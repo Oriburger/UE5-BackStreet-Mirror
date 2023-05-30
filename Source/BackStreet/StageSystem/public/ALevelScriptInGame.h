@@ -43,6 +43,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetGameModeRef();
 
+public:
+	UFUNCTION(BlueprintCallable)
+		bool IsNewGame();
+
+	UFUNCTION(BlueprintCallable)
+		USaveData* LoadSaveData();
+
+	UFUNCTION(BlueprintCallable)
+		void SaveData();
+
+
+
 
 public:
 	UPROPERTY()

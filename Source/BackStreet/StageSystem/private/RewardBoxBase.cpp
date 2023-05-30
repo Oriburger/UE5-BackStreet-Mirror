@@ -29,7 +29,7 @@ ARewardBoxBase::ARewardBoxBase()
 void ARewardBoxBase::BeginPlay()
 {
 	Super::BeginPlay();
-	if (this->ActorHasTag("Sample"))
+	if (this->ActorHasTag("UIImage"))
 		return;
 	OpenUIDelegate.AddDynamic(this, &ARewardBoxBase::EnterUI);
 	SelectRandomAbilityIdx();

@@ -8,6 +8,8 @@
 #include "../../Character/public/MainCharacterBase.h"
 #include "../public/MissionBase.h"
 #include "Engine/LevelStreaming.h"
+#include "../../Global/public/SaveData.h"
+#include "Kismet/GameplayStatics.h"
 
 ALevelScriptInGame::ALevelScriptInGame()
 {
@@ -52,6 +54,67 @@ void ALevelScriptInGame::SetGameModeRef()
 {
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
+
+bool ALevelScriptInGame::IsNewGame()
+{
+	USaveData* LoadGameInstance = LoadSaveData();
+
+	if (LoadGameInstance)
+		return false;
+	else return true;
+}
+
+USaveData* ALevelScriptInGame::LoadSaveData()
+{
+	USaveData* LoadGameInstance = Cast<USaveData>(UGameplayStatics::CreateSaveGameObject(USaveData::StaticClass()));
+
+	if (LoadGameInstance)
+	{
+		LoadGameInstance->SaveSlotName = "MySaveGame";
+		LoadGameInstance->SaveIndex = 0;
+
+		UE_LOG(LogTemp, Log, TEXT("GateCheck!"));
+
+		LoadGameInstance = Cast<USaveData>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->SaveIndex));
+		
+		if (LoadGameInstance)
+		{
+			UE_LOG(LogTemp, Log, TEXT("IsNotNewGame!"));
+		}
+		else
+			UE_LOG(LogTemp, Log, TEXT("IsNewGame!"));
+		
+		return LoadGameInstance;
+	}
+	else
+		return nullptr;
+
+}
+
+
+void ALevelScriptInGame::SaveData()
+{
+	USaveData* SaveGameInstance = Cast<USaveData>(UGameplayStatics::CreateSaveGameObject(USaveData::StaticClass()));
+
+	if (SaveGameInstance)
+	{
+		/** Save file data **/
+		SaveGameInstance->SaveSlotName = "MySaveGame";
+		SaveGameInstance->SaveIndex = 0;
+
+		/** Save data **/
+		SaveGameInstance->SaveName = "Player0";
+
+		SaveGameInstance->IsNewGame = false;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("SaveGameInstance is nullptr"));
+	}
+
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->SaveIndex);
+}
+
 
 void ALevelScriptInGame::CreateAssetManager()
 {

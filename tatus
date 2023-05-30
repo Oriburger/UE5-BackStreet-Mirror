@@ -1,0 +1,3195 @@
+[33mcommit da457f06c10b9c4cdb2ec4c9280d217fc475aca3[m[33m ([m[1;36mHEAD -> [m[1;32mtutorial-develop[m[33m)[m
+Author: hran <ahr0322@naver.com>
+Date:   Mon May 22 14:59:55 2023 +0900
+
+    [feat] Tutorial 기능 구현
+    
+    - KeyGuide 추가
+     - . key 누르면 on/off 가능
+    - 게임 목표 설명 UI 추가
+    -  F 상호작용 가능 Actor 목록 UI 추가
+    - 스토리 컷씬 추가
+    
+    * F 상호작용 가능 Actor 목록 UI 수정 예정
+    * 스토리 컷씬 Text Animation 추가 예정
+
+[33mcommit e417c70fef1a0126794902ee11faba24dc9d1681[m[33m ([m[1;31mupstream/stagesystem-develop[m[33m, [m[1;32mstagesystem-develop[m[33m)[m
+Author: hran <ahr0322@naver.com>
+Date:   Tue May 9 13:04:34 2023 +0900
+
+    [fix] 코드리뷰 수정반영
+    - RewardBox -> RewardBoxBase
+    - ARewardBox::AbilitySelect -> ARewardBoxBase::SelectRandomAbilityIdx
+    - 테스트 코드 삭제
+    - 클래스 멤버 선언 순서 수정
+    - UI 텍스처 파일명 수정
+
+[33mcommit cef48dcd75faff58c0df141d5ee97ba776f2c43b[m
+Author: hran <ahr0322@naver.com>
+Date:   Mon May 8 15:24:03 2023 +0900
+
+    [feat] RewardBox 기능 구현
+    - 어빌리티 스왑
+    - 어빌리티 보관
+    
+    * AbilityManagerBase에서는 액티브 어빌리티 리스트를 받아오는 임시 함수만 추가되었습니다~
+    
+    * MaingCharaterBase는 어빌리티 매니저 레퍼런스 받아오는 Get 함수만 추가되었습니다~
+
+[33mcommit eb0c5722083ac04538083d7075e6f068d8cb96f5[m
+Author: hran <ahr0322@naver.com>
+Date:   Tue May 2 14:33:16 2023 +0900
+
+    [merge] CombatUI 수정, InGameMap 추가
+
+[33mcommit 68d013627c4e0d6d579140af61828be7d7e64575[m
+Merge: 358142d a93f175
+Author: hran <ahr0322@naver.com>
+Date:   Tue May 2 14:32:47 2023 +0900
+
+    [merge] pull origin master, Combat_UI 수정사항 반영
+
+[33mcommit 358142d5347c949515788dca3ec600f58cf95a57[m
+Author: hran <ahr0322@naver.com>
+Date:   Tue May 2 13:41:58 2023 +0900
+
+    [merge] pull origin master 병합 충돌
+
+[33mcommit 1957004b62a09c1c8980a9f15ad555cc9a441e24[m
+Author: hran <ahr0322@naver.com>
+Date:   Tue May 2 01:05:16 2023 +0900
+
+    [feat] RewardBox 기능 추가
+    - 스테이지 클리어시 RewardBox 생성
+    - 박스 근처 접근시 간략 UI 팝업
+    - 상호작용시 Reward UI 생성
+    - 보유 Ability에 따라 이미지 변동
+
+[33mcommit a93f1752ea50d60beffc73970ed77900284e1769[m[33m ([m[1;31mupstream/master[m[33m)[m
+Merge: 5cc49c0 4c61a05
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon May 1 16:30:20 2023 +0900
+
+    Merge pull request #95 from SSU-BackStreet/battlesystem-develop
+    
+    [battlesystem-develop -> master] 버프 시스템 제거,  어빌리티 시스템 추가, 2챕터 레벨 디자인 3종 등
+
+[33mcommit 4c61a05f2ef090fa2f43ab0f17b470b0dc84bf3e[m
+Merge: 5cc49c0 f276a1b
+Author: Oriburger <uss425@naver.com>
+Date:   Mon May 1 16:26:18 2023 +0900
+
+    [merge] 병합 충돌 수정
+    - CombatUI
+    - 230501 코드 리뷰 수정사항 반영
+    - Issue
+        - 적들도 3개를 발사하는 현상
+
+[33mcommit f276a1be31d18af1b0264349795baa6d43537321[m
+Merge: d9996bb 5e5d8cc
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon May 1 15:21:32 2023 +0900
+
+    Merge pull request #94 from Oriburger/battlesystem-develop
+    
+    [battlesystem-develop] 챕터2 레벨 디자인 3종 및 어빌리티 (멀티샷 추가 등)
+
+[33mcommit 5e5d8cc1607f54592be4d459bb1603f3c6248f0a[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Apr 30 17:54:05 2023 +0900
+
+    [feat] 멀티샷 어빌리티 추가, 어빌리티명 프로퍼티 추가 등
+    - 멀티샷 어빌리티 추가
+        - CharacterStatInfoStruct
+            - MaxProjectileCount 프로퍼티
+        - UAbilityManagerBase
+            - 등록 및 해제 로직
+        - AWeaponBase
+            - MaxProjectileCount 만큼 발사
+            - 탄환은 1씩 소비
+    - 어빌리티명 프로퍼티 추가
+        - FAbilityInfoStruct
+            - AbilityName
+
+[33mcommit 5381a60396424f0c7f71dad22ab410551fff1c17[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Apr 30 13:58:14 2023 +0900
+
+    [feat] 레벨 디자인 3종
+    - Type2-*.umap
+        - A, B, C
+
+[33mcommit 878853b2ebfe879c2779c3b928ee2fddf2299efa[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Apr 28 18:23:59 2023 +0900
+
+    [feat] 챕터2 레벨 디자인 2종 및 애니메이션 추가
+    - 챕터2 레벨 디자인 2종
+        - ../Map/Stages/Type2-A, B.umap
+    - 근접 전투 애니메이션
+        - AM_SwordCombo_*.uasset
+    - **4월 28일자 에셋 적용을 해야함**
+
+[33mcommit d9996bb63489ab3e13251901b3a628f5e4522237[m
+Merge: 17c9b05 85cef86
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sun Apr 23 12:48:55 2023 +0900
+
+    Merge pull request #93 from Oriburger/battlesystem-develop
+    
+    [battlesystem-develop] 버프 코드 어빌리티로 전환
+
+[33mcommit 85cef86f90bb42d44ec6f788b6231f18bd24d6a9[m
+Author: Oriburger <uss425@naver.com>
+Date:   Thu Apr 20 13:33:16 2023 +0900
+
+    [feat][test] 어빌리티 추가/제거 (임시 코드)
+    - 기존 버프에 있던 6종의 능력 추가
+        - 타이머가 필요한 Heal에 한해서 테스트 완료
+        - 코드는 레거시 (switch~case)
+        - 주석 추가 등
+    - 추가 내용
+        - UGameplayAbility로 바꿀 필요가 있을지?
+        - 그렇지 않다면, switch ~ case에서 리팩토링이 필요
+            - Ability 별 Class, TFunctionRef, Lambda 등의 방식
+
+[33mcommit 9c3fabb611a34004e569876cc5e35b4d74b0ff6e[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Apr 10 00:32:51 2023 +0900
+
+    [test] 어빌리티 매니저 슬롯 (not working)
+    - 어빌리티 매니저
+        - 기존 버프코드 활용
+        - 슬롯 - 기존 버프의 Bit-field 활용
+        - 초기화 코드 (Outer)
+
+[33mcommit cc1a03594cc5a59f8cb2243ad0fee8cb3d5b8ebd[m
+Merge: 9b54d04 17c9b05
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Apr 8 18:20:32 2023 +0900
+
+    Merge branch 'battlesystem-develop' of https://github.com/Oriburger/UE5-BackStreet into battlesystem-develop
+
+[33mcommit 9b54d043382efe4981ca1c4a5abb9783f34cc031[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Apr 8 18:20:06 2023 +0900
+
+    [refactor][test] 버프 시스템 제거, 아웃라인 머티리얼 테스트 등
+    - 어빌리티 시스템
+        - 패시브 어빌리티 관련 코드 추가 위해 기존 버프/디버프 시스템 내 버프 관련 코드 제거
+        - UBuffDebuffManager -> UDebuffManager 클래스명 변경
+            - 멤버함수 및 변수명 변경
+    - 아웃라인 머티리얼 및 효과 테스트
+        - BP_WeaponItemBase
+            - 아웃라인 머티리얼 적용
+                - M_Outline
+            - 회전 효과 -> TImeline (임시코드)
+                - 추후 Mat 내의 코드로 개선 예정
+
+[33mcommit 5cc49c0fb7493c84ad2670fb5194c7b2af9ff00c[m
+Merge: 182f2ab 17c9b05
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Tue Apr 4 14:02:05 2023 +0900
+
+    Merge pull request #92 from SSU-BackStreet/battlesystem-develop
+    
+    [battlesystem-develop -> master] 기존 버프 시스템 제거 및 개선
+
+[33mcommit 17c9b053b51ea2b8d3e264e0dd1565d7906ea29b[m
+Merge: 04a1e17 16ee77d
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sun Apr 2 11:05:01 2023 +0900
+
+    Merge pull request #91 from Oriburger/battlesystem-develop
+    
+    [battlesystem-develop] 기존 버프 시스템 제거 및 개선
+
+[33mcommit 16ee77d40efb121f75445183ffded59a71643b7c[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Mar 28 23:52:19 2023 +0900
+
+    [fix][refactor] Buff/Debuff System 리팩토링
+    - Gamemode 내 Global하게 위치
+        - 기존 캐릭터가 각자 소유하고 있던 것에서 수정
+        - target 파라미터 추가
+        - timer 및 resetvalue 관리는 TMap(Actor ID, Containers)
+    - 미작동 오류 수정
+
+[33mcommit 182f2ab5347f1e8174c771e94fd55e61555e076f[m
+Merge: 34b1982 4bffe90
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon Mar 27 13:16:46 2023 +0900
+
+    Merge pull request #89 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem-develop->master] 미니맵, 미션 UI  개선
+
+[33mcommit 0cbf83bf2f4f67afe291982c63b6c7d6a9b51480[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Mar 27 01:33:39 2023 +0900
+
+    [refactor][test] 기존 버프 시스템 제거 및 개선 (not working)
+    - ACharacterBuffManager 제거
+        - 캐릭터 내 BuffManagerChild Actor제거
+        - UBuffDebuffManager
+            - AActor -> UObject로 베이스 클래스 변경
+        - Global
+            - Target 파라미터 추가 (실제 버프/디버프를 적용할 대상)
+            - Target의 Unique ID를 기반으로 한 TimerHandle,  ResetValue 배열 관리 (TMap)
+    - ABackStreetGameModeBase
+        - 공통으로 사용하는 GlobalBuffDebuffManager 추가
+
+[33mcommit 4bffe90b56c05307d015a51fd68971d74936f48d[m
+Merge: 24d50d8 fb98729
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Sun Mar 26 23:04:45 2023 +0900
+
+    Merge pull request #88 from HeaRyeong/stagesystem-develop
+    
+    [feat] 미니맵, 미션 UI  개선
+
+[33mcommit fb98729de846f64ccb6d107eda6989f44868eb98[m
+Author: hran <ahr0322@naver.com>
+Date:   Sun Mar 26 23:02:26 2023 +0900
+
+    [feat] 미니맵, 미션 UI  개선
+    
+    - 미니맵 현재 타일 깜빡임 애니메이션 추가
+    - 미션 리스트 화면 비율 수정
+
+[33mcommit 04a1e17c849488c9e17687c2089cd31998eb9f01[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Mar 25 14:51:31 2023 +0900
+
+    [refactor] 버프매니저 클래스명 변경 등
+    - ACharacterBuffManager -> ABuffDebuffManager
+        - "*Base"가 붙지 않는건, 파생 BP를 생성하지 않기 떄문
+        - BP 내 클래스 오류 수정 등
+
+[33mcommit 34b19824367fa8aab300148a78273b985014ec67[m
+Merge: 9d914ab 24d50d8
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon Mar 20 13:34:11 2023 +0900
+
+    Merge pull request #87 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem develop->master] 미션 UI 수정 및 추가
+
+[33mcommit 24d50d8e0f49ac4627bd10754afe045d350608d6[m
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon Mar 20 13:27:04 2023 +0900
+
+    Update StageManagerBase.cpp
+
+[33mcommit 08914a9db083318f6be4478ac4edc974eb4bb636[m
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon Mar 20 13:25:50 2023 +0900
+
+    [merge] 병합 충돌 해결
+
+[33mcommit bc36633b7a5d01dace7125e543fd198e00c14299[m
+Merge: 40c1fb8 3e5b3d9
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Sun Mar 19 04:30:52 2023 +0900
+
+    Merge pull request #86 from HeaRyeong/stagesystem-develop
+    
+    [feat] 미션 UI 수정
+
+[33mcommit 3e5b3d9fffbda90e6e758b87899fc3f7e6cce131[m
+Author: hran <ahr0322@naver.com>
+Date:   Sun Mar 19 04:29:13 2023 +0900
+
+    [feat] 미션 UI 수정
+    
+    - 스테이지 타입 미니맵 반영 수정
+    - 미션 리스트 추가
+     - 미션 클리어시 이미지 변경 기능 추가
+    
+    * 현재 UI 디자인은 미완성 상태 ( 앵커 어려워요... 애들 비율이 이상해요... )
+
+[33mcommit 9d914ab7c626e773fe4463156c1d2401c1fffddb[m
+Merge: 73fda3b 40c1fb8
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Wed Mar 15 23:04:34 2023 +0900
+
+    Merge pull request #85 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem-develop -> master] 각종 크래시 및 오류 수정 등
+
+[33mcommit 40c1fb8e3d1a8121b783a9464972fc7ce6848b09[m
+Merge: f89199b 4cde666
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Tue Mar 14 17:02:09 2023 +0900
+
+    Merge pull request #84 from Oriburger/stagesystem-develop
+    
+    [stagesystem-develop] 각종 크래시 및 오류 수정
+
+[33mcommit 4cde66612bc8e3ed151e0a5182cd520bb37ee2b8[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Feb 28 15:40:35 2023 +0900
+
+    [fix] 랜드스케이프 크래시, 챕터 전환 시 인벤토리 기능 오류 수정 등
+    - 랜드스케이프 크래시
+        - 랜드스케이프 제거
+    - 챕터 전환 시 인벤토리 기능 오류
+        - Weapon제거가 아닌 Enemy Die 유도
+    - 레벨 단차 제거
+        - TypeB
+
+[33mcommit 197e3790750a2b386ffa5c41c6a5958f3e342c79[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Feb 28 01:49:17 2023 +0900
+
+    [fix][refactor] AI 컨트롤러 크래시 해결, 아이템 파티클 개선
+    - 사망 이후, SightLoss 타이머 호출로 인한 크래시 발
+    - 아이템 파티클 개선
+        - 에셋 파일 업데이트 필요
+        - 각종 아이템 파티클 밝기 대폭 감소 및 최적화
+        - 아이템 박스 개봉 파티클 최적화
+
+[33mcommit f89199b6f851da636bb6232e35af8f36cb489a92[m
+Merge: 1d47ec1 0b1b6eb
+Author: hran <ahr0322@naver.com>
+Date:   Mon Feb 27 21:07:10 2023 +0900
+
+    Merge branch 'stagesystem-develop' of https://github.com/SSU-BackStreet/UE5-BackStreet into stagesystem-develop
+
+[33mcommit 1d47ec1a173e206ef64778843d2a7c0db278c59f[m[33m ([m[1;31morigin/stagesystem_develop[m[33m)[m
+Author: hran <ahr0322@naver.com>
+Date:   Mon Feb 27 19:22:26 2023 +0900
+
+    [fix] 미션 아이템 관련 수정
+    
+    - 미션 아이템 키 번호 6000으로 변경
+    - 미션 구분 없이 몬스터 잡은 후 아이템 획득으로 미션 고정
+
+[33mcommit ad0966d9619ea4347d354ffcbf45631a853b4069[m
+Author: hran <ahr0322@naver.com>
+Date:   Mon Feb 27 17:12:29 2023 +0900
+
+    [merge][fix] 병합작업 , 각종 BP 수정 사항 반영
+    
+    - AssetManager BP
+    - 미션 몬스터 BP
+    - 아이템 박스 버프
+
+[33mcommit 5d171d319f2304b68d52a3c73fe4131d9bff53ee[m
+Merge: 1dc3cc1 73fda3b
+Author: hran <ahr0322@naver.com>
+Date:   Mon Feb 27 15:22:39 2023 +0900
+
+    [merge] 병합
+
+[33mcommit 73fda3b755d39a0969384333851a57fae54007e8[m
+Merge: cc54896 63664b4
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Mon Feb 27 14:26:59 2023 +0900
+
+    Merge pull request #82 from SSU-BackStreet/battlesystem-develop
+    
+    [battlesystem-develop -> master] UI 버그 수정, 밸런스 패치 등
+
+[33mcommit 63664b45a1db3401e684160bf6af98157734be68[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Feb 27 14:10:06 2023 +0900
+
+    [refactor][fix] 무기 스탯 내 디버프 개선, 디버그 메시지 제거 등
+    - 무기 스탯 내 디버프 개선
+        - TotalTime, Variable 파라미터 수정 등
+    - 디버그 메시지 제거 (~ing)
+    - AI 추격 이전 애니메이션 개선
+        - 보스몹에만 딜레이 x (임시 코드)
+
+[33mcommit 1dc3cc1948fa9986d8d6dfa3da2f10d9e19e2b2a[m
+Merge: 04924b6 cc54896
+Author: hran <ahr0322@naver.com>
+Date:   Mon Feb 27 14:07:35 2023 +0900
+
+    Merge branch 'master' of https://github.com/HeaRyeong/UE5-BackStreet into stagesystem-develop
+
+[33mcommit 0b1b6eb943abee6c7d989411074dd117fd511c89[m
+Merge: 9b58816 04924b6
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Mon Feb 27 12:30:20 2023 +0900
+
+    Merge pull request #80 from HeaRyeong/stagesystem-develop
+    
+    [feat] 챕터 Clear UI 추가 , 챕터 시간 변경
+
+[33mcommit 04924b6d781b5a86561fb15269d70dc979820d9d[m
+Author: hran <ahr0322@naver.com>
+Date:   Mon Feb 27 12:27:49 2023 +0900
+
+    [feat] 챕터 Clear UI 추가 , 챕터 시간 변경
+
+[33mcommit 28a51baccdfad20cf9696d6b1969501d52622312[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Feb 26 13:16:28 2023 +0900
+
+    [refactor][fix] UI 버그 수정, 밸런스 패치 등
+    - 인벤토리 UI 버그 수정
+        - 무기에서 탄약이 뜨는 버그
+    - 밸런스 패치
+        - TypeA_Throw 몹이 힐 버프를 드랍
+        - 각종 버프 시간 증가
+        - 담배꽁초 화염 디버프 데미지 증가
+    - 네비게이션 오류 수정
+        - 메시간 단차 수정
+
+[33mcommit cc548961c5b0abe6d2c6ffd1901568558344ce65[m
+Merge: ee6b220 1f270b1
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sun Feb 26 08:55:14 2023 +0900
+
+    Merge pull request #77 from SSU-BackStreet/battlesystem-develop
+    
+    [battlesystem-develop -> master] 서브레벨 네비메시 오류, 무기 타입 업데이트 오류 수정 등
+
+[33mcommit 1f270b19090cf6527d9b63e9f3816dc31d2465d7[m
+Merge: 17b95fa 320411a
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Feb 26 08:55:07 2023 +0900
+
+    Merge branch 'battlesystem-develop' of https://github.com/SSU-BackStreet/UE5-BackStreet into battlesystem-develop
+
+[33mcommit 17b95fa2dbf5bb6a74f2c804fb2f16a390123efd[m
+Merge: 54737b0 ee6b220
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Feb 26 08:54:01 2023 +0900
+
+    [merge] 병합간 충돌 사항 수정
+    - InGame.umap : master
+    - Type*.umap  : battlesystem-develop
+    - AGateBase
+
+[33mcommit ee6b2200a4062c9f65ed21964ead7017ce17c694[m
+Merge: 9a2fa3e 9b58816
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sun Feb 26 08:50:29 2023 +0900
+
+    Merge pull request #79 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem-develop -> master] 인게임 시작 지점 레벨 디자인 추가
+
+[33mcommit 9b58816f6c84ebdcf9dcc976c6308ae51ae9a6a5[m
+Merge: a4557d4 01e440f
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Sun Feb 26 01:40:38 2023 +0900
+
+    Merge pull request #78 from HeaRyeong/stagesystem-develop
+    
+    [fix] 인게임 시작 지점 레벨 디자인
+
+[33mcommit 01e440f7160aa85f5019c912a6fd3978b96b3f36[m
+Author: hran <ahr0322@naver.com>
+Date:   Sun Feb 26 01:38:19 2023 +0900
+
+    [fix] 인게임 시작 지점 레벨 디자인
+    
+    - 인게임 시작 지점 레벨 디자인 추가
+    - 화면 FadeOut 애니메이션 시간 수정
+    - 언로드 스테이지 ULevelStreaming으로 Tile 거치지 않고 직접 참조로 수정
+
+[33mcommit 320411a22e2e4268a03619ba2a06164ef9255963[m
+Merge: a9625e4 54737b0
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sat Feb 25 23:50:02 2023 +0900
+
+    Merge pull request #76 from Oriburger/battlesystem-develop
+    
+    [battlesystem-develop] 서브레벨 네비메시 오류, 무기 타입 업데이트 오류 수정 등
+
+[33mcommit 54737b00dc66cbaf974b63d25bf1b4845c2bc87d[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Feb 25 23:46:36 2023 +0900
+
+    [fix] 서브레벨 네비메시 오류, 무기 타입 업데이트 오류 수정 등
+    - AI 오류 해결
+        - 서브 레벨 네비메시 오류
+            - 각 서브레벨 내 메시에 턱이 생겨 네비메시가 분리됨
+                - 독립된 각 구역이 생겨 AI 이동 범위가 제한
+                - 바닥과 인접하게 재배치
+        - 무기 타입 업데이트 해결
+            - AAIControllerBase::UpdateNewWeapon
+            - BB 멤버 HasRangedWeapon 추가
+    - 밸런스 조절
+        - 보스몹 플레이어 감지 범위 조절
+            - BP_BossAIController
+            - 보스몹은 최대 거리에서도 플레이어를 감지
+            - 플레이어를 까먹지 않아 계속해서 추격
+        - 아이템 박스
+            - 회복 버프 아이템 등장 확률 up
+            - 무기 아이템 / 발사체 아이템 중복 제거
+                - 투사체 무기 아이템이 기존에는 구별 (E_Weapon, E_Ammo)
+                - 로직이 동일
+                    - 없으면 무기 추가, 있다면 탄환 추가
+                - 아이템 박스내 E_Ammo타입 아이템만 등장하게 변경
+        - 플레이어 근접 공격
+            - 5번째 콤보 속도 증가
+    - 그 외
+        - 챕터 미완료 메시지 컴파일 오류 수정
+    - 추가 이슈..
+        - 얇은 벽 너머에서 근접 공격 시, 적이 맞음 -> 꼼수 플레이가 가능할 듯
+
+[33mcommit 9a2fa3ee1c33bdf7dfecc958269f08b516a180cd[m
+Merge: eaa3fa9 a4557d4
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sat Feb 25 16:11:39 2023 +0900
+
+    Merge pull request #75 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem-develop-> master] 챕터 전환 크래시 수정
+
+[33mcommit a4557d47f2ae2c6742856054e66fc7e0a6fb0af5[m
+Merge: f2b2f1c c32f5b3
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Sat Feb 25 10:10:45 2023 +0900
+
+    Merge pull request #74 from HeaRyeong/stagesystem-develop
+    
+    [fix] 챕터 전환 크래시 수정
+
+[33mcommit c32f5b3df62b36146e33121cad6d54aca55b5851[m
+Author: hran <ahr0322@naver.com>
+Date:   Sat Feb 25 09:59:15 2023 +0900
+
+    [fix] 챕터 전환 버그 픽스
+    
+    - 패키징 파일에서 챕터 전환시 타이머 크래시 버그 수정
+    
+    - 아이템이 아닌 BP_AWeapon들이  다음 챕터에 남아있는 버그 수정
+
+[33mcommit eaa3fa9fca0df25bbf9a757b35ca880887bd734b[m
+Merge: 191ae96 a9625e4
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Fri Feb 24 20:42:29 2023 +0900
+
+    Merge pull request #73 from SSU-BackStreet/battlesystem-develop
+    
+    [battlesystem-develop -> master] 마우스 버그 수정, 근접 전투 개선, 슬로우 디버프 버그 수정, 밸런스 조절 등
+
+[33mcommit a9625e4ec3dfc071a49a5e3a6bba5c118b27d421[m
+Merge: d6e5beb 973cf52
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Fri Feb 24 20:02:41 2023 +0900
+
+    Merge pull request #72 from Oriburger/battlesystem-develop
+    
+    [battlesystem-develop] 마우스 버그 수정, 근접 전투 개선, 슬로우 디버프 버그 수정, 밸런스 조절 등
+
+[33mcommit 973cf522ef45a688fedca7fbb83f45211bf31b62[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Feb 24 19:56:20 2023 +0900
+
+    [feat][fix][refactor] 마우스 버그 수정, 근접 전투 개선, 슬로우 디버프 버그 수정, 밸런스 조절 등
+    - 마우스 버그 수정
+        - SetInputModeGameAndUI
+    - 근접 전투 개선
+        - 무기 크기 조절
+            - 플레이어는 1.5배 더 큰 근접 무기를 소유
+        - 비주얼 개선
+            - 나이아가라 이펙트 추가 (검로)
+            - NS_SwordTrail_*.uasset
+        - 애니메이션 변경
+            - 5단계의 콤보 공격 애니메이션
+    - 끝나지 않는 디버프 오류 수정
+        - ACharacterBuffManager
+        - 슬로우 해제가 되지 않는 오류 수정
+    - 밸런스 조절
+        - 플레이어 최대 체력 증가
+        - 전체 무기 공격력 상향
+        - 벽돌 투사체 최대 보유 개수 하향 등
+    - 그 외
+        - 투사체 스폰 지점을 총구가 아닌 플레이어 정면으로 수정
+        - HP 위젯 표시 오류 수정
+        - 카메라 Shake 효과가 더 잘 적용됨 (범위 증가)
+        - 레벨 내 잘못된 네비게이션 및 틈 제거 (블로킹 볼륨 추가)
+        - 레벨 내 어두운 부분 라이트 배치
+        - BP_Gate 내 포인트 라이트 설치
+
+[33mcommit 191ae960876206f5312743aec6b6179331a4084c[m
+Merge: 1a0bf72 f2b2f1c
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Fri Feb 24 11:35:18 2023 +0900
+
+    Merge pull request #71 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem develop- master] ChapterGate 활성화/비활성화 구현
+
+[33mcommit f2b2f1cfa6f1eea34e94a9f4adf259412622f8be[m
+Merge: 01751ed 99e4587
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Fri Feb 24 00:31:17 2023 +0900
+
+    Merge pull request #70 from HeaRyeong/stagesystem-develop
+    
+    [fix][feat] ChapterGate 활성화/비활성화 구현 및 버그 픽스
+
+[33mcommit 99e45878c69440f5cefb80bd287246dc4044af00[m
+Author: hran <ahr0322@naver.com>
+Date:   Fri Feb 24 00:25:58 2023 +0900
+
+    [feat][fix] ChapterGate 활성화/비활성화 구현
+    
+    - 챕터 Gate 활성화/비활성화 구분
+     - 비활성화 게이트 입장 시도시 시스템 메시지 Call 오류로 인해 작동 안됨
+    
+    - 지하철 레벨 바닥 끼임 버그 수정
+    - 전환 UI 재적용
+
+[33mcommit 1a0bf7254b6343b4ec73ef771957cc10b903e5e9[m
+Merge: aa90551 d6e5beb
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Thu Feb 23 17:56:36 2023 +0900
+
+    Merge pull request #69 from SSU-BackStreet/battlesystem-develop
+    
+    [battlesystem-develop -> master] AI/버프 오류 수정, 드롭템 및 아이템 박스 개선 등
+
+[33mcommit d6e5beb7f39b9c2550d8e0ac84b88ae1329df2ec[m
+Merge: a444684 63aa542
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Thu Feb 23 17:33:15 2023 +0900
+
+    Merge pull request #68 from Oriburger/battlesystem-develop
+    
+    [battlesystem-develop] AI/버프 오류 수정, 드롭템 및 아이템 박스 개선 등
+
+[33mcommit 63aa542a00330451ef440da311c181747bde2584[m
+Author: Oriburger <uss425@naver.com>
+Date:   Thu Feb 23 17:30:35 2023 +0900
+
+    [fix][refactor] AI/버프 오류 수정, 드롭템 및 아이템 박스 개선 등
+    - AI 오류 수정 및 개선
+        - 무한 Chase에 빠지는 현상 수정
+        - 벽 너머에서도 공격을 시도하는 현상 수정
+        - 겹쳐져 있으면 공격을 하지 않는 현상 수정
+        - TurnToTarget의 정확도 개선 + 밸런스 조절
+    - 버프 오류 수정
+        - 캐릭터의 이동속도 연산이 적용되지 않는 오류 수정
+    - 아이템관련
+        - 아이템 박스
+            - 밸런스 조절 (확률 및 최대 스폰 개수)
+            - 클래스 세분화 (버프만 스폰, 무기만 스폰, 발사체만 스폰)
+            - **BP_BackStreetGameMode / BP_AssetManager 수정했습니다. 제껄로 받아주세여**
+        - 몬스터 드롭 아이템
+            - 각 몬스터별 드롭 아이템 구분
+            - 몬스터 드롭 아이템 확률 구분
+            - **BP_Enemy*.uasset**도 수정했습니다. 제껄로 받아주세여
+    - 무기 관련
+        - 무기 밸런스 조절
+            - 최대 내구도 대폭 하향
+        - 무기 스케일 통일
+        - 무기 콤보 타이머를 공격 속도에 맞게 조정
+    - 수정 필요
+        - 발사체 아이템 중, 발사체 자체가 무기인 것과 아닌 것의 구분 필요
+            - 현재는 BB탄을 먹으면 BB탄 총이 추가
+
+[33mcommit aa905512d16143819579418013112cfeeae1dd0e[m
+Merge: 7710fad 01751ed
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Wed Feb 22 20:52:03 2023 +0900
+
+    Merge pull request #67 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem-develop -> master ] 각종 버그 픽스
+
+[33mcommit 01751ed51e3e8d83fd05f82662f50dfff60a0add[m
+Merge: 8693ff5 7710fad
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Feb 22 20:51:52 2023 +0900
+
+    [merge] 병합 충돌 해결
+    - InGame.uasset
+        - master꺼로 받음
+
+[33mcommit 7710fad66c437b760dbaa9857e024862cc985d41[m
+Merge: ac93f19 a444684
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Wed Feb 22 20:41:04 2023 +0900
+
+    Merge pull request #65 from SSU-BackStreet/battlesystem-develop
+    
+    [battlesystem-develop -> master] 인벤토리 버그 수정, AI 버그 일부 수정, 무기 밸런스 조절 등
+
+[33mcommit 8693ff533bad99c18d4e32d9c2b1999884d644ed[m
+Merge: 34d0a14 82f400d
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Wed Feb 22 20:24:04 2023 +0900
+
+    Merge pull request #66 from HeaRyeong/stagesystem-develop
+    
+    [fix] 각종 버그 픽스
+
+[33mcommit 82f400dcc4383dd37514b429dd48e9c18551cc37[m
+Author: hran <ahr0322@naver.com>
+Date:   Wed Feb 22 20:20:58 2023 +0900
+
+    [fix] 각종 버그 픽스
+    
+    - 타이머 관련 크래시 수정
+    - 화면 fade out 버그 수정
+    - 아이템 박스 Destroy() 크래시 수정
+    - 챕터 이동시 스폰된 아이템이 제거되지 않던 버그 수정
+    - 게임 클리어 사운드 추가
+
+[33mcommit a4446846da83698aa2dce29929836c43d133e1ed[m
+Merge: 817a5e2 3594970
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Wed Feb 22 19:54:30 2023 +0900
+
+    Merge pull request #64 from Oriburger/battlesystem-develop
+    
+    [battlesystem-develop]  인벤토리 버그 수정, AI 버그 일부 수정, 무기 밸런스 조절 등
+
+[33mcommit 359497063fb0b5e7e566f010d55bb87f61088d66[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Feb 22 19:52:27 2023 +0900
+
+    [fix][refactor] 인벤토리 버그 수정, AI 버그 일부 수정, 무기 밸런스 조절 등
+    - 인벤토리 버그 수정
+        - 무기가 1개 남은 상태에서 버릴 시, UI가 업데이트 되지 않는 현상
+        - 원거리 무기 습득 시 초기 탄환 수가 초기화 되지 않는 현상
+            - 최초 습득 시, 한개 탄창 내 탄환 수만큼 소지
+    - 아이템 박스 플로팅 버그 수정
+        - Simulate Physics 설정
+        - Mesh가 Hit이벤트를 호출할 때마다 component 위치 업데이트
+    - AI 버그 수정 및 개선(~ing)
+        - NavMesh 정확도 수정
+            - Runtime 동적 생성 옵션 추가
+            - 서브 레벨 Nullptr 메시 제거 및 수정
+            - nav 리빌드
+        - 시야 로직 개선
+            - SightLoss 타이머
+                - 기존 : 캐릭터가 시야에서 사라진지 n초가 지나야 TargetCharacter를 까먹고 시야에 들어왔다는 변수를 제거
+                - 개선 : 사라지면 즉시 hasLineOfSight 제거. n초가 지나면 TargetCharacter를 까먹음
+            - Attack 조건 수정
+                - hasLineOfSight과 TargetCharacter 둘 다 있어야함
+            - Chase 조건 수정
+                - TargetCharacter만 있어도 추격 / 기존 (HasLineOfSight 값)
+        - 회전 로직 재추가
+    - 공격 딜레이 / 공격 속도 로직 개선
+        - ACharacterBase / FCharacterStatStruct
+        - 캐릭터 속도 스탯 범위 수정
+            - [0.25 : 1.0] -> [0.25 : 2.0]
+        - 공격 속도 계산 방식 수정
+            - 캐릭터와 무기의 AtkSpeedMultiplier 의 곱을 활용
+    - 무기 밸런스 조절
+        - D_ProjectileStatTable, D_WeaponStatTable
+        - 전체적인 공격력 / 속도 상향
+
+[33mcommit ac93f195d5c5fc70e5cc2da27dd93d5e539c6fa1[m
+Merge: 8b2bb5e 34d0a14
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Wed Feb 22 12:25:42 2023 +0900
+
+    Merge pull request #63 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem-develop->master] 스테이지 시간 UI 추가 및 버그 픽스
+
+[33mcommit 34d0a1447017b209e880c1e578e6e8687ba26f3b[m
+Merge: 9f45d41 9f90abe
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Wed Feb 22 12:07:08 2023 +0900
+
+    Merge pull request #62 from HeaRyeong/stagesystem-develop
+    
+    [stagesystem-develop] 스테이지 시간 UI 추가 및 버그 픽스
+
+[33mcommit 9f90abe17c6e3abcef302690003fb1da5ad0a361[m
+Author: hran <ahr0322@naver.com>
+Date:   Wed Feb 22 12:00:58 2023 +0900
+
+    [fix][feat] 스테이지 시간 UI 추가 및 버그 픽스
+    
+    [feat]
+    - 스테이지 경과 시간 UI 추가
+    
+    [fix]
+    - 보스 바닥 뚫고 스폰 버그 수정
+    - 게임 클리어 이후, 메인으로 돌아가면 계속 플레이어 발소리가 들리는 버그 수정
+    
+    [밸런스]
+    - 아이템 박스 스폰 개수 수정
+     - 10~7 개 사이로 스폰
+    
+    * 현재 작업중 )
+     - 타이머 Clear 관련 작업중 , 현재 크래시 발생
+
+[33mcommit 8b2bb5e3f806a8d98d5fdf3839b11409d0235aef[m
+Merge: d0b2cd7 817a5e2
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Tue Feb 21 20:37:13 2023 +0900
+
+    Merge pull request #61 from SSU-BackStreet/battlesystem-develop
+    
+    [battlesystem-develop -> master] 인게임 UI 기능 추가, 각종 버그 수정(AI, 월드 등)
+
+[33mcommit 817a5e26f29da0867bb7de6059488c39a4adc3d0[m
+Merge: a5b4e05 a31dd6c
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Tue Feb 21 18:03:36 2023 +0900
+
+    Merge pull request #60 from Oriburger/battlesystem-develop
+    
+    [battlesystem-develop], [feat][fix] 인게임 UI 기능 추가, 각종 버그 수정(AI, 월드 등)
+
+[33mcommit a31dd6c053a1861c5d88f988be1161a00f278cc6[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Feb 21 18:01:18 2023 +0900
+
+    [feat][fix] 인게임 UI 기능 추가, 각종 버그 수정(AI, 월드 등)
+    - 인게임 UI 기능 추가
+        - 시스템 메시지 기능
+            - ABackStreetGameModeBase, WB_CombatUI
+            - SystemMessagePrintDelegate
+            - 각종 시스템 메시지 출력
+                - 탄환 부족, 무기 추가 실패 등
+        - 인벤토리 내구도 낮음 효과 표시
+            - WB_Inventory
+            - 기존 수치 제외한 효과
+            - 붉은색으로 Pulse 효과
+    - 버그 수정
+        - AI
+            - 캐릭터로의 부자연스러운 방향 전환
+                - TurnToTarget Task 임시 비활성화
+                - Controller Yaw Input 상속
+            - 적 기본 스탯이 적용되지 않는 현상
+                - 적 캐릭터의 무한 효과 적용이 안먹히는 현상
+                - TileBase내 InitEnemyStat과 충돌
+                    - InitEnemyStat내 SetDefaultStat 함수 병합
+        - 월드 / 발사체
+            - 월드 메시를 뚫는 현상
+            - TypeA~F 레벨 내 메시들에 오버랩 이벤트 추가
+    - 그 외
+        - 블래스터 메시 추가 (지오메트리로 제작)
+            - SM_Blaster
+    - 버그 리포트
+        - AI 네비게이션 오류
+            - 적이 장애물을 뚫으려고함 (최단 경로 사이에 메시가 포함되어있음)
+            - 루트레벨의 네비 메시에서 모든 서브레벨이 공유하다보니 발생하는것 같음.
+
+[33mcommit d0b2cd7c91e192bec44a7690e0e356cb4f9eb096[m
+Merge: 6adc8a0 9f45d41
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon Feb 20 23:35:24 2023 +0900
+
+    Merge pull request #57 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem-develop -> master] 챕터 이동 관련 기능 추가
+
+[33mcommit 9f45d41b323c4db5ebaf3fea86799ea7cae023f9[m
+Merge: 984f097 6adc8a0
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Feb 20 23:35:08 2023 +0900
+
+    [merge] 병합 충돌 해결
+    - TypeB / InGame
+        - master(battlesystem-develop)로 병합
+
+[33mcommit 6adc8a03712e0eebb481324eab2fb21b48ae8c76[m
+Merge: dec231c a5b4e05
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon Feb 20 23:09:16 2023 +0900
+
+    Merge pull request #59 from SSU-BackStreet/battlesystem-develop
+    
+    [battlesystem-develop -> master] 비주얼 개선, 버그 픽스 등
+
+[33mcommit a5b4e058521128b157c1b4d8e177c79b1f8c229c[m
+Merge: 9128369 dc15c3e
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon Feb 20 23:07:23 2023 +0900
+
+    Merge pull request #58 from Oriburger/battlesystem-develop
+    
+    [battlesystem-develop] 각종 비주얼 개선 등
+
+[33mcommit 984f0973d319cd571c5e3a650c477b380f099405[m
+Merge: 7f3691e 77bef5a
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Mon Feb 20 21:35:13 2023 +0900
+
+    Merge pull request #56 from HeaRyeong/stagesystem-develop
+    
+    [fix][refactor] 챕터 전환 기능
+
+[33mcommit 77bef5a6c482efe22c2af95e9a615182d172ddf1[m
+Author: hran <ahr0322@naver.com>
+Date:   Mon Feb 20 21:28:30 2023 +0900
+
+    [etc] StaterContent 삭제
+
+[33mcommit 54240d960971d4feea71d297a6a6f8b51df06927[m
+Author: hran <ahr0322@naver.com>
+Date:   Mon Feb 20 21:17:35 2023 +0900
+
+    [fix][refactor] 챕터 전환 기능
+
+[33mcommit dc15c3e0f7f27dfadfc2b4189a62e18b67925c36[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Feb 20 17:45:29 2023 +0900
+
+    [feat][fix] 레벨 디자인 개선, 각종 비주얼 개선 등
+    - 레벨 디자인 개선
+        - 각종 UV 겹치는 메시 제거
+        - 일부 메시 재배치 및 추가
+        - 이미시브 메시 적용 (창문 등)
+            - M_Window
+        - 스테이지 Gate 배치 수정
+    - 각종 비주얼 개선
+        - 포스트 프로세싱 및 월드 라이팅
+        - Gate 머티리얼 수정 (Pulse 효과)
+        - 각 서브레벨 라이팅 빌드
+    - 무기 스탯 수정 (BB탄 총)
+        - BP_BB_Bullet
+    - 버그 수정
+        - 인게임 내 인벤토리 업데이트가 안되는 현상
+    - 현재 버그
+        - 보스 몹이 바닥을 뚫는 현상
+
+[33mcommit 7f3691e6b7d63e222a2f15187774234c8ca226f2[m
+Merge: f3f4966 db386db
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon Feb 20 14:07:39 2023 +0900
+
+    Merge pull request #55 from HeaRyeong/stagesystem-develop
+    
+    [merge] 병합 후 레벨 충돌 오류 수정
+
+[33mcommit dec231cd71f85a05c48b688fa0a7bd697e58fee0[m
+Merge: 1b4cf69 db386db
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon Feb 20 13:40:56 2023 +0900
+
+    Merge pull request #54 from HeaRyeong/stagesystem-develop
+    
+    [merge] 병합 후 레벨 충돌 오류 수정
+
+[33mcommit db386db49aa6d5958f28815e34893310491035bd[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Sun Feb 19 22:06:23 2023 +0900
+
+    [merge] 병합 후 레벨 충돌 오류 수정
+
+[33mcommit 1b4cf69969c4a41ea5d7058a85cdd66f19393e52[m[33m ([m[1;31morigin/stagesystem-develop-Save[m[33m, [m[1;32mmaster[m[33m)[m
+Merge: c1b3de4 f3f4966
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sun Feb 19 14:03:30 2023 +0900
+
+    Merge pull request #53 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem develop -> master] 스테이지 디자인 스폰 포인트 추가
+
+[33mcommit f3f4966ed7575caf50975f4ab07f3a6960a9cc3e[m
+Merge: 9128369 1945e2b
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Feb 19 14:03:12 2023 +0900
+
+    [merge] 병합 간 충돌 해결
+
+[33mcommit 1945e2b2d9cf1f12fd66cb49a2756c55ebefe2b7[m
+Merge: dcf5dee 8b19984
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Sun Feb 19 13:57:25 2023 +0900
+
+    Merge pull request #52 from HeaRyeong/stagesystem-develop
+    
+    [feat] 레벨 디자인
+
+[33mcommit 8b19984d30f03808ace96df0369477d256141e61[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Sun Feb 19 13:56:39 2023 +0900
+
+    [feat] 레벨 디자인
+    
+    스폰 포인트 추가
+
+[33mcommit c1b3de4251b6786efe883adc0e3c568081a93a5f[m
+Merge: 21c4801 9128369
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sun Feb 19 13:24:50 2023 +0900
+
+    Merge pull request #49 from SSU-BackStreet/battlesystem-develop
+    
+    [feat][refactor][fix] 원형 인벤토리UI, 아이템 박스, 각종 버그 픽스 및 개선
+
+[33mcommit 9128369df69ed529d8b5e192179a159415605bf8[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Feb 19 13:24:32 2023 +0900
+
+    [merge] 병합간 오류 수정
+
+[33mcommit 654697fc07aa2a2577b09d56a7bb938e7105f274[m
+Merge: f70310a 02a52ef
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Feb 19 13:23:01 2023 +0900
+
+    Merge branch 'battlesystem-develop' of https://github.com/SSU-BackStreet/UE5-BackStreet into battlesystem-develop
+
+[33mcommit f70310ab6a55175898d1f17179580947b1540cea[m
+Merge: cde4783 21c4801
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Feb 19 13:21:53 2023 +0900
+
+    [merge][fix] 병합 간 오류 수정
+    - ItemBoxBase 관련 오류
+    - Stage 관련 오류
+
+[33mcommit 21c480192edc831f5337768ffb913114adcc32d8[m
+Merge: 3c5c253 dcf5dee
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sun Feb 19 10:24:41 2023 +0900
+
+    Merge pull request #51 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem-develop -> master] 스테이지 전환 버그 수정
+
+[33mcommit dcf5dee43bc305813dd2b3e3111117e41963e3d9[m
+Merge: 0db9560 8b36244
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Sun Feb 19 09:56:09 2023 +0900
+
+    Merge pull request #50 from HeaRyeong/stagesystem-develop
+    
+    [stagesystem develop] 스테이지 전환 버그 수정
+
+[33mcommit 8b362449a5b3e6830d567959356c5ebbf22c50a6[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Sun Feb 19 09:54:09 2023 +0900
+
+    [fix][refactor] 스테이지 전환 개선
+    
+    보스 스테이지 버그 수정
+    화면 전환 시퀀스 적용
+
+[33mcommit 02a52ef87ea9a453d81b4bdc83f931483396670c[m
+Merge: bac0eae cde4783
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sun Feb 19 09:26:48 2023 +0900
+
+    Merge pull request #48 from Oriburger/battlesystem-develop
+    
+    [feat][refactor][fix] 원형 인벤토리UI, 아이템 박스, 각종 버그 픽스 및 개선
+
+[33mcommit cde4783e19d3ac4d8fc72a9cc1369e521bf494bb[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Feb 18 17:42:56 2023 +0900
+
+    [feat][fix] 보스 개선, 버프/디버프 UI개선, 오류 수정 등
+    - 보스 개선
+        - 보스 애니메이션 교체 - Paragon Kwang
+        - 보스 효과음 추가 - Roar 이벤트
+        - 보스 전용 무기
+            - BP_Pillar / BP_SwordAura (원거리/ 근거리 콤보 무기)
+    - 버프/디버프 UI 개선
+        - 각 버프/디버프 마다 아이콘 추가
+        - 버프/디버프 Description 이벤트 (~ing)
+    - 오류 수정
+        - 힐/도트데미지가 끝나지 않는 현상
+        - 무한 Turn에 빠지는 현상
+            - Turn TimeOut 타이머 추가
+
+[33mcommit 3dc21bf7140db0e305df481d3dd6142540644820[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Feb 17 21:37:20 2023 +0900
+
+    [feat][fix] 원형 인벤토리 완성, 보스 포효 이벤트 추가, 각종 오류 수정 등
+    - 원형 인벤토리 완성
+        - 무기 아이콘 추가 및 세그먼트 이미지 수정
+        - 각 세그먼트 요소 업데이트 (내구도, 탄환)
+        - 현재 무기 하이라이트
+    - 보스 포효 이벤트 추가
+        - 카메라 이펙트 추가 (E_Boss)
+    - 각종 오류 수정
+        - 카메라 흔들림 효과 미출력 오류 수정
+            - CameraBoom 길이에 맞게 위치 수정
+        - 버프, 디버프 오류 수정
+            - 스턴 해제가 되지 않는 현상 수정
+            - 힐 / 도트데미지 이벤트가 호출되지 않는 현상 수정
+
+[33mcommit 5aee26b0929682a783245c18a70c5234a6a4ed13[m
+Author: Oriburger <uss425@naver.com>
+Date:   Thu Feb 16 21:55:17 2023 +0900
+
+    [feat] 원형 인벤토리 UI (~ing)
+    - 원형 인벤토리
+        - WB_Inventory_new
+        - 세그먼트 컴포넌트
+            - WB_InventorySegmentA, B, C
+            - BPI_Segment (BP 인터페이스)
+        - AWeaponInventoryBase
+            - 무기 추가, 제거 시 Delegate 호출
+            - WB_Inventory_New에 InventoryArray 전달 후, 재생성
+            - 호출 시 마다 전체 제거 후, 재생성 되어 추후 로직 개선 필요
+        - 무기 추가, 정보 (이름, 내구도, 탄환 수 등)
+            - 무기 Weight에 따른 정렬 등
+
+[33mcommit a939cd2b109529c79f17b4318992ee1bc9ccbdf4[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Feb 15 18:22:58 2023 +0900
+
+    [feat][fix] 아이템 박스 완성, 발사체 아이템 추가 등
+    - AItemBoxBase
+        - 기존 작동하지 않던 발사체 로직 (개봉 시, 아이템들이 쏟아져 나오는 효과)
+            - 발사체 콜리전 문제 수정
+            - 겹치거나 통과되는 문제
+            - 스케일을 1/100 수준으로 스폰한 뒤, Proejctile Movement Activate
+               - 일정 시간 이후, 스케일 1/1 수준으로 조정
+        - 각종 효과
+            - 아이템 개봉 효과 (사운드 및 파티클)
+            - 아이템 발사체 효과 및 등장 효과
+    - AItemBase
+        - 발사체 아이템 추가
+        - AWeaponInventoryBase
+            - Ammo 추가 기능 및 정보 Sync 로직 추가
+
+[33mcommit fd1f586b0f94c9e17c59b7a4b1202118c432bc04[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Feb 14 23:18:54 2023 +0900
+
+    [feat][fix][refactor] 버프 아이템, 미션 아이템 추가, 아이템 박스 추가(~ing) 등
+    - 아이템
+        - AItemBase
+        - 아이템 이펙트 추가
+        - 버프 아이템 추가
+            - BP_BuffItem_~~
+        - 미션 아이템 추가
+            - 기존 시스템과 연결
+            - BP_MissionItemBase
+    - 아이템 박스
+        - AItemBoxBase
+        - 개봉 및 스폰
+            - ABackStreetGameModeBase
+                - Hash로 아이템 클래스 관리
+            - 지정한 값/클래스/확률에 기반으로 아이템 스폰
+            - 아이템 흩뿌리기 효과 (not working)
+                - 아이템 스폰 후, 흩뿌려지는 효과
+                - 현재 콜리전 문제로 인해 작동 x
+    - 버그 수정 및 리팩토링
+        - 버프시스템
+            - 무한 버프와 힐링버프를 동시에 걸 경우, 무한 버프가 사라지지 않는 현상 수정
+        - AChapterManagerBase / AMissionBase
+            - 반환형태 수정 및 코드 스타일 일부 수정
+
+[33mcommit 8abd4d1410f5d58135e1d409f1ff826bf652dd5d[m
+Merge: 0db9560 11b5cde
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Tue Feb 14 15:11:18 2023 +0900
+
+    Merge pull request #2 from HeaRyeong/master
+    
+    [merge] master pull
+
+[33mcommit 11b5cde3e0beb21eda20367c86dd4230e30209e9[m
+Merge: 72781e4 3c5c253
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Tue Feb 14 15:03:14 2023 +0900
+
+    Merge branch 'SSU-BackStreet:master' into master
+
+[33mcommit 3c5c253db8e5d4fbd32256c8a84b63deb70181b0[m
+Merge: a51c018 bac0eae
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Tue Feb 14 15:02:07 2023 +0900
+
+    Merge pull request #47 from SSU-BackStreet/battlesystem-develop
+    
+    [battlesystem-develop -> master] 병합 작업 재적용, 발사각 오류 수정 등
+
+[33mcommit bac0eaee98e7127e9044612df859687aff98c0cf[m
+Merge: 5f7d739 a6aeae5
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Tue Feb 14 15:01:17 2023 +0900
+
+    Merge pull request #46 from Oriburger/battlesystem-develop
+    
+    [fix][merge] 병합 작업 재적용,
+
+[33mcommit a6aeae562b63a2192914635f81d21857227924c7[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Feb 14 14:57:15 2023 +0900
+
+    [fix][merge] 병합 작업 재적용, 아이템 수정(~ing, not working), 발사각 오류 수정 등
+
+[33mcommit 72781e4a7b226df60862bf55d272233496073a54[m
+Merge: a51c018 0db9560
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Tue Feb 14 14:13:21 2023 +0900
+
+    Merge pull request #45 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem-develop -> master] 잔여 병합 작업
+
+[33mcommit 5f7d739588715ec9dd64bdcbf0f99f91ed65fc2b[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Feb 13 21:09:20 2023 +0900
+
+    [merge] 병합간 오류 수정
+
+[33mcommit 0db95604ce91e9cc3526958c7be8824aecb29554[m
+Merge: a51c018 1057b60
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Feb 13 20:50:28 2023 +0900
+
+    [stagesystem-develop -> master] 병합 간 오류 수정 (1)
+
+[33mcommit a51c01878d17082ab3adece0c39a093c4d87eef3[m
+Merge: f9ffdec 59f10da
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon Feb 13 19:19:39 2023 +0900
+
+    Merge pull request #39 from SSU-BackStreet/battlesystem-develop
+    
+    [battlesystem-develop -> master] 레벨 디자인 적용, 버프 시스템 분리, 각종 오류 수정 및 개선 등
+
+[33mcommit 59f10dacadfa5475cdf608c17a5a17180d160d82[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Feb 13 19:01:34 2023 +0900
+
+    [fix][feat] 아이템 클래스 분리, 인벤토리 오류 수정, 무기 추가 등
+    - 아이템 클래스 분리
+        - AItemBoxBase (not working)
+        - AItemBase
+            - BP_WeaponItemBase
+            - 습득 가능 (이외 동작 x)
+    - 인벤토리 오류 수정
+        - 내구도 관련 오류
+        - 무기 Add시 State 초기화가 되지 않는 현상
+    - 무기 추가
+        - 맨손 무기 분리
+
+[33mcommit 1057b60f56966d142129bc6bf2c381e9a6398f77[m
+Merge: e56b3d7 136fdf5
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Mon Feb 13 18:58:10 2023 +0900
+
+    Merge pull request #43 from HeaRyeong/stagesystem-develop
+    
+    [stagesystem-develop] 스테이지 리팩토링
+
+[33mcommit 136fdf592bcca17737076b4b9e48c72d27d0dea0[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Mon Feb 13 18:54:58 2023 +0900
+
+    [fix][refactor] 스테이지 리팩토링
+    
+    AI 움직이지 않는 오류 개선
+    게임 로직 부분 레벨스크립트 이전
+    미니맵 UI 수정중
+
+[33mcommit 90dcbe4ccac80afa953d50695a93521fd041dfc9[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Feb 12 22:16:53 2023 +0900
+
+    [feat][refactor][fix] 캐릭터 머티리얼 효과, AI 개선, 버프 디버프 버그 수정 등
+    - 캐릭터 머티리얼 효과
+        - A*CharacterBase
+        - 플레이어 캐릭터 얼굴 표정 효과 (not working)
+        - 플레이어 데미지 효과 / 벽 투시 효과 통합
+        - 적 공격 모드 효과 (눈 색깔)
+    - AI 개선
+        - Attack 이전 행동 추가 (눈 색깔 변경)
+        - 캐릭터 발견 애니메이션 단일 호출 되도록
+    - 버프 / 디버프 버그 수정
+        - 버프/ 디버프 중복 적용 버그
+            - 중복 적용 시, 값이 누적되는 현상
+            - ResetBuff 임의 호출
+
+[33mcommit e56b3d7d15ddc709f8534b6a853c8f64025a62d7[m
+Merge: d6b9fb1 c5574f4
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Sun Feb 12 13:35:29 2023 +0900
+
+    Merge pull request #40 from HeaRyeong/stagesystem-develop
+    
+    [refactor][fix] 스테이지 시스템 리팩토링
+
+[33mcommit c5574f44bafa738e1cc3af8821d14198342fab79[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Sun Feb 12 13:33:21 2023 +0900
+
+    [refactor][fix] 스테이지 시스템 리팩토링
+    
+    레벨 디자인 개선
+    스테이지 시스템 리팩토링
+    비동기 에셋 코드 삭제
+
+[33mcommit 164a585b46d4f798c861d19ade764c96d2853b7e[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Feb 11 17:26:50 2023 +0900
+
+    [fix][refactor] WeaponState 관련 개선 등
+    - 버프/디버프 안되는 현상
+        - 버프 매니저 Owner Set 시점 오류
+            - 캐릭터와 매니저가 BeginPlay에서 동시에 Set
+                - 캐릭터의 SetOwner 호출이 선행되어야함
+            - 매니저의 Init() 함수를 추가하여 캐릭터에서 호출
+    - 인벤토리 / 버프 오류
+        - 버프를 받은 채로 무기 Swap 시 버프를 받은 스탯이 그대로 저장됨
+            - SetBuff/DebuffTimer 함수 내에서 WeaponStat 관련 연산 전부 제거
+            - CharacterStat 연산으로 커버 가능
+        - 버프가 적용되지 않았음에도 Effect가 남아있는 현상
+            - bool 반환형 추가로 해결
+    - 접근제어지시자 개선
+        - ACharacterBuffManager
+        - AWeaponBase
+            - WeaponStat, State
+
+[33mcommit 9f90588b5ddca7f3d61277fa34c7fc360deae75a[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Feb 11 15:00:18 2023 +0900
+
+    [fix] 패키징 파일 크래시 현상 일부 수정
+    - ACharacterBuffManager
+        - RootComponent 누락 수정
+            - SceneComponent 추가
+        - BeginPlay() 내 Super 클래스 함수 호출 누락 수정
+    - ABackStreetGameModeBase
+        - CreateAssetManager
+            - Null Exception 검사 추가
+            -> 생성 과정 자체에 문제가 있는듯
+        - 미해결
+
+[33mcommit 47f7715fa92cb657475409adc24a87533366a0ab[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Feb 10 21:10:41 2023 +0900
+
+    [feat][refactor] AI 시스템 개선 (1)
+    - 캐릭터 발견 모션 추가
+        - UBTStateManageServiceBase
+        - 추격 상태 (E_Chase) 로 넘어가기 직전, 플레이어를 발견했다는 애니메이션 추가
+            - E_Patrol 상태에서 chase anim 상태 초기화
+    - E_Return 상태에서 공격 시 Action 추가
+        - AEnemyCharacterBase, UBTStateManageServiceBase
+        - 복귀 상태 (E_Return) 상태에서 데미지 입을 시 바로 Chase
+
+[33mcommit 1d1957404cf59637716ecd8d28c58ad67152528b[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Feb 10 16:40:20 2023 +0900
+
+    [feat][fix] 타일 추가작업, 무한 장전 오류 수정 등
+    - 타일 추가작업
+        - Map1JH, Map2JH,...
+            - Gate 및 각종 SpawnPoint 추가
+            - LevelBP 네이티브화
+    - 무한 장전 오류 수정
+        - ACharacterBase::TryReload
+            - ResetActionState 조건식과 충돌
+    - 애니메이션 리타깃 작업
+
+[33mcommit ab5892d6b10a6518924e355c3da35437b029fb96[m
+Author: Oriburger <uss425@naver.com>
+Date:   Thu Feb 9 22:38:12 2023 +0900
+
+    [feat][refactor][fix] 적 사운드 구분, 종료 화면 사운드 추가 등
+    - 적 사운드 구분
+        - Tag에 따른 볼륨 구분
+        - HitImpact 및 Attack 사운드
+    - 공격 속도에 따른 애니메이션 속도 처리
+        - ACharacterBase::TryAttack
+            - CharacterStat.CharacterAttackSpeed 프로퍼티에 따름
+    - Reload 관련 버그
+        - Reload 도중에 데미지를 입을 시, Reload가 풀리는 현상
+            - ACharacterBase::ResetActionState 수정
+
+[33mcommit 21baa88ac794d50f7e24536a12df16457e6dd3c3[m
+Author: Oriburger <uss425@naver.com>
+Date:   Thu Feb 9 16:32:49 2023 +0900
+
+    [feat] 무기 타입별 공격 애니메이션 구분, 사운드 추가(~ing) 등
+    - 무기 타입별 공격 애니메이션 구분
+        - EWeaponType, <-- WeaponStat내 추가
+        - 위 열거형 값에 따라 공격 애니메이션 구분
+    - 사운드 추가
+        - 에너지 블래스터, BB탄 총 발사
+        - 무게 별 휘두르는 사운드 구분
+        - 투척 사운드
+        - HitImpact 3종
+    - 무기 수정
+        - BP_BB_Gun
+        - 스태틱메시 모델 추가
+    - 애니메이션 추가 작업 (~ing)
+        - Shoot 애니메이션 (AM_Gunplay)
+        - 각종 애니메이션 추가를 위한 Mixamo 모델 리타깃 작업
+
+[33mcommit b4e336b79f9a0568bdf82e918480749435f9df82[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Feb 8 23:47:47 2023 +0900
+
+    [fix] Buff/Debuff Deactivate 시 Niagara가 Deactivate 되지 않는 현상
+    - ACharacterBuffManger
+        - ClearBuffDebuffTimer 함수 내 Add 함수 제거 (...)
+
+[33mcommit e014feb05e43fe679a0b8a6190d758e2d2087eea[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Feb 8 23:26:45 2023 +0900
+
+    [refactor] 버프 시스템 분리 작업 (~ing, not working)
+    - 버프 시스템 분리 작업
+        - ACharacterBuffManager
+            - 타이머 설정, 반환 상태 관리 등
+        - ACharacterBase 내 ChildActor로 등록
+        - AItemBase, AWeaponBase, AProjectileBase, Debug 발판 등 수정
+    - 미동작
+        - Deactivate Niagara 이벤트
+            - ACharacterBuffManager::BuffEmitterDeactivateDelegate
+                - AMainCharacterBase::DeactivateBuffNiagara 바인딩
+                - Buff/Debuff 종료 시 Broadcast
+            - 나이아가라 컴포넌트가 아무리해도 안꺼짐.
+
+[33mcommit 7a21579e5787f25bbcb709c3133c097c08f99a81[m
+Merge: fb653a0 11704ae
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Feb 7 23:46:05 2023 +0900
+
+    Merge branch 'battlesystem-develop' of https://github.com/Oriburger/UE5-BackStreet into battlesystem-develop
+
+[33mcommit fb653a0781c7de58c13b921d90bad38d02921e92[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Feb 7 23:45:51 2023 +0900
+
+    [refactor] Hit Impact 효과 출력 로직 개선
+    - AWeaponBase
+        - AudioComponent
+            - Actor 소멸 시, 동시 소멸
+            - 내구도 이벤트로 인한 소멸 시 각종 사운드 미출력
+        - 개선된 방식
+            - Instant 출력 (UGameplayStatics::PlaySoundAtLocation)
+            - HitImpactB 사운드 추가
+
+[33mcommit cc1dba51180a1ea7aa0bb85c36a2f6cc59036c82[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Feb 6 23:52:56 2023 +0900
+
+    [feat] 레벨 디자인(~ing), 발 사운드, 발사체 피격 사운드 등
+    - 레벨 디자인
+        - Map3_JH1.umap
+    - 발 사운드
+        - AnimNotify 활용한 사운드
+    - 발사체 사운드
+        - SoundComponent가 아닌 Instant 출력
+        -> 타격 이벤트 발생 시 Destroy 되기 때문
+    - 사운드 개선
+
+[33mcommit f9ffdec7dccada214258ee0c26be9257a460ecb6[m
+Merge: b638ba4 d6b9fb1
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sun Feb 5 15:46:33 2023 +0900
+
+    Merge pull request #37 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem-develop -> master] 사운드 , 미니맵 UI, 레벨 디자인 추가
+
+[33mcommit d6b9fb1fdbad7153c77425c3d1613fa4e6517a38[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Feb 5 15:44:54 2023 +0900
+
+    [merge][fix] stagesystem-develop 병합 및 오류 수정
+
+[33mcommit 0f95db8183fe8ddf4ebb790315a613391c866356[m
+Merge: a3ca53f b638ba4
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Feb 5 15:44:24 2023 +0900
+
+    [merge][fix] stagesystem-develop 병합 및 오류 수정
+
+[33mcommit b638ba418262fc5fb1889abb56c19ee4afc8b9c2[m
+Merge: d6a8dcf f2bda70
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sun Feb 5 14:27:31 2023 +0900
+
+    Merge pull request #35 from SSU-BackStreet/interface-develop
+    
+    [Interface-develop & battlesystem-develop --> master] 인벤토리 로직, 각종 UI 및 효과, 내구도 시스템 등
+
+[33mcommit a3ca53fdfff805d58d466a703fd5cd3024f5b96e[m
+Merge: f670d2c 11de394
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Sun Feb 5 09:32:21 2023 +0900
+
+    Merge pull request #36 from HeaRyeong/stagesystem-develop
+    
+    [stagesystem-develop] 사운드 , UI , 레벨 디자인 추가
+
+[33mcommit 11de394db78f67b33e2fb1e70cf3fc2a87837df1[m
+Merge: 57a367e f670d2c
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Sun Feb 5 09:29:37 2023 +0900
+
+    Merge branch 'stagesystem-develop' of https://github.com/HeaRyeong/UE5-BackStreet into stagesystem-develop
+
+[33mcommit 57a367eb55797ab71aad5d411c693a3307470a84[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Sun Feb 5 09:26:28 2023 +0900
+
+    [feat] 사운드 추가 및 UI 추가 기능
+    
+    [feat]
+    사운드 추가
+    UI 미니맵 기능 추가
+    레벨 디자인 3종 추가
+
+[33mcommit 11704ae44eb04d302513be59ba64afe276c1fb6d[m
+Merge: 7c27b55 c3276db
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sun Feb 5 00:55:36 2023 +0900
+
+    Merge pull request #34 from Oriburger/battlesystem-develop
+    
+    [battlesystem-develop] 인벤토리 기본 로직, 내구도 기본 로직 등
+
+[33mcommit f2bda70c41b2405c2f2495663863c671295d8cda[m
+Merge: f2a4ee7 39a318c
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sun Feb 5 00:42:57 2023 +0900
+
+    Merge pull request #33 from Oriburger/interface-develop
+    
+    [Interface-develop] 인벤토리 로직 및 각종 인게임 UI, 타일간 전환 효과 등
+
+[33mcommit 39a318cac54fdaccafa67def90b12615480e4464[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Feb 5 00:37:07 2023 +0900
+
+    [feat][fix] 타일간 전환 효과 추가, ActionState 관련 오류 수정 등
+    - ATileBase
+        - GamemodeRef, CurrTile 등 다중 프로퍼티 단일화
+        - LevelSequencer 관련 로직 추가
+            - 타일 전환시 SQ_CrossFade 출력
+                - 전환 간에 새 타일 로드
+                - 전환 종료 시, 기존 타일 언로드 및 Gate 소멸
+    - ActionState 관련 오류 수정
+        - ACharacterBase
+            - 적 캐릭터가 MeleeAtk를 하는 도중에 Hit 이벤트가 발생? -> 끝이 나지 않는 Melee LineTrace 체크
+                - ResetActionState()에 StopAttack 추가
+
+[33mcommit 699fbf2ad4e7447a85f7d7db401bc60415c2c3f4[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Feb 4 16:39:00 2023 +0900
+
+    [fix][test] 근접전투 시, hitActor의 Nullptr Exception 수정 등
+    - 레벨 디자인 테스트
+        - Map1_JH.umap
+    - 버그 픽스
+        - 근접 전투 간, 크래시 에러
+        - AWeaponBase::MeleeAttack
+            - hitResult의 Nullptr Exception
+            - hitResult.GetActor의 Validity 체크
+
+[33mcommit 87efaa789848a1189d913c421e180373702ef09b[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Feb 3 20:38:26 2023 +0900
+
+    [feat][refactor] 게임 종료 로직 개선, 클리어 UI 및 보상 로직
+    - 게임 종료 로직 개선
+        - ABackStreetGameModeBase
+            - StartChapterDelegate
+                - ABack..GameModeBase::StartChapter
+                - AAIControllerBase::ActivateAI
+            - FinishChapterDelegate
+                - ABack..GameModeBase::FinishChapter
+            - ClearResourceDelegate
+                - ACharacterBase::ClearAllTimerHandle
+    - 클리어 UI 및 보상 로직
+        - ABack...GameModeBase::FinishChapter
+            - 결과에 따른 두 위젯 출력
+            - WB_GameOver
+            - WB_GameClear
+                - WB_RewardSelection
+                    - ABack..Mode::RewardStageClear 호출
+
+[33mcommit f1d59850baa831ef8c5b3da03af50816ab52d108[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Feb 3 00:34:34 2023 +0900
+
+    [feat] 적 캐릭터 Floating HP바 추가
+    - AEnemyCharacterBase
+        - WidgetComponent 추가
+    - WB_EnemyHPBar
+        - 적 캐릭터 위에 출력할 실제 위젯
+    - M_FloatingWidget
+        - 기본 위젯 머티리얼 복제
+        - 오파시티 값 조절
+
+[33mcommit 84f8c5f9bab146620ea86132bb56bb0d90cc8a20[m
+Author: Oriburger <uss425@naver.com>
+Date:   Thu Feb 2 17:43:26 2023 +0900
+
+    [feat] 게임오버 이벤트 추가 등
+    - ABackStreetGameModeBase
+        - GameOverDelegate
+            - ACharacterBase::ClearAllTimerHandle
+            - AAIControllerBase::DeactivateAI
+            - ABackStreetGameModeBase::GameOver
+                - 게임오버 로직처리
+    - 게임오버 로직?
+        - WB_GameOver 출력
+        - 부드러운 전환 효과
+            - GlobalTimeDelation으로 사망 시점에 슬로우 효과
+        - Press Any Key 이벤트
+            - FadeOut 효과와 함께 Transition -> MainMenu로 이동
+        - 현재 임시로 MainMenuPersistent <-> Transition <-> BattleTestRoom 연결
+
+[33mcommit c3276db818e513ca41d8b46467b1898eb2f7d7e1[m
+Author: Oriburger <uss425@naver.com>
+Date:   Thu Feb 2 14:55:29 2023 +0900
+
+    [refactor][fix] 사망 로직 개선, 인벤토리 관련 오류 등
+    - 사망 로직 개선
+        - AS_*.uasset / ACharacterBase / AEnemyCharacterBase
+        - 기존
+            - StateMachine 내 따로 Die라는 상태로 관리
+            - StateMachinie 내 간선이 많아져 관리가 어려운 문제
+        - 개선
+            - AnimMontage + AnimNotify
+            - Emitter은 AnimNotifyf 내에서 출력
+    - 인벤토리 관련 오류
+        - 인벤토리 드롭 오류
+            - 드롭 로직 일부 미구현 -> 해결
+        - 사망 이후, WeaponActor이 월드에 남아있는 오류
+            - 사망 시, 인벤토리와 무기 액터를 소멸하도록 함
+
+[33mcommit 363a1d27fcc1fd2b0f14ed1361d545d921da8b92[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Feb 1 23:30:34 2023 +0900
+
+    [feat] 인벤토리 기본 UI 추가, 중간 발표 영상 찍기
+    - 중간 발표
+        - MainMenu -> BattleTestRoom
+        - AI Possess 방식 수정
+            - Spawned
+        - 버그
+            - 공격 커맨드 딜레이 현상
+    - 인벤토리 기본 UI (임시)
+        - WeaponInventoryBase와 연결
+        - 이름, 탄환, 내구도 표시
+
+[33mcommit 0aa4e97cd1e2c1625e3ab1dfd8033163b3697c00[m
+Merge: f2a4ee7 6b4acf7
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Feb 1 19:17:57 2023 +0900
+
+    [merge] battlesystem-develop 작업 내용 병합
+
+[33mcommit 6b4acf7ca98ebe4c3b2d734c9806d8538dd3512d[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Feb 1 18:39:39 2023 +0900
+
+    [feat][fix] 인벤토리 기본 로직 완성, 내구도 기본 로직 완성 등
+    - 인벤토리 기본 로직
+        - 습득
+            - WeaponID를 통해 습득
+            - 발사체 무기의 경우, 중복 검사를 하여 중복 시 탄환 개수 증가
+        - 제거
+            - 가지고 있는 무기를 제거하고, 인벤토리의 정보를 제거하는 로직
+            - (임시) 드롭 기능, Q를 눌러 인벤토리에서 제거
+        - 전환
+            - Tab키를 통해 인벤토리 내 무기간 전환
+        - 동기화
+            - 인벤토리 내 정보와 실제 착용하고 있는 무기의 정보 동기화
+        - 자동 정렬
+            - Weight에 따른 오름차순 정렬 (UI를 위한 기능)
+    - 내구도 기본 로직 완성
+        - WeaponStat, State
+            - Durability 관련 프로퍼티
+        - AWeaponBase
+            - UpdateWeaponDurabiliy
+    - 아이템 기능
+        - BP_Item의 봉투 크기를 키움 (잘 안보임)
+        - 무기 아이템
+            - ACharacterBase::PickWeapon 호출
+        - 탄환 아이템 (임시)
+            - 따로 지정하지 않음
+            - 중복된 원거리 (탄환) 무기를 습득 시, 25만큼의 탄환 추가
+    - 그 외 기능
+        - AEnemyCharacter
+            - 기본 무기 ID를 지정해서, 스폰 시 아이템을 장착하도록 함
+            - 무한 내구도와 무한 탄환 버프를 기본 장착
+    - 버그 픽스
+        - 근접 무기 AI 공격 범위 오류
+            - 근접 무기 소지시, 고정된 값 200을 사용
+
+[33mcommit 0a46ccb7c88e4336bcf2bc0c391017b0f79ab241[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Jan 31 23:17:31 2023 +0900
+
+    [feat][refactor][fix] 병합 작업, 인벤토리 기본 로직(~ing), 버그 수정
+    - 병합 작업
+    - 인벤토리 기본 로직
+        - ItemInfoStruct
+            - FInventoryItemInfoStruct
+        - AWeaponInventoryBase
+            - 무기 추가 로직
+            - 무기 전환 로직
+            - 그 외 필요 함수
+        - 리팩토링
+            - ACharacterBase 내 WeaponRef 제거
+                - AWeaponInventoryBase가 관리
+            - 기존 인벤토리 테스트 로직 제거
+                - AItemBase 내 AddWeapon 등
+            - WeaponInfo
+                - WeaponStatStruct 내 Weight 정보 추가
+                - WeaponState 구조체 추가
+                    - Weapon 현재 상태 (탄환 수, 현재 내구도 등)
+    - 버그 수정
+        - AtkRange가 제대로 반환되지 않는 현상 수정
+            - UBTStateManageServiceBase
+            - AWeaponBase
+    - 리팩토링 필요
+        - 빈칸을 남겨두는 인벤토리 list 수정
+        - 캐릭터 Buff/Debuff Manager
+            - ACharacterBase에서 분리시켜도 될 것 같음
+        - WeaponID만 있어도 Create가 되도록
+            - AWeaponInventoryBase에 클래스와 ID 정보를 담은 List를 추가하면 될 것 같음
+
+[33mcommit d6a8dcfee5106de5045db7a9d9296364fe534c54[m
+Merge: 4e78a35 f670d2c
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon Jan 30 16:20:21 2023 +0900
+
+    Merge pull request #31 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem-develop -> master] 캐릭터 벽 투과 , 스테이지 타입 별 몬스터 스폰 , 아이템 이펙트
+    
+    ㄴ 수고하셨습니다.
+
+[33mcommit f670d2ce41eee5c11f821a37db92f09be84d09cb[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Jan 30 16:15:31 2023 +0900
+
+    [merge] 병합 수정 내용
+
+[33mcommit e545f049cf9e3b5d2ca825a25aba8ec56cf0af71[m
+Merge: aeab265 4e78a35
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Jan 30 14:52:24 2023 +0900
+
+    [merge] 병합 충돌 작업
+
+[33mcommit 4e78a3553f5b6df2e053c7beabda01bc3e36abb3[m
+Merge: 1f91712 7c27b55
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon Jan 30 14:22:40 2023 +0900
+
+    Merge pull request #26 from SSU-BackStreet/battlesystem-develop
+    
+    [battlesystem-develop -> master] 보스몬스터 기본, AI 시스템 리팩토링, 버그 수정 등
+
+[33mcommit 7c27b55f15888b0c653eb2b38dfc0a970d269044[m
+Merge: 65d60fc 383bce5
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Mon Jan 30 14:15:48 2023 +0900
+
+    Merge pull request #32 from Oriburger/battlesystem-develop
+    
+    [battlesystem-develop] AWeaponBase 소유 로직 개선 및 무기 교체 로직 추가 등
+
+[33mcommit 383bce5c7c8b6eb2952f980bec738ba05c0e6ea6[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Jan 30 13:51:36 2023 +0900
+
+    [refactor][fix] AWeaponBase 소유 로직 개선 및 무기 교체 로직 추가 등
+    - Weapon 소유로직
+        - 기존 로직
+            - ACharacterBase내 Mesh 컴포넌트의 자식에ChildActorComponent를 통해 관리
+        - 새 로직
+            - 별도로 스폰된 AWeaponBase 액터의 Root를 캐릭터 Mesh에 Attach
+            - 제거 시, Detach 및 Destroy
+            - ChildActorComp 관련된 모든 로직들 수정 (BT 등)
+    - 무기 변경 로직
+        - InitWeapon(NewWeapon)을 호출해서 변경을 시도
+        - 기존 무기가 있다면, AWeaponBase::DropWeapon을 통해 기존 무기를 제거
+        - 새 무기를 Attach 및 기타 필요 작업 수행
+    - 적 캐릭터 사망 델리게이트 수정
+        - ACharacterBase, EnemyCharacterBase
+        - 기존의 ACharacterBase의 Tag로 있던 로직 제거
+        - Die 함수를 가상함수화 하여 EnemyCharacterBase에서 o오버라이드
+
+[33mcommit aeab265a9603b57b887b5cdc597ff2adda061560[m
+Merge: 82b9a02 567ecc1
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Mon Jan 30 08:48:03 2023 +0900
+
+    Merge pull request #30 from HeaRyeong/stagesystem-develop
+    
+    [Stagesystem develop] 병합 오류 수정
+
+[33mcommit 567ecc1b5cf5c3a5af0967454efc502c81e88c77[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Mon Jan 30 08:23:41 2023 +0900
+
+    [merge] 병합 오류 수정
+    
+    (1/30)
+    병합 오류 수정
+    헤더 파일 정리
+
+[33mcommit b0f9536dbf0ecea5ac79a592f2c3490b4e85be90[m
+Merge: d98604f 1f91712
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Mon Jan 30 04:27:22 2023 +0900
+
+    Merge branch 'master' into stagesystem-develop
+
+[33mcommit d98604fddf360fb0eb68c1f35ff48177065bac66[m
+Merge: ee3a73e 82b9a02
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Sun Jan 29 18:58:52 2023 +0900
+
+    Merge branch 'stagesystem-develop' of https://github.com/HeaRyeong/UE5-BackStreet into stagesystem-develop
+
+[33mcommit ee3a73eec2eda316390a709f72ef9e120fdafd4f[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Sun Jan 29 18:53:12 2023 +0900
+
+    [feat]
+    
+    - 스테이지 타입별 몬스터 구현 추가
+    - 캐릭터 벽 투시 기능 추가
+    - 무기 인벤토리, 스왑 부분 구현
+
+[33mcommit f2a4ee762561b8cb2b8249c49d596d13015ee7a5[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Jan 29 18:29:10 2023 +0900
+
+    [feat] 각종 UI 임시 제작 및 수정
+    - 게임 결과 화면
+        - WB_GameOver
+        - WB_GameWin
+            - WB_RewardSelection
+        - 필수 애니메이션 추가
+    - 인게임 UI 수정 (~ing)
+        - WB_CombatUI
+
+[33mcommit 65d60fcc2bd77d2b69f7fd5ad693790aea73cbe5[m
+Merge: dcdada8 c79ae23
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sat Jan 28 23:41:15 2023 +0900
+
+    Merge pull request #25 from Oriburger/battlesystem-develop
+    
+    [battlesystem-develop]  각종 버그 수정 및 리팩토링, 보스몬스터 기본
+
+[33mcommit c79ae234a76aa062559f719913f4b8407f6b27f9[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Jan 28 15:17:31 2023 +0900
+
+    [refactor] BTT_TurnToTargetLocation 네이티브화 및 크래시 해결
+    - Gamemode 크래시 해결
+        - BP 재생성 (..)
+        - GamemodeBase의 InitGame과 함수명 겹침
+            - InitializeChapter로 이름 변경
+    - BTT 네이티브화
+        - BTTaskTurnToTargetLocation
+        - 발사각 도출이 되지 않는 현상 수정
+        - 난수값 추가로 더 자연스러운 회전
+
+[33mcommit f85140c5d94e72c9b488f3c26d5435b2fc944336[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Jan 27 21:57:33 2023 +0900
+
+    [fix] 장전 딜레이가 동작하지 않는 현상 등
+    - 장전 딜레이 미동작 오류
+        - AWeaponBase
+            - 탄환수가 0이 되면 Delay가 포함된 ACharacterBase::TryReload를 호출하는게 아닌, AWeaponBase의 TryReload를 직접적으로 호출하여 딜레이가 생략되었음
+            - StopAttack AnimNotify 이벤트의 ResetAction 함수 호출로 인해 장전이 즉시 취소 되는 현상을 Timer로 딜레이를 주어 해결
+        - ACharacterBase
+            - 고정값이었던 reloadTime을 WeaponStat에 따른 값으로 수정
+    - 보스 몬스터가 계속해서 Turn을 시도하는 현상
+        - AM_EnemyCharacter_TypeC
+            - StopAttack의 ResetAction 추가
+
+[33mcommit 8979c27170dc39a6d33855bb1ea7e8d62af9bb78[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Jan 27 01:12:31 2023 +0900
+
+    [feat] 보스 몬스터 기본 애니메이션 로직
+    - 애니메이션 리타깃 작업
+        - AM_*.uasset
+        - AS_*.uasset
+        - AnimNotify 작업
+            - AttackBegin, AttackEnd
+            - ResetAction
+            - Death
+    - AB_BotTypeC
+        - 기본 Locomotion
+            - Stun, Turn, Death
+        - Upperbody Montage
+            - Hit, Atk 등
+
+[33mcommit 72e8e07f6e8eed8db6861d78a50a4141adb6b805[m
+Author: Oriburger <uss425@naver.com>
+Date:   Thu Jan 26 23:57:39 2023 +0900
+
+    [fix] BTService가 하나의 인스턴스에게만 적용이 되는 현상 수정 등
+    - UBTStateManangeServiceBase
+        - bCreateNodeInstance 프로퍼티
+            - 다중 인스턴스를 지원
+        - 기존의 함수를 대체하는 TickNode
+        - UpdateAIState수정
+            - AI의 상태가 엉뚱하게 반영이 되는 현상 수정
+    - 병합 이후 크래시 현상 해결
+        - Config 내 적 에셋 경로 수정
+        - 프로젝트 임시 파일 재구성
+
+[33mcommit 4e872d7b5b815d077bd1646c4468919d1ec8e3ed[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Jan 25 00:12:45 2023 +0900
+
+    [refactor] 버프/디버프 로직 수정 및 BTService 네이티브화
+    - 버프/디버프 로직 수정
+        - A*CharacterBase
+        - SetBuffTimer(bool bIsDebuff, .,, )
+            - 모호한 함수명 (버프/디버프 동시 지원)
+            - SetBuffDebuffTimer( ..) 로 수정
+                - 해당 함수 호출하는 SetBuffTimer / SetDebuffTimer 함수 추가
+        - 그 외에도 BuffDebuff 관련 모호한 표현 수정
+    - AI 네이티브화 작업 (not working)
+        - BTS_UpdateAIState.uasset
+            - 매 AI Tick 마다 캐릭터의 Action 판별
+            - UBTStateManageServiceBase
+                - BP 로직 네이티브화 (테스트 미완료)
+        - AI관련 클래스 "AISystem"로 별도 분류
+
+[33mcommit aa8a0d74fab233fb0f01d06298ce823b2dae72ab[m
+Merge: 5337a30 dcdada8
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Jan 24 18:17:09 2023 +0900
+
+    Merge branch 'battlesystem-develop' of https://github.com/Oriburger/UE5-BackStreet into battlesystem-develop
+
+[33mcommit 5337a30e94373e322f7fe1cd2d861155e8c735d6[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Jan 24 18:17:02 2023 +0900
+
+    [merge] pull 간 충돌사항 수정
+
+[33mcommit 29b5ed2eeea9571beee81544ac515ecebd474a40[m
+Merge: c92c46e 1f91712
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Jan 24 18:16:47 2023 +0900
+
+    [merge] pull 간 충돌사항 수정
+
+[33mcommit dcdada81353ad2616e27295dba7f167e40d4566d[m
+Merge: 5d5fe34 c92c46e
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Tue Jan 24 17:50:31 2023 +0900
+
+    Merge pull request #24 from Oriburger/battlesystem-develop
+    
+    [battlesystem-develop] 스탯 구조체 관련 리팩토링, 무기 추가 등
+
+[33mcommit 1f917122f35644ff4dd83a2f94e4a0f8f97df841[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Jan 24 17:05:20 2023 +0900
+
+    [merge][stagesystem-develop] 병합간 오류 수정
+
+[33mcommit d9022ef73b7348a64e99521bde2c69223a78c548[m
+Merge: c1e5b4f 82b9a02
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Tue Jan 24 16:47:15 2023 +0900
+
+    Merge pull request #21 from SSU-BackStreet/stagesystem-develop
+    
+    [Stagesystem develop -> master] 스테이지 시스템 개선
+
+[33mcommit 82b9a02fa6935716f91fc84e5cf633b4a2f72a44[m
+Merge: dceb2fe c1e5b4f
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Jan 24 16:45:27 2023 +0900
+
+    [merge][stagesystem-develop] 스테이지 시스템 개선
+    - 아이템 VFX 추가
+    - 미션, 아이템 클래스 수정
+    - 에셋 매니저 클래스 추가
+        - 뭔가 잘못했는지 게임이 더 느려진 기분...
+    - 화면 가림 개선 관련 테스트 코드 추가
+        - 현재 동작 X
+    - 스테이지 클리어시 보상 시스템 추가
+    - 각종 수치값 관리 DataAsset 시도중
+
+[33mcommit c1e5b4f3fd21ee5f218c163c6ff6f0ef301ba6c6[m
+Merge: 9f66979 dc6d2e0
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Jan 24 16:01:29 2023 +0900
+
+    [merge][interface-develop] UI 애니메이션 일부, 임시 로딩 화면 등
+    - 임시 로딩화면
+        - 레벨 간 전환 효과 (SQ_Fade)
+        - 임시 Transition 로직
+    - 메인메뉴 및 환경설정 애니메이션
+
+[33mcommit 9f669792875940e6fcf00e48183fa1af5a1b787f[m
+Merge: fe92032 5d5fe34
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Tue Jan 24 14:50:46 2023 +0900
+
+    Merge pull request #18 from SSU-BackStreet/battlesystem-develop
+    
+    [battlesystem-develop -> master] 전투 시스템 코드 개선, 다양한 전투 효과, 버그 수정
+
+[33mcommit c92c46e7cd806b99805b8bdef2eb3f4d0d77369d[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Jan 23 23:55:59 2023 +0900
+
+    [refactor] AIControllerBase 네이티브화
+    - AAIControllerBase
+        - Sight Perception
+            - 초기화 및 이벤트 바인딩
+        - UpdateTargetPerception
+            - Sight 업데이트 때마다 BB 값 갱신
+
+[33mcommit dceb2fef200cc630becd2df5f8d5cc6393105c7c[m
+Merge: f7d43d8 b580b23
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Mon Jan 23 18:17:21 2023 +0900
+
+    Merge pull request #20 from HeaRyeong/stagesystem-develop
+    
+    [Stagesystem develop] 스테이지 시스템 개선 및 아이템 개선
+
+[33mcommit b580b230c66abed30c4d05df8b8bf3f4e43875c3[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Mon Jan 23 18:07:25 2023 +0900
+
+    [feat][refactor][test] 스테이지 시스템 개선
+    
+    - 아이템 VFX 추가
+     - 나이아가라 시스템 추가
+    
+    - 미션, 아이템 클래스 수정
+    
+    - 에셋 매니저 클래스 추가
+     - 뭔가 잘못했는지 게임이 더 느려진 기분...
+    
+    - 화면 가림 개선 관련 테스트 코드 추가
+     -  현재 동작 X
+    
+    - 스테이지 클리어시 보상 시스템 추가
+     - 현재 보정치는 임의값으로 설정
+     - 추후 보정치 수정 필요
+
+[33mcommit e17190250cef377e7fdb932b6f3ac629431b756d[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Jan 21 22:54:42 2023 +0900
+
+    [refactor] 무기 초기화 로직 개선 등
+    - 무기 초기화 로직
+        - ABackStreetGameModeBase
+            - 무기 초기화 로직 추가
+            - 추후 GameplayManager로 분리 예정
+    - AWeaopnBase
+        - FWeaopnStatStruct
+            - ProjectileStat 제거
+            - Melee Atk Range 제거
+            - 그 외 프로퍼티 수정
+        - GetAttackRange
+            - 무기Mesh의 LineTrace를 진행하는 소켓 간 거리에 비례해서 반환
+    - 데이터 테이블 수정
+        - D_ProjectileStat
+        - D_WeaponStat
+    - 개선/수정 필요
+        - 적 캐릭터가 죽지 않음
+        - 공격 속도 / 장전 속도 로직 개선 필요
+            - 장전이 스킵되는 경우
+
+[33mcommit 6db703c2eb37b89ccc20b6af603f01f7a2235edf[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Jan 20 22:37:13 2023 +0900
+
+    [feat][refactor] 무기 추가, 스탯 구조체 관련 리팩토링 등
+    - 무기 추가
+        - 무기
+            - BP_BB_Bun
+            - BP_GlassBottle
+        - 발사체
+            - BP_BB_Bullet
+            - BP_ProjectileBrick
+    - 스탯 구조체 리팩토링
+        - 헤더파일 분리
+            - WeaponInfoStruct.h
+            - ProjectileInfoStruct.h
+            - CharacterInfoEnum.h
+        - 데이터 시트 추가
+            - D_WeaponStatTable.*
+            - D_ProjectileStatTable.*
+    - 버그
+        - 적 캐릭터가 죽지 않는 경우
+
+[33mcommit dc6d2e0bde8adaf56db0bc2fd172ac4edbd4a1c3[m
+Merge: fe92032 3c27b45
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Fri Jan 20 16:02:48 2023 +0900
+
+    Merge pull request #17 from Oriburger/interface-develop
+    
+    [Interface develop] 브랜치 생성, UI 애니메이션 일부, 임시 로딩 화면 추가
+
+[33mcommit 5d5fe348fc9f402f808227c61aa2850939c656d5[m
+Merge: a3a99a8 faecda0
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Fri Jan 20 15:55:15 2023 +0900
+
+    Merge pull request #16 from Oriburger/battlesystem-develop
+    
+    [battlesystem-develop] 버프/디버프 효과, 전투 시스템 코드 개선, 버그 수정 등
+
+[33mcommit faecda0c46a2a910f572a27b0d905e0f13fc3732[m
+Author: Oriburger <uss425@naver.com>
+Date:   Thu Jan 19 18:43:29 2023 +0900
+
+    [feat][test] AI 부드러운 Rotation 전환(BP) 및 제자리 Turn 애니메이션 작업
+    - AEnemyCharacterBase
+        - bUseControllerRotationYaw 해제
+        - 수동으로 일정 각도씩 Rotation 조절
+            - Turn(Angle)
+        - Movement에서 UseControllerDesiredRotation 체크
+            - 부드러운 방향 전환 (수동으로 Rotation 업데이트 해주어야함)
+    - BTT_TurnToTargetLocation
+        - Attack 시에만 필요한 캐릭터 회전 함수
+           - 그 외에는 bUseControllerDesiredRotation 옵션으로 인해 "움직이는 방향으로" 부드러운 전환 가능
+           - 공격 시에는 Rotation 조절을 해주지 않으면 ActionState가 Attack으로 들어온 이상 Rotation 조절을 할 수 없음 (움직여야만 해당 방향으로 부드럽게 조절해주기 때문)
+        - 캐릭터의 Forward Vector과 타겟과의 단위 Vector를 2차원으로 전환하고 회전각을 구해서 Turn
+           -  무기 종류(근접 공격과 원거리 공격)에 따라 허용 회전각 오차 구분
+    - 애니메이션 작업
+        - EnemyTypeA, EnemyTypeB
+            - 리타깃 및 AnimBP
+        - 왼쪽 Turn, 오른쪽 Turn 구현
+
+[33mcommit 3c27b45a28f869b32fdebbd6fe5bd4efebd76471[m
+Author: Oriburger <uss425@naver.com>
+Date:   Thu Jan 19 14:20:55 2023 +0900
+
+    [feat][fix] fake 로딩 화면 구현 등
+    - fake 로딩 화면
+        - 실제 로딩 작업은 수행하지 않는 로딩 화면
+        - Loading UI가 포함된 Transition 을 거쳐서 인게임으로 진입
+            - WB_LoadingScreen
+            - OpenLevel 함수의 Option String
+                 - 게임모드 및 Transition 레벨에서 Open할 레벨의 이름 포함
+        - Fade 효과 시퀀서 추가 (SQ_Fade)
+    - 메인메뉴(WB_MainMenu) 위젯간 오류
+        - Press Any Key 와 Button Box 간 활성상태 충돌
+    - 추후 구현할 것?
+        - 맵 비동기 로딩
+
+[33mcommit 5812794947a02577d1a231dd032596ef16e02394[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Jan 18 20:22:26 2023 +0900
+
+    [fix][refactor] 구르기 시 Rotation이 튀는 현상 등
+    - AMainCharacter
+        - 원인
+            - 공격 작업 수행 시, 커서 방향으로 Rotation을 조정
+            - 직후, Rotation 조절을 Movement 방향으로 되돌리는 타이머를 검 (1.0s 뒤에 수행이 되도록)
+            - 해당 타이머가 수행되기 이전에, 구르기 수행
+            - 구르기는 Mesh의 Forward 방향으로 진행,
+            - 구르기 도중에 Rotation 조절 매커니즘이 리셋되므로 Rotation이 튐
+    - 해결
+        - 구르기가 끝나는 시점을 AnimNotify 이벤트로 대체 (기존에는 타이머)
+        - 끝나면 ResetActionState 호출과 동시에 ResetRotationToMovement 함수 호촐
+        - 그 외 ActionState 조건식들 수정
+    - 플레이어의 속도에 따라 구르기 속도 또한 달라지도록 코드 개선
+
+[33mcommit 4b9c53996ed1fdcbf3b12114cdfc7b85684a75c3[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Jan 18 18:12:24 2023 +0900
+
+    [refactor][feat] 일시정지 로직 일부 수정, 메인메뉴 레벨 디자인 및 랜덤 레벨
+    - 일시정지 로직
+        - 기존
+            - BP_MainCharacter 내 위치
+        - 변경
+            - Gamemode 자체에 위치
+        - MainMenu 내 기본 Pawn 제거
+    - 메인메뉴 레벨
+        - 레벨 디자인
+            - MainMenuPersistent, MainMenu_Type* (A,B,C)
+            - 공통의 요소들만 부모 레벨에 위치
+        - 랜덤 레벨
+            - 다양한 메인메뉴 연출
+            - MainMenuPersistent 레벨 BP에서 진행
+            - DirectionalLight 및 Camera 등의 다양한 Property 값을 Load할 레벨의 Index에 따라 배열로 구분
+            - 추후 네이티브화 필요
+    - 버그
+        - 게임 진행 시, Delegate 관련 크래시가 뜸
+
+[33mcommit 33ae629fb7cd81ddc3bddd7554390359cf943d51[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Tue Jan 17 16:46:20 2023 +0900
+
+    [feat][refactor] 스테이지 시스템
+    
+    랜덤 스폰 기능 구현
+    클래스명 수정
+    소스코드 정리
+
+[33mcommit 4a7638d2f709709d88cb14dec01c2edb6d7d93d8[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Jan 17 15:20:07 2023 +0900
+
+    [feat] MainMenu 애니메이션 추가 등
+    - UI, Map 폴더 정리
+    - WB_PressKey 제거
+        - WB_MainMenu와 통합
+    - 메인메뉴
+        - WB_MainMenu
+            - 기존 PressKey 기능 추가
+            - 타이틀 및 버튼 애니메이션 추가
+        - BP_MainMenuCharacter
+            - 메인메뉴 전용 캐릭터
+        - MainMenu 레벨 디자인 테스트
+
+[33mcommit fb93e338d50c029a82266fcdc3df623db6b9c97d[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Jan 17 11:19:38 2023 +0900
+
+    [docs] 미사용 디버그 로직 제거, 주석 일부 추가 등
+    - BP_PlasticBottle, BP_MainCharacter
+        - 미사용 로직 제거
+    - AMainCharacter, AWeaponBase
+        - 미사용 디버그 로직 제거
+        - 주석 일부 추가 등
+
+[33mcommit 31b623a0a496127e7b87b47b44a71bb45eda7340[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Jan 16 15:25:18 2023 +0900
+
+    [feat] 캐릭터 방향 이미터 추가
+    - AMainCharacter
+       - DirectionNiagaraEmitter
+       - 발 밑에서 캐릭터의 방향을 표시
+    - Issue
+       - 이동 시, 다른 파티클처럼 깨져보이는 현상
+
+[33mcommit 9307f2ec619bb75a4fa1582e5487ecf103d67f3b[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Jan 16 15:04:48 2023 +0900
+
+    [refactor] Melee 공격 Linetrace 로직 변경
+    - 기존 로직의 문제
+        - GrabPoint ~ End로 뻗어나가는 Linetrace
+    가 반복되는 기존로직의 정확도가 낮음
+        - 애니메이션이 빠른 경우에는 각 Trace의 결과 간 거리가 멀어서 맞지 않음
+    - 개선된 로직
+        - 진짜 근접 무기의 흐름을 모방하는 Trace 구현
+        - 근접 무기의 GrabPoint ~ End를 n등분하여 MeleeAttack 함수가 호출될 때마다 List로 갱신. (currrTracePositionList)
+        - 이전 호출때의 무기의 각 trace 지점 위치 List도 저장 (MeleePrevTracePointLIst)
+        - curr[k] ~ prev[k]으로 LineTrace 진행 k = [0 : n-1]
+    - 결과
+        - 몇 애니메이션을 제외한 대부분의 경우에서 정확도가 대폭 올라간 것을 확인하였음
+
+[33mcommit eec9f91431796e31950422b1a1ddfa9e4c69cd2a[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Jan 15 22:52:21 2023 +0900
+
+    [refactor] 마우스 커서 조준 로직 개선
+    - 로직 개선
+        - 기존 로직
+            - Following Camera를 활용한 LineTrace
+        - 개선된 로직
+            - DeprojectMousePositionToWorld 함수
+            - Cursor의 World좌표와 해당 좌표에서 homogenous 평면 방향으로 LineTrace
+
+[33mcommit 6c9e606bb0bab868bbb71dddc7b5b45628ac8c85[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Jan 13 20:26:11 2023 +0900
+
+    [fix][refactor] 버프/디버프 & 효과 버그 수정
+    - 버프 디버프 버그
+        - 회복&데미지 디버프가 해제가 되지 않는 버그
+        - 효과 관련 버그
+            - 불 효과가 꺼지지 않는 버그
+        -> 타이머 관련 로직 리팩토링
+    - 버프 디버프 리팩토링
+        - TImerHandle 1차원화
+        - RemainingTime 배열 제거
+        - Heal, DebuffDamage 타이머 추가
+    - 버그
+        - Melee전투 시, LineTrace 타이머가 제대로 동작하지 않음
+
+[33mcommit 337d22e6467df8e7f209546c8ff234d881c27bfc[m
+Author: Oriburger <uss425@naver.com>
+Date:   Thu Jan 12 23:58:10 2023 +0900
+
+    [feat][refactor][fix] 디버프/버프 VFX 효과 추가 및 로직 수정, 캐릭터 애니메이션 작업 등
+    - 디버프/버프 VFX 효과 추가
+        - 버프
+            - 회복, 속도 증가 등
+        - 디버프
+            - 화염, 슬로우, 스턴 등
+    - 디버프/버프 로직 수정, 오류 수정
+        - SlowProjectile, SlowAtk 등 제거
+            - Slow로 통합
+        - Sleep -> Stun으로 수정
+        - 버프 적용 로직 수정
+            - *= /= 활용해서 원래 값으로 Reset
+    - 캐릭터 애니메이션 작업
+        - MainCharacter, EnemyCharacterTypeA&B (총 3종)
+        - Anim BP
+            - Stun, Die 스테이트 추가 (+Die 로직 수정)
+        - AS_Dizzy 추가 (스턴 애니메이션)
+    - 버그
+        - 화염 데미지 시 ScreenShake 효과가 출력됨
+        - 화염 디버프 효과가 나오지 않음
+
+[33mcommit a3a99a837a827afde7d0ae2b1c5941531e31b321[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Jan 11 20:28:30 2023 +0900
+
+    [feat][fix][refactor] 신규 무기 및 적 추가, 일부 전투 VFX 적용, 조작 기능 개선, 일부 버그 및 로직 수정 등
+    - 신규 적 추가
+        - BP_EnemyCharacter_Type*_Melee
+        - BP_EnemyCharacter_Type*_Throw
+        - A, B 2 종류 타입으로 총 4개의 적 클래스 생성
+    - 신규 무기 추가
+        - 근접 무기
+            - BP_PlasticBottle
+            - BP_TaserStick
+            - BP_WoodStick
+        - 발사체
+            - BP_BareHand
+                - BP_ProjectileCan
+            - BP_EnergyBlaster
+                - BP_EnergyBall
+                - M_EnergyBall
+    - 무기 VFX 효과
+        - 파티클 에셋 적용
+            - 파티클 최적화
+                - P_*_Low (총 4종)
+        - 발사체 피격, 발사 시 출력
+        - 근접무기 타격 시 출력
+    - 조작 기능 개선
+        - AMainCharacterBase, AMainCharacterController
+            - GetActionKeyIsDown 등
+        - 마우스를 꾹 누르고 있으면 공격을 유지
+    - 버그 수정
+        - 적에게 공격을 성공했음에도 CameraShake 이펙트가 호출되지 않는 현상
+            - AProjectile의 Causer이 제대로 전달되지 않음
+    - 리팩토링
+        - MainCharacter Rotation 조절 로직 변경
+            - CapsuleComponent가 아닌 Mesh가 Rotate의 주체
+                - 공격 유지 로직을 통해 일정 간격으로 Capsule의 Rotation을 조절하다보면, FollowingCamera도 따라서 흔들리는 현상 발생
+        - AWeaponBase의 콤보가 근접 무기에서만 올라가는 로직 수정
+    - 해야할 것
+        - AMainCharacterController
+            - 접미사 -Base 붙이기
+
+[33mcommit aaa904327e426fd073f0e6f03acfde4de5f92a07[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Jan 11 20:28:26 2023 +0900
+
+    [feat][fix][refactor] 신규 무기 및 적 추가, 일부 전투 VFX 적용, 조작 기능 개선, 일부 버그 및 로직 수정 등
+    - 신규 적 추가
+        - BP_EnemyCharacter_Type*_Melee
+        - BP_EnemyCharacter_Type*_Throw
+        - A, B 2 종류 타입으로 총 4개의 적 클래스 생성
+    - 신규 무기 추가
+        - 근접 무기
+            - BP_PlasticBottle
+            - BP_TaserStick
+            - BP_WoodStick
+        - 발사체
+            - BP_BareHand
+                - BP_ProjectileCan
+            - BP_EnergyBlaster
+                - BP_EnergyBall
+                - M_EnergyBall
+    - 무기 VFX 효과
+        - 파티클 에셋 적용
+            - 파티클 최적화
+                - P_*_Low (총 4종)
+        - 발사체 피격, 발사 시 출력
+        - 근접무기 타격 시 출력
+    - 조작 기능 개선
+        - AMainCharacterBase, AMainCharacterController
+            - GetActionKeyIsDown 등
+        - 마우스를 꾹 누르고 있으면 공격을 유지
+    - 버그 수정
+        - 적에게 공격을 성공했음에도 CameraShake 이펙트가 호출되지 않는 현상
+            - AProjectile의 Causer이 제대로 전달되지 않음
+    - 리팩토링
+        - MainCharacter Rotation 조절 로직 변경
+            - CapsuleComponent가 아닌 Mesh가 Rotate의 주체
+                - 공격 유지 로직을 통해 일정 간격으로 Capsule의 Rotation을 조절하다보면, FollowingCamera도 따라서 흔들리는 현상 발생
+        - AWeaponBase의 콤보가 근접 무기에서만 올라가는 로직 수정
+    - 해야할 것
+        - AMainCharacterController
+            - 접미사 -Base 붙이기
+
+[33mcommit fe92032632619d9ec863653a9f5b1c9ceff883fc[m
+Merge: a715a83 2b18c7f
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Tue Jan 10 19:28:55 2023 +0900
+
+    Merge pull request #12 from SSU-BackStreet/battlesystem-develop
+    
+    [battlesystem-develop] 적 AI 기능 추가, 카메라 흔들림 효과 추가, 조작 매커니즘 변경 등
+    + 코드 스타일 일부 통일 및 병합간 오류 수정
+
+[33mcommit 2b18c7f1bf32b4c1d0677e8da78e148107f1fdeb[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Jan 10 19:27:34 2023 +0900
+
+    [refactor][fix] 코드 스타일 일부 통일, 병합간 오류 수정, 소스코드 분류 등
+    - Stage System 내 일부 코드 테스트 미진행
+        - 전체 테스트 진행 후 피드백 필요 -> @rryeong
+
+[33mcommit 3ca853388957395fbec36307c14fab24ff567500[m
+Merge: b6e77a9 a715a83
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Jan 10 16:47:08 2023 +0900
+
+    [battlesystem-develop] AI 시스템, 마우스 기반 조작 등 추가
+    - Merge 충돌 해결
+
+[33mcommit a715a837554e7bc916aef060bef5f26012f2c8db[m
+Merge: 6ab29a5 f7d43d8
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Tue Jan 10 16:33:31 2023 +0900
+
+    Merge pull request #15 from SSU-BackStreet/stagesystem-develop
+    
+    [stagesystem-develop] 스테이지 시스템 관련 기능구현 + 리뷰 수정 사항 반영
+
+[33mcommit f7d43d8fe102124c1059958de19041428c7f6521[m
+Merge: cce32f9 661b207
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Tue Jan 10 04:30:25 2023 +0900
+
+    Merge pull request #14 from HeaRyeong/stagesystem-develop
+    
+    [refactor] PR 리뷰 수정
+
+[33mcommit 661b207afd4daaa4f9921245c2ebd1082348173d[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Tue Jan 10 04:24:45 2023 +0900
+
+    [refactor] PR 리뷰 수정
+    
+    - 경로
+    - AGate -> AGateBase
+    - x -> XPos
+    - y -> YPos
+
+[33mcommit cce32f98e58a1f90c9fd7330f357863a2443cdfe[m
+Merge: 6ab29a5 4ee23fe
+Author: rryeong <47558214+HeaRyeong@users.noreply.github.com>
+Date:   Sun Jan 8 08:59:17 2023 +0900
+
+    Merge pull request #9 from HeaRyeong/stagesystem-develop
+    
+    [stagesystem-devlop] 스테이지 시스템 및 UI
+
+[33mcommit 4ee23fef66ec7408fa0c82d304157a5db8111c10[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Sun Jan 8 08:52:23 2023 +0900
+
+    [feat][refactor] 스테이지 개선
+    
+    - 스테이지 전환 관련 BP 네이티브화
+    - Chapter 관련 추가
+    - 게임 클리어 추가
+
+[33mcommit b6e77a9fc2d386aabd8d2f1bd92adcea6fda55a6[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Jan 6 18:13:59 2023 +0900
+
+    [test][refactor] 미사용 에셋 및 로직 정리, VFX 에셋 테스트
+    - 미사용 에셋, 로직 정리
+        - 근접 전투 로직
+        - 언데드 팩 등
+    - VFX 에셋 추가 및 테스트
+        - Hit 파티클 테스트 중
+    - Bug
+        - Projectile 기본 Stat이 초기화 되는 현상
+            - bIsExplosive이 초기화 됨
+
+[33mcommit f6d3145c89d0473a103ac30d72c5ae59248c316d[m
+Author: Oriburger <uss425@naver.com>
+Date:   Thu Jan 5 23:47:02 2023 +0900
+
+    [fix][refactor][feat] 카메라 피격 효과 추가 및 AI 기능 개선
+    - 카메라 피격 효과
+        - ABackStreetGameModeBase
+            - PlayCameraShakeEffect
+                - PlayerCharacter의 Camera의 위치에 맞게 변환 후 Play
+        - ECameraShakeType
+            - Camera Shake 타입 종류 Enum
+        - Player가 때릴때, 맞을때, 주변에 폭발물이 터졌을때 3가지 제공
+    - AI 기능 개선
+        - AWeaponBase, FWeaponStatStruct
+            - 무기마다의 Atk Range 추가
+            - 현재 상태 (탄환 수 등)에 따라 AtkRange 반환 받는 함수 제공
+        - BTS_UpdateAIState
+            - AtkRange에 따라서 플레이어에게 접근
+    - AI 버그 수정
+        - 발사체 공격 시, 캐릭터가 피하는 경우.
+            - Rotation을 업데이트 하지 않음 (빈 곳에 계속 던짐)
+            - Rotation 업데이트 노드 추가
+    - 첫 패키징!
+
+[33mcommit 22aeaecec3b27c53d7a8aa128d916f0946dbaa05[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Jan 4 19:15:08 2023 +0900
+
+    [feat][test] AI 개선 및 개인 영역 로직 추가, 카메라 흔들림 효과 (BP)
+    - AI 개선 및 로직 추가
+        - BTS_UpdateAIState
+            - 루트 노드의 서비스 노드
+            - Tick 단위로 캐릭터의 상태 결정 (음.._)
+        - CharacterInfoStructBase.h
+            - EAIBehaviorType
+                - AI가 취할 Behavior의 종류를 나타냄
+        - BT_Enemy
+            - 수정된 위 두 로직을 기반으로 BT 재구성
+    - 카메라 효과
+        - 에셋 종류
+            - BP_AttackCameraShake
+            - BP_DamageCameraShake
+            - BP_ExplosionCameraShake
+        - 적절한 값 테스트 및 조절 완료
+        - 데미지 입을 시, 효과 출력
+    - 예정
+        - BTS_UpdateAIState
+            - 네이티브화
+            - Tick을 쓰지 않는 방법..?
+        - 카메라 효과
+            - 네이티브화
+            - 데미지 타입 구분 등
+
+[33mcommit 5dc9d973bdf9f53630a926112f7e8ccdda31a333[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Jan 3 20:40:10 2023 +0900
+
+    [fix][feat] Patrol 속도 버그 수정, Melee 공격 버그 수정, Input 장치 종류에 따른 조준 로직 구분
+    - Patrol 속도 버그 수정
+        - BTT_FindRandomPatrol
+            - BP 핀 재배열 및 수정
+        - BT_Enemy.uasset
+    - Input 장치 종류에 따른 조준 로직 구분
+        - AMainCharacterBase내 TryAttack의 로직 이동
+        - AMainCharacterController
+            - GetAimingRotation
+                - GetRightAnalogRotation
+                - GetRotationToCursor
+    - MeleeAtk 버그 수정
+        - ACharacterBase
+            - Tag 관련 오류로 인해 근접 공격이 되지 않는 현상 수정
+
+[33mcommit d927335c8f6b08f7fd926e7adb20be04a2b43bc4[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Jan 2 21:28:26 2023 +0900
+
+    [feat] 마우스 조준 시스템, 메인 캐릭터 8Way Locomotion
+    - 마우스 조준 시스템
+        - MoveForward, MoveRight 수정
+            - Y, X 축으로만 AddMovementInput
+        - 크로스헤어 추가 (TX_RedDot)
+        - 공격 시 1초간 공격 위치를 바라봄
+            - 그 후에는 Movement 방향으로 Rotation 조정
+        - Roll 로직 수정
+            - Movement 방향으로만 Roll이 되는 현상 수정
+            - MoveRight, MoveForward 입력 값을 이용해 Radian값을 구해서 Rotation을 강제 조정하고 Roll 수행
+                -> 키보드 Input에 따라 Roll 진행
+    - 수정 필요
+        - Dash -> Roll 표현 수정 필요
+        - 원거리 AI가 제대로 동작하지 않음
+        - Patrol 시 AI의 이동속도가 줄어들지 않음
+
+[33mcommit 36df87f2d1dc3f0390007671642bf2422028ef05[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Sun Jan 1 13:13:51 2023 +0900
+
+    [feat][fix] 스테이지 시스템 , UI
+    
+    스테이지 시스템
+    - 스테이지 전환 방식 변경
+    
+    UI
+    - 전투 UI 추가
+     - 체력
+     - 버프/디버프
+     - 무기
+     - 스테이지 레벨
+    
+    Item
+    - 아이템 버프 수치 csv
+    - 무기 수치 csv
+    - 아이템 획득
+
+[33mcommit e7aacec55a981256eb30ad560d60fcdc23110001[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Dec 31 18:48:29 2022 +0900
+
+    [refactor][feat] AIControllerBase 일부 네이티브화, 피데미지 액터 태그 구분 기능 추가
+    - AAIControllerBase
+        - 일부 로직 네이티브화
+    - AWeaponBase, AProjectileBase
+        - Tag 구분으로 아군 피격 방지 기능 추가
+    - Bug
+        - BT_Enemy
+            - 캐릭터의 속도가 항상 최대
+
+[33mcommit 25256055902a507773058818a3c1094cbf130c91[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Dec 31 15:56:23 2022 +0900
+
+    [feat] Sleep, Die 상태 관리 추가, AI 기능 마무리
+    - ACharacterBase
+        - Sleep, Die 상태 전환 로직 추가
+    - AnimNotify로 하는건 어떨지..?
+
+[33mcommit e586c8d5c44f59c14b928a71078f3d0a91e0c5b9[m
+Merge: b9ae35e 6ab29a5
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Fri Dec 30 23:55:15 2022 +0900
+
+    Merge remote-tracking branch 'upstream/master' into stagesystem-develop
+
+[33mcommit 0db0db8796b688eec614eb8cd51585176af2f25f[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Dec 30 14:46:06 2022 +0900
+
+    [feat][refactor] 버프/디버프 추가 및 개선
+    - 공격(+발사체) 속도 관련
+        - E_FastProjectile / E_FastAtk
+        - E_SlowProjectile / E_SlowAtk
+    - 캐릭터 상태 구조체 수정
+        - FCharacterStateStruct
+        - Stat과 중복되는 내용 제거
+    - 디버프 로직 개선
+        - ResetVal 파라미터 추가
+            - 디버프 / 버프 Reset 용이하도록 수정
+    - 그 외
+        - 작동하지 않던 버프 / 디버프 수정 (전부 작동)
+        - WeaponStat 내 bInfiniteAmmo 추가
+        - 등...
+
+[33mcommit 695ceb5873f0a255846349897b3288477405601c[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Dec 28 22:10:10 2022 +0900
+
+    [feat] 발사체 공격 시 디버프가 적용, 부드러운 AI 방향 전환
+    - 발사체 디버프
+        - AProjectileBase내 데미지 로직에 추가
+    - 부드러운 AI 방향 전환
+        - bUseControllerRotationYaw 해제
+        - Movement의 bUseControllerDesiredRotation 체크
+    - 추가/개선할 것
+        - 공격 타겟 적 / 아군 구별 (?)
+        - Die, Sleep 등 여러 Action 추가
+        - AI Perception 로직 개선
+        - 근접 공격 디버프
+
+[33mcommit 2c18aa4ceba3179f75c1af901d0590858f8fde96[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Dec 28 21:54:20 2022 +0900
+
+    [feat][fix][refactor] 원거리 AI 추가, 발사체 관련 오류 수정, 여러 로직 개선 등
+    - AI 원거리 공격 로직
+        - BT_Enemy
+        - BTD_CheckAttackType
+        - WeaponState에 따른 원거리/근거리 구분
+            - 원거리 : 타겟과 일정 거리 떨어진 곳에서 공격
+            - 근거리 : 타겟에 근접해서 공격
+    - 발사체 관련 오류 수정
+        - OwnerCharacter 초기화 로직 추가
+        - Tag 통일 (Character)
+        - Activate 되기 이전의 Overlap 이벤트는 무시
+    - Action 관련 로직 개선
+        - ResetActionState 추가
+            - 특정 Action 수행 이전에 초기화 진행
+    - 추가 구현 필요
+        - 공격 타겟 적 / 아군 구별
+        - Die, Sleep 등 여러 Action 추가
+        - AI 방향 전환 자연스럽게
+
+[33mcommit 6a016d3d24ee2758621bf119115a42e2c59a49b7[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Dec 27 23:38:09 2022 +0900
+
+    [feat][refactor] 캐릭터 상태 관리 로직 추가, 공격 애니메이션 추가
+    - 캐릭터 상태 관리 로직 추가
+        - CharacterInfoStructBase
+            - ECharacterActionType
+                - 캐릭터가 취하고 있는 Action 종류
+            - FCharacterStateStruct
+                - Is~~ing 프로퍼티 제거
+                - CharacterActionState 추가
+            - 캐릭터는 하나의 Action만 가짐
+    - 공격 애니메이션 추가
+        - 기존의 Paragon_Gwang 애니메이션
+            - 새로운 SD 캐릭터와 잘 맞지 않음
+            - LineTrace 판정이 바닥을 뚫음
+        - Paragon_Aurora 기반의 애니메이션 추가
+            - Retarget 이후 애니메이션 애셋만 추가
+
+[33mcommit 78c62693ae9626c6191a0cb1b7bbbe2f98fd8f51[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Dec 26 21:44:52 2022 +0900
+
+    [refactor][fix] 공격 매커니즘 수정, AI 공격 버그 수정 등 (~ing)
+    - 공격 매커니즘 수정
+        - AWeaponBase, A*CharacterBase
+        - 기존 로직
+            - 캐릭터의 Input -> Attack 로직 수행
+            - AnimNotify를 통해 Atk 종료 로직 처리
+            -> 통일성 없는 공격 로직
+        - 개선된 로직
+            - 캐릭터는 TryAttack를 통해 공격 모션만 수행
+            - AnimNotify를 통해 AB에서 실제 Attack, StopAttack 호출
+    - AI 공격 버그 수정
+        - BTD_IsReadyToAtk, BT_Enemy
+        - 공격을 1회만 하고 더이상 공격하지 않는 오류
+            - StopAttack 및 Attack 로직 개선 이후 해결
+        - 타겟과의 거리 체크 로직
+            - 기존 : 매 Tick 마다, AIPerception이 업데이트 될 때마다 타겟과의 Dist를 체크하지
+            - 개선 : Decorator를 추가하여 정의 (BTD_IsReadyToAtk)
+    - Issue
+        - 공격 Input에 딜레이가 생김
+        - 근접 공격 정확도
+            - Linetrace의 정확도가 낮음
+            - 일부 애니메이션에서 제대로 Hit 및 Attack 처리가 되지 않는 현상
+        - AI
+            - 매끄럽지 못한 AI
+        - Action
+            - 특정 커맨드를 중복되게 호출 시, Is~~ing 상태 변수가 반환되지 않는 현상 (더이상 해당 Action을 할 수 없음)
+                - ex) 공격과 동시에 구르기? 더이상 공격을 할 수 없음
+            - 상태 그래프 구축 및 한가지의 상태만 가지도록 하면 될 것 같음
+
+[33mcommit 20d53158d5a8c1c23cb260c5e47c202a53889a81[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Dec 23 21:01:22 2022 +0900
+
+    [test][feat][fix] 적 캐릭터 작업 (AI, 기본 Action 등)
+    - 적 기본 Action
+        - 공격, 피격, 사망 추가
+        - 플레이어 거리 판별 코드 (임시 Tick 코드 -> 수정 필수)
+    - 오류 수정
+        - 근접 무기 공격 시, self가 데미지를 입음
+        - 데미지 계산 로직 오류 (1회 호출에 2번씩 데미지를 입음)
+        - 공격 직후 구르기 시, IsAttacking 상태가 true에서 false로 전환되지 않는 현상
+            - Roll 및 기타 동작에 StopAtk Notify 추가
+    - Issue
+        - 디버깅용 Ammo 추가 발판이 동작하지 않음
+        - 적이 1회만 공격함
+    - 리팩토링 할 것
+        - AnimNotify 를 활용한 ComboReset?
+        - 지저분한 Atk 로직 정리 (Notify? 수동호출?) 하나만 하기
+        - 특수 Action과 공격 중복 처리 (ex. 공격 도중 구르기 등)
+
+[33mcommit 817e44136ff525168bf3aeb6e3ab132abda192ca[m
+Author: Oriburger <uss425@naver.com>
+Date:   Thu Dec 22 18:00:14 2022 +0900
+
+    [test][feat] 적 AI 기능 테스트
+        - Blueprint로 작업 진행 중
+        - AI
+            - BB_EnemyInfo
+            - BP_EnemyCharacterController
+            - 현재 플레이어 감지 (Tag를 통한) 및 추격 가능
+        - ACharacterBase, ACharacterInfoStructBase
+            - Stat 관련 BP 쓰기 권한 코드 추가
+
+[33mcommit 6ab29a52c7569fdd0ef1fd948a703e31f35c49ae[m
+Merge: ca107c6 00eb354
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Thu Dec 22 11:50:30 2022 +0900
+
+    Merge pull request #7 from SSU-BackStreet/battlesystem-develop
+    
+    [feat][merge] 전투 시스템 기본 완성
+
+[33mcommit 00eb35413ff57427afb6ea8dc5647a63405ea580[m
+Merge: a46db5d c16c2dc
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Wed Dec 21 18:25:06 2022 +0900
+
+    Merge pull request #6 from Oriburger/battlesystem-develop
+    
+    [feat] 전투 시스템 - 무기 시스템 구현
+
+[33mcommit c16c2dcecf2c1d30f3f12821a6136752ee33a227[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Dec 21 18:21:27 2022 +0900
+
+    [feat][refactor] 장전 시스템, 각종 디버그 기능
+    - 장전 시스템
+        - AWeaponBase
+            - TryReload, GetCanReload 추가
+        - ACharacterBase
+            - TryReload 추가 / 키 바인딩
+            - 애니메이션 및 장전 딜레이 구현
+    - 각종 디버그 기능
+        - BattleTestRoom.umap 추가
+            - BP_AmmoButton.uasset 추가
+            - 디버그 룸
+
+[33mcommit b3b6d99c0b338cf10915bb658f928eab95f6047e[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Dec 20 22:22:44 2022 +0900
+
+    [fix][refactor] 디버프 미작동 오류 및 발사체 각종 오류 수정 등
+    - 디버프 미작동 오류
+        - ACharacterBase, AMainCharacterBase
+            - Tag 관련 코드 네이티브화
+    - 원거리 무기 테스트
+        - 장전 오류 - AWeaponBase
+            - 장전 로직 수정
+        - Hit 효과 파티클이 {0, 0, 0}에 스폰
+            - SweepResult가 비어있는 오류
+            - DefaultSceneRoot를 추가했기 떄문
+            - OverlapEvent의 주체인 SphereCollision를 RootComponent로 올려주어 해결
+    - 발사체 nullptr exception
+        - AProjectileBase, AWeaponBase
+            - Instigator 관련 로직 수정
+            - 여러 Ref 관련 함수 추가
+    - 각종 리팩토링
+        - AWeaponBase
+            - bCanMeleeAtk 관련 로직
+            - InitWeapon 및 InitProjectile 관련 로직
+
+[33mcommit ca25d55305381ac4066208bc7f89d1d3b14570ca[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Dec 20 22:22:33 2022 +0900
+
+    [fix][refactor] 디버프 미작동 오류 및 발사체 각종 오류 수정 등
+    - 디버프 미작동 오류
+        - ACharacterBase, AMainCharacterBase
+            - Tag 관련 코드 네이티브화
+    - 원거리 무기 테스트
+        - 장전 오류 - AWeaponBase
+            - 장전 로직 수정
+        - Hit 효과 파티클이 {0, 0, 0}에 스폰
+            - SweepResult가 비어있는 오류
+            - DefaultSceneRoot를 추가했기 떄문
+            - OverlapEvent의 주체인 SphereCollision를 RootComponent로 올려주어 해결
+    - 발사체 nullptr exception
+        - AProjectileBase, AWeaponBase
+            - Instigator 관련 로직 수정
+            - 여러 Ref 관련 함수 추가
+    - 각종 리팩토링
+        - AWeaponBase
+            - bCanMeleeAtk 관련 로직
+            - InitWeapon 및 InitProjectile 관련 로직
+
+[33mcommit b10e14510b73e79474935edb9eaff29b0d5588ae[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Dec 19 16:19:06 2022 +0900
+
+    [refactor][feat] 원거리 무기 탄환 관련 기능 추가 등
+    - AWeaponBase
+        - 탄환 개수 관련 기능
+            - TryLoadMagazine : 장전
+            - AddAmmo / AddMagazine : 아이템 관련
+        - 버프 추가 (FCharacterStatStruct)
+            - E_InfiniteAmmo
+        - 프로퍼티 추가 (FWeaponStatStruct)
+            - bInfiniteMagazine
+    - ACharacterBase, AMainCharacterBase
+        - 공격 Interval 기능 추가 (공격 사이의 Delay)
+        - CharacterStat의 AtkSpeed와 연동
+        - CharacterState에 bCanAttack 추가
+    - Bugs / Issue
+        - 각종 Buff 및 Debuff가 작동하지 않음
+
+[33mcommit 604f2cbc8c335a2f7f3cab6637592333d5b5a650[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Dec 17 20:27:19 2022 +0900
+
+    [feat][refactor] 콤보기능 추가, 무기 클래스 로직 개선
+    - 콤보 기능 추가 .. (ACharacterBase, AWeaponBase)
+        - 1.0f초 뒤에 콤보 풀림 / 애니메이션 및 콤보 초기화
+    - 기존의 Combo 로직 수정
+        - 기존 : 단순히 캐릭터의 애니메이션 idx
+        - 개선 : 캐릭터의 실제 콤보수
+        - GetCharacterAtkAnimIdx 제거
+    - 무기 클래스 로직 개선
+        - WeaponStatStructBase
+            - 무기 스탯 구조체 개선
+            - 근접 / 원거리 구분x
+            - WeaponStat 내 ProjectileStat 포함
+        - 스탯 관련 로직 전면 리팩토링
+    - 일부 주석 작업
+
+[33mcommit a05c09c2439ce73421dfaac68c8dfb044a605484[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Dec 5 21:07:56 2022 +0900
+
+    [refactor] 무기 시스템 네이티브화 및 개선작업 (50%, 일부 미동작)
+    - 네이티브화
+        - AMainCharacterBase / ACharacter
+            - Attack 및 StopAttack 로직
+            - Atk Combo Anim Array 추가
+        - AWeaponBase
+            - FireProjectile
+            - 기본 Component
+    - 개선 작업 / 오류 수정
+        - AWeaponBase
+            - 스탯 초기화 함수 추가
+        - BP_MainCharacter*
+            - 크래시 유발 클래스 제거 및 재생성
+                - BP_MainCharacter -> BP_MainCharacter_
+    - 구현 필요 항목
+        - 콤보 타이머 초기화 로직
+
+[33mcommit ff9e4f2e76ec95536e281776b36df723ac239d70[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sun Dec 4 23:59:45 2022 +0900
+
+    [refactor] 무기 시스템 네이티브화 및 개선작업 (20%, not working)
+    - 네이티브화
+        - 근접 공격 로직 (Linetrace)
+        - 캐릭터 중복 trace 제거
+    - 그 외 개선 작업
+        - 캐릭터 상,하위 클래스 공격 로직
+
+[33mcommit db9e7001a0a05ca757bcc35ac78ee7a46a353050[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Dec 3 23:18:51 2022 +0900
+
+    [refactor] 무기 동작 매커니즘 변경 등 (10%, not working)
+    - 무기 베이스 클래스 추가
+        - AWeaponBase
+    - 캐릭터 공격 매커니즘 변경
+        - 기존 기획 : ACharacterBase -> MeleeAtk 또는 Fire
+        - 새 로직 : ACharacterBase -> AWeaponBase -> Atk -> (무기 종류에 따른) 공격 로직 수행
+
+[33mcommit a46db5ddd0aa935a0b50fa080948fad3895a4ecf[m
+Merge: 48f4e75 97c95f9
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Fri Dec 2 19:15:39 2022 +0900
+
+    Merge pull request #5 from Oriburger/battlesystem-develop
+    
+    [feat] 적 캐릭터 에셋 추가 및 애니메이션 작업
+
+[33mcommit 97c95f9f86e4ceee3be183510b1e561d2bcfb190[m
+Author: Oriburger <uss425@naver.com>
+Date:   Fri Dec 2 19:14:34 2022 +0900
+
+    [feat] 적 캐릭터 에셋 추가 및 애니메이션 작업
+    - BotType A, B, C
+        - Paragon 및 기타 애니메이션 리타깃 작업
+        - 애니메이션BP 및 8Way Locomotion + Upperbody Montage
+    - EnemyCharacter 클래스
+        - AEnemyCharacterBase
+
+[33mcommit 48f4e7512f5ff54dcb64249eab8a59941ac14148[m
+Merge: ca107c6 235d071
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Wed Nov 30 15:46:15 2022 +0900
+
+    Merge pull request #4 from Oriburger/battlesystem-develop
+    
+    [docs][fix] 브랜치 세분화, 디버프 오류 수정
+
+[33mcommit 235d07104c1a396d4bfcd2825fa9d2c9e70d06ce[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Nov 30 15:42:52 2022 +0900
+
+    [feat][fix] 근접 전투 테스트 BP코드, 디버프 상태 체크 오류 수정
+    - 근접 전투
+        - 파라곤 Kwang 에셋 내 각종 전투 애니메이션 리타깃
+        - 테스트 무기 (SM_MetalStick)
+        - AnimNotify + Linetrace 활용한 근접 데미지
+    - 디버프 상태 체크 오류
+        - 비트마스킹 연산이 제대로 동작하지 않음
+        - 관련 연산 위치 통일 (SetTimer, ClearTimer 호출시점)
+
+[33mcommit 8dbaff5fa22d69f49baf9b998045415406ca5b7a[m
+Author: Oriburger <uss425@naver.com>
+Date:   Tue Nov 29 15:41:43 2022 +0900
+
+    [feat] 버프, 디버프 추가 등
+    - 디버프
+        - 방어력 다운
+        - 공격력 다운
+    - 버프
+        - 자동 회복
+        - 무적
+        - 스피드업
+        - 방어력 업
+        - 공격력업
+    - 회복
+    - 공격력 관련 버프/디버프는 현재 프레임워크만 구현 (미동작)
+
+[33mcommit ca107c65b0f651b708e4dccad7feaec45b6f4650[m
+Merge: 6ad2c4d 6978239
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Tue Nov 29 13:06:22 2022 +0900
+
+    Merge pull request #3 from Oriburger/battlesystem-develop
+    
+    [feat][refactor] 방어력 로직 추가 및 버프-디버프 시스템 개선
+
+[33mcommit b9ae35e6b77e70f9c4f7e071c7c45e78cb2befad[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Mon Nov 28 19:23:06 2022 +0900
+
+    [fix][feat] 레벨 로드 문제 해결 및 게이트 구현 (work-in-progress, not working)
+    
+    [fix] 레벨 로드 문제
+    - 파일 경로 수정
+    - Tile 클래스 수정
+       - 부모 클래스 Actor -> 상속 X
+    
+    [feat] 게이트 구현
+    - Gate 클래스 추가
+     - Open 기능 추가 예정
+
+[33mcommit 69782397d4887e520d0c12bd0eb13bd34e5ebc15[m
+Author: Oriburger <uss425@naver.com>
+Date:   Mon Nov 28 16:09:32 2022 +0900
+
+    [feat][refactor] 방어력 로직 추가 및 버프-디버프 시스템 개선
+    - 방어력 로직 추가
+        - ECharacterStatStruct 내 ECharacterDefense
+        - [-1.0f, 1.0f] 범위로 해당 값 만큼 방어
+            - 0.8이라면? 0.2만큼만 데미지를 입음
+    - buff, debuff 공통 로직 다수
+        - TimerHandle 및 RemainingTime 배열 2차원화
+            - [bIsDebuff][BuffCount]
+        - ClearBuffTimer, SetBuffTimer 등 함수명 수정 등
+
+[33mcommit ab6bc7bdd5d493b38f97eade1cc579f2625d57a5[m
+Author: Hearyeong <ahr0322@naver.com>
+Date:   Sun Nov 27 10:37:22 2022 +0900
+
+    [feat]스테이지 시스템
+    
+    - 스테이지 관련
+      - Tile 클래스
+      - Grid 클래스
+      - BP_Wall, BP_Gate
+      - LevelStreamerActor 클래스
+    
+    -UI
+     - 파일명 수정
+
+[33mcommit 6ad2c4dc366d100477b476d013ddb2079912f777[m
+Merge: b7af171 764c23e
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sat Nov 26 20:20:20 2022 +0900
+
+    Merge pull request #2 from Oriburger/battlesystem-develop
+    
+    [feat] 기본 디버프 시스템 완성
+
+[33mcommit 764c23efc3dbbea61a14048735e748f78e413141[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Nov 26 20:18:28 2022 +0900
+
+    [feat] Debuff 시스템 기본 완성
+    - 현재 구현 목록
+        - E_Flame
+        - E_Poison
+        - E_Slow
+        - E_Sleep
+    - 추가 구현 예정 항목
+        - 각 디버프 당 이펙트 / 애니메이션
+        - 버프 시스템
+
+[33mcommit 6f38c460d66d7afc7859a4d00a0051dc4677f8d5[m
+Author: Oriburger <uss425@naver.com>
+Date:   Thu Nov 24 20:52:41 2022 +0900
+
+    [feat] debuff/buff 시스템  (work in progress)
+    - CharacterInfoStructBase.h 내 buff 구조체
+    - ClearDebuffTimer 로직 수정
+    - Poision 디버프 이벤트 추가
+    - Sleep / Slow 작업중
+
+[33mcommit 1c891e199cb2155457f5d194f0fbbc2b0c2db1ed[m
+Merge: 15f2f19 f57f213
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Nov 23 11:55:55 2022 +0900
+
+    Merge branch 'battlesystem-develop' of https://github.com/Oriburger/UE5-BackStreet into battlesystem-develop
+
+[33mcommit 15f2f19a46dd53f35f1f5927aa61ae6f276f9e2f[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Nov 23 11:55:24 2022 +0900
+
+    [fix] 디버프 시스템 내 크래시 문제 해결
+    - CharacterBase.cpp 내 line 88
+        - 4번째 Causer 인자 미전달 (..)
+
+[33mcommit f57f213df6678ecfc0e806cab3eb64d06a0f67d7[m
+Merge: 9e535db b7af171
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Sat Nov 19 00:22:11 2022 +0900
+
+    Merge branch 'SSU-BackStreet:master' into battlesystem-develop
+
+[33mcommit 9e535db8db9961bc101c09b3e8edae639c4f3f58[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Nov 19 00:17:43 2022 +0900
+
+    [feat] 디버프 시스템 개선 (work-in-progress, not working)
+    - Debuff Timer 관련 로직 전면 수정
+       - Debuff Timer 호출을 Lambda에서 TimerDelegate로 수정 (현재 크래시)
+       - Debuff Type Enum
+           - Debuff Type 에 따른 Remaining Time 체크
+           - 플레이어의 현재 Debuff 상태를 State 구조체 내에 int32 형태로 표현 (bit-field)
+    - 무기 스탯 구조체
+        - 각 무기가 소유한 Debuff Type 추가
+
+[33mcommit b7af171522a125d43ef740a12c7a1cacd8be3083[m
+Merge: 39cddbe c679e77
+Author: Jaeho Lee <uss425@naver.com>
+Date:   Wed Nov 16 23:06:07 2022 +0900
+
+    Merge pull request #1 from Oriburger/master
+    
+    [feat] 전투 시스템, 캐릭터 클래스, 기본 UI 등 (쌓여있던 것..)
+
+[33mcommit c679e778095bca31b56c971ac029969d1d0d3de4[m
+Merge: 44884d9 39cddbe
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Nov 16 23:04:55 2022 +0900
+
+    [test] merge test
+
+[33mcommit 44884d91c70f1bb15a01414b688789e8bad0714d[m
+Author: Oriburger <uss425@naver.com>
+Date:   Wed Nov 16 22:59:08 2022 +0900
+
+    [feat] 전투 시스템, 캐릭터 클래스, 기본 UI 등 (쌓여있던 것..)
+    - 전투 시스템
+        - 무기
+            - 발사체 클래스 (AProjectileBase)
+            - 무기 스탯 (A
+        - 데미지 시스템
+        - 디버프 시스템
+            - ACharacterBase
+                - *Debuff* 관련 멤버 참고
+    - 캐릭터
+        - 클래스 세분화
+            - ACharacterBase
+                - AMainCharacterBase
+                    - BP_MainCharacter
+                - BP_EnemyCharacterBase
+        - 애니메이션
+        - 캐릭터 스탯/상태 구조체 (추후 FCharacter*로 수정 예정)
+            - ACharacterBase
+                - FPlayerStatStruct
+                - FPlayerStateStruct
+    - UI
+        - 파일명 W_*.uasset 로 수정 요망
+        - BP_MainMenu
+        - BP_Option
+        - BP_Pause
+        - BP_PressAnyKey
+
+[33mcommit 39cddbe157213c46c7d392b9153c81a8e3dfc366[m
+Author: Oriburger <uss425@naver.com>
+Date:   Sat Oct 29 16:13:17 2022 +0900
+
+    [test] 초기 커밋
