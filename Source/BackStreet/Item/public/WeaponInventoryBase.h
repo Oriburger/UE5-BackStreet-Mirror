@@ -44,12 +44,12 @@ public:
 		void EquipWeapon(int32 InventoryIdx, bool bIsNewWeapon = false);
 
 	//무기 추가를 시도. 불가능하면 false를 반환
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		bool AddWeapon(int32 NewWeaponID);
 
 	//무기를 인벤토리로부터 제거
-	UFUNCTION()
-		void RemoveWeapon(int32 InventoryIdx);
+	UFUNCTION(BlueprintCallable)
+	void RemoveWeapon(int32 WeaponID);
 
 	//현재 장착하고 있는 Weapon Actor 정보를 제거한다.
 	UFUNCTION()
@@ -87,7 +87,7 @@ protected:
 		void SortInventory();
 
 	//해당 Weapon이 인벤토리에 포함이 되어있는지 반환
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		int32 GetWeaponInventoryIdx(int32 WeaponID);
 
 	//인벤토리에 TargetWeaponID라는 ID를 가진 Weapon이 있는지 체크.

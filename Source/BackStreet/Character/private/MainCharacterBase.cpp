@@ -16,6 +16,7 @@
 #include "Animation/AnimInstance.h"
 #include "TimerManager.h"
 #include "../../Item/public/RewardBoxBase.h"
+#include "../../CraftingSystem/public/CraftBoxBase.h"
 #define MAX_CAMERA_BOOM_LENGTH 1450.0f
 #define MIN_CAMERA_BOOM_LENGTH 250.0f
 
@@ -196,6 +197,10 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 	{
 		Cast<ARewardBoxBase>(TargetActor)->OnPlayerBeginInteract.Broadcast(this);
 	}
+	else if (TargetActor->ActorHasTag("CraftingBox"))
+	{
+		Cast<ACraftBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
+	}
 }
 
 void AMainCharacterBase::TryReload()
@@ -301,7 +306,7 @@ void AMainCharacterBase::RotateToCursor()
 TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
 {
 	TArray<AActor*> totalItemList;
-	TArray<UClass*> targetClassList = {AItemBase::StaticClass(), AItemBoxBase::StaticClass(), ARewardBoxBase::StaticClass()};
+	TArray<UClass*> targetClassList = {AItemBase::StaticClass(), AItemBoxBase::StaticClass(), ARewardBoxBase::StaticClass(), ACraftBoxBase::StaticClass()};
 	TEnumAsByte<EObjectTypeQuery> itemObjectType = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel3);
 	FVector overlapBeginPos = GetActorLocation() + GetMesh()->GetForwardVector() * 70.0f + GetMesh()->GetUpVector() * -45.0f;
 	
