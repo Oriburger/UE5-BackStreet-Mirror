@@ -47,8 +47,5 @@ protected:
 
 private:
 	UPROPERTY()
-		class AMainCharacterBase* PlayerRef;
-
-	UPROPERTY()
 		FRotator LastRotationToCursor;
 };

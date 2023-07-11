@@ -116,7 +116,5 @@ protected:
 
 // ----- Ref -----------------------------------
 private:
-	UPROPERTY()
-		class ABackStreetGameModeBase* GamemodeRef;
-
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 };

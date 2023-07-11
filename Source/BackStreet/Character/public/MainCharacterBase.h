@@ -172,8 +172,8 @@ private:
 	UPROPERTY()
 		class UAbilityManagerBase* AbilityManagerRef;
 
-	UPROPERTY()
-		class AMainCharacterController* PlayerControllerRef;
+	//플레이어 컨트롤러 약 참조
+	TWeakObjectPtr<class AMainCharacterController> PlayerControllerRef;
 
 	//공격 시, 마우스 커서의 위치로 캐릭터가 바라보는 로직을 초기화하는 타이머
 	//초기화 시에는 다시 movement 방향으로 캐릭터의 Rotation Set 

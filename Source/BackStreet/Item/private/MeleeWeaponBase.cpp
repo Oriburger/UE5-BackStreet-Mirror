@@ -24,7 +24,7 @@ void AMeleeWeaponBase::Attack()
 	}
 	if (MeleeLineTraceQueryParams.GetIgnoredActors().Num() == 0)
 	{
-		MeleeLineTraceQueryParams.AddIgnoredActor(OwnerCharacterRef);
+		MeleeLineTraceQueryParams.AddIgnoredActor(OwnerCharacterRef.Get());
 	}
 }
 
@@ -40,7 +40,7 @@ void AMeleeWeaponBase::StopAttack()
 
 float AMeleeWeaponBase::GetAttackRange()
 {
-	if (!IsValid(OwnerCharacterRef)) return DEFAULT_MELEE_ATK_RANGE + 50.0f;
+	if (!OwnerCharacterRef.IsValid()) return DEFAULT_MELEE_ATK_RANGE + 50.0f;
 	return DEFAULT_MELEE_ATK_RANGE;
 }
 
@@ -76,14 +76,14 @@ void AMeleeWeaponBase::MeleeAttack()
 
 		//데미지를 주고, 중복 체크를 해준다.
 		UGameplayStatics::ApplyDamage(hitResult.GetActor(), WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate
-			, OwnerCharacterRef->GetController(), OwnerCharacterRef, nullptr);
+			, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
 		MeleeLineTraceQueryParams.AddIgnoredActor(hitResult.GetActor());
 
 		//디버프도 부여
-		if (IsValid(GamemodeRef->GetGlobalDebuffManagerRef()))
+		if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
 		{
-			GamemodeRef->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(hitResult.GetActor())
-				, OwnerCharacterRef, WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
+			GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(hitResult.GetActor())
+				, OwnerCharacterRef.Get(), WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
 		}
 
 		//내구도를 업데이트
@@ -102,9 +102,9 @@ bool AMeleeWeaponBase::CheckMeleeAttackTarget(FHitResult& hitResult, const TArra
 			GetWorld()->LineTraceSingleByChannel(hitResult, beginPoint, endPoint, ECollisionChannel::ECC_Camera, MeleeLineTraceQueryParams);
 
 			if (hitResult.bBlockingHit && IsValid(hitResult.GetActor()) //hitResult와 hitActor의 Validity 체크
-				&& OwnerCharacterRef->Tags.IsValidIndex(1) //hitActor의 Tags 체크(1)
+				&& OwnerCharacterRef.Get()->Tags.IsValidIndex(1) //hitActor의 Tags 체크(1)
 				&& hitResult.GetActor()->ActorHasTag("Character") //hitActor의 Type 체크
-				&& !hitResult.GetActor()->ActorHasTag(OwnerCharacterRef->Tags[1])) //공격자와 피격자의 타입이 같은지 체크
+				&& !hitResult.GetActor()->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) //공격자와 피격자의 타입이 같은지 체크
 			{
 				return true;
 			}
@@ -125,9 +125,8 @@ void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location)
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffectParticle, emitterSpawnTransform, true, EPSCPoolMethod::None, true);
 
 	}
-
 	//카메라 Shake 효과
-	GamemodeRef->PlayCameraShakeEffect(OwnerCharacterRef->ActorHasTag("Player") ? ECameraShakeType::E_Attack : ECameraShakeType::E_Hit, Location);
+	GamemodeRef.Get()->PlayCameraShakeEffect(OwnerCharacterRef.Get()->ActorHasTag("Player") ? ECameraShakeType::E_Attack : ECameraShakeType::E_Hit, Location);
 
 	// 사운드
 	if (HitImpactSound != nullptr)
@@ -141,13 +140,15 @@ bool AMeleeWeaponBase::TryActivateSlowHitEffect()
 	//마지막 콤보 슬로우 효과, 추후 MaxComboCnt 프로퍼티 추가 예정
 		//애니메이션 배열 소유는 캐릭터. OwnerCharacter->GetAnimArray(WeaponType).Num() ) 
 		// ㄴ> 이런식으로 하면 될 거 같은데...
-	if (OwnerCharacterRef->ActorHasTag("Player") && WeaponState.ComboCount % 4 == 0)
+	if (OwnerCharacterRef.Get()->ActorHasTag("Player"))
 	{
 		FTimerHandle attackSlowEffectTimerHandle;
-		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.1f);
+		const float dilationValue = WeaponState.ComboCount % 5 == 0 ? 0.08 : 0.15;
+
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), dilationValue);
 		GetWorldTimerManager().SetTimer(attackSlowEffectTimerHandle, FTimerDelegate::CreateLambda([&]() {
 			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
-			}), 0.015f, false);
+		}), 0.015f, false);
 		return true;
 	}
 	return false;

@@ -95,8 +95,6 @@ protected:
 		class USoundCue* PickSound;
 
 // ------ 참조 프로퍼티 ---------------------------------------------
-
 private:
-	UPROPERTY(VisibleDefaultsOnly)
-		class ABackStreetGameModeBase* GamemodeRef;
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 };

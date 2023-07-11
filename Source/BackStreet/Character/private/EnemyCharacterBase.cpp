@@ -56,13 +56,14 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitImpactSound, GetActorLocation());
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 
-	const float knockBackStrength = 500000.0f;
+	//const float knockBackStrength = 100000.0f;
 	FVector knockBackDirection = GetActorLocation() - DamageCauser->GetActorLocation();
 	knockBackDirection = knockBackDirection.GetSafeNormal();
 	knockBackDirection *= knockBackStrength;
 	knockBackDirection.Z = 0.0f;
 
 	GetCharacterMovement()->AddImpulse(knockBackDirection);
+	CharacterState.CharacterActionState = ECharacterActionType::E_Hit;
 
 	return damageAmount;
 }
@@ -137,41 +138,38 @@ void AEnemyCharacterBase::SpawnDeathItems()
 	{
 		AItemBase* newItem = GamemodeRef->SpawnItemToWorld((uint8)SpawnItemTypeList[0], SpawnItemIDList[0], GetActorLocation() + FMath::VRand() * 10.0f);
 		if (IsValid(newItem))
-			{
-				spawnedItemList.Add(newItem);
-				//newItem->Dele_MissionItemSpawned.BindUFunction(target, FName("TryAddMissionItem"));
-			}
-	
+		{
+			spawnedItemList.Add(newItem);
+			//newItem->Dele_MissionItemSpawned.BindUFunction(target, FName("TryAddMissionItem"));
+		}
 	}
 	else
 	{
 		while(totalSpawnItemCount)
 		{
 			if (++trySpawnCount > totalSpawnItemCount * 3) break; //스폰할 아이템 개수의 3배만큼 시도
-		
+			
 			const int32 itemIdx = UKismetMathLibrary::RandomIntegerInRange(0, SpawnItemIDList.Num()-1);
 			if (!SpawnItemTypeList.IsValidIndex(itemIdx) || !ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
-		
+			
 			const uint8 itemType = (uint8)SpawnItemTypeList[itemIdx];
 			const uint8 itemID = SpawnItemIDList[itemIdx];
 			const float spawnProbability = ItemSpawnProbabilityList[itemIdx];
-		
+			
 			if(FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
 			{
 				AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemType, itemID, GetActorLocation() + FMath::VRand() * 10.0f);
-		
+			
 				UE_LOG(LogTemp, Warning, TEXT("Spawned@"));
-		
+			
 				if (IsValid(newItem))
 				{
 					spawnedItemList.Add(newItem);
 					totalSpawnItemCount -= 1;
 				}
 			}
-		}
-	}
-
-	
+		}	
+	}		
 	for (auto& targetItem : spawnedItemList)
 	{
 		targetItem->ActivateProjectileMovement();

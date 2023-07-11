@@ -15,11 +15,11 @@ class BACKSTREET_API AWeaponInventoryBase : public AActor
 	GENERATED_BODY()
 //------ Delegate ---------------------------------
 public:
-	//ÀÎº¥Åä¸®°¡ ¾÷µ¥ÀÌÆ® µÇ¾úÀ» ¶§ (Ãß°¡, Á¤·Ä, Á¦°Å µî)
+	//ì¸ë²¤í† ë¦¬ê°€ ì—…ë°ì´íŠ¸ ë˜ì—ˆì„ ë•Œ (ì¶”ê°€, ì •ë ¬, ì œê±° ë“±)
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDeleInventoryUpdate OnInventoryIsUpdated;
 
-	//ÀÎº¥Åä¸® ³» ¿ø¼Ò°¡ ¾÷µ¥ÀÌÆ® µÇ¾úÀ» ¶§
+	//ì¸ë²¤í† ë¦¬ ë‚´ ì›ì†Œê°€ ì—…ë°ì´íŠ¸ ë˜ì—ˆì„ ë•Œ
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDeleInventoryInfoUpdate OnInventoryItemIsUpdated;
 
@@ -33,37 +33,37 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-//----- ÀÎº¥Åä¸® ÇÙ½É ·ÎÁ÷-------------------------------
+//----- ì¸ë²¤í† ë¦¬ í•µì‹¬ ë¡œì§-------------------------------
 public: 
-	//ÀÎº¥Åä¸®¸¦ ÃÊ±âÈ­
+	//ì¸ë²¤í† ë¦¬ë¥¼ ì´ˆê¸°í™”
 	UFUNCTION()
 		void InitInventory();
 
-	//¹«±â¸¦ ÀåÂø
+	//ë¬´ê¸°ë¥¼ ì¥ì°©
 	UFUNCTION()
 		void EquipWeapon(int32 InventoryIdx, bool bIsNewWeapon = false);
 
-	//¹«±â Ãß°¡¸¦ ½Ãµµ. ºÒ°¡´ÉÇÏ¸é false¸¦ ¹İÈ¯
+	//ë¬´ê¸° ì¶”ê°€ë¥¼ ì‹œë„. ë¶ˆê°€ëŠ¥í•˜ë©´ falseë¥¼ ë°˜í™˜
 	UFUNCTION(BlueprintCallable)
 		bool AddWeapon(int32 NewWeaponID);
 
-	//¹«±â¸¦ ÀÎº¥Åä¸®·ÎºÎÅÍ Á¦°Å
+	//ë¬´ê¸°ë¥¼ ì¸ë²¤í† ë¦¬ë¡œë¶€í„° ì œê±°
 	UFUNCTION(BlueprintCallable)
-	void RemoveWeapon(int32 WeaponID);
+		void RemoveWeapon(int32 WeaponID);
 
-	//ÇöÀç ÀåÂøÇÏ°í ÀÖ´Â Weapon Actor Á¤º¸¸¦ Á¦°ÅÇÑ´Ù.
+	//í˜„ì¬ ì¥ì°©í•˜ê³  ìˆëŠ” Weapon Actor ì •ë³´ë¥¼ ì œê±°í•œë‹¤.
 	UFUNCTION()
 		void RemoveCurrentWeapon();
 
-	//´ÙÀ½ ¹«±â·Î ÀüÈ¯
+	//ë‹¤ìŒ ë¬´ê¸°ë¡œ ì „í™˜
 	UFUNCTION()
 		bool SwitchToNextWeapon();
 
-	//ÇöÀç ¹«±âÀÇ Á¤º¸¿Í ÀÎº¥Åä¸® ³» Á¤º¸¸¦ µ¿±âÈ­
+	//í˜„ì¬ ë¬´ê¸°ì˜ ì •ë³´ì™€ ì¸ë²¤í† ë¦¬ ë‚´ ì •ë³´ë¥¼ ë™ê¸°í™”
 	UFUNCTION(BlueprintCallable)
 		void SyncCurrentWeaponInfo(bool bIsLoadInfo);
 
-	//ÇØ´ç WeaponÀÌ ÀÎº¥Åä¸®¿¡ Æ÷ÇÔÀÌ µÇ¾îÀÖ´ÂÁö ¹İÈ¯
+	//í•´ë‹¹ Weaponì´ ì¸ë²¤í† ë¦¬ì— í¬í•¨ì´ ë˜ì–´ìˆëŠ”ì§€ ë°˜í™˜
 	UFUNCTION(BlueprintCallable)
 		bool GetWeaponIsContained(int32 WeaponID);
 	
@@ -74,34 +74,34 @@ protected:
 	UFUNCTION()
 		class AWeaponBase* SpawnWeaponActor(int32 WeaponID);
 
-	//ÇöÀç ¹«±â¸¦ ÀÎº¥Åä¸®·Î º¸³½´Ù.
+	//í˜„ì¬ ë¬´ê¸°ë¥¼ ì¸ë²¤í† ë¦¬ë¡œ ë³´ë‚¸ë‹¤.
 	UFUNCTION()
 		void RestoreCurrentWeapon();
 
-	//ÀÎº¥Åä¸®¸¦ ºñ¿ò
+	//ì¸ë²¤í† ë¦¬ë¥¼ ë¹„ì›€
 	UFUNCTION()
 		void ClearInventory();
 
-	//ÀÎº¥Åä¸®¸¦ Weight¸¦ ±âÁØÀ¸·Î ¿À¸§Â÷¼ø Á¤·Ä
+	//ì¸ë²¤í† ë¦¬ë¥¼ Weightë¥¼ ê¸°ì¤€ìœ¼ë¡œ ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬
 	UFUNCTION()
 		void SortInventory();
 
-	//ÇØ´ç WeaponÀÌ ÀÎº¥Åä¸®¿¡ Æ÷ÇÔÀÌ µÇ¾îÀÖ´ÂÁö ¹İÈ¯
+	//í•´ë‹¹ Weaponì´ ì¸ë²¤í† ë¦¬ì— í¬í•¨ì´ ë˜ì–´ìˆëŠ”ì§€ ë°˜í™˜
 	UFUNCTION(BlueprintCallable)
 		int32 GetWeaponInventoryIdx(int32 WeaponID);
 
-	//ÀÎº¥Åä¸®¿¡ TargetWeaponID¶ó´Â ID¸¦ °¡Áø WeaponÀÌ ÀÖ´ÂÁö Ã¼Å©.
-	//Áßº¹µÇ´Â°Ô ÀÖ´Ù¸é ÇØ´ç ÀÎº¥Åä¸®ÀÇ Idx¸¦ ¹İÈ¯
+	//ì¸ë²¤í† ë¦¬ì— TargetWeaponIDë¼ëŠ” IDë¥¼ ê°€ì§„ Weaponì´ ìˆëŠ”ì§€ ì²´í¬.
+	//ì¤‘ë³µë˜ëŠ”ê²Œ ìˆë‹¤ë©´ í•´ë‹¹ ì¸ë²¤í† ë¦¬ì˜ Idxë¥¼ ë°˜í™˜
 	UFUNCTION()
 		int32 CheckWeaponDuplicate(int32 TargetWeaponID);
 
-//------ ÇÁ·ÎÆÛÆ¼ °ü·Ã ----------------------------------
+//------ í”„ë¡œí¼í‹° ê´€ë ¨ ----------------------------------
 public:
-	//ÇöÀç ¼±ÅÃµÈ ÀÎº¥Åä¸® Idx¸¦ ¹İÈ¯
+	//í˜„ì¬ ì„ íƒëœ ì¸ë²¤í† ë¦¬ Idxë¥¼ ë°˜í™˜
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetCurrentIdx() {  return CurrentIdx;  }
 
-	//ÇöÀç ¹«±â °³¼ö¸¦ ¹İÈ¯
+	//í˜„ì¬ ë¬´ê¸° ê°œìˆ˜ë¥¼ ë°˜í™˜
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetCurrentWeaponCount() {  return CurrentWeaponCount = InventoryArray.Num(); }
 
@@ -131,11 +131,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (UIMin = 1, UIMax = 10))
 		int32 MaxWeaponCount = 6;
 
-	//Weapon ID ¹è¿­, BP¿¡¼­ ÁöÁ¤ÇÏ°í Idx·Î ±¸ºĞ
+	//Weapon ID ë°°ì—´, BPì—ì„œ ì§€ì •í•˜ê³  Idxë¡œ êµ¬ë¶„
 	UPROPERTY(EditAnywhere, Category = "Gameplay|Class")
 		TArray<int32> WeaponIDList;
 
-	//Weapon Class ¹è¿­, BP¿¡¼­ ÁöÁ¤ÇÏ°í Idx·Î ±¸ºĞ
+	//Weapon Class ë°°ì—´, BPì—ì„œ ì§€ì •í•˜ê³  Idxë¡œ êµ¬ë¶„
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Class")
 		TArray<TSubclassOf<class AWeaponBase> > WeaponClassList;
 
@@ -156,13 +156,14 @@ private:
 	UPROPERTY()
 		TMap<int32, UClass*> WeaponClassInfoMap;
 
-	UPROPERTY()
-		class ABackStreetGameModeBase* GamemodeRef;
 
-	UPROPERTY()
-		class ACharacterBase* OwnerCharacterRef;
+private: 
+	//ê²Œì„ëª¨ë“œ Ref
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
-	//ÇöÀç ÀåºñÇÏ°í ÀÖ´Â WeaponRef
-	UPROPERTY()
-		class AWeaponBase* CurrentWeaponRef;
+	//ì¸ë²¤í† ë¦¬ ì†Œìœ ì í”Œë ˆì´ì–´ 
+	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
+
+	//í˜„ì¬ ì¥ë¹„í•˜ê³  ìˆëŠ” WeaponRef
+	TWeakObjectPtr<class AWeaponBase> CurrentWeaponRef;
 };

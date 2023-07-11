@@ -78,8 +78,8 @@ private:
 		void AddNewTimerList(class ACharacterBase* Target);
 
 private:
-	UPROPERTY()
-		class ABackStreetGameModeBase* GamemodeRef;
+	//게임모드 Ref
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
 	//캐릭터의 Actor id - 디버프 타이머(+ 초기화 값) 정보를 저장
 	UPROPERTY()

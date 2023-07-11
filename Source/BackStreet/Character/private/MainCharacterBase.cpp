@@ -226,7 +226,7 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 
 void AMainCharacterBase::TryAttack()
 {
-	if (!PlayerControllerRef->GetActionKeyIsDown("Attack"))
+	if (!PlayerControllerRef.Get()->GetActionKeyIsDown("Attack"))
 	{
 		return;
 	}
@@ -265,16 +265,16 @@ void AMainCharacterBase::StopAttack()
 void AMainCharacterBase::Die()
 {
 	Super::Die();
-	if (IsValid(GamemodeRef))
+	if (GamemodeRef.IsValid())
 	{
-		if(IsValid(GamemodeRef->GetChapterManagerRef())
-			&& IsValid(GamemodeRef->GetChapterManagerRef()->GetCurrentStage()))
-			GamemodeRef->GetChapterManagerRef()->GetCurrentStage()->AIOffDelegate.Broadcast();
+		if(IsValid(GamemodeRef.Get()->GetChapterManagerRef())
+			&& IsValid(GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage()))
+			GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage()->AIOffDelegate.Broadcast();
 		
 		GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 		//ClearAllTimerHandle();
-		GamemodeRef->ClearResourceDelegate.Broadcast();
-		GamemodeRef->FinishChapterDelegate.Broadcast(true);
+		GamemodeRef.Get()->ClearResourceDelegate.Broadcast();
+		GamemodeRef.Get()->FinishChapterDelegate.Broadcast(true);
 	}
 	//;
 	UE_LOG(LogTemp, Warning, TEXT("DIE DELEGATE"));
@@ -285,7 +285,7 @@ void AMainCharacterBase::RotateToCursor()
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Attack) return;
 
-	FRotator newRotation = PlayerControllerRef->GetRotationToCursor();
+	FRotator newRotation = PlayerControllerRef.Get()->GetRotationToCursor();
 	if (newRotation != FRotator())
 	{
 		newRotation.Pitch = newRotation.Roll = 0.0f;
@@ -297,7 +297,7 @@ void AMainCharacterBase::RotateToCursor()
 	GetWorld()->GetTimerManager().ClearTimer(RotationResetTimerHandle);
 	GetWorld()->GetTimerManager().SetTimer(RotationResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
 		ResetRotationToMovement();
-		FRotator newRotation = PlayerControllerRef->GetLastRotationToCursor();
+		FRotator newRotation = PlayerControllerRef.Get()->GetLastRotationToCursor();
 		newRotation.Yaw = FMath::Fmod((newRotation.Yaw + 90.0f), 360.0f);
 		SetActorRotation(newRotation.Quaternion(), ETeleportType::ResetPhysics);
 	}), 1.0f, false);

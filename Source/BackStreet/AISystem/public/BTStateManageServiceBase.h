@@ -41,12 +41,9 @@ protected:
 		void OnOwnerGetDamaged(AActor* Causer);
 
 private:
-	//캐릭터 레퍼런스
-	UPROPERTY()
-		class AEnemyCharacterBase* OwnerCharacterRef;
+	TWeakObjectPtr<class AEnemyCharacterBase> OwnerCharacterRef;
 
-	UPROPERTY()
-		class UBlackboardComponent* BlackboardRef;
+	TWeakObjectPtr<UBlackboardComponent> BlackboardRef;
 
 	UPROPERTY()
 		EAIBehaviorType AIBehaviorState;

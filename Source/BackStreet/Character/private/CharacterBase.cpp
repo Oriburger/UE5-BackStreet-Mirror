@@ -5,6 +5,7 @@
 #include "../../Item/public/WeaponInventoryBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "../../Global/public/AssetManagerBase.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Animation/AnimMontage.h"
 
 // Sets default values
@@ -27,16 +28,16 @@ void ACharacterBase::BeginPlay()
 	InventoryRef = Cast<AWeaponInventoryBase>(InventoryComponent->GetChildActor());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 
-	if (IsValid(GetInventoryRef()))
+	if (IsValid(InventoryRef) && !InventoryRef->IsActorBeingDestroyed())
 	{
-		GetInventoryRef()->SetOwner(this);
-		GetInventoryRef()->InitInventory();
+		InventoryRef->SetOwner(this);
+		InventoryRef->InitInventory();
 	}
 
 	//애니메이션 에셋 초기화
-	if (IsValid(GamemodeRef))
+	if (GamemodeRef.IsValid())
 	{
-		AnimAssetData = GamemodeRef->GetCharacterAnimAssetInfoData(CharacterStat.CharacterID);
+		AnimAssetData = GamemodeRef.Get()->GetCharacterAnimAssetInfoData(CharacterStat.CharacterID);
 	}
 }
 
@@ -62,19 +63,19 @@ void ACharacterBase::InitCharacterState()
 
 bool ACharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer, float TotalTime, float Value)
 {
-	if (!IsValid(GamemodeRef)) return false;
+	if(!GamemodeRef.IsValid()) return false;
 	
-	if (!IsValid(GamemodeRef->GetGlobalDebuffManagerRef())) return false;
+	if (!IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef())) return false;
 
-	bool result = GamemodeRef->GetGlobalDebuffManagerRef()->SetDebuffTimer(NewDebuffType, this, Causer, TotalTime, Value);
-	return result;
+	bool result = GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(NewDebuffType, this, Causer, TotalTime, Value);
+	return result; 
 }
 
 bool ACharacterBase::GetDebuffIsActive(ECharacterDebuffType DebuffType)
 {
-	if (!IsValid(GamemodeRef)) return false;
-	if (!IsValid(GamemodeRef->GetGlobalDebuffManagerRef())) return false;
-	return	GamemodeRef->GetGlobalDebuffManagerRef()->GetDebuffIsActive(DebuffType, this);
+	if(!GamemodeRef.IsValid()) return false;
+	if (!IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef())) return false;
+	return	GamemodeRef.Get()->GetGlobalDebuffManagerRef()->GetDebuffIsActive(DebuffType, this);
 }
 
 void ACharacterBase::UpdateCharacterStat(FCharacterStatStruct NewStat)
@@ -91,8 +92,8 @@ void ACharacterBase::UpdateCharacterState(FCharacterStateStruct NewState)
 
 void ACharacterBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
-	if (!IsValid(GetWeaponActorRef())) return;
-	GetWeaponActorRef()->UpdateWeaponStat(NewStat);
+	if (!IsValid(WeaponRef) || InventoryRef->IsActorBeingDestroyed()) return;
+	WeaponRef->UpdateWeaponStat(NewStat);
 }
 
 void ACharacterBase::ResetActionState(bool bForceReset)
@@ -129,7 +130,8 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	}
 	else if (AnimAssetData.HitAnimMontageList.Num() > 0)
 	{
-		PlayAnimMontage(AnimAssetData.HitAnimMontageList[0]);
+		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AnimAssetData.HitAnimMontageList.Num() - 1);
+		PlayAnimMontage(AnimAssetData.HitAnimMontageList[randomIdx]);
 	}
 	return DamageAmount;
 }
@@ -150,14 +152,14 @@ void ACharacterBase::TakeHeal(float HealAmountRate, bool bIsTimerEvent, uint8 Bu
 
 void ACharacterBase::Die()
 {
-	if (IsValid(GetInventoryRef()))
+	if (IsValid(InventoryRef) && !InventoryRef->IsActorBeingDestroyed())
 	{
-		GetInventoryRef()->RemoveCurrentWeapon();
-		GetInventoryRef()->Destroy();
+		InventoryRef->RemoveCurrentWeapon();
+		InventoryRef->Destroy();
 	}
-	if (IsValid(GetWeaponActorRef()))
+	if (IsValid(WeaponRef) && !WeaponRef->IsActorBeingDestroyed())
 	{
-		GetWeaponActorRef()->ClearAllTimerHandle();
+		WeaponRef->ClearAllTimerHandle();
 	}
 
 	ClearAllTimerHandle();
@@ -179,7 +181,7 @@ void ACharacterBase::Die()
 
 void ACharacterBase::TryAttack()
 {
-	if (!IsValid(GetWeaponActorRef())) return;
+	if (!IsValid(WeaponRef)) return;
 	if (GetWorldTimerManager().IsTimerActive(AtkIntervalHandle)) return;
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 	
@@ -187,29 +189,29 @@ void ACharacterBase::TryAttack()
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
 
 	int32 nextAnimIdx = 0;
-	const float attackSpeed = FMath::Min(1.5f, CharacterStat.CharacterAtkSpeed * GetWeaponActorRef()->GetWeaponStat().WeaponAtkSpeedRate);
+	const float attackSpeed = FMath::Min(1.5f, CharacterStat.CharacterAtkSpeed * WeaponRef->GetWeaponStat().WeaponAtkSpeedRate);
 
 	TArray<UAnimMontage*> targetAnimList;
-	switch (GetWeaponActorRef()->GetWeaponStat().WeaponType)
+	switch (WeaponRef->GetWeaponStat().WeaponType)
 	{
 	case EWeaponType::E_Melee:
 		if (AnimAssetData.MeleeAttackAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetWeaponActorRef()->GetCurrentComboCnt() % AnimAssetData.MeleeAttackAnimMontageList.Num();
+			nextAnimIdx = WeaponRef->GetCurrentComboCnt() % AnimAssetData.MeleeAttackAnimMontageList.Num();
 		}
 		targetAnimList = AnimAssetData.MeleeAttackAnimMontageList;
 		break;
 	case EWeaponType::E_Shoot:
 		if (AnimAssetData.ShootAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetWeaponActorRef()->GetCurrentComboCnt() % AnimAssetData.ShootAnimMontageList.Num();
+			nextAnimIdx = WeaponRef->GetCurrentComboCnt() % AnimAssetData.ShootAnimMontageList.Num();
 		}
 		targetAnimList = AnimAssetData.ShootAnimMontageList;
 		break;
 	case EWeaponType::E_Throw:
 		if (AnimAssetData.ThrowAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetWeaponActorRef()->GetCurrentComboCnt() % AnimAssetData.ThrowAnimMontageList.Num();
+			nextAnimIdx = WeaponRef->GetCurrentComboCnt() % AnimAssetData.ThrowAnimMontageList.Num();
 		}
 		targetAnimList = AnimAssetData.ThrowAnimMontageList;
 		break;
@@ -224,27 +226,27 @@ void ACharacterBase::TryAttack()
 
 void ACharacterBase::Attack()
 {
-	if (!IsValid(GetWeaponActorRef())) return;
+	if (!IsValid(WeaponRef) || WeaponRef->IsActorBeingDestroyed()) return;
 	
-	const float attackSpeed = FMath::Min(1.5f, CharacterStat.CharacterAtkSpeed * GetWeaponActorRef()->GetWeaponStat().WeaponAtkSpeedRate);
+	const float attackSpeed = FMath::Min(1.5f, CharacterStat.CharacterAtkSpeed * WeaponRef->GetWeaponStat().WeaponAtkSpeedRate);
 
-	GetWeaponActorRef()->Attack();
+	WeaponRef->Attack();
 }
  
 void ACharacterBase::StopAttack()
 {
-	if (!IsValid(GetWeaponActorRef())) return;
-	GetWeaponActorRef()->StopAttack();
+	if (!IsValid(WeaponRef) || WeaponRef->IsActorBeingDestroyed()) return;
+	WeaponRef->StopAttack();
 }
 
 void ACharacterBase::TryReload()
 {
-	if (!IsValid(GetWeaponActorRef())) return;
-	if (GetWeaponActorRef()->GetWeaponStat().WeaponType != EWeaponType::E_Shoot
-		&& GetWeaponActorRef()->GetWeaponStat().WeaponType != EWeaponType::E_Throw)	return; 
-	if (!Cast<ARangedWeaponBase>(GetWeaponActorRef())->GetCanReload()) return;
+	if (!IsValid(WeaponRef) || WeaponRef->IsActorBeingDestroyed()) return;
+	if (WeaponRef->GetWeaponStat().WeaponType != EWeaponType::E_Shoot
+		&& WeaponRef->GetWeaponStat().WeaponType != EWeaponType::E_Throw)	return; 
+	if (!Cast<ARangedWeaponBase>(WeaponRef)->GetCanReload()) return;
 
-	float reloadTime = GetWeaponActorRef()->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
+	float reloadTime = WeaponRef->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
 	if (AnimAssetData.ReloadAnimMontageList.Num() > 0)
 	{
 		UAnimMontage* reloadAnim = AnimAssetData.ReloadAnimMontageList[0];
@@ -254,7 +256,7 @@ void ACharacterBase::TryReload()
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Reload;
 	GetWorldTimerManager().SetTimer(ReloadTimerHandle, FTimerDelegate::CreateLambda([&](){
-		Cast<ARangedWeaponBase>(GetWeaponActorRef())->TryReload();
+		Cast<ARangedWeaponBase>(WeaponRef)->TryReload();
 		ResetActionState(true);
 	}), 1.0f, false, reloadTime);
 }
@@ -285,37 +287,43 @@ bool ACharacterBase::EquipWeapon(AWeaponBase* TargetWeapon)
 
 bool ACharacterBase::PickWeapon(int32 NewWeaponID)
 {
-	if (!IsValid(GetInventoryRef())) return false;
+	if (!IsValid(InventoryRef)) return false;
 	bool result = InventoryRef->AddWeapon(NewWeaponID);
 	return result;
 }
 
 void ACharacterBase::SwitchToNextWeapon()
 {
-	if (!IsValid(GetInventoryRef())) return;
-	if (!IsValid(GetWeaponActorRef())) return;
+	if (!IsValid(InventoryRef)) return;
+	if (!IsValid(WeaponRef) || WeaponRef->IsActorBeingDestroyed()) return;
 	InventoryRef->SwitchToNextWeapon();
 }
 
 void ACharacterBase::DropWeapon()
 {
-	if (!IsValid(GetInventoryRef())) return;
+	if (!IsValid(InventoryRef)) return;
 
-	GetInventoryRef()->RemoveCurrentWeapon();
+	InventoryRef->RemoveCurrentWeapon();
 	/*---- 현재 무기를 월드에 버리는 기능은 미구현 -----*/
 }
 
 AWeaponInventoryBase* ACharacterBase::GetInventoryRef()
 {
-	if (!IsValid(InventoryRef)) return nullptr;
+	if (!IsValid(InventoryRef) || InventoryRef->IsActorBeingDestroyed()) return nullptr;
 	return InventoryRef;
+}
+
+void ACharacterBase::SetWeaponActorRef(AWeaponBase* NewWeapon)
+{
+	if (!IsValid(NewWeapon) || NewWeapon->IsActorBeingDestroyed()) return;
+	WeaponRef = NewWeapon;
 }
 
 AWeaponBase* ACharacterBase::GetWeaponActorRef()
 {
-	if (!IsValid(GetInventoryRef())) return nullptr;
+	if (!IsValid(WeaponRef) || WeaponRef->IsActorBeingDestroyed()) return nullptr;
 
-	return GetInventoryRef()->GetCurrentWeaponRef();
+	return WeaponRef;
 }
 
 void ACharacterBase::ClearAllTimerHandle()

@@ -42,7 +42,7 @@ enum class ECharacterActionType : uint8
 {
 	E_Idle			UMETA(DisplayName = "Idle"),
 	E_Attack		UMETA(DisplayName = "Attack"),
-	E_Defense		UMETA(DisplayName = "Defense"),
+	E_Hit			UMETA(DisplayName = "Hit"),
 	E_Roll			UMETA(DisplayName = "Roll"),
 	E_Jump			UMETA(DisplayName = "Jump"),
 	E_Reload		UMETA(DisplayName = "Reload"),

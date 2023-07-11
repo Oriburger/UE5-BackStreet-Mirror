@@ -123,7 +123,7 @@ TArray<AItemBase*> AItemBoxBase::SpawnItems(int32 TargetSpawnCount)
 		{
 			const float randomValue = UKismetMathLibrary::RandomFloatInRange(-10.0f, 10.0f);
 			const FVector spawnLocation = GetActorLocation() + FVector(randomValue, randomValue, currentSpawnCount * SpawnLocationInterval + 125.0f);
-			AItemBase* newItem = GamemodeRef->SpawnItemToWorld(targetItemType, targetItemID, spawnLocation);
+			AItemBase* newItem = GamemodeRef.Get()->SpawnItemToWorld(targetItemType, targetItemID, spawnLocation);
 
 			if (IsValid(newItem))
 			{

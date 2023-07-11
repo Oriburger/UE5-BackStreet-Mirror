@@ -26,9 +26,9 @@ void UAbilityManagerBase::InitAbilityManager(ACharacterBase* NewCharacter)
 
 bool UAbilityManagerBase::TryAddNewAbility(const ECharacterAbilityType NewAbilityType)
 {
-	if (!IsValid(OwnerCharacterRef)) return false; 
-	FCharacterStateStruct characterState = OwnerCharacterRef->GetCharacterState();
-	FCharacterStatStruct characterStat = OwnerCharacterRef->GetCharacterStat();
+	if (!OwnerCharacterRef.IsValid()) return false;
+	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
+	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
 
 	if (GetIsAbilityActive(NewAbilityType)) return false;
 	if (ActiveAbilityInfoList.Num() >= MaxAbilityCount) return false;
@@ -39,8 +39,8 @@ bool UAbilityManagerBase::TryAddNewAbility(const ECharacterAbilityType NewAbilit
 	if (newAbilityInfo.bIsRepetitive)
 	{
 		const float variable = newAbilityInfo.Variable.Num() > 0 ? newAbilityInfo.Variable[0] : 1.0f;
-		newAbilityInfo.TimerDelegate.BindUFunction(OwnerCharacterRef, newAbilityInfo.FuncName, variable, true, (uint8)NewAbilityType);
-		OwnerCharacterRef->GetWorldTimerManager().SetTimer(newAbilityInfo.TimerHandle, newAbilityInfo.TimerDelegate, 1.0f, true);
+		newAbilityInfo.TimerDelegate.BindUFunction(OwnerCharacterRef.Get(), newAbilityInfo.FuncName, variable, true, (uint8)NewAbilityType);
+		OwnerCharacterRef.Get()->GetWorldTimerManager().SetTimer(newAbilityInfo.TimerHandle, newAbilityInfo.TimerDelegate, 1.0f, true);
 	}
 	TryUpdateCharacterStat(newAbilityInfo, false);
 	ActiveAbilityInfoList.Add(newAbilityInfo);
@@ -51,7 +51,7 @@ bool UAbilityManagerBase::TryAddNewAbility(const ECharacterAbilityType NewAbilit
 
 bool UAbilityManagerBase::TryRemoveAbility(ECharacterAbilityType TargetAbilityType)
 {
-	if (!IsValid(OwnerCharacterRef)) return false;
+	if (!OwnerCharacterRef.IsValid()) return false;
 	if (!GetIsAbilityActive(TargetAbilityType)) return false;
 	if (ActiveAbilityInfoList.Num() == 0) return false;
 
@@ -68,7 +68,7 @@ bool UAbilityManagerBase::TryRemoveAbility(ECharacterAbilityType TargetAbilityTy
 			ActiveAbilityInfoList.RemoveAt(idx);
 			if (abilityInfo.bIsRepetitive)
 			{
-				OwnerCharacterRef->GetWorldTimerManager().ClearTimer(abilityInfo.TimerHandle);
+				OwnerCharacterRef.Get()->GetWorldTimerManager().ClearTimer(abilityInfo.TimerHandle);
 			}
 			AbilityRemoveDelegate.Broadcast((uint8)TargetAbilityType);
 			return true;
@@ -87,8 +87,8 @@ bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct Target
 	//Validity 체크 (꺼져있는데 제거를 시도하거나, 켜져있는데 추가를 시도한다면?)
 	if (GetIsAbilityActive((ECharacterAbilityType)TargetAbilityInfo.AbilityId) != bIsReset) return false;
 	
-	FCharacterStatStruct characterStat = OwnerCharacterRef->GetCharacterStat();
-	FCharacterStateStruct characterState = OwnerCharacterRef->GetCharacterState();
+	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
+	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
 
 	for (int statIdx = 0; statIdx < TargetAbilityInfo.TargetStatName.Num(); statIdx++)
 	{
@@ -114,8 +114,8 @@ bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct Target
 		else if (targetStatName == FName("MaxProjectileCount"))
 			characterStat.MaxProjectileCount *= targetVariable;
 	}
-	OwnerCharacterRef->UpdateCharacterStat(characterStat);
-	OwnerCharacterRef->UpdateCharacterState(characterState);
+	OwnerCharacterRef.Get()->UpdateCharacterStat(characterStat);
+	OwnerCharacterRef.Get()->UpdateCharacterState(characterState);
 
 	return true;
 }

@@ -11,8 +11,6 @@ void AMainCharacterController::BeginPlay()
 	Super::BeginPlay();
 
 	this->bShowMouseCursor = true;
-
-	PlayerRef = Cast<AMainCharacterBase>(GetCharacter());
 }
 
 FRotator AMainCharacterController::GetAimingRotation()
@@ -29,7 +27,7 @@ FRotator AMainCharacterController::GetAimingRotation()
 
 FRotator AMainCharacterController::GetRotationToCursor()
 {
-	if (!IsValid(PlayerRef)) return FRotator();
+	if (!IsValid(GetPawn())) return FRotator();
 
 	FRotator retRotation = FRotator();
 	FVector cursorWorldDeprojectionLocation = GetCursorDeprojectionWorldLocation();

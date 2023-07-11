@@ -103,6 +103,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetFacialMaterialEffect(bool NewState);
 
+	//테스트 코드 -> 상수화 예정
+	UPROPERTY(EditDefaultsOnly)
+		float knockBackStrength = 100000.0f;
 
 // ---- 그 외 (위젯, 사운드 등) ----
 public:
@@ -122,5 +125,5 @@ public:
 private:
 	//무한 Turn에 빠지지 않게 TimeOut 처리 시켜주는 타이머 핸들
 	UPROPERTY()
-		FTimerHandle TurnTimeOutTimerHandle; 
+		FTimerHandle TurnTimeOutTimerHandle;
 };

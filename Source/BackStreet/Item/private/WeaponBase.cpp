@@ -81,7 +81,7 @@ void AWeaponBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
 
 void AWeaponBase::PlayEffectSound(USoundCue* EffectSound)
 {
-	if (EffectSound == nullptr || !IsValid(OwnerCharacterRef) || !OwnerCharacterRef->ActorHasTag("Player")) return;
+	if (EffectSound == nullptr || !OwnerCharacterRef.IsValid() || !OwnerCharacterRef.Get()->ActorHasTag("Player")) return;
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), EffectSound, GetActorLocation());
 }
 
@@ -92,7 +92,7 @@ void AWeaponBase::ClearAllTimerHandle()
 
 void AWeaponBase::UpdateDurabilityState()
 {
-	if (OwnerCharacterRef->GetCharacterStat().bInfinite || WeaponStat.bInfinite) return;
+	if (OwnerCharacterRef.Get()->GetCharacterStat().bInfinite || WeaponStat.bInfinite) return;
 	if (--WeaponState.CurrentDurability == 0)
 	{
 		if (IsValid(DestroyEffectParticle))
@@ -100,7 +100,7 @@ void AWeaponBase::UpdateDurabilityState()
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyEffectParticle, GetActorLocation(), FRotator()); //파괴 효과
 		}
 		ClearAllTimerHandle();
-		OwnerCharacterRef->StopAttack();
+		OwnerCharacterRef.Get()->StopAttack();
 		WeaponDestroyDelegate.ExecuteIfBound();
 	}
 }

@@ -30,7 +30,7 @@ void ARangedWeaponBase::StopAttack()
 
 float ARangedWeaponBase::GetAttackRange()
 {
-	if (!IsValid(OwnerCharacterRef)) return 200.0f;
+	if (!OwnerCharacterRef.IsValid()) return 200.0f;
 	if (WeaponStat.WeaponType == EWeaponType::E_Melee
 		|| (!OwnerCharacterRef->GetCharacterStat().bInfinite
 			&& WeaponState.RangedWeaponState.CurrentAmmoCount == 0.0f
@@ -74,7 +74,7 @@ AProjectileBase* ARangedWeaponBase::CreateProjectile()
 	if (IsValid(newProjectile))
 	{
 		newProjectile->SetOwner(this);
-		newProjectile->InitProjectile(OwnerCharacterRef);
+		newProjectile->InitProjectile(OwnerCharacterRef.Get());
 		newProjectile->ProjectileStat.ProjectileDamage *= WeaponStat.WeaponDamageRate; //버프/디버프로 인해 강화/너프된 값을 반영
 		newProjectile->ProjectileStat.ProjectileSpeed *= WeaponStat.WeaponAtkSpeedRate;
 		return newProjectile;
@@ -118,7 +118,7 @@ void ARangedWeaponBase::AddMagazine(int32 Count)
 
 bool ARangedWeaponBase::TryFireProjectile()
 {
-	if (!IsValid(OwnerCharacterRef)) return false;
+	if (!OwnerCharacterRef.IsValid()) return false;
 	if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo 
 		&& !OwnerCharacterRef->GetCharacterStat().bInfinite && WeaponState.RangedWeaponState.CurrentAmmoCount == 0)
 	{
