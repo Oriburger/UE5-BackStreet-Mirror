@@ -62,8 +62,12 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	knockBackDirection *= knockBackStrength;
 	knockBackDirection.Z = 0.0f;
 
-	GetCharacterMovement()->AddImpulse(knockBackDirection);
-	CharacterState.CharacterActionState = ECharacterActionType::E_Hit;
+	//데미지가 전체 체력의 20% 미만이면 넉백이 출력되지 않는다.
+	if(DamageAmount >= GetCharacterStat().CharacterMaxHP * 0.2f)
+	{
+		GetCharacterMovement()->AddImpulse(knockBackDirection);
+		CharacterState.CharacterActionState = ECharacterActionType::E_Hit;	
+	}
 
 	return damageAmount;
 }
