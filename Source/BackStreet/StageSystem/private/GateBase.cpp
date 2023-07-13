@@ -40,17 +40,19 @@ void AGateBase::BeginPlay()
 void AGateBase::InitGate()
 {
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (!GamemodeRef.IsValid()) return;
 	CheckHaveToActive();
 	if(!MoveStageDelegate.IsBound())
-		MoveStageDelegate.BindUFunction(GamemodeRef->GetChapterManagerRef()->GetTransitionManager(), FName("MoveStage"));
+		MoveStageDelegate.BindUFunction(GamemodeRef.Get()->GetChapterManagerRef()->GetTransitionManager(), FName("MoveStage"));
 	AddGate();
 
 }
 
 void AGateBase::AddGate()
 {
-	AStageData* stage = GamemodeRef->GetChapterManagerRef()->GetCurrentStage();
-	stage->GateList.Add(this);
+	AStageData* stage = GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage();
+	if (!IsValid(stage)) return;
+	stage->AddGateList(this);
 }
 
 void AGateBase::EnterGate()
@@ -65,6 +67,7 @@ void AGateBase::EnterGate()
 void AGateBase::ActivateChapterGate()
 {
 	UE_LOG(LogTemp, Log, TEXT("AGateBase:ActivateChapterGate"));
+	if (!GateMaterialList.IsValidIndex(1)) return;
 	Mesh->SetMaterial(0, GateMaterialList[1]);
 
 }
@@ -72,6 +75,7 @@ void AGateBase::ActivateChapterGate()
 void AGateBase::ActivateNormalGate()
 {
 	UE_LOG(LogTemp, Log, TEXT("AGateBase:ActivateNormalGate"));
+	if (!GateMaterialList.IsValidIndex(0)) return;
 	Mesh->SetMaterial(0, GateMaterialList[0]);
 
 }
@@ -79,15 +83,17 @@ void AGateBase::ActivateNormalGate()
 void AGateBase::DeactivateGate()
 {
 	UE_LOG(LogTemp, Log, TEXT("AGateBase:DeactivateGate"));
+	if (!GateMaterialList.IsValidIndex(2)) return;
 	Mesh->SetMaterial(0, GateMaterialList[2]);
 
 }
 
 void AGateBase::RequestMoveStage()
 {
+	if (!GamemodeRef.IsValid()) return;
 	if (this->ActorHasTag(FName("StartGate")))
 	{
-		GamemodeRef->FadeOutDelegate.Broadcast();
+		GamemodeRef.Get()->FadeOutDelegate.Broadcast();
 
 		GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
 				MoveStageDelegate.Execute(EDirection::E_Start);
@@ -97,23 +103,23 @@ void AGateBase::RequestMoveStage()
 	}
 	else if (this->ActorHasTag(FName("ChapterGate")))
 	{
-		if (GamemodeRef->GetChapterManagerRef()->IsChapterClear())
+		if (GamemodeRef.Get()->GetChapterManagerRef()->IsChapterClear())
 		{
-			GamemodeRef->FadeOutDelegate.Broadcast();
+			GamemodeRef.Get()->FadeOutDelegate.Broadcast();
 			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
 				MoveStageDelegate.Execute(EDirection::E_Chapter);
 			GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 				}), 1.0f, false, 1.0f);
 		}else
 		{
-			GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("미션을 클리어해주세요.")), FColor::White);
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("미션을 클리어해주세요.")), FColor::White);
 		}
 	}
 	else
 	{
 		 if (this->ActorHasTag(FName("UP")))
 		{
-			 GamemodeRef->FadeOutDelegate.Broadcast();
+			 GamemodeRef.Get()->FadeOutDelegate.Broadcast();
 			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
 				MoveStageDelegate.Execute(EDirection::E_UP);
 			GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
@@ -122,7 +128,7 @@ void AGateBase::RequestMoveStage()
 		}
 		else if (this->ActorHasTag(FName("DOWN")))
 		{
-			 GamemodeRef->FadeOutDelegate.Broadcast();
+			 GamemodeRef.Get()->FadeOutDelegate.Broadcast();
 			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
 				MoveStageDelegate.Execute(EDirection::E_DOWN);
 				GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
@@ -131,7 +137,7 @@ void AGateBase::RequestMoveStage()
 		}
 		else if (this->ActorHasTag(FName("RIGHT")))
 		{
-			 GamemodeRef->FadeOutDelegate.Broadcast();
+			 GamemodeRef.Get()->FadeOutDelegate.Broadcast();
 			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
 				MoveStageDelegate.Execute(EDirection::E_RIGHT);
 			GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
@@ -140,7 +146,7 @@ void AGateBase::RequestMoveStage()
 		}
 		else if (this->ActorHasTag(FName("LEFT")))
 		{
-			 GamemodeRef->FadeOutDelegate.Broadcast();
+			 GamemodeRef.Get()->FadeOutDelegate.Broadcast();
 			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
 				MoveStageDelegate.Execute(EDirection::E_LEFT);
 				GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
@@ -153,65 +159,64 @@ void AGateBase::RequestMoveStage()
 
 void AGateBase::CheckHaveToActive()
 {
-	ABackStreetGameModeBase* gameModeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
-	AStageData* stage = gameModeRef->GetChapterManagerRef()->GetCurrentStage();
+	if (!GamemodeRef.IsValid()) return;
+	AStageData* stage = GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage();
 
-	if (stage != nullptr)
+	if (!IsValid(stage)) return;
+
+	if (!this->Tags.IsValidIndex(0)) return;
+	if (this->Tags[0].IsEqual(FName(TEXT("StartGate"))))
 	{
-		if (this->Tags[0].IsEqual(FName(TEXT("StartGate"))))
+		return;
+	}
+	else if (this->Tags[0].IsEqual(FName(TEXT("ChapterGate"))))
+	{
+		if (stage->GetStageType() != EStageCategoryInfo::E_Boss)
 		{
-			return;
+			Destroy();
 		}
-		else if (this->Tags[0].IsEqual(FName(TEXT("ChapterGate"))))
+		if (GamemodeRef.Get()->GetChapterManagerRef()->IsChapterClear())
 		{
-			if (stage->GetStageType() != EStageCategoryInfo::E_Boss)
-			{
-				Destroy();
-			}
-			if (gameModeRef->GetChapterManagerRef()->IsChapterClear())
-			{
-				ActivateChapterGate();
-			}
-			else
-			{
-				DeactivateGate();
-			}
-		
+			ActivateChapterGate();
 		}
 		else
 		{
-			
-			for (int i = 0; i < 4; i++)
-			{
-				if (!stage->GateInfo[i])
-				{
-					switch (i)
-					{
-					case 0:
-						if (this->Tags[1].IsEqual(FName(TEXT("UP"))))
-							Destroy();
-						break;
-					case 1:
-						if (this->Tags[1].IsEqual(FName(TEXT("DOWN"))))
-							Destroy();
-						break;
-					case 2:
-						if (this->Tags[1].IsEqual(FName(TEXT("LEFT"))))
-							Destroy();
-						break;
-					case 3:
-						if (this->Tags[1].IsEqual(FName(TEXT("RIGHT"))))
-							Destroy();
-						break;
-					default:
-						break;
-					}
-		
-				}
-			}
-
-			ActivateNormalGate();
+			DeactivateGate();
 		}
+	
 	}
+	else
+	{
+		if (!this->Tags.IsValidIndex(1)) return;
+		for (int i = 0; i < 4; i++)
+		{
+			if (!stage->GetGateInfoDir(EDirection(i)))
+			{
+				switch (i)
+				{
+				case 0:
+					if (this->Tags[1].IsEqual(FName(TEXT("UP"))))
+						Destroy();
+					break;
+				case 1:
+					if (this->Tags[1].IsEqual(FName(TEXT("DOWN"))))
+						Destroy();
+					break;
+				case 2:
+					if (this->Tags[1].IsEqual(FName(TEXT("LEFT"))))
+						Destroy();
+					break;
+				case 3:
+					if (this->Tags[1].IsEqual(FName(TEXT("RIGHT"))))
+						Destroy();
+					break;
+				default:
+					break;
+				}
+	
+			}
+		}
 
+		ActivateNormalGate();
+	}
 }

@@ -4,8 +4,7 @@
 #include "../../Global/public/BackStreet.h"
 #include "UObject/NoExportTypes.h"
 #include "TransitionManager.generated.h"
-#define ChapterSize 3
-#define MAX_GRID_SIZE 3
+
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSpawnRequest,class AStageData* , Target);
 
@@ -64,8 +63,9 @@ private:
 	UPROPERTY()
 		TArray<class AStageData*> Stages;
 
-	UPROPERTY()
-		class AStageData* HideStage;
+		TWeakObjectPtr<class AStageData> HideStage;
+
+		TWeakObjectPtr<class AChapterManagerBase> ChapterManager;
 
 	UPROPERTY()
 		EDirection MoveDirection;

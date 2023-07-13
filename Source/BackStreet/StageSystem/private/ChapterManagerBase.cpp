@@ -34,12 +34,11 @@ void AChapterManagerBase::SetLobbyStage()
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AStageData::StaticClass(), lobbyStages);
 	for (AActor* target : lobbyStages)
 	{
-		if (Cast<AStageData>(target)->GetStageType() == EStageCategoryInfo::E_Lobby)
+		if (target->ActorHasTag(FName("Lobby")))
 		{
 			UE_LOG(LogTemp, Log, TEXT("AChapterManagerBase::SetLobbyStage: Find LobbyStage"));
-
 			LobbyStage = Cast<AStageData>(target);
-
+			Cast<AStageData>(target)->SetStageType(EStageCategoryInfo::E_Lobby);
 		}
 	}
 }
@@ -70,17 +69,18 @@ bool AChapterManagerBase::IsChapterClear()
 	{
 		if (stage->GetStageType() == EStageCategoryInfo::E_Boss)
 		{
-			if (stage->bIsClear)
+			if (stage->GetIsClear())
 				return true;
 		}
 	}
 	return false;
 }
+
 void AChapterManagerBase::MoveChapter()
 {
 	UE_LOG(LogTemp, Log, TEXT("AChapterManagerBase: MoveChapter"));
 	ABackStreetGameModeBase* gameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-
+	if (!IsValid(gameModeRef)) return;
 	if (IsGameClear())
 	{
 		UE_LOG(LogTemp, Log, TEXT("MoveChapte:Game Clear"));
@@ -126,6 +126,7 @@ void AChapterManagerBase::CreateResourceManager()
 	FActorSpawnParameters actorSpawnParameters;
 	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	actorSpawnParameters.Owner = this;
+	if (!IsValid(ResourceManagerClass)) return;
 	ResourceManager = GetWorld()->SpawnActor<AResourceManager>(ResourceManagerClass,FVector(0,0,0), FRotator(0, 90, 0), actorSpawnParameters);
 }
 
@@ -158,7 +159,6 @@ void AChapterManagerBase::InitStartGate()
 
 void AChapterManagerBase::UpdateMapUI()
 {
-
 	Cast<ABackStreetGameModeBase>(GetOwner())->UpdateMiniMapUI();
 }
 
