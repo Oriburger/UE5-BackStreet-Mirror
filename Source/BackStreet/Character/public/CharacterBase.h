@@ -137,11 +137,11 @@ protected:
 // ------ 그 외 캐릭터 프로퍼티  ---------------
 protected:
 	//캐릭터의 스탯
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FCharacterStatStruct CharacterStat;
 
 	//캐릭터의 현재 상태
-	UPROPERTY(BlueprintReadWrite, Category = "Gameplay")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
 		FCharacterStateStruct CharacterState;
 
 	UPROPERTY()
