@@ -1,7 +1,0 @@
-﻿ProjectileID,ProjectileName,Description,bIsExplosive,ProjectileSpeed,ProjectileDamage,GravityScale,bIsHoming,DebuffType,DebuffTotalTime,DebuffVariable
-200,캔,일반적인 음료수 캔이다,FALSE,3000,0.4,0.1,FALSE,0,0,0
-201,담배꽁초,누군가 버린 담배꽁초이다. 불씨가 살아있다.,FALSE,3000,0.25,0.1,FALSE,E_Flame,3,0.2
-202,에너지볼,(아이템 상자에 등장하지 않음) 에너지 블래스터에서 나오는 에너지볼이다.,FALSE,6000,0.25,0.001,FALSE,0,1.5,0.5
-203,BB탄,길거리에 굴러다니는 BB탄이다.,FALSE,10000,0.3,0.001,FALSE,0,0,0
-204,벽돌,맞으면 상당히 아플것 같은 벽돌이다.,FALSE,2000,0.5,0.6,FALSE,E_Stun,0.75,1
-205,검기,보스의 무기에서 나오는 검기다.,FALSE,5000,0.3,0,TRUE,0,0,0
