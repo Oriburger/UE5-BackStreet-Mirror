@@ -54,3 +54,74 @@ public:
 
 };
 
+USTRUCT(BlueprintType)
+struct FStageDataStruct : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY()
+		int32 XPos;
+
+	UPROPERTY()
+		int32 YPos;
+
+	UPROPERTY()
+		FVector StageLocation;
+
+	UPROPERTY()
+		TArray<bool> GateInfo;
+
+	UPROPERTY()
+		EStageCategoryInfo Type;
+
+	UPROPERTY()
+		FName LevelToLoad;
+
+	UPROPERTY()
+		bool bIsVisited;
+
+	UPROPERTY()
+		bool bIsClear;
+
+	UPROPERTY()
+		bool bIsValid;
+
+	UPROPERTY()
+		TArray<FVector> MonsterSpawnPoints;
+
+	UPROPERTY()
+		TArray<FVector> ItemSpawnPoints;
+
+	UPROPERTY()
+		TArray<FVector> CharacterSpawnPoint;
+
+	UPROPERTY()
+		TArray<FVector> RewardBoxSpawnPoint;
+
+	UPROPERTY()
+		TArray<class AEnemyCharacterBase*> MonsterList;
+
+	UPROPERTY()
+		TArray<class AItemBase*> ItemList;
+
+	UPROPERTY()
+		TArray<class AItemBoxBase*> ItemBoxList;
+
+	UPROPERTY()
+		TArray<class AGateBase*> GateList;
+
+	UPROPERTY()
+		class ARewardBoxBase* RewardBoxRef;
+
+	UPROPERTY()
+		ULevelStreaming* LevelRef;
+
+	UPROPERTY()
+		FTimerHandle StageTimerHandle;
+
+	UPROPERTY()
+		int32 StageTime;
+
+
+};

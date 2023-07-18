@@ -7,8 +7,6 @@
 #include "ChapterManagerBase.generated.h"
 // Chapter °¹¼ö
 
-#define MAX_CHAPTER_COUNT 2
-
 
 
 UCLASS()
@@ -87,10 +85,10 @@ private:
 		void InitStartGate();
 
 private:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY()
 		int32 ChapterLV;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY()
 		float StatWeight;
 
 private:

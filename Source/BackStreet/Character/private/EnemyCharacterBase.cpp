@@ -69,6 +69,11 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		CharacterState.CharacterActionState = ECharacterActionType::E_Hit;	
 	}
 
+	GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, FTimerDelegate::CreateLambda([&]() {
+		if (CharacterState.CharacterActionState == ECharacterActionType::E_Hit)
+			ResetActionState();
+	}), 1.0f, false, 0.5f);
+
 	return damageAmount;
 }
 
@@ -227,4 +232,5 @@ void AEnemyCharacterBase::ClearAllTimerHandle()
 {
 	Super::ClearAllTimerHandle();
 	GetWorldTimerManager().ClearTimer(TurnTimeOutTimerHandle);
+	GetWorldTimerManager().ClearTimer(HitTimeOutTimerHandle);
 }
