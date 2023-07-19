@@ -1,14 +1,12 @@
 
 #include "../public/AssetManagerBase.h"
-#include "../../StageSystem/public/TileBase.h"
 #include "../../Item/public/ItemBase.h"
 #include "../../Item/public/ProjectileBase.h"
 #include "../../Item/public/WeaponBase.h"
 #include "../public/BackStreetGameModeBase.h"
-#include "../../StageSystem/public/MissionBase.h"
 #include "UObject/ConstructorHelpers.h"
 #include "../../Character/public/EnemyCharacterBase.h"
-#include "../../StageSystem/public/RewardBoxBase.h"
+#include "../../Item/public/RewardBoxBase.h"
 
 AAssetManagerBase::AAssetManagerBase()
 {

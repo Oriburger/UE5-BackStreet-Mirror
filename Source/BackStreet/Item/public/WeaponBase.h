@@ -14,6 +14,8 @@ class BACKSTREET_API AWeaponBase : public AActor
 {
 	GENERATED_BODY()
 
+	friend class ACharacterBase; 
+
 //------ Global, Component -------------------
 public:
 	// Sets default values for this actor's properties
@@ -21,9 +23,6 @@ public:
 
 	//Weapon이 파괴되었을때 호출할 이벤트
 	FDelegateWeaponDestroy WeaponDestroyDelegate;
-
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -45,31 +44,30 @@ public:
 		uint8 WeaponID;
 
 	//공격 처리
-	UFUNCTION(BlueprintCallable)
-		void Attack();
+	virtual void Attack();
 
 	//공격 마무리 처리
-	UFUNCTION(BlueprintCallable)
-		void StopAttack();
+	virtual void StopAttack();
 
 //------ 스탯/상태 관련 ---------------------------------
 public:
+	//Weapon Stat 초기화
+	virtual void UpdateWeaponStat(FWeaponStatStruct NewStat);
+
 	UFUNCTION()
 		void InitWeapon();
 
 	UFUNCTION()
 		void RevertWeaponInfo(FWeaponStatStruct OldWeaponStat, FWeaponStateStruct OldWeaponState);
 
-	//Weapon Stat 초기화
-	UFUNCTION(BlueprintCallable)
-		void UpdateWeaponStat(FWeaponStatStruct NewStat);
-
-	//공격 범위를 반환
-	UFUNCTION(BlueprintCallable)
-		float GetAttackRange();
-
 	UFUNCTION()
 		void UpdateDurabilityState();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsWeaponRangeType() { return WeaponStat.WeaponType == EWeaponType::E_Shoot || WeaponStat.WeaponType == EWeaponType::E_Throw; }
+
+	//공격 범위를 반환
+	virtual float GetAttackRange();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FWeaponStatStruct GetWeaponStat() { return WeaponStat; }
@@ -85,76 +83,26 @@ public:
 
 protected:
 	//Weapon의 종합 Stat
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Stat")
 		FWeaponStatStruct WeaponStat;
 
 	//Weapon 상태 정보
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
+	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay|Stat")
 		FWeaponStateStruct WeaponState;
 
-//------ Projectile 관련----------------------------
+//-------- 콤보 관련 ------------------------------------
 public:
-	//발사체를 생성
-	UFUNCTION()
-		class AProjectileBase* CreateProjectile();
-
-	//발사체 초기화 및 발사를 시도 
-	UFUNCTION()
-		bool TryFireProjectile();
-
-	//장전을 시도. 현재 상태에 따른 성공 여부를 반환
+	//콤보 증가
 	UFUNCTION(BlueprintCallable)
-		bool TryReload();
+		void UpdateComboState();
 
-	//남은 탄환의 개수를 반환 - Stat.TotalAmmoCount
+	//Melee Combo 초기화하는 타이머를 등록
 	UFUNCTION(BlueprintCallable)
-		int32 GetLeftAmmoCount() { return WeaponState.TotalAmmoCount; };
+		virtual void SetResetComboTimer();
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetCanReload();
-
-	//탄환의 개수를 더함 (TotalAmmoCount까지)
-	UFUNCTION(BlueprintCallable)
-		void AddAmmo(int32 Count);
-
-	//탄창의 개수를 더함 (+= MaxAmmoPerMagazine*Count)
-	UFUNCTION()
-		void AddMagazine(int32 Count);
-
-	UFUNCTION()
-		void SetInfiniteAmmoMode(bool NewMode) { WeaponStat.bIsInfiniteAmmo = NewMode; }
-
-protected:
-	//SoftObjRef로 대체 예정
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Weapon")
-		TSubclassOf<class AProjectileBase> ProjectileClass;
-
-//-------- Melee 관련 ---------------------------
-public:
 	//현재 Combo 수를 반환 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetCurrentComboCnt() { return WeaponState.ComboCount; }
-
-	//근접 공격을 수행
-	UFUNCTION()
-		void MeleeAttack();
-
-	//Melee Combo 초기화
-	UFUNCTION(BlueprintCallable)
-		void SetResetComboTimer();
-
-	UFUNCTION()
-		TArray<FVector> GetCurrentMeleePointList();
-
-private:
-	UPROPERTY()
-		float MeleeAtkComboRemainTime = 1.0f;
-
-	UPROPERTY()
-		TArray<FVector> MeleePrevTracePointList;
-
-	//UPROPERTY()
-	FCollisionQueryParams MeleeLineTraceQueryParams;
 
 //-------- 그 외 (Ref, VFX 등)-------------------------------
 public:
@@ -180,24 +128,18 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
 		class USoundCue* AttackFailSound;
 
-private:
-	//캐릭터 Ref
-	UPROPERTY()
-		class ACharacterBase* OwnerCharacterRef;
+protected:
+	//모든 타이머를 해제
+	UFUNCTION(BlueprintCallable)
+		virtual void ClearAllTimerHandle();
 
 	UPROPERTY()
-		class ABackStreetGameModeBase* GamemodeRef;
+		FTimerHandle ComboTimerHandle;
 
-//------- Timer 관련 -----------------------------
-	UFUNCTION()
-		void ClearAllTimerHandle();
+protected:
+	//게임모드 약 참조
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
-	UPROPERTY()
-		FTimerHandle MeleeAtkTimerHandle;
-
-	UPROPERTY()
-		FTimerHandle AutoReloadTimerHandle;
-
-	UPROPERTY()
-		FTimerHandle MeleeComboTimerHandle;
+	//소유자 캐릭터 약 참조
+	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 };

@@ -16,10 +16,10 @@ class BACKSTREET_API USaveData : public USaveGame
 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SaveData")
-		FString SaveSlotName;		// Save game data file name
+		FString SaveSlotName;		
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SaveData")
-		int32 SaveIndex;		// Save game data file index
+		int32 SaveIndex;		
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SaveData")
 		FString SaveName;

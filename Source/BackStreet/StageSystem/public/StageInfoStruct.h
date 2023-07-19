@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/DataTable.h"
+#include "../../Character/public/EnemyStatInfoStruct.h"
 #include "StageInfoStruct.generated.h"
 
 UENUM(BlueprintType)
@@ -10,6 +11,8 @@ enum class EStageCategoryInfo : uint8
 	E_Normal				UMETA(DisplayName = "Normal"),
 	E_Mission			  	UMETA(DisplayName = "Mission"),
 	E_Boss				    UMETA(DisplayName = "Boss"),
+	E_Lobby					UMETA(DisplayName = "Lobby"),
+
 };
 
 USTRUCT(BlueprintType)
@@ -20,22 +23,12 @@ struct FStageEnemyRankStruct : public FTableRowBase
 public:
 	UPROPERTY(EditAnywhere)
 		uint8 StageLevel;
+
 	UPROPERTY(EditAnywhere)
 		FName StageType;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.5f, UIMax = 10.0f))
-		float CharacterMaxHP;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.1f, UIMax = 10.0f))
-		float CharacterAtkMultiplier;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
-		float CharacterAtkSpeed;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 100.0f, UIMax = 1000.0f))
-		float CharacterMoveSpeed;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = -1.0f, UIMax = 1.0f))
-		float CharacterDefense;
+	UPROPERTY(EditAnywhere)
+		FEnemyStatStruct StatData;
 
 };
 
@@ -50,25 +43,7 @@ public:
 		FName StageType;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool ID_1001;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool ID_1002;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool ID_1003;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool ID_1100;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool ID_1101;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool ID_1102;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool ID_1200;
+		TArray<int32> IDList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		int32 MaxSpawn;
@@ -79,3 +54,74 @@ public:
 
 };
 
+USTRUCT(BlueprintType)
+struct FStageDataStruct : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY()
+		int32 XPos;
+
+	UPROPERTY()
+		int32 YPos;
+
+	UPROPERTY()
+		FVector StageLocation;
+
+	UPROPERTY()
+		TArray<bool> GateInfo;
+
+	UPROPERTY()
+		EStageCategoryInfo Type;
+
+	UPROPERTY()
+		FName LevelToLoad;
+
+	UPROPERTY()
+		bool bIsVisited;
+
+	UPROPERTY()
+		bool bIsClear;
+
+	UPROPERTY()
+		bool bIsValid;
+
+	UPROPERTY()
+		TArray<FVector> MonsterSpawnPoints;
+
+	UPROPERTY()
+		TArray<FVector> ItemSpawnPoints;
+
+	UPROPERTY()
+		TArray<FVector> CharacterSpawnPoint;
+
+	UPROPERTY()
+		TArray<FVector> RewardBoxSpawnPoint;
+
+	UPROPERTY()
+		TArray<class AEnemyCharacterBase*> MonsterList;
+
+	UPROPERTY()
+		TArray<class AItemBase*> ItemList;
+
+	UPROPERTY()
+		TArray<class AItemBoxBase*> ItemBoxList;
+
+	UPROPERTY()
+		TArray<class AGateBase*> GateList;
+
+	UPROPERTY()
+		class ARewardBoxBase* RewardBoxRef;
+
+	UPROPERTY()
+		ULevelStreaming* LevelRef;
+
+	UPROPERTY()
+		FTimerHandle StageTimerHandle;
+
+	UPROPERTY()
+		int32 StageTime;
+
+
+};

@@ -7,9 +7,6 @@
 #include "ChapterManagerBase.generated.h"
 // Chapter 갯수
 
-#define MAX_CHAPTER_COUNT 2
-#define MAX_MISSION_COUNT 2
-#define MAX_MISSION_ITEM_COUNT 10
 
 
 UCLASS()
@@ -19,86 +16,105 @@ class BACKSTREET_API AChapterManagerBase : public AActor
 
 
 public:
-	// Sets default values for this actor's properties
 	AChapterManagerBase();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 public:
+	UFUNCTION(BlueprintCallable)
+		void SetLobbyStage();
+
+	UFUNCTION(BlueprintCallable)
+		void CreateChapterManager();
+
 	UFUNCTION()
-		void InitChapterManager();
+		void CreateResourceManager();
+
+	UFUNCTION()
+		bool CheckChapterClear();
+
+	UFUNCTION()
+		void MoveChapter();
+
+	UFUNCTION(BlueprintCallable)
+		void UpdateMapUI();
+
+	UFUNCTION()
+		bool IsChapterClear();
 
 	UFUNCTION()
 		bool IsGameClear() { return (ChapterLV >= MAX_CHAPTER_COUNT) ? true : false; }
 
-	UFUNCTION()
-		bool IsChapterClear() { return Missions.IsEmpty(); }
-
-	UFUNCTION()
-		void ClearChapter();
-
-	UFUNCTION()
-		bool TryAddMissionItem(AItemBase* target);
+	UFUNCTION(BlueprintCallable)
+		void SetCurrentStage(class AStageData* Target) { CurrentStage = Target; };
 
 	UFUNCTION(BlueprintCallable)
-		bool TryRemoveMissionItem(class AItemBase* target);
-
-	UFUNCTION()
-		void RemoveMission(class UMissionBase* target);
+		UStageGenerator* GetStageGenerator() { return StageGenerator; }
 
 	UFUNCTION(BlueprintCallable)
-		AGridBase* GetChapter() { return CurrentChapter; }
+		UTransitionManager* GetTransitionManager() { return TransitionManager; }
 
-	UFUNCTION()
-		float GetChapterWeight() { return StatWeight; }
+	UFUNCTION(BlueprintCallable)
+		AResourceManager* GetResourceManager() { return ResourceManager; }
 
-	UFUNCTION()
-		int8 GetChapterLV() { return ChapterLV; }
+	UFUNCTION(BlueprintCallable)
+		int32 GetChapterLV() { return ChapterLV; }
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		AStageManagerBase* GetStageManager() { return StageManager; }
+	UFUNCTION(BlueprintCallable)
+		AStageData* GetCurrentStage() { return CurrentStage; }
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<class UMissionBase*> GetMissions() { return Missions; }
+	UFUNCTION(BlueprintCallable)
+		AStageData* GetLobbyStage() { return LobbyStage; }
 
-
+	UFUNCTION(BlueprintCallable)
+		TArray<class AStageData*> GetStages() { return StageList; }
+	
 private:
+
+	UFUNCTION()
+		void InitChapterManager();
+
 	UFUNCTION()
 		void CreateChapter();
 
 	UFUNCTION()
-		void CreateMission();
-
-	UFUNCTION()
-		void CleanChapterManager();
+		void InitStartGate();
 
 private:
-	UPROPERTY(VisibleAnywhere)
-		class AGridBase* CurrentChapter;
+	UPROPERTY()
+		int32 ChapterLV;
 
-	UPROPERTY(VisibleAnywhere)
-		int8 ChapterLV;
-
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY()
 		float StatWeight;
 
 private:
 	UPROPERTY()
-		class ALevelScriptInGame* InGameScriptRef;
-
-	UPROPERTY(VisibleAnywhere)
-		class AStageManagerBase* StageManager;
-
-	UPROPERTY(VisibleAnywhere)
-		TArray<class UMissionBase*> Missions;
+		TArray<class AStageData*> StageList;
 
 	UPROPERTY()
-		class ABackStreetGameModeBase* GameModeRef;
+		class AStageData* CurrentStage;
+
+	UPROPERTY()
+		class AStageData* LobbyStage;
+
+private:
+	UPROPERTY()
+		class UStageGenerator* StageGenerator;
+
+	UPROPERTY()
+		class UTransitionManager* TransitionManager;
+
+	UPROPERTY()
+		class AResourceManager* ResourceManager;
+
+	//SoftObjRef로 대체 예정
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|ResourceManager")
+		TSubclassOf<class AResourceManager> ResourceManagerClass;
+
+
 
 };

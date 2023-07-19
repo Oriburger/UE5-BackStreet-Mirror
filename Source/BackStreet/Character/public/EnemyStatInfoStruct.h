@@ -16,6 +16,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		FName EnemyName;
 
+	// 이것도 재사용 가능 할 듯 싶음 Character뭐시기 struct로 바꾸는게 좋을 것 같음
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.5f, UIMax = 10.0f))
 		float CharacterMaxHP;
 
@@ -29,6 +30,5 @@ public:
 		float CharacterMoveSpeed;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
-		float CharacterAtkSpeed;
-
+		float CharacterAtkSpeed;	
 };

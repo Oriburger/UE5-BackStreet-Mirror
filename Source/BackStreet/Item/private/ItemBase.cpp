@@ -2,11 +2,8 @@
 #include "../public/ItemBase.h"
 #include "../public/WeaponBase.h"
 #include "Components/WidgetComponent.h"
-#include "../../StageSystem/public/MissionBase.h"
-#include "../../StageSystem/public/TileBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "../../StageSystem/public/ChapterManagerBase.h"
-#include "../../StageSystem/public/ALevelScriptInGame.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Character/public/MainCharacterBase.h"
 #include "../../Global/public/DebuffManager.h"
@@ -55,23 +52,12 @@ void AItemBase::BeginPlay()
 
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 	OnPlayerBeginPickUp.BindUFunction(this, FName("OnItemPicked"));
-	InGameScriptRef = Cast<ALevelScriptInGame>(GetWorld()->GetLevelScriptActor(GetWorld()->GetCurrentLevel()));
 }
 
 void AItemBase::InitItem(EItemCategoryInfo SetType, uint8 NewItemID)
 {
 	ItemType = SetType;
 	ItemID = NewItemID;
-
-	if (ItemType == EItemCategoryInfo::E_Mission)
-	{
-		bool result = InGameScriptRef->ChapterManager->TryAddMissionItem(this);
-
-		if (!result)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("최대 미션 아이템 개수를 초과했습니다."));
-		}
-	}
 }
 
 void AItemBase::OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

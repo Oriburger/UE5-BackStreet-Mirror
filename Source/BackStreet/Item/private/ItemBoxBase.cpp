@@ -3,9 +3,7 @@
 
 #include "../public/ItemBoxBase.h"
 #include "../public/ItemBase.h"
-#include "../../StageSystem/public/MissionBase.h"
 #include "../../StageSystem/public/ChapterManagerBase.h"
-#include "../../StageSystem/public/ALevelScriptInGame.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "NiagaraFunctionLibrary.h"
@@ -125,7 +123,7 @@ TArray<AItemBase*> AItemBoxBase::SpawnItems(int32 TargetSpawnCount)
 		{
 			const float randomValue = UKismetMathLibrary::RandomFloatInRange(-10.0f, 10.0f);
 			const FVector spawnLocation = GetActorLocation() + FVector(randomValue, randomValue, currentSpawnCount * SpawnLocationInterval + 125.0f);
-			AItemBase* newItem = GamemodeRef->SpawnItemToWorld(targetItemType, targetItemID, spawnLocation);
+			AItemBase* newItem = GamemodeRef.Get()->SpawnItemToWorld(targetItemType, targetItemID, spawnLocation);
 
 			if (IsValid(newItem))
 			{

@@ -26,11 +26,7 @@ protected:
 
 public:
 	UPROPERTY(EditDefaultsOnly)
-		UChildActorComponent* InventoryComponent; 
-
-	UPROPERTY(EditDefaultsOnly)
-		UChildActorComponent* BuffManagerComponent;
-
+		UChildActorComponent* InventoryComponent;	
 
 // ------- Character Action 기본 ------- 
 public:
@@ -72,7 +68,8 @@ public:
 		void InitCharacterState();
 
 	//캐릭터의 디버프 정보를 업데이트
-	virtual	bool TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer = nullptr, float TotalTime = 0.0f, float Value = 0.0f);
+	UFUNCTION(BlueprintCallable)
+		virtual	bool TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer = nullptr, float TotalTime = 0.0f, float Value = 0.0f);
 
 	//디버프가 활성화 되어있는지 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -112,6 +109,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class AWeaponInventoryBase* GetInventoryRef();
 
+	UFUNCTION()
+		void SetWeaponActorRef(class AWeaponBase* NewWeapon);
+
 	//무기 Ref를 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class AWeaponBase* GetWeaponActorRef();
@@ -120,33 +120,19 @@ public:
 	UFUNCTION()
 		void ResetAtkIntervalTimer();
 
-// ----- VFX -------------------
+// ----- 애니메이션 관련 -------------------
+protected:
+	//애니메이션, VFX, 사운드큐 등 저장
+	UPROPERTY()
+		struct FCharacterAnimAssetInfoStruct AnimAssetData;
+
+// ----- VFX ------------------- -> 위 애니메이션 처럼 변경 예정
 protected:
 	UFUNCTION()
 		void InitDynamicMeshMaterial(UMaterialInterface* NewMaterial);
 
 	UPROPERTY()
 		class UMaterialInstanceDynamic* CurrentDynamicMaterial;
-
-// ----- 캐릭터 애니메이션 -------------------
-protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Animation")
-		TArray<class UAnimMontage*> AttackAnimMontageArray;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Animation")
-		class UAnimMontage* ShootAnimMontage;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Animation")
-		class UAnimMontage* HitAnimMontage;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Animation")
-		class UAnimMontage* RollAnimMontage;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Animation")
-		class UAnimMontage* DieAnimMontage;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Animation")
-		class UAnimMontage* ReloadAnimMontage;
 
 // ------ 그 외 캐릭터 프로퍼티  ---------------
 protected:
@@ -159,16 +145,19 @@ protected:
 		FCharacterStateStruct CharacterState;
 
 	UPROPERTY()
-		class ABackStreetGameModeBase* GamemodeRef;
+		class AWeaponInventoryBase* InventoryRef;
 
 	UPROPERTY()
-		class AWeaponInventoryBase* InventoryRef;
+		class AWeaponBase* WeaponRef;
+
+	//Gamemode 약 참조
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
 // ----- 타이머 관련 ---------------------------------
 protected:
-	virtual void ClearAllTimerHandle();
+	UFUNCTION()
+		virtual void ClearAllTimerHandle();
 
-private:
 	//공격 간 딜레이 핸들
 	UPROPERTY()
 		FTimerHandle AtkIntervalHandle;

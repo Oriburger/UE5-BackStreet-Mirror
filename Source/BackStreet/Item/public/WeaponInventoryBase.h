@@ -47,6 +47,10 @@ public:
 	UFUNCTION()
 		bool AddWeapon(int32 NewWeaponID);
 
+	//무기를 인벤토리로부터 제거
+	UFUNCTION(BlueprintCallable)
+		void RemoveWeapon(int32 WeaponID);
+
 	//현재 장착하고 있는 Weapon Actor 정보를 제거한다.
 	UFUNCTION()
 		void RemoveCurrentWeapon();
@@ -86,10 +90,6 @@ protected:
 	UFUNCTION()
 		int32 GetWeaponInventoryIdx(int32 WeaponID);
 
-	//무기를 인벤토리로부터 제거
-	UFUNCTION()
-		void RemoveWeapon(int32 InventoryIdx);
-
 	//인벤토리에 TargetWeaponID라는 ID를 가진 Weapon이 있는지 체크.
 	//중복되는게 있다면 해당 인벤토리의 Idx를 반환
 	UFUNCTION()
@@ -97,7 +97,7 @@ protected:
 
 //------ 프로퍼티 관련 ----------------------------------
 public:
-	//현재 인벤토리 Idx를 반환
+	//현재 선택된 인벤토리 Idx를 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetCurrentIdx() {  return CurrentIdx;  }
 
@@ -156,13 +156,14 @@ private:
 	UPROPERTY()
 		TMap<int32, UClass*> WeaponClassInfoMap;
 
-	UPROPERTY()
-		class ABackStreetGameModeBase* GamemodeRef;
 
-	UPROPERTY()
-		class ACharacterBase* OwnerCharacterRef;
+private: 
+	//게임모드 Ref
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+	//인벤토리 소유자 플레이어 
+	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 
 	//현재 장비하고 있는 WeaponRef
-	UPROPERTY()
-		class AWeaponBase* CurrentWeaponRef;
+	TWeakObjectPtr<class AWeaponBase> CurrentWeaponRef;
 };

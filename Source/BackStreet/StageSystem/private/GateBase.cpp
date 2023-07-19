@@ -2,11 +2,10 @@
 
 
 #include "../public/GateBase.h"
-#include "../public/TileBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "../public/ChapterManagerBase.h"
-#include "../public/ALevelScriptInGame.h"
-#include "../public/StageManagerBase.h"
+#include "../public/TransitionManager.h"
+#include "../public/StageData.h"
 #include "Math/Color.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -22,7 +21,6 @@ AGateBase::AGateBase()
 	OverlapVolume->SetupAttachment(RootComponent);
 	Mesh->SetupAttachment(RootComponent);
 
-	OverlapVolume->OnComponentBeginOverlap.AddUniqueDynamic(this, &AGateBase::OverlapBegins);
 }
 
 // Called every frame
@@ -36,128 +34,128 @@ void AGateBase::Tick(float DeltaTime)
 void AGateBase::BeginPlay()
 {
 	Super::BeginPlay();
-	InGameScriptRef =  Cast<ALevelScriptInGame>(GetWorld()->GetLevelScriptActor(GetWorld()->GetCurrentLevel()));
-	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
-}
-
-void AGateBase::OverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-
-	//if (OtherActor->ActorHasTag("Player"))
-	//{
-	//	if (IsValid(TravelSequencePlayer))
-	//	{
-	//		TravelSequencePlayer->Play();
-	//	}
-
-	//	UpdateNewTile();
-
-	//	////�� Ÿ���� CrossFade ���߿� ������Ʈ �Ѵ�.
-	//	//GetWorldTimerManager().SetTimer(TravelSequenceDelayHandle, this, &AGateBase::UpdateNewTile, 1.0f, false, 0.5f);
-
-	//	////CrossFade�� ������ Gate�� ��ȯ�Ѵ�.
-	//	//GetWorldTimerManager().SetTimer(ResourceReturnTimerHandle, FTimerDelegate::CreateLambda([&]() {
-	//	//	GamemodeRef->ChapterManager->GetStageManager()->UnLoadStage();
-	//	//	ClearAllTimerHandle();
-	//	//	Destroy();
-	//	//}), 1.0f, false, 0.75f);
-	//			
-	//}
+	if (this->ActorHasTag(FName("Off")))
+		DeactivateGate();
+	
 }
 
 void AGateBase::InitGate()
 {
+	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (!GamemodeRef.IsValid()) return;
 	CheckHaveToActive();
+	if(!MoveStageDelegate.IsBound())
+		MoveStageDelegate.BindUFunction(GamemodeRef.Get()->GetChapterManagerRef()->GetTransitionManager(), FName("MoveStage"));
+	AddGate();
+
+}
+
+void AGateBase::AddGate()
+{
+	AStageData* stage = GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage();
+	if (!IsValid(stage)) return;
+	stage->AddGateList(this);
 }
 
 void AGateBase::EnterGate()
 {
-	UpdateNewTile();
-}
-
-void AGateBase::ActiveGate()
-{
-	if (this->ActorHasTag(FName("ChapterGate")))
-	{
-		if (InGameScriptRef->ChapterManager->IsChapterClear())
-		{
-			UE_LOG(LogTemp, Log, TEXT("Call ActiveGate!"));
-			Mesh->SetMaterial(0, GateMaterialList[1]);
-		}
-		else
-		{
-			UE_LOG(LogTemp, Log, TEXT("Check IsChpaterClear!"));
-		}
-	}
-	
-}
-
-
-void AGateBase::UpdateNewTile()
-{
 	if (this->ActorHasTag(FName("StartGate")))
 	{
-		InGameScriptRef->FadeOutDelegate.Broadcast();
+		InitGate();
+	}
+	if (this->ActorHasTag(FName("Off")))
+		return;
+	RequestMoveStage();
+}
+
+void AGateBase::ActivateChapterGate()
+{
+	UE_LOG(LogTemp, Log, TEXT("AGateBase:ActivateChapterGate"));
+	if (!GateMaterialList.IsValidIndex(1)) return;
+	Mesh->SetMaterial(0, GateMaterialList[1]);
+
+}
+
+void AGateBase::ActivateNormalGate()
+{
+	UE_LOG(LogTemp, Log, TEXT("AGateBase:ActivateNormalGate"));
+	if (!GateMaterialList.IsValidIndex(0)) return;
+	Mesh->SetMaterial(0, GateMaterialList[0]);
+
+}
+
+void AGateBase::DeactivateGate()
+{
+	UE_LOG(LogTemp, Log, TEXT("AGateBase:DeactivateGate"));
+	if (!GateMaterialList.IsValidIndex(2)) return;
+	Mesh->SetMaterial(0, GateMaterialList[2]);
+
+}
+
+void AGateBase::RequestMoveStage()
+{
+	if (!GamemodeRef.IsValid()) return;
+	if (this->ActorHasTag(FName("StartGate")))
+	{
+		GamemodeRef.Get()->FadeOutDelegate.Broadcast();
 
 		GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
-	
-				InGameScriptRef->ChapterManager->GetStageManager()->MoveStage((uint8)EDirection::E_Start);
+				MoveStageDelegate.Execute(EDirection::E_Start);
 				GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 			}), 1.0f, false, 1.0f);
-		//InGameScriptRef->ChapterManager->GetStageManager()->MoveStage((uint8)EDirection::E_Start);
 		
 	}
 	else if (this->ActorHasTag(FName("ChapterGate")))
 	{
-		if (InGameScriptRef->ChapterManager->IsChapterClear())
+		if (GamemodeRef.Get()->GetChapterManagerRef()->IsChapterClear())
 		{
-			InGameScriptRef->FadeOutDelegate.Broadcast();
+			GamemodeRef.Get()->FadeOutDelegate.Broadcast();
 			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
-			InGameScriptRef->ChapterManager->GetStageManager()->MoveStage((uint8)EDirection::E_Chapter);
+				MoveStageDelegate.Execute(EDirection::E_Chapter);
 			GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 				}), 1.0f, false, 1.0f);
 		}else
 		{
-			GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("미션을 클리어해주세요.")), FColor::White);
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("미션을 클리어해주세요.")), FColor::White);
 		}
 	}
 	else
 	{
 		 if (this->ActorHasTag(FName("UP")))
 		{
-			InGameScriptRef->FadeOutDelegate.Broadcast();
+			 GamemodeRef.Get()->FadeOutDelegate.Broadcast();
 			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
-			InGameScriptRef->ChapterManager->GetStageManager()->MoveStage((uint8)EDirection::E_UP);
+				MoveStageDelegate.Execute(EDirection::E_UP);
 			GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 				}), 1.0f, false, 1.0f);
-			UE_LOG(LogTemp, Log, TEXT("Up Gate"));
+			UE_LOG(LogTemp, Log, TEXT("Up GateInfo"));
 		}
 		else if (this->ActorHasTag(FName("DOWN")))
 		{
-			InGameScriptRef->FadeOutDelegate.Broadcast();
+			 GamemodeRef.Get()->FadeOutDelegate.Broadcast();
 			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
-			InGameScriptRef->ChapterManager->GetStageManager()->MoveStage((uint8)EDirection::E_DOWN);
-			GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
+				MoveStageDelegate.Execute(EDirection::E_DOWN);
+				GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 				}), 1.0f, false, 1.0f);
-			UE_LOG(LogTemp, Log, TEXT("Down Gate"));
+			UE_LOG(LogTemp, Log, TEXT("Down GateInfo"));
 		}
 		else if (this->ActorHasTag(FName("RIGHT")))
 		{
-			InGameScriptRef->FadeOutDelegate.Broadcast();
+			 GamemodeRef.Get()->FadeOutDelegate.Broadcast();
 			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
-			InGameScriptRef->ChapterManager->GetStageManager()->MoveStage((uint8)EDirection::E_RIGHT);
+				MoveStageDelegate.Execute(EDirection::E_RIGHT);
 			GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 				}), 1.0f, false, 1.0f);
-			UE_LOG(LogTemp, Log, TEXT("Right Gate"));
+			UE_LOG(LogTemp, Log, TEXT("Right GateInfo"));
 		}
 		else if (this->ActorHasTag(FName("LEFT")))
 		{
-			InGameScriptRef->FadeOutDelegate.Broadcast();
+			 GamemodeRef.Get()->FadeOutDelegate.Broadcast();
 			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
-			InGameScriptRef->ChapterManager->GetStageManager()->MoveStage((uint8)EDirection::E_LEFT);
-			GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
+				MoveStageDelegate.Execute(EDirection::E_LEFT);
+				GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 				}), 1.0f, false, 1.0f);
-			UE_LOG(LogTemp, Log, TEXT("Left Gate"));
+			UE_LOG(LogTemp, Log, TEXT("Left GateInfo"));
 		}
 
 	}
@@ -165,66 +163,64 @@ void AGateBase::UpdateNewTile()
 
 void AGateBase::CheckHaveToActive()
 {
-	ATileBase* tile = InGameScriptRef->ChapterManager->GetStageManager()->GetCurrentStage();
+	if (!GamemodeRef.IsValid()) return;
+	AStageData* stage = GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage();
 
+	if (!IsValid(stage)) return;
+
+	if (!this->Tags.IsValidIndex(0)) return;
 	if (this->Tags[0].IsEqual(FName(TEXT("StartGate"))))
 	{
 		return;
 	}
 	else if (this->Tags[0].IsEqual(FName(TEXT("ChapterGate"))))
 	{
-		if (tile->GetStageType() != EStageCategoryInfo::E_Boss)
+		if (stage->GetStageType() != EStageCategoryInfo::E_Boss)
 		{
 			Destroy();
 		}
-		// Set Material	
-		if (InGameScriptRef->ChapterManager->IsChapterClear())
+		if (GamemodeRef.Get()->GetChapterManagerRef()->IsChapterClear())
 		{
-			Mesh->SetMaterial(0, GateMaterialList[1]);
+			ActivateChapterGate();
 		}
 		else
 		{
-			Mesh->SetMaterial(0, GateMaterialList[2]);
+			DeactivateGate();
 		}
-		
+	
 	}
 	else
 	{
-		if (IsValid(tile))
+		if (!this->Tags.IsValidIndex(1)) return;
+		for (int i = 0; i < 4; i++)
 		{
-			for (int i = 0; i < 4; i++)
+			if (!stage->GetGateInfoDir(EDirection(i)))
 			{
-				if (!tile->Gate[i])
+				switch (i)
 				{
-					switch (i)
-					{
-					case 0:
-						if (this->Tags[1].IsEqual(FName(TEXT("UP"))))
-							Destroy();
-						break;
-					case 1:
-						if (this->Tags[1].IsEqual(FName(TEXT("DOWN"))))
-							Destroy();
-						break;
-					case 2:
-						if (this->Tags[1].IsEqual(FName(TEXT("LEFT"))))
-							Destroy();
-						break;
-					case 3:
-						if (this->Tags[1].IsEqual(FName(TEXT("RIGHT"))))
-							Destroy();
-						break;
-					default:
-						break;
-					}
-
+				case 0:
+					if (this->Tags[1].IsEqual(FName(TEXT("UP"))))
+						Destroy();
+					break;
+				case 1:
+					if (this->Tags[1].IsEqual(FName(TEXT("DOWN"))))
+						Destroy();
+					break;
+				case 2:
+					if (this->Tags[1].IsEqual(FName(TEXT("LEFT"))))
+						Destroy();
+					break;
+				case 3:
+					if (this->Tags[1].IsEqual(FName(TEXT("RIGHT"))))
+						Destroy();
+					break;
+				default:
+					break;
 				}
-			}
 	
+			}
 		}
 
-		// Set Material
-		Mesh->SetMaterial(0, GateMaterialList[0]);
+		ActivateNormalGate();
 	}
-
 }

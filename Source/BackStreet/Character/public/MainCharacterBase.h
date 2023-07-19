@@ -94,10 +94,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UAbilityManagerBase* GetAbilityManagerRef() { return AbilityManagerRef; }
 
-protected: 
+public: 
 	//디버프 상태를 지정
-	UFUNCTION(BlueprintCallable)
-		virtual	bool TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer = nullptr, float TotalTime = 0.0f, float Value = 0.0f);
+	virtual	bool TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer = nullptr, float TotalTime = 0.0f, float Value = 0.0f);
 
 	UFUNCTION(BlueprintCallable)
 		bool TryAddNewAbility(const ECharacterAbilityType NewAbilityType);
@@ -117,9 +116,6 @@ protected:
 		class UNiagaraComponent* DirectionNiagaraEmitter;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		TArray<class UNiagaraSystem*> BuffNiagaraEffectList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		TArray<class UNiagaraSystem*> DebuffNiagaraEffectList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
@@ -136,7 +132,7 @@ private:
 		bool bIsWallThroughEffectActivated = false;
 
 	UFUNCTION()
-		void ActivateBuffNiagara(bool bIsDebuff, uint8 BuffDebuffType);
+		void ActivateDebuffNiagara(uint8 DebuffType);
 
 	UFUNCTION()
 		void DeactivateBuffEffect();
@@ -170,18 +166,17 @@ protected:
 
 // ------- 그 외 -----------
 public:
-	UFUNCTION()
 	virtual void ClearAllTimerHandle() override;
 
 private:
 	UPROPERTY()
 		class UAbilityManagerBase* AbilityManagerRef;
 
-	UPROPERTY()
-		class AMainCharacterController* PlayerControllerRef;
+	//플레이어 컨트롤러 약 참조
+	TWeakObjectPtr<class AMainCharacterController> PlayerControllerRef;
 
 	//공격 시, 마우스 커서의 위치로 캐릭터가 바라보는 로직을 초기화하는 타이머
-	//초기화 시에는 다시 Movement 방향으로 캐릭터의 Rotation을 Set
+	//초기화 시에는 다시 movement 방향으로 캐릭터의 Rotation Set 
 	UPROPERTY()
 		FTimerHandle RotationResetTimerHandle;
 

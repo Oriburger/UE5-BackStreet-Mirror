@@ -1,8 +1,8 @@
-﻿,AbilityId,AbilityName,bIsRepetitive,FuncName,TargetStatName,Variable,TimerHandle
-1,1,청테이프,FALSE,,"(""MaxHP"")",(1.25),
-2,2,신소재 박스,TRUE,TakeHeal,"(""CurrHP"")",(0.2),
-3,3,에너자이저 전지,FALSE,,"(""Attack"")",(1.25),
-4,4,금속 플레이트,FALSE,,"(""Defense"")",(1.25),
-5,5,WD 윤활유,FALSE,,"(""MoveSpeed, AttackSpeed"")",(1.25),
-6,6,총알이 2개지요,FALSE,,"(""MaxProjectileCount"")",(2),
-7,7,총알이 3개지요,FALSE,,"(""MaxProjectileCount"")",(3),
+﻿,AbilityId,AbilityName,AbilityDescription,bIsRepetitive,FuncName,TargetStatName,Variable,TimerHandle
+1,1,청테이프,박스맨의 최대 체력을 증가시킨다,FALSE,,"(""MaxHP"")",(1.25),
+2,2,신소재 박스,박스맨이 일정 시간에 걸쳐 자동으로 수리된다.,TRUE,TakeHeal,"(""CurrHP"")",(1.0),
+3,3,에너자이저 전지,출력을 더욱 높여 공격력을 일정 비율 향상 시킨다,FALSE,,"(""Attack"")",(1.25),
+4,4,금속 플레이트,건축에 사용되는 자재이다. 방어력을 일정 비율 향상 시킨다,FALSE,,"(""Defense"")",(1.25),
+5,5,WD 윤활유,플레이어가 취하는 모든 행동에 대한 속도를 일정 비율 향상 시킨다.,FALSE,,"(""MoveSpeed, AttackSpeed"")",(1.25),
+6,6,총알이 2개지요,발사체를 던지면 2개씩 날아간다. (탄환은 2개씩 소모),FALSE,,"(""MaxProjectileCount"")",(2.0),
+7,7,총알이 3개지요,발사체를 던지면 3개씩 날아간다. (탄환은 3개씩 소모),FALSE,,"(""MaxProjectileCount"")",(3.0),

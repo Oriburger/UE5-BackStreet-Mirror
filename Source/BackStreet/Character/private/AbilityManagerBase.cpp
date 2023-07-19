@@ -26,12 +26,12 @@ void UAbilityManagerBase::InitAbilityManager(ACharacterBase* NewCharacter)
 
 bool UAbilityManagerBase::TryAddNewAbility(const ECharacterAbilityType NewAbilityType)
 {
-	if (!IsValid(OwnerCharacterRef)) return false; 
-	FCharacterStateStruct characterState = OwnerCharacterRef->GetCharacterState();
-	FCharacterStatStruct characterStat = OwnerCharacterRef->GetCharacterStat();
+	if (!OwnerCharacterRef.IsValid()) return false;
+	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
+	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
 
 	if (GetIsAbilityActive(NewAbilityType)) return false;
-	if (ActiveAbilityList.Num() >= MaxAbilityCount) return false;
+	if (ActiveAbilityInfoList.Num() >= MaxAbilityCount) return false;
 
 	FAbilityInfoStruct newAbilityInfo = GetAbilityInfo(NewAbilityType);
 	if (newAbilityInfo.AbilityId == -1) return false;
@@ -39,48 +39,47 @@ bool UAbilityManagerBase::TryAddNewAbility(const ECharacterAbilityType NewAbilit
 	if (newAbilityInfo.bIsRepetitive)
 	{
 		const float variable = newAbilityInfo.Variable.Num() > 0 ? newAbilityInfo.Variable[0] : 1.0f;
-		newAbilityInfo.TimerDelegate.BindUFunction(OwnerCharacterRef, newAbilityInfo.FuncName, variable, true, (uint8)NewAbilityType);
-		OwnerCharacterRef->GetWorldTimerManager().SetTimer(newAbilityInfo.TimerHandle, newAbilityInfo.TimerDelegate, 1.0f, true);
+		newAbilityInfo.TimerDelegate.BindUFunction(OwnerCharacterRef.Get(), newAbilityInfo.FuncName, variable, true, (uint8)NewAbilityType);
+		OwnerCharacterRef.Get()->GetWorldTimerManager().SetTimer(newAbilityInfo.TimerHandle, newAbilityInfo.TimerDelegate, 1.0f, true);
 	}
 	TryUpdateCharacterStat(newAbilityInfo, false);
-	ActiveAbilityList.Add(newAbilityInfo);
+	ActiveAbilityInfoList.Add(newAbilityInfo);
+	AbilityAddDelegate.Broadcast(newAbilityInfo);
 
 	return true;
 }
 
 bool UAbilityManagerBase::TryRemoveAbility(ECharacterAbilityType TargetAbilityType)
 {
-	if (!IsValid(OwnerCharacterRef)) return false;
+	if (!OwnerCharacterRef.IsValid()) return false;
 	if (!GetIsAbilityActive(TargetAbilityType)) return false;
-	if (ActiveAbilityList.Num() == 0) return false;
+	if (ActiveAbilityInfoList.Num() == 0) return false;
 
 	FAbilityInfoStruct targetAbilityInfo = GetAbilityInfo(TargetAbilityType);
 	targetAbilityInfo.AbilityId = (uint8)TargetAbilityType;
 	if (targetAbilityInfo.AbilityId == -1) return false;
 	
-	for (int idx = 0; idx < ActiveAbilityList.Num(); idx++)
+	for (int idx = 0; idx < ActiveAbilityInfoList.Num(); idx++)
 	{
-		FAbilityInfoStruct& abilityInfo = ActiveAbilityList[idx];
+		FAbilityInfoStruct& abilityInfo = ActiveAbilityInfoList[idx];
 		if (abilityInfo.AbilityId == (uint8)TargetAbilityType)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("--> Found"));
 			TryUpdateCharacterStat(abilityInfo, true);
-			ActiveAbilityList.RemoveAt(idx);
+			ActiveAbilityInfoList.RemoveAt(idx);
 			if (abilityInfo.bIsRepetitive)
 			{
-				OwnerCharacterRef->GetWorldTimerManager().ClearTimer(abilityInfo.TimerHandle);
+				OwnerCharacterRef.Get()->GetWorldTimerManager().ClearTimer(abilityInfo.TimerHandle);
 			}
 			AbilityRemoveDelegate.Broadcast((uint8)TargetAbilityType);
 			return true;
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("--> Not Found"));
 	return false;
 }
 
 void UAbilityManagerBase::ClearAllAbility()
 {
-	ActiveAbilityList.Empty();
+	ActiveAbilityInfoList.Empty();
 }
 
 bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct TargetAbilityInfo, bool bIsReset)
@@ -88,8 +87,8 @@ bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct Target
 	//Validity 체크 (꺼져있는데 제거를 시도하거나, 켜져있는데 추가를 시도한다면?)
 	if (GetIsAbilityActive((ECharacterAbilityType)TargetAbilityInfo.AbilityId) != bIsReset) return false;
 	
-	FCharacterStatStruct characterStat = OwnerCharacterRef->GetCharacterStat();
-	FCharacterStateStruct characterState = OwnerCharacterRef->GetCharacterState();
+	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
+	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
 
 	for (int statIdx = 0; statIdx < TargetAbilityInfo.TargetStatName.Num(); statIdx++)
 	{
@@ -115,17 +114,15 @@ bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct Target
 		else if (targetStatName == FName("MaxProjectileCount"))
 			characterStat.MaxProjectileCount *= targetVariable;
 	}
-	OwnerCharacterRef->UpdateCharacterStat(characterStat);
-	OwnerCharacterRef->UpdateCharacterState(characterState);
-
-	AbilityAddDelegate.Broadcast(TargetAbilityInfo);
+	OwnerCharacterRef.Get()->UpdateCharacterStat(characterStat);
+	OwnerCharacterRef.Get()->UpdateCharacterState(characterState);
 
 	return true;
 }
 
-bool UAbilityManagerBase::GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType)
+bool UAbilityManagerBase::GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType) const
 {
-	for (FAbilityInfoStruct& abilityInfo : ActiveAbilityList)
+	for (const FAbilityInfoStruct& abilityInfo : ActiveAbilityInfoList)
 	{
 		if (abilityInfo.AbilityId == (uint8)TargetAbilityType)
 		{
@@ -133,6 +130,11 @@ bool UAbilityManagerBase::GetIsAbilityActive(const ECharacterAbilityType TargetA
 		}
 	}
 	return false;
+}
+
+int32 UAbilityManagerBase::GetMaxAbilityCount() const
+{
+	return MaxAbilityCount; 
 }
 
 FAbilityInfoStruct UAbilityManagerBase::GetAbilityInfo(const ECharacterAbilityType AbilityType)
@@ -159,13 +161,17 @@ bool UAbilityManagerBase::InitAbilityInfoListFromTable(const UDataTable* Ability
 	return true;
 }
 
-// 임시 코드
-TArray<ECharacterAbilityType> UAbilityManagerBase::GetActiveAbilityList()
+TArray<ECharacterAbilityType> UAbilityManagerBase::GetActiveAbilityList() const
 {
 	TArray<ECharacterAbilityType> returnActiveAbility;
-	for (FAbilityInfoStruct& abilityInfo : ActiveAbilityList)
+	for (const FAbilityInfoStruct& abilityInfo : ActiveAbilityInfoList)
 	{
 		returnActiveAbility.Add((const ECharacterAbilityType)abilityInfo.AbilityId);
 	}
 	return returnActiveAbility;
+}
+
+TArray<FAbilityInfoStruct> UAbilityManagerBase::GetActiveAbilityInfoList() const
+{
+	return ActiveAbilityInfoList;
 }

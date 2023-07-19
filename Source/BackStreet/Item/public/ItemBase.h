@@ -95,14 +95,6 @@ protected:
 		class USoundCue* PickSound;
 
 // ------ 참조 프로퍼티 ---------------------------------------------
-protected:
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class ALevelScriptInGame* GetLevelScriptRef() { return InGameScriptRef; }
-
 private:
-	UPROPERTY(VisibleDefaultsOnly)
-		class ALevelScriptInGame* InGameScriptRef;
-
-	UPROPERTY(VisibleDefaultsOnly)
-		class ABackStreetGameModeBase* GamemodeRef;
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 };

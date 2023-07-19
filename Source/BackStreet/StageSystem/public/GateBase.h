@@ -6,11 +6,15 @@
 #include "Components/BoxComponent.h"
 #include "GateBase.generated.h"
 
+
+DECLARE_DELEGATE_OneParam(FDelegateMove, EDirection);
+
 UCLASS()
 class BACKSTREET_API AGateBase : public AActor
 {
 	GENERATED_BODY()
-
+public:
+		FDelegateMove  MoveStageDelegate;
 
 //------------ Global / Component -------------------
 public:
@@ -33,24 +37,28 @@ public:
 
 //----------- ÇÙ½É ·ÎÁ÷ ---------------
 public:
-	UFUNCTION()
-		void OverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
 		void InitGate();
 
 	UFUNCTION(BlueprintCallable)
-		void EnterGate();
+		void AddGate();
 
 	UFUNCTION(BlueprintCallable)
-		void ActiveGate();
+		void EnterGate();
 
-
-public:
-	
 	UFUNCTION()
-		void UpdateNewTile();
+		void RequestMoveStage();
 
+	UFUNCTION(BlueprintCallable)
+		void ActivateChapterGate();
+
+	UFUNCTION(BlueprintCallable)
+		void ActivateNormalGate();
+
+	UFUNCTION(BlueprintCallable)
+		void DeactivateGate();
+	
 	UFUNCTION(BlueprintCallable)
 		void CheckHaveToActive();
 
@@ -66,9 +74,6 @@ public:
 		FTimerHandle FadeOutEffectHandle;
 
 private:
-	UPROPERTY()
-		class ALevelScriptInGame* InGameScriptRef;
+		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
-	UPROPERTY()
-		class ABackStreetGameModeBase* GamemodeRef;
 };

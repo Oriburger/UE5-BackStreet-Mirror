@@ -11,8 +11,6 @@ void AMainCharacterController::BeginPlay()
 	Super::BeginPlay();
 
 	this->bShowMouseCursor = true;
-
-	PlayerRef = Cast<AMainCharacterBase>(GetCharacter());
 }
 
 FRotator AMainCharacterController::GetAimingRotation()
@@ -29,14 +27,19 @@ FRotator AMainCharacterController::GetAimingRotation()
 
 FRotator AMainCharacterController::GetRotationToCursor()
 {
-	if (!IsValid(PlayerRef)) return FRotator();
+	if (!IsValid(GetPawn())) return FRotator();
 
 	FRotator retRotation = FRotator();
 	FVector cursorWorldDeprojectionLocation = GetCursorDeprojectionWorldLocation();
 
 	retRotation = UKismetMathLibrary::FindLookAtRotation(GetPawn()->GetActorLocation(), cursorWorldDeprojectionLocation);
 	retRotation = UKismetMathLibrary::MakeRotator(0.0f, 0.0f, retRotation.Yaw + 270.0f);
-	return retRotation;
+	return LastRotationToCursor = retRotation;
+}
+
+FRotator AMainCharacterController::GetLastRotationToCursor()
+{
+	return LastRotationToCursor;
 }
 
 FVector AMainCharacterController::GetCursorDeprojectionWorldLocation()

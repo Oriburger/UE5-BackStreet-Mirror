@@ -43,12 +43,12 @@ protected:
 		void LogMessage(FString str, FVector2D vec);
 
 private:
-	UPROPERTY()
-		class AEnemyCharacterBase* OwnerCharacterRef;
+	//소유자 캐릭터 약참조
+	TWeakObjectPtr<class AEnemyCharacterBase> OwnerCharacterRef;
+
+	//블랙보드 컴포넌트
+	TWeakObjectPtr<UBlackboardComponent> BlackboardRef;
 
 	UPROPERTY()
 		FVector TargetLocation;
-
-	UPROPERTY()
-		class UBlackboardComponent* BlackboardComponentRef;
 };

@@ -18,6 +18,10 @@ struct FCharacterStatStruct : public FTableRowBase
 public:
 	GENERATED_USTRUCT_BODY()
 
+	//캐릭터의 종류를 나타내는 ID
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0, UIMax = 2500))
+		int32 CharacterID;
+
 	UPROPERTY(BlueprintReadOnly)
 		bool bIsInvincibility = false;
 

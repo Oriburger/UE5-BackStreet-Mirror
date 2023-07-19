@@ -38,16 +38,16 @@ EBTNodeResult::Type UBTTaskTurnToTargetLocation::ExecuteTask(UBehaviorTreeCompon
 {
     Super::ExecuteTask(OwnerComp, NodeMemory);
     OwnerCharacterRef = Cast<AEnemyCharacterBase>(OwnerComp.GetAIOwner()->GetPawn());
-    BlackboardComponentRef = OwnerComp.GetBlackboardComponent();
+    BlackboardRef = OwnerComp.GetBlackboardComponent();
     
     InitTargetLocationFromBBKey();
     
-    const double turnAngle = CalculateTurnAngle(OwnerCharacterRef->GetActorLocation()
-                                            , OwnerCharacterRef->GetCapsuleComponent()->GetForwardVector());
+    const double turnAngle = CalculateTurnAngle(OwnerCharacterRef.Get()->GetActorLocation()
+                                            , OwnerCharacterRef.Get()->GetCapsuleComponent()->GetForwardVector());
  
     if (turnAngle != 0.0f)
     {
-        OwnerCharacterRef->Turn(turnAngle);
+        OwnerCharacterRef.Get()->Turn(turnAngle);
     }
     return EBTNodeResult::Succeeded;
     //return EBTNodeResult::Failed;
@@ -56,16 +56,16 @@ EBTNodeResult::Type UBTTaskTurnToTargetLocation::ExecuteTask(UBehaviorTreeCompon
 void UBTTaskTurnToTargetLocation::InitTargetLocationFromBBKey()
 {
     FName bbKeyName = TargetCharacterBBKey.SelectedKeyName;
-    const AActor* targetCharacterRef = Cast<AActor>(BlackboardComponentRef->GetValueAsObject(bbKeyName));
+    const AActor* targetCharacterRef = Cast<AActor>(BlackboardRef.Get()->GetValueAsObject(bbKeyName));
 
-    if (IsValid(targetCharacterRef))
+    if (IsValid(targetCharacterRef) && !targetCharacterRef->IsActorBeingDestroyed())
     {
         TargetLocation = targetCharacterRef->GetActorLocation();
     }
     else
     {
         bbKeyName = TargetLocationBBKey.SelectedKeyName;
-        TargetLocation = BlackboardComponentRef->GetValueAsVector(bbKeyName);
+        TargetLocation = BlackboardRef.Get()->GetValueAsVector(bbKeyName);
     }
 }
 
@@ -80,7 +80,7 @@ double UBTTaskTurnToTargetLocation::CalculateTurnAngle(const FVector& OwnerLocat
     pawnForwardVector2D = UKML::Normal2D(pawnForwardVector2D);
 
     double rotateAngle = 0.0f;
-    const bool bHasRangedWeapon = BlackboardComponentRef->GetValueAsBool(FName("HasRangedWeapon"));
+    const bool bHasRangedWeapon = BlackboardRef.Get()->GetValueAsBool(FName("HasRangedWeapon"));
 
     double errorTolerance = bHasRangedWeapon ? RANGED_WEAPON_ERROR_TOLERANCE : MELEE_WEAPON_ERROR_TOLERANCE;
    

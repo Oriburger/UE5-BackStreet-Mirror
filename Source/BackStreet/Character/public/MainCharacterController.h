@@ -30,6 +30,10 @@ public:
 	UFUNCTION()
 		FRotator GetRotationToCursor();
 
+	//마지막에 클릭이 된 커서로의 Rotation을 반환
+	UFUNCTION()
+		FRotator GetLastRotationToCursor();
+
 	UFUNCTION()
 		FVector GetCursorDeprojectionWorldLocation();
 
@@ -43,5 +47,5 @@ protected:
 
 private:
 	UPROPERTY()
-		class AMainCharacterBase* PlayerRef;
+		FRotator LastRotationToCursor;
 };

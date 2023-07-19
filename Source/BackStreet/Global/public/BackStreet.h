@@ -24,6 +24,13 @@
 #include "../../StageSystem/public/DirectionEnumInfo.h"
 #include "../../StageSystem/public/StageInfoStruct.h"
 #include "../../Item/public/ItemInfoStruct.h"
-#include "../../Item/public/ItemDataAssetInfo.h"
 #include "../../Item/public/WeaponInfoStruct.h"
 #include "../../Item/public/ProjectileInfoStruct.h"
+#include "../../Global/public/AssetManagerBase.h"
+
+
+#define MAX_CHAPTER_COUNT 2
+#define MAX_ITEM_SPAWN 10
+#define MIN_ITEM_SPAWN 7
+#define MAX_STAGE_TYPE 5
+#define MAX_GRID_SIZE 3

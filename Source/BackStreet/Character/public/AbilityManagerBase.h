@@ -17,29 +17,43 @@ public:
 		uint8 AbilityId;
 
 	//어빌리티명
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FName AbilityName;
 
+	//어빌리티 설명
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FName AbilityDescription;
+
+	//어빌리티의 아이콘
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		UTexture2D* AbilityIcon;
+		
 	//반복적인 연산이 필요한지? (도트 힐) , 현재 미사용
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		bool bIsRepetitive;
 
 	//Callback 함수명
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		FName FuncName; 
 
 	//반영할 Stat의 이름
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<FName> TargetStatName;
 
 	//어빌리티에 사용할 변수 (증가량)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<float> Variable;
 
 	//Repetitive 연산을 위한 TimerHandle
 	UPROPERTY()
 		FTimerHandle TimerHandle; 
 		FTimerDelegate TimerDelegate;
+
+public:
+	inline bool operator==(const FAbilityInfoStruct& other) const
+	{
+		return AbilityId == other.AbilityId;
+	}
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityID, uint8, AbilityID);
@@ -62,9 +76,12 @@ public:
 
 //--------- Function ----------------------------------------------------
 public:
-	// 임시 코드 Active Ability GET 함수
-	UFUNCTION()
-	TArray<ECharacterAbilityType> GetActiveAbilityList();
+	// Active Ability getter 함수
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<ECharacterAbilityType> GetActiveAbilityList() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FAbilityInfoStruct> GetActiveAbilityInfoList() const;
 
 public:
 	//어빌리티 매니저 초기화, 부모 설정
@@ -85,7 +102,10 @@ public:
 
 	//해당 Ability가 Active한지 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType);
+		bool GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType) const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetMaxAbilityCount() const;
 
 protected:
 	UFUNCTION()
@@ -104,16 +124,16 @@ protected:
 	//최대 어빌리티 수
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 1, UIMax = 5))
 		int32 MaxAbilityCount = 3;
-
+		
 private:
-	//현재 플레이어가 소유한 어빌리티의 종류
+	//현재 플레이어가 소유한 어빌리티의 정보
 	UPROPERTY()
-		TArray<FAbilityInfoStruct> ActiveAbilityList;
+		TArray<FAbilityInfoStruct> ActiveAbilityInfoList;
 	
-	//소유자
-	UPROPERTY()
-		class ACharacterBase* OwnerCharacterRef;
+	//소유자 캐릭터 약참조
+	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 
+	//모든 어빌리티의 정보
 	UPROPERTY()
 		TArray<FAbilityInfoStruct> AbilityInfoList;
 };
