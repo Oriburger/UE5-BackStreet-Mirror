@@ -107,7 +107,7 @@ void AWeaponInventoryBase::RemoveWeapon(int32 WeaponID)
 
 	int32 targetInventoryIdx = GetWeaponInventoryIdx(WeaponID);
 	if (!InventoryArray.IsValidIndex(targetInventoryIdx)) return;
-	
+
 	CurrentCapacity -= InventoryArray[targetInventoryIdx].WeaponStat.WeaponWeight;
 	CurrentWeaponCount -= 1;
 

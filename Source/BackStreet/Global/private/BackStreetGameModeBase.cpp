@@ -63,7 +63,8 @@ void ABackStreetGameModeBase::InitializeGame()
 
 void ABackStreetGameModeBase::PlayCameraShakeEffect(ECameraShakeType EffectType, FVector Location, float Radius)
 {
-	if (CameraShakeEffectList.Num() < (uint8)EffectType) return;
+	if (!IsValid(GetWorld()) || !CameraShakeEffectList.IsValidIndex((uint8)EffectType)) return;
+	if (!IsValid(PlayerCharacterRef) || PlayerCharacterRef->IsActorBeingDestroyed()) return;
 
 	Location = Location + (PlayerCharacterRef->FollowingCamera->GetComponentLocation() - PlayerCharacterRef->GetActorLocation());
 	UGameplayStatics::PlayWorldCameraShake(GetWorld(), CameraShakeEffectList[(uint8)EffectType], Location, Radius * 0.75f, Radius * 1.5f, 0.5f);
@@ -92,7 +93,7 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(uint8 ItemType, uint8 ItemI
 			if (IsValid(GetChapterManagerRef()) 
 				&& GetChapterManagerRef()->GetCurrentStage())
 			{
-				GetChapterManagerRef()->GetCurrentStage()->ItemList.Add(newItem);
+				GetChapterManagerRef()->GetCurrentStage()->AddItemList(newItem);
 			}
 		}
 		return newItem;

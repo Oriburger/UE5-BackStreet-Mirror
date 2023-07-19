@@ -12,10 +12,12 @@
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "../../StageSystem/public/StageData.h"
+#include "../../StageSystem/public/GateBase.h"
 #include "Components/AudioComponent.h"
 #include "Animation/AnimInstance.h"
 #include "TimerManager.h"
 #include "../../Item/public/RewardBoxBase.h"
+#include "../../CraftingSystem/public/CraftBoxBase.h"
 #define MAX_CAMERA_BOOM_LENGTH 1450.0f
 #define MIN_CAMERA_BOOM_LENGTH 250.0f
 
@@ -183,7 +185,7 @@ void AMainCharacterBase::TryInvestigate()
 void AMainCharacterBase::Investigate(AActor* TargetActor)
 {
 	if (!IsValid(TargetActor)) return;
-	
+
 	if (TargetActor->ActorHasTag("Item"))
 	{
 		Cast<AItemBase>(TargetActor)->OnPlayerBeginPickUp.ExecuteIfBound(this);
@@ -195,6 +197,14 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 	else if (TargetActor->ActorHasTag("RewardBox"))
 	{
 		Cast<ARewardBoxBase>(TargetActor)->OnPlayerBeginInteract.Broadcast(this);
+	}
+	else if (TargetActor->ActorHasTag("CraftingBox"))
+	{
+		Cast<ACraftBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
+	}
+	else if (TargetActor->ActorHasTag("Gate"))
+	{
+		Cast<AGateBase>(TargetActor)->EnterGate(); 
 	}
 }
 
@@ -301,7 +311,9 @@ void AMainCharacterBase::RotateToCursor()
 TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
 {
 	TArray<AActor*> totalItemList;
-	TArray<UClass*> targetClassList = {AItemBase::StaticClass(), AItemBoxBase::StaticClass(), ARewardBoxBase::StaticClass()};
+	TArray<UClass*> targetClassList = {AItemBase::StaticClass(), AItemBoxBase::StaticClass()
+									 , ARewardBoxBase::StaticClass(), ACraftBoxBase::StaticClass()
+									 , AGateBase::StaticClass()};
 	TEnumAsByte<EObjectTypeQuery> itemObjectType = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel3);
 	FVector overlapBeginPos = GetActorLocation() + GetMesh()->GetForwardVector() * 70.0f + GetMesh()->GetUpVector() * -45.0f;
 	
@@ -309,7 +321,7 @@ TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
 	{
 		bool result = false;
 
-		for (auto& targetClass : targetClassList)
+		for (UClass* targetClass : targetClassList)
 		{
 			result = (result || UKismetSystemLibrary::SphereOverlapActors(GetWorld(), overlapBeginPos, sphereRadius
 														, { itemObjectType }, targetClass, {}, totalItemList));

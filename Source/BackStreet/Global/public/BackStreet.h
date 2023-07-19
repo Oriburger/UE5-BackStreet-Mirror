@@ -28,5 +28,9 @@
 #include "../../Item/public/ProjectileInfoStruct.h"
 #include "../../Global/public/AssetManagerBase.h"
 
-/* ----- 스테이지 정보 (사용되는 곳이 많아 임시로 추가 논의 필요, 사용하는 곳 마다 추가할지) ------------ */
-//#include "../../StageSystem/public/StageData.h"
+
+#define MAX_CHAPTER_COUNT 2
+#define MAX_ITEM_SPAWN 10
+#define MIN_ITEM_SPAWN 7
+#define MAX_STAGE_TYPE 5
+#define MAX_GRID_SIZE 3

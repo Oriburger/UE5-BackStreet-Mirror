@@ -26,76 +26,141 @@ public:
 	AStageData();
 
 	UFUNCTION()
-		EStageCategoryInfo GetStageType() { return StageType; }
+		int32 GetXPos() { return StageInfo.XPos; }
+
+	UFUNCTION()
+		void SetXPos(int32 Pos) { StageInfo.XPos = Pos; }
+
+	UFUNCTION()
+		int32 GetYPos() { return StageInfo.YPos; }
+
+	UFUNCTION()
+		void SetYPos(int32 Pos) { StageInfo.YPos = Pos; }
+
+	UFUNCTION()
+		FVector GetStageLocation() { return StageInfo.StageLocation; }
+
+	UFUNCTION()
+		void SetStageLocation(FVector Vector) { StageInfo.StageLocation = Vector; }
 
 	UFUNCTION(BlueprintCallable)
-		bool GetIsVisited() { return bIsVisited; }
+		EStageCategoryInfo GetStageType() { return StageInfo.Type; }
 
-//민감한 프로퍼티는 protected나 private로 수정부탁드립니다.
-public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		int32 XPos;
+	UFUNCTION()
+		void SetStageType(EStageCategoryInfo StageType) { StageInfo.Type = StageType; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		int32 YPos;
+	UFUNCTION()
+		FName GetLevelToLoad() { return StageInfo.LevelToLoad; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		FVector StageLocation;
+	UFUNCTION()
+		void SetLevelToLoad(FName Level) { StageInfo.LevelToLoad = Level; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TArray<bool> GateInfo;
+	UFUNCTION()
+		bool GetIsClear() { return StageInfo.bIsClear; }
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-		EStageCategoryInfo StageType;
+	UFUNCTION()
+		void SetIsClear(bool Clear) { StageInfo.bIsClear = Clear; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		FName LevelToLoad;
+	UFUNCTION()
+		bool GetIsValid() { return StageInfo.bIsValid; }
 
-	UPROPERTY(VisibleAnywhere)
-		bool bIsVisited;
+	UFUNCTION()
+		void SetIsValid(bool Valid) { StageInfo.bIsValid = Valid; }
 
-	UPROPERTY(VisibleAnywhere)
-		bool bIsClear;
+	UFUNCTION(BlueprintCallable)
+		bool GetIsVisited() { return StageInfo.bIsVisited; }
 
-	UPROPERTY(VisibleAnywhere)
-		bool bIsValid;
+	UFUNCTION()
+		void SetIsVisited(bool Visited) { StageInfo.bIsVisited = Visited; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TArray<FVector> MonsterSpawnPoints;
+	UFUNCTION()
+		void AddGateInfo(bool Target) { StageInfo.GateInfo.Add(Target); }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TArray<FVector> ItemSpawnPoints;
+	UFUNCTION(BlueprintCallable)
+		bool GetGateInfoDir(EDirection Dir) { return StageInfo.GateInfo[(uint8)(Dir)]; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TArray<FVector> CharacterSpawnPoint;
+	UFUNCTION()
+		void SetGateInfoDir(EDirection Dir, bool Info) { StageInfo.GateInfo[(uint8)(Dir)] = Info; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TArray<FVector> RewardBoxSpawnPoint;
+	UFUNCTION(BlueprintCallable)
+		TArray<FVector> GetMonsterSpawnPoints() { return StageInfo.MonsterSpawnPoints; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TArray<class AEnemyCharacterBase*> MonsterList;
+	UFUNCTION(BlueprintCallable)
+		TArray<FVector> GetItemSpawnPoints() { return StageInfo.ItemSpawnPoints; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TArray<class AItemBase*> ItemList;
+	UFUNCTION(BlueprintCallable)
+		TArray<FVector> GetCharacterSpawnPoint() { return StageInfo.CharacterSpawnPoint; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TArray<class AItemBoxBase*> ItemBoxList;
+	UFUNCTION(BlueprintCallable)
+		TArray<FVector> GetRewardBoxSpawnPoint() { return StageInfo.RewardBoxSpawnPoint; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		class ARewardBoxBase* RewardBoxRef;
+	UFUNCTION()
+		void AddMonsterSpawnPoint(FVector Target) { StageInfo.MonsterSpawnPoints.Add(Target); }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		ULevelStreaming* LevelRef;
+	UFUNCTION()
+		void AddItemSpawnPoint(FVector Target) { StageInfo.ItemSpawnPoints.Add(Target); }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TArray<class AGateBase*> GateList;
+	UFUNCTION()
+		void AddCharacterSpawnPoint(FVector Target) { StageInfo.CharacterSpawnPoint.Add(Target); }
 
+	UFUNCTION()
+		void AddRewardBoxSpawnPoint(FVector Target) { StageInfo.RewardBoxSpawnPoint.Add(Target); }
 
-public:
-	UPROPERTY(VisibleAnywhere)
-		FTimerHandle StageTimerHandle;
+	UFUNCTION()
+		class AEnemyCharacterBase* GetMonsterIdx(int32 Idx) { return StageInfo.MonsterList[Idx]; }
 
-	UPROPERTY(VisibleAnywhere)
-		int32 StageTime;
-	
+	UFUNCTION()
+		class AItemBase* GetItemIdx(int32 Idx) { return StageInfo.ItemList[Idx]; }
+
+	UFUNCTION()
+		class AItemBoxBase* GetItemBoxIdx(int32 Idx) { return StageInfo.ItemBoxList[Idx]; }
+
+	UFUNCTION(BlueprintCallable)
+		TArray<class AEnemyCharacterBase*> GetMonsterList() { return StageInfo.MonsterList; }
+
+	UFUNCTION()
+		TArray<class AItemBase*> GetItemList() { return StageInfo.ItemList; }
+
+	UFUNCTION()
+		TArray<class AItemBoxBase*> GetItemBoxList() { return StageInfo.ItemBoxList; }
+
+	UFUNCTION()
+		TArray<class AGateBase*> GetGateList() { return StageInfo.GateList; }
+
+	UFUNCTION()
+		class ARewardBoxBase* GetRewardBox() { return StageInfo.RewardBoxRef; }
+
+	UFUNCTION()
+		void SetRewardBox(class ARewardBoxBase* Target) { StageInfo.RewardBoxRef = Target; }
+
+	UFUNCTION()
+		void AddMonsterList(class AEnemyCharacterBase* Target) { StageInfo.MonsterList.Add(Target); }
+
+	UFUNCTION()
+		void RemoveMonsterList(class AEnemyCharacterBase* Target) { StageInfo.MonsterList.Remove(Target); }
+
+	UFUNCTION()
+		void AddItemBoxList(class AItemBoxBase* Target) { StageInfo.ItemBoxList.Add(Target); }
+
+	UFUNCTION()
+		void RemoveItemBoxList(class AItemBoxBase* Target) { StageInfo.ItemBoxList.Remove(Target); }
+
+	UFUNCTION()
+		void AddItemList(class AItemBase* Target) { StageInfo.ItemList.Add(Target); }
+
+	UFUNCTION()
+		void AddGateList(class AGateBase* Target) { StageInfo.GateList.Add(Target); }
+
+	UFUNCTION()
+		void EmptyGateList() { StageInfo.GateList.Empty(); }
+
+	UFUNCTION()
+		ULevelStreaming* GetLevelRef() { return StageInfo.LevelRef; }
+
+	UFUNCTION()
+		void SetLevelRef(ULevelStreaming* Target) { StageInfo.LevelRef = Target; }
+
+private:
+	UPROPERTY()
+		FStageDataStruct StageInfo;
 };

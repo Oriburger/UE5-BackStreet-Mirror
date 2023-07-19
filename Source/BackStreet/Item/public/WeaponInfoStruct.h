@@ -86,8 +86,8 @@ struct FWeaponStatStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
-
-		UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
 		FName WeaponName;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
@@ -95,6 +95,9 @@ public:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
 		EWeaponType WeaponType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		UTexture2D* WeaponImage;
 
 	//----- 공통 Stat -------
 	//공격 속도 Rate

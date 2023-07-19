@@ -78,3 +78,4 @@ Content/Asset/*
 
 # 빌드 데이터 파일
 *_BuiltData.uasset
+/Content/StarterContent
