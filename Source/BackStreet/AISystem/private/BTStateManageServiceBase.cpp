@@ -32,7 +32,9 @@ void UBTStateManageServiceBase::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 		BlackboardRef = OwnerComp.GetBlackboardComponent();
 		if (BlackboardRef.IsValid())
 		{
-			BlackboardRef.Get()->SetValueAsVector(FName("SpawnLocation"), OwnerCharacterRef.Get()->GetActorLocation());
+			FVector spawnLocation = OwnerCharacterRef.Get()->GetActorLocation();
+			spawnLocation.Z = 170.0f;
+			BlackboardRef.Get()->SetValueAsVector(FName("SpawnLocation"), spawnLocation);
 		}
 	}
 	else 
@@ -97,6 +99,7 @@ bool UBTStateManageServiceBase::CheckReturnState()
 {
 	if (!BlackboardRef.IsValid()) return false;
 	const FVector& spawnLocation = BlackboardRef.Get()->GetValueAsVector(FName("SpawnLocation"));
+
 	if (AIBehaviorState == EAIBehaviorType::E_Return || GetDistanceTo(spawnLocation) >= MAX_CHASE_DISTANCE) return true;
 	return false;
 }
@@ -139,10 +142,7 @@ void UBTStateManageServiceBase::OnOwnerGetDamaged(AActor* Causer)
 		BlackboardRef.Get()->SetValueAsVector("SpawnLocation", OwnerCharacterRef.Get()->GetActorLocation());
 	}
 
-	if (BlackboardRef.IsValid())	
-	{
-		AIBehaviorState = EAIBehaviorType::E_Chase;
-		BlackboardRef.Get()->SetValueAsObject("TargetCharacter", Causer);
-		BlackboardRef.Get()->SetValueAsEnum("AIBehaviorState", (uint8)AIBehaviorState);
-	}
+	AIBehaviorState = EAIBehaviorType::E_Chase;
+	BlackboardRef.Get()->SetValueAsObject("TargetCharacter", Causer);
+	BlackboardRef.Get()->SetValueAsEnum("AIBehaviorState", (uint8)AIBehaviorState);
 }

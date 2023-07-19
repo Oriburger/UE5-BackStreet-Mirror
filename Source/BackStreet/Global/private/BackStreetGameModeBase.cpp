@@ -92,7 +92,7 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(uint8 ItemType, uint8 ItemI
 			if (IsValid(GetChapterManagerRef()) 
 				&& GetChapterManagerRef()->GetCurrentStage())
 			{
-				GetChapterManagerRef()->GetCurrentStage()->ItemList.Add(newItem);
+				GetChapterManagerRef()->GetCurrentStage()->AddItemList(newItem);
 			}
 		}
 		return newItem;
