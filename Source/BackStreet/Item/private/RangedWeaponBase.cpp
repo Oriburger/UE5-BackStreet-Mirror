@@ -34,7 +34,7 @@ float ARangedWeaponBase::GetAttackRange()
 	if (WeaponStat.WeaponType == EWeaponType::E_Melee
 		|| (!OwnerCharacterRef->GetCharacterStat().bInfinite
 			&& WeaponState.RangedWeaponState.CurrentAmmoCount == 0.0f
-			&& WeaponState.RangedWeaponState.TotalAmmoCount == 0.0f))
+			&& WeaponState.RangedWeaponState.ExtraAmmoCount == 0.0f))
 	{
 		return 150.0f; //매크로나 const 멤버로 수정하기 
 	}
@@ -86,13 +86,13 @@ bool ARangedWeaponBase::TryReload()
 {
 	if (!GetCanReload()) return false;
 
-	int32 addAmmoCnt = FMath::Min(WeaponState.RangedWeaponState.TotalAmmoCount, WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine);
+	int32 addAmmoCnt = FMath::Min(WeaponState.RangedWeaponState.ExtraAmmoCount, WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine);
 	if (addAmmoCnt + WeaponState.RangedWeaponState.CurrentAmmoCount > WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine)
 	{
 		addAmmoCnt = (WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine - WeaponState.RangedWeaponState.CurrentAmmoCount);
 	}
 	WeaponState.RangedWeaponState.CurrentAmmoCount += addAmmoCnt;
-	WeaponState.RangedWeaponState.TotalAmmoCount -= addAmmoCnt;
+	WeaponState.RangedWeaponState.ExtraAmmoCount -= addAmmoCnt;
 
 	return true;
 }	
@@ -100,20 +100,20 @@ bool ARangedWeaponBase::TryReload()
 bool ARangedWeaponBase::GetCanReload()
 {	
 	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo || !WeaponStat.RangedWeaponStat.bHasProjectile) return false;
-	if (WeaponState.RangedWeaponState.TotalAmmoCount == 0 || WeaponState.RangedWeaponState.CurrentAmmoCount == WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine) return false;
+	if (GetLeftAmmoCount() == 0) return false;
 	return true;
 }
 
 void ARangedWeaponBase::AddAmmo(int32 Count)
 {
-	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo || WeaponState.RangedWeaponState.TotalAmmoCount >= MAX_AMMO_LIMIT_CNT) return;
-	WeaponState.RangedWeaponState.TotalAmmoCount = (WeaponState.RangedWeaponState.TotalAmmoCount + Count) % MAX_AMMO_LIMIT_CNT;
+	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo || WeaponState.RangedWeaponState.ExtraAmmoCount >= MAX_AMMO_LIMIT_CNT) return;
+	WeaponState.RangedWeaponState.ExtraAmmoCount = (WeaponState.RangedWeaponState.ExtraAmmoCount + Count) % MAX_AMMO_LIMIT_CNT;
 }
 
 void ARangedWeaponBase::AddMagazine(int32 Count)
 {
-	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo || WeaponState.RangedWeaponState.TotalAmmoCount >= MAX_AMMO_LIMIT_CNT) return;
-	WeaponState.RangedWeaponState.TotalAmmoCount = (WeaponState.RangedWeaponState.TotalAmmoCount + WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine * Count) % MAX_AMMO_LIMIT_CNT;
+	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo || WeaponState.RangedWeaponState.ExtraAmmoCount >= MAX_AMMO_LIMIT_CNT) return;
+	WeaponState.RangedWeaponState.ExtraAmmoCount = (WeaponState.RangedWeaponState.ExtraAmmoCount + WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine * Count) % MAX_AMMO_LIMIT_CNT;
 }
 
 bool ARangedWeaponBase::TryFireProjectile()
@@ -135,23 +135,22 @@ bool ARangedWeaponBase::TryFireProjectile()
 		}), 1.0f, false, AUTO_RELOAD_DELAY_VALUE);
 		return false;
 	}
-
 	const int32 fireProjectileCnt = FMath::Min(WeaponState.RangedWeaponState.CurrentAmmoCount, OwnerCharacterRef->GetCharacterStat().MaxProjectileCount);
 	for (int idx = 1; idx <= fireProjectileCnt; idx++)
 	{
 		FTimerHandle delayHandle;
 		GetWorld()->GetTimerManager().SetTimer(delayHandle, FTimerDelegate::CreateLambda([&]() {
 			AProjectileBase* newProjectile = CreateProjectile();
-		//스폰한 발사체가 Valid 하다면 발사
-		if (IsValid(newProjectile))
-		{
-			if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef->GetCharacterStat().bInfinite)
+			//스폰한 발사체가 Valid 하다면 발사
+			if (IsValid(newProjectile))
 			{
-				WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
+				if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef->GetCharacterStat().bInfinite)
+				{
+					WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
+				}
+				newProjectile->ActivateProjectileMovement();
 			}
-			newProjectile->ActivateProjectileMovement();
-		}
-			}), 0.1f * (float)idx, false);
+		}), 0.1f * (float)idx, false);
 	}
 	return true;
 }

@@ -48,14 +48,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool TryReload();
 
-	//남은 탄환의 개수를 반환 - Stat.TotalAmmoCount
+	//남은 탄환의 개수를 반환 - Stat.ExtraAmmoCount
 	UFUNCTION(BlueprintCallable)
-		int32 GetLeftAmmoCount() { return RangedWeaponState.TotalAmmoCount; };
+		int32 GetLeftAmmoCount() { return RangedWeaponState.ExtraAmmoCount + RangedWeaponState.CurrentAmmoCount; };
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetCanReload();
 
-	//탄환의 개수를 더함 (TotalAmmoCount까지)
+	//탄환의 개수를 더함 (ExtraAmmoCount까지)
 	UFUNCTION(BlueprintCallable)
 		void AddAmmo(int32 Count);
 
