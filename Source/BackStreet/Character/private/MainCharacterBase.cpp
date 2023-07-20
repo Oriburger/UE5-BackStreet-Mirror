@@ -134,7 +134,7 @@ void AMainCharacterBase::Roll()
 		newRotation = { 0, FMath::Atan2(newDirection.Y, newDirection.X) * 180.0f / 3.141592, 0.0f };
 		newRotation.Yaw += 270.0f;
 	}
-
+	
 	//Rotation 리셋 로직
 	GetWorldTimerManager().ClearTimer(RotationResetTimerHandle);
 	ResetRotationToMovement();
@@ -152,7 +152,7 @@ void AMainCharacterBase::Roll()
 	if (AnimAssetData.RollAnimMontageList.Num() > 0
 		&& IsValid(AnimAssetData.RollAnimMontageList[0]))
 	{
-		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.CharacterMoveSpeed / 550.0f));
+		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.CharacterMoveSpeed / 500.0f));
 	}	
 }
 
