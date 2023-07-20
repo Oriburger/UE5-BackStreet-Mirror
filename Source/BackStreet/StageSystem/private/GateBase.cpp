@@ -21,6 +21,7 @@ AGateBase::AGateBase()
 	OverlapVolume->SetupAttachment(RootComponent);
 	Mesh->SetupAttachment(RootComponent);
 
+	this->Tags.Add("Gate");
 }
 
 // Called every frame
@@ -165,11 +166,11 @@ void AGateBase::CheckHaveToActive()
 	if (!IsValid(stage)) return;
 
 	if (!this->Tags.IsValidIndex(0)) return;
-	if (this->Tags[0].IsEqual(FName(TEXT("StartGate"))))
+	if (this->Tags.Find(FName(TEXT("StartGate"))) != INDEX_NONE)
 	{
 		return;
 	}
-	else if (this->Tags[0].IsEqual(FName(TEXT("ChapterGate"))))
+	if (this->Tags.Find(FName(TEXT("ChapterGate"))) != INDEX_NONE)
 	{
 		if (stage->GetStageType() != EStageCategoryInfo::E_Boss)
 		{
@@ -195,19 +196,19 @@ void AGateBase::CheckHaveToActive()
 				switch (i)
 				{
 				case 0:
-					if (this->Tags[1].IsEqual(FName(TEXT("UP"))))
+					if (this->Tags.Find(FName(TEXT("UP"))) != INDEX_NONE)
 						Destroy();
 					break;
 				case 1:
-					if (this->Tags[1].IsEqual(FName(TEXT("DOWN"))))
+					if (this->Tags.Find(FName(TEXT("DOWN"))) != INDEX_NONE)
 						Destroy();
 					break;
 				case 2:
-					if (this->Tags[1].IsEqual(FName(TEXT("LEFT"))))
+					if (this->Tags.Find(FName(TEXT("LEFT"))) != INDEX_NONE)
 						Destroy();
 					break;
 				case 3:
-					if (this->Tags[1].IsEqual(FName(TEXT("RIGHT"))))
+					if (this->Tags.Find(FName(TEXT("RIGHT"))) != INDEX_NONE)
 						Destroy();
 					break;
 				default:
