@@ -156,6 +156,18 @@ void AMainCharacterBase::Roll()
 	}	
 }
 
+void AMainCharacterBase::Dash()
+{
+	if (IsActorBeingDestroyed()) return;
+	
+	LaunchCharacter(FVector(0.0f, 0.0f, 500.0f), false, false);
+	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, FTimerDelegate::CreateLambda([&]() {
+		const FVector& direction = GetMesh()->GetRightVector();
+		float& speed = GetCharacterMovement()->MaxWalkSpeed;
+		GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
+	}), 0.075f, false);
+}
+
 void AMainCharacterBase::ZoomIn(float Value)
 {
 	if (Value == 0.0f) return;
@@ -224,7 +236,7 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 		GetWorld()->GetTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 		GetWorld()->GetTimerManager().SetTimer(FacialEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
 			SetFacialDamageEffect(false);
-		}), 1.0f, false, 1.0f);
+		}), 1.0f, false);
 	}
 	return damageAmount;
 }
