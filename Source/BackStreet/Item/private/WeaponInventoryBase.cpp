@@ -72,7 +72,7 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 	{
 		if (newWeaponStat.RangedWeaponStat.bHasProjectile && !newWeaponStat.RangedWeaponStat.bIsInfiniteAmmo)
 		{
-			InventoryArray[duplicateIdx].WeaponState.RangedWeaponState.TotalAmmoCount +=
+			InventoryArray[duplicateIdx].WeaponState.RangedWeaponState.CurrentAmmoCount =
 				InventoryArray[duplicateIdx].WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine;
 			if(duplicateIdx == CurrentIdx) SyncCurrentWeaponInfo(true);
 			return true;
@@ -194,15 +194,15 @@ bool AWeaponInventoryBase::TryAddAmmoToWeapon(int32 WeaponID, int32 AmmoCount)
 
 	FInventoryItemInfoStruct& itemInfoRef = InventoryArray[targetInventoryIdx];
 
-	int32& currTotalAmmoCount = itemInfoRef.WeaponState.RangedWeaponState.TotalAmmoCount;
-	const int32 maxTotalAmmoCount = itemInfoRef.WeaponStat.RangedWeaponStat.MaxTotalAmmo;
+	int32& currExtraAmmoCount = itemInfoRef.WeaponState.RangedWeaponState.ExtraAmmoCount;
+	const int32 maxExtraAmmoCount = itemInfoRef.WeaponStat.RangedWeaponStat.MaxTotalAmmo;
 
-	currTotalAmmoCount += AmmoCount;
+	currExtraAmmoCount += AmmoCount;
 
-	if(currTotalAmmoCount < maxTotalAmmoCount)
-		currTotalAmmoCount %= maxTotalAmmoCount;
+	if(currExtraAmmoCount < maxExtraAmmoCount)
+		currExtraAmmoCount %= maxExtraAmmoCount;
 	else
-		currTotalAmmoCount = maxTotalAmmoCount;
+		currExtraAmmoCount = maxExtraAmmoCount;
 	
 	if (CurrentIdx == targetInventoryIdx) SyncCurrentWeaponInfo(true);
 	else OnInventoryItemIsUpdated.Broadcast(targetInventoryIdx, false, InventoryArray[targetInventoryIdx]);

@@ -138,9 +138,9 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		int32 CurrentAmmoCount = 0;
 
-	//탄창에 있는 탄환들의 총합
+	//별도 탄창에 있는 탄환들의 총합
 	UPROPERTY(BlueprintReadOnly)
-		int32 TotalAmmoCount = 0;
+		int32 ExtraAmmoCount = 0;
 };
 
 USTRUCT(BlueprintType)
