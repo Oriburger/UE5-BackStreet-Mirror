@@ -75,6 +75,11 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 			InventoryArray[duplicateIdx].WeaponState.RangedWeaponState.TotalAmmoCount +=
 				InventoryArray[duplicateIdx].WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine;
 			if(duplicateIdx == CurrentIdx) SyncCurrentWeaponInfo(true);
+
+			// 무기 습득 델리게이트 호출
+			if (OnAddWeapon.IsBound())
+				OnAddWeapon.Broadcast();
+
 			return true;
 		}
 		else
@@ -94,6 +99,10 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 		CurrentCapacity += newWeaponStat.WeaponWeight;
 		SortInventory();
 		OnInventoryIsUpdated.Broadcast(InventoryArray);
+
+		// 무기 습득 델리게이트 호출
+		if (OnAddWeapon.IsBound())
+			OnAddWeapon.Broadcast();
 
 		return true;
 	}
@@ -125,6 +134,10 @@ void AWeaponInventoryBase::RemoveWeapon(int32 WeaponID)
 		}
 	}
 	SortInventory();
+	// 무기 드랍 델리게이트 호출
+	if (OnDropWeapon.IsBound())
+		OnDropWeapon.Broadcast();
+
 	OnInventoryIsUpdated.Broadcast(InventoryArray);
 }
 
@@ -145,6 +158,9 @@ bool AWeaponInventoryBase::SwitchToNextWeapon()
 	EquipWeapon(nextIdx);
 	SetCurrentIdx(nextIdx);
 	SortInventory();
+	// 무기 스왑 델리게이트 호출
+	if (OnSwapWeapon.IsBound())
+		OnSwapWeapon.Broadcast();
 
 	return false;
 }
