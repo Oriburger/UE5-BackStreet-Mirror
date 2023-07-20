@@ -27,7 +27,7 @@ public:
 
 	//무한 내구도 / 무한 탄약 (Enemy 기본 스탯)
 	UPROPERTY(BlueprintReadOnly)
-		bool bInfinite = false;; 
+		bool bInfinite = false;
 
 	//PlayerMaxHP는 1.0f
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.5f, UIMax = 10.0f))

@@ -91,5 +91,5 @@ void ARewardBoxBase::AddAbilityToPlayer(AMainCharacterBase* PlayerCharacterRef)
 void ARewardBoxBase::SelectRandomAbilityIdx()
 {
 	//임시코드!!!!!!! 반드시 변경 필요 - @ljh
-	AbilityType = (ECharacterAbilityType)((uint8)FMath::RandRange(1.0f, 7.0f));
+	AbilityType = (ECharacterAbilityType)((uint8)FMath::RandRange(1.0f, 16.0f));
 }
