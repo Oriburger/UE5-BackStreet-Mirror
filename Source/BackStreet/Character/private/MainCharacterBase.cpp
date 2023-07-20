@@ -134,7 +134,7 @@ void AMainCharacterBase::Roll()
 		newRotation = { 0, FMath::Atan2(newDirection.Y, newDirection.X) * 180.0f / 3.141592, 0.0f };
 		newRotation.Yaw += 270.0f;
 	}
-
+	
 	//Rotation 리셋 로직
 	GetWorldTimerManager().ClearTimer(RotationResetTimerHandle);
 	ResetRotationToMovement();
@@ -152,8 +152,20 @@ void AMainCharacterBase::Roll()
 	if (AnimAssetData.RollAnimMontageList.Num() > 0
 		&& IsValid(AnimAssetData.RollAnimMontageList[0]))
 	{
-		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.CharacterMoveSpeed / 550.0f));
+		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.CharacterMoveSpeed / 500.0f));
 	}	
+}
+
+void AMainCharacterBase::Dash()
+{
+	if (IsActorBeingDestroyed()) return;
+	
+	LaunchCharacter(FVector(0.0f, 0.0f, 500.0f), false, false);
+	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, FTimerDelegate::CreateLambda([&]() {
+		const FVector& direction = GetMesh()->GetRightVector();
+		float& speed = GetCharacterMovement()->MaxWalkSpeed;
+		GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
+	}), 0.075f, false);
 }
 
 void AMainCharacterBase::ZoomIn(float Value)
@@ -224,17 +236,13 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 		GetWorld()->GetTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 		GetWorld()->GetTimerManager().SetTimer(FacialEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
 			SetFacialDamageEffect(false);
-		}), 1.0f, false, 1.0f);
+		}), 1.0f, false);
 	}
 	return damageAmount;
 }
 
 void AMainCharacterBase::TryAttack()
 {
-	if (!PlayerControllerRef.Get()->GetActionKeyIsDown("Attack"))
-	{
-		return;
-	}
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 
@@ -247,9 +255,11 @@ void AMainCharacterBase::TryAttack()
 	Super::TryAttack();
 	RotateToCursor();
 
-	//Pressed 상태를 0.2s 뒤에 체크해서 계속 눌려있다면 Attack 반복
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
-	GetWorldTimerManager().SetTimer(AttackLoopTimerHandle, this, &AMainCharacterBase::TryAttack, 1.0f, false, 0.1f);
+	GetWorld()->GetTimerManager().SetTimer(AttackLoopTimerHandle, FTimerDelegate::CreateLambda([&]() {
+		if (!IsActorBeingDestroyed() && PlayerControllerRef.Get()->GetActionKeyIsDown("Attack"))
+			TryAttack(); //0.1초 뒤에 체크해서 계속 눌려있는 상태라면, Attack을 반복한다. 
+	}), 0.1f, false);
 }
 
 void AMainCharacterBase::Attack()
@@ -448,4 +458,5 @@ void AMainCharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(RollTimerHandle); 
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
+	GetWorldTimerManager().ClearTimer(DashDelayTimerHandle);
 }

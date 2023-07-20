@@ -41,15 +41,23 @@ public:
 	UFUNCTION()
 		void MoveRight(float Value);
 
+	//구르기를 시도한다.
 	UFUNCTION()
 		void Roll();
 
+	//구르기 시 대쉬를 시도한다. AnimMontage의 Notify에 의해 호출된다.
+	UFUNCTION(BlueprintCallable)
+		void Dash();
+
+	//카메라 Boom의 길이를 늘이거나 줄인다.
 	UFUNCTION()
 		void ZoomIn(float Value);
 
+	//주변에 상호작용 가능한 액터를 조사한다.
 	UFUNCTION()
 		void TryInvestigate();
 
+	//해당 액터와 상호작용한다.
 	UFUNCTION(BlueprintCallable)
 		void Investigate(AActor* TargetActor);
 
@@ -187,6 +195,10 @@ private:
 	//구르기 딜레이 타이머
 	UPROPERTY()
 		FTimerHandle RollTimerHandle;
+
+	//구르기 내 대쉬 딜레이 핸들
+	UPROPERTY()
+		FTimerHandle DashDelayTimerHandle;
 
 	//버프 나이아가라 이펙트 리셋 타이머
 	UPROPERTY()
