@@ -42,7 +42,7 @@ public:
 //------- 기본 프로퍼티 -------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
-		uint8 ProjectileID;
+		int32 ProjectileID;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")

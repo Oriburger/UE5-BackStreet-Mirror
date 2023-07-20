@@ -66,7 +66,7 @@ public:
 		void PlayCameraShakeEffect(ECameraShakeType EffectType, FVector Location, float Radius = 100.0f);
 
 	UFUNCTION()
-		AItemBase* SpawnItemToWorld(uint8 ItemType, uint8 ItemID, FVector SpawnLocation);
+		AItemBase* SpawnItemToWorld(uint8 ItemType, int32 ItemID, FVector SpawnLocation);
 
 	UFUNCTION()
 		void UpdateCharacterStat(class ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat);
@@ -78,13 +78,13 @@ public:
 		void UpdateWeaponStat(class AWeaponBase* TargetWeapon, FWeaponStatStruct NewStat);
 
 	UFUNCTION()
-		void UpdateWeaponStatWithID(class AWeaponBase* TargetWeapon, const uint8 WeaponID);
+		void UpdateWeaponStatWithID(class AWeaponBase* TargetWeapon, const int32 WeaponID);
 
 	UFUNCTION()
-		void UpdateProjectileStatWithID(class AProjectileBase* TargetProjectile, const uint8 ProjectileID);
+		void UpdateProjectileStatWithID(class AProjectileBase* TargetProjectile, const int32 ProjectileID);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FWeaponStatStruct GetWeaponStatInfoWithID(const uint8 WeaponID);
+		FWeaponStatStruct GetWeaponStatInfoWithID(const int32 WeaponID);
 
 	UFUNCTION()
 		FStageEnemyTypeStruct GetStageTypeInfoWithRow(uint16 rowName);
