@@ -54,7 +54,7 @@ void AItemBase::BeginPlay()
 	OnPlayerBeginPickUp.BindUFunction(this, FName("OnItemPicked"));
 }
 
-void AItemBase::InitItem(EItemCategoryInfo SetType, uint8 NewItemID)
+void AItemBase::InitItem(EItemCategoryInfo SetType, int32 NewItemID)
 {
 	ItemType = SetType;
 	ItemID = NewItemID;

@@ -41,7 +41,7 @@ public:
 //------- 기본 프로퍼티, Action -------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
-		uint8 WeaponID;
+		int32 WeaponID;
 
 	//공격 처리
 	virtual void Attack();
