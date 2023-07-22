@@ -34,6 +34,17 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FRangedWeaponStateStruct RangedWeaponState;
 
+//------ VFX ----------------------------------
+protected:
+	//발사 순간에 출력될 이미터 (임시, 추후 데이터 테이블로 관리 예정)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraSystem* ShootNiagaraEmitter;
+
+private:
+	//투사체가 발사되는 이펙트를 출력한다
+	UFUNCTION()
+		void SpawnShootNiagaraEffect();
+
 //------ Projectile 관련----------------------------
 public:
 	//발사체를 생성

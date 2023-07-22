@@ -5,6 +5,7 @@
 #include "../public/ProjectileBase.h"
 #include "../public/WeaponBase.h"
 #include "../../Global/public/DebuffManager.h"
+#include "NiagaraFunctionLibrary.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define AUTO_RELOAD_DELAY_VALUE 0.1
@@ -51,6 +52,15 @@ void ARangedWeaponBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
 	//WeaponStat 업데이트
 } 
+
+void ARangedWeaponBase::SpawnShootNiagaraEffect()
+{
+	if (!OwnerCharacterRef.IsValid()) return;
+
+	FVector spawnLocation = OwnerCharacterRef.Get()->GetActorLocation() + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 50.0f;
+	FRotator spawnRotation = OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation() + FRotator(0.0f, 90.0f, 0.0f);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShootNiagaraEmitter, spawnLocation, spawnRotation);
+}
 
 AProjectileBase* ARangedWeaponBase::CreateProjectile()
 {
@@ -135,10 +145,11 @@ bool ARangedWeaponBase::TryFireProjectile()
 		}), 1.0f, false, AUTO_RELOAD_DELAY_VALUE);
 		return false;
 	}
-	const int32 fireProjectileCnt = FMath::Min(WeaponState.RangedWeaponState.CurrentAmmoCount, OwnerCharacterRef->GetCharacterStat().MaxProjectileCount);
+	const int32 fireProjectileCnt = FMath::Min(WeaponState.RangedWeaponState.CurrentAmmoCount, OwnerCharacterRef.Get()->GetCharacterStat().MaxProjectileCount);
 	for (int idx = 1; idx <= fireProjectileCnt; idx++)
 	{
 		FTimerHandle delayHandle;
+
 		GetWorld()->GetTimerManager().SetTimer(delayHandle, FTimerDelegate::CreateLambda([&]() {
 			AProjectileBase* newProjectile = CreateProjectile();
 			//스폰한 발사체가 Valid 하다면 발사
@@ -149,6 +160,7 @@ bool ARangedWeaponBase::TryFireProjectile()
 					WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
 				}
 				newProjectile->ActivateProjectileMovement();
+				SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
 			}
 		}), 0.1f * (float)idx, false);
 	}
