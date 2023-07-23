@@ -221,17 +221,12 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 
 void AMainCharacterBase::TryAttack()
 {
-	if (!PlayerControllerRef.Get()->GetActionKeyIsDown("Attack"))
-	{
-		return;
-	}
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 
 	if (!IsValid(InventoryRef) || !IsValid(GetWeaponActorRef()))
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
-		return;
 	}
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
@@ -242,9 +237,11 @@ void AMainCharacterBase::TryAttack()
 	if (OnAttack.IsBound())
 		OnAttack.Broadcast();
 
-	//Pressed 상태를 0.2s 뒤에 체크해서 계속 눌려있다면 Attack 반복
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
-	GetWorldTimerManager().SetTimer(AttackLoopTimerHandle, this, &AMainCharacterBase::TryAttack, 1.0f, false, 0.1f);
+	GetWorld()->GetTimerManager().SetTimer(AttackLoopTimerHandle, FTimerDelegate::CreateLambda([&]() {
+		if (!IsActorBeingDestroyed() && PlayerControllerRef.Get()->GetActionKeyIsDown("Attack"))
+			TryAttack(); //0.1초 뒤에 체크해서 계속 눌려있는 상태라면, Attack을 반복한다. 
+		}), 0.1f, false);
 }
 
 void AMainCharacterBase::Attack()
