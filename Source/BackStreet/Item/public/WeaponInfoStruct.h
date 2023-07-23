@@ -86,8 +86,8 @@ struct FWeaponStatStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
-
-		UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
 		FName WeaponName;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
@@ -95,6 +95,9 @@ public:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
 		EWeaponType WeaponType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		UTexture2D* WeaponImage;
 
 	//----- 공통 Stat -------
 	//공격 속도 Rate
@@ -135,9 +138,9 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		int32 CurrentAmmoCount = 0;
 
-	//탄창에 있는 탄환들의 총합
+	//별도 탄창에 있는 탄환들의 총합
 	UPROPERTY(BlueprintReadOnly)
-		int32 TotalAmmoCount = 0;
+		int32 ExtraAmmoCount = 0;
 };
 
 USTRUCT(BlueprintType)

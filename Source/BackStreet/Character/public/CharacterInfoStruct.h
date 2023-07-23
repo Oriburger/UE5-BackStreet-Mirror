@@ -27,7 +27,7 @@ public:
 
 	//무한 내구도 / 무한 탄약 (Enemy 기본 스탯)
 	UPROPERTY(BlueprintReadOnly)
-		bool bInfinite = false;; 
+		bool bInfinite = false;
 
 	//PlayerMaxHP는 1.0f
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.5f, UIMax = 10.0f))
@@ -57,22 +57,22 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	//캐릭터의 디버프 상태 (Bit-Field로 표현)
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		int32 CharacterDebuffState = (1 << 10);
 
 	//공격을 할 수 있는 상태인지?
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bCanAttack = false;
 
 	//0 : Idle,  1 : Left Turn,  2 : Right Turn
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		uint8 TurnDirection = 0;
 
 	//캐릭터의 행동 정보
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		ECharacterActionType CharacterActionState;
 
 	//PlayerMaxHP는 1.0f
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float CharacterCurrHP;
 };

@@ -4,7 +4,7 @@
 #include "Components/AudioComponent.h"
 #include "../../Global/public/DebuffManager.h"
 #include "../../Character/public/CharacterBase.h"
-#include "../../Global/public/BackStreetGameModeBase.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 
 
@@ -68,9 +68,11 @@ void AWeaponBase::UpdateComboState()
 void AWeaponBase::SetResetComboTimer()
 {
 	GetWorldTimerManager().ClearTimer(ComboTimerHandle);
+	const float delayValue = FMath::Clamp((-1.0f * WeaponStat.WeaponAtkSpeedRate) + 2.0f, 0.25f, 1.5f);
+
 	GetWorldTimerManager().SetTimer(ComboTimerHandle, FTimerDelegate::CreateLambda([&]() {
 		WeaponState.ComboCount = 0;
-	}), 0.75f, false);
+	}), delayValue, false);
 }
 
 void AWeaponBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)

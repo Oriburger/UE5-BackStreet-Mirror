@@ -12,10 +12,12 @@
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "../../StageSystem/public/StageData.h"
+#include "../../StageSystem/public/GateBase.h"
 #include "Components/AudioComponent.h"
 #include "Animation/AnimInstance.h"
 #include "TimerManager.h"
 #include "../../Item/public/RewardBoxBase.h"
+#include "../../CraftingSystem/public/CraftBoxBase.h"
 #define MAX_CAMERA_BOOM_LENGTH 1450.0f
 #define MIN_CAMERA_BOOM_LENGTH 250.0f
 
@@ -132,7 +134,7 @@ void AMainCharacterBase::Roll()
 		newRotation = { 0, FMath::Atan2(newDirection.Y, newDirection.X) * 180.0f / 3.141592, 0.0f };
 		newRotation.Yaw += 270.0f;
 	}
-
+	
 	//Rotation 리셋 로직
 	GetWorldTimerManager().ClearTimer(RotationResetTimerHandle);
 	ResetRotationToMovement();
@@ -150,8 +152,20 @@ void AMainCharacterBase::Roll()
 	if (AnimAssetData.RollAnimMontageList.Num() > 0
 		&& IsValid(AnimAssetData.RollAnimMontageList[0]))
 	{
-		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.CharacterMoveSpeed / 550.0f));
+		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.CharacterMoveSpeed / 500.0f));
 	}	
+}
+
+void AMainCharacterBase::Dash()
+{
+	if (IsActorBeingDestroyed()) return;
+	
+	LaunchCharacter(FVector(0.0f, 0.0f, 500.0f), false, false);
+	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, FTimerDelegate::CreateLambda([&]() {
+		const FVector& direction = GetMesh()->GetRightVector();
+		float& speed = GetCharacterMovement()->MaxWalkSpeed;
+		GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
+	}), 0.075f, false);
 }
 
 void AMainCharacterBase::ZoomIn(float Value)
@@ -183,7 +197,7 @@ void AMainCharacterBase::TryInvestigate()
 void AMainCharacterBase::Investigate(AActor* TargetActor)
 {
 	if (!IsValid(TargetActor)) return;
-	
+
 	if (TargetActor->ActorHasTag("Item"))
 	{
 		Cast<AItemBase>(TargetActor)->OnPlayerBeginPickUp.ExecuteIfBound(this);
@@ -195,6 +209,14 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 	else if (TargetActor->ActorHasTag("RewardBox"))
 	{
 		Cast<ARewardBoxBase>(TargetActor)->OnPlayerBeginInteract.Broadcast(this);
+	}
+	else if (TargetActor->ActorHasTag("CraftingBox"))
+	{
+		Cast<ACraftBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
+	}
+	else if (TargetActor->ActorHasTag("Gate"))
+	{
+		Cast<AGateBase>(TargetActor)->EnterGate(); 
 	}
 }
 
@@ -214,7 +236,7 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 		GetWorld()->GetTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 		GetWorld()->GetTimerManager().SetTimer(FacialEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
 			SetFacialDamageEffect(false);
-		}), 1.0f, false, 1.0f);
+		}), 1.0f, false);
 	}
 	return damageAmount;
 }
@@ -233,12 +255,11 @@ void AMainCharacterBase::TryAttack()
 	Super::TryAttack();
 	RotateToCursor();
 
-	
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
 	GetWorld()->GetTimerManager().SetTimer(AttackLoopTimerHandle, FTimerDelegate::CreateLambda([&]() {
 		if (!IsActorBeingDestroyed() && PlayerControllerRef.Get()->GetActionKeyIsDown("Attack"))
 			TryAttack(); //0.1초 뒤에 체크해서 계속 눌려있는 상태라면, Attack을 반복한다. 
-		}), 0.1f, false);
+	}), 0.1f, false);
 }
 
 void AMainCharacterBase::Attack()
@@ -304,7 +325,9 @@ void AMainCharacterBase::RotateToCursor()
 TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
 {
 	TArray<AActor*> totalItemList;
-	TArray<UClass*> targetClassList = {AItemBase::StaticClass(), AItemBoxBase::StaticClass(), ARewardBoxBase::StaticClass()};
+	TArray<UClass*> targetClassList = {AItemBase::StaticClass(), AItemBoxBase::StaticClass()
+									 , ARewardBoxBase::StaticClass(), ACraftBoxBase::StaticClass()
+									 , AGateBase::StaticClass()};
 	TEnumAsByte<EObjectTypeQuery> itemObjectType = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel3);
 	FVector overlapBeginPos = GetActorLocation() + GetMesh()->GetForwardVector() * 70.0f + GetMesh()->GetUpVector() * -45.0f;
 	
@@ -312,7 +335,7 @@ TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
 	{
 		bool result = false;
 
-		for (auto& targetClass : targetClassList)
+		for (UClass* targetClass : targetClassList)
 		{
 			result = (result || UKismetSystemLibrary::SphereOverlapActors(GetWorld(), overlapBeginPos, sphereRadius
 														, { itemObjectType }, targetClass, {}, totalItemList));
@@ -439,4 +462,5 @@ void AMainCharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(RollTimerHandle); 
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
+	GetWorldTimerManager().ClearTimer(DashDelayTimerHandle);
 }
