@@ -233,10 +233,7 @@ void AMainCharacterBase::TryAttack()
 	Super::TryAttack();
 	RotateToCursor();
 
-	// 공격 델리게이트 호출
-	if (OnAttack.IsBound())
-		OnAttack.Broadcast();
-
+	
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
 	GetWorld()->GetTimerManager().SetTimer(AttackLoopTimerHandle, FTimerDelegate::CreateLambda([&]() {
 		if (!IsActorBeingDestroyed() && PlayerControllerRef.Get()->GetActionKeyIsDown("Attack"))
@@ -247,6 +244,10 @@ void AMainCharacterBase::TryAttack()
 void AMainCharacterBase::Attack()
 {
 	Super::Attack();
+	// 공격 델리게이트 호출
+	if (OnAttack.IsBound())
+		OnAttack.Broadcast();
+
 }
 
 

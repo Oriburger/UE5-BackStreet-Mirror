@@ -228,6 +228,10 @@ void UTransitionManager::SetSpawnPoint(AStageData* Target)
 		{
 			Target->AddRewardBoxSpawnPoint(FVector(actor->GetActorLocation()));
 		}
+		if (actor->ActorHasTag(FName(TEXT("CraftingBoxSpawnPoint"))))
+		{
+			Target->AddCraftingBoxSpawnPoint(FVector(actor->GetActorLocation()));
+		}
 	}
 }
 

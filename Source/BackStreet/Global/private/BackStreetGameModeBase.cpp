@@ -100,6 +100,13 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(uint8 ItemType, uint8 ItemI
 	return nullptr;
 }
 
+bool ABackStreetGameModeBase::IsLobbyStage()
+{
+	if (ChapterManager->GetCurrentStage() == ChapterManager->GetLobbyStage()) 
+		return true; 
+	else return false;
+}
+
 void ABackStreetGameModeBase::UpdateCharacterStat(ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat)
 {
 	if (IsValid(TargetCharacter))

@@ -35,6 +35,9 @@ public:
 		void SpawnRewardBox(class AStageData* Target);
 
 	UFUNCTION()
+		void SpawnCraftingBox(class AStageData* Target);
+
+	UFUNCTION()
 		void BindDelegate(class AStageData* Target);
 
 	UFUNCTION()
@@ -74,6 +77,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<TSubclassOf<class ARewardBoxBase>> RewardBoxAssets;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<TSubclassOf<class ACraftBoxBase>> CraftingBoxAssets;
 
 	
 };
