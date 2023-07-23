@@ -9,6 +9,7 @@
 #include "RewardBoxBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateInteraction, class AMainCharacterBase*, PlayerCharacterRef);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialAbility);
 
 UCLASS()
 class BACKSTREET_API ARewardBoxBase : public AActor
@@ -17,6 +18,9 @@ class BACKSTREET_API ARewardBoxBase : public AActor
 
 /*-------- Delegate ----------------------- */
 public:
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTutorialAbility OnAddAbility;
+
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateInteraction OnPlayerBeginInteract;
 

@@ -30,7 +30,10 @@ public:
 			void InitChapter(TArray<class AStageData*> StageRef);
 
 		UFUNCTION()
-			void MoveStage(EDirection Dir);
+			void TryMoveStage(EDirection Dir);
+
+		UFUNCTION()
+			void MoveStage();
 
 		UFUNCTION()
 			void LoadStage();
@@ -67,7 +70,14 @@ private:
 
 		TWeakObjectPtr<class AChapterManagerBase> ChapterManager;
 
+		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
 	UPROPERTY()
 		EDirection MoveDirection;
 
+	UPROPERTY()
+		bool IsMoveStage;
+
+	UPROPERTY(VisibleAnywhere)
+		FTimerHandle FadeOutEffectHandle;
 };

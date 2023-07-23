@@ -12,6 +12,7 @@
 #include "../../Item/public/RewardBoxBase.h"
 #include "../../Item/public/ItemBoxBase.h"
 #include "../../Item/public/ItemBase.h"
+#include "../../CraftingSystem/public/CraftBoxBase.h"
 #include "Engine/LevelStreaming.h"
 
 AResourceManager::AResourceManager()
@@ -39,11 +40,14 @@ void AResourceManager::SpawnStageActor(class AStageData* Target)
 	{
 			SpawnMonster(Target);
 			SpawnItem(Target);
+			SpawnCraftingBox(Target);
+
 	}
 	else if (Target->GetStageType() == EStageCategoryInfo::E_Boss)
 	{
 			SpawnBossMonster(Target);
 			SpawnItem(Target);
+			SpawnCraftingBox(Target);
 	}
 	BindDelegate(Target);
 	UE_LOG(LogTemp, Log, TEXT("AResourceManager::SpawnStageActor -> Finish Spawn"));
@@ -167,6 +171,38 @@ void AResourceManager::SpawnRewardBox(class AStageData* Target)
 	if (!IsValid(rewardBox))
 		return;
 		Target->SetRewardBox(rewardBox);
+
+}
+
+void AResourceManager::SpawnCraftingBox(class AStageData* Target)
+{
+	if (!IsValid(Target))
+		return;
+	TArray<FVector> craftingBoxSpawnPoint = Target->GetCraftingBoxSpawnPoint();
+	if (craftingBoxSpawnPoint.IsEmpty())
+		return;
+
+	for (int i = 0; i < 100; i++)
+	{
+		int32 selectidxA = FMath::RandRange(0, craftingBoxSpawnPoint.Num() - 1);
+		int32 selectidxB = FMath::RandRange(0, craftingBoxSpawnPoint.Num() - 1);
+		FVector temp;
+
+		temp = craftingBoxSpawnPoint[selectidxA];
+		craftingBoxSpawnPoint[selectidxA] = craftingBoxSpawnPoint[selectidxB];
+		craftingBoxSpawnPoint[selectidxB] = temp;
+
+	}
+
+	FActorSpawnParameters actorSpawnParameters;
+	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	ACraftBoxBase* craftBox;
+	if (!CraftingBoxAssets.IsValidIndex(0) || !craftingBoxSpawnPoint.IsValidIndex(0))
+		return;
+	craftBox = GetWorld()->SpawnActor<ACraftBoxBase>(CraftingBoxAssets[0], craftingBoxSpawnPoint[0], FRotator(0, 90, 0), actorSpawnParameters);
+	if (!IsValid(craftBox))
+		return;
+	Target->SetCraftingBox(craftBox);
 
 }
 

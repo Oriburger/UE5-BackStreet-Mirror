@@ -68,6 +68,9 @@ public:
 	UFUNCTION()
 		AItemBase* SpawnItemToWorld(uint8 ItemType, int32 ItemID, FVector SpawnLocation);
 
+	UFUNCTION(BlueprintCallable)
+		bool IsLobbyStage();
+
 	UFUNCTION()
 		void UpdateCharacterStat(class ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat);
 

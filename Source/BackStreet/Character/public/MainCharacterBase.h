@@ -7,10 +7,16 @@
 #include "GameFramework/Character.h"
 #include "MainCharacterBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialAttack);
+
 UCLASS()
 class BACKSTREET_API AMainCharacterBase : public ACharacterBase
 {
 	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTutorialAttack OnAttack;
 
 //-------- Global -----------------
 public:

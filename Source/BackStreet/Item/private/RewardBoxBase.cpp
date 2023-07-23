@@ -79,6 +79,8 @@ void ARewardBoxBase::AddAbilityToPlayer(AMainCharacterBase* PlayerCharacterRef)
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyEffectParticle, GetActorLocation());
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), DestroyEffectSound, GetActorLocation());
 		}
+		if (OnAddAbility.IsBound())
+			OnAddAbility.Broadcast();
 		Destroy();
 	}
 	else

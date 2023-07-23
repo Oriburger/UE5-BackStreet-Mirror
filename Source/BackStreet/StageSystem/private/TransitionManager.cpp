@@ -6,6 +6,7 @@
 #include "../public/StageData.h"
 #include "../public/GateBase.h"
 #include "../../Character/public/MainCharacterBase.h"
+#include "../../Global/public/BackStreetGameModeBase.h"
 #include "Engine/LevelStreaming.h"
 
 void UTransitionManager::InitTransitionManager()
@@ -15,10 +16,11 @@ void UTransitionManager::InitTransitionManager()
 	{
 		SpawnRequestDelegate.AddDynamic(this, &AResourceManager::SpawnStageActor);
 	}*/
+	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 	ChapterManager = Cast<AChapterManagerBase>(this->GetOuter());
 	LoadCompleteDelegate.BindUFunction(this, "CompleteLoad");
 	UnloadCompleteDelegate.BindUFunction(this, "SetGate");
-
+	IsMoveStage = false;
 }
 
 void UTransitionManager::InitChapter(TArray<class AStageData*> StageRef)
@@ -27,16 +29,35 @@ void UTransitionManager::InitChapter(TArray<class AStageData*> StageRef)
 	HideStage = nullptr;
 }
 
-void UTransitionManager::MoveStage(EDirection Dir)
+void UTransitionManager::TryMoveStage(EDirection Dir)
+{
+	if (IsMoveStage)
+	{
+		UE_LOG(LogTemp, Log, TEXT("IsMoveStage"));
+		return;
+	}
+
+	if (!ChapterManager.IsValid()) return;
+	AStageData* currentStage = ChapterManager.Get()->GetCurrentStage();
+	if (!IsValid(currentStage)) return;
+
+	GamemodeRef.Get()->FadeOutDelegate.Broadcast();
+
+	IsMoveStage = true;
+	MoveDirection = Dir;
+	HideStageWork(Dir);
+
+	GamemodeRef.Get()->GetWorldTimerManager().SetTimer(FadeOutEffectHandle,this,&UTransitionManager::MoveStage, 1.0f, false, 1.0f);
+
+}
+
+void UTransitionManager::MoveStage()
 {
 	if (!ChapterManager.IsValid()) return;
 	AStageData* currentStage = ChapterManager.Get()->GetCurrentStage();
 	if (!IsValid(currentStage)) return;
 
-	MoveDirection = Dir;
-	HideStageWork(Dir);
-
-	switch (Dir)
+	switch (MoveDirection)
 	{
 	case EDirection::E_UP:
 		ChapterManager.Get()->SetCurrentStage(GetStage(currentStage->GetXPos() + 1, currentStage->GetYPos()));
@@ -75,7 +96,9 @@ void UTransitionManager::MoveStage(EDirection Dir)
 	}
 
 	ChapterManager.Get()->UpdateMapUI();
+
 }
+
 
 void UTransitionManager::LoadStage()
 {
@@ -88,6 +111,7 @@ void UTransitionManager::LoadStage()
 	{
 		UE_LOG(LogTemp, Log, TEXT("Instance is exist, Load Level"));
 
+		if(!currentStage->GetLevelRef()->OnLevelShown.IsBound())
 		currentStage->GetLevelRef()->OnLevelShown.Add(LoadCompleteDelegate);
 
 		currentStage->GetLevelRef()->SetShouldBeLoaded(true);
@@ -111,6 +135,7 @@ void UTransitionManager::LoadStage()
 		currentStage->GetLevelRef()->LevelTransform.SetLocation(location);
 		
 		LoadCompleteDelegate.BindUFunction(this, "CompleteLoad");
+		if (!level->OnLevelShown.IsBound())
 		level->OnLevelShown.Add(LoadCompleteDelegate);
 		currentStage->GetLevelRef()->SetShouldBeLoaded(true);
 		currentStage->GetLevelRef()->SetShouldBeVisible(true);
@@ -126,6 +151,7 @@ void UTransitionManager::UnLoadStage()
 	if (HideStage.IsValid())
 	{
 		UE_LOG(LogTemp, Log, TEXT("Instance is exist, Now UnLoad Level"));
+		if (!HideStage.Get()->GetLevelRef()->OnLevelHidden.IsBound())
 		HideStage.Get()->GetLevelRef()->OnLevelHidden.Add(UnloadCompleteDelegate);
 		HideStage.Get()->GetLevelRef()->SetShouldBeLoaded(false);
 		HideStage.Get()->GetLevelRef()->SetShouldBeVisible(false);
@@ -178,6 +204,12 @@ void UTransitionManager::SetSpawnPoint(AStageData* Target)
 	ULevelStreaming* levelRef = Target->GetLevelRef();
 	ULevel* level = levelRef->GetLoadedLevel();
 
+	if (!IsValid(level))
+	{
+		UE_LOG(LogTemp, Log, TEXT("UTransitionManager::gggggggggg"));
+		return;
+
+	}
 	for (AActor* actor : level->Actors)
 	{
 		if (actor->ActorHasTag(FName(TEXT("MonsterSpawnPoint"))))
@@ -195,6 +227,10 @@ void UTransitionManager::SetSpawnPoint(AStageData* Target)
 		if (actor->ActorHasTag(FName(TEXT("RewardBoxSpawnPoint"))))
 		{
 			Target->AddRewardBoxSpawnPoint(FVector(actor->GetActorLocation()));
+		}
+		if (actor->ActorHasTag(FName(TEXT("CraftingBoxSpawnPoint"))))
+		{
+			Target->AddCraftingBoxSpawnPoint(FVector(actor->GetActorLocation()));
 		}
 	}
 }
@@ -298,6 +334,7 @@ void UTransitionManager::TeleportCharacter()
 	moveLocation = moveLocation + FVector(0, 0, 10);
 	if(IsValid(characterRef)) characterRef->SetActorLocation(moveLocation);
 	else { UE_LOG(LogTemp, Warning, TEXT("Whyrano")); }
+	IsMoveStage = false;
 }
 
 AStageData* UTransitionManager::GetStage(uint8 XPosition, uint8 YPosition)

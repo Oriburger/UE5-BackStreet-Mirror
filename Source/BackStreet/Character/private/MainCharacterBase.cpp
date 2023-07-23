@@ -92,13 +92,13 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMainCharacterBase::MoveRight);
 	PlayerInputComponent->BindAxis("ZoomIn", this, &AMainCharacterBase::ZoomIn);
 	
-	PlayerInputComponent->BindAction("Roll", IE_Pressed, this, &AMainCharacterBase::Roll);
-	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AMainCharacterBase::TryAttack);
-	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMainCharacterBase::TryReload);
+	PlayerInputComponent->BindAction("Roll", IE_Pressed, this, &AMainCharacterBase::Roll).bConsumeInput = true;
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AMainCharacterBase::TryAttack).bConsumeInput = true;
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMainCharacterBase::TryReload).bConsumeInput = true;
 
-	PlayerInputComponent->BindAction("SwitchWeapon", IE_Pressed, this, &AMainCharacterBase::SwitchToNextWeapon);
-	PlayerInputComponent->BindAction("PickItem", IE_Pressed, this, &AMainCharacterBase::TryInvestigate);
-	PlayerInputComponent->BindAction("DropWeapon", IE_Pressed, this, &AMainCharacterBase::DropWeapon);
+	PlayerInputComponent->BindAction("SwitchWeapon", IE_Pressed, this, &AMainCharacterBase::SwitchToNextWeapon).bConsumeInput = true;
+	PlayerInputComponent->BindAction("PickItem", IE_Pressed, this, &AMainCharacterBase::TryInvestigate).bConsumeInput = true;
+	PlayerInputComponent->BindAction("DropWeapon", IE_Pressed, this, &AMainCharacterBase::DropWeapon).bConsumeInput = true;
 }
 
 void AMainCharacterBase::MoveForward(float Value)
@@ -198,6 +198,8 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 {
 	if (!IsValid(TargetActor)) return;
 
+	UE_LOG(LogTemp, Warning, TEXT("Gate#2"));
+
 	if (TargetActor->ActorHasTag("Item"))
 	{
 		Cast<AItemBase>(TargetActor)->OnPlayerBeginPickUp.ExecuteIfBound(this);
@@ -216,6 +218,7 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 	}
 	else if (TargetActor->ActorHasTag("Gate"))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Gate#3"));
 		Cast<AGateBase>(TargetActor)->EnterGate(); 
 	}
 }
@@ -265,6 +268,10 @@ void AMainCharacterBase::TryAttack()
 void AMainCharacterBase::Attack()
 {
 	Super::Attack();
+	// 공격 델리게이트 호출
+	if (OnAttack.IsBound())
+		OnAttack.Broadcast();
+
 }
 
 
