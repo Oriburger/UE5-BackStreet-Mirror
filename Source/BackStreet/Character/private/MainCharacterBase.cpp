@@ -105,12 +105,27 @@ void AMainCharacterBase::MoveForward(float Value)
 {
 	FVector Direction = FVector(1.0f, 0.0f, 0.0f);
 	AddMovementInput(Direction, Value);
+
+	if (Value != 0)
+	{
+		UE_LOG(LogTemp, Log, TEXT("AMainCharacterBase::MoveForward Why???"));
+		if (OnMove.IsBound())
+			OnMove.Broadcast();
+	}
+
 }
 
 void AMainCharacterBase::MoveRight(float Value)
 {
 	FVector Direction = FVector(0.0f, 1.0f, 0.0f);
 	AddMovementInput(Direction, Value);
+
+	if (Value != 0)
+	{
+		UE_LOG(LogTemp, Log, TEXT("AMainCharacterBase::MoveForward Why???"));
+		if (OnMove.IsBound())
+			OnMove.Broadcast();
+	}
 }
 
 void AMainCharacterBase::Roll()
@@ -154,6 +169,9 @@ void AMainCharacterBase::Roll()
 	{
 		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.CharacterMoveSpeed / 500.0f));
 	}	
+
+	if (OnRoll.IsBound())
+		OnRoll.Broadcast();
 }
 
 void AMainCharacterBase::Dash()
@@ -176,6 +194,8 @@ void AMainCharacterBase::ZoomIn(float Value)
 	newLength = newLength < MIN_CAMERA_BOOM_LENGTH ? MIN_CAMERA_BOOM_LENGTH : newLength;
 	newLength = newLength > MAX_CAMERA_BOOM_LENGTH ? MAX_CAMERA_BOOM_LENGTH : newLength;
 	CameraBoom->TargetArmLength = newLength;
+	if (OnZoom.IsBound())
+		OnZoom.Broadcast();
 }
 
 void AMainCharacterBase::TryInvestigate()

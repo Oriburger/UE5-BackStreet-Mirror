@@ -97,6 +97,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		TArray<FVector> GetCraftingBoxSpawnPoint() { return StageInfo.CraftingBoxSpawnPoint; }
 
+	UFUNCTION(BlueprintCallable)
+		TArray<FRotator> GetCraftingBoxSpawnRotatorPoint() { return StageInfo.CraftingBoxSpawnRotatorPoint; }
+
 	UFUNCTION()
 		void AddMonsterSpawnPoint(FVector Target) { StageInfo.MonsterSpawnPoints.Add(Target); }
 
@@ -111,6 +114,9 @@ public:
 
 	UFUNCTION()
 		void AddCraftingBoxSpawnPoint(FVector Target) { StageInfo.CraftingBoxSpawnPoint.Add(Target); }
+
+	UFUNCTION()
+		void AddCraftingBoxSpawnRotatorPoint(FRotator Target) { StageInfo.CraftingBoxSpawnRotatorPoint.Add(Target); }
 
 	UFUNCTION()
 		class AEnemyCharacterBase* GetMonsterIdx(int32 Idx) { return StageInfo.MonsterList[Idx]; }

@@ -231,6 +231,7 @@ void UTransitionManager::SetSpawnPoint(AStageData* Target)
 		if (actor->ActorHasTag(FName(TEXT("CraftingBoxSpawnPoint"))))
 		{
 			Target->AddCraftingBoxSpawnPoint(FVector(actor->GetActorLocation()));
+			Target->AddCraftingBoxSpawnRotatorPoint(FRotator(actor->GetActorRotation()));
 		}
 	}
 }
