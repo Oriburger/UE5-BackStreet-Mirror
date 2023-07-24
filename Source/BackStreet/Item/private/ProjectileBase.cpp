@@ -5,6 +5,7 @@
 #include "../public/WeaponBase.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Global/public/DebuffManager.h"
+#include "NiagaraFunctionLibrary.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
@@ -97,11 +98,12 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 																, ProjectileStat.DebuffTotalTime, ProjectileStat.DebuffVariable);
 	}
 
-	FTransform TargetTransform = { FRotator(), SweepResult.Location, {1.0f, 1.0f, 1.0f} };
+	FTransform targetTransform = { FRotator(), SweepResult.Location, {1.0f, 1.0f, 1.0f} };
 	if (HitSound != nullptr && HitParticle != nullptr)
 	{
 		const float soundVolume = OwnerCharacterRef->ActorHasTag("Player") ? 1.0f : 0.2;
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, TargetTransform);
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, targetTransform);
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitNiagaraParticle, targetTransform.GetLocation(), targetTransform.GetRotation().Rotator());
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, GetActorLocation(), soundVolume);
 	}
 	Destroy();

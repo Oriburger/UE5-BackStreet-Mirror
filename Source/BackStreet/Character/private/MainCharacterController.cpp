@@ -45,7 +45,7 @@ FRotator AMainCharacterController::GetLastRotationToCursor()
 FVector AMainCharacterController::GetCursorDeprojectionWorldLocation()
 {
 	FVector traceStartLocation, traceEndLocation, mouseDirection;
-	FHitResult hitResult;
+	TArray<FHitResult> hitResultList;
 
 	//Trace의 시작은 마우스의 World Location
 	DeprojectMousePositionToWorld(traceStartLocation, mouseDirection);
@@ -54,10 +54,19 @@ FVector AMainCharacterController::GetCursorDeprojectionWorldLocation()
 	traceEndLocation = traceStartLocation + mouseDirection * 250000.0f;
 
 	//카메라에서 커서의 바닥 위치까지 LineTrace를 진행 -> 실제 커서의 월드 상호작용 위치가 hitResult.Location에 담김
-	GetWorld()->LineTraceSingleByChannel(hitResult, traceStartLocation, traceEndLocation
-		, ECollisionChannel::ECC_Camera);
+	GetWorld()->LineTraceMultiByChannel(hitResultList, traceStartLocation, traceEndLocation
+										, ECollisionChannel::ECC_Camera);
 
-	if (hitResult.bBlockingHit) return hitResult.Location;
+	if (hitResultList.Num())
+	{
+		for (FHitResult& hitResult : hitResultList)
+		{
+			if (hitResult.GetActor()->ActorHasTag("Enemy") || hitResult.GetActor()->ActorHasTag("Ground"))
+			{
+				return hitResult.Location;
+			}
+		}
+	}
 	return FVector();
 }
 

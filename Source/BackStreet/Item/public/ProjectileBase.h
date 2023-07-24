@@ -54,6 +54,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
 		UParticleSystem* HitParticle;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
+		class UNiagaraSystem* HitNiagaraParticle;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
 		struct FProjectileStatStruct ProjectileStat;
 
