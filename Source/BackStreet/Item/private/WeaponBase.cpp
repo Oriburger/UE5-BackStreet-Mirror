@@ -68,7 +68,7 @@ void AWeaponBase::UpdateComboState()
 void AWeaponBase::SetResetComboTimer()
 {
 	GetWorldTimerManager().ClearTimer(ComboTimerHandle);
-	const float delayValue = FMath::Clamp((-1.0f * WeaponStat.WeaponAtkSpeedRate) + 2.0f, 0.25f, 1.5f);
+	const float delayValue = FMath::Clamp((-1.0f * WeaponStat.WeaponAtkSpeedRate) + 2.0f, 0.25f, 10.0f);
 
 	GetWorldTimerManager().SetTimer(ComboTimerHandle, FTimerDelegate::CreateLambda([&]() {
 		WeaponState.ComboCount = 0;
