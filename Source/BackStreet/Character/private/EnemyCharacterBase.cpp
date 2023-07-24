@@ -57,16 +57,12 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 
 	//const float knockBackStrength = 100000.0f;
-	FVector knockBackDirection = GetActorLocation() - DamageCauser->GetActorLocation();
-	knockBackDirection = knockBackDirection.GetSafeNormal();
-	knockBackDirection *= knockBackStrength;
-	knockBackDirection.Z = 0.0f;
+	
 
 	//데미지가 전체 체력의 20% 미만이면 넉백이 출력되지 않는다.
 	if(DamageAmount >= GetCharacterStat().CharacterMaxHP * 0.2f)
 	{
-		GetCharacterMovement()->AddImpulse(knockBackDirection);
-		CharacterState.CharacterActionState = ECharacterActionType::E_Hit;	
+		TakeKnockBack(DamageCauser, DefaultKnockBackStrength);
 	}
 
 	GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, FTimerDelegate::CreateLambda([&]() {

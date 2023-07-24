@@ -98,14 +98,14 @@ protected:
 	UFUNCTION()
 		void SpawnDeathItems();
 
+private:
+	UPROPERTY()
+		float DefaultKnockBackStrength = 2000.0f;
+
 // ---- VFX ---------------------
 public:
 	UFUNCTION(BlueprintCallable)
 		void SetFacialMaterialEffect(bool NewState);
-
-	//테스트 코드 -> 상수화 예정
-	UPROPERTY(EditDefaultsOnly)
-		float knockBackStrength = 100000.0f;
 
 // ---- 그 외 (위젯, 사운드 등) ----
 public:

@@ -61,6 +61,9 @@ public:
 	UFUNCTION()
 		void TakeHeal(float HealAmountRate, bool bIsTimerEvent = false, uint8 BuffDebuffType = 0);
 
+	UFUNCTION(BlueprintCallable)
+		void TakeKnockBack(AActor* Causer, float Strength);
+
 // ------- Character Stat/State ------------------------------
 public:
 	//캐릭터의 상태 정보를 초기화

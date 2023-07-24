@@ -86,6 +86,8 @@ void AMeleeWeaponBase::MeleeAttack()
 			GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(hitResult.GetActor())
 				, OwnerCharacterRef.Get(), WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
 		}
+		//커스텀 이벤트 
+		OnMeleeAttackSuccess(hitResult, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage);
 
 		//내구도를 업데이트
 		UpdateDurabilityState();

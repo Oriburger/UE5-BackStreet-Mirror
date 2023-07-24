@@ -79,6 +79,7 @@ void AWeaponBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
 {
 	if (!IsValid(NewOwnerCharacterRef)) return;
 	OwnerCharacterRef = NewOwnerCharacterRef;
+	SetOwner(OwnerCharacterRef.Get());
 }
 
 void AWeaponBase::PlayEffectSound(USoundCue* EffectSound)
