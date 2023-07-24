@@ -189,7 +189,7 @@ void ACharacterBase::TryAttack()
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
 
 	int32 nextAnimIdx = 0;
-	const float attackSpeed = FMath::Min(1.5f, CharacterStat.CharacterAtkSpeed * WeaponRef->GetWeaponStat().WeaponAtkSpeedRate);
+	const float attackSpeed = FMath::Clamp(CharacterStat.CharacterAtkSpeed * WeaponRef->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
 	TArray<UAnimMontage*> targetAnimList;
 	switch (WeaponRef->GetWeaponStat().WeaponType)
@@ -220,7 +220,7 @@ void ACharacterBase::TryAttack()
 	if (targetAnimList.Num() > 0
 		&& IsValid(targetAnimList[nextAnimIdx]))
 	{
-		PlayAnimMontage(targetAnimList[nextAnimIdx], attackSpeed + 0.75f);
+		PlayAnimMontage(targetAnimList[nextAnimIdx], attackSpeed + 0.25f);
 	}
 }
 

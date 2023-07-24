@@ -3,6 +3,7 @@
 
 #include "../public/MeleeWeaponBase.h"
 #include "../public/WeaponBase.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "../../Global/public/DebuffManager.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
@@ -99,9 +100,18 @@ bool AMeleeWeaponBase::CheckMeleeAttackTarget(FHitResult& hitResult, const TArra
 		{
 			const FVector& beginPoint = MeleePrevTracePointList[tracePointIdx];
 			const FVector& endPoint = TracePositionList[tracePointIdx];
-			GetWorld()->LineTraceSingleByChannel(hitResult, beginPoint, endPoint, ECollisionChannel::ECC_Camera, MeleeLineTraceQueryParams);
+			const float traceHalfHeight = UKismetMathLibrary::Vector_Distance(beginPoint, endPoint);
+			const float traceRadius = 30.0f;
 
-			if (hitResult.bBlockingHit && IsValid(hitResult.GetActor()) //hitResult와 hitActor의 Validity 체크
+			// Use CapsuleTraceByChannel instead of LineTraceSingleByChannel
+			bool bHit = GetWorld()->SweepSingleByChannel(hitResult, beginPoint, endPoint, FQuat::Identity, ECollisionChannel::ECC_Camera
+														, FCollisionShape::MakeCapsule(traceRadius, traceHalfHeight), MeleeLineTraceQueryParams);
+
+			//DrawDebugCapsule(GetWorld(), (beginPoint + endPoint) / 2, traceHalfHeight, traceRadius
+			//				, UKismetMathLibrary::FindLookAtRotation(beginPoint, endPoint).Quaternion()
+			//				, FColor::Yellow, false, 2.0f, 0U, 1.0f);
+
+			if (bHit && IsValid(hitResult.GetActor()) //hitResult와 hitActor의 Validity 체크
 				&& OwnerCharacterRef.Get()->Tags.IsValidIndex(1) //hitActor의 Tags 체크(1)
 				&& hitResult.GetActor()->ActorHasTag("Character") //hitActor의 Type 체크
 				&& !hitResult.GetActor()->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) //공격자와 피격자의 타입이 같은지 체크
@@ -143,7 +153,7 @@ bool AMeleeWeaponBase::TryActivateSlowHitEffect()
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player"))
 	{
 		FTimerHandle attackSlowEffectTimerHandle;
-		const float dilationValue = WeaponState.ComboCount % 5 == 0 ? 0.08 : 0.15;
+		const float dilationValue = WeaponState.ComboCount % 5 == 0 ? 0.08 : 0.15; 
 
 		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), dilationValue);
 		GetWorldTimerManager().SetTimer(attackSlowEffectTimerHandle, FTimerDelegate::CreateLambda([&]() {

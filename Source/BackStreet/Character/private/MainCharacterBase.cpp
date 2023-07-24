@@ -231,7 +231,6 @@ void AMainCharacterBase::TryReload()
 float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
 	if (damageAmount > 0.0f && DamageCauser->ActorHasTag("Enemy"))
 	{
 		SetFacialDamageEffect(true);
@@ -271,7 +270,6 @@ void AMainCharacterBase::Attack()
 	// 공격 델리게이트 호출
 	if (OnAttack.IsBound())
 		OnAttack.Broadcast();
-
 }
 
 
@@ -341,7 +339,7 @@ TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
 		for (UClass* targetClass : targetClassList)
 		{
 			result = (result || UKismetSystemLibrary::SphereOverlapActors(GetWorld(), overlapBeginPos, sphereRadius
-														, { itemObjectType }, targetClass, {}, totalItemList));
+													, { itemObjectType }, targetClass, {}, totalItemList));
 			if (totalItemList.Num() > 0) return totalItemList; //찾는 즉시 반환
 		}
 	}
