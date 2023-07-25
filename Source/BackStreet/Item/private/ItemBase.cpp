@@ -17,7 +17,7 @@ AItemBase::AItemBase()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	this->Tags.Add(FName("Item"));
 
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	RootComponent = RootCollisionVolume = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERE_COLLISION_ROOT"));
 	RootCollisionVolume->SetCollisionProfileName("Item", true);
 

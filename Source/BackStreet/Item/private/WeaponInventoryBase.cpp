@@ -10,6 +10,7 @@
 AWeaponInventoryBase::AWeaponInventoryBase()
 {
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("DEFAULT_SCENE_ROOT"));
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 void AWeaponInventoryBase::Tick(float DeltaTime)

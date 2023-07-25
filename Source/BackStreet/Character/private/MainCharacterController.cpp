@@ -11,6 +11,7 @@ void AMainCharacterController::BeginPlay()
 	Super::BeginPlay();
 
 	this->bShowMouseCursor = true;
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 FRotator AMainCharacterController::GetAimingRotation()
@@ -62,11 +63,9 @@ FVector AMainCharacterController::GetCursorDeprojectionWorldLocation()
 		for (FHitResult& hitResult : hitResultList)
 		{
 			if (!IsValid(hitResult.GetActor()) || hitResult.GetActor()->IsActorBeingDestroyed()) continue;
-				
-			if (hitResult.GetActor()->ActorHasTag("Enemy") || hitResult.GetActor()->ActorHasTag("Ground"))
-			{
-				return hitResult.Location;
-			}
+		
+			return hitResult.Location;
+			
 		}
 	}
 	return FVector();

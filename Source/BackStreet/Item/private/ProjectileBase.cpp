@@ -14,8 +14,6 @@
 // Sets default values
 AProjectileBase::AProjectileBase()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
 
 	RootComponent = SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERE_COLLISION"));
 	SphereCollision->SetCollisionProfileName(TEXT("OverlapAll"));
@@ -33,6 +31,7 @@ AProjectileBase::AProjectileBase()
 	ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
 	ProjectileMovement->MaxSpeed = ProjectileStat.ProjectileSpeed;
 	ProjectileMovement->bAutoActivate = false;
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 // Called when the game starts or when spawned
