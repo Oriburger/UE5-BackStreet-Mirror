@@ -255,20 +255,12 @@ void ACharacterBase::StopAttack()
 
 void ACharacterBase::TryReload()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Reload #0"));
-
 	if (!IsValid(WeaponRef) || WeaponRef->IsActorBeingDestroyed()) return;
-
-	UE_LOG(LogTemp, Warning, TEXT("Reload #1"));
 
 	if (WeaponRef->GetWeaponStat().WeaponType != EWeaponType::E_Shoot
 		&& WeaponRef->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return; 
 	
-	UE_LOG(LogTemp, Warning, TEXT("Reload #2"));
-	
 	if (!Cast<ARangedWeaponBase>(WeaponRef)->GetCanReload()) return;
-
-	UE_LOG(LogTemp, Warning, TEXT("Reload #3"));
 
 	float reloadTime = WeaponRef->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
 	if (AnimAssetData.ReloadAnimMontageList.Num() > 0)

@@ -17,8 +17,9 @@ UENUM(BlueprintType)
 enum class ECharacterDebuffType : uint8
 {
 	E_None				UMETA(DisplayName = "None"),
-	E_Flame				UMETA(DisplayName = "Flame"),
+	E_Temp				UMETA(DisplayName = "Temp"),
 	E_Poison			UMETA(DisplayName = "Poison"),
+	E_Burn				UMETA(DisplayName = "Burn"),
 	E_AttackDown		UMETA(DisplayName = "AttackDown"),
 	E_DefenseDown		UMETA(DisplayName = "DefenseDown"),
 	E_Slow				UMETA(DisplayName = "Slow"),

@@ -80,7 +80,7 @@ public:
 		void ActivateProjectileMovement();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		ACharacterBase* GetOwnerCharacterRef() { return OwnerCharacterRef; }
+		ACharacterBase* GetOwnerCharacterRef() { return OwnerCharacterRef.Get(); }
 
 //------ private 프로퍼티 ------------------
 private: 
@@ -91,8 +91,8 @@ private:
 		AController* SpawnInstigator;
 
 	UPROPERTY()
-		class ACharacterBase* OwnerCharacterRef;
+		TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 
 	UPROPERTY()
-		class ABackStreetGameModeBase* GamemodeRef;
+		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 };
