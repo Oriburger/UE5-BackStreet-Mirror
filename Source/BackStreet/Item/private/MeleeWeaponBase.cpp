@@ -15,14 +15,11 @@ void AMeleeWeaponBase::Attack()
 	Super::Attack();
 
 	this->Tags.Add("Melee");
-
-	//근접 공격이 가능한 무기라면 근접 공격 로직 수행
-	if (WeaponStat.MeleeWeaponStat.bCanMeleeAtk)
-	{
-		PlayEffectSound(AttackSound);
-		GetWorldTimerManager().SetTimer(MeleeAtkTimerHandle, this, &AMeleeWeaponBase::MeleeAttack, 0.01f, true);
-		MeleeTrailParticle->Activate();
-	}
+	
+	PlayEffectSound(AttackSound);
+	GetWorldTimerManager().SetTimer(MeleeAtkTimerHandle, this, &AMeleeWeaponBase::MeleeAttack, 0.01f, true);
+	MeleeTrailParticle->Activate(true);
+	
 	if (MeleeLineTraceQueryParams.GetIgnoredActors().Num() == 0)
 	{
 		MeleeLineTraceQueryParams.AddIgnoredActor(OwnerCharacterRef.Get());

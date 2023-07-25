@@ -31,9 +31,6 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		virtual void UpdateWeaponStat(FWeaponStatStruct NewStat) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		FRangedWeaponStateStruct RangedWeaponState;
-
 //------ VFX ----------------------------------
 protected:
 	//발사 순간에 출력될 이미터 (임시, 추후 데이터 테이블로 관리 예정)
@@ -61,7 +58,7 @@ public:
 
 	//남은 탄환의 개수를 반환 - Stat.ExtraAmmoCount
 	UFUNCTION(BlueprintCallable)
-		int32 GetLeftAmmoCount() { return RangedWeaponState.ExtraAmmoCount + RangedWeaponState.CurrentAmmoCount; };
+		int32 GetLeftAmmoCount() { return WeaponState.RangedWeaponState.ExtraAmmoCount + WeaponState.RangedWeaponState.CurrentAmmoCount; };
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetCanReload();

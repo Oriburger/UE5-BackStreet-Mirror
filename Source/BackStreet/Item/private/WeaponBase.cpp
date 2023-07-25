@@ -47,6 +47,8 @@ void AWeaponBase::InitWeapon()
 		GamemodeRef->UpdateWeaponStatWithID(this, WeaponID);
 	}
 	WeaponState.CurrentDurability = WeaponStat.MaxDurability;
+
+	
 }
 
 void AWeaponBase::RevertWeaponInfo(FWeaponStatStruct OldWeaponStat, FWeaponStateStruct OldWeaponState)
@@ -56,7 +58,7 @@ void AWeaponBase::RevertWeaponInfo(FWeaponStatStruct OldWeaponStat, FWeaponState
 	WeaponState = OldWeaponState;
 }
 
-void AWeaponBase::Attack() { }
+void AWeaponBase::Attack() {}
 
 void AWeaponBase::StopAttack() { }
 
@@ -80,6 +82,18 @@ void AWeaponBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
 	if (!IsValid(NewOwnerCharacterRef)) return;
 	OwnerCharacterRef = NewOwnerCharacterRef;
 	SetOwner(OwnerCharacterRef.Get());
+
+	//Melee Trail Particle 파라미터 초기화
+	if (IsValid(MeleeTrailParticle))
+	{
+		FVector startLocation = WeaponMesh->GetSocketLocation("Mid");  // OwnerCharacterRef.Get()->GetMesh()->GetSocketLocation("Weapon_R"); //
+		FVector endLocation = WeaponMesh->GetSocketLocation("End");	 //OwnerCharacterRef.Get()->GetMesh()->GetSocketLocation("Weapon_Tip");
+
+		MeleeTrailParticle->SetVectorParameter(FName("Start"), startLocation);
+		MeleeTrailParticle->SetVectorParameter(FName("End"), endLocation);
+
+		
+	}
 }
 
 void AWeaponBase::PlayEffectSound(USoundCue* EffectSound)

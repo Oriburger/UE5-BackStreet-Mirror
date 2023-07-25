@@ -16,12 +16,9 @@ void ARangedWeaponBase::Attack()
 
 	this->Tags.Add("Ranged");
 
-	if (WeaponStat.RangedWeaponStat.bHasProjectile)
-	{
-		bool result = TryFireProjectile();
-		PlayEffectSound(result ? AttackSound : AttackFailSound);
-		if (result)	UpdateDurabilityState();
-	}
+	bool result = TryFireProjectile();
+	PlayEffectSound(result ? AttackSound : AttackFailSound);
+	if (result)	UpdateDurabilityState();
 }
 
 void ARangedWeaponBase::StopAttack()
@@ -94,7 +91,11 @@ AProjectileBase* ARangedWeaponBase::CreateProjectile()
 	
 bool ARangedWeaponBase::TryReload()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Reload #5"));
+
 	if (!GetCanReload()) return false;
+
+	UE_LOG(LogTemp, Warning, TEXT("Reload #6"));
 
 	int32 addAmmoCnt = FMath::Min(WeaponState.RangedWeaponState.ExtraAmmoCount, WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine);
 	if (addAmmoCnt + WeaponState.RangedWeaponState.CurrentAmmoCount > WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine)
@@ -109,7 +110,8 @@ bool ARangedWeaponBase::TryReload()
 	
 bool ARangedWeaponBase::GetCanReload()
 {	
-	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo || !WeaponStat.RangedWeaponStat.bHasProjectile) return false;
+	UE_LOG(LogTemp, Warning, TEXT("Left Ammo Count : %d"), GetLeftAmmoCount());
+	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo) return false;
 	if (GetLeftAmmoCount() == 0) return false;
 	return true;
 }
@@ -155,14 +157,22 @@ bool ARangedWeaponBase::TryFireProjectile()
 			//스폰한 발사체가 Valid 하다면 발사
 			if (IsValid(newProjectile))
 			{
-				if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef->GetCharacterStat().bInfinite)
+				if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
 				{
 					WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
 				}
 				newProjectile->ActivateProjectileMovement();
 				SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
 			}
+
+			//탄환이 다 되었다면? 자동으로 제거
+			if (WeaponState.RangedWeaponState.CurrentAmmoCount == 0 && WeaponState.RangedWeaponState.ExtraAmmoCount == 0)
+			{
+				OwnerCharacterRef.Get()->DropWeapon();
+			}
+
 		}), 0.1f * (float)idx, false);
 	}
+	
 	return true;
 }

@@ -34,10 +34,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float WeaponMeleeDamage = 0.2f;
 
-	//근접 공격이 가능한 지? 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bCanMeleeAtk = true;
-
 	//무기는 각 하나의 디버프만 가짐 (임시)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		ECharacterDebuffType DebuffType;
@@ -59,10 +55,6 @@ public:
 	//무한 탄약인지?
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsInfiniteAmmo;
-
-	//공격 시, 발사체가 있는지?
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bHasProjectile = false;
 
 	//무한 탄창인지?
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
