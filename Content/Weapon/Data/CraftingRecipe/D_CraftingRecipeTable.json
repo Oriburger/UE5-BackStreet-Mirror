@@ -5,18 +5,33 @@
     "ResultID" : 0
   },
   {
-    "Name" : "1000",
-    "IngredientsId" : [101,103],
-    "ResultID" : 153
+    "Name" : "200",
+    "IngredientsId" : [100 ,101],
+    "ResultID" : 200
   },
   {
-    "Name" : "1001",
+    "Name" : "201",
+    "IngredientsId" : [100,102],
+    "ResultID" : 201
+  },
+  {
+    "Name" : "202",
     "IngredientsId" : [101,102],
-    "ResultID" : 152
+    "ResultID" : 202
   },
   {
-    "Name" : "1002",
-    "IngredientsId" : [101,100],
-    "ResultID" : 151
+    "Name" : "203",
+    "IngredientsId" : [100,103],
+    "ResultID" : 203
+  },
+  {
+    "Name" : "220",
+    "IngredientsId" : [101,103],
+    "ResultID" : 220
+  },
+  {
+    "Name" : "221",
+    "IngredientsId" : [102,103],
+    "ResultID" : 221
   }
 ]
