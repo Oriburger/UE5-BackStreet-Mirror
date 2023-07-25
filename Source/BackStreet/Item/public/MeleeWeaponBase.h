@@ -14,6 +14,8 @@ class BACKSTREET_API AMeleeWeaponBase : public AWeaponBase
 {
 	GENERATED_BODY()
 public:
+	AMeleeWeaponBase();
+
 	//공격 처리
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;

@@ -15,6 +15,7 @@
 
 ABackStreetGameModeBase::ABackStreetGameModeBase()
 {
+	PrimaryActorTick.bCanEverTick = false;
 	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Character/EnemyCharacter/Data/D_EnemyStatDataTable.D_EnemyStatDataTable"));
 	if (DataTable.Succeeded())
 	{

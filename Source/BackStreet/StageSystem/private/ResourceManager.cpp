@@ -17,6 +17,7 @@
 
 AResourceManager::AResourceManager()
 {
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 void AResourceManager::BeginPlay()
