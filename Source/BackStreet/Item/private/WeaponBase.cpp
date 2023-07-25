@@ -47,8 +47,6 @@ void AWeaponBase::InitWeapon()
 		GamemodeRef->UpdateWeaponStatWithID(this, WeaponID);
 	}
 	WeaponState.CurrentDurability = WeaponStat.MaxDurability;
-
-	
 }
 
 void AWeaponBase::RevertWeaponInfo(FWeaponStatStruct OldWeaponStat, FWeaponStateStruct OldWeaponState)
@@ -86,13 +84,12 @@ void AWeaponBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
 	//Melee Trail Particle 파라미터 초기화
 	if (IsValid(MeleeTrailParticle))
 	{
-		FVector startLocation = WeaponMesh->GetSocketLocation("Mid");  // OwnerCharacterRef.Get()->GetMesh()->GetSocketLocation("Weapon_R"); //
-		FVector endLocation = WeaponMesh->GetSocketLocation("End");	 //OwnerCharacterRef.Get()->GetMesh()->GetSocketLocation("Weapon_Tip");
+		FVector startLocation = WeaponMesh->GetSocketLocation("Mid");
+		FVector endLocation = WeaponMesh->GetSocketLocation("End");
 
 		MeleeTrailParticle->SetVectorParameter(FName("Start"), startLocation);
 		MeleeTrailParticle->SetVectorParameter(FName("End"), endLocation);
-
-		
+		MeleeTrailParticle->SetColorParameter(FName("Color"), MeleeTrailParticleColor);
 	}
 }
 

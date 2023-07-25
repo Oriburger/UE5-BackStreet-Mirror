@@ -72,8 +72,7 @@ void AItemBoxBase::OnItemBoxOpened(AActor* Causer)
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OpenEffectParticle, GetActorLocation(), FRotator(), FVector(1.5f));
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), OpenEffectSound, GetActorLocation());
 	
-	if(!GamemodeRef.Get()->IsLobbyStage())
-		Destroy();
+	if(!ActorHasTag("Tutorial")) Destroy();
 }
 
 void AItemBoxBase::OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
