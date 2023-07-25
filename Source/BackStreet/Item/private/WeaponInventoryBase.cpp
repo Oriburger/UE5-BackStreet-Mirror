@@ -70,7 +70,9 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 	int32 duplicateIdx = CheckWeaponDuplicate(NewWeaponID);
 	if (duplicateIdx != -1)
 	{
-		if (newWeaponStat.RangedWeaponStat.bHasProjectile && !newWeaponStat.RangedWeaponStat.bIsInfiniteAmmo)
+		if ((newWeaponStat.WeaponType == EWeaponType::E_Shoot 
+			|| newWeaponStat.WeaponType == EWeaponType::E_Throw)
+			&& !newWeaponStat.RangedWeaponStat.bIsInfiniteAmmo)
 		{
 			InventoryArray[duplicateIdx].WeaponState.RangedWeaponState.CurrentAmmoCount =
 				InventoryArray[duplicateIdx].WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine;
@@ -206,7 +208,8 @@ bool AWeaponInventoryBase::TryAddAmmoToWeapon(int32 WeaponID, int32 AmmoCount)
 {
 	const int32 targetInventoryIdx = GetWeaponInventoryIdx(WeaponID);
 	if (targetInventoryIdx == -1) return false;
-	if (!InventoryArray[targetInventoryIdx].WeaponStat.RangedWeaponStat.bHasProjectile) return false;
+	if (InventoryArray[targetInventoryIdx].WeaponStat.WeaponType != EWeaponType::E_Shoot
+		&& InventoryArray[targetInventoryIdx].WeaponStat.WeaponType != EWeaponType::E_Throw) return false;
 
 	FInventoryItemInfoStruct& itemInfoRef = InventoryArray[targetInventoryIdx];
 

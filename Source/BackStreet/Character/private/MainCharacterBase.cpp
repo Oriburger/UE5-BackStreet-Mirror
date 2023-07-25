@@ -108,7 +108,6 @@ void AMainCharacterBase::MoveForward(float Value)
 
 	if (Value != 0)
 	{
-		UE_LOG(LogTemp, Log, TEXT("AMainCharacterBase::MoveForward Why???"));
 		if (OnMove.IsBound())
 			OnMove.Broadcast();
 	}
@@ -122,7 +121,6 @@ void AMainCharacterBase::MoveRight(float Value)
 
 	if (Value != 0)
 	{
-		UE_LOG(LogTemp, Log, TEXT("AMainCharacterBase::MoveForward Why???"));
 		if (OnMove.IsBound())
 			OnMove.Broadcast();
 	}

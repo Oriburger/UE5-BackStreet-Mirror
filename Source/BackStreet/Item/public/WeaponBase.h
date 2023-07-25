@@ -35,9 +35,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		UStaticMeshComponent* WeaponMesh;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UNiagaraComponent* MeleeTrailParticle;
-
 //------- 기본 프로퍼티, Action -------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
@@ -112,6 +109,12 @@ public:
 protected:
 	UFUNCTION()
 		void PlayEffectSound(class USoundCue* EffectSound);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraComponent* MeleeTrailParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		FColor MeleeTrailParticleColor;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UParticleSystem* HitEffectParticle;
