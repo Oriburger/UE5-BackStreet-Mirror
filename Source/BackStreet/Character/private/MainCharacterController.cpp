@@ -61,12 +61,8 @@ FVector AMainCharacterController::GetCursorDeprojectionWorldLocation()
 	{
 		for (FHitResult& hitResult : hitResultList)
 		{
-			if (!IsValid(hitResult.GetActor()) || hitResult.GetActor()->IsActorBeingDestroyed()) continue;
-				
-			if (hitResult.GetActor()->ActorHasTag("Enemy") || hitResult.GetActor()->ActorHasTag("Ground"))
-			{
-				return hitResult.Location;
-			}
+			if (!IsValid(hitResult.GetActor()) || hitResult.GetActor()->IsActorBeingDestroyed()) continue;	
+			return hitResult.Location;
 		}
 	}
 	return FVector();

@@ -12,10 +12,13 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY()
-		TArray<FTimerHandle> TimerHandleList;
+		TMap<ECharacterDebuffType, FTimerHandle> TimerHandleMap;
 
 	UPROPERTY()
-		TArray<float> ResetValueHandleList;
+		TMap<ECharacterDebuffType, FTimerHandle> DebuffDamageTimerHandleMap;
+
+	UPROPERTY()
+		TMap<ECharacterDebuffType, float> ResetValueHandleMap;
 };
 
 /** 
@@ -40,7 +43,6 @@ public:
 	UFUNCTION()
 		void ClearDebuffTimer(ECharacterDebuffType DebuffType, class ACharacterBase* Target);
 
-public: 
 	UFUNCTION()
 		void InitDebuffManager(class ABackStreetGameModeBase* NewGamemodeRef);
 
@@ -52,26 +54,23 @@ public:
 	UFUNCTION()
 		bool GetDebuffIsActive(ECharacterDebuffType DebuffType, class ACharacterBase* Target);
 
+private:
 	//디버프 타이머 핸들의 참조자를 반환
 	UFUNCTION()
-		FTimerHandle& GetDebuffTimerHandleRef(ECharacterDebuffType DebuffType, class ACharacterBase* Target);
-
-	//ECharacterDebuffType를 uint16으로 변환
-	UFUNCTION()
-		uint16 GetDebuffInfoListIndex(ECharacterDebuffType DebuffType);
+		FTimerHandle& GetDebuffTimerHandleRef(ECharacterDebuffType DebuffType, class ACharacterBase* Target, bool bIsDebuffDamageTimerMap = false);
 
 	//GetResetValueListRef의 단점 (Invalid List)를 보완하는 함수
 	UFUNCTION()
-		float& GetDebuffResetValueRef(ECharacterDebuffType DebuffType, ACharacterBase* Target);
+		float GetDebuffResetValue(ECharacterDebuffType DebuffType, ACharacterBase* Target);
 
 private:
 	//TimerInfoMap에 Key가 Target.id에 대응하는 Timer Handle List를 Get
 	UFUNCTION()
-		TArray<FTimerHandle>& GetTimerHandleListRef(class ACharacterBase* Target);
+		TMap<ECharacterDebuffType, FTimerHandle>& GetTimerHandleMapRef(class ACharacterBase* Target, bool bIsDebuffDamageTimerMap = false);
 
 	//Target.id에 대응하는 디버프 이전 초기화 값 배열을 Get
 	UFUNCTION()
-		TArray<float>& GetResetValueListRef(class ACharacterBase* Target);
+		TMap<ECharacterDebuffType, float>& GetResetValueMapRef(class ACharacterBase* Target);
 
 	//Target Pawn에 대응하는 디버프 타이머 리스트 생성
 	UFUNCTION()
