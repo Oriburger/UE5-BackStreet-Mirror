@@ -15,6 +15,7 @@ class BACKSTREET_API ARangedWeaponBase : public AWeaponBase
 	GENERATED_BODY()
 
 public:
+	ARangedWeaponBase();
 	//공격 처리
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;

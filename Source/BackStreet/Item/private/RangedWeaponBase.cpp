@@ -10,6 +10,11 @@
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define AUTO_RELOAD_DELAY_VALUE 0.1
 
+ARangedWeaponBase::ARangedWeaponBase()
+{
+	PrimaryActorTick.bCanEverTick = false;
+}
+
 void ARangedWeaponBase::Attack()
 {
 	Super::Attack();

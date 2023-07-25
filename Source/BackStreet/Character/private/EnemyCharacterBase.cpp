@@ -23,6 +23,7 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	FloatingHpBar->SetDrawSize({ 80.0f, 10.0f });
 
 	bUseControllerRotationYaw = false;
+	PrimaryActorTick.bCanEverTick = false;
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	this->Tags.Add("Enemy");

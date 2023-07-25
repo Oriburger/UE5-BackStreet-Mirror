@@ -10,6 +10,11 @@
 #define MAX_LINETRACE_POS_COUNT 6
 #define DEFAULT_MELEE_ATK_RANGE 150.0f
 
+AMeleeWeaponBase::AMeleeWeaponBase()
+{
+	PrimaryActorTick.bCanEverTick = false;
+}
+
 void AMeleeWeaponBase::Attack()
 {
 	Super::Attack();

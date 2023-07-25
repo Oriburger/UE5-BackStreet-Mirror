@@ -10,7 +10,7 @@
 
 AAssetManagerBase::AAssetManagerBase()
 {
-
+	PrimaryActorTick.bCanEverTick = false;
 
 }
 
