@@ -103,6 +103,9 @@ public:
 		TArray<FVector> CraftingBoxSpawnPoint;
 
 	UPROPERTY()
+		TArray<FRotator> CraftingBoxSpawnRotatorPoint;
+
+	UPROPERTY()
 		TArray<class AEnemyCharacterBase*> MonsterList;
 
 	UPROPERTY()

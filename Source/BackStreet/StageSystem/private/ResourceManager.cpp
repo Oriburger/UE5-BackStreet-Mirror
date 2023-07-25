@@ -179,6 +179,7 @@ void AResourceManager::SpawnCraftingBox(class AStageData* Target)
 	if (!IsValid(Target))
 		return;
 	TArray<FVector> craftingBoxSpawnPoint = Target->GetCraftingBoxSpawnPoint();
+	TArray<FRotator> craftingBoxSpawnRotatorPoint = Target->GetCraftingBoxSpawnRotatorPoint();
 	if (craftingBoxSpawnPoint.IsEmpty())
 		return;
 
@@ -186,11 +187,16 @@ void AResourceManager::SpawnCraftingBox(class AStageData* Target)
 	{
 		int32 selectidxA = FMath::RandRange(0, craftingBoxSpawnPoint.Num() - 1);
 		int32 selectidxB = FMath::RandRange(0, craftingBoxSpawnPoint.Num() - 1);
-		FVector temp;
+		FVector tempVector;
+		FRotator tempRotator;
 
-		temp = craftingBoxSpawnPoint[selectidxA];
+		tempVector = craftingBoxSpawnPoint[selectidxA];
 		craftingBoxSpawnPoint[selectidxA] = craftingBoxSpawnPoint[selectidxB];
-		craftingBoxSpawnPoint[selectidxB] = temp;
+		craftingBoxSpawnPoint[selectidxB] = tempVector;
+
+		tempRotator = craftingBoxSpawnRotatorPoint[selectidxA];
+		craftingBoxSpawnRotatorPoint[selectidxA] = craftingBoxSpawnRotatorPoint[selectidxB];
+		craftingBoxSpawnRotatorPoint[selectidxB] = tempRotator;
 
 	}
 
@@ -199,7 +205,7 @@ void AResourceManager::SpawnCraftingBox(class AStageData* Target)
 	ACraftBoxBase* craftBox;
 	if (!CraftingBoxAssets.IsValidIndex(0) || !craftingBoxSpawnPoint.IsValidIndex(0))
 		return;
-	craftBox = GetWorld()->SpawnActor<ACraftBoxBase>(CraftingBoxAssets[0], craftingBoxSpawnPoint[0], FRotator(0, 90, 0), actorSpawnParameters);
+	craftBox = GetWorld()->SpawnActor<ACraftBoxBase>(CraftingBoxAssets[0], craftingBoxSpawnPoint[0], craftingBoxSpawnRotatorPoint[0], actorSpawnParameters);
 	if (!IsValid(craftBox))
 		return;
 	Target->SetCraftingBox(craftBox);
@@ -316,6 +322,10 @@ void AResourceManager::CleanStage(class AStageData* Target)
 	if (IsValid(Target->GetRewardBox()))
 	{
 		Target->GetRewardBox()->Destroy();
+	}
+	if (IsValid(Target->GetCraftingBox()))
+	{
+		Target->GetCraftingBox()->Destroy();
 	}
 	//if (Target->LevelRef != nullptr)
 	//{

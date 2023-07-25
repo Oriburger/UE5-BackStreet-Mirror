@@ -9,6 +9,14 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialAttack);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialMove);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialZoom);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialRoll);
+
+
+
 UCLASS()
 class BACKSTREET_API AMainCharacterBase : public ACharacterBase
 {
@@ -17,6 +25,16 @@ class BACKSTREET_API AMainCharacterBase : public ACharacterBase
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTutorialAttack OnAttack;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTutorialMove OnMove;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTutorialZoom OnZoom;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTutorialRoll OnRoll;
+
 
 //-------- Global -----------------
 public:
