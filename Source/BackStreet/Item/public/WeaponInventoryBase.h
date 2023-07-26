@@ -25,6 +25,9 @@ public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTutorialWeapon OnDropWeapon;
 
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTutorialWeapon OnWeaponIsRemoved;
+
 	//인벤토리가 업데이트 되었을 때 (추가, 정렬, 제거 등)
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDeleInventoryUpdate OnInventoryIsUpdated;

@@ -115,7 +115,7 @@ void AWeaponBase::UpdateDurabilityState()
 		}
 		ClearAllTimerHandle();
 		OwnerCharacterRef.Get()->StopAttack();
-		WeaponDestroyDelegate.ExecuteIfBound();
+		OnWeaponBeginDestroy.Broadcast();
 	}
 }
 

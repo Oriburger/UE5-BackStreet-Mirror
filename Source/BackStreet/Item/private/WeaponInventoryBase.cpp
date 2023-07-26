@@ -28,7 +28,7 @@ void AWeaponInventoryBase::InitInventory()
 	if (!IsValid(GetOwner()) || !GetOwner()->ActorHasTag("Character"))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("AInventory는 CharacterBase 이외의 클래스에서는 소유할 수 없습니다."));
-		return;
+		check(true);
 	}
 	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
@@ -67,7 +67,7 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 	newWeaponState.CurrentDurability = newWeaponStat.MaxDurability;
 	newWeaponState.RangedWeaponState.CurrentAmmoCount = newWeaponStat.RangedWeaponStat.MaxAmmoPerMagazine;
 
-	//먼저, 원거리 무기의 중복 여부를 판단. 중복된다면 Ammo를 추가
+	//먼저, 무기의 중복 여부를 판단. 중복된다면 (원거리 무기인 경우에) Ammo를 추가
 	int32 duplicateIdx = CheckWeaponDuplicate(NewWeaponID);
 	if (duplicateIdx != -1)
 	{
@@ -345,6 +345,6 @@ void AWeaponInventoryBase::SetCurrentWeaponRef(AWeaponBase* NewWeapon)
 {
 	if (!IsValid(NewWeapon)) return;
 	CurrentWeaponRef = NewWeapon;
-	CurrentWeaponRef.Get()->WeaponDestroyDelegate.BindUFunction(this, FName("RemoveCurrentWeapon"));
+	CurrentWeaponRef.Get()->OnWeaponBeginDestroy.AddDynamic(this, &AWeaponInventoryBase::RemoveCurrentWeapon);
 	CurrentWeaponRef.Get()->SetOwnerCharacter(OwnerCharacterRef.Get());
 }

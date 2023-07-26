@@ -7,7 +7,7 @@
 #include "WeaponBase.generated.h"
 #define MAX_AMMO_LIMIT_CNT 2000
 
-DECLARE_DELEGATE(FDelegateWeaponDestroy);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateWeaponDestroy);
 
 UCLASS()
 class BACKSTREET_API AWeaponBase : public AActor
@@ -22,7 +22,8 @@ public:
 	AWeaponBase();
 
 	//Weapon이 파괴되었을때 호출할 이벤트
-	FDelegateWeaponDestroy WeaponDestroyDelegate;
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateWeaponDestroy OnWeaponBeginDestroy;
 
 protected:
 	// Called when the game starts or when spawned
