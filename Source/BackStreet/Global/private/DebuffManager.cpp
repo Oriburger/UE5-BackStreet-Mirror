@@ -92,7 +92,7 @@ void UDebuffManager::ResetStatDebuffState(ECharacterDebuffType DebuffType, AChar
 	{
 	case ECharacterDebuffType::E_Burn:
 	case ECharacterDebuffType::E_Poison:
-		GamemodeRef.Get()->GetWorldTimerManager().ClearTimer(GetTimerHandleMapRef(Target)[DebuffType]);
+		GamemodeRef.Get()->GetWorldTimerManager().ClearTimer(GetDebuffTimerHandleRef(DebuffType, Target, true));
 		break;
 	case ECharacterDebuffType::E_Slow:
 		characterStat.CharacterMoveSpeed /= ResetVal;
