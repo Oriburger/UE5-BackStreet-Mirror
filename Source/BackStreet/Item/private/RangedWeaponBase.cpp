@@ -96,11 +96,7 @@ AProjectileBase* ARangedWeaponBase::CreateProjectile()
 	
 bool ARangedWeaponBase::TryReload()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Reload #5"));
-
 	if (!GetCanReload()) return false;
-
-	UE_LOG(LogTemp, Warning, TEXT("Reload #6"));
 
 	int32 addAmmoCnt = FMath::Min(WeaponState.RangedWeaponState.ExtraAmmoCount, WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine);
 	if (addAmmoCnt + WeaponState.RangedWeaponState.CurrentAmmoCount > WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine)
@@ -115,7 +111,6 @@ bool ARangedWeaponBase::TryReload()
 	
 bool ARangedWeaponBase::GetCanReload()
 {	
-	UE_LOG(LogTemp, Warning, TEXT("Left Ammo Count : %d"), GetLeftAmmoCount());
 	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo) return false;
 	if (GetLeftAmmoCount() == 0) return false;
 	return true;
@@ -142,7 +137,6 @@ bool ARangedWeaponBase::TryFireProjectile()
 		if (OwnerCharacterRef->ActorHasTag("Player"))
 		{
 			GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("탄환이 부족합니다.")), FColor::White);
-			UE_LOG(LogTemp, Warning, TEXT("No Ammo"));
 		}
 
 		//StopAttack의 ResetActionState로 인해 실행이 되지 않는 현상 방지를 위해

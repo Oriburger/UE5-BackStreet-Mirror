@@ -216,8 +216,6 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 {
 	if (!IsValid(TargetActor)) return;
 
-	UE_LOG(LogTemp, Warning, TEXT("Gate#2"));
-
 	if (TargetActor->ActorHasTag("Item"))
 	{
 		Cast<AItemBase>(TargetActor)->OnPlayerBeginPickUp.ExecuteIfBound(this);
@@ -236,7 +234,6 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 	}
 	else if (TargetActor->ActorHasTag("Gate"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Gate#3"));
 		Cast<AGateBase>(TargetActor)->EnterGate(); 
 	}
 }
@@ -314,8 +311,6 @@ void AMainCharacterBase::Die()
 		GamemodeRef.Get()->ClearResourceDelegate.Broadcast();
 		GamemodeRef.Get()->FinishChapterDelegate.Broadcast(true);
 	}
-	//;
-	UE_LOG(LogTemp, Warning, TEXT("DIE DELEGATE"));
 }
 
 void AMainCharacterBase::RotateToCursor()

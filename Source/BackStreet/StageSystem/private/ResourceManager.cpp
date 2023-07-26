@@ -232,7 +232,6 @@ void AResourceManager::DieMonster(AEnemyCharacterBase* Target)
 
 	AStageData* currentStage = Cast<AChapterManagerBase>(GetOwner())->GetCurrentStage();
 	if (!IsValid(currentStage)) return;
-	UE_LOG(LogTemp, Log, TEXT("Call MonsterDie()"));
 
 	currentStage->RemoveMonsterList(Target);
 

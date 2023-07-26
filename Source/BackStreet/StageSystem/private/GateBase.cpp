@@ -113,29 +113,21 @@ void AGateBase::RequestMoveStage()
 	}
 	else
 	{
-		 if (this->ActorHasTag(FName("UP")))
+		if (this->ActorHasTag(FName("UP")))
 		{
-			 MoveStageDelegate.Execute(EDirection::E_UP);
-			
-			UE_LOG(LogTemp, Log, TEXT("Up GateInfo"));
+			MoveStageDelegate.Execute(EDirection::E_UP);
 		}
 		else if (this->ActorHasTag(FName("DOWN")))
 		{
-			 MoveStageDelegate.Execute(EDirection::E_DOWN);
-		
-			UE_LOG(LogTemp, Log, TEXT("Down GateInfo"));
+			MoveStageDelegate.Execute(EDirection::E_DOWN);
 		}
 		else if (this->ActorHasTag(FName("RIGHT")))
 		{
-			 MoveStageDelegate.Execute(EDirection::E_RIGHT);
-		
-			UE_LOG(LogTemp, Log, TEXT("Right GateInfo"));
+			MoveStageDelegate.Execute(EDirection::E_RIGHT);
 		}
 		else if (this->ActorHasTag(FName("LEFT")))
 		{
-			 MoveStageDelegate.Execute(EDirection::E_LEFT);
-			
-			UE_LOG(LogTemp, Log, TEXT("Left GateInfo"));
+			MoveStageDelegate.Execute(EDirection::E_LEFT);
 		}
 
 	}

@@ -31,6 +31,7 @@ void UBTTaskTurnToTargetLocation::InitializeFromAsset(UBehaviorTree& Asset)
     else
     {
         UE_LOG(LogBehaviorTree, Warning, TEXT("BTTask_%s 초기화 실패."), *GetName());
+        check(1);
     }
 }
 

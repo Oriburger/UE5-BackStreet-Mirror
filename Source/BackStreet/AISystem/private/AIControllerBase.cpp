@@ -47,7 +47,7 @@ void AAIControllerBase::ActivateAI()
 {
 	//GetBrainComponent()->ResumeLogic(FString("GameStart")); //Delegate를 통해 Chapter이 초기화 되면, Activate 한다.
 	GetBrainComponent()->StartLogic();
-	UE_LOG(LogTemp, Warning, TEXT("ActivateAI"));
+	//UE_LOG(LogTemp, Warning, TEXT("ActivateAI"));
 }
 
 void AAIControllerBase::DeactivateAI()

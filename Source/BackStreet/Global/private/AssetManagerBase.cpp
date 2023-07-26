@@ -17,7 +17,6 @@ AAssetManagerBase::AAssetManagerBase()
 void AAssetManagerBase::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Log, TEXT("Being Play"));
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	
 }
@@ -51,8 +50,7 @@ TSubclassOf<AEnemyCharacterBase> AAssetManagerBase::GetEnemyWithID(int32 EnemyID
 		break;
 	default:
 		UE_LOG(LogTemp, Log, TEXT("Wrong ID"));
-		return nullptr;
-		break;
+		check(true);
 	}
 	return enemy;
 }

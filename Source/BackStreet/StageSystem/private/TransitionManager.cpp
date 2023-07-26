@@ -204,12 +204,8 @@ void UTransitionManager::SetSpawnPoint(AStageData* Target)
 	ULevelStreaming* levelRef = Target->GetLevelRef();
 	ULevel* level = levelRef->GetLoadedLevel();
 
-	if (!IsValid(level))
-	{
-		UE_LOG(LogTemp, Log, TEXT("UTransitionManager::gggggggggg"));
-		return;
+	check(!IsValid(level));
 
-	}
 	for (AActor* actor : level->Actors)
 	{
 		if (actor->ActorHasTag(FName(TEXT("MonsterSpawnPoint"))))
@@ -334,7 +330,6 @@ void UTransitionManager::TeleportCharacter()
 	}
 	moveLocation = moveLocation + FVector(0, 0, 10);
 	if(IsValid(characterRef)) characterRef->SetActorLocation(moveLocation);
-	else { UE_LOG(LogTemp, Warning, TEXT("Whyrano")); }
 	IsMoveStage = false;
 }
 

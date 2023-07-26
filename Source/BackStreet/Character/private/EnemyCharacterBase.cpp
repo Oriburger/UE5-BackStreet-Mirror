@@ -166,8 +166,6 @@ void AEnemyCharacterBase::SpawnDeathItems()
 			{
 				AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemType, itemID, GetActorLocation() + FMath::VRand() * 10.0f);
 			
-				UE_LOG(LogTemp, Warning, TEXT("Spawned@"));
-			
 				if (IsValid(newItem))
 				{
 					spawnedItemList.Add(newItem);
