@@ -204,7 +204,7 @@ void UTransitionManager::SetSpawnPoint(AStageData* Target)
 	ULevelStreaming* levelRef = Target->GetLevelRef();
 	ULevel* level = levelRef->GetLoadedLevel();
 
-	check(!IsValid(level));
+	check(IsValid(level));
 
 	for (AActor* actor : level->Actors)
 	{
