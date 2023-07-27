@@ -174,7 +174,7 @@ bool UDebuffManager::GetDebuffIsActive(ECharacterDebuffType DebuffType, ACharact
 FTimerHandle& UDebuffManager::GetDebuffTimerHandleRef(ECharacterDebuffType DebuffType, ACharacterBase* Target, bool bIsDotDamageTimer)
 {
 	if (!IsValid(Target) || Target->IsActorBeingDestroyed()) return	TempTimerHandleList[0];
-	TArray<FTimerHandle>& timerHandleListRef = GetTimerHandleListRef(Target, true);
+	TArray<FTimerHandle>& timerHandleListRef = GetTimerHandleListRef(Target, bIsDotDamageTimer);
 	int16 targetListIdx = GetDebuffInfoListIndex(DebuffType);
 	return timerHandleListRef.IsValidIndex(targetListIdx) ? timerHandleListRef[targetListIdx] : TempTimerHandleList[0];
 }
