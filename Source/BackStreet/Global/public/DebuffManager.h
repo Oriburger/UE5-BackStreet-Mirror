@@ -11,11 +11,8 @@ struct FDebuffTimerInfoStruct
 public:
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY()
+		UPROPERTY()
 		TArray<FTimerHandle> TimerHandleList;
-
-	UPROPERTY()
-		TArray<FTimerHandle> DotDamageTimerHandleList;
 
 	UPROPERTY()
 		TArray<float> ResetValueHandleList;
@@ -57,7 +54,7 @@ public:
 
 	//디버프 타이머 핸들의 참조자를 반환
 	UFUNCTION()
-		FTimerHandle& GetDebuffTimerHandleRef(ECharacterDebuffType DebuffType, class ACharacterBase* Target, bool bIsDotDamageTimer = false);
+		FTimerHandle& GetDebuffTimerHandleRef(ECharacterDebuffType DebuffType, class ACharacterBase* Target);
 
 	//ECharacterDebuffType를 uint16으로 변환
 	UFUNCTION()
@@ -70,7 +67,7 @@ public:
 private:
 	//TimerInfoMap에 Key가 Target.id에 대응하는 Timer Handle List를 Get
 	UFUNCTION()
-		TArray<FTimerHandle>& GetTimerHandleListRef(class ACharacterBase* Target, bool bIsDotDamageTimer = false);
+		TArray<FTimerHandle>& GetTimerHandleListRef(class ACharacterBase* Target);
 
 	//Target.id에 대응하는 디버프 이전 초기화 값 배열을 Get
 	UFUNCTION()
