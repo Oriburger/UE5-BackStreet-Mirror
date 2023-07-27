@@ -104,13 +104,17 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 	}
 
 	FTransform targetTransform = { FRotator(), SweepResult.Location, {1.0f, 1.0f, 1.0f} };
-	if (HitSound != nullptr && HitParticle != nullptr)
+	if (HitSound != nullptr)
 	{
 		const float soundVolume = OwnerCharacterRef.Get()->ActorHasTag("Player") ? 1.0f : 0.2;
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, targetTransform);
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitNiagaraParticle, targetTransform.GetLocation(), targetTransform.GetRotation().Rotator());
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, GetActorLocation(), soundVolume);
 	}
+	if(HitParticle != nullptr)
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, targetTransform);
+
+	if(HitNiagaraParticle != nullptr)
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitNiagaraParticle, targetTransform.GetLocation(), targetTransform.GetRotation().Rotator());
+
 	Destroy();
 }
 
