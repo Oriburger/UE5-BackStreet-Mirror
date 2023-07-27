@@ -12,16 +12,16 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY()
-		TMap<ECharacterDebuffType, FTimerHandle> TimerHandleMap;
+		TArray<FTimerHandle> TimerHandleList;
 
 	UPROPERTY()
-		TMap<ECharacterDebuffType, FTimerHandle> DebuffDamageTimerHandleMap;
+		TArray<FTimerHandle> DotDamageTimerHandleList;
 
 	UPROPERTY()
-		TMap<ECharacterDebuffType, float> ResetValueHandleMap;
+		TArray<float> ResetValueHandleList;
 };
 
-/** 
+/**
  */
 UCLASS()
 class BACKSTREET_API UDebuffManager : public UObject
@@ -43,6 +43,7 @@ public:
 	UFUNCTION()
 		void ClearDebuffTimer(ECharacterDebuffType DebuffType, class ACharacterBase* Target);
 
+public:
 	UFUNCTION()
 		void InitDebuffManager(class ABackStreetGameModeBase* NewGamemodeRef);
 
@@ -54,23 +55,26 @@ public:
 	UFUNCTION()
 		bool GetDebuffIsActive(ECharacterDebuffType DebuffType, class ACharacterBase* Target);
 
-private:
 	//디버프 타이머 핸들의 참조자를 반환
 	UFUNCTION()
-		FTimerHandle& GetDebuffTimerHandleRef(ECharacterDebuffType DebuffType, class ACharacterBase* Target, bool bIsDebuffDamageTimerMap = false);
+		FTimerHandle& GetDebuffTimerHandleRef(ECharacterDebuffType DebuffType, class ACharacterBase* Target, bool bIsDotDamageTimer = false);
+
+	//ECharacterDebuffType를 uint16으로 변환
+	UFUNCTION()
+		uint16 GetDebuffInfoListIndex(ECharacterDebuffType DebuffType);
 
 	//GetResetValueListRef의 단점 (Invalid List)를 보완하는 함수
 	UFUNCTION()
-		float GetDebuffResetValue(ECharacterDebuffType DebuffType, ACharacterBase* Target);
+		float& GetDebuffResetValueRef(ECharacterDebuffType DebuffType, ACharacterBase* Target);
 
 private:
 	//TimerInfoMap에 Key가 Target.id에 대응하는 Timer Handle List를 Get
 	UFUNCTION()
-		TMap<ECharacterDebuffType, FTimerHandle>& GetTimerHandleMapRef(class ACharacterBase* Target, bool bIsDebuffDamageTimerMap = false);
+		TArray<FTimerHandle>& GetTimerHandleListRef(class ACharacterBase* Target, bool bIsDotDamageTimer = false);
 
 	//Target.id에 대응하는 디버프 이전 초기화 값 배열을 Get
 	UFUNCTION()
-		TMap<ECharacterDebuffType, float>& GetResetValueMapRef(class ACharacterBase* Target);
+		TArray<float>& GetResetValueListRef(class ACharacterBase* Target);
 
 	//Target Pawn에 대응하는 디버프 타이머 리스트 생성
 	UFUNCTION()
