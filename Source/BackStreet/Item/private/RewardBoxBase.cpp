@@ -38,7 +38,8 @@ void ARewardBoxBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SelectRandomAbilityIdx();
+	//에디터에 지정해주지 않았다면, 
+	if (AbilityType == ECharacterAbilityType::E_None) SelectRandomAbilityIdx();
 	OverlapVolume->OnComponentBeginOverlap.AddDynamic(this, &ARewardBoxBase::OnPlayerBeginOverlap);
 	OverlapVolume->OnComponentEndOverlap.AddDynamic(this, &ARewardBoxBase::OnPlayerEndOverlap);
 	OnPlayerBeginInteract.AddDynamic(this, &ARewardBoxBase::AddAbilityToPlayer);

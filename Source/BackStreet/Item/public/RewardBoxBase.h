@@ -86,8 +86,8 @@ protected:
 /*------- 프로퍼티 ---------------------------*/
 protected:
 	//현재의 보상 타입
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		ECharacterAbilityType AbilityType; 
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
+	ECharacterAbilityType AbilityType;
 
 private:
 	//위젯을 띄운 다음에 true로 바뀌어 상호작용(어빌리티 추가)이 가능
