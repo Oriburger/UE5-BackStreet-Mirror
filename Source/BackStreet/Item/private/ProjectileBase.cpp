@@ -5,6 +5,7 @@
 #include "../public/WeaponBase.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Global/public/DebuffManager.h"
+#include "NiagaraFunctionLibrary.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
@@ -13,8 +14,6 @@
 // Sets default values
 AProjectileBase::AProjectileBase()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
 
 	RootComponent = SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERE_COLLISION"));
 	SphereCollision->SetCollisionProfileName(TEXT("OverlapAll"));
@@ -32,6 +31,7 @@ AProjectileBase::AProjectileBase()
 	ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
 	ProjectileMovement->MaxSpeed = ProjectileStat.ProjectileSpeed;
 	ProjectileMovement->bAutoActivate = false;
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 // Called when the game starts or when spawned
@@ -53,65 +53,76 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef)
 
 		OwnerCharacterRef = NewCharacterRef;
 		SpawnInstigator = OwnerCharacterRef->GetController();
-
-		ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
-		ProjectileMovement->MaxSpeed = ProjectileStat.ProjectileSpeed;
 	}
 }
 
 void AProjectileBase::UpdateProjectileStat(FProjectileStatStruct NewStat)
 {
 	ProjectileStat = NewStat;
+	ProjectileMovement->bIsHomingProjectile = ProjectileStat.bIsHoming; 
+	ProjectileMovement->ProjectileGravityScale = ProjectileStat.GravityScale;
+	ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
+	ProjectileMovement->MaxSpeed = ProjectileStat.ProjectileSpeed;
 }
 
 void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex
 	, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (!ProjectileMovement->IsActive() || (IsValid(GetOwner()) && OtherActor == GetOwner())) return;
-	if (OtherActor->ActorHasTag("Item")) return;
+	if (!OwnerCharacterRef.IsValid() || !GamemodeRef.IsValid()) return;
+	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Item")) return;
 
 	if (OtherActor->ActorHasTag("Character"))
 	{
-		if (OtherActor == OwnerCharacterRef || OtherActor->ActorHasTag(OwnerCharacterRef->Tags[1])) return;
+		if (OtherActor == OwnerCharacterRef.Get() || OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
 
 		//폭발하는 발사체라면?
 		if (ProjectileStat.bIsExplosive)
 		{
 			UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), ProjectileStat.ProjectileDamage, ProjectileStat.ProjectileDamage / 2.0f
-														, SweepResult.Location, 100.0f, 200.0f, 25.0f, nullptr, {}, OwnerCharacterRef, OwnerCharacterRef->Controller);
-			GamemodeRef->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, SweepResult.Location, 100.0f);
+														, SweepResult.Location, 100.0f, 200.0f, 25.0f, nullptr, {}, OwnerCharacterRef.Get(), OwnerCharacterRef.Get()->Controller);
+			GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, SweepResult.Location, 100.0f);
 			
 			if (ExplosionSound != nullptr)
 			{
-				const float soundVolume = OwnerCharacterRef->ActorHasTag("Player") ? 1.0f : 0.2f;
+				const float soundVolume = OwnerCharacterRef.Get()->ActorHasTag("Player") ? 1.0f : 0.2f;
 				UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation(), soundVolume);
 			}
 		}
 		else
 		{
-			const float totalDamage = ProjectileStat.ProjectileDamage * OwnerCharacterRef->GetCharacterStat().CharacterAtkMultiplier;
-			UGameplayStatics::ApplyDamage(OtherActor, totalDamage,SpawnInstigator, OwnerCharacterRef, nullptr);
-			GamemodeRef->PlayCameraShakeEffect(ECameraShakeType::E_Hit, SweepResult.Location, 100.0f);
+			const float totalDamage = ProjectileStat.ProjectileDamage * OwnerCharacterRef.Get()->GetCharacterStat().CharacterAtkMultiplier;
+			UGameplayStatics::ApplyDamage(OtherActor, totalDamage,SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
+			GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Hit, SweepResult.Location, 100.0f);
 		}
-		GamemodeRef->GetGlobalDebuffManagerRef()->SetDebuffTimer(ProjectileStat.DebuffType, Cast<ACharacterBase>(OtherActor), OwnerCharacterRef
-																, ProjectileStat.DebuffTotalTime, ProjectileStat.DebuffVariable);
+
+		if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
+		{
+			GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(ProjectileStat.DebuffType, Cast<ACharacterBase>(OtherActor), OwnerCharacterRef.Get()
+																		, ProjectileStat.DebuffTotalTime, ProjectileStat.DebuffVariable);
+		}
 	}
 
-	FTransform TargetTransform = { FRotator(), SweepResult.Location, {1.0f, 1.0f, 1.0f} };
-	if (HitSound != nullptr && HitParticle != nullptr)
+	FTransform targetTransform = { FRotator(), SweepResult.Location, {1.0f, 1.0f, 1.0f} };
+	if (HitSound != nullptr)
 	{
-		const float soundVolume = OwnerCharacterRef->ActorHasTag("Player") ? 1.0f : 0.2;
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, TargetTransform);
+		const float soundVolume = OwnerCharacterRef.Get()->ActorHasTag("Player") ? 1.0f : 0.2;
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, GetActorLocation(), soundVolume);
 	}
+	if(HitParticle != nullptr)
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, targetTransform);
+
+	if(HitNiagaraParticle != nullptr)
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitNiagaraParticle, targetTransform.GetLocation(), targetTransform.GetRotation().Rotator());
+
 	Destroy();
 }
 
 void AProjectileBase::OnTargetBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!IsValid(OtherActor) || !IsValid(OwnerCharacterRef)) return;
-	if ( OtherActor->ActorHasTag(OwnerCharacterRef->Tags[1])) return;
-	if (!ProjectileStat.bIsHoming || OtherActor == OwnerCharacterRef || !bIsActivated) return;
+	if (!IsValid(OtherActor) || !OwnerCharacterRef.IsValid()) return;
+	if ( OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
+	if (!ProjectileStat.bIsHoming || OtherActor == OwnerCharacterRef.Get() || !bIsActivated) return;
 
 	ProjectileMovement->HomingTargetComponent = OverlappedComp;
 	ProjectileMovement->bIsHomingProjectile = true;

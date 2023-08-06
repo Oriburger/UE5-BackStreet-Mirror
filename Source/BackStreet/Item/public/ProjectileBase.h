@@ -42,7 +42,7 @@ public:
 //------- 기본 프로퍼티 -------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
-		uint8 ProjectileID;
+		int32 ProjectileID;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
@@ -53,6 +53,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
 		UParticleSystem* HitParticle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
+		class UNiagaraSystem* HitNiagaraParticle;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
 		struct FProjectileStatStruct ProjectileStat;
@@ -77,7 +80,7 @@ public:
 		void ActivateProjectileMovement();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		ACharacterBase* GetOwnerCharacterRef() { return OwnerCharacterRef; }
+		ACharacterBase* GetOwnerCharacterRef() { return OwnerCharacterRef.Get(); }
 
 //------ private 프로퍼티 ------------------
 private: 
@@ -88,8 +91,8 @@ private:
 		AController* SpawnInstigator;
 
 	UPROPERTY()
-		class ACharacterBase* OwnerCharacterRef;
+		TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 
 	UPROPERTY()
-		class ABackStreetGameModeBase* GamemodeRef;
+		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 };

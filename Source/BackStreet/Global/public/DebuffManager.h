@@ -11,14 +11,14 @@ struct FDebuffTimerInfoStruct
 public:
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY()
+		UPROPERTY()
 		TArray<FTimerHandle> TimerHandleList;
 
 	UPROPERTY()
 		TArray<float> ResetValueHandleList;
 };
 
-/** 
+/**
  */
 UCLASS()
 class BACKSTREET_API UDebuffManager : public UObject
@@ -40,7 +40,7 @@ public:
 	UFUNCTION()
 		void ClearDebuffTimer(ECharacterDebuffType DebuffType, class ACharacterBase* Target);
 
-public: 
+public:
 	UFUNCTION()
 		void InitDebuffManager(class ABackStreetGameModeBase* NewGamemodeRef);
 

@@ -23,6 +23,7 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	FloatingHpBar->SetDrawSize({ 80.0f, 10.0f });
 
 	bUseControllerRotationYaw = false;
+	PrimaryActorTick.bCanEverTick = false;
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	this->Tags.Add("Enemy");
@@ -57,13 +58,13 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 
 	//const float knockBackStrength = 100000.0f;
-	FVector knockBackDirection = GetActorLocation() - DamageCauser->GetActorLocation();
-	knockBackDirection = knockBackDirection.GetSafeNormal();
-	knockBackDirection *= knockBackStrength;
-	knockBackDirection.Z = 0.0f;
+	
 
-	GetCharacterMovement()->AddImpulse(knockBackDirection);
-	CharacterState.CharacterActionState = ECharacterActionType::E_Hit;
+	//데미지가 전체 체력의 20% 미만이면 넉백이 출력되지 않는다.
+	if(DamageAmount >= GetCharacterStat().CharacterMaxHP * 0.2f)
+	{
+		TakeKnockBack(DamageCauser, DefaultKnockBackStrength);
+	}
 
 	GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, FTimerDelegate::CreateLambda([&]() {
 		if (CharacterState.CharacterActionState == ECharacterActionType::E_Hit)
@@ -164,8 +165,6 @@ void AEnemyCharacterBase::SpawnDeathItems()
 			if(FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
 			{
 				AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemType, itemID, GetActorLocation() + FMath::VRand() * 10.0f);
-			
-				UE_LOG(LogTemp, Warning, TEXT("Spawned@"));
 			
 				if (IsValid(newItem))
 				{

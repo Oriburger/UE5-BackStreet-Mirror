@@ -4,7 +4,7 @@
 #include "Components/AudioComponent.h"
 #include "../../Global/public/DebuffManager.h"
 #include "../../Character/public/CharacterBase.h"
-#include "../../Global/public/BackStreetGameModeBase.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 
 
@@ -56,7 +56,7 @@ void AWeaponBase::RevertWeaponInfo(FWeaponStatStruct OldWeaponStat, FWeaponState
 	WeaponState = OldWeaponState;
 }
 
-void AWeaponBase::Attack() { }
+void AWeaponBase::Attack() {}
 
 void AWeaponBase::StopAttack() { }
 
@@ -68,15 +68,29 @@ void AWeaponBase::UpdateComboState()
 void AWeaponBase::SetResetComboTimer()
 {
 	GetWorldTimerManager().ClearTimer(ComboTimerHandle);
+	const float delayValue = FMath::Clamp((-1.0f * WeaponStat.WeaponAtkSpeedRate) + 2.0f, 0.25f, 10.0f);
+
 	GetWorldTimerManager().SetTimer(ComboTimerHandle, FTimerDelegate::CreateLambda([&]() {
 		WeaponState.ComboCount = 0;
-	}), 0.75f, false);
+	}), delayValue, false);
 }
 
 void AWeaponBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
 {
 	if (!IsValid(NewOwnerCharacterRef)) return;
 	OwnerCharacterRef = NewOwnerCharacterRef;
+	SetOwner(OwnerCharacterRef.Get());
+
+	//Melee Trail Particle 파라미터 초기화
+	if (IsValid(MeleeTrailParticle))
+	{
+		FVector startLocation = WeaponMesh->GetSocketLocation("Mid");
+		FVector endLocation = WeaponMesh->GetSocketLocation("End");
+
+		MeleeTrailParticle->SetVectorParameter(FName("Start"), startLocation);
+		MeleeTrailParticle->SetVectorParameter(FName("End"), endLocation);
+		MeleeTrailParticle->SetColorParameter(FName("Color"), MeleeTrailParticleColor);
+	}
 }
 
 void AWeaponBase::PlayEffectSound(USoundCue* EffectSound)
@@ -101,7 +115,7 @@ void AWeaponBase::UpdateDurabilityState()
 		}
 		ClearAllTimerHandle();
 		OwnerCharacterRef.Get()->StopAttack();
-		WeaponDestroyDelegate.ExecuteIfBound();
+		OnWeaponBeginDestroy.Broadcast();
 	}
 }
 

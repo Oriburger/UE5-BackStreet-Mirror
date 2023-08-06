@@ -1,0 +1,37 @@
+[
+  {
+    "Name" : "0",
+    "IngredientsId" : [0,0],
+    "ResultID" : 0
+  },
+  {
+    "Name" : "200",
+    "IngredientsId" : [100 ,101],
+    "ResultID" : 200
+  },
+  {
+    "Name" : "201",
+    "IngredientsId" : [100,102],
+    "ResultID" : 201
+  },
+  {
+    "Name" : "202",
+    "IngredientsId" : [101,102],
+    "ResultID" : 202
+  },
+  {
+    "Name" : "203",
+    "IngredientsId" : [100,103],
+    "ResultID" : 203
+  },
+  {
+    "Name" : "220",
+    "IngredientsId" : [101,103],
+    "ResultID" : 220
+  },
+  {
+    "Name" : "221",
+    "IngredientsId" : [102,103],
+    "ResultID" : 221
+  }
+]

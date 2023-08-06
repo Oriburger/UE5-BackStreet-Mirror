@@ -13,7 +13,7 @@
 AGateBase::AGateBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	OverlapVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("OverlapVolume"));
@@ -21,6 +21,7 @@ AGateBase::AGateBase()
 	OverlapVolume->SetupAttachment(RootComponent);
 	Mesh->SetupAttachment(RootComponent);
 
+	this->Tags.Add("Gate");
 }
 
 // Called every frame
@@ -34,6 +35,8 @@ void AGateBase::Tick(float DeltaTime)
 void AGateBase::BeginPlay()
 {
 	Super::BeginPlay();
+	if (this->ActorHasTag(FName("Off")))
+		DeactivateGate();
 	
 }
 
@@ -43,7 +46,7 @@ void AGateBase::InitGate()
 	if (!GamemodeRef.IsValid()) return;
 	CheckHaveToActive();
 	if(!MoveStageDelegate.IsBound())
-		MoveStageDelegate.BindUFunction(GamemodeRef.Get()->GetChapterManagerRef()->GetTransitionManager(), FName("MoveStage"));
+		MoveStageDelegate.BindUFunction(GamemodeRef.Get()->GetChapterManagerRef()->GetTransitionManager(), FName("TryMoveStage"));
 	AddGate();
 
 }
@@ -61,6 +64,8 @@ void AGateBase::EnterGate()
 	{
 		InitGate();
 	}
+	if (this->ActorHasTag(FName("Off")))
+		return;
 	RequestMoveStage();
 }
 
@@ -93,23 +98,14 @@ void AGateBase::RequestMoveStage()
 	if (!GamemodeRef.IsValid()) return;
 	if (this->ActorHasTag(FName("StartGate")))
 	{
-		GamemodeRef.Get()->FadeOutDelegate.Broadcast();
-
-		GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
-				MoveStageDelegate.Execute(EDirection::E_Start);
-				GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
-			}), 1.0f, false, 1.0f);
-		
+		MoveStageDelegate.Execute(EDirection::E_Start);
 	}
 	else if (this->ActorHasTag(FName("ChapterGate")))
 	{
 		if (GamemodeRef.Get()->GetChapterManagerRef()->IsChapterClear())
 		{
-			GamemodeRef.Get()->FadeOutDelegate.Broadcast();
-			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
-				MoveStageDelegate.Execute(EDirection::E_Chapter);
-			GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
-				}), 1.0f, false, 1.0f);
+			MoveStageDelegate.Execute(EDirection::E_Chapter);
+			
 		}else
 		{
 			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("미션을 클리어해주세요.")), FColor::White);
@@ -117,41 +113,21 @@ void AGateBase::RequestMoveStage()
 	}
 	else
 	{
-		 if (this->ActorHasTag(FName("UP")))
+		if (this->ActorHasTag(FName("UP")))
 		{
-			 GamemodeRef.Get()->FadeOutDelegate.Broadcast();
-			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
-				MoveStageDelegate.Execute(EDirection::E_UP);
-			GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
-				}), 1.0f, false, 1.0f);
-			UE_LOG(LogTemp, Log, TEXT("Up GateInfo"));
+			MoveStageDelegate.Execute(EDirection::E_UP);
 		}
 		else if (this->ActorHasTag(FName("DOWN")))
 		{
-			 GamemodeRef.Get()->FadeOutDelegate.Broadcast();
-			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
-				MoveStageDelegate.Execute(EDirection::E_DOWN);
-				GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
-				}), 1.0f, false, 1.0f);
-			UE_LOG(LogTemp, Log, TEXT("Down GateInfo"));
+			MoveStageDelegate.Execute(EDirection::E_DOWN);
 		}
 		else if (this->ActorHasTag(FName("RIGHT")))
 		{
-			 GamemodeRef.Get()->FadeOutDelegate.Broadcast();
-			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
-				MoveStageDelegate.Execute(EDirection::E_RIGHT);
-			GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
-				}), 1.0f, false, 1.0f);
-			UE_LOG(LogTemp, Log, TEXT("Right GateInfo"));
+			MoveStageDelegate.Execute(EDirection::E_RIGHT);
 		}
 		else if (this->ActorHasTag(FName("LEFT")))
 		{
-			 GamemodeRef.Get()->FadeOutDelegate.Broadcast();
-			GetWorldTimerManager().SetTimer(FadeOutEffectHandle, FTimerDelegate::CreateLambda([&]() {
-				MoveStageDelegate.Execute(EDirection::E_LEFT);
-				GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
-				}), 1.0f, false, 1.0f);
-			UE_LOG(LogTemp, Log, TEXT("Left GateInfo"));
+			MoveStageDelegate.Execute(EDirection::E_LEFT);
 		}
 
 	}
@@ -165,11 +141,11 @@ void AGateBase::CheckHaveToActive()
 	if (!IsValid(stage)) return;
 
 	if (!this->Tags.IsValidIndex(0)) return;
-	if (this->Tags[0].IsEqual(FName(TEXT("StartGate"))))
+	if (this->Tags.Find(FName(TEXT("StartGate"))) != INDEX_NONE)
 	{
 		return;
 	}
-	else if (this->Tags[0].IsEqual(FName(TEXT("ChapterGate"))))
+	if (this->Tags.Find(FName(TEXT("ChapterGate"))) != INDEX_NONE)
 	{
 		if (stage->GetStageType() != EStageCategoryInfo::E_Boss)
 		{
@@ -195,19 +171,19 @@ void AGateBase::CheckHaveToActive()
 				switch (i)
 				{
 				case 0:
-					if (this->Tags[1].IsEqual(FName(TEXT("UP"))))
+					if (this->Tags.Find(FName(TEXT("UP"))) != INDEX_NONE)
 						Destroy();
 					break;
 				case 1:
-					if (this->Tags[1].IsEqual(FName(TEXT("DOWN"))))
+					if (this->Tags.Find(FName(TEXT("DOWN"))) != INDEX_NONE)
 						Destroy();
 					break;
 				case 2:
-					if (this->Tags[1].IsEqual(FName(TEXT("LEFT"))))
+					if (this->Tags.Find(FName(TEXT("LEFT"))) != INDEX_NONE)
 						Destroy();
 					break;
 				case 3:
-					if (this->Tags[1].IsEqual(FName(TEXT("RIGHT"))))
+					if (this->Tags.Find(FName(TEXT("RIGHT"))) != INDEX_NONE)
 						Destroy();
 					break;
 				default:

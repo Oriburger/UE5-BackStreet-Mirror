@@ -28,7 +28,7 @@ UDebuffManager::UDebuffManager()
 
 bool UDebuffManager::SetDebuffTimer(ECharacterDebuffType DebuffType, ACharacterBase* Target, AActor* Causer, float TotalTime, float Variable)
 {
-	if (!GamemodeRef.IsValid() || !IsValid(Target) || Target->IsActorBeingDestroyed() ) return false;
+	if (!GamemodeRef.IsValid() || !IsValid(Target) || Target->IsActorBeingDestroyed()) return false;
 
 	UE_LOG(LogTemp, Warning, TEXT("TRY #2"));
 
@@ -46,7 +46,7 @@ bool UDebuffManager::SetDebuffTimer(ECharacterDebuffType DebuffType, ACharacterB
 		ResetStatDebuffState(DebuffType, Target, resetValue);
 		resetValue = 0.0f;
 
-		return SetDebuffTimer( DebuffType, Target, Causer, FMath::Min(TotalTime + remainTime, MAX_DEBUFF_TIME), Variable);
+		return SetDebuffTimer(DebuffType, Target, Causer, FMath::Min(TotalTime + remainTime, MAX_DEBUFF_TIME), Variable);
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("TRY #3"));
@@ -58,44 +58,44 @@ bool UDebuffManager::SetDebuffTimer(ECharacterDebuffType DebuffType, ACharacterB
 	switch ((ECharacterDebuffType)DebuffType)
 	{
 		//----데미지 디버프-------------------
-		case ECharacterDebuffType::E_Flame:
-		case ECharacterDebuffType::E_Poison:
-			dotDamageDelegate.BindUFunction(Target, FName("TakeDebuffDamage"), Variable, DebuffType, Causer);\
+	case ECharacterDebuffType::E_Burn:
+	case ECharacterDebuffType::E_Poison:
+		dotDamageDelegate.BindUFunction(Target, FName("TakeDebuffDamage"), Variable, DebuffType, Causer); \
 
 			UE_LOG(LogTemp, Warning, TEXT("%lf"), Variable);
 
-			if (!(GetTimerHandleListRef(Target)).IsValidIndex(DEBUFF_DAMAGE_TIMER_IDX))
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Timer Handle List is Invalid!!! - - - - - "));
-			}
-			else 
-				GamemodeRef.Get()->GetWorldTimerManager().SetTimer((GetTimerHandleListRef(Target))[DEBUFF_DAMAGE_TIMER_IDX], dotDamageDelegate, 1.0f, true);
-			break;
+		if (!(GetTimerHandleListRef(Target)).IsValidIndex(DEBUFF_DAMAGE_TIMER_IDX))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Timer Handle List is Invalid!!! - - - - - "));
+		}
+		else
+			GamemodeRef.Get()->GetWorldTimerManager().SetTimer((GetTimerHandleListRef(Target))[DEBUFF_DAMAGE_TIMER_IDX], dotDamageDelegate, 1.0f, true);
+		break;
 		//----스탯 조정 디버프-------------------
-		case ECharacterDebuffType::E_Stun:
-			Target->StopAttack();
-			characterState.CharacterActionState = ECharacterActionType::E_Stun;
-			Target->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
-			break;
-		case ECharacterDebuffType::E_Slow:
-			characterStat.CharacterMoveSpeed *= Variable;
-			characterStat.CharacterAtkSpeed *= Variable;
-			break;
-		case ECharacterDebuffType::E_AttackDown:
-			characterStat.CharacterAtkMultiplier *= Variable;
-			break;
-		case ECharacterDebuffType::E_DefenseDown:
-			characterStat.CharacterDefense *= Variable;
-			break;
+	case ECharacterDebuffType::E_Stun:
+		Target->StopAttack();
+		characterState.CharacterActionState = ECharacterActionType::E_Stun;
+		Target->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+		break;
+	case ECharacterDebuffType::E_Slow:
+		characterStat.CharacterMoveSpeed *= Variable;
+		characterStat.CharacterAtkSpeed *= Variable;
+		break;
+	case ECharacterDebuffType::E_AttackDown:
+		characterStat.CharacterAtkMultiplier *= Variable;
+		break;
+	case ECharacterDebuffType::E_DefenseDown:
+		characterStat.CharacterDefense *= Variable;
+		break;
 	}
 	TArray<float>& resetValueListRef = GetResetValueListRef(Target);
-	if(resetValueListRef.IsValidIndex(GetDebuffInfoListIndex(DebuffType)))
+	if (resetValueListRef.IsValidIndex(GetDebuffInfoListIndex(DebuffType)))
 		resetValueListRef[GetDebuffInfoListIndex(DebuffType)] = Variable;
 
 	Target->UpdateCharacterStat(characterStat);
 	Target->UpdateCharacterState(characterState);
 
-	timerDelegate.BindUFunction(this, FName("ResetStatDebuffState"),  DebuffType, Target, Variable);
+	timerDelegate.BindUFunction(this, FName("ResetStatDebuffState"), DebuffType, Target, Variable);
 	GamemodeRef.Get()->GetWorldTimerManager().SetTimer(timerHandle, timerDelegate, 0.1f, false, TotalTime);
 
 	return true;
@@ -112,7 +112,7 @@ void UDebuffManager::ResetStatDebuffState(ECharacterDebuffType DebuffType, AChar
 
 	switch ((ECharacterDebuffType)DebuffType)
 	{
-	case ECharacterDebuffType::E_Flame:
+	case ECharacterDebuffType::E_Burn:
 	case ECharacterDebuffType::E_Poison:
 		GamemodeRef.Get()->GetWorldTimerManager().ClearTimer((GetTimerHandleListRef(Target))[DEBUFF_DAMAGE_TIMER_IDX]);
 		break;
@@ -120,7 +120,7 @@ void UDebuffManager::ResetStatDebuffState(ECharacterDebuffType DebuffType, AChar
 		characterStat.CharacterMoveSpeed /= ResetVal;
 		characterStat.CharacterAtkSpeed /= ResetVal;
 		break;
-	case ECharacterDebuffType::E_Stun:	
+	case ECharacterDebuffType::E_Stun:
 		characterState.CharacterActionState = ECharacterActionType::E_Idle;
 		Target->ResetActionState(true);
 		Target->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
@@ -147,7 +147,7 @@ void UDebuffManager::ClearAllDebuffTimer()
 {
 	const uint16 startIdx = 0;
 	const uint16 endIdx = MAX_DEBUFF_IDX;
-	
+
 	for (auto timerListIterator = TimerInfoMap.CreateIterator(); timerListIterator; ++timerListIterator)
 	{
 		TArray<FTimerHandle>& timerListRef = timerListIterator->Value.TimerHandleList;

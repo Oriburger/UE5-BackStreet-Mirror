@@ -94,6 +94,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		TArray<FVector> GetRewardBoxSpawnPoint() { return StageInfo.RewardBoxSpawnPoint; }
 
+	UFUNCTION(BlueprintCallable)
+		TArray<FVector> GetCraftingBoxSpawnPoint() { return StageInfo.CraftingBoxSpawnPoint; }
+
+	UFUNCTION(BlueprintCallable)
+		TArray<FRotator> GetCraftingBoxSpawnRotatorPoint() { return StageInfo.CraftingBoxSpawnRotatorPoint; }
+
 	UFUNCTION()
 		void AddMonsterSpawnPoint(FVector Target) { StageInfo.MonsterSpawnPoints.Add(Target); }
 
@@ -105,6 +111,12 @@ public:
 
 	UFUNCTION()
 		void AddRewardBoxSpawnPoint(FVector Target) { StageInfo.RewardBoxSpawnPoint.Add(Target); }
+
+	UFUNCTION()
+		void AddCraftingBoxSpawnPoint(FVector Target) { StageInfo.CraftingBoxSpawnPoint.Add(Target); }
+
+	UFUNCTION()
+		void AddCraftingBoxSpawnRotatorPoint(FRotator Target) { StageInfo.CraftingBoxSpawnRotatorPoint.Add(Target); }
 
 	UFUNCTION()
 		class AEnemyCharacterBase* GetMonsterIdx(int32 Idx) { return StageInfo.MonsterList[Idx]; }
@@ -131,7 +143,13 @@ public:
 		class ARewardBoxBase* GetRewardBox() { return StageInfo.RewardBoxRef; }
 
 	UFUNCTION()
+		class ACraftBoxBase* GetCraftingBox() { return StageInfo.CraftingBoxRef; }
+
+	UFUNCTION()
 		void SetRewardBox(class ARewardBoxBase* Target) { StageInfo.RewardBoxRef = Target; }
+
+	UFUNCTION()
+		void SetCraftingBox(class ACraftBoxBase* Target) { StageInfo.CraftingBoxRef = Target; }
 
 	UFUNCTION()
 		void AddMonsterList(class AEnemyCharacterBase* Target) { StageInfo.MonsterList.Add(Target); }

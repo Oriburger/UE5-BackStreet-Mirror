@@ -12,6 +12,7 @@
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "../../StageSystem/public/StageData.h"
+#include "../../StageSystem/public/GateBase.h"
 #include "Components/AudioComponent.h"
 #include "Animation/AnimInstance.h"
 #include "TimerManager.h"
@@ -104,12 +105,25 @@ void AMainCharacterBase::MoveForward(float Value)
 {
 	FVector Direction = FVector(1.0f, 0.0f, 0.0f);
 	AddMovementInput(Direction, Value);
+
+	if (Value != 0)
+	{
+		if (OnMove.IsBound())
+			OnMove.Broadcast();
+	}
+
 }
 
 void AMainCharacterBase::MoveRight(float Value)
 {
 	FVector Direction = FVector(0.0f, 1.0f, 0.0f);
 	AddMovementInput(Direction, Value);
+
+	if (Value != 0)
+	{
+		if (OnMove.IsBound())
+			OnMove.Broadcast();
+	}
 }
 
 void AMainCharacterBase::Roll()
@@ -133,7 +147,7 @@ void AMainCharacterBase::Roll()
 		newRotation = { 0, FMath::Atan2(newDirection.Y, newDirection.X) * 180.0f / 3.141592, 0.0f };
 		newRotation.Yaw += 270.0f;
 	}
-
+	
 	//Rotation 리셋 로직
 	GetWorldTimerManager().ClearTimer(RotationResetTimerHandle);
 	ResetRotationToMovement();
@@ -151,8 +165,23 @@ void AMainCharacterBase::Roll()
 	if (AnimAssetData.RollAnimMontageList.Num() > 0
 		&& IsValid(AnimAssetData.RollAnimMontageList[0]))
 	{
-		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.CharacterMoveSpeed / 550.0f));
+		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.CharacterMoveSpeed / 500.0f));
 	}	
+
+	if (OnRoll.IsBound())
+		OnRoll.Broadcast();
+}
+
+void AMainCharacterBase::Dash()
+{
+	if (IsActorBeingDestroyed()) return;
+	
+	LaunchCharacter(FVector(0.0f, 0.0f, 500.0f), false, false);
+	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, FTimerDelegate::CreateLambda([&]() {
+		const FVector& direction = GetMesh()->GetRightVector();
+		float& speed = GetCharacterMovement()->MaxWalkSpeed;
+		GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
+	}), 0.075f, false);
 }
 
 void AMainCharacterBase::ZoomIn(float Value)
@@ -163,6 +192,8 @@ void AMainCharacterBase::ZoomIn(float Value)
 	newLength = newLength < MIN_CAMERA_BOOM_LENGTH ? MIN_CAMERA_BOOM_LENGTH : newLength;
 	newLength = newLength > MAX_CAMERA_BOOM_LENGTH ? MAX_CAMERA_BOOM_LENGTH : newLength;
 	CameraBoom->TargetArmLength = newLength;
+	if (OnZoom.IsBound())
+		OnZoom.Broadcast();
 }
 
 void AMainCharacterBase::TryInvestigate()
@@ -184,7 +215,7 @@ void AMainCharacterBase::TryInvestigate()
 void AMainCharacterBase::Investigate(AActor* TargetActor)
 {
 	if (!IsValid(TargetActor)) return;
-	
+
 	if (TargetActor->ActorHasTag("Item"))
 	{
 		Cast<AItemBase>(TargetActor)->OnPlayerBeginPickUp.ExecuteIfBound(this);
@@ -201,6 +232,10 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 	{
 		Cast<ACraftBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
 	}
+	else if (TargetActor->ActorHasTag("Gate"))
+	{
+		Cast<AGateBase>(TargetActor)->EnterGate(); 
+	}
 }
 
 void AMainCharacterBase::TryReload()
@@ -211,7 +246,6 @@ void AMainCharacterBase::TryReload()
 float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
 	if (damageAmount > 0.0f && DamageCauser->ActorHasTag("Enemy"))
 	{
 		SetFacialDamageEffect(true);
@@ -219,17 +253,13 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 		GetWorld()->GetTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 		GetWorld()->GetTimerManager().SetTimer(FacialEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
 			SetFacialDamageEffect(false);
-		}), 1.0f, false, 1.0f);
+		}), 1.0f, false);
 	}
 	return damageAmount;
 }
 
 void AMainCharacterBase::TryAttack()
 {
-	if (!PlayerControllerRef.Get()->GetActionKeyIsDown("Attack"))
-	{
-		return;
-	}
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 
@@ -242,14 +272,19 @@ void AMainCharacterBase::TryAttack()
 	Super::TryAttack();
 	RotateToCursor();
 
-	//Pressed 상태를 0.2s 뒤에 체크해서 계속 눌려있다면 Attack 반복
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
-	GetWorldTimerManager().SetTimer(AttackLoopTimerHandle, this, &AMainCharacterBase::TryAttack, 1.0f, false, 0.1f);
+	GetWorld()->GetTimerManager().SetTimer(AttackLoopTimerHandle, FTimerDelegate::CreateLambda([&]() {
+		if (!IsActorBeingDestroyed() && PlayerControllerRef.Get()->GetActionKeyIsDown("Attack"))
+			TryAttack(); //0.1초 뒤에 체크해서 계속 눌려있는 상태라면, Attack을 반복한다. 
+	}), 0.1f, false);
 }
 
 void AMainCharacterBase::Attack()
 {
 	Super::Attack();
+	// 공격 델리게이트 호출
+	if (OnAttack.IsBound())
+		OnAttack.Broadcast();
 }
 
 
@@ -276,8 +311,6 @@ void AMainCharacterBase::Die()
 		GamemodeRef.Get()->ClearResourceDelegate.Broadcast();
 		GamemodeRef.Get()->FinishChapterDelegate.Broadcast(true);
 	}
-	//;
-	UE_LOG(LogTemp, Warning, TEXT("DIE DELEGATE"));
 }
 
 void AMainCharacterBase::RotateToCursor()
@@ -306,7 +339,9 @@ void AMainCharacterBase::RotateToCursor()
 TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
 {
 	TArray<AActor*> totalItemList;
-	TArray<UClass*> targetClassList = {AItemBase::StaticClass(), AItemBoxBase::StaticClass(), ARewardBoxBase::StaticClass(), ACraftBoxBase::StaticClass()};
+	TArray<UClass*> targetClassList = {AItemBase::StaticClass(), AItemBoxBase::StaticClass()
+									 , ARewardBoxBase::StaticClass(), ACraftBoxBase::StaticClass()
+									 , AGateBase::StaticClass()};
 	TEnumAsByte<EObjectTypeQuery> itemObjectType = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel3);
 	FVector overlapBeginPos = GetActorLocation() + GetMesh()->GetForwardVector() * 70.0f + GetMesh()->GetUpVector() * -45.0f;
 	
@@ -314,10 +349,10 @@ TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
 	{
 		bool result = false;
 
-		for (auto& targetClass : targetClassList)
+		for (UClass* targetClass : targetClassList)
 		{
 			result = (result || UKismetSystemLibrary::SphereOverlapActors(GetWorld(), overlapBeginPos, sphereRadius
-														, { itemObjectType }, targetClass, {}, totalItemList));
+													, { itemObjectType }, targetClass, {}, totalItemList));
 			if (totalItemList.Num() > 0) return totalItemList; //찾는 즉시 반환
 		}
 	}
@@ -441,4 +476,5 @@ void AMainCharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(RollTimerHandle); 
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
+	GetWorldTimerManager().ClearTimer(DashDelayTimerHandle);
 }

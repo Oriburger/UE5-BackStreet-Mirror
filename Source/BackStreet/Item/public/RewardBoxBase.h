@@ -9,6 +9,7 @@
 #include "RewardBoxBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateInteraction, class AMainCharacterBase*, PlayerCharacterRef);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialAbility);
 
 UCLASS()
 class BACKSTREET_API ARewardBoxBase : public AActor
@@ -17,6 +18,9 @@ class BACKSTREET_API ARewardBoxBase : public AActor
 
 /*-------- Delegate ----------------------- */
 public:
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTutorialAbility OnAddAbility;
+
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateInteraction OnPlayerBeginInteract;
 
@@ -82,9 +86,8 @@ protected:
 /*------- 프로퍼티 ---------------------------*/
 protected:
 	//현재의 보상 타입
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		ECharacterAbilityType AbilityType; 
-
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
+		ECharacterAbilityType AbilityType = ECharacterAbilityType::E_None;
 private:
 	//위젯을 띄운 다음에 true로 바뀌어 상호작용(어빌리티 추가)이 가능
 	UPROPERTY()

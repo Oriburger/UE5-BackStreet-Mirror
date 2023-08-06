@@ -7,7 +7,7 @@
 #include "WeaponBase.generated.h"
 #define MAX_AMMO_LIMIT_CNT 2000
 
-DECLARE_DELEGATE(FDelegateWeaponDestroy);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateWeaponDestroy);
 
 UCLASS()
 class BACKSTREET_API AWeaponBase : public AActor
@@ -22,7 +22,8 @@ public:
 	AWeaponBase();
 
 	//Weapon이 파괴되었을때 호출할 이벤트
-	FDelegateWeaponDestroy WeaponDestroyDelegate;
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateWeaponDestroy OnWeaponBeginDestroy;
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,13 +36,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		UStaticMeshComponent* WeaponMesh;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UNiagaraComponent* MeleeTrailParticle;
-
 //------- 기본 프로퍼티, Action -------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
-		uint8 WeaponID;
+		int32 WeaponID;
 
 	//공격 처리
 	virtual void Attack();
@@ -112,6 +110,12 @@ public:
 protected:
 	UFUNCTION()
 		void PlayEffectSound(class USoundCue* EffectSound);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraComponent* MeleeTrailParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		FColor MeleeTrailParticleColor;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UParticleSystem* HitEffectParticle;

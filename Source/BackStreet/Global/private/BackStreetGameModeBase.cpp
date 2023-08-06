@@ -15,6 +15,7 @@
 
 ABackStreetGameModeBase::ABackStreetGameModeBase()
 {
+	PrimaryActorTick.bCanEverTick = false;
 	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Character/EnemyCharacter/Data/D_EnemyStatDataTable.D_EnemyStatDataTable"));
 	if (DataTable.Succeeded())
 	{
@@ -63,13 +64,14 @@ void ABackStreetGameModeBase::InitializeGame()
 
 void ABackStreetGameModeBase::PlayCameraShakeEffect(ECameraShakeType EffectType, FVector Location, float Radius)
 {
-	if (CameraShakeEffectList.Num() < (uint8)EffectType) return;
+	if (!IsValid(GetWorld()) || !CameraShakeEffectList.IsValidIndex((uint8)EffectType)) return;
+	if (!IsValid(PlayerCharacterRef) || PlayerCharacterRef->IsActorBeingDestroyed()) return;
 
 	Location = Location + (PlayerCharacterRef->FollowingCamera->GetComponentLocation() - PlayerCharacterRef->GetActorLocation());
 	UGameplayStatics::PlayWorldCameraShake(GetWorld(), CameraShakeEffectList[(uint8)EffectType], Location, Radius * 0.75f, Radius * 1.5f, 0.5f);
 }
 
-AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(uint8 ItemType, uint8 ItemID, FVector SpawnLocation)
+AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(uint8 ItemType, int32 ItemID, FVector SpawnLocation)
 {
 	if (!IsValid(GetWorld())) return nullptr;
 	
@@ -98,6 +100,13 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(uint8 ItemType, uint8 ItemI
 		return newItem;
 	}
 	return nullptr;
+}
+
+bool ABackStreetGameModeBase::IsLobbyStage()
+{
+	if (ChapterManager->GetCurrentStage() == ChapterManager->GetLobbyStage()) 
+		return true; 
+	else return false;
 }
 
 void ABackStreetGameModeBase::UpdateCharacterStat(ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat)
@@ -137,7 +146,7 @@ void ABackStreetGameModeBase::UpdateWeaponStat(AWeaponBase* TargetWeapon, FWeapo
 		TargetWeapon->UpdateWeaponStat(NewStat);
 	}
 }
-void ABackStreetGameModeBase::UpdateWeaponStatWithID(AWeaponBase* TargetWeapon, const uint8 WeaponID)
+void ABackStreetGameModeBase::UpdateWeaponStatWithID(AWeaponBase* TargetWeapon, const int32 WeaponID)
 {
 	if (IsValid(TargetWeapon) && IsValid(WeaponStatTable))
 	{
@@ -147,7 +156,7 @@ void ABackStreetGameModeBase::UpdateWeaponStatWithID(AWeaponBase* TargetWeapon, 
 	}
 }
 
-void ABackStreetGameModeBase::UpdateProjectileStatWithID(AProjectileBase* TargetProjectile, const uint8 ProjectileID)
+void ABackStreetGameModeBase::UpdateProjectileStatWithID(AProjectileBase* TargetProjectile, const int32 ProjectileID)
 {
 	if (IsValid(TargetProjectile) && IsValid(ProjectileStatTable))
 	{
@@ -160,7 +169,7 @@ void ABackStreetGameModeBase::UpdateProjectileStatWithID(AProjectileBase* Target
 	}
 }
 
-FWeaponStatStruct ABackStreetGameModeBase::GetWeaponStatInfoWithID(const uint8 WeaponID)
+FWeaponStatStruct ABackStreetGameModeBase::GetWeaponStatInfoWithID(const int32 WeaponID)
 {
 	FString rowName = FString::FromInt(WeaponID);
 	FWeaponStatStruct* newStat = WeaponStatTable->FindRow<FWeaponStatStruct>(FName(rowName), rowName);

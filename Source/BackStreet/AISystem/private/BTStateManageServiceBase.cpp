@@ -33,7 +33,11 @@ void UBTStateManageServiceBase::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 		if (BlackboardRef.IsValid())
 		{
 			FVector spawnLocation = OwnerCharacterRef.Get()->GetActorLocation();
-			spawnLocation.Z = 170.0f;
+			FHitResult hitResult;
+			GetWorld()->LineTraceSingleByChannel(hitResult, spawnLocation, spawnLocation + FVector(0.0f, 0.0f, -10000.0f)
+												, ECollisionChannel::ECC_Camera);
+			spawnLocation.Z = hitResult.Location.Z;
+
 			BlackboardRef.Get()->SetValueAsVector(FName("SpawnLocation"), spawnLocation);
 		}
 	}

@@ -86,7 +86,7 @@ void ACharacterBase::UpdateCharacterStat(FCharacterStatStruct NewStat)
 
 void ACharacterBase::UpdateCharacterState(FCharacterStateStruct NewState)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Debuff State : %d"), NewState.CharacterDebuffState);
+	//UE_LOG(LogTemp, Warning, TEXT("Debuff State : %d"), NewState.CharacterDebuffState);
 	CharacterState = NewState;
 }
 
@@ -118,7 +118,8 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	DamageAmount = DamageAmount - DamageAmount * CharacterStat.CharacterDefense;
+	const float maxDefenseValue = 2.0f; 
+	DamageAmount = FMath::Max(DamageAmount - DamageAmount * (CharacterStat.CharacterDefense / maxDefenseValue), 0.01f);
 	if (DamageAmount <= 0.0f || !IsValid(DamageCauser)) return 0.0f;
 	if (CharacterStat.bIsInvincibility) return 0.0f;
 
@@ -148,6 +149,20 @@ void ACharacterBase::TakeHeal(float HealAmountRate, bool bIsTimerEvent, uint8 Bu
 	CharacterState.CharacterCurrHP += CharacterStat.CharacterMaxHP * HealAmountRate;
 	CharacterState.CharacterCurrHP = FMath::Min(CharacterStat.CharacterMaxHP, CharacterState.CharacterCurrHP);
 	return;
+}
+
+void ACharacterBase::TakeKnockBack(AActor* Causer, float Strength)
+{
+	if (!IsValid(Causer) || Causer->IsActorBeingDestroyed()) return;
+
+	FVector knockBackDirection = GetActorLocation() - Causer->GetActorLocation();
+	knockBackDirection = knockBackDirection.GetSafeNormal();
+	knockBackDirection *= Strength;
+	knockBackDirection.Z = 0.0f;
+
+	//GetCharacterMovement()->AddImpulse(knockBackDirection);
+	LaunchCharacter(knockBackDirection, true, false);
+	CharacterState.CharacterActionState = ECharacterActionType::E_Hit;
 }
 
 void ACharacterBase::Die()
@@ -189,7 +204,7 @@ void ACharacterBase::TryAttack()
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
 
 	int32 nextAnimIdx = 0;
-	const float attackSpeed = FMath::Min(1.5f, CharacterStat.CharacterAtkSpeed * WeaponRef->GetWeaponStat().WeaponAtkSpeedRate);
+	const float attackSpeed = FMath::Clamp(CharacterStat.CharacterAtkSpeed * WeaponRef->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
 	TArray<UAnimMontage*> targetAnimList;
 	switch (WeaponRef->GetWeaponStat().WeaponType)
@@ -220,7 +235,7 @@ void ACharacterBase::TryAttack()
 	if (targetAnimList.Num() > 0
 		&& IsValid(targetAnimList[nextAnimIdx]))
 	{
-		PlayAnimMontage(targetAnimList[nextAnimIdx], attackSpeed + 0.75f);
+		PlayAnimMontage(targetAnimList[nextAnimIdx], attackSpeed + 0.25f);
 	}
 }
 
@@ -242,8 +257,10 @@ void ACharacterBase::StopAttack()
 void ACharacterBase::TryReload()
 {
 	if (!IsValid(WeaponRef) || WeaponRef->IsActorBeingDestroyed()) return;
+
 	if (WeaponRef->GetWeaponStat().WeaponType != EWeaponType::E_Shoot
-		&& WeaponRef->GetWeaponStat().WeaponType != EWeaponType::E_Throw)	return; 
+		&& WeaponRef->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return; 
+	
 	if (!Cast<ARangedWeaponBase>(WeaponRef)->GetCanReload()) return;
 
 	float reloadTime = WeaponRef->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;

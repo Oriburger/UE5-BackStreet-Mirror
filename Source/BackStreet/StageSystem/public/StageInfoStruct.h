@@ -100,6 +100,12 @@ public:
 		TArray<FVector> RewardBoxSpawnPoint;
 
 	UPROPERTY()
+		TArray<FVector> CraftingBoxSpawnPoint;
+
+	UPROPERTY()
+		TArray<FRotator> CraftingBoxSpawnRotatorPoint;
+
+	UPROPERTY()
 		TArray<class AEnemyCharacterBase*> MonsterList;
 
 	UPROPERTY()
@@ -113,6 +119,9 @@ public:
 
 	UPROPERTY()
 		class ARewardBoxBase* RewardBoxRef;
+
+	UPROPERTY()
+		class ACraftBoxBase* CraftingBoxRef;
 
 	UPROPERTY()
 		ULevelStreaming* LevelRef;

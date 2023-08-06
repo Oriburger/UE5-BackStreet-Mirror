@@ -13,7 +13,7 @@ UAbilityManagerBase::UAbilityManagerBase()
 void UAbilityManagerBase::InitAbilityManager(ACharacterBase* NewCharacter)
 {
 	if (!IsValid(NewCharacter)) return;
-	UE_LOG(LogTemp, Warning, TEXT("Initialize Ability Manager Success"));
+	//UE_LOG(LogTemp, Warning, TEXT("Initialize Ability Manager Success"));
 	OwnerCharacterRef = NewCharacter;
 
 	//초기화 시점에 진행

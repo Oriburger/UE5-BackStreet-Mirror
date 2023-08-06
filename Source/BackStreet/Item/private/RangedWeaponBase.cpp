@@ -5,9 +5,15 @@
 #include "../public/ProjectileBase.h"
 #include "../public/WeaponBase.h"
 #include "../../Global/public/DebuffManager.h"
+#include "NiagaraFunctionLibrary.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define AUTO_RELOAD_DELAY_VALUE 0.1
+
+ARangedWeaponBase::ARangedWeaponBase()
+{
+	PrimaryActorTick.bCanEverTick = false;
+}
 
 void ARangedWeaponBase::Attack()
 {
@@ -15,12 +21,9 @@ void ARangedWeaponBase::Attack()
 
 	this->Tags.Add("Ranged");
 
-	if (WeaponStat.RangedWeaponStat.bHasProjectile)
-	{
-		bool result = TryFireProjectile();
-		PlayEffectSound(result ? AttackSound : AttackFailSound);
-		if (result)	UpdateDurabilityState();
-	}
+	bool result = TryFireProjectile();
+	PlayEffectSound(result ? AttackSound : AttackFailSound);
+	if (result)	UpdateDurabilityState();
 }
 
 void ARangedWeaponBase::StopAttack()
@@ -34,7 +37,7 @@ float ARangedWeaponBase::GetAttackRange()
 	if (WeaponStat.WeaponType == EWeaponType::E_Melee
 		|| (!OwnerCharacterRef->GetCharacterStat().bInfinite
 			&& WeaponState.RangedWeaponState.CurrentAmmoCount == 0.0f
-			&& WeaponState.RangedWeaponState.TotalAmmoCount == 0.0f))
+			&& WeaponState.RangedWeaponState.ExtraAmmoCount == 0.0f))
 	{
 		return 150.0f; //매크로나 const 멤버로 수정하기 
 	}
@@ -51,6 +54,15 @@ void ARangedWeaponBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
 	//WeaponStat 업데이트
 } 
+
+void ARangedWeaponBase::SpawnShootNiagaraEffect()
+{
+	if (!OwnerCharacterRef.IsValid()) return;
+
+	FVector spawnLocation = OwnerCharacterRef.Get()->GetActorLocation() + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 50.0f;
+	FRotator spawnRotation = OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation() + FRotator(0.0f, 90.0f, 0.0f);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShootNiagaraEmitter, spawnLocation, spawnRotation);
+}
 
 AProjectileBase* ARangedWeaponBase::CreateProjectile()
 {
@@ -86,34 +98,34 @@ bool ARangedWeaponBase::TryReload()
 {
 	if (!GetCanReload()) return false;
 
-	int32 addAmmoCnt = FMath::Min(WeaponState.RangedWeaponState.TotalAmmoCount, WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine);
+	int32 addAmmoCnt = FMath::Min(WeaponState.RangedWeaponState.ExtraAmmoCount, WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine);
 	if (addAmmoCnt + WeaponState.RangedWeaponState.CurrentAmmoCount > WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine)
 	{
 		addAmmoCnt = (WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine - WeaponState.RangedWeaponState.CurrentAmmoCount);
 	}
 	WeaponState.RangedWeaponState.CurrentAmmoCount += addAmmoCnt;
-	WeaponState.RangedWeaponState.TotalAmmoCount -= addAmmoCnt;
+	WeaponState.RangedWeaponState.ExtraAmmoCount -= addAmmoCnt;
 
 	return true;
 }	
 	
 bool ARangedWeaponBase::GetCanReload()
 {	
-	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo || !WeaponStat.RangedWeaponStat.bHasProjectile) return false;
-	if (WeaponState.RangedWeaponState.TotalAmmoCount == 0 || WeaponState.RangedWeaponState.CurrentAmmoCount == WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine) return false;
+	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo) return false;
+	if (GetLeftAmmoCount() == 0) return false;
 	return true;
 }
 
 void ARangedWeaponBase::AddAmmo(int32 Count)
 {
-	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo || WeaponState.RangedWeaponState.TotalAmmoCount >= MAX_AMMO_LIMIT_CNT) return;
-	WeaponState.RangedWeaponState.TotalAmmoCount = (WeaponState.RangedWeaponState.TotalAmmoCount + Count) % MAX_AMMO_LIMIT_CNT;
+	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo || WeaponState.RangedWeaponState.ExtraAmmoCount >= MAX_AMMO_LIMIT_CNT) return;
+	WeaponState.RangedWeaponState.ExtraAmmoCount = (WeaponState.RangedWeaponState.ExtraAmmoCount + Count) % MAX_AMMO_LIMIT_CNT;
 }
 
 void ARangedWeaponBase::AddMagazine(int32 Count)
 {
-	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo || WeaponState.RangedWeaponState.TotalAmmoCount >= MAX_AMMO_LIMIT_CNT) return;
-	WeaponState.RangedWeaponState.TotalAmmoCount = (WeaponState.RangedWeaponState.TotalAmmoCount + WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine * Count) % MAX_AMMO_LIMIT_CNT;
+	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo || WeaponState.RangedWeaponState.ExtraAmmoCount >= MAX_AMMO_LIMIT_CNT) return;
+	WeaponState.RangedWeaponState.ExtraAmmoCount = (WeaponState.RangedWeaponState.ExtraAmmoCount + WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine * Count) % MAX_AMMO_LIMIT_CNT;
 }
 
 bool ARangedWeaponBase::TryFireProjectile()
@@ -125,7 +137,6 @@ bool ARangedWeaponBase::TryFireProjectile()
 		if (OwnerCharacterRef->ActorHasTag("Player"))
 		{
 			GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("탄환이 부족합니다.")), FColor::White);
-			UE_LOG(LogTemp, Warning, TEXT("No Ammo"));
 		}
 
 		//StopAttack의 ResetActionState로 인해 실행이 되지 않는 현상 방지를 위해
@@ -135,23 +146,32 @@ bool ARangedWeaponBase::TryFireProjectile()
 		}), 1.0f, false, AUTO_RELOAD_DELAY_VALUE);
 		return false;
 	}
-
-	const int32 fireProjectileCnt = FMath::Min(WeaponState.RangedWeaponState.CurrentAmmoCount, OwnerCharacterRef->GetCharacterStat().MaxProjectileCount);
+	const int32 fireProjectileCnt = FMath::Min(WeaponState.RangedWeaponState.CurrentAmmoCount, OwnerCharacterRef.Get()->GetCharacterStat().MaxProjectileCount);
 	for (int idx = 1; idx <= fireProjectileCnt; idx++)
 	{
 		FTimerHandle delayHandle;
+
 		GetWorld()->GetTimerManager().SetTimer(delayHandle, FTimerDelegate::CreateLambda([&]() {
 			AProjectileBase* newProjectile = CreateProjectile();
-		//스폰한 발사체가 Valid 하다면 발사
-		if (IsValid(newProjectile))
-		{
-			if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef->GetCharacterStat().bInfinite)
+			//스폰한 발사체가 Valid 하다면 발사
+			if (IsValid(newProjectile))
 			{
-				WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
+				if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
+				{
+					WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
+				}
+				newProjectile->ActivateProjectileMovement();
+				SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
 			}
-			newProjectile->ActivateProjectileMovement();
-		}
-			}), 0.1f * (float)idx, false);
+
+			//탄환이 다 되었다면? 자동으로 제거
+			if (WeaponState.RangedWeaponState.CurrentAmmoCount == 0 && WeaponState.RangedWeaponState.ExtraAmmoCount == 0)
+			{
+				OwnerCharacterRef.Get()->DropWeapon();
+			}
+
+		}), 0.1f * (float)idx, false);
 	}
+	
 	return true;
 }

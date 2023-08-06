@@ -38,7 +38,8 @@ void ARewardBoxBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SelectRandomAbilityIdx();
+	//에디터에 지정해주지 않았다면, 
+	//if (AbilityType == ECharacterAbilityType::E_None) SelectRandomAbilityIdx();
 	OverlapVolume->OnComponentBeginOverlap.AddDynamic(this, &ARewardBoxBase::OnPlayerBeginOverlap);
 	OverlapVolume->OnComponentEndOverlap.AddDynamic(this, &ARewardBoxBase::OnPlayerEndOverlap);
 	OnPlayerBeginInteract.AddDynamic(this, &ARewardBoxBase::AddAbilityToPlayer);
@@ -79,6 +80,8 @@ void ARewardBoxBase::AddAbilityToPlayer(AMainCharacterBase* PlayerCharacterRef)
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyEffectParticle, GetActorLocation());
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), DestroyEffectSound, GetActorLocation());
 		}
+		if (OnAddAbility.IsBound())
+			OnAddAbility.Broadcast();
 		Destroy();
 	}
 	else
@@ -91,5 +94,6 @@ void ARewardBoxBase::AddAbilityToPlayer(AMainCharacterBase* PlayerCharacterRef)
 void ARewardBoxBase::SelectRandomAbilityIdx()
 {
 	//임시코드!!!!!!! 반드시 변경 필요 - @ljh
-	AbilityType = (ECharacterAbilityType)((uint8)FMath::RandRange(1.0f, 7.0f));
+	UE_LOG(LogTemp, Log, TEXT("Call ARewardBoxBase::SelectRandomAbilityIdx()"));
+	AbilityType = (ECharacterAbilityType)((uint8)FMath::RandRange(1.0f, 16.0f));
 }

@@ -12,10 +12,12 @@
 #include "../../Item/public/RewardBoxBase.h"
 #include "../../Item/public/ItemBoxBase.h"
 #include "../../Item/public/ItemBase.h"
+#include "../../CraftingSystem/public/CraftBoxBase.h"
 #include "Engine/LevelStreaming.h"
 
 AResourceManager::AResourceManager()
 {
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 void AResourceManager::BeginPlay()
@@ -39,11 +41,14 @@ void AResourceManager::SpawnStageActor(class AStageData* Target)
 	{
 			SpawnMonster(Target);
 			SpawnItem(Target);
+			SpawnCraftingBox(Target);
+
 	}
 	else if (Target->GetStageType() == EStageCategoryInfo::E_Boss)
 	{
 			SpawnBossMonster(Target);
 			SpawnItem(Target);
+			SpawnCraftingBox(Target);
 	}
 	BindDelegate(Target);
 	UE_LOG(LogTemp, Log, TEXT("AResourceManager::SpawnStageActor -> Finish Spawn"));
@@ -170,6 +175,44 @@ void AResourceManager::SpawnRewardBox(class AStageData* Target)
 
 }
 
+void AResourceManager::SpawnCraftingBox(class AStageData* Target)
+{
+	if (!IsValid(Target))
+		return;
+	TArray<FVector> craftingBoxSpawnPoint = Target->GetCraftingBoxSpawnPoint();
+	TArray<FRotator> craftingBoxSpawnRotatorPoint = Target->GetCraftingBoxSpawnRotatorPoint();
+	if (craftingBoxSpawnPoint.IsEmpty())
+		return;
+
+	for (int i = 0; i < 100; i++)
+	{
+		int32 selectidxA = FMath::RandRange(0, craftingBoxSpawnPoint.Num() - 1);
+		int32 selectidxB = FMath::RandRange(0, craftingBoxSpawnPoint.Num() - 1);
+		FVector tempVector;
+		FRotator tempRotator;
+
+		tempVector = craftingBoxSpawnPoint[selectidxA];
+		craftingBoxSpawnPoint[selectidxA] = craftingBoxSpawnPoint[selectidxB];
+		craftingBoxSpawnPoint[selectidxB] = tempVector;
+
+		tempRotator = craftingBoxSpawnRotatorPoint[selectidxA];
+		craftingBoxSpawnRotatorPoint[selectidxA] = craftingBoxSpawnRotatorPoint[selectidxB];
+		craftingBoxSpawnRotatorPoint[selectidxB] = tempRotator;
+
+	}
+
+	FActorSpawnParameters actorSpawnParameters;
+	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	ACraftBoxBase* craftBox;
+	if (!CraftingBoxAssets.IsValidIndex(0) || !craftingBoxSpawnPoint.IsValidIndex(0))
+		return;
+	craftBox = GetWorld()->SpawnActor<ACraftBoxBase>(CraftingBoxAssets[0], craftingBoxSpawnPoint[0], craftingBoxSpawnRotatorPoint[0], actorSpawnParameters);
+	if (!IsValid(craftBox))
+		return;
+	Target->SetCraftingBox(craftBox);
+
+}
+
 void AResourceManager::BindDelegate(class AStageData* Target)
 {
 	if (!IsValid(Target))
@@ -189,7 +232,6 @@ void AResourceManager::DieMonster(AEnemyCharacterBase* Target)
 
 	AStageData* currentStage = Cast<AChapterManagerBase>(GetOwner())->GetCurrentStage();
 	if (!IsValid(currentStage)) return;
-	UE_LOG(LogTemp, Log, TEXT("Call MonsterDie()"));
 
 	currentStage->RemoveMonsterList(Target);
 
@@ -280,6 +322,10 @@ void AResourceManager::CleanStage(class AStageData* Target)
 	if (IsValid(Target->GetRewardBox()))
 	{
 		Target->GetRewardBox()->Destroy();
+	}
+	if (IsValid(Target->GetCraftingBox()))
+	{
+		Target->GetCraftingBox()->Destroy();
 	}
 	//if (Target->LevelRef != nullptr)
 	//{
