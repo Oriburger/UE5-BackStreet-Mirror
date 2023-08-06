@@ -119,4 +119,8 @@ void AWeaponBase::UpdateDurabilityState()
 	}
 }
 
-float AWeaponBase::GetAttackRange() { return 0.0f; }
+float AWeaponBase::GetAttackRange() 
+{ 
+	if(WeaponStat.WeaponType == EWeaponType::E_Melee) return 25.0f;
+	return 200.0f;
+}
