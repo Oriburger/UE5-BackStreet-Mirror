@@ -54,10 +54,10 @@ void AItemBase::BeginPlay()
 	OnPlayerBeginPickUp.BindUFunction(this, FName("OnItemPicked"));
 }
 
-void AItemBase::InitItem(EItemCategoryInfo SetType, int32 NewItemID)
+void AItemBase::InitItem(int32 NewItemID)
 {
-	ItemType = SetType;
 	ItemID = NewItemID;
+	//ItemType = ItemID / 1000;
 }
 
 void AItemBase::OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

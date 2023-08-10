@@ -23,9 +23,6 @@ public:
 
 	FDeleSpawnMissionItem Dele_MissionItemSpawned;
 
-	UFUNCTION(BlueprintCallable)
-		static int32 GetTargetItemKey(int32 Type, int32 ItemID) { return Type * 1000 + ItemID; }
-
 // ------ Global, Component ---------------------------------------------
 public:
 	AItemBase();
@@ -55,16 +52,17 @@ public:
 
 // ------ 기본 Info ---------------------------
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay")
 		EItemCategoryInfo ItemType = EItemCategoryInfo::E_None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		int32 ItemID;
+
 // ------ 아이템 기본 로직-------------------------------------
 public:
 	// 외부에서 Init하기위해 Call
 	UFUNCTION()
-		void InitItem(EItemCategoryInfo SetType, int32 NewItemID = 0);
+		void InitItem(int32 NewItemID0);
 
 	//아이템 초기 효과를 출력하고 활성화 시킨다.
 	UFUNCTION(BlueprintImplementableEvent)

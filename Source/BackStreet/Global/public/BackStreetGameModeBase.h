@@ -66,7 +66,7 @@ public:
 		void PlayCameraShakeEffect(ECameraShakeType EffectType, FVector Location, float Radius = 100.0f);
 
 	UFUNCTION()
-		AItemBase* SpawnItemToWorld(uint8 ItemType, int32 ItemID, FVector SpawnLocation);
+		AItemBase* SpawnItemToWorld(int32 ItemID, FVector SpawnLocation);
 
 	UFUNCTION(BlueprintCallable)
 		bool IsLobbyStage();
@@ -147,6 +147,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* StageTypeTable;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		UDataTable* ItemSpawnInfoTable;
 
 // ----- Class Info ------------------------------------ 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
