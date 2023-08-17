@@ -89,8 +89,11 @@ public:
 
 // ------ Asset ----------------------------------------------
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Sound")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
 		class USoundCue* PickSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
+		TSoftObjectPtr<UStaticMesh> MainMeshAsset;
 
 // ------ 참조 프로퍼티 ---------------------------------------------
 private:
