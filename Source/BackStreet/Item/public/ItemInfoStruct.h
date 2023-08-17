@@ -27,6 +27,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		int32 ItemID;
 
+	//아이템명
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FName ItemName;
+
 	//스폰할 아이템 스태틱 메시 정보 저장
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
 		TSoftObjectPtr<UStaticMesh> ItemMesh;

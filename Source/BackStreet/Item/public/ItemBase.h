@@ -55,14 +55,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay")
 		EItemCategoryInfo ItemType = EItemCategoryInfo::E_None;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		int32 ItemID;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		FItemInfoStruct ItemInfo;
 
 // ------ 아이템 기본 로직-------------------------------------
-public:
+public:	
 	// 외부에서 Init하기위해 Call
-	UFUNCTION()
-		void InitItem(int32 NewItemID0);
+	UFUNCTION(BlueprintCallable)
+		void InitItem(FItemInfoStruct NewItemInfo);
 
 	//아이템 초기 효과를 출력하고 활성화 시킨다.
 	UFUNCTION(BlueprintImplementableEvent)
@@ -79,6 +79,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void OnItemPicked(AActor* Causer);
 
+protected:
+	UFUNCTION()
+		void InitializeItemMesh();
+
 // ------ Projectile 로직 ------------------------------------
 public:
 	UFUNCTION()
@@ -94,6 +98,10 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
 		TSoftObjectPtr<UStaticMesh> MainMeshAsset;
+
+	//아이템 데이터 테이블 (에셋 정보 포함)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Asset|Data")
+		UDataTable* ItemDataInfoTable;
 
 // ------ 참조 프로퍼티 ---------------------------------------------
 private:

@@ -123,7 +123,6 @@ TArray<AItemBase*> AItemBoxBase::SpawnItems(int32 TargetSpawnCount)
 			{
 				itemList.Add(newItem);
 				newItem->SetActorScale3D(FVector(0.1));
-				newItem->InitItem(targetItemID);
 
 				//OnMissionItemSpawned.ExecuteIfBound(newItem); //새 아이템을 UMission에 등록
 				

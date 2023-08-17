@@ -88,7 +88,7 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector Spawn
 
 		if (IsValid(newItem))
 		{
-			newItem->InitItem(ItemID);
+			newItem->InitItem(GetItemInfoWithID(ItemID));
 
 			//임시코드!!!!!!!!!!!!!!!! 230704 @ljh
 			if (IsValid(GetChapterManagerRef()) 
@@ -175,6 +175,14 @@ FWeaponStatStruct ABackStreetGameModeBase::GetWeaponStatInfoWithID(const int32 W
 	FWeaponStatStruct* newStat = WeaponStatTable->FindRow<FWeaponStatStruct>(FName(rowName), rowName);
 	if (newStat == nullptr) return FWeaponStatStruct();
 	return *newStat;
+}
+
+FItemInfoStruct ABackStreetGameModeBase::GetItemInfoWithID(const int32 ItemID)
+{
+	FString rowName = FString::FromInt(ItemID);
+	FItemInfoStruct* newInfo = ItemDataInfoTable->FindRow<FItemInfoStruct>(FName(rowName), rowName);
+	if (newInfo == nullptr) return FItemInfoStruct();
+	return *newInfo;
 }
 
 FStageEnemyTypeStruct ABackStreetGameModeBase::GetStageTypeInfoWithRow(uint16 row)

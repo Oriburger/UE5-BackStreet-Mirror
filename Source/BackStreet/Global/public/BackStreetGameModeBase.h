@@ -89,6 +89,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FWeaponStatStruct GetWeaponStatInfoWithID(const int32 WeaponID);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FItemInfoStruct GetItemInfoWithID(const int32 ItemID);
+
 	UFUNCTION()
 		FStageEnemyTypeStruct GetStageTypeInfoWithRow(uint16 rowName);
 
@@ -111,7 +114,7 @@ public:
 		void PopUpClearUI();
 
 
-	// ------ Asset Info ----------------------------
+// ------ Asset Info ----------------------------
 public:
 	//캐릭터의 애니메이션 에셋 데이터를 읽어들임
 	UFUNCTION()
@@ -124,7 +127,11 @@ protected:
 
 	//VFX 에셋 경로 저장 데이터 테이블
 	UPROPERTY(EditDefaultsOnly, Category = "Asset|Data")
-		UDataTable* VFXssetInfoTable;
+		UDataTable* VFXAssetInfoTable;
+
+	//아이템 데이터 테이블 (에셋 정보 포함)
+	UPROPERTY(EditDefaultsOnly, Category = "Asset|Data")
+		UDataTable* ItemDataInfoTable;
 
 private:
 	//추후 따로 뺄 예정

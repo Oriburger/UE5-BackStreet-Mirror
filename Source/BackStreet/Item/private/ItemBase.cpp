@@ -7,6 +7,8 @@
 #include "../../Character/public/CharacterBase.h"
 #include "../../Character/public/MainCharacterBase.h"
 #include "../../Global/public/DebuffManager.h"
+#include "Engine/AssetManager.h"
+#include "Engine/StreamableManager.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 #define DEFAULT_ITEM_LAUNCH_SPEED 500.0f
@@ -54,10 +56,26 @@ void AItemBase::BeginPlay()
 	OnPlayerBeginPickUp.BindUFunction(this, FName("OnItemPicked"));
 }
 
-void AItemBase::InitItem(int32 NewItemID)
+void AItemBase::InitItem(FItemInfoStruct NewItemInfo)
 {
-	ItemID = NewItemID;
-	//ItemType = ItemID / 1000;
+	ItemInfo = NewItemInfo;
+
+	if (!ItemInfo.ItemMesh.IsNull())
+	{
+		TArray<FSoftObjectPath> MeshToStream;
+		MeshToStream.AddUnique(ItemInfo.ItemMesh.ToSoftObjectPath());
+		if (IsValid(ItemInfo.ItemMesh.Get()))
+		{
+			InitializeItemMesh();
+		}
+		else
+		{
+			FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
+			streamable.RequestAsyncLoad(MeshToStream, FStreamableDelegate::CreateUObject(this, &AItemBase::InitializeItemMesh));
+		}
+	}
+	//ItemInfo.ItemName
+	//ItemInfo.OutlineColor
 }
 
 void AItemBase::OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -72,6 +90,15 @@ void AItemBase::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* O
 	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Player")) return;
 
 	//UI Deactivate
+}
+
+void AItemBase::InitializeItemMesh()
+{
+	if (ItemInfo.ItemMesh.IsNull() || !IsValid(ItemInfo.ItemMesh.Get())) return;
+	MeshComponent->SetStaticMesh(ItemInfo.ItemMesh.Get());
+	MeshComponent->SetRelativeLocation(ItemInfo.InitialLocation);
+	MeshComponent->SetRelativeRotation(ItemInfo.InitialRotation);
+	MeshComponent->SetRelativeScale3D(ItemInfo.InitialScale);
 }
 
 void AItemBase::SetLaunchDirection(FVector NewDirection)
