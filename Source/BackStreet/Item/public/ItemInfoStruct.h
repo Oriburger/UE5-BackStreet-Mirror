@@ -24,12 +24,15 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	//아이템 ID
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		int32 ItemID;
 
 	//아이템명
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FName ItemName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		EItemCategoryInfo ItemType;
 
 	//스폰할 아이템 스태틱 메시 정보 저장
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
@@ -50,6 +53,10 @@ public:
 	//아이템 메시의 아웃라인 컬러
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
 		FColor OutlineColor = FColor::Red; 
+	
+	//특정 아이템을 위한 변수 (총알, 미션 등)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		float Variable;
 
 	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 //		FSound

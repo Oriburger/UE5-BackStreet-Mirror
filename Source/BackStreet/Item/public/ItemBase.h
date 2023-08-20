@@ -38,6 +38,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UStaticMeshComponent* MeshComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UStaticMeshComponent* OutlineMeshComponent;
+
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), BlueprintReadWrite)
 		class USphereComponent* ItemTriggerVolume;
 
@@ -53,18 +56,15 @@ public:
 // ------ 기본 Info ---------------------------
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		EItemCategoryInfo ItemType = EItemCategoryInfo::E_None;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay")
 		FItemInfoStruct ItemInfo;
 
 // ------ 아이템 기본 로직-------------------------------------
 public:	
 	// 외부에서 Init하기위해 Call
 	UFUNCTION(BlueprintCallable)
-		void InitItem(FItemInfoStruct NewItemInfo);
+		void InitItem(int32 NewItemID);
 
-	//아이템 초기 효과를 출력하고 활성화 시킨다.
+	//아이템 초기 효과를 출력하고 활성화 시킨다. (타임라인 활용)
 	UFUNCTION(BlueprintImplementableEvent)
 		void ActivateItem();
 
@@ -76,12 +76,15 @@ public:
 		void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	
 	//캐릭터가 Pick이벤트를 호출했다면
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION()
 		void OnItemPicked(AActor* Causer);
 
 protected:
 	UFUNCTION()
 		void InitializeItemMesh();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FItemInfoStruct GetItemInfoWithID(const int32 ItemID);
 
 // ------ Projectile 로직 ------------------------------------
 public:
@@ -96,12 +99,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
 		class USoundCue* PickSound;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
-		TSoftObjectPtr<UStaticMesh> MainMeshAsset;
-
 	//아이템 데이터 테이블 (에셋 정보 포함)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Asset|Data")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
 		UDataTable* ItemDataInfoTable;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
+		UNiagaraSystem* ItemPickEffect;
 
 // ------ 참조 프로퍼티 ---------------------------------------------
 private:

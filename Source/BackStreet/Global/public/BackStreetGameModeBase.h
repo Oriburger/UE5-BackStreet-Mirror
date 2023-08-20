@@ -86,11 +86,9 @@ public:
 	UFUNCTION()
 		void UpdateProjectileStatWithID(class AProjectileBase* TargetProjectile, const int32 ProjectileID);
 
+	//제거 예정
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FWeaponStatStruct GetWeaponStatInfoWithID(const int32 WeaponID);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FItemInfoStruct GetItemInfoWithID(const int32 ItemID);
 
 	UFUNCTION()
 		FStageEnemyTypeStruct GetStageTypeInfoWithRow(uint16 rowName);
@@ -129,10 +127,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Asset|Data")
 		UDataTable* VFXAssetInfoTable;
 
-	//아이템 데이터 테이블 (에셋 정보 포함)
-	UPROPERTY(EditDefaultsOnly, Category = "Asset|Data")
-		UDataTable* ItemDataInfoTable;
-
 private:
 	//추후 따로 뺄 예정
 	UPROPERTY()
@@ -144,7 +138,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* EnemyStatTable;
 	
-	//무기 스탯 테이블
+	//무기 스탯 테이블, 제거예정
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* WeaponStatTable;
 
