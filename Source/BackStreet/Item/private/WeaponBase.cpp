@@ -30,23 +30,20 @@ AWeaponBase::AWeaponBase()
 void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
-	InitWeapon();
+	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
 void AWeaponBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
 }
 
-void AWeaponBase::InitWeapon()
+void AWeaponBase::InitWeapon()//FWeaponStatStruct NewStat)
 {
-	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-
-	//무기 스탯이 초기화가 되지 않았다면
-	if (WeaponStat.WeaponName == FName(""))
-	{
-		GamemodeRef->UpdateWeaponStatWithID(this, WeaponID);
-	}
+	//Stat, State 초기화 
+	//UpdateWeaponStat(NewStat);	
 	WeaponState.CurrentDurability = WeaponStat.MaxDurability;
+
+	//에셋 초기화
 }
 
 void AWeaponBase::RevertWeaponInfo(FWeaponStatStruct OldWeaponStat, FWeaponStateStruct OldWeaponState)

@@ -55,7 +55,7 @@ public:
 
 // ------ 기본 Info ---------------------------
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay")
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
 		FItemInfoStruct ItemInfo;
 
 // ------ 아이템 기본 로직-------------------------------------

@@ -3,17 +3,18 @@
 		"Name": 31100,
 		"ItemName": "야구방망이",
 		"ItemID": 31100,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/BasicWeapon/Bat/SM_Bat.SM_Bat",
 		"InitialLocation":
 		{
 			"X": -80,
 			"Y": 0,
-			"Z": 20
+			"Z": 10
 		},
 		"InitialRotation":
 		{
-			"Pitch": 0,
-			"Yaw": -90,
+			"Pitch": -90,
+			"Yaw": 0,
 			"Roll": 0
 		},
 		"InitialScale":
@@ -34,17 +35,18 @@
 		"Name": 31110,
 		"ItemName": "테이저스틱",
 		"ItemID": 31110,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/BasicWeapon/TaserStick/SM_TaserStick.SM_TaserStick",
 		"InitialLocation":
 		{
 			"X": -110,
 			"Y": 0,
-			"Z": 15
+			"Z": 5
 		},
 		"InitialRotation":
 		{
-			"Pitch": 0,
-			"Yaw": -90,
+			"Pitch": -90,
+			"Yaw": 0,
 			"Roll": 0
 		},
 		"InitialScale":
@@ -65,6 +67,7 @@
 		"Name": 31120,
 		"ItemName": "케틀벨",
 		"ItemID": 31120,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/BasicWeapon/KettleBell/SM_KettleBell.SM_KettleBell",
 		"InitialLocation":
 		{
@@ -75,8 +78,8 @@
 		"InitialRotation":
 		{
 			"Pitch": 0,
-			"Yaw": 0,
-			"Roll": 90
+			"Yaw": 90	,
+			"Roll": 0
 		},
 		"InitialScale":
 		{
@@ -96,18 +99,19 @@
 		"Name": 31130,
 		"ItemName": "유리병",
 		"ItemID": 31130,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/BasicWeapon/GlassBottle/SM_GlassBottle.SM_GlassBottle",
 		"InitialLocation":
 		{
-			"X": -70,
+			"X": 70,
 			"Y": 0,
-			"Z": 40
+			"Z": 15
 		},
 		"InitialRotation":
 		{
-			"Pitch": 0,
-			"Yaw": 90,
-			"Roll": 180
+			"Pitch": 90,
+			"Yaw": 0,
+			"Roll": 0
 		},
 		"InitialScale":
 		{
@@ -127,11 +131,12 @@
 		"Name": 31200,
 		"ItemName": "에너지블래스터",
 		"ItemID": 31200,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/BasicWeapon/EnergyBlaster/SM_EnergyBlaster.SM_EnergyBlaster",
 		"InitialLocation":
 		{
-			"X": 0,
-			"Y": -50,
+			"X": -50,
+			"Y": 0,
 			"Z": 15
 		},
 		"InitialRotation":
@@ -155,20 +160,21 @@
 		}
 	},
 	{
-		"Name": 11210,
+		"Name": 31210,
 		"ItemName": "BB탄총",
-		"ItemID": 11210,
+		"ItemID": 31210,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/BasicWeapon/BBGun/SM_BBGun.SM_BBGun",
 		"InitialLocation":
 		{
 			"X": -30,
-			"Y": 0,
+			"Y": -30,
 			"Z": 15
 		},
 		"InitialRotation":
 		{
-			"Pitch": 0,
-			"Yaw": -90,
+			"Pitch": -90,
+			"Yaw": 0,
 			"Roll": 0
 		},
 		"InitialScale":
@@ -189,12 +195,13 @@
 		"Name": 31300,
 		"ItemName": "탄산음료캔",
 		"ItemID": 31300,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/BasicWeapon/BeverageCan/SM_Can.SM_Can",
 		"InitialLocation":
 		{
 			"X": 0,
 			"Y": 0,
-			"Z": 15
+			"Z": 0
 		},
 		"InitialRotation":
 		{
@@ -204,9 +211,9 @@
 		},
 		"InitialScale":
 		{
-			"X": 0.7,
-			"Y": 0.7,
-			"Z": 0.7
+			"X": 0.75,
+			"Y": 0.75,
+			"Z": 0.75
 		},
 		"OutlineColor":
 		{
@@ -220,12 +227,13 @@
 		"Name": 31310,
 		"ItemName": "풍선껌",
 		"ItemID": 31310,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/BasicWeapon/Gum/SM_BubbleGum.SM_BubbleGum",
 		"InitialLocation":
 		{
 			"X": 0,
 			"Y": 0,
-			"Z": 15
+			"Z": -10
 		},
 		"InitialRotation":
 		{
@@ -251,24 +259,25 @@
 		"Name": 31320,
 		"ItemName": "담배꽁초",
 		"ItemID": 31320,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Asset/Construction/Abd_apt/Megascans/3D_Assets/DirtyCigaretteBox/SM_CigaretteBox01.SM_CigaretteBox01",
 		"InitialLocation":
 		{
-			"X": -80,
-			"Y": 0,
-			"Z": 20
+			"X": 0,
+			"Y": 25,
+			"Z": 5
 		},
 		"InitialRotation":
 		{
 			"Pitch": 0,
 			"Yaw": 0,
-			"Roll": 0
+			"Roll": -90
 		},
 		"InitialScale":
 		{
-			"X": 1.5,
-			"Y": 1.5,
-			"Z": 1.5
+			"X": 5,
+			"Y": 5,
+			"Z": 5
 		},
 		"OutlineColor":
 		{
@@ -282,17 +291,18 @@
 		"Name": 32100,
 		"ItemName": "양날광선검",
 		"ItemID": 32100,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/CombinationWeapon/DoubleBlade/SM_DoubleBlade.SM_DoubleBlade",
 		"InitialLocation":
 		{
 			"X": -20,
 			"Y": 0,
-			"Z": 15
+			"Z": 5
 		},
 		"InitialRotation":
 		{
-			"Pitch": 0,
-			"Yaw": -90,
+			"Pitch": -90,
+			"Yaw": 0,
 			"Roll": 0
 		},
 		"InitialScale":
@@ -313,17 +323,18 @@
 		"Name": 32110,
 		"ItemName": "메이스",
 		"ItemID": 32110,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/CombinationWeapon/Mace/SM_Mace.SM_Mace",
 		"InitialLocation":
 		{
 			"X": -80,
 			"Y": 0,
-			"Z": 20
+			"Z": 10
 		},
 		"InitialRotation":
 		{
-			"Pitch": 0,
-			"Yaw": -90,
+			"Pitch": -90,
+			"Yaw":  0,
 			"Roll": 0
 		},
 		"InitialScale":
@@ -344,18 +355,19 @@
 		"Name": 32120,
 		"ItemName": "무쇠망치",
 		"ItemID": 32120,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/CombinationWeapon/IronHammer/SM_IronHammer1.SM_IronHammer1",
 		"InitialLocation":
 		{
 			"X": -100,
 			"Y": 0,
-			"Z": 70
+			"Z": 15
 		},
 		"InitialRotation":
 		{
 			"Pitch": 0,
-			"Yaw": -90,
-			"Roll": 0
+			"Yaw": 90,
+			"Roll": -80
 		},
 		"InitialScale":
 		{
@@ -375,6 +387,7 @@
 		"Name": 32130,
 		"ItemName": "유리병 방망이",
 		"ItemID": 32130,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/CombinationWeapon/GlassBat/SM_GlassBottleBat.SM_GlassBottleBat",
 		"InitialLocation":
 		{
@@ -384,8 +397,8 @@
 		},
 		"InitialRotation":
 		{
-			"Pitch": 0,
-			"Yaw": -90,
+			"Pitch": -90,
+			"Yaw": 0,
 			"Roll": 0
 		},
 		"InitialScale":
@@ -406,6 +419,7 @@
 		"Name": 32131,
 		"ItemName": "깨진 유리병 방망이",
 		"ItemID": 32131,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/CombinationWeapon/GlassBat/SM_GlassBottleBat.SM_GlassBottleBat",
 		"InitialLocation":
 		{
@@ -415,8 +429,8 @@
 		},
 		"InitialRotation":
 		{
-			"Pitch": 0,
-			"Yaw": -90,
+			"Pitch": -90,
+			"Yaw": 0,
 			"Roll": 0
 		},
 		"InitialScale":
@@ -437,16 +451,17 @@
 		"Name": 32300,
 		"ItemName": "EMP바이알",
 		"ItemID": 32300,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/CombinationWeapon/EMPBombard/SM_EMPVial.SM_EMPVial",
 		"InitialLocation":
 		{
 			"X": 0,
 			"Y": 0,
-			"Z": 50
+			"Z": 15
 		},
 		"InitialRotation":
 		{
-			"Pitch": 0,
+			"Pitch": -90,
 			"Yaw": 0,
 			"Roll": 0
 		},
@@ -468,12 +483,13 @@
 		"Name": 32310,
 		"ItemName": "봄바드",
 		"ItemID": 32310,
+		"ItemType": "E_Weapon",
 		"ItemMesh": "/Game/Weapon/StaticMesh/CombinationWeapon/Bombard/Bombard1.Bombard1",
 		"InitialLocation":
 		{
 			"X": 0,
 			"Y": 0,
-			"Z": 15
+			"Z": 0
 		},
 		"InitialRotation":
 		{

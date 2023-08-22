@@ -24,7 +24,7 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	//아이템 ID
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
 		int32 ItemID;
 
 	//아이템명
@@ -51,9 +51,12 @@ public:
 		FVector InitialScale;
 
 	//아이템 메시의 아웃라인 컬러
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance|Outline")
 		FColor OutlineColor = FColor::Red; 
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance|Outline")
+		TSoftObjectPtr<UMaterialInstanceDynamic> OutlineMaterial;
+
 	//특정 아이템을 위한 변수 (총알, 미션 등)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		float Variable;

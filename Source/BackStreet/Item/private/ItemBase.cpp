@@ -29,6 +29,9 @@ AItemBase::AItemBase()
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_MESH"));
 	MeshComponent->SetupAttachment(RootComponent);
 
+	OutlineMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_OUTLINE_MESH"));
+	OutlineMeshComponent->SetupAttachment(MeshComponent);
+
 	InfoWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("ITEM_INFO_WIDGET"));
 	InfoWidgetComponent->SetupAttachment(MeshComponent);
 	InfoWidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 50.0f));
@@ -47,7 +50,7 @@ AItemBase::AItemBase()
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("PROJECTILE_MOVEMENT"));
 	ProjectileMovement->InitialSpeed = DEFAULT_ITEM_LAUNCH_SPEED;
 	ProjectileMovement->MaxSpeed = DEFAULT_ITEM_LAUNCH_SPEED;
-	ProjectileMovement->bAutoActivate = false;
+	ProjectileMovement->bAutoActivate = false;	
 }
 
 // Called when the game starts or when spawned
@@ -57,17 +60,21 @@ void AItemBase::BeginPlay()
 
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 	OnPlayerBeginPickUp.BindUFunction(this, FName("OnItemPicked"));
+
+	ActivateItem();
 }
 
 void AItemBase::InitItem(int32 NewItemID)
 {
 	ItemInfo = GetItemInfoWithID(NewItemID);
+
 	if (ItemInfo.ItemID == 0) return;
 
 	if (!ItemInfo.ItemMesh.IsNull())
 	{
-		TArray<FSoftObjectPath> MeshToStream;
-		MeshToStream.AddUnique(ItemInfo.ItemMesh.ToSoftObjectPath());
+		TArray<FSoftObjectPath> AssetToStream;
+		AssetToStream.AddUnique(ItemInfo.ItemMesh.ToSoftObjectPath());
+		AssetToStream.AddUnique(ItemInfo.OutlineMaterial.ToSoftObjectPath());
 		if (IsValid(ItemInfo.ItemMesh.Get()))
 		{
 			InitializeItemMesh();
@@ -75,7 +82,7 @@ void AItemBase::InitItem(int32 NewItemID)
 		else
 		{
 			FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
-			streamable.RequestAsyncLoad(MeshToStream, FStreamableDelegate::CreateUObject(this, &AItemBase::InitializeItemMesh));
+			streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &AItemBase::InitializeItemMesh));
 		}
 	}
 	//ItemInfo.ItemName
@@ -109,8 +116,9 @@ void AItemBase::OnItemPicked(AActor* Causer)
 	case EItemCategoryInfo::E_Weapon:
 		if (Causer->ActorHasTag("Player"))
 		{
-			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_BULLET_ID_DIFF_VALUE;
-			ensure(playerRef->PickWeapon(targetWeaponID));
+			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
+			UE_LOG(LogTemp, Warning, TEXT("targetWeaopnID : %d"), targetWeaponID);
+			//ensure(playerRef->PickWeapon(targetWeaponID));
 		}
 		break;
 	case EItemCategoryInfo::E_Bullet:
@@ -121,13 +129,13 @@ void AItemBase::OnItemPicked(AActor* Causer)
 
 			if (playerInventoryRef->GetWeaponIsContained(targetWeaponID))
 			{
-				ensure(playerInventoryRef->TryAddAmmoToWeapon(targetWeaponID, (int32)ItemInfo.Variable));
+			//	ensure(playerInventoryRef->TryAddAmmoToWeapon(targetWeaponID, (int32)ItemInfo.Variable));
 			}
 			else
 			{
 				if (targetWeaponStat.WeaponType == EWeaponType::E_Throw)
 				{
-					ensure(playerRef->PickWeapon(targetWeaponID));
+				//	ensure(playerRef->PickWeapon(targetWeaponID));
 				}
 				else
 				{
@@ -148,18 +156,31 @@ void AItemBase::OnItemPicked(AActor* Causer)
 void AItemBase::InitializeItemMesh()
 {
 	if (ItemInfo.ItemMesh.IsNull() || !IsValid(ItemInfo.ItemMesh.Get())) return;
+	
 	MeshComponent->SetStaticMesh(ItemInfo.ItemMesh.Get());
 	MeshComponent->SetRelativeLocation(ItemInfo.InitialLocation);
-	MeshComponent->SetRelativeRotation(ItemInfo.InitialRotation);
+	MeshComponent->SetWorldRotation(ItemInfo.InitialRotation);
 	MeshComponent->SetRelativeScale3D(ItemInfo.InitialScale);
+
+	OutlineMeshComponent->SetStaticMesh(ItemInfo.ItemMesh.Get());
+	OutlineMeshComponent->SetRelativeLocation(FVector(0.0f));
+	OutlineMeshComponent->SetRelativeRotation(FRotator(0.0f));
+	OutlineMeshComponent->SetRelativeScale3D(FVector(1.0f));
+	//OutlineMeshComponent->SetMaterial(0, )
 }
 
 FItemInfoStruct AItemBase::GetItemInfoWithID(const int32 ItemID)
 {
-	FString rowName = FString::FromInt(ItemID);
-	FItemInfoStruct* newInfo = ItemDataInfoTable->FindRow<FItemInfoStruct>(FName(rowName), rowName);
-	if (newInfo == nullptr) return FItemInfoStruct();
-	return *newInfo;
+	if (ItemDataInfoTable != nullptr || ItemID != 0)
+	{
+		FItemInfoStruct* newInfo = nullptr;
+		FString rowName = FString::FromInt(ItemID);
+
+		newInfo = ItemDataInfoTable->FindRow<FItemInfoStruct>(FName(rowName), rowName);
+
+		if (newInfo != nullptr) return *newInfo;
+	}
+	return FItemInfoStruct(); 
 }
 
 void AItemBase::SetLaunchDirection(FVector NewDirection)
