@@ -46,6 +46,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+//----- 필수 프로퍼티 (반드시 BP에서 지정할 것)--------------
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Basic")
+		TSubclassOf<AWeaponBase> WeaponClass;
+
+
 //----- 인벤토리 핵심 로직-------------------------------
 public: 
 	//인벤토리를 초기화
@@ -54,7 +60,7 @@ public:
 
 	//무기를 장착
 	UFUNCTION()
-		void EquipWeapon(int32 InventoryIdx, bool bIsNewWeapon = false);
+		void EquipWeapon(int32 NewWeaponID);
 
 	//무기 추가를 시도. 불가능하면 false를 반환
 	UFUNCTION(BlueprintCallable)
@@ -72,9 +78,9 @@ public:
 	UFUNCTION()
 		bool SwitchToNextWeapon();
 
-	//현재 무기의 정보와 인벤토리 내 정보를 동기화
+	//현재 무기의 정보와 인벤토리 내 정보를 동기화 (bIsLoadInfo : 액터 정보를 블러올 것인지?)
 	UFUNCTION(BlueprintCallable)
-		void SyncCurrentWeaponInfo(bool bIsLoadInfo);
+		void SyncCurrentWeaponInfo(bool bIsLoadActorInfo = false);
 
 	//해당 Weapon이 인벤토리에 포함이 되어있는지 반환
 	UFUNCTION(BlueprintCallable)
@@ -83,16 +89,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool TryAddAmmoToWeapon(int32 WeaponID, int32 AmmoCount);
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FWeaponStatStruct GetWeaponStatInfoWithID(const int32 WeaponID);
-
 protected:
 	UFUNCTION()
 		class AWeaponBase* SpawnWeaponActor(int32 WeaponID);
-
-	//현재 무기를 인벤토리로 보낸다.
-	UFUNCTION()
-		void RestoreCurrentWeapon();
 
 	//인벤토리를 비움
 	UFUNCTION()
@@ -119,10 +118,13 @@ public:
 
 	//현재 무기 개수를 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetCurrentWeaponCount() {  return CurrentWeaponCount = InventoryArray.Num(); }
+		int32 GetCurrentWeaponCount() {  return InventoryArray.Num(); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetCurrentCapacity() { return CurrentCapacity; }
+		int32 GetCurrentCapacity() { return TotalWeight; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsInventoryEmpty() { return TotalWeight == 0; }
 
 	UFUNCTION()
 		class AWeaponBase* GetCurrentWeaponRef();
@@ -143,21 +145,7 @@ private:
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (UIMin = 1, UIMax = 10))
 		int32 MaxCapacity = 6;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (UIMin = 1, UIMax = 10))
-		int32 MaxWeaponCount = 6;
-
-	//Weapon ID 배열, BP에서 지정하고 Idx로 구분
-	UPROPERTY(EditAnywhere, Category = "Gameplay|Class")
-		TArray<int32> WeaponIDList;
-
-	//Weapon Class 배열, BP에서 지정하고 Idx로 구분 / 제거예정
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Class")
-		TArray<TSubclassOf<class AWeaponBase> > WeaponClassList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* WeaponStatTable;
-		
+	
 private:
 	UPROPERTY()
 		TArray<FInventoryItemInfoStruct> InventoryArray;
@@ -166,14 +154,9 @@ private:
 		int32 CurrentIdx = 0; 
 
 	UPROPERTY()
-		int32 CurrentCapacity = 0;
+		int32 TotalWeight = 0;
 
-	UPROPERTY()
-		int32 CurrentWeaponCount = 0;
-
-	UPROPERTY()
-		TMap<int32, UClass*> WeaponClassInfoMap;
-
+//---- 그 외 Ref Ptr------------------------------
 private: 
 	//게임모드 Ref
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
