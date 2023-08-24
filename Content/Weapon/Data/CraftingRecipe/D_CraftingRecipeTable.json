@@ -6,32 +6,32 @@
   },
   {
     "Name" : "200",
-    "IngredientsId" : [100 ,101],
-    "ResultID" : 200
+    "IngredientsId" : [11100 ,11110],
+    "ResultID" : 12100
   },
   {
     "Name" : "201",
-    "IngredientsId" : [100,102],
-    "ResultID" : 201
+    "IngredientsId" : [11100,11120],
+    "ResultID" : 12110
   },
   {
     "Name" : "202",
-    "IngredientsId" : [101,102],
-    "ResultID" : 202
+    "IngredientsId" : [11110,11120],
+    "ResultID" : 12120
   },
   {
     "Name" : "203",
-    "IngredientsId" : [100,103],
-    "ResultID" : 203
+    "IngredientsId" : [11100,11130],
+    "ResultID" : 12130
   },
   {
     "Name" : "220",
-    "IngredientsId" : [101,103],
-    "ResultID" : 220
+    "IngredientsId" : [11110,11130],
+    "ResultID" : 12300
   },
   {
     "Name" : "221",
-    "IngredientsId" : [102,103],
-    "ResultID" : 221
+    "IngredientsId" : [11120,11130],
+    "ResultID" : 12311
   }
 ]

@@ -323,6 +323,14 @@ int32 AWeaponInventoryBase::CheckWeaponDuplicate(int32 TargetWeaponID)
 	return -1;
 }
 
+FWeaponStatStruct AWeaponInventoryBase::GetWeaponStatInfoWithID(const int32 WeaponID)
+{
+	FString rowName = FString::FromInt(WeaponID);
+	FWeaponStatStruct* newStat = WeaponStatTable->FindRow<FWeaponStatStruct>(FName(rowName), rowName);
+	if (newStat == nullptr) return FWeaponStatStruct();
+	return *newStat;
+}
+
 AWeaponBase* AWeaponInventoryBase::GetCurrentWeaponRef()
 {
 	if (!CurrentWeaponRef.IsValid()) return nullptr;

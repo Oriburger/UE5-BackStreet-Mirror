@@ -66,7 +66,7 @@ public:
 		void PlayCameraShakeEffect(ECameraShakeType EffectType, FVector Location, float Radius = 100.0f);
 
 	UFUNCTION()
-		AItemBase* SpawnItemToWorld(uint8 ItemType, int32 ItemID, FVector SpawnLocation);
+		AItemBase* SpawnItemToWorld(int32 ItemID, FVector SpawnLocation);
 
 	UFUNCTION(BlueprintCallable)
 		bool IsLobbyStage();
@@ -86,6 +86,7 @@ public:
 	UFUNCTION()
 		void UpdateProjectileStatWithID(class AProjectileBase* TargetProjectile, const int32 ProjectileID);
 
+	//제거 예정
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FWeaponStatStruct GetWeaponStatInfoWithID(const int32 WeaponID);
 
@@ -111,7 +112,7 @@ public:
 		void PopUpClearUI();
 
 
-	// ------ Asset Info ----------------------------
+// ------ Asset Info ----------------------------
 public:
 	//캐릭터의 애니메이션 에셋 데이터를 읽어들임
 	UFUNCTION()
@@ -124,7 +125,7 @@ protected:
 
 	//VFX 에셋 경로 저장 데이터 테이블
 	UPROPERTY(EditDefaultsOnly, Category = "Asset|Data")
-		UDataTable* VFXssetInfoTable;
+		UDataTable* VFXAssetInfoTable;
 
 private:
 	//추후 따로 뺄 예정
@@ -137,7 +138,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* EnemyStatTable;
 	
-	//무기 스탯 테이블
+	//무기 스탯 테이블, 제거예정
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* WeaponStatTable;
 
@@ -147,6 +148,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* StageTypeTable;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		UDataTable* ItemSpawnInfoTable;
 
 // ----- Class Info ------------------------------------ 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")

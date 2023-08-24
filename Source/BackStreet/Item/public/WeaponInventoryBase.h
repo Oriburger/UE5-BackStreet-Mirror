@@ -83,6 +83,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool TryAddAmmoToWeapon(int32 WeaponID, int32 AmmoCount);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FWeaponStatStruct GetWeaponStatInfoWithID(const int32 WeaponID);
+
 protected:
 	UFUNCTION()
 		class AWeaponBase* SpawnWeaponActor(int32 WeaponID);
@@ -148,11 +151,13 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Gameplay|Class")
 		TArray<int32> WeaponIDList;
 
-	//Weapon Class 배열, BP에서 지정하고 Idx로 구분
+	//Weapon Class 배열, BP에서 지정하고 Idx로 구분 / 제거예정
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Class")
 		TArray<TSubclassOf<class AWeaponBase> > WeaponClassList;
 
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		UDataTable* WeaponStatTable;
+		
 private:
 	UPROPERTY()
 		TArray<FInventoryItemInfoStruct> InventoryArray;
@@ -168,7 +173,6 @@ private:
 
 	UPROPERTY()
 		TMap<int32, UClass*> WeaponClassInfoMap;
-
 
 private: 
 	//게임모드 Ref

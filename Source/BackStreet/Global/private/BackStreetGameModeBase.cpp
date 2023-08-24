@@ -71,14 +71,11 @@ void ABackStreetGameModeBase::PlayCameraShakeEffect(ECameraShakeType EffectType,
 	UGameplayStatics::PlayWorldCameraShake(GetWorld(), CameraShakeEffectList[(uint8)EffectType], Location, Radius * 0.75f, Radius * 1.5f, 0.5f);
 }
 
-AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(uint8 ItemType, int32 ItemID, FVector SpawnLocation)
+AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector SpawnLocation)
 {
 	if (!IsValid(GetWorld())) return nullptr;
 	
-	int32 targetKey = AItemBase::GetTargetItemKey(ItemType, ItemID);
-	if (!ItemClassMap.Contains(targetKey)) return nullptr;
-
-	TSubclassOf<AItemBase> targetClass = *ItemClassMap.Find(AItemBase::GetTargetItemKey(ItemType, ItemID));
+	TSubclassOf<AItemBase> targetClass = AItemBase::StaticClass();
 	FActorSpawnParameters actorSpawnParameters;
 	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
@@ -88,7 +85,7 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(uint8 ItemType, int32 ItemI
 
 		if (IsValid(newItem))
 		{
-			newItem->InitItem((EItemCategoryInfo)ItemType, ItemID);
+			newItem->InitItem(ItemID);
 
 			//임시코드!!!!!!!!!!!!!!!! 230704 @ljh
 			if (IsValid(GetChapterManagerRef()) 

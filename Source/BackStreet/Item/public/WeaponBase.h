@@ -53,7 +53,7 @@ public:
 	virtual void UpdateWeaponStat(FWeaponStatStruct NewStat);
 
 	UFUNCTION()
-		void InitWeapon();
+		void InitWeapon();// FWeaponStatStruct NewStat);
 
 	UFUNCTION()
 		void RevertWeaponInfo(FWeaponStatStruct OldWeaponStat, FWeaponStateStruct OldWeaponState);
