@@ -62,8 +62,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* WeaponStatInfoTable;
 
-	UFUNCTION()
-		void InitWeaponAsset();
+	virtual void InitWeaponAsset();
 
 	//현재 무기의 에셋 정보
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
@@ -138,19 +137,7 @@ protected:
 		void PlayEffectSound(class USoundCue* EffectSound);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class UNiagaraComponent* MeleeTrailParticle;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		FColor MeleeTrailParticleColor;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class UParticleSystem* HitEffectParticle;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UParticleSystem* DestroyEffectParticle;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* HitImpactSound;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
 		class USoundCue* AttackSound;

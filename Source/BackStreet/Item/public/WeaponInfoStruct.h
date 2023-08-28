@@ -157,6 +157,38 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FMeleeWeaponAssetInfoStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UParticleSystem> HitEffectParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UNiagaraSystem> MeleeTrailParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		FColor MeleeTrailParticleColor;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		TSoftObjectPtr<class USoundCue> HitImpactSound;
+};
+
+USTRUCT(BlueprintType)
+struct FRangedWeaponAssetInfoStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		TSubclassOf<class AProjectileBase> ProjectileClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UNiagaraSystem> ShootEffectParticle;
+};
+
+USTRUCT(BlueprintType)
 struct FWeaponAssetInfoStruct : public FTableRowBase
 {
 public:
@@ -186,20 +218,17 @@ public:
 		FVector InitialScale;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
-		TSoftObjectPtr<class UNiagaraComponent> MeleeTrailParticle;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
-		TSoftObjectPtr<class UParticleSystem> HitEffectParticle;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UParticleSystem> DestroyEffectParticle;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		TSoftObjectPtr<class USoundCue> HitImpactSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
 		TSoftObjectPtr<class USoundCue> AttackSound;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
 		TSoftObjectPtr<class USoundCue> AttackFailSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Ranged")
+		FRangedWeaponAssetInfoStruct RangedWeaponAssetInfo;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Melee")
+		FMeleeWeaponAssetInfoStruct MeleeWeaponAssetInfo;
 };

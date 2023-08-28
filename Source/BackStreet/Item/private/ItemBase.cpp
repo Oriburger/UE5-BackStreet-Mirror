@@ -176,7 +176,7 @@ void AItemBase::InitializeItemMesh()
 
 FItemInfoStruct AItemBase::GetItemInfoWithID(const int32 ItemID)
 {
-	if (ItemDataInfoTable != nullptr || ItemID != 0)
+	if (ItemDataInfoTable != nullptr && ItemID != 0)
 	{
 		FItemInfoStruct* newInfo = nullptr;
 		FString rowName = FString::FromInt(ItemID);

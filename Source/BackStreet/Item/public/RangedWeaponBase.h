@@ -34,6 +34,9 @@ protected:
 
 //------ VFX ----------------------------------
 protected:
+	UFUNCTION()
+		virtual void InitWeaponAsset() override;
+
 	//발사 순간에 출력될 이미터 (임시, 추후 데이터 테이블로 관리 예정)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UNiagaraSystem* ShootNiagaraEmitter;
@@ -68,7 +71,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void AddAmmo(int32 Count);
 
-	//탄창의 개수를 더함 (+= MaxAmmoPerMagazine*Count)
+	//탄창의 개수를 더함 (+= MaxAmmoPerMagazine * Count)
 	UFUNCTION()
 		void AddMagazine(int32 Count);
 

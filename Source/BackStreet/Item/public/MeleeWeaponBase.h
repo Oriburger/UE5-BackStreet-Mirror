@@ -33,6 +33,23 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		virtual void UpdateWeaponStat(FWeaponStatStruct NewStat) override;
 
+//-------- 에셋 관련 ----------------------------
+protected:
+	UFUNCTION()
+		virtual void InitWeaponAsset() override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraComponent* MeleeTrailParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		FColor MeleeTrailParticleColor;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UParticleSystem* HitEffectParticle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
+		class USoundCue* HitImpactSound;
+
 //-------- Melee 관련 ---------------------------
 public:
 	//근접 공격을 수행

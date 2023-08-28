@@ -53,7 +53,20 @@ void ARangedWeaponBase::ClearAllTimerHandle()
 void ARangedWeaponBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
 	//WeaponStat 업데이트
-} 
+}
+
+void ARangedWeaponBase::InitWeaponAsset()
+{
+	Super::InitWeaponAsset();
+
+	FRangedWeaponAssetInfoStruct& rangedWeaponAssetInfo = WeaponAssetInfo.RangedWeaponAssetInfo;
+
+	ProjectileClass = rangedWeaponAssetInfo.ProjectileClass;
+	if (rangedWeaponAssetInfo.ShootEffectParticle.IsValid())
+	{
+		ShootNiagaraEmitter = rangedWeaponAssetInfo.ShootEffectParticle.Get();
+	}
+}
 
 void ARangedWeaponBase::SpawnShootNiagaraEffect()
 {

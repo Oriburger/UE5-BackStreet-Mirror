@@ -46,11 +46,22 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-//----- 필수 프로퍼티 (반드시 BP에서 지정할 것)--------------
+//----- 필수 프로퍼티과 관련 함수 (반드시 BP에서 지정할 것)------
 protected:
+	//EWeaponType과 인덱스를 맞춰줄 것 / 0은 비워두기
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Basic")
-		TSubclassOf<AWeaponBase> WeaponClass;
+		TArray<TSubclassOf<AWeaponBase>> WeaponClassList;
 
+	//무기 스탯 테이블
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
+		UDataTable* WeaponStatInfoTable;
+
+private:
+	UFUNCTION()
+		FWeaponStatStruct GetWeaponStatInfoWithID(int32 TargetWeaponID);
+
+	UFUNCTION()
+		EWeaponType GetWeaponType(int32 TargetWeaponID);
 
 //----- 인벤토리 핵심 로직-------------------------------
 public: 
@@ -110,6 +121,14 @@ protected:
 	UFUNCTION()
 		int32 CheckWeaponDuplicate(int32 TargetWeaponID);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsEqualWeaponType(int32 WeaponIDA, int32 WeaponIDB);
+
+private:
+	//Melee <-> Ranged Weapon Actor을 전환
+	UFUNCTION()
+		void SwitchWeaponActorToAnotherType();
+
 //------ 프로퍼티 관련 ----------------------------------
 public:
 	//현재 선택된 인벤토리 Idx를 반환
@@ -156,6 +175,11 @@ private:
 	UPROPERTY()
 		int32 TotalWeight = 0;
 
+	//근, 원거리 무기 전환을 위한 포인터 변수 
+	//GC 방지를 위해 인벤토리 소유로 두고, RawPtr을 사용한다
+	UPROPERTY()
+		AWeaponBase* HiddenWeaponRef;
+
 //---- 그 외 Ref Ptr------------------------------
 private: 
 	//게임모드 Ref
@@ -166,4 +190,5 @@ private:
 
 	//현재 장비하고 있는 WeaponRef
 	TWeakObjectPtr<class AWeaponBase> CurrentWeaponRef;
+
 };

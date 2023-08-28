@@ -22,10 +22,6 @@ AWeaponBase::AWeaponBase()
 
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPON_MESH"));
 	WeaponMesh->SetupAttachment(DefaultSceneRoot);
-
-	MeleeTrailParticle = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ITEM_NIAGARA_COMPONENT"));
-	MeleeTrailParticle->SetupAttachment(WeaponMesh);
-	MeleeTrailParticle->bAutoActivate = false;
 }
 
 // Called when the game starts or when spawned
@@ -40,9 +36,10 @@ void AWeaponBase::InitWeapon(int32 NewWeaponID)
 {
 	//Stat, State 초기화 
 	WeaponID = NewWeaponID;
+	WeaponStat.WeaponID = WeaponID;
 
-	FWeaponStatStruct newStat = GetWeaponStatInfoWithID(WeaponID);
-	UpdateWeaponStat(newStat);
+	//FWeaponStatStruct newStat = GetWeaponStatInfoWithID(WeaponID);
+	//UpdateWeaponStat(newStat);
 
 	//에셋 초기화
 	FWeaponAssetInfoStruct newAssetInfo = GetWeaponAssetInfoWithID(WeaponID);
@@ -51,22 +48,28 @@ void AWeaponBase::InitWeapon(int32 NewWeaponID)
 	{
 		TArray<FSoftObjectPath> tempStream, assetToStream;
 		tempStream.AddUnique(WeaponAssetInfo.WeaponMesh.ToSoftObjectPath());
-		tempStream.AddUnique(WeaponAssetInfo.MeleeTrailParticle.ToSoftObjectPath());
-		tempStream.AddUnique(WeaponAssetInfo.HitEffectParticle.ToSoftObjectPath());
 		tempStream.AddUnique(WeaponAssetInfo.DestroyEffectParticle.ToSoftObjectPath());
-		tempStream.AddUnique(WeaponAssetInfo.HitImpactSound.ToSoftObjectPath());
 		tempStream.AddUnique(WeaponAssetInfo.AttackSound.ToSoftObjectPath());
 		tempStream.AddUnique(WeaponAssetInfo.AttackFailSound.ToSoftObjectPath());
+
+		//Melee
+		tempStream.AddUnique(WeaponAssetInfo.MeleeWeaponAssetInfo.MeleeTrailParticle.ToSoftObjectPath());
+		tempStream.AddUnique(WeaponAssetInfo.MeleeWeaponAssetInfo.HitEffectParticle.ToSoftObjectPath());
+		tempStream.AddUnique(WeaponAssetInfo.MeleeWeaponAssetInfo.HitImpactSound.ToSoftObjectPath());
+
+		//Ranged
+		//tempStream.AddUnique(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileClass.ToSoftObjectPath());
+		tempStream.AddUnique(WeaponAssetInfo.RangedWeaponAssetInfo.ShootEffectParticle.ToSoftObjectPath());
 
 		for (auto& assetPath : tempStream)
 		{
 			if (!assetPath.IsValid() || assetPath.IsNull()) continue;
 			assetToStream.AddUnique(assetPath);
 		}
-
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &AWeaponBase::InitWeaponAsset));
 	}
+	else WeaponMesh->SetStaticMesh(nullptr);
 }
 
 
@@ -78,19 +81,11 @@ void AWeaponBase::InitWeaponAsset()
 		WeaponMesh->SetRelativeLocation(WeaponAssetInfo.InitialLocation);
 		WeaponMesh->SetRelativeRotation(WeaponAssetInfo.InitialRotation);
 		WeaponMesh->SetRelativeScale3D(WeaponAssetInfo.InitialScale);
+		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
-
-	if (WeaponAssetInfo.MeleeTrailParticle.IsValid())
-		MeleeTrailParticle = WeaponAssetInfo.MeleeTrailParticle.Get();
-
-	if (WeaponAssetInfo.HitEffectParticle.IsValid())
-		HitEffectParticle = WeaponAssetInfo.HitEffectParticle.Get();
 
 	if (WeaponAssetInfo.DestroyEffectParticle.IsValid())
 		DestroyEffectParticle = WeaponAssetInfo.DestroyEffectParticle.Get();
-
-	if (WeaponAssetInfo.HitImpactSound.IsValid())
-		HitImpactSound = WeaponAssetInfo.HitImpactSound.Get();
 
 	if (WeaponAssetInfo.AttackSound.IsValid())
 		AttackSound = WeaponAssetInfo.AttackSound.Get();
@@ -101,13 +96,12 @@ void AWeaponBase::InitWeaponAsset()
 
 FWeaponStatStruct AWeaponBase::GetWeaponStatInfoWithID(int32 TargetWeaponID)
 {
-	if (WeaponStatInfoTable != nullptr || TargetWeaponID != 0)
+	if (WeaponStatInfoTable != nullptr && TargetWeaponID != 0)
 	{
 		FWeaponStatStruct* newInfo = nullptr;
 		FString rowName = FString::FromInt(TargetWeaponID);
 
 		newInfo = WeaponStatInfoTable->FindRow<FWeaponStatStruct>(FName(rowName), rowName);
-
 		if (newInfo != nullptr) return *newInfo;
 	}
 	return FWeaponStatStruct();
@@ -115,13 +109,12 @@ FWeaponStatStruct AWeaponBase::GetWeaponStatInfoWithID(int32 TargetWeaponID)
 
 FWeaponAssetInfoStruct AWeaponBase::GetWeaponAssetInfoWithID(int32 TargetWeaponID)
 {
-	if (WeaponAssetInfoTable != nullptr || TargetWeaponID != 0)
+	if (WeaponAssetInfoTable != nullptr && TargetWeaponID != 0)
 	{
 		FWeaponAssetInfoStruct* newInfo = nullptr;
 		FString rowName = FString::FromInt(TargetWeaponID);
 
 		newInfo = WeaponAssetInfoTable->FindRow<FWeaponAssetInfoStruct>(FName(rowName), rowName);
-
 		if (newInfo != nullptr) return *newInfo;
 	}
 	return FWeaponAssetInfoStruct();
@@ -164,17 +157,6 @@ void AWeaponBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
 	if (!IsValid(NewOwnerCharacterRef)) return;
 	OwnerCharacterRef = NewOwnerCharacterRef;
 	SetOwner(OwnerCharacterRef.Get());
-
-	//Melee Trail Particle 파라미터 초기화
-	if (IsValid(MeleeTrailParticle))
-	{
-		FVector startLocation = WeaponMesh->GetSocketLocation("Mid");
-		FVector endLocation = WeaponMesh->GetSocketLocation("End");
-
-		MeleeTrailParticle->SetVectorParameter(FName("Start"), startLocation);
-		MeleeTrailParticle->SetVectorParameter(FName("End"), endLocation);
-		MeleeTrailParticle->SetColorParameter(FName("Color"), MeleeTrailParticleColor);
-	}
 }
 
 void AWeaponBase::PlayEffectSound(USoundCue* EffectSound)

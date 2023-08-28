@@ -13,6 +13,10 @@
 AMeleeWeaponBase::AMeleeWeaponBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
+
+	MeleeTrailParticle = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ITEM_NIAGARA_COMPONENT"));
+	MeleeTrailParticle->SetupAttachment(WeaponMesh);
+	MeleeTrailParticle->bAutoActivate = false;
 }
 
 void AMeleeWeaponBase::Attack()
@@ -60,6 +64,35 @@ void AMeleeWeaponBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
 	Super::UpdateWeaponStat(NewStat);
 	// State ÃÊ±âÈ­
+}
+
+void AMeleeWeaponBase::InitWeaponAsset()
+{
+	Super::InitWeaponAsset();
+
+	FMeleeWeaponAssetInfoStruct& MeleeWeaponAssetInfo = WeaponAssetInfo.MeleeWeaponAssetInfo;
+
+	if (MeleeWeaponAssetInfo.MeleeTrailParticle.IsValid())
+	{	
+		MeleeTrailParticle->SetAsset(MeleeWeaponAssetInfo.MeleeTrailParticle.Get());
+		MeleeTrailParticleColor = MeleeWeaponAssetInfo.MeleeTrailParticleColor;
+		MeleeTrailParticle->SetColorParameter(FName("Color"), MeleeTrailParticleColor);
+
+		FVector startLocation = WeaponMesh->GetSocketLocation("Mid");
+		FVector endLocation = WeaponMesh->GetSocketLocation("End");
+		FVector socketLocalLocation = UKismetMathLibrary::MakeRelativeTransform(WeaponMesh->GetSocketTransform(FName("End"))
+																				, WeaponMesh->GetComponentTransform()).GetLocation();
+
+		MeleeTrailParticle->SetVectorParameter(FName("Start"), startLocation);
+		MeleeTrailParticle->SetVectorParameter(FName("End"), endLocation);
+		MeleeTrailParticle->SetRelativeLocation(socketLocalLocation);
+	}
+
+	if (MeleeWeaponAssetInfo.HitEffectParticle.IsValid())
+		HitEffectParticle = MeleeWeaponAssetInfo.HitEffectParticle.Get();
+		
+	if (MeleeWeaponAssetInfo.HitImpactSound.IsValid())
+		HitImpactSound = MeleeWeaponAssetInfo.HitImpactSound.Get();
 }
 
 void AMeleeWeaponBase::MeleeAttack()
