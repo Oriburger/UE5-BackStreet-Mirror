@@ -333,7 +333,6 @@ AWeaponInventoryBase* ACharacterBase::GetInventoryRef()
 
 void ACharacterBase::SetWeaponActorRef(AWeaponBase* NewWeapon)
 {
-	if (!IsValid(NewWeapon) || NewWeapon->IsActorBeingDestroyed()) return;
 	WeaponRef = NewWeapon;
 }
 

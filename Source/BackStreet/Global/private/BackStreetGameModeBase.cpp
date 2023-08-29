@@ -75,13 +75,12 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector Spawn
 {
 	if (!IsValid(GetWorld())) return nullptr;
 	
-	TSubclassOf<AItemBase> targetClass = AItemBase::StaticClass();
 	FActorSpawnParameters actorSpawnParameters;
 	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-	if (targetClass != nullptr)
+	if (ItemClass != nullptr)
 	{
-		AItemBase* newItem = Cast<AItemBase>(GetWorld()->SpawnActor(targetClass, &SpawnLocation, nullptr, actorSpawnParameters));
+		AItemBase* newItem = Cast<AItemBase>(GetWorld()->SpawnActor(ItemClass, &SpawnLocation, nullptr, actorSpawnParameters));
 
 		if (IsValid(newItem))
 		{

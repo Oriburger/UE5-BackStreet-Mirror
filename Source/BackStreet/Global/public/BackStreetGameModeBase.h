@@ -139,9 +139,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
 		TArray<TSubclassOf<UCameraShakeBase> > CameraShakeEffectList;
 	
-	//EItemCategoryInfo의 값이 Idx
+	//스폰할 아이템 클래스 (초기화를 위한 데이터테이블이 포함된 BP를 지정해야함)
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Item")
-		TMap<int32, TSubclassOf<class AItemBase> > ItemClassMap;
+		TSubclassOf<class AItemBase> ItemClass;
 
 //------ 그 외 프로퍼티 ---------------
 protected:

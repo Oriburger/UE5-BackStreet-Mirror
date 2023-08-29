@@ -17,6 +17,7 @@ ARangedWeaponBase::ARangedWeaponBase()
 
 void ARangedWeaponBase::Attack()
 {
+	if (WeaponID == 0) return; 
 	Super::Attack();
 
 	this->Tags.Add("Ranged");

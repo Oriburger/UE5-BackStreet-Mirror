@@ -21,6 +21,7 @@ AMeleeWeaponBase::AMeleeWeaponBase()
 
 void AMeleeWeaponBase::Attack()
 {
+	if (WeaponID == 0) return;
 	Super::Attack();
 
 	this->Tags.Add("Melee");

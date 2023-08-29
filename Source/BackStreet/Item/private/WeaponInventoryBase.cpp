@@ -96,12 +96,13 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 
 	int32 duplicateIdx = CheckWeaponDuplicate(NewWeaponID);
 
-	if(GetIsInventoryEmpty()) EquipWeapon(NewWeaponID);
+	if (GetCurrentCapacity() >= MaxCapacity) return false;
 
 	//중복이 되지 않는다면?
 	if (duplicateIdx == -1)
 	{
 		//Weapon이 InValid하면 안됨
+		if (GetIsInventoryEmpty()) EquipWeapon(NewWeaponID);
 		if (!IsValid(GetCurrentWeaponRef())) return false;
 
 		FWeaponStatStruct newStat; 
@@ -122,7 +123,7 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 		else
 		{
 			InventoryArray.Add({ NewWeaponID, newStat, newState });
-			TotalWeight = GetCurrentWeaponRef()->GetWeaponStat().WeaponWeight;
+			TotalWeight += GetCurrentWeaponRef()->GetWeaponStat().WeaponWeight;
 			SyncCurrentWeaponInfo(false);
 		}
 	}
@@ -188,7 +189,11 @@ void AWeaponInventoryBase::RemoveWeapon(int32 WeaponID)
 		ensure(IsValid(GetCurrentWeaponRef()));
 		
 		//무기 개수가 0이라면 무기 액터를 제거
-		if (GetCurrentWeaponCount() == 0) GetCurrentWeaponRef()->InitWeapon(0);
+		if (GetCurrentWeaponCount() == 0)
+		{
+			GetCurrentWeaponRef()->InitWeapon(0);
+			OwnerCharacterRef->SetWeaponActorRef(nullptr);
+		}
 
 		//그렇지 않다면, 해당 무기 액터를 다시 초기화하여 재활용 
 		else
@@ -414,6 +419,7 @@ void AWeaponInventoryBase::SwitchWeaponActorToAnotherType()
 	//Visibility 전환
 	HiddenWeaponRef->SetActorHiddenInGame(true);
 	GetCurrentWeaponRef()->SetActorHiddenInGame(false);
+	HiddenWeaponRef->InitWeapon(0);
 }
 
 AWeaponBase* AWeaponInventoryBase::GetCurrentWeaponRef()

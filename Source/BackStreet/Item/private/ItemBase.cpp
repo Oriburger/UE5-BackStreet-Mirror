@@ -118,7 +118,7 @@ void AItemBase::OnItemPicked(AActor* Causer)
 		{
 			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
 			UE_LOG(LogTemp, Warning, TEXT("targetWeaopnID : %d"), targetWeaponID);
-			ensure(playerRef->PickWeapon(targetWeaponID));
+			if (!playerRef->PickWeapon(targetWeaponID)) return;
 		}
 		break;
 	case EItemCategoryInfo::E_Bullet:
