@@ -64,6 +64,8 @@ void AWeaponInventoryBase::EquipWeapon(int32 NewWeaponID)
 	{
 		AWeaponBase* newWeapon = SpawnWeaponActor(NewWeaponID);
 
+		UE_LOG(LogTemp, Warning, TEXT("Spawn Initial Actor"));
+
 		if (IsValid(newWeapon) && !newWeapon->IsActorBeingDestroyed())
 		{
 			SetCurrentWeaponRef(newWeapon);
@@ -75,23 +77,13 @@ void AWeaponInventoryBase::EquipWeapon(int32 NewWeaponID)
 		//check(GetCurrentWeaponRef()->GetWeaponStat().WeaponType != EWeaponType::E_None);
 		//check(GetWeaponType(NewWeaponID) != EWeaponType::E_None);
 
-		UE_LOG(LogTemp, Warning, TEXT("%d %d"), GetCurrentWeaponRef()->GetWeaponStat().WeaponID, NewWeaponID);
-
-		// 근거리무기랑 원거리무기를 교체
-		if (!GetIsEqualWeaponType(GetCurrentWeaponRef()->GetWeaponStat().WeaponID, NewWeaponID))
-		{
-			//반대 타입의 무기 액터가 스폰되지 않았다면? / 이것도 1회만 수행되어야함.
-			if (!IsValid(HiddenWeaponRef)) HiddenWeaponRef = SpawnWeaponActor(NewWeaponID);
+		UE_LOG(LogTemp, Warning, TEXT("%d %d"), GetCurrentWeaponRef()->WeaponID, NewWeaponID);
 			
-			AWeaponBase* tempWeaponPtr = CurrentWeaponRef.Get();
-			SetCurrentWeaponRef(HiddenWeaponRef);
-			HiddenWeaponRef = tempWeaponPtr;
-
+		// 근거리무기랑 원거리무기를 교체
+		if (!GetIsEqualWeaponType(GetCurrentWeaponRef()->WeaponID, NewWeaponID))
+		{
+			SwitchWeaponActorToAnotherType();
 			OwnerCharacterRef.Get()->EquipWeapon(GetCurrentWeaponRef());
-
-			//Visibility 전환
-			HiddenWeaponRef->SetActorHiddenInGame(true);
-			GetCurrentWeaponRef()->SetActorHiddenInGame(false);
 		}
 	}
 	if (IsValid(GetCurrentWeaponRef()))
@@ -201,7 +193,11 @@ void AWeaponInventoryBase::RemoveWeapon(int32 WeaponID)
 		//그렇지 않다면, 해당 무기 액터를 다시 초기화하여 재활용 
 		else
 		{
-			//SwitchWeaponActorToAnotherType();
+			if (!GetIsEqualWeaponType(WeaponID, InventoryArray[CurrentIdx].WeaponID))
+			{
+				SwitchWeaponActorToAnotherType();
+				OwnerCharacterRef->EquipWeapon(GetCurrentWeaponRef());
+			}
 			GetCurrentWeaponRef()->InitWeapon(InventoryArray[CurrentIdx].WeaponID);
 			SyncCurrentWeaponInfo();
 		}
@@ -313,7 +309,8 @@ AWeaponBase* AWeaponInventoryBase::SpawnWeaponActor(int32 WeaponID)
 	check(WeaponClassList.IsValidIndex(weaponType)); //클래스 지정이 잘 되어있는지 확인
 
 	UClass* targetClass = WeaponClassList[weaponType];
-	if (!IsValid(targetClass) || weaponType == 0)
+	UClass* anotherTypeClass = WeaponClassList[weaponType == 1 ? 2 : 1];
+	if (!IsValid(targetClass) || !IsValid(anotherTypeClass) || weaponType == 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Weapon Class가 Invalid 합니다."));
 		return nullptr;
@@ -327,6 +324,7 @@ AWeaponBase* AWeaponInventoryBase::SpawnWeaponActor(int32 WeaponID)
 	const FVector spawnScale3D = OwnerCharacterRef.Get()->ActorHasTag("Player") ? FVector(2.0f) : FVector(1.0f / OwnerCharacterRef.Get()->GetCapsuleComponent()->GetComponentScale().X);
 	FTransform spawnTransform = FTransform(spawnRotation, spawnLocation, spawnScale3D);
 	AWeaponBase* newWeapon = Cast<AWeaponBase>(GetWorld()->SpawnActor(targetClass, &spawnTransform, spawnParams));
+	HiddenWeaponRef = Cast<AWeaponBase>(GetWorld()->SpawnActor(anotherTypeClass, &spawnTransform, spawnParams));
 
 	if (!CurrentWeaponRef.IsValid())
 	{
@@ -396,6 +394,10 @@ int32 AWeaponInventoryBase::CheckWeaponDuplicate(int32 TargetWeaponID)
 
 bool AWeaponInventoryBase::GetIsEqualWeaponType(int32 WeaponIDA, int32 WeaponIDB)
 {
+	//invalid 한 ID가 전달되었다면 false 반환
+	if (GetWeaponType(WeaponIDA) == EWeaponType::E_None || GetWeaponType(WeaponIDB) == EWeaponType::E_None) return false;
+
+	//그렇지 않다면 근거리 or 원거리 동일 여부를 반환
 	return (GetWeaponType(WeaponIDA) == EWeaponType::E_Melee && GetWeaponType(WeaponIDB) == EWeaponType::E_Melee)
 		   || (GetWeaponType(WeaponIDA) != EWeaponType::E_Melee && GetWeaponType(WeaponIDB) != EWeaponType::E_Melee);
 }
