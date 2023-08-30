@@ -123,7 +123,7 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 		else
 		{
 			InventoryArray.Add({ NewWeaponID, newStat, newState });
-			TotalWeight += GetCurrentWeaponRef()->GetWeaponStat().WeaponWeight;
+			TotalWeight += newStat.WeaponWeight;
 			SyncCurrentWeaponInfo(false);
 		}
 	}
