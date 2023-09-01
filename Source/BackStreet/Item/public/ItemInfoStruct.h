@@ -35,27 +35,23 @@ public:
 		EItemCategoryInfo ItemType;
 
 	//스폰할 아이템 스태틱 메시 정보 저장
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		TSoftObjectPtr<UStaticMesh> ItemMesh;
 
 	//메시의 초기 위치 정보
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance|Transform")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		FVector InitialLocation; 
 
 	//메시의 초기 회전 정보
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance|Transform")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		FRotator InitialRotation;
 
 	//메시의 초기 크기 정보
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance|Transform")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		FVector InitialScale;
-
-	//아이템 메시의 아웃라인 컬러
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance|Outline")
-		FColor OutlineColor = FColor::Red; 
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance|Outline")
-		TSoftObjectPtr<UMaterialInstanceDynamic> OutlineMaterial;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
+		TSoftObjectPtr<UMaterialInstance> OutlineMaterial;
 
 	//특정 아이템을 위한 변수 (총알, 미션 등)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")

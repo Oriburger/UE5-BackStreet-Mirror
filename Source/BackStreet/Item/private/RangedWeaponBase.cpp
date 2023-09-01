@@ -17,6 +17,7 @@ ARangedWeaponBase::ARangedWeaponBase()
 
 void ARangedWeaponBase::Attack()
 {
+	if (WeaponID == 0) return; 
 	Super::Attack();
 
 	this->Tags.Add("Ranged");
@@ -44,6 +45,23 @@ float ARangedWeaponBase::GetAttackRange()
 	return 700.0f;
 }
 
+FProjectileAssetInfoStruct ARangedWeaponBase::GetProjectileAssetInfo(int32 TargetProjectileID)
+{
+	//캐시에 기록이 되어있다면?
+	if (ProjectileAssetInfo.ProjectileID == TargetProjectileID) return ProjectileAssetInfo;
+
+	//없다면 새로 읽어옴
+	else if (ProjectileAssetInfoTable != nullptr && TargetProjectileID != 0)
+	{
+		FProjectileAssetInfoStruct* newInfo = nullptr;
+		FString rowName = FString::FromInt(TargetProjectileID);
+
+		newInfo = ProjectileAssetInfoTable->FindRow<FProjectileAssetInfoStruct>(FName(rowName), rowName);
+		if (newInfo != nullptr) return *newInfo;
+	}
+	return FProjectileAssetInfoStruct();
+}
+
 void ARangedWeaponBase::ClearAllTimerHandle()
 {
 	Super::ClearAllTimerHandle();
@@ -53,7 +71,23 @@ void ARangedWeaponBase::ClearAllTimerHandle()
 void ARangedWeaponBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
 	//WeaponStat 업데이트
-} 
+}
+
+void ARangedWeaponBase::InitWeaponAsset()
+{
+	Super::InitWeaponAsset();
+
+	FRangedWeaponAssetInfoStruct& rangedWeaponAssetInfo = WeaponAssetInfo.RangedWeaponAssetInfo;
+
+	if (rangedWeaponAssetInfo.ShootEffectParticle.IsValid())
+	{
+		ShootNiagaraEmitter = rangedWeaponAssetInfo.ShootEffectParticle.Get();
+	}
+	if (rangedWeaponAssetInfo.ProjectileID && ProjectileAssetInfoTable != nullptr)
+	{
+		ProjectileAssetInfo = GetProjectileAssetInfo(rangedWeaponAssetInfo.ProjectileID);
+	}
+}
 
 void ARangedWeaponBase::SpawnShootNiagaraEffect()
 {
@@ -81,12 +115,12 @@ AProjectileBase* ARangedWeaponBase::CreateProjectile()
 	SpawnRotation.Yaw += 90.0f;
 
 	FTransform SpawnTransform = { SpawnRotation, SpawnLocation, {1.0f, 1.0f, 1.0f} };
-	AProjectileBase* newProjectile = Cast<AProjectileBase>(GetWorld()->SpawnActor(ProjectileClass, &SpawnTransform, spawmParams));
+	AProjectileBase* newProjectile = Cast<AProjectileBase>(GetWorld()->SpawnActor(AProjectileBase::StaticClass(), &SpawnTransform, spawmParams));
 
-	if (IsValid(newProjectile))
+	if (IsValid(newProjectile) && ProjectileAssetInfo.ProjectileID != 0)
 	{
 		newProjectile->SetOwner(this);
-		newProjectile->InitProjectile(OwnerCharacterRef.Get());
+		newProjectile->InitProjectile(OwnerCharacterRef.Get(), ProjectileAssetInfo);
 		newProjectile->ProjectileStat.ProjectileDamage *= WeaponStat.WeaponDamageRate; //버프/디버프로 인해 강화/너프된 값을 반영
 		newProjectile->ProjectileStat.ProjectileSpeed *= WeaponStat.WeaponAtkSpeedRate;
 		return newProjectile;

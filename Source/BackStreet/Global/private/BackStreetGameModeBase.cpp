@@ -75,13 +75,12 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector Spawn
 {
 	if (!IsValid(GetWorld())) return nullptr;
 	
-	TSubclassOf<AItemBase> targetClass = AItemBase::StaticClass();
 	FActorSpawnParameters actorSpawnParameters;
 	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-	if (targetClass != nullptr)
+	if (ItemClass != nullptr)
 	{
-		AItemBase* newItem = Cast<AItemBase>(GetWorld()->SpawnActor(targetClass, &SpawnLocation, nullptr, actorSpawnParameters));
+		AItemBase* newItem = Cast<AItemBase>(GetWorld()->SpawnActor(ItemClass, &SpawnLocation, nullptr, actorSpawnParameters));
 
 		if (IsValid(newItem))
 		{
@@ -136,23 +135,6 @@ void ABackStreetGameModeBase::UpdateCharacterStatWithID(ACharacterBase* TargetCh
 	}
 }
 
-void ABackStreetGameModeBase::UpdateWeaponStat(AWeaponBase* TargetWeapon, FWeaponStatStruct NewStat)
-{
-	if (IsValid(TargetWeapon))
-	{
-		TargetWeapon->UpdateWeaponStat(NewStat);
-	}
-}
-void ABackStreetGameModeBase::UpdateWeaponStatWithID(AWeaponBase* TargetWeapon, const int32 WeaponID)
-{
-	if (IsValid(TargetWeapon) && IsValid(WeaponStatTable))
-	{
-		FString rowName = FString::FromInt(WeaponID);
-		FWeaponStatStruct newStat = GetWeaponStatInfoWithID(WeaponID);
-		TargetWeapon->UpdateWeaponStat(newStat);
-	}
-}
-
 void ABackStreetGameModeBase::UpdateProjectileStatWithID(AProjectileBase* TargetProjectile, const int32 ProjectileID)
 {
 	if (IsValid(TargetProjectile) && IsValid(ProjectileStatTable))
@@ -164,14 +146,6 @@ void ABackStreetGameModeBase::UpdateProjectileStatWithID(AProjectileBase* Target
 			TargetProjectile->UpdateProjectileStat(*newStat);
 		}
 	}
-}
-
-FWeaponStatStruct ABackStreetGameModeBase::GetWeaponStatInfoWithID(const int32 WeaponID)
-{
-	FString rowName = FString::FromInt(WeaponID);
-	FWeaponStatStruct* newStat = WeaponStatTable->FindRow<FWeaponStatStruct>(FName(rowName), rowName);
-	if (newStat == nullptr) return FWeaponStatStruct();
-	return *newStat;
 }
 
 FStageEnemyTypeStruct ABackStreetGameModeBase::GetStageTypeInfoWithRow(uint16 row)

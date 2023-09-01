@@ -38,22 +38,47 @@ public:
 
 //------- 기본 프로퍼티, Action -------------------
 public:
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
-		int32 WeaponID;
-
 	//공격 처리
 	virtual void Attack();
 
 	//공격 마무리 처리
 	virtual void StopAttack();
 
+	//필수 지정 프로퍼티
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
+		int32 WeaponID;
+
+	//무기를 초기화 한다. (스탯은 반드시 따로 초기화 해주어야한다.)
+	UFUNCTION()
+		void InitWeapon(int32 NewWeaponID);
+
+//--------- 데이터 테이블, 에셋 관련 ----------------------
+protected:
+	//무기 에셋 정보 테이블
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		UDataTable* WeaponAssetInfoTable;
+	
+	//무기 스탯 테이블
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
+		UDataTable* WeaponStatInfoTable;
+
+	virtual void InitWeaponAsset();
+
+	//현재 무기의 에셋 정보
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
+		FWeaponAssetInfoStruct WeaponAssetInfo;
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FWeaponAssetInfoStruct GetWeaponAssetInfoWithID(int32 TargetWeaponID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FWeaponStatStruct GetWeaponStatInfoWithID(int32 TargetWeaponID);
+
 //------ 스탯/상태 관련 ---------------------------------
 public:
 	//Weapon Stat 초기화
 	virtual void UpdateWeaponStat(FWeaponStatStruct NewStat);
-
-	UFUNCTION()
-		void InitWeapon();// FWeaponStatStruct NewStat);
 
 	UFUNCTION()
 		void RevertWeaponInfo(FWeaponStatStruct OldWeaponStat, FWeaponStateStruct OldWeaponState);
@@ -81,7 +106,7 @@ public:
 
 protected:
 	//Weapon의 종합 Stat
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Stat")
+	UPROPERTY(EditInstanceOnly, Category = "Gameplay|Stat")
 		FWeaponStatStruct WeaponStat;
 
 	//Weapon 상태 정보
@@ -112,19 +137,7 @@ protected:
 		void PlayEffectSound(class USoundCue* EffectSound);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class UNiagaraComponent* MeleeTrailParticle;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		FColor MeleeTrailParticleColor;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class UParticleSystem* HitEffectParticle;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UParticleSystem* DestroyEffectParticle;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* HitImpactSound;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
 		class USoundCue* AttackSound;

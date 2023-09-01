@@ -9,6 +9,8 @@
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/AssetManager.h"
+#include "Engine/StreamableManager.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
@@ -45,7 +47,31 @@ void AProjectileBase::BeginPlay()
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
-void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef)
+void AProjectileBase::InitProjectileAsset()
+{
+	if (ProjectileAssetInfo.ProjectileMesh.IsValid())
+	{
+		Mesh->SetStaticMesh(ProjectileAssetInfo.ProjectileMesh.Get());
+		Mesh->SetRelativeLocation(ProjectileAssetInfo.InitialLocation);
+		Mesh->SetRelativeRotation(ProjectileAssetInfo.InitialRotation);
+		Mesh->SetRelativeScale3D(ProjectileAssetInfo.InitialScale);
+		Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+
+	if (ProjectileAssetInfo.HitEffectParticle.IsValid())
+		HitNiagaraParticle = ProjectileAssetInfo.HitEffectParticle.Get();
+
+	if (ProjectileAssetInfo.HitEffectParticleLegacy.IsValid())
+		HitParticle = ProjectileAssetInfo.HitEffectParticleLegacy.Get();
+
+	if (ProjectileAssetInfo.HitSound.IsValid())
+		HitSound = ProjectileAssetInfo.HitSound.Get();
+
+	if (ProjectileAssetInfo.ExplosionSound.IsValid())
+		ExplosionSound = ProjectileAssetInfo.ExplosionSound.Get();
+}
+
+void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectileAssetInfoStruct NewAssetInfo)
 {
 	if (IsValid(NewCharacterRef))
 	{
@@ -54,6 +80,28 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef)
 		OwnerCharacterRef = NewCharacterRef;
 		SpawnInstigator = OwnerCharacterRef->GetController();
 	}
+
+	ProjectileID = NewAssetInfo.ProjectileID;
+
+	ProjectileAssetInfo = NewAssetInfo;
+	if (ProjectileID != 0)
+	{
+		TArray<FSoftObjectPath> tempStream, assetToStream;
+		tempStream.AddUnique(ProjectileAssetInfo.ProjectileMesh.ToSoftObjectPath());
+		tempStream.AddUnique(ProjectileAssetInfo.HitEffectParticle.ToSoftObjectPath());
+		tempStream.AddUnique(ProjectileAssetInfo.HitEffectParticleLegacy.ToSoftObjectPath());
+		tempStream.AddUnique(ProjectileAssetInfo.HitSound.ToSoftObjectPath());
+		tempStream.AddUnique(ProjectileAssetInfo.ExplosionSound.ToSoftObjectPath());
+
+		for (auto& assetPath : tempStream)
+		{
+			if (!assetPath.IsValid() || assetPath.IsNull()) continue;
+			assetToStream.AddUnique(assetPath);
+		}
+		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
+		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &AProjectileBase::InitProjectileAsset));
+	}
+	else Mesh->SetStaticMesh(nullptr);
 }
 
 void AProjectileBase::UpdateProjectileStat(FProjectileStatStruct NewStat)

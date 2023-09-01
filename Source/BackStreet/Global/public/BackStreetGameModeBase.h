@@ -78,17 +78,7 @@ public:
 		void UpdateCharacterStatWithID(class ACharacterBase* TargetCharacter, const uint32 CharacterID);
 
 	UFUNCTION()
-		void UpdateWeaponStat(class AWeaponBase* TargetWeapon, FWeaponStatStruct NewStat);
-
-	UFUNCTION()
-		void UpdateWeaponStatWithID(class AWeaponBase* TargetWeapon, const int32 WeaponID);
-
-	UFUNCTION()
 		void UpdateProjectileStatWithID(class AProjectileBase* TargetProjectile, const int32 ProjectileID);
-
-	//제거 예정
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FWeaponStatStruct GetWeaponStatInfoWithID(const int32 WeaponID);
 
 	UFUNCTION()
 		FStageEnemyTypeStruct GetStageTypeInfoWithRow(uint16 rowName);
@@ -137,10 +127,6 @@ protected:
 	//적의 스탯 테이블
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* EnemyStatTable;
-	
-	//무기 스탯 테이블, 제거예정
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* WeaponStatTable;
 
 	//발사체 스탯 테이블
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
@@ -149,16 +135,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* StageTypeTable;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* ItemSpawnInfoTable;
-
 // ----- Class Info ------------------------------------ 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
 		TArray<TSubclassOf<UCameraShakeBase> > CameraShakeEffectList;
 	
-	//EItemCategoryInfo의 값이 Idx
+	//스폰할 아이템 클래스 (초기화를 위한 데이터테이블이 포함된 BP를 지정해야함)
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Item")
-		TMap<int32, TSubclassOf<class AItemBase> > ItemClassMap;
+		TSubclassOf<class AItemBase> ItemClass;
 
 //------ 그 외 프로퍼티 ---------------
 protected:
