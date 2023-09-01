@@ -32,16 +32,15 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		virtual void UpdateWeaponStat(FWeaponStatStruct NewStat) override;
 
-//------ VFX ----------------------------------
+//------ Asset----------------------------------
 protected:
 	UFUNCTION()
 		virtual void InitWeaponAsset() override;
 
 	//발사 순간에 출력될 이미터 (임시, 추후 데이터 테이블로 관리 예정)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+	UPROPERTY(VisibleInstanceOnly)
 		class UNiagaraSystem* ShootNiagaraEmitter;
 
-private:
 	//투사체가 발사되는 이펙트를 출력한다
 	UFUNCTION()
 		void SpawnShootNiagaraEffect();
@@ -78,11 +77,21 @@ public:
 	UFUNCTION()
 		void SetInfiniteAmmoMode(bool NewMode) { WeaponStat.RangedWeaponStat.bIsInfiniteAmmo = NewMode; }
 
+//--------Projectile Asset 관련 -----------------
 protected:
-	//SoftObjRef로 대체 예정
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Weapon")
-		TSubclassOf<class AProjectileBase> ProjectileClass;
+	//발사체의 에셋 테이블
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Weapon|Projectile")
+		UDataTable* ProjectileAssetInfoTable;
 
+	//발사체의 에셋 정보를 담을 캐시 변수
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Weapon|Projectile")
+		FProjectileAssetInfoStruct ProjectileAssetInfo;
+
+private:
+	UFUNCTION()
+		FProjectileAssetInfoStruct GetProjectileAssetInfo(int32 TargetProjectileID);
+
+//--------타이머 관련--------------------
 protected:
 	virtual void ClearAllTimerHandle() override;
 

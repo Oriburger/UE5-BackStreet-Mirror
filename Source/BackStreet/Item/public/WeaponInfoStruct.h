@@ -181,8 +181,9 @@ struct FRangedWeaponAssetInfoStruct
 public:
 	GENERATED_USTRUCT_BODY()
 
+	//스폰할 발사체의 ID
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		TSubclassOf<class AProjectileBase> ProjectileClass;
+		int32 ProjectileID;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UNiagaraSystem> ShootEffectParticle;

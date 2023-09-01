@@ -47,3 +47,45 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float DebuffVariable;
 };
+
+USTRUCT(BlueprintType)
+struct FProjectileAssetInfoStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	//아이템 ID
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		int32 ProjectileID;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		FName ProjectileName;
+
+	//스폰할 아이템 스태틱 메시 정보 저장
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+		TSoftObjectPtr<UStaticMesh> ProjectileMesh;
+
+	//메시의 초기 위치 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+		FVector InitialLocation;
+
+	//메시의 초기 회전 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+		FRotator InitialRotation;
+
+	//메시의 초기 크기 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+		FVector InitialScale;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UNiagaraSystem> HitEffectParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UParticleSystem> HitEffectParticleLegacy;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		TSoftObjectPtr<class USoundCue> HitSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		TSoftObjectPtr<class USoundCue> ExplosionSound;
+};
