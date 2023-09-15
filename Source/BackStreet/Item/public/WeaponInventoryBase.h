@@ -122,12 +122,7 @@ protected:
 		int32 CheckWeaponDuplicate(int32 TargetWeaponID);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsEqualWeaponType(int32 WeaponIDA, int32 WeaponIDB);
-
-private:
-	//Melee <-> Ranged Weapon Actor을 전환
-	UFUNCTION()
-		void SwitchWeaponActorToAnotherType();
+		bool GetIsEqualWeaponType(EWeaponType TypeA, EWeaponType TypeB);
 
 //------ 프로퍼티 관련 ----------------------------------
 public:
@@ -156,9 +151,6 @@ private:
 		int32 GetNextInventoryIdx();
 
 	UFUNCTION()
-		void SetCurrentWeaponRef(class AWeaponBase* NewWeapon);
-
-	UFUNCTION()
 		void SetCurrentIdx(int32 newValue) { CurrentIdx = newValue; };
 
 protected:
@@ -175,11 +167,6 @@ private:
 	UPROPERTY()
 		int32 TotalWeight = 0;
 
-	//근, 원거리 무기 전환을 위한 포인터 변수 
-	//GC 방지를 위해 인벤토리 소유로 두고, RawPtr을 사용한다
-	UPROPERTY()
-		AWeaponBase* HiddenWeaponRef;
-
 //---- 그 외 Ref Ptr------------------------------
 private: 
 	//게임모드 Ref
@@ -187,8 +174,4 @@ private:
 
 	//인벤토리 소유자 플레이어 
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
-
-	//현재 장비하고 있는 WeaponRef
-	TWeakObjectPtr<class AWeaponBase> CurrentWeaponRef;
-
 };

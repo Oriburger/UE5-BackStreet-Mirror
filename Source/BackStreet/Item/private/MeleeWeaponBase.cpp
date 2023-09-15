@@ -14,6 +14,8 @@ AMeleeWeaponBase::AMeleeWeaponBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	this->Tags.Add("Melee");
+
 	MeleeTrailParticle = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ITEM_NIAGARA_COMPONENT"));
 	MeleeTrailParticle->SetupAttachment(WeaponMesh);
 	MeleeTrailParticle->bAutoActivate = false;
@@ -23,8 +25,6 @@ void AMeleeWeaponBase::Attack()
 {
 	if (WeaponID == 0) return;
 	Super::Attack();
-
-	this->Tags.Add("Melee");
 	
 	PlayEffectSound(AttackSound);
 	GetWorldTimerManager().SetTimer(MeleeAtkTimerHandle, this, &AMeleeWeaponBase::MeleeAttack, 0.01f, true);
