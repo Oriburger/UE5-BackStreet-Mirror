@@ -612,6 +612,7 @@ bool ACharacterBase::EquipWeapon(AWeaponBase* TargetWeapon)
 	TargetWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, "Weapon_R");
 	TargetWeapon->SetActorRelativeLocation(FVector(0.0f), false);
 	TargetWeapon->SetOwnerCharacter(this);
+	SetWeaponActorRef(TargetWeapon);
 	return true;
 }
 
@@ -645,7 +646,6 @@ AWeaponInventoryBase* ACharacterBase::GetInventoryRef()
 
 void ACharacterBase::SetWeaponActorRef(AWeaponBase* NewWeapon)
 {
-	if (!IsValid(NewWeapon) || NewWeapon->IsActorBeingDestroyed()) return;
 	WeaponRef = NewWeapon;
 }
 

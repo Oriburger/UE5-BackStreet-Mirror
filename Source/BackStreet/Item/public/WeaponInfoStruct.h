@@ -78,7 +78,10 @@ struct FWeaponStatStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		int32 WeaponID;
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
 		FName WeaponName;
 
@@ -151,4 +154,82 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FRangedWeaponStateStruct RangedWeaponState;
+};
+
+USTRUCT(BlueprintType)
+struct FMeleeWeaponAssetInfoStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UParticleSystem> HitEffectParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UNiagaraSystem> MeleeTrailParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		FColor MeleeTrailParticleColor;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		TSoftObjectPtr<class USoundCue> HitImpactSound;
+};
+
+USTRUCT(BlueprintType)
+struct FRangedWeaponAssetInfoStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	//스폰할 발사체의 ID
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		int32 ProjectileID;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UNiagaraSystem> ShootEffectParticle;
+};
+
+USTRUCT(BlueprintType)
+struct FWeaponAssetInfoStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	//아이템 ID
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		int32 WeaponID;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		FName WeaponName;
+
+	//스폰할 아이템 스태틱 메시 정보 저장
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+		TSoftObjectPtr<UStaticMesh> WeaponMesh;
+
+	//메시의 초기 위치 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+		FVector InitialLocation;
+
+	//메시의 초기 회전 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+		FRotator InitialRotation;
+
+	//메시의 초기 크기 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+		FVector InitialScale;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UParticleSystem> DestroyEffectParticle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		TSoftObjectPtr<class USoundCue> AttackSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		TSoftObjectPtr<class USoundCue> AttackFailSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Ranged")
+		FRangedWeaponAssetInfoStruct RangedWeaponAssetInfo;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Melee")
+		FMeleeWeaponAssetInfoStruct MeleeWeaponAssetInfo;
 };

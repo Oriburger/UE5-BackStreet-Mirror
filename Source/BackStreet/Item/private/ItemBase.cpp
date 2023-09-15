@@ -72,9 +72,9 @@ void AItemBase::InitItem(int32 NewItemID)
 
 	if (!ItemInfo.ItemMesh.IsNull())
 	{
-		TArray<FSoftObjectPath> AssetToStream;
-		AssetToStream.AddUnique(ItemInfo.ItemMesh.ToSoftObjectPath());
-		AssetToStream.AddUnique(ItemInfo.OutlineMaterial.ToSoftObjectPath());
+		TArray<FSoftObjectPath> assetToStream;
+		assetToStream.AddUnique(ItemInfo.ItemMesh.ToSoftObjectPath());
+		assetToStream.AddUnique(ItemInfo.OutlineMaterial.ToSoftObjectPath());
 		if (IsValid(ItemInfo.ItemMesh.Get()))
 		{
 			InitializeItemMesh();
@@ -82,7 +82,7 @@ void AItemBase::InitItem(int32 NewItemID)
 		else
 		{
 			FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
-			streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &AItemBase::InitializeItemMesh));
+			streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &AItemBase::InitializeItemMesh));
 		}
 	}
 	//ItemInfo.ItemName
@@ -118,14 +118,14 @@ void AItemBase::OnItemPicked(AActor* Causer)
 		{
 			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
 			UE_LOG(LogTemp, Warning, TEXT("targetWeaopnID : %d"), targetWeaponID);
-			//ensure(playerRef->PickWeapon(targetWeaponID));
+			if (!playerRef->PickWeapon(targetWeaponID)) return;
 		}
 		break;
 	case EItemCategoryInfo::E_Bullet:
 		if (Causer->ActorHasTag("Player"))
 		{
 			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_BULLET_ID_DIFF_VALUE;
-			FWeaponStatStruct targetWeaponStat = playerInventoryRef->GetWeaponStatInfoWithID(targetWeaponID);
+			//FWeaponStatStruct targetWeaponStat = playerInventoryRef->GetWeaponStatInfoWithID(targetWeaponID);
 
 			if (playerInventoryRef->GetWeaponIsContained(targetWeaponID))
 			{
@@ -133,11 +133,11 @@ void AItemBase::OnItemPicked(AActor* Causer)
 			}
 			else
 			{
-				if (targetWeaponStat.WeaponType == EWeaponType::E_Throw)
+				//if (targetWeaponStat.WeaponType == EWeaponType::E_Throw)
 				{
 				//	ensure(playerRef->PickWeapon(targetWeaponID));
 				}
-				else
+				//else
 				{
 					GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName("탄환에 맞는 무기를 소지해주세요"), FColor(255));
 				}
@@ -166,12 +166,17 @@ void AItemBase::InitializeItemMesh()
 	OutlineMeshComponent->SetRelativeLocation(FVector(0.0f));
 	OutlineMeshComponent->SetRelativeRotation(FRotator(0.0f));
 	OutlineMeshComponent->SetRelativeScale3D(FVector(1.0f));
-	//OutlineMeshComponent->SetMaterial(0, )
+	
+	for (int32 matIdx = 0; matIdx < OutlineMeshComponent->GetNumMaterials(); matIdx++)
+	{
+		if(!IsValid(ItemInfo.OutlineMaterial.Get())) break;
+		OutlineMeshComponent->SetMaterial(matIdx, ItemInfo.OutlineMaterial.Get());
+	}
 }
 
 FItemInfoStruct AItemBase::GetItemInfoWithID(const int32 ItemID)
 {
-	if (ItemDataInfoTable != nullptr || ItemID != 0)
+	if (ItemDataInfoTable != nullptr && ItemID != 0)
 	{
 		FItemInfoStruct* newInfo = nullptr;
 		FString rowName = FString::FromInt(ItemID);
