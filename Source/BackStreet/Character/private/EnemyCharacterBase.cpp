@@ -12,6 +12,8 @@
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+
+
 #define TURN_TIME_OUT_SEC 1.0f
 
 AEnemyCharacterBase::AEnemyCharacterBase()
@@ -37,13 +39,13 @@ void AEnemyCharacterBase::BeginPlay()
 	InitFloatingHpWidget();
 	InitEnemyStat();
 	SetDefaultWeapon();
-
 	InitDynamicMeshMaterial(GetMesh()->GetMaterial(0));
 }
 
 void AEnemyCharacterBase::InitEnemyStat()
 {
-	GamemodeRef->UpdateCharacterStatWithID(this, EnemyID);
+	UE_LOG(LogTemp, Warning, TEXT("My ID : %d"), CharacterID);
+	GamemodeRef->UpdateCharacterStatWithID(this, CharacterID);
 	CharacterState.CharacterCurrHP = CharacterStat.CharacterMaxHP;
 	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.CharacterMoveSpeed;
 	SetDefaultStat();
@@ -180,6 +182,7 @@ void AEnemyCharacterBase::SpawnDeathItems()
 		targetItem->ActivateItem();
 	}
 }
+
 
 void AEnemyCharacterBase::SetFacialMaterialEffect(bool NewState)
 {

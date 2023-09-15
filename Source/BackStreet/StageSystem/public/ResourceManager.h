@@ -59,13 +59,7 @@ public:
 	UFUNCTION()
 		TSubclassOf<AEnemyCharacterBase> GetEnemyWithID(int32 EnemyID);
 
-	UFUNCTION()
-		FName GetRandomMap();
-
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<FName> MapNames;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<TSubclassOf<class AEnemyCharacterBase>> EnemyAssets;
 

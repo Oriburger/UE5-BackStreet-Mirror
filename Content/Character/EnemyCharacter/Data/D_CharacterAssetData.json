@@ -1,0 +1,310 @@
+[
+  {
+    "Name": 0,
+    "CharacterName": "박스맨",
+    "CharacterID": 0,
+    "CharacterMesh": "SkeletalMesh'/Game/Asset/Characters/Cute_cardboard_boy/BaseMesh/SK_Cute_Cardboard_boy.SK_Cute_Cardboard_boy'",
+    "CharacterMeshMaterial": "MaterialInstanceConstant'/Game/Character/MainCharacter/Material/M_Cute_cardboard_DynamicFace.M_Cute_cardboard_DynamicFace'",
+    "InitialLocation": {
+      "X": 0,
+      "Y": 0,
+      "Z": -65
+    },
+    "InitialRotation": {
+      "Pitch": 0,
+      "Yaw": -90,
+      "Roll": 0
+    },
+    "InitialScale": {
+      "X": 1,
+      "Y": 1,
+      "Z": 1
+    },
+    "InitialCapsuleComponentScale": {
+      "X": 0.5,
+      "Y": 0.5,
+      "Z": 0.5
+    },
+    "AnimClass": "/Game/Character/MainCharacter/Animation/AB_MainCharacter.AB_MainCharacter",
+    "MeleeAttackAnimMontageList": [ "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_ComboC_1.AM_ComboC_1'", "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_ComboC_2.AM_ComboC_2'", "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_ComboC_3.AM_ComboC_3'", "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_ComboC_4.AM_ComboC_4'", "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_ComboFullA.AM_ComboFullA'" ],
+    "ShootAnimMontageList": [ "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_Gunplay.AM_Gunplay'" ],
+    "ThrowAnimMontageList": [ "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_Attack_A.AM_Attack_A'", "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_AttackB.AM_AttackB'", "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_AttackC.AM_AttackC'", "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_AttackD.AM_AttackD'" ],
+    "ReloadAnimMontageList": [ "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_Investigate.AM_Investigate'" ],
+    "HitAnimMontageList": [ "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_Hit.AM_Hit'" ],
+    "RollAnimMontageList": [ "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_NinjaFrontEvade.AM_NinjaFrontEvade'" ],
+    "InvestigateAnimMontageList": [ "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_Investigate.AM_Investigate'" ],
+    "DieAnimMontageList": [ "AnimMontage'/Game/Character/MainCharacter/Animation/Montage/AM_Death_Bwd.AM_Death_Bwd'" ],
+    "PointMontageList": [],
+    "RollSound": "SoundCue'/Game/Character/MainCharacter/Sound/SQ_Roll.SQ_Roll'",
+    "BuffSound": "SoundCue'/Game/Item/Sound/SQ_Buff.SQ_Buff'",
+    "DebuffSound": "SoundCue'/Game/Item/Sound/SQ_DeBuff.SQ_DeBuff'",
+    "DebuffNiagaraEffectList": [ "", "NiagaraSystem'/Game/Asset/VFX/sA_Megapack_v1/sA_StylizedAttacksPack/FX/NiagaraSystems/NS_Flame_Single.NS_Flame_Single'", "NiagaraSystem'/Game/Asset/VFX/sA_Megapack_v1/sA_PickupSet_1/Fx/NiagaraSystems/NS_Magic_1.NS_Magic_1'", "NiagaraSystem'/Game/Asset/VFX/sA_Megapack_v1/sA_PickupSet_1/Fx/NiagaraSystems/NS_Magic_1.NS_Magic_1'", "NiagaraSystem'/Game/Asset/VFX/sA_Megapack_v1/sA_PickupSet_1/Fx/NiagaraSystems/NS_Magic_1.NS_Magic_1'", "NiagaraSystem'/Game/Asset/VFX/sA_Megapack_v1/sA_PickupSet_1/Fx/NiagaraSystems/NS_Magic_1.NS_Magic_1'", "NiagaraSystem'/Game/Asset/VFX/RPGEffects/ParticlesNiagara/StatusEffects/Stun/NS_Status_Stun.NS_Status_Stun'" ],
+    "NormalMaterial": "MaterialInstanceConstant'/Game/Character/MainCharacter/Material/M_Cute_cardboard_DynamicFace.M_Cute_cardboard_DynamicFace'",
+    "WallThroughMaterial": "Material'/Game/Character/MainCharacter/Material/M_Cute_cardboard_Opacity.M_Cute_cardboard_Opacity'",
+    "EmotionTextureList": [ "Texture2D'/Game/Character/MainCharacter/Texture/T_Bright.T_Bright'", "Texture2D'/Game/Character/MainCharacter/Texture/T_Angry.T_Angry'", "Texture2D'/Game/Character/MainCharacter/Texture/T_Death.T_Death'" ]
+
+
+  },
+  {
+    "Name": 1001,
+    "CharacterName": "로봇A",
+    "CharacterID": 1001,
+    "CharacterMesh": "SkeletalMesh'/Game/Asset/Characters/Cute_Robot/Meshes/Cute_Robot.Cute_Robot'",
+    "CharacterMeshMaterial": "MaterialInstanceConstant'/Game/Character/EnemyCharacter/BotTypeA/Material/M_Robot_Base_Inst.M_Robot_Base_Inst'",
+    "InitialLocation": {
+      "X": 0,
+      "Y": 0,
+      "Z": -90
+    },
+    "InitialRotation": {
+      "Pitch": 0,
+      "Yaw": -90,
+      "Roll": 0
+    },
+    "InitialScale": {
+      "X": 1,
+      "Y": 1,
+      "Z": 1
+    },
+    "InitialCapsuleComponentScale": {
+      "X": 1,
+      "Y": 1,
+      "Z": 1
+    },
+    "AnimClass": "/Game/Character/EnemyCharacter/BotTypeA/Animation/AB_BotTypeA.AB_BotTypeA",
+    "MeleeAttackAnimMontageList": [ "/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_B.AM_PrimaryAttack_B", "/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_C.AM_PrimaryAttack_C", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_D.AM_PrimaryAttack_D'" ],
+    "ShootAnimMontageList": [],
+    "ThrowAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_B.AM_PrimaryAttack_B'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_C.AM_PrimaryAttack_C'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_D.AM_PrimaryAttack_D'" ],
+    "ReloadAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_Action.AM_Action'" ],
+    "HitAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_HeadHit.AM_HeadHit'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_BodyHit.AM_BodyHit'" ],
+    "RollAnimMontageList": [],
+    "InvestigateAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_Action.AM_Action'" ],
+    "DieAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_Death.AM_Death'" ],
+    "PointMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_Point.AM_Point'" ]
+
+  },
+  {
+    "Name": 1002,
+    "CharacterName": "로봇A",
+    "CharacterID": 1002,
+    "CharacterMesh": "SkeletalMesh'/Game/Asset/Characters/Cute_Robot/Meshes/Cute_Robot.Cute_Robot'",
+    "CharacterMeshMaterial": "MaterialInstanceConstant'/Game/Character/EnemyCharacter/BotTypeA/Material/M_Robot_Base_Inst.M_Robot_Base_Inst'",
+    "InitialLocation": {
+      "X": 0,
+      "Y": 0,
+      "Z": -90
+    },
+    "InitialRotation": {
+      "Pitch": 0,
+      "Yaw": -90,
+      "Roll": 0
+    },
+    "InitialScale": {
+      "X": 1,
+      "Y": 1,
+      "Z": 1
+    },
+    "InitialCapsuleComponentScale": {
+      "X": 1,
+      "Y": 1,
+      "Z": 1
+    },
+    "AnimClass": "/Game/Character/EnemyCharacter/BotTypeA/Animation/AB_BotTypeA.AB_BotTypeA",
+    "MeleeAttackAnimMontageList": [ "/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_B.AM_PrimaryAttack_B", "/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_C.AM_PrimaryAttack_C", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_D.AM_PrimaryAttack_D'" ],
+    "ShootAnimMontageList": [],
+    "ThrowAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_B.AM_PrimaryAttack_B'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_C.AM_PrimaryAttack_C'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_D.AM_PrimaryAttack_D'" ],
+    "ReloadAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_Action.AM_Action'" ],
+    "HitAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_HeadHit.AM_HeadHit'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_BodyHit.AM_BodyHit'" ],
+    "RollAnimMontageList": [],
+    "InvestigateAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_Action.AM_Action'" ],
+    "DieAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_Death.AM_Death'" ],
+    "PointMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_Point.AM_Point'" ]
+  },
+  {
+    "Name": 1003,
+    "CharacterName": "로봇A",
+    "CharacterID": 1003,
+    "CharacterMesh": "SkeletalMesh'/Game/Asset/Characters/Cute_Robot_3/Meshes/SK_Robot_3.SK_Robot_3'",
+    "CharacterMeshMaterial": "MaterialInstanceConstant'/Game/Character/EnemyCharacter/BotTypeB/Material/M_Robot_3_Base_InstA.M_Robot_3_Base_InstA'",
+    "InitialLocation": {
+      "X": 0,
+      "Y": 0,
+      "Z": -90
+    },
+    "InitialRotation": {
+      "Pitch": 0,
+      "Yaw": -90,
+      "Roll": 0
+    },
+    "InitialScale": {
+      "X": 1,
+      "Y": 1,
+      "Z": 1
+    },
+    "InitialCapsuleComponentScale": {
+      "X": 1,
+      "Y": 1,
+      "Z": 1
+    },
+    "AnimClass": "AnimBlueprint'/Game/Character/EnemyCharacter/BotTypeB/Animation/AB_BotTypeB.AB_BotTypeB'",
+    "MeleeAttackAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_PrimaryAttack_B.AM_PrimaryAttack_B'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_PrimaryAttack_C.AM_PrimaryAttack_C'" ],
+    "ShootAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Gunplay.AM_Gunplay'" ],
+    "ThrowAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_PrimaryAttack_C.AM_PrimaryAttack_C'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_PrimaryAttack_B.AM_PrimaryAttack_B'" ],
+    "ReloadAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Action.AM_Action'" ],
+    "HitAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Hit.AM_Hit'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_HeadHit.AM_HeadHit'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_BodyHit.AM_BodyHit'" ],
+    "RollAnimMontageList": [],
+    "InvestigateAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Action.AM_Action'" ],
+    "DieAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Death.AM_Death'" ],
+    "PointMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Point.AM_Point'" ]
+  },
+  {
+    "Name": 1100,
+    "CharacterName": "로봇A",
+    "CharacterID": 1100,
+    "CharacterMesh": "SkeletalMesh'/Game/Asset/Characters/Cute_Robot/Meshes/Cute_Robot.Cute_Robot'",
+    "CharacterMeshMaterial": "MaterialInstanceConstant'/Game/Character/EnemyCharacter/BotTypeA/Material/M_Robot_Base_Inst.M_Robot_Base_Inst'",
+    "InitialLocation": {
+      "X": 0,
+      "Y": 0,
+      "Z": -90
+    },
+    "InitialRotation": {
+      "Pitch": 0,
+      "Yaw": -90,
+      "Roll": 0
+    },
+    "InitialScale": {
+      "X": 1,
+      "Y": 1,
+      "Z": 1
+    },
+    "InitialCapsuleComponentScale": {
+      "X": 1,
+      "Y": 1,
+      "Z": 1
+    },
+    "AnimClass": "/Game/Character/EnemyCharacter/BotTypeA/Animation/AB_BotTypeA.AB_BotTypeA",
+    "MeleeAttackAnimMontageList": [ "/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_B.AM_PrimaryAttack_B", "/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_C.AM_PrimaryAttack_C", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_D.AM_PrimaryAttack_D'" ],
+    "ShootAnimMontageList": [],
+    "ThrowAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_B.AM_PrimaryAttack_B'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_C.AM_PrimaryAttack_C'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_PrimaryAttack_D.AM_PrimaryAttack_D'" ],
+    "ReloadAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_Action.AM_Action'" ],
+    "HitAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_HeadHit.AM_HeadHit'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_BodyHit.AM_BodyHit'" ],
+    "RollAnimMontageList": [],
+    "InvestigateAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_Action.AM_Action'" ],
+    "DieAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_Death.AM_Death'" ],
+    "PointMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeA/Animation/Montage/AM_Point.AM_Point'" ]
+  },
+  {
+    "Name": 1101,
+    "CharacterName": "로봇A",
+    "CharacterID": 1101,
+    "CharacterMesh": "SkeletalMesh'/Game/Asset/Characters/Cute_Robot_3/Meshes/SK_Robot_3.SK_Robot_3'",
+    "CharacterMeshMaterial": "MaterialInstanceConstant'/Game/Character/EnemyCharacter/BotTypeB/Material/M_Robot_3_Base_InstA.M_Robot_3_Base_InstA'",
+    "InitialLocation": {
+      "X": 0,
+      "Y": 0,
+      "Z": -90
+    },
+    "InitialRotation": {
+      "Pitch": 0,
+      "Yaw": -90,
+      "Roll": 0
+    },
+    "InitialScale": {
+      "X": 1,
+      "Y": 1,
+      "Z": 1
+    },
+    "InitialCapsuleComponentScale": {
+      "X": 1,
+      "Y": 1,
+      "Z": 1
+    },
+    "AnimClass": "AnimBlueprint'/Game/Character/EnemyCharacter/BotTypeB/Animation/AB_BotTypeB.AB_BotTypeB'",
+    "MeleeAttackAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_PrimaryAttack_B.AM_PrimaryAttack_B'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_PrimaryAttack_C.AM_PrimaryAttack_C'" ],
+    "ShootAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Gunplay.AM_Gunplay'" ],
+    "ThrowAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_PrimaryAttack_C.AM_PrimaryAttack_C'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_PrimaryAttack_B.AM_PrimaryAttack_B'" ],
+    "ReloadAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Action.AM_Action'" ],
+    "HitAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Hit.AM_Hit'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_HeadHit.AM_HeadHit'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_BodyHit.AM_BodyHit'" ],
+    "RollAnimMontageList": [],
+    "InvestigateAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Action.AM_Action'" ],
+    "DieAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Death.AM_Death'" ],
+    "PointMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Point.AM_Point'" ]
+
+  },
+  {
+    "Name": 1102,
+    "CharacterName": "로봇A",
+    "CharacterID": 1102,
+    "CharacterMesh": "SkeletalMesh'/Game/Asset/Characters/Cute_Robot_3/Meshes/SK_Robot_3.SK_Robot_3'",
+    "CharacterMeshMaterial": "MaterialInstanceConstant'/Game/Character/EnemyCharacter/BotTypeB/Material/M_Robot_3_Base_InstA.M_Robot_3_Base_InstA'",
+    "InitialLocation": {
+      "X": 0,
+      "Y": 0,
+      "Z": -90
+    },
+    "InitialRotation": {
+      "Pitch": 0,
+      "Yaw": -90,
+      "Roll": 0
+    },
+    "InitialScale": {
+      "X": 1,
+      "Y": 1,
+      "Z": 1
+    },
+    "InitialCapsuleComponentScale": {
+      "X": 1,
+      "Y": 1,
+      "Z": 1
+    },
+    "AnimClass": "AnimBlueprint'/Game/Character/EnemyCharacter/BotTypeB/Animation/AB_BotTypeB.AB_BotTypeB'",
+    "MeleeAttackAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_PrimaryAttack_B.AM_PrimaryAttack_B'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_PrimaryAttack_C.AM_PrimaryAttack_C'" ],
+    "ShootAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Gunplay.AM_Gunplay'" ],
+    "ThrowAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_PrimaryAttack_C.AM_PrimaryAttack_C'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_PrimaryAttack_B.AM_PrimaryAttack_B'" ],
+    "ReloadAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Action.AM_Action'" ],
+    "HitAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Hit.AM_Hit'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_HeadHit.AM_HeadHit'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_BodyHit.AM_BodyHit'" ],
+    "RollAnimMontageList": [],
+    "InvestigateAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Action.AM_Action'" ],
+    "DieAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Death.AM_Death'" ],
+    "PointMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeB/Animation/Montage/AM_Point.AM_Point'" ]
+
+  },
+  {
+    "Name": 1200,
+    "CharacterName": "로봇A",
+    "CharacterID": 1200,
+    "CharacterMesh": "SkeletalMesh'/Game/Asset/Characters/Brute_Robot/Meshes/Brute_Robot.Brute_Robot'",
+    "CharacterMeshMaterial": "MaterialInstanceConstant'/Game/Character/EnemyCharacter/BotTypeC/Material/M_Brute_Robot_InstA.M_Brute_Robot_InstA'",
+    "InitialLocation": {
+      "X": 0,
+      "Y": 0,
+      "Z": -80
+    },
+    "InitialRotation": {
+      "Pitch": 0,
+      "Yaw": -90,
+      "Roll": 0
+    },
+    "InitialScale": {
+      "X": 0.5,
+      "Y": 0.5,
+      "Z": 0.5
+    },
+    "InitialCapsuleComponentScale": {
+      "X": 1.5,
+      "Y": 1.5,
+      "Z": 1.5
+    },
+    "AnimClass": "AnimBlueprint'/Game/Character/EnemyCharacter/BotTypeC/Animation/AB_BotTypeC.AB_BotTypeC'",
+    "MeleeAttackAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_MeleeAttackA.AM_MeleeAttackA'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_MeleeAttackB.AM_MeleeAttackB'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_MeleeAttackC.AM_MeleeAttackC'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_MeleeAttackD.AM_MeleeAttackD'" ],
+    "ShootAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_MeleeAttackA.AM_MeleeAttackA'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_MeleeAttackB.AM_MeleeAttackB'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_MeleeAttackC.AM_MeleeAttackC'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_MeleeAttackD.AM_MeleeAttackD'" ],
+    "ThrowAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_MeleeAttackA.AM_MeleeAttackA'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_MeleeAttackB.AM_MeleeAttackB'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_MeleeAttackC.AM_MeleeAttackC'", "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_MeleeAttackD.AM_MeleeAttackD'" ],
+    "ReloadAnimMontageList": [],
+    "HitAnimMontageList": [],
+    "RollAnimMontageList": [],
+    "InvestigateAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_Action.AM_Action'" ],
+    "DieAnimMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_Death.AM_Death'" ],
+    "PointMontageList": [ "AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AS_Mutant_Roaring_Montage.AS_Mutant_Roaring_Montage'" ]
+  }
+]
