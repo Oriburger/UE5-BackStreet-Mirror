@@ -35,9 +35,8 @@ protected:
 	UFUNCTION()
 		void InitTargetLocationFromBBKey();
 	
-	//이번 tick에 돌 Angle을 반환
 	UFUNCTION()
-		double CalculateTurnAngle(const FVector& OwnerLocation, const FVector& OwnerForwardVector);
+		FRotator GetTurnRotation(APawn* ControlledPawn);
 
 	UFUNCTION()
 		void LogMessage(FString str, FVector2D vec);
