@@ -13,14 +13,14 @@
 ARangedWeaponBase::ARangedWeaponBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	this->Tags.Add("Ranged");
+
 }
 
 void ARangedWeaponBase::Attack()
 {
 	if (WeaponID == 0) return; 
 	Super::Attack();
-
-	this->Tags.Add("Ranged");
 
 	bool result = TryFireProjectile();
 	PlayEffectSound(result ? AttackSound : AttackFailSound);

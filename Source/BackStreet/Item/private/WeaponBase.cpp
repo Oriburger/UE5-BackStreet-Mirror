@@ -38,6 +38,14 @@ void AWeaponBase::InitWeapon(int32 NewWeaponID)
 	WeaponID = NewWeaponID;
 	WeaponStat.WeaponID = WeaponID;
 
+	if (NewWeaponID == 0)
+	{
+		WeaponStat.WeaponType = ActorHasTag(FName("Melee")) ? EWeaponType::E_Melee
+								: (ActorHasTag(FName("Ranged")) ? EWeaponType::E_Shoot : EWeaponType::E_None);
+
+		UE_LOG(LogTemp, Warning, TEXT("Type!!!!!! = %d"), (int)WeaponStat.WeaponType);
+	}
+
 	//FWeaponStatStruct newStat = GetWeaponStatInfoWithID(WeaponID);
 	//UpdateWeaponStat(newStat);
 

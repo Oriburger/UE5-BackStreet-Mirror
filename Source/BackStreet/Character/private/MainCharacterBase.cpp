@@ -263,7 +263,7 @@ void AMainCharacterBase::TryAttack()
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 
-	if (!IsValid(InventoryRef) || !IsValid(GetWeaponActorRef()))
+	if (!IsValid(InventoryRef) || !IsValid(GetCurrentWeaponRef()))
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
 	}
@@ -291,9 +291,9 @@ void AMainCharacterBase::Attack()
 void AMainCharacterBase::StopAttack()
 {
 	Super::StopAttack();
-	if (IsValid(GetWeaponActorRef()))
+	if (IsValid(GetCurrentWeaponRef()))
 	{
-		GetWeaponActorRef()->StopAttack();
+		GetCurrentWeaponRef()->StopAttack();
 	}
 }
 

@@ -104,6 +104,9 @@ public:
 	UFUNCTION()
 		void SetWeaponState(FWeaponStateStruct NewState) { WeaponState = NewState; }
 
+	UFUNCTION()
+		EWeaponType GetWeaponType() { return WeaponStat.WeaponType; }
+
 protected:
 	//Weapon¿« ¡æ«’ Stat
 	UPROPERTY(EditInstanceOnly, Category = "Gameplay|Stat")

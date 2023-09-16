@@ -9,6 +9,8 @@ class BACKSTREET_API ACharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
+	friend class AWeaponInventoryBase;
+
 //----- Global / Component ----------
 public:
 	// Sets default values for this character's properties
@@ -64,6 +66,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void TakeKnockBack(AActor* Causer, float Strength);
 
+	//공격Action 사이의 Interval을 관리하는 타이머를 해제
+	UFUNCTION()
+		void ResetAtkIntervalTimer();
+
 // ------- Character Stat/State ------------------------------
 public:
 	//캐릭터의 상태 정보를 초기화
@@ -112,16 +118,31 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class AWeaponInventoryBase* GetInventoryRef();
 
-	UFUNCTION()
-		void SetWeaponActorRef(class AWeaponBase* NewWeapon);
+	UPROPERTY()
+		class AWeaponInventoryBase* InventoryRef;
 
 	//무기 Ref를 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class AWeaponBase* GetWeaponActorRef();
+		class AWeaponBase* GetCurrentWeaponRef();
 
-	//공격Action 사이의 Interval을 관리하는 타이머를 해제
-	UFUNCTION()
-		void ResetAtkIntervalTimer();
+private:
+	//0번째 : 들고 있는 무기 / 1번째, 숨겨져 있는 다른 타임의무기
+	UPROPERTY()
+		TArray<class AWeaponBase*> WeaponActorList;
+
+	//0번째 : 근접 무기 / 1번째 : 원거리 무기
+	//하나의 WeaponBase로 통일을 한다면 이렇게 하지 않아도 될텐데..
+	UPROPERTY()
+		TArray<TSubclassOf<class AWeaponBase>> WeaponClassList; 
+
+	//Melee <-> Ranged Weapon Actor을 전환
+	void SwitchWeaponActorToAnotherType();
+
+	//초기 무기 액터들을 스폰하고 초기화 한다.
+	void InitWeaponActors();
+
+	//무기 액터를 스폰
+	AWeaponBase* SpawnWeaponActor(bool bIsRangedWeapon);
 
 // ----- 애니메이션 관련 -------------------
 protected:
@@ -146,12 +167,6 @@ protected:
 	//캐릭터의 현재 상태
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
 		FCharacterStateStruct CharacterState;
-
-	UPROPERTY()
-		class AWeaponInventoryBase* InventoryRef;
-
-	UPROPERTY()
-		class AWeaponBase* WeaponRef;
 
 	//Gamemode 약 참조
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
