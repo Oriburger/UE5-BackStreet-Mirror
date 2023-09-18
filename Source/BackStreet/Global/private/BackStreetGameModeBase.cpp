@@ -22,11 +22,6 @@ ABackStreetGameModeBase::ABackStreetGameModeBase()
 		EnemyStatTable = DataTable.Object;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UDataTable> StageTypeDataTable(TEXT("/Game/System/StageManager/Data/D_StageEnemyTypeTable.D_StageEnemyTypeTable"));
-	if (StageTypeDataTable.Succeeded())
-	{
-		StageTypeTable = StageTypeDataTable.Object;
-	}
 }
 
 void ABackStreetGameModeBase::BeginPlay()
@@ -115,7 +110,7 @@ void ABackStreetGameModeBase::UpdateCharacterStat(ACharacterBase* TargetCharacte
 
 void ABackStreetGameModeBase::UpdateCharacterStatWithID(ACharacterBase* TargetCharacter, const uint32 CharacterID)
 {
-	if (IsValid(TargetCharacter) && TargetCharacter->ActorHasTag("Enemy"))
+	if (IsValid(TargetCharacter) && TargetCharacter->ActorHasTag("Enemy")&&CharacterID!=0)
 	{
 		//DataTable로 부터 Read
 		FString rowName = FString::FromInt(CharacterID);
@@ -148,33 +143,5 @@ void ABackStreetGameModeBase::UpdateProjectileStatWithID(AProjectileBase* Target
 	}
 }
 
-FStageEnemyTypeStruct ABackStreetGameModeBase::GetStageTypeInfoWithRow(uint16 row)
-{
-	FString rowName = FString::FromInt(row);
-	FStageEnemyTypeStruct* newStat = StageTypeTable->FindRow<FStageEnemyTypeStruct>(FName(rowName), rowName);
-	if (newStat == nullptr) return FStageEnemyTypeStruct();
-	return *newStat;
-}
 
-FCharacterAnimAssetInfoStruct ABackStreetGameModeBase::GetCharacterAnimAssetInfoData(const int32 CharacterID)
-{
-	// 캐시된 데이터 확인
-	if (CachedCharacterAssetInfoData.AnimAssetInfoMap.Contains(CharacterID))
-	{
-		return CachedCharacterAssetInfoData.AnimAssetInfoMap[CharacterID];
-	}
-	// AssetInfoTable에서 데이터 가져오기
-	if (AnimAssetInfoTable)
-	{
-		FCharacterAnimAssetInfoStruct* assetInfoRow = AnimAssetInfoTable->FindRow<FCharacterAnimAssetInfoStruct>(FName(*FString::FromInt(CharacterID)), FString(""));
-		if (assetInfoRow)
-		{
-			// 데이터를 캐시에 저장
-			CachedCharacterAssetInfoData.AnimAssetInfoMap.Add(CharacterID, *assetInfoRow);
-			return *assetInfoRow;
-		}
-	}
-	// 데이터가 없을 경우 기본값 반환
-	return FCharacterAnimAssetInfoStruct();
-}
 

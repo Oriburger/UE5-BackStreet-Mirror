@@ -81,9 +81,6 @@ public:
 		void UpdateProjectileStatWithID(class AProjectileBase* TargetProjectile, const int32 ProjectileID);
 
 	UFUNCTION()
-		FStageEnemyTypeStruct GetStageTypeInfoWithRow(uint16 rowName);
-
-	UFUNCTION()
 		class UDebuffManager* GetGlobalDebuffManagerRef() { return DebuffManager; }
 
 	UFUNCTION(BlueprintCallable)
@@ -102,26 +99,6 @@ public:
 		void PopUpClearUI();
 
 
-// ------ Asset Info ----------------------------
-public:
-	//캐릭터의 애니메이션 에셋 데이터를 읽어들임
-	UFUNCTION()
-		FCharacterAnimAssetInfoStruct GetCharacterAnimAssetInfoData(const int32 CharacterID);
-
-protected:
-	//애니메이션 에셋 경로 저장 데이터 테이블
-	UPROPERTY(EditDefaultsOnly, Category = "Asset|Data")
-		UDataTable* AnimAssetInfoTable;
-
-	//VFX 에셋 경로 저장 데이터 테이블
-	UPROPERTY(EditDefaultsOnly, Category = "Asset|Data")
-		UDataTable* VFXAssetInfoTable;
-
-private:
-	//추후 따로 뺄 예정
-	UPROPERTY()
-		FCharacterAssetInfoStruct CachedCharacterAssetInfoData;
-
 // ------ Data Table -----------------------------
 protected:
 	//적의 스탯 테이블
@@ -132,8 +109,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* ProjectileStatTable;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* StageTypeTable;
 
 // ----- Class Info ------------------------------------ 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")

@@ -72,6 +72,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		TArray<class AStageData*> GetStages() { return StageList; }
+
+	UFUNCTION(BlueprintCallable)
+		FStageInfoStruct GetStageTypeInfoWithType(EStageCategoryInfo Type);
+
 	
 private:
 
@@ -83,6 +87,9 @@ private:
 
 	UFUNCTION()
 		void InitStartGate();
+
+	UFUNCTION()
+		void InitStageTypeArray();
 
 private:
 	UPROPERTY()
@@ -115,6 +122,15 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|ResourceManager")
 		TSubclassOf<class AResourceManager> ResourceManagerClass;
 
+	// --------Data Table-------
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		UDataTable* StageTypeTable;
 
+	UPROPERTY()
+		TArray<FStageInfoStruct> NormalStageTypes;
+
+	UPROPERTY()
+		TArray<FStageInfoStruct> BossStageTypes;
 
 };

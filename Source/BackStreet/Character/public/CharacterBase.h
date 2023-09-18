@@ -30,6 +30,9 @@ public:
 
 // ------- Character Action 기본 ------- 
 public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		int32 CharacterID;
+
 	//Input에 Binding 되어 공격을 시도 (AnimMontage를 호출)
 	virtual void TryAttack();
 
@@ -123,19 +126,80 @@ public:
 	UFUNCTION()
 		void ResetAtkIntervalTimer();
 
-// ----- 애니메이션 관련 -------------------
+// ---- Asset -------------------
+public:
+	// 외부에서 Init하기위해 Call
+	UFUNCTION(BlueprintCallable)
+		void InitAsset(int32 NewEnemyID);
+
+protected:
+	UFUNCTION()
+		void SetAsset();
+
+	UFUNCTION()
+		bool InitAnimAsset();
+
+	UFUNCTION()
+		void InitSoundAsset();
+
+	UFUNCTION()
+		void InitVFXAsset();
+
+	UFUNCTION()
+		void InitMaterialAsset();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FCharacterAssetInfoStruct GetAssetInfoWithID(const int32 GetEnemyID);
+
+protected:
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
+		FCharacterAssetInfoStruct AssetInfo;
+
+	//적 데이터 테이블 (에셋 정보 포함)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
+		UDataTable* AssetDataInfoTable;
+
 protected:
 	//애니메이션, VFX, 사운드큐 등 저장
 	UPROPERTY()
 		struct FCharacterAnimAssetInfoStruct AnimAssetData;
 
-// ----- VFX ------------------- -> 위 애니메이션 처럼 변경 예정
-protected:
-	UFUNCTION()
-		void InitDynamicMeshMaterial(UMaterialInterface* NewMaterial);
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+		class UAnimMontage* PreChaseAnimMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+		class UAnimMontage* InvestigateAnimation;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		class USoundCue* RollSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		class USoundCue* BuffSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		class USoundCue* DebuffSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		USoundCue* HitImpactSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		TArray<class UNiagaraSystem*> DebuffNiagaraEffectList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
+		class UMaterialInterface* NormalMaterial;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
+		class UMaterialInterface* WallThroughMaterial;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
+		TArray<class UTexture*> EmotionTextureList;
 
 	UPROPERTY()
 		class UMaterialInstanceDynamic* CurrentDynamicMaterial;
+
+protected:
+	UFUNCTION()
+		void InitDynamicMeshMaterial(UMaterialInterface* NewMaterial);
 
 // ------ 그 외 캐릭터 프로퍼티  ---------------
 protected:

@@ -55,6 +55,54 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FStageInfoStruct : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		int32 StageID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		int32 ChapterLevel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		EStageCategoryInfo StageType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		TArray<FName> LevelList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blueprint")
+		TArray<UBlueprint*> ItemBoxBPList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blueprint")
+		TArray<UBlueprint*> RewardBoxBPList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blueprint")
+		TArray<UBlueprint*> CraftingBoxBPList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
+		TArray<int32> NormalEnemyIDList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
+		TArray<int32> BossEnemyIDList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
+		int32 MaxSpawnEnemy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
+		int32 MinSpawnEnemy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
+		int32 MaxSpawnItem;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
+		int32 MinSpawnItem;
+
+};
+
+
+USTRUCT(BlueprintType)
 struct FStageDataStruct : public FTableRowBase
 {
 	GENERATED_BODY()
@@ -73,7 +121,10 @@ public:
 		TArray<bool> GateInfo;
 
 	UPROPERTY()
-		EStageCategoryInfo Type;
+		EStageCategoryInfo StageCategoryType;
+
+	UPROPERTY()
+		FStageInfoStruct StageType;
 
 	UPROPERTY()
 		FName LevelToLoad;
