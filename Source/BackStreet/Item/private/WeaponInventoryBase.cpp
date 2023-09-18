@@ -46,14 +46,14 @@ EWeaponType AWeaponInventoryBase::GetWeaponType(int32 TargetWeaponID)
 	return GetWeaponStatInfoWithID(TargetWeaponID).WeaponType;
 }
 
-void AWeaponInventoryBase::InitInventory()
+void AWeaponInventoryBase::InitInventory(int32 NewMaxCapacity)
 {
 	if (!IsValid(GetOwner()) || !GetOwner()->ActorHasTag("Character"))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("AInventory는 CharacterBase 이외의 클래스에서는 소유할 수 없습니다."));
 		checkf(false, TEXT("AInventory는 CharacterBase 이외의 클래스에서는 소유할 수 없습니다."));
 	}
-
+	MaxCapacity = NewMaxCapacity;
 	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 		
@@ -86,7 +86,7 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 	if (duplicateIdx == -1)
 	{
 		//Weapon이 InValid하면 안됨
-		if (GetIsInventoryEmpty()) EquipWeapon(NewWeaponID);
+		if (GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 0) EquipWeapon(NewWeaponID);
 		if (!IsValid(GetCurrentWeaponRef())) return false;
 
 		FWeaponStatStruct newStat; 
@@ -230,6 +230,18 @@ bool AWeaponInventoryBase::SwitchToNextWeapon()
 		OnSwapWeapon.Broadcast();
 
 	return false;
+}
+
+bool AWeaponInventoryBase::SetInventoryIdx(int32 NewIdx)
+{
+	if (!InventoryArray.IsValidIndex(NewIdx)) return false; 
+
+	while (GetCurrentIdx() != NewIdx)
+	{ 
+		bool result = SwitchToNextWeapon();
+		if (!result) return false;	
+	}
+	return true;
 }
 
 void AWeaponInventoryBase::SyncCurrentWeaponInfo(bool bIsLoadActorInfo)

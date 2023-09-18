@@ -70,6 +70,12 @@ void AMainCharacterBase::BeginPlay()
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	SubInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 
+	if (IsValid(SubInventoryRef) && !SubInventoryRef->IsActorBeingDestroyed())
+	{
+		SubInventoryRef->SetOwner(this);
+		SubInventoryRef->InitInventory(4);
+	}
+
 	InitDynamicMeshMaterial(NormalMaterial);
 
 	AbilityManagerRef = NewObject<UAbilityManagerBase>(this, UAbilityManagerBase::StaticClass(), FName("AbilityfManager"));

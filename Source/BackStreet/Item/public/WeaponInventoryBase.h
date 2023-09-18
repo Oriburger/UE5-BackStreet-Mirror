@@ -39,6 +39,9 @@ public:
 
 //------ Global ------------------------------------
 public:
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void PrintDebugMessage(); 
+
 	AWeaponInventoryBase();
 
 	virtual void Tick(float DeltaTime) override;
@@ -69,7 +72,7 @@ public:
 public: 
 	//인벤토리를 초기화
 	UFUNCTION()
-		void InitInventory();
+		void InitInventory(int32 NewMaxCapacity = 6);
 
 	//무기를 장착
 	UFUNCTION()
@@ -90,6 +93,10 @@ public:
 	//다음 무기로 전환
 	UFUNCTION()
 		bool SwitchToNextWeapon();
+
+	//새로운 인덱스로 전환
+	UFUNCTION(BlueprintCallable)
+		bool SetInventoryIdx(int32 NewIdx);
 
 	//현재 무기의 정보와 인벤토리 내 정보를 동기화 (bIsLoadInfo : 액터 정보를 블러올 것인지?)
 	UFUNCTION(BlueprintCallable)
