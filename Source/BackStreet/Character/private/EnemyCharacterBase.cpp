@@ -18,6 +18,9 @@
 
 AEnemyCharacterBase::AEnemyCharacterBase()
 {
+	PrimaryActorTick.bCanEverTick = false;
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
 	FloatingHpBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("FLOATING_HP_BAR"));
 	FloatingHpBar->SetupAttachment(GetCapsuleComponent());
 	FloatingHpBar->SetRelativeLocation(FVector(0.0f, 0.0f, 85.0f));
@@ -25,8 +28,7 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	FloatingHpBar->SetDrawSize({ 80.0f, 10.0f });
 
 	bUseControllerRotationYaw = false;
-	PrimaryActorTick.bCanEverTick = false;
-	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	this->Tags.Add("Enemy");
 }
@@ -36,8 +38,10 @@ void AEnemyCharacterBase::BeginPlay()
 	Super::BeginPlay();
 	
 	SpawnDefaultController();
+
 	InitFloatingHpWidget();
 	InitEnemyStat();
+	
 	SetDefaultWeapon();
 	InitDynamicMeshMaterial(GetMesh()->GetMaterial(0));
 }
