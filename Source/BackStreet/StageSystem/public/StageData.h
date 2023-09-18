@@ -44,10 +44,16 @@ public:
 		void SetStageLocation(FVector Vector) { StageInfo.StageLocation = Vector; }
 
 	UFUNCTION(BlueprintCallable)
-		EStageCategoryInfo GetStageType() { return StageInfo.Type; }
+		EStageCategoryInfo GetStageCategoryType() { return StageInfo.StageCategoryType; }
 
 	UFUNCTION()
-		void SetStageType(EStageCategoryInfo StageType) { StageInfo.Type = StageType; }
+		FStageInfoStruct GetStageTypeInfo() { return StageInfo.StageType; }
+
+	UFUNCTION()
+		void SetStageCategoryType(EStageCategoryInfo Type) { StageInfo.StageCategoryType = Type; }
+
+	UFUNCTION()
+		void SetStageTypeInfo(FStageInfoStruct Type) { StageInfo.StageType = Type; }
 
 	UFUNCTION()
 		FName GetLevelToLoad() { return StageInfo.LevelToLoad; }
