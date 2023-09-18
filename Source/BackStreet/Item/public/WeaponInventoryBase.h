@@ -14,6 +14,7 @@ UCLASS()
 class BACKSTREET_API AWeaponInventoryBase : public AActor
 {
 	GENERATED_BODY()
+
 //------ Delegate ---------------------------------
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
@@ -60,6 +61,7 @@ private:
 	UFUNCTION()
 		FWeaponStatStruct GetWeaponStatInfoWithID(int32 TargetWeaponID);
 
+public: 
 	UFUNCTION()
 		EWeaponType GetWeaponType(int32 TargetWeaponID);
 

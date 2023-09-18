@@ -51,7 +51,7 @@ void AWeaponInventoryBase::InitInventory()
 	if (!IsValid(GetOwner()) || !GetOwner()->ActorHasTag("Character"))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("AInventory는 CharacterBase 이외의 클래스에서는 소유할 수 없습니다."));
-		check(0);
+		checkf(false, TEXT("AInventory는 CharacterBase 이외의 클래스에서는 소유할 수 없습니다."));
 	}
 
 	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());

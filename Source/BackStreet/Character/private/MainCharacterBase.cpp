@@ -68,6 +68,7 @@ void AMainCharacterBase::BeginPlay()
 	Super::BeginPlay();
 	
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	SubInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 
 	InitDynamicMeshMaterial(NormalMaterial);
 
@@ -413,6 +414,34 @@ bool AMainCharacterBase::GetIsAbilityActive(const ECharacterAbilityType TargetAb
 {
 	if (!IsValid(AbilityManagerRef)) return false;
 	return AbilityManagerRef->GetIsAbilityActive(TargetAbilityType);
+}
+
+bool AMainCharacterBase::PickWeapon(int32 NewWeaponID)
+{
+	if (!IsValid(InventoryRef) || !IsValid(SubInventoryRef)) return false;
+	
+	bool result = false; 
+	EWeaponType weaponType = InventoryRef->GetWeaponType(NewWeaponID);
+	
+	if (weaponType == EWeaponType::E_Throw)
+	{
+		result = SubInventoryRef->AddWeapon(NewWeaponID);
+		UE_LOG(LogTemp, Warning, TEXT("Sub Weapon!"));
+	}
+		
+	else
+	{
+		result = InventoryRef->AddWeapon(NewWeaponID);
+		UE_LOG(LogTemp, Warning, TEXT("Main Weapon!"));
+	}
+
+	return result;
+}
+
+AWeaponInventoryBase* AMainCharacterBase::GetSubInventoryRef()
+{
+	if (!IsValid(SubInventoryRef) || SubInventoryRef->IsActorBeingDestroyed()) return nullptr;
+	return SubInventoryRef;
 }
 
 void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)

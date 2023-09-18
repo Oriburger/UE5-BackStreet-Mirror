@@ -16,17 +16,16 @@ ACharacterBase::ACharacterBase()
 	PrimaryActorTick.bCanEverTick = true;
 	this->Tags.Add("Character");
 
-	InventoryComponent = CreateDefaultSubobject<UChildActorComponent>(TEXT("INVENTORY"));
-	InventoryComponent->SetupAttachment(GetCapsuleComponent());
-
-
+	static ConstructorHelpers::FClassFinder<AWeaponInventoryBase> weaponInventoryClassFinder(TEXT("/Game/Weapon/Blueprint/BP_WeaponInventory"));
 	static ConstructorHelpers::FClassFinder<AWeaponBase> meleeWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_MeleeWeaponBase"));
 	static ConstructorHelpers::FClassFinder<AWeaponBase> rangedWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_RangedWeaponBase"));
 
 	//클래스를 제대로 명시하지 않았으면 크래시를 띄움
+	checkf(weaponInventoryClassFinder.Succeeded(), TEXT("Weapon Inventory 클래스 탐색에 실패했습니다."));
 	checkf(meleeWeaponClassFinder.Succeeded(), TEXT("Melee Weapon 클래스 탐색에 실패했습니다.")); 
 	checkf(rangedWeaponClassFinder.Succeeded(), TEXT("Ranged Weapon 클래스 탐색에 실패했습니다."));
 
+	WeaponInventoryClass = weaponInventoryClassFinder.Class; 
 	WeaponClassList.Add(meleeWeaponClassFinder.Class);
 	WeaponClassList.Add(rangedWeaponClassFinder.Class);
 }
@@ -37,7 +36,7 @@ void ACharacterBase::BeginPlay()
 	Super::BeginPlay();
 	InitCharacterState();
 
-	InventoryRef = Cast<AWeaponInventoryBase>(InventoryComponent->GetChildActor());
+	InventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 
 	if (IsValid(InventoryRef) && !InventoryRef->IsActorBeingDestroyed())

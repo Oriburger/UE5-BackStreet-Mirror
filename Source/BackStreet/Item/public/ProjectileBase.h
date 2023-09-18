@@ -13,6 +13,7 @@ class BACKSTREET_API AProjectileBase : public AActor
 	GENERATED_BODY()
 
 	friend class ARangedWeaponBase;
+	friend class AThrowWeaponBase;
 
 //------ Global, Component -------------------
 public:	

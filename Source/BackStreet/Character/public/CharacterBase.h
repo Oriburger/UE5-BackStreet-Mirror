@@ -106,8 +106,7 @@ public:
 		bool EquipWeapon(class AWeaponBase* TargetWeapon);
 
 	//무기를 집는다. 인벤토리가 꽉 찼다면 false를 반환
-	UFUNCTION(BlueprintCallable)
-		bool PickWeapon(int32 NewWeaponID);
+	virtual bool PickWeapon(int32 NewWeaponID);
 
 	//다음 무기로 전환한다. 전환에 실패하면 false를 반환
 	virtual void SwitchToNextWeapon();
@@ -125,6 +124,14 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class AWeaponBase* GetCurrentWeaponRef();
 
+protected:
+	UPROPERTY()
+		TSubclassOf<class AWeaponInventoryBase> WeaponInventoryClass;
+
+	//Melee <-> Ranged Weapon Actor을 전환
+	UFUNCTION()
+		void SwitchWeaponActorToAnotherType();
+
 private:
 	//0번째 : 들고 있는 무기 / 1번째, 숨겨져 있는 다른 타임의무기
 	UPROPERTY()
@@ -134,9 +141,6 @@ private:
 	//하나의 WeaponBase로 통일을 한다면 이렇게 하지 않아도 될텐데..
 	UPROPERTY()
 		TArray<TSubclassOf<class AWeaponBase>> WeaponClassList; 
-
-	//Melee <-> Ranged Weapon Actor을 전환
-	void SwitchWeaponActorToAnotherType();
 
 	//초기 무기 액터들을 스폰하고 초기화 한다.
 	void InitWeaponActors();

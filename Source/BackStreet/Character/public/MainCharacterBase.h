@@ -139,6 +139,18 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType);
 
+// -------- Inventory --------------
+public:
+	UFUNCTION(BlueprintCallable)
+		virtual bool PickWeapon(int32 NewWeaponID) override;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class AWeaponInventoryBase* GetSubInventoryRef();
+
+	UPROPERTY()
+		class AWeaponInventoryBase* SubInventoryRef;
+
+
 // -------- VFX -----------
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
