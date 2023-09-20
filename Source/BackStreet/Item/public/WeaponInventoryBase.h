@@ -74,9 +74,16 @@ public:
 	UFUNCTION()
 		void InitInventory(int32 NewMaxCapacity = 6);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FInventoryItemInfoStruct> GetInventoryArray() { return InventoryArray; }
+
 	//무기를 장착
 	UFUNCTION()
 		void EquipWeapon(int32 NewWeaponID);
+
+	//새로운 인덱스로 전환
+	UFUNCTION(BlueprintCallable)
+		bool EquipWeaponByIdx(int32 NewIdx);
 
 	//무기 추가를 시도. 불가능하면 false를 반환
 	UFUNCTION(BlueprintCallable)
@@ -93,10 +100,6 @@ public:
 	//다음 무기로 전환
 	UFUNCTION()
 		bool SwitchToNextWeapon();
-
-	//새로운 인덱스로 전환
-	UFUNCTION(BlueprintCallable)
-		bool SetInventoryIdx(int32 NewIdx);
 
 	//현재 무기의 정보와 인벤토리 내 정보를 동기화 (bIsLoadInfo : 액터 정보를 블러올 것인지?)
 	UFUNCTION(BlueprintCallable)
@@ -135,6 +138,9 @@ protected:
 
 //------ 프로퍼티 관련 ----------------------------------
 public:
+	UFUNCTION(BlueprintCallable)
+		bool SetCurrentIdx(int32 NewIdx);
+
 	//현재 선택된 인벤토리 Idx를 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetCurrentIdx() {  return CurrentIdx;  }
@@ -152,15 +158,12 @@ public:
 	UFUNCTION()
 		class AWeaponBase* GetCurrentWeaponRef();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FInventoryItemInfoStruct GetCurrentWeaponInfo();
 
 private:
 	UFUNCTION()
 		int32 GetNextInventoryIdx();
-
-	UFUNCTION()
-		void SetCurrentIdx(int32 newValue) { CurrentIdx = newValue; };
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (UIMin = 1, UIMax = 10))

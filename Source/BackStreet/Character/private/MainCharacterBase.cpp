@@ -270,9 +270,10 @@ void AMainCharacterBase::TryAttack()
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 
-	if (!IsValid(InventoryRef) || !IsValid(GetCurrentWeaponRef()))
+	if (GetCurrentWeaponRef()->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
+		return;
 	}
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
@@ -432,13 +433,10 @@ bool AMainCharacterBase::PickWeapon(int32 NewWeaponID)
 	if (weaponType == EWeaponType::E_Throw)
 	{
 		result = SubInventoryRef->AddWeapon(NewWeaponID);
-		UE_LOG(LogTemp, Warning, TEXT("Sub Weapon!"));
 	}
-		
-	else
+	else if(weaponType != EWeaponType::E_None)
 	{
 		result = InventoryRef->AddWeapon(NewWeaponID);
-		UE_LOG(LogTemp, Warning, TEXT("Main Weapon!"));
 	}
 
 	return result;

@@ -105,7 +105,7 @@ public:
 		void SetWeaponState(FWeaponStateStruct NewState) { WeaponState = NewState; }
 
 	UFUNCTION()
-		EWeaponType GetWeaponType() { return WeaponStat.WeaponType; }
+		EWeaponType GetWeaponType();
 
 protected:
 	//Weapon¿« ¡æ«’ Stat

@@ -13,7 +13,6 @@
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
-
 #define TURN_TIME_OUT_SEC 1.0f
 
 AEnemyCharacterBase::AEnemyCharacterBase()

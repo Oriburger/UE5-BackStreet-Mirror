@@ -198,3 +198,11 @@ float AWeaponBase::GetAttackRange()
 	if(WeaponStat.WeaponType == EWeaponType::E_Melee) return 25.0f;
 	return 200.0f;
 }
+
+EWeaponType AWeaponBase::GetWeaponType()
+{
+	if (ActorHasTag("Melee")) return EWeaponType::E_Melee;
+	else if (ActorHasTag("Ranged")) return EWeaponType::E_Shoot;
+	else if (ActorHasTag("Throw")) return EWeaponType::E_Throw;
+	return EWeaponType();
+}

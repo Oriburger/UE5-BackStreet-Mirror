@@ -666,18 +666,10 @@ void ACharacterBase::SwitchWeaponActorToAnotherType()
 	if (WeaponActorList.Num() < 2) return;
 	if (!IsValid(WeaponActorList[0]) || !IsValid(WeaponActorList[1])) return;
 
-	//Swap하기
-	//AWeaponBase* tempWeaponPtr = WeaponActorList[0];
-	//WeaponActorList[0] = WeaponActorList[1];
-	//WeaponActorList[1] = tempWeaponPtr;
-	UE_LOG(LogTemp, Warning, TEXT("Before Switch : %d %d"), (int32)WeaponActorList[0]->GetWeaponType()
-		, (int32)WeaponActorList[1]->GetWeaponType());
-
 	Swap(WeaponActorList[0], WeaponActorList[1]);
 
 	UE_LOG(LogTemp, Warning, TEXT("After Switch : %d %d"), (int32)WeaponActorList[0]->GetWeaponType()
 												 , (int32)WeaponActorList[1]->GetWeaponType());
-	UE_LOG(LogTemp, Warning, TEXT("------------------"));
 
 	//Visibility 전환
 	WeaponActorList[0]->SetActorHiddenInGame(false);
