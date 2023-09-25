@@ -55,9 +55,6 @@ public:
 	//근접 공격을 수행
 	UFUNCTION()
 		void MeleeAttack();
-
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-		void OnMeleeAttackSuccess(FHitResult HitResult, float DamageAmount);
 	
 private:
 	//검로 Trace, 근접 무기의 각 지점에서 이전 월드 좌표 -> 현재 월드 좌표로 LineTrace를 진행 

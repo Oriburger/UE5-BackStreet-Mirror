@@ -65,7 +65,7 @@ void AWeaponInventoryBase::EquipWeapon(int32 NewWeaponID)
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 
 	// 근거리무기랑 원거리무기를 교체
-	UE_LOG(LogTemp, Warning, TEXT("Try Swap :%d %d"), GetCurrentWeaponRef()->GetWeaponType(), GetWeaponType(NewWeaponID));
+	//UE_LOG(LogTemp, Warning, TEXT("Try Swap :%d %d"), GetCurrentWeaponRef()->GetWeaponType(), GetWeaponType(NewWeaponID));
 
 	if (!GetIsEqualWeaponType(GetCurrentWeaponRef()->GetWeaponType(), GetWeaponType(NewWeaponID)))
 	{
@@ -80,8 +80,9 @@ bool AWeaponInventoryBase::EquipWeaponByIdx(int32 NewIdx)
 {
 	if (!InventoryArray.IsValidIndex(NewIdx)) return false;
 
+	SyncCurrentWeaponInfo(true);
 	EquipWeapon(GetCurrentWeaponInfo().WeaponID);
-	SyncCurrentWeaponInfo();
+	SyncCurrentWeaponInfo(false);
 	while (GetCurrentIdx() != NewIdx)
 	{
 		bool result = SwitchToNextWeapon();
@@ -252,33 +253,27 @@ bool AWeaponInventoryBase::SwitchToNextWeapon()
 
 void AWeaponInventoryBase::SyncCurrentWeaponInfo(bool bIsLoadActorInfo)
 {
-	UE_LOG(LogTemp, Warning, TEXT("#1"));
 	if (!OwnerCharacterRef.IsValid()) return;
-	UE_LOG(LogTemp, Warning, TEXT("#2"));
 	if (GetCurrentWeaponCount() == 0) return;
-	UE_LOG(LogTemp, Warning, TEXT("#3"));
 	if (!InventoryArray.IsValidIndex(GetCurrentIdx())) return;
-	UE_LOG(LogTemp, Warning, TEXT("#4"));
 	if (!IsValid(GetCurrentWeaponRef())) return;
 	if (!GetIsEqualWeaponType(GetCurrentWeaponInfo().WeaponStat.WeaponType, GetCurrentWeaponRef()->GetWeaponType())) return;
 
 	//액터 정보를 인벤토리 정보로 업데이트
 	if (!bIsLoadActorInfo)
 	{
-		//타입이 다르다면 return
-		UE_LOG(LogTemp, Warning, TEXT("#5"));
-		UE_LOG(LogTemp, Warning, TEXT("#6"));
-		UE_LOG(LogTemp, Warning, TEXT("ID : %d, Ammo : %d"), InventoryArray[GetCurrentIdx()].WeaponID, InventoryArray[GetCurrentIdx()].WeaponState.RangedWeaponState.CurrentAmmoCount);
+		UE_LOG(LogTemp, Warning, TEXT("<-- ID : %d, Ammo : %d"), InventoryArray[GetCurrentIdx()].WeaponID, InventoryArray[GetCurrentIdx()].WeaponState.RangedWeaponState.CurrentAmmoCount);
 		GetCurrentWeaponRef()->SetWeaponStat( InventoryArray[GetCurrentIdx()].WeaponStat );
 		GetCurrentWeaponRef()->SetWeaponState( InventoryArray[GetCurrentIdx()].WeaponState );
 	}
 	//인벤토리 정보를 액터 정보로 업데이트
 	else
 	{
+		UE_LOG(LogTemp, Warning, TEXT("--> ID : %d, Ammo : %d"), InventoryArray[GetCurrentIdx()].WeaponID, InventoryArray[GetCurrentIdx()].WeaponState.RangedWeaponState.CurrentAmmoCount);
 		InventoryArray[GetCurrentIdx()].WeaponStat = GetCurrentWeaponRef()->GetWeaponStat();
 		InventoryArray[GetCurrentIdx()].WeaponState = GetCurrentWeaponRef()->GetWeaponState();
 	}
-	OnInventoryItemIsUpdated.Broadcast(GetCurrentIdx(), true, InventoryArray[GetCurrentIdx()]);
+	OnInventoryItemIsUpdated.Broadcast(GetCurrentIdx(), GetIsFocused(), InventoryArray[GetCurrentIdx()]);
 }
 
 bool AWeaponInventoryBase::GetWeaponIsContained(int32 WeaponID)
@@ -314,12 +309,7 @@ bool AWeaponInventoryBase::TryAddAmmoToWeapon(int32 WeaponID, int32 AmmoCount)
 
 	return true;
 }
-
-AWeaponBase* AWeaponInventoryBase::SpawnWeaponActor(int32 WeaponID)
-{
-	return nullptr;
-}
-
+		
 void AWeaponInventoryBase::ClearInventory()
 {
 	RemoveCurrentWeapon();
@@ -385,6 +375,12 @@ bool AWeaponInventoryBase::GetIsEqualWeaponType(EWeaponType TypeA, EWeaponType T
 	//그렇지 않다면 근거리 or 원거리 동일 여부를 반환
 	return (TypeA == EWeaponType::E_Melee && TypeB == EWeaponType::E_Melee)
 		   || (TypeA != EWeaponType::E_Melee && TypeB != EWeaponType::E_Melee);
+}
+
+bool AWeaponInventoryBase::GetIsFocused()
+{
+	return GetIsEqualWeaponType(InventoryArray[GetCurrentIdx()].WeaponStat.WeaponType
+		, GetCurrentWeaponRef()->GetWeaponType());
 }
 
 bool AWeaponInventoryBase::SetCurrentIdx(int32 NewIdx)

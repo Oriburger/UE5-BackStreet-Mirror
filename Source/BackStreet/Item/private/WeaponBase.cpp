@@ -4,6 +4,7 @@
 #include "Components/AudioComponent.h"
 #include "../../Global/public/DebuffManager.h"
 #include "../../Character/public/CharacterBase.h"
+#include "../public/WeaponInventoryBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
@@ -42,8 +43,6 @@ void AWeaponBase::InitWeapon(int32 NewWeaponID)
 	{
 		WeaponStat.WeaponType = ActorHasTag(FName("Melee")) ? EWeaponType::E_Melee
 								: (ActorHasTag(FName("Ranged")) ? EWeaponType::E_Shoot : EWeaponType::E_None);
-
-		UE_LOG(LogTemp, Warning, TEXT("Type!!!!!! = %d"), (int)WeaponStat.WeaponType);
 	}
 
 	//FWeaponStatStruct newStat = GetWeaponStatInfoWithID(WeaponID);
@@ -148,6 +147,7 @@ void AWeaponBase::StopAttack() { }
 void AWeaponBase::UpdateComboState()
 {
 	WeaponState.ComboCount = (WeaponState.ComboCount + 1); 
+	OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
 }
 
 void AWeaponBase::SetResetComboTimer()
@@ -191,6 +191,7 @@ void AWeaponBase::UpdateDurabilityState()
 		OwnerCharacterRef.Get()->StopAttack();
 		OnWeaponBeginDestroy.Broadcast();
 	}
+	OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
 }
 
 float AWeaponBase::GetAttackRange() 

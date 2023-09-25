@@ -108,8 +108,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void InitFloatingHpWidget();
 
-
-
 public:
 	void ClearAllTimerHandle();
 

@@ -109,13 +109,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool GetWeaponIsContained(int32 WeaponID);
 	
+	//현재 인벤토리가 선택이 되어있는지?
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsFocused();
+
 	UFUNCTION(BlueprintCallable)
 		bool TryAddAmmoToWeapon(int32 WeaponID, int32 AmmoCount);
 
 protected:
-	UFUNCTION()
-		class AWeaponBase* SpawnWeaponActor(int32 WeaponID);
-
 	//인벤토리를 비움
 	UFUNCTION()
 		void ClearInventory();

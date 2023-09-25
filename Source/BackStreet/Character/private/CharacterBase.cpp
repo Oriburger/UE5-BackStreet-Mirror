@@ -674,6 +674,7 @@ void ACharacterBase::SwitchWeaponActorToAnotherType()
 	//Visibility 전환
 	WeaponActorList[0]->SetActorHiddenInGame(false);
 	WeaponActorList[1]->SetActorHiddenInGame(true);
+	//WeaponActorList[1]->
 	WeaponActorList[1]->InitWeapon(0);
 }
 

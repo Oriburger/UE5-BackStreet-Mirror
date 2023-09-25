@@ -140,12 +140,12 @@ void AEnemyCharacterBase::SpawnDeathItems()
 {
 	int32 totalSpawnItemCount = UKismetMathLibrary::RandomIntegerInRange(0, MaxSpawnItemCount);
 	int32 trySpawnCount = 0; //스폰 시도를 한 횟수
-	
+
 	TArray<AItemBase*> spawnedItemList;
 
 	UE_LOG(LogTemp, Warning, TEXT("totalSpawnItemCount %d"), totalSpawnItemCount);
 
-	if (SpawnItemTypeList.IsValidIndex(0)&&SpawnItemTypeList[0] == EItemCategoryInfo::E_Mission)
+	if (SpawnItemTypeList.IsValidIndex(0) && SpawnItemTypeList[0] == EItemCategoryInfo::E_Mission)
 	{
 		/*AItemBase* newItem = GamemodeRef->SpawnItemToWorld(SpawnItemIDList[0], GetActorLocation() + FMath::VRand() * 10.0f);
 		if (IsValid(newItem))
@@ -156,36 +156,35 @@ void AEnemyCharacterBase::SpawnDeathItems()
 	}
 	else
 	{
-		while(totalSpawnItemCount)
+		while (totalSpawnItemCount)
 		{
 			if (++trySpawnCount > totalSpawnItemCount * 3) break; //스폰할 아이템 개수의 3배만큼 시도
-			
-			const int32 itemIdx = UKismetMathLibrary::RandomIntegerInRange(0, SpawnItemIDList.Num()-1);
+
+			const int32 itemIdx = UKismetMathLibrary::RandomIntegerInRange(0, SpawnItemIDList.Num() - 1);
 			if (!SpawnItemTypeList.IsValidIndex(itemIdx) || !ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
-			
+
 			const uint8 itemType = (uint8)SpawnItemTypeList[itemIdx];
 			const uint8 itemID = SpawnItemIDList[itemIdx];
 			const float spawnProbability = ItemSpawnProbabilityList[itemIdx];
-			
-			if(FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
+
+			if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
 			{
 				AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 10.0f);
-			
+
 				if (IsValid(newItem))
 				{
 					spawnedItemList.Add(newItem);
 					totalSpawnItemCount -= 1;
 				}
 			}
-		}	
-	}		
+		}
+	}
 	for (auto& targetItem : spawnedItemList)
 	{
 		targetItem->ActivateProjectileMovement();
 		targetItem->ActivateItem();
 	}
 }
-
 
 void AEnemyCharacterBase::SetFacialMaterialEffect(bool NewState)
 {

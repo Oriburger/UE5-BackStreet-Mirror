@@ -4,9 +4,11 @@
 #include "../public/RangedWeaponBase.h"
 #include "../public/ProjectileBase.h"
 #include "../public/WeaponBase.h"
+#include "../public/WeaponInventoryBase.h"
 #include "../../Global/public/DebuffManager.h"
 #include "NiagaraFunctionLibrary.h"
 #include "../../Character/public/CharacterBase.h"
+#include "../../Character/public/MainCharacterBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define AUTO_RELOAD_DELAY_VALUE 0.1
 
@@ -193,6 +195,7 @@ bool ARangedWeaponBase::TryFireProjectile()
 				if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
 				{
 					WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
+					OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
 				}
 				newProjectile->ActivateProjectileMovement();
 				SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
@@ -201,7 +204,16 @@ bool ARangedWeaponBase::TryFireProjectile()
 			//탄환이 다 되었다면? 자동으로 제거
 			if (WeaponState.RangedWeaponState.CurrentAmmoCount == 0 && WeaponState.RangedWeaponState.ExtraAmmoCount == 0)
 			{
-				OwnerCharacterRef.Get()->DropWeapon();
+				//플레이어가 소유한 보조무기라면? 보조무기 인벤토리에서 제거
+				if (OwnerCharacterRef.Get()->ActorHasTag("Player") && WeaponStat.WeaponType == EWeaponType::E_Throw)
+				{
+					Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->GetSubInventoryRef()->RemoveCurrentWeapon();
+				}
+				//그렇지 않다면 일반 인벤토리에서 제거 
+				else
+				{
+					OwnerCharacterRef.Get()->GetInventoryRef()->RemoveCurrentWeapon();
+				}
 			}
 
 		}), 0.1f * (float)idx, false);

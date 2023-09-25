@@ -162,4 +162,7 @@ protected:
 
 	//소유자 캐릭터 약 참조
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
+
+	//소속된 인벤토리 약 참조 
+	//TWeakObjectPtr<class AWeaponInventoryBase> BelongInventoryRef;
 };
