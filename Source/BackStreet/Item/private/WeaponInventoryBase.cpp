@@ -80,9 +80,9 @@ bool AWeaponInventoryBase::EquipWeaponByIdx(int32 NewIdx)
 {
 	if (!InventoryArray.IsValidIndex(NewIdx)) return false;
 
-	SyncCurrentWeaponInfo(true);
 	EquipWeapon(GetCurrentWeaponInfo().WeaponID);
 	SyncCurrentWeaponInfo(false);
+
 	while (GetCurrentIdx() != NewIdx)
 	{
 		bool result = SwitchToNextWeapon();
@@ -400,6 +400,19 @@ FInventoryItemInfoStruct AWeaponInventoryBase::GetCurrentWeaponInfo()
 {
 	if(GetCurrentWeaponCount() == 0) return FInventoryItemInfoStruct();
 	return InventoryArray[GetCurrentIdx()];
+}
+
+FInventoryItemInfoStruct AWeaponInventoryBase::GetWeaponInfoByID(int32 WeaponID)
+{
+	if (!GetWeaponIsContained(WeaponID)) return FInventoryItemInfoStruct();
+	
+	for(FInventoryItemInfoStruct& inventoryItem :InventoryArray)
+	{
+		if (inventoryItem.WeaponID == WeaponID)
+			return inventoryItem;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("@@@@@@@@@@@Critical Error@@@@@@@@@"));
+	return FInventoryItemInfoStruct();
 }
 
 int32 AWeaponInventoryBase::GetNextInventoryIdx()

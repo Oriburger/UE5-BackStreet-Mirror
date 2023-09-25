@@ -162,6 +162,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FInventoryItemInfoStruct GetCurrentWeaponInfo();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FInventoryItemInfoStruct GetWeaponInfoByID(int32 WeaponID);
+
 private:
 	UFUNCTION()
 		int32 GetNextInventoryIdx();
