@@ -41,8 +41,17 @@ void AWeaponBase::InitWeapon(int32 NewWeaponID)
 
 	if (NewWeaponID == 0)
 	{
-		WeaponStat.WeaponType = ActorHasTag(FName("Melee")) ? EWeaponType::E_Melee
-								: (ActorHasTag(FName("Ranged")) ? EWeaponType::E_Shoot : EWeaponType::E_None);
+		if (ActorHasTag(FName("Melee")))
+			WeaponStat.WeaponType = EWeaponType::E_Melee;
+
+		else if (ActorHasTag(FName("Throw")))
+			WeaponStat.WeaponType = EWeaponType::E_Throw;
+
+		else if (ActorHasTag(FName("Shoot"))) 
+			WeaponStat.WeaponType = EWeaponType::E_Shoot;
+
+		else
+			WeaponStat.WeaponType =  EWeaponType::E_None;
 	}
 
 	//FWeaponStatStruct newStat = GetWeaponStatInfoWithID(WeaponID);
@@ -51,6 +60,8 @@ void AWeaponBase::InitWeapon(int32 NewWeaponID)
 	//에셋 초기화
 	FWeaponAssetInfoStruct newAssetInfo = GetWeaponAssetInfoWithID(WeaponID);
 	WeaponAssetInfo = newAssetInfo; 
+
+	UE_LOG(LogTemp, Warning, TEXT("Init Weapon : %d"), newAssetInfo.RangedWeaponAssetInfo.ProjectileID);
 	if (WeaponID != 0)
 	{
 		TArray<FSoftObjectPath> tempStream, assetToStream;
@@ -203,7 +214,7 @@ float AWeaponBase::GetAttackRange()
 EWeaponType AWeaponBase::GetWeaponType()
 {
 	if (ActorHasTag("Melee")) return EWeaponType::E_Melee;
-	else if (ActorHasTag("Ranged")) return EWeaponType::E_Shoot;
+	else if (ActorHasTag("Shoot")) return EWeaponType::E_Shoot;
 	else if (ActorHasTag("Throw")) return EWeaponType::E_Throw;
 	return EWeaponType();
 }

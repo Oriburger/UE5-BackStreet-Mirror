@@ -3,14 +3,14 @@
 #pragma once
 
 #include "../../Global/public/BackStreet.h"
-#include "../public/WeaponBase.h"
+#include "../public/RangedWeaponBase.h"
 #include "ThrowWeaponBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BACKSTREET_API AThrowWeaponBase : public AWeaponBase
+class BACKSTREET_API AThrowWeaponBase : public ARangedWeaponBase
 {
 	GENERATED_BODY()
 
@@ -27,74 +27,39 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual float GetAttackRange() override;
 
-//------ 스탯/상태 관련 ---------------------------------
-protected:
 	UFUNCTION(BlueprintCallable)
-		virtual void UpdateWeaponStat(FWeaponStatStruct NewStat) override;
-
-//------ Asset----------------------------------
-protected:
-	UFUNCTION()
-		virtual void InitWeaponAsset() override;
-
-	//발사 순간에 출력될 이미터 (임시, 추후 데이터 테이블로 관리 예정)
-	UPROPERTY(VisibleInstanceOnly)
-		class UNiagaraSystem* ShootNiagaraEmitter;
-
-	//투사체가 발사되는 이펙트를 출력한다
-	UFUNCTION()
-		void SpawnShootNiagaraEffect();
-
-//------ Projectile 관련----------------------------
-public:
-	//발사체를 생성
-	UFUNCTION()
-		class AProjectileBase* CreateProjectile();
-
-	//발사체 초기화 및 발사를 시도 
-	UFUNCTION()
-		bool TryFireProjectile();
+		virtual bool TryFireProjectile() override;
 
 	//장전을 시도. 현재 상태에 따른 성공 여부를 반환
 	UFUNCTION(BlueprintCallable)
-		bool TryReload();
-
-	//남은 탄환의 개수를 반환 - Stat.ExtraAmmoCount
-	UFUNCTION(BlueprintCallable)
-		int32 GetLeftAmmoCount() { return WeaponState.RangedWeaponState.ExtraAmmoCount + WeaponState.RangedWeaponState.CurrentAmmoCount; };
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetCanReload();
+		virtual bool TryReload() override;
 
 	//탄환의 개수를 더함 (ExtraAmmoCount까지)
 	UFUNCTION(BlueprintCallable)
-		void AddAmmo(int32 Count);
+		virtual void AddAmmo(int32 Count) override;
 
-	//탄창의 개수를 더함 (+= MaxAmmoPerMagazine * Count)
+//------ 투척 관련 ----------------------------------
+public:
+	//ThrowDirection으로 발사
 	UFUNCTION()
-		void AddMagazine(int32 Count);
+		void Throw();
+	
+	//ThrowDirection, ThrowEndLocation 을 활용하여 발사 예측 지점들을 구함
+	UFUNCTION()
+		FPredictProjectilePathResult GetProjectilePathPredictResult();
+
+	//SetThrowEndLocation 호출 이후에 호출 할 것
+	//ThrowEndLocation 까지의 발사각을 구하여 ThrowDirection 프로퍼티를 업데이트
+	UFUNCTION()
+		void CalculateThrowDirection(FVector NewDestination);
 
 	UFUNCTION()
-		void SetInfiniteAmmoMode(bool NewMode) { WeaponStat.RangedWeaponStat.bIsInfiniteAmmo = NewMode; }
-
-//--------Projectile Asset 관련 -----------------
-protected:
-	//발사체의 에셋 테이블
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Weapon|Projectile")
-		UDataTable* ProjectileAssetInfoTable;
-
-	//발사체의 에셋 정보를 담을 캐시 변수
-	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Weapon|Projectile")
-		FProjectileAssetInfoStruct ProjectileAssetInfo;
+		FVector GetThrowDirection() { return ThrowDirection; }
 
 private:
-	UFUNCTION()
-		FProjectileAssetInfoStruct GetProjectileAssetInfo(int32 TargetProjectileID);
+	//매번 업데이트 할 변수 / 발사체가 도착할 위치
+		FVector ThrowDestination;
 
-//--------타이머 관련--------------------
-protected:
-	virtual void ClearAllTimerHandle() override;
-
-	UPROPERTY()
-		FTimerHandle AutoReloadTimerHandle;
+	//매번 업데이트 할 변수 / 발사체가 발사될 방향
+		FVector ThrowDirection;
 };

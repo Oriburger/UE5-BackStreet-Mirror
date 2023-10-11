@@ -120,8 +120,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class AWeaponInventoryBase* GetInventoryRef();
 
-	UPROPERTY()
-		class AWeaponInventoryBase* InventoryRef;
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class AWeaponInventoryBase* GetSubInventoryRef();
 
 	//무기 Ref를 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -131,14 +131,22 @@ protected:
 	UPROPERTY()
 		TSubclassOf<class AWeaponInventoryBase> WeaponInventoryClass;
 
-	//Melee <-> Ranged Weapon Actor을 전환
 	UFUNCTION()
-		void SwitchWeaponActorToAnotherType();
+		void SwitchWeaponActor(EWeaponType TargetWeaponType);
 
 private:
+	UPROPERTY()
+		class AWeaponInventoryBase* InventoryRef;
+
+	UPROPERTY()
+		class AWeaponInventoryBase* SubInventoryRef;
+
 	//0번째 : 들고 있는 무기 / 1번째, 숨겨져 있는 다른 타임의무기
 	UPROPERTY()
 		TArray<class AWeaponBase*> WeaponActorList;
+
+	UPROPERTY()
+		TWeakObjectPtr<class AWeaponBase> CurrentWeaponRef;
 
 	//0번째 : 근접 무기 / 1번째 : 원거리 무기
 	//하나의 WeaponBase로 통일을 한다면 이렇게 하지 않아도 될텐데..
@@ -149,7 +157,7 @@ private:
 	void InitWeaponActors();
 
 	//무기 액터를 스폰
-	AWeaponBase* SpawnWeaponActor(bool bIsRangedWeapon);
+	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
 
 // ---- Asset -------------------
 public:

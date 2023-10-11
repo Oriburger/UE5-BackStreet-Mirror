@@ -16,21 +16,42 @@ class BACKSTREET_API ARangedWeaponBase : public AWeaponBase
 
 public:
 	ARangedWeaponBase();
-	//공격 처리
-	UFUNCTION(BlueprintCallable)
-		virtual void Attack() override;
+	
+	virtual void Attack();
 
-	//공격 마무리 처리
-	UFUNCTION(BlueprintCallable)
-		virtual void StopAttack() override;
+	virtual void StopAttack();
 
-	UFUNCTION(BlueprintCallable)
-		virtual float GetAttackRange() override;
+	virtual float GetAttackRange();
 
-//------ 스탯/상태 관련 ---------------------------------
+//------ Ranged 오버라이더블 ----------------------------
+public:
+	virtual bool TryFireProjectile();
+
+	//장전을 시도. 현재 상태에 따른 성공 여부를 반환
+	virtual bool TryReload();
+
+	//탄환의 개수를 더함 (ExtraAmmoCount까지)
+	virtual void AddAmmo(int32 Count);
+
+//------ 기본 ---------------------------------
 protected:
 	UFUNCTION(BlueprintCallable)
 		virtual void UpdateWeaponStat(FWeaponStatStruct NewStat) override;
+
+	UFUNCTION(BlueprintCallable)
+		class AProjectileBase* CreateProjectile();
+
+//------- Getter / Setter ---------------------------
+public:
+	UFUNCTION()
+		void SetInfiniteAmmoMode(bool NewMode) { WeaponStat.RangedWeaponStat.bIsInfiniteAmmo = NewMode; }
+
+	//남은 탄환의 개수를 반환 - Stat.ExtraAmmoCount
+	UFUNCTION(BlueprintCallable)
+		int32 GetLeftAmmoCount() { return WeaponState.RangedWeaponState.ExtraAmmoCount + WeaponState.RangedWeaponState.CurrentAmmoCount; };
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetCanReload();
 
 //------ Asset----------------------------------
 protected:
@@ -45,39 +66,6 @@ protected:
 	UFUNCTION()
 		void SpawnShootNiagaraEffect();
 
-//------ Projectile 관련----------------------------
-public:
-	//발사체를 생성
-	UFUNCTION()
-		class AProjectileBase* CreateProjectile();
-
-	//발사체 초기화 및 발사를 시도 
-	UFUNCTION()
-		bool TryFireProjectile();
-
-	//장전을 시도. 현재 상태에 따른 성공 여부를 반환
-	UFUNCTION(BlueprintCallable)
-		bool TryReload();
-
-	//남은 탄환의 개수를 반환 - Stat.ExtraAmmoCount
-	UFUNCTION(BlueprintCallable)
-		int32 GetLeftAmmoCount() { return WeaponState.RangedWeaponState.ExtraAmmoCount + WeaponState.RangedWeaponState.CurrentAmmoCount; };
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetCanReload();
-
-	//탄환의 개수를 더함 (ExtraAmmoCount까지)
-	UFUNCTION(BlueprintCallable)
-		void AddAmmo(int32 Count);
-
-	//탄창의 개수를 더함 (+= MaxAmmoPerMagazine * Count)
-	UFUNCTION()
-		void AddMagazine(int32 Count);
-
-	UFUNCTION()
-		void SetInfiniteAmmoMode(bool NewMode) { WeaponStat.RangedWeaponStat.bIsInfiniteAmmo = NewMode; }
-
-//--------Projectile Asset 관련 -----------------
 protected:
 	//발사체의 에셋 테이블
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Weapon|Projectile")
@@ -87,7 +75,6 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Weapon|Projectile")
 		FProjectileAssetInfoStruct ProjectileAssetInfo;
 
-private:
 	UFUNCTION()
 		FProjectileAssetInfoStruct GetProjectileAssetInfo(int32 TargetProjectileID);
 

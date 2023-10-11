@@ -20,16 +20,18 @@ ACharacterBase::ACharacterBase()
 
 	static ConstructorHelpers::FClassFinder<AWeaponInventoryBase> weaponInventoryClassFinder(TEXT("/Game/Weapon/Blueprint/BP_WeaponInventory"));
 	static ConstructorHelpers::FClassFinder<AWeaponBase> meleeWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_MeleeWeaponBase"));
-	static ConstructorHelpers::FClassFinder<AWeaponBase> rangedWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_RangedWeaponBase"));
+	static ConstructorHelpers::FClassFinder<AWeaponBase> throwWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_ThrowWeaponBase"));
+	static ConstructorHelpers::FClassFinder<AWeaponBase> shootWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_ShootWeaponBase"));
 
 	//클래스를 제대로 명시하지 않았으면 크래시를 띄움
 	checkf(weaponInventoryClassFinder.Succeeded(), TEXT("Weapon Inventory 클래스 탐색에 실패했습니다."));
 	checkf(meleeWeaponClassFinder.Succeeded(), TEXT("Melee Weapon 클래스 탐색에 실패했습니다.")); 
-	checkf(rangedWeaponClassFinder.Succeeded(), TEXT("Ranged Weapon 클래스 탐색에 실패했습니다."));
+	checkf(shootWeaponClassFinder.Succeeded(), TEXT("Ranged Weapon 클래스 탐색에 실패했습니다."));
 
 	WeaponInventoryClass = weaponInventoryClassFinder.Class; 
 	WeaponClassList.Add(meleeWeaponClassFinder.Class);
-	WeaponClassList.Add(rangedWeaponClassFinder.Class);
+	WeaponClassList.Add(throwWeaponClassFinder.Class);
+	WeaponClassList.Add(shootWeaponClassFinder.Class);
 }
 
 // Called when the game starts or when spawned
@@ -39,7 +41,14 @@ void ACharacterBase::BeginPlay()
 	InitCharacterState();
 
 	InventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
+	SubInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+
+	if (IsValid(SubInventoryRef) && !SubInventoryRef->IsActorBeingDestroyed())
+	{
+		SubInventoryRef->SetOwner(this);
+		SubInventoryRef->InitInventory(4);
+	}
 
 	if (IsValid(InventoryRef) && !InventoryRef->IsActorBeingDestroyed())
 	{
@@ -297,7 +306,7 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 	AssetInfo = GetAssetInfoWithID(NewEnemyID);
 	//SetCharacterAnimAssetInfoData(CharacterID);
 
-	if (!AssetInfo.CharacterMesh.IsNull() || !AssetInfo.CharacterMeshMaterial.IsNull() || !AssetInfo.AnimClass.IsNull())
+	if (!AssetInfo.CharacterMesh.IsNull() && !AssetInfo.CharacterMeshMaterial.IsNull() && !AssetInfo.AnimClass.IsNull())
 	{
 		TArray<FSoftObjectPath> AssetToStream;
 
@@ -444,7 +453,6 @@ void ACharacterBase::SetAsset()
 	InitSoundAsset();
 	InitVFXAsset();
 	InitMaterialAsset();
-
 }
 
 bool ACharacterBase::InitAnimAsset()
@@ -643,7 +651,6 @@ void ACharacterBase::SwitchToNextWeapon()
 void ACharacterBase::DropWeapon()
 {
 	if (!IsValid(InventoryRef)) return;
-
 	InventoryRef->RemoveCurrentWeapon();
 	/*---- 현재 무기를 월드에 버리는 기능은 미구현 -----*/
 }
@@ -654,34 +661,35 @@ AWeaponInventoryBase* ACharacterBase::GetInventoryRef()
 	return InventoryRef;
 }
 
+AWeaponInventoryBase* ACharacterBase::GetSubInventoryRef()
+{	
+	if (!IsValid(SubInventoryRef) || SubInventoryRef->IsActorBeingDestroyed()) return nullptr;
+	return SubInventoryRef;
+}
+
 AWeaponBase* ACharacterBase::GetCurrentWeaponRef()
 {
-	if (WeaponActorList.Num() < 2) return nullptr;
-	if (!IsValid(WeaponActorList[0]) || !IsValid(WeaponActorList[1])) return nullptr;
-	return WeaponActorList[0];
+	if (!CurrentWeaponRef.IsValid()) return nullptr;
+	return CurrentWeaponRef.Get();
 }
 
-void ACharacterBase::SwitchWeaponActorToAnotherType()
+void ACharacterBase::SwitchWeaponActor(EWeaponType TargetWeaponType)
 {
-	if (WeaponActorList.Num() < 2) return;
-	if (!IsValid(WeaponActorList[0]) || !IsValid(WeaponActorList[1])) return;
-
-	Swap(WeaponActorList[0], WeaponActorList[1]);
-
-	UE_LOG(LogTemp, Warning, TEXT("After Switch : %d %d"), (int32)WeaponActorList[0]->GetWeaponType()
-												 , (int32)WeaponActorList[1]->GetWeaponType());
-
-	//Visibility 전환
-	WeaponActorList[0]->SetActorHiddenInGame(false);
-	WeaponActorList[1]->SetActorHiddenInGame(true);
-	//WeaponActorList[1]->
-	WeaponActorList[1]->InitWeapon(0);
+	
+	if (!WeaponActorList.IsValidIndex((int32)TargetWeaponType-1)) return;
+	if (!IsValid(WeaponActorList[(int32)TargetWeaponType-1]))  return;
+	if (!IsValid(GetCurrentWeaponRef())) return; 
+	
+	GetCurrentWeaponRef()->SetActorHiddenInGame(true);
+	GetCurrentWeaponRef()->InitWeapon(0);
+	CurrentWeaponRef = WeaponActorList[(int32)TargetWeaponType - 1];
+	GetCurrentWeaponRef()->SetActorHiddenInGame(false);
 }
 
-AWeaponBase* ACharacterBase::SpawnWeaponActor(bool bIsRangedWeapon)
+AWeaponBase* ACharacterBase::SpawnWeaponActor(EWeaponType TargetWeaponType)
 {
-	checkf(WeaponClassList.Num() == 2, TEXT("초기 무기 클래스 지정이 실패했습니다."));
-	TSubclassOf<AWeaponBase> weaponClass = WeaponClassList[bIsRangedWeapon];
+	checkf(WeaponClassList.Num() == 3, TEXT("초기 무기 클래스 지정이 실패했습니다."));
+	TSubclassOf<AWeaponBase> weaponClass = WeaponClassList[(int)TargetWeaponType-1];
 
 	if (!IsValid(weaponClass))
 	{
@@ -707,12 +715,15 @@ void ACharacterBase::InitWeaponActors()
 	if (!WeaponActorList.IsEmpty()) return; 
 
 	//근접과 원거리의 무기 액터를 스폰
-	for (int idx = 0; idx < 2; idx++)
+	for (int idx = 0; idx < 3; idx++)
 	{
-		WeaponActorList.Add(SpawnWeaponActor((bool)idx));
+		WeaponActorList.Add(SpawnWeaponActor((EWeaponType)(idx+1)));
+		WeaponActorList[idx]->SetOwner(this);
 		checkf(IsValid(WeaponActorList[idx]), TEXT("무기 %d 타입 스폰에 실패했습니다."));
-		if (idx == 0) EquipWeapon(WeaponActorList[0]);
+		EquipWeapon(WeaponActorList[idx]);
 	}
+	EquipWeapon(WeaponActorList[0]);
+	CurrentWeaponRef = WeaponActorList[0];
 }
 
 void ACharacterBase::ClearAllTimerHandle()

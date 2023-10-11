@@ -158,12 +158,6 @@ void ARangedWeaponBase::AddAmmo(int32 Count)
 	WeaponState.RangedWeaponState.ExtraAmmoCount = (WeaponState.RangedWeaponState.ExtraAmmoCount + Count) % MAX_AMMO_LIMIT_CNT;
 }
 
-void ARangedWeaponBase::AddMagazine(int32 Count)
-{
-	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo || WeaponState.RangedWeaponState.ExtraAmmoCount >= MAX_AMMO_LIMIT_CNT) return;
-	WeaponState.RangedWeaponState.ExtraAmmoCount = (WeaponState.RangedWeaponState.ExtraAmmoCount + WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine * Count) % MAX_AMMO_LIMIT_CNT;
-}
-
 bool ARangedWeaponBase::TryFireProjectile()
 {
 	if (!OwnerCharacterRef.IsValid()) return false;

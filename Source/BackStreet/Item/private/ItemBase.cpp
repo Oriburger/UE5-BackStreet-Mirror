@@ -36,6 +36,8 @@ AItemBase::AItemBase()
 	InfoWidgetComponent->SetupAttachment(MeshComponent);
 	InfoWidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 50.0f));
 	InfoWidgetComponent->SetWorldRotation(FRotator(0.0f, 180.0f, 0.0f));
+	InfoWidgetComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	InfoWidgetComponent->SetVisibility(false);
 
 	ParticleComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ITEM_NIAGARA_COMPONENT"));
 	ParticleComponent->SetupAttachment(MeshComponent);

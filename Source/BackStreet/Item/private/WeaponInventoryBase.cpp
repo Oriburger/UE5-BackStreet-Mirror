@@ -50,7 +50,7 @@ void AWeaponInventoryBase::InitInventory(int32 NewMaxCapacity)
 {
 	if (!IsValid(GetOwner()) || !GetOwner()->ActorHasTag("Character"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AInventory는 CharacterBase 이외의 클래스에서는 소유할 수 없습니다."));
+		UE_LOG(LogTemp, Warning, TEXT("AInventory는 CharacterBase 이외의 클래스에서는 소유할 수 없습니다."));	
 		checkf(false, TEXT("AInventory는 CharacterBase 이외의 클래스에서는 소유할 수 없습니다."));
 	}
 	MaxCapacity = NewMaxCapacity;
@@ -66,17 +66,13 @@ void AWeaponInventoryBase::EquipWeapon(int32 NewWeaponID)
 
 	// 근거리무기랑 원거리무기를 교체
 	//UE_LOG(LogTemp, Warning, TEXT("Try Swap :%d %d"), GetCurrentWeaponRef()->GetWeaponType(), GetWeaponType(NewWeaponID));
-
-	if (!GetIsEqualWeaponType(GetCurrentWeaponRef()->GetWeaponType(), GetWeaponType(NewWeaponID)))
-	{
-		OwnerCharacterRef.Get()->SwitchWeaponActorToAnotherType();
-		OwnerCharacterRef.Get()->EquipWeapon(GetCurrentWeaponRef()); //Attach
-	}
-	if ((GetCurrentWeaponRef()))
-		GetCurrentWeaponRef()->InitWeapon(NewWeaponID);
+	
+	OwnerCharacterRef.Get()->SwitchWeaponActor(GetWeaponType(NewWeaponID));
+	OwnerCharacterRef.Get()->EquipWeapon(GetCurrentWeaponRef()); //Attach
+	GetCurrentWeaponRef()->InitWeapon(NewWeaponID);
 }
 
-bool AWeaponInventoryBase::EquipWeaponByIdx(int32 NewIdx)
+bool AWeaponInventoryBase::EquipWeaponByIdx(int32 NewIdx)	
 {
 	if (!InventoryArray.IsValidIndex(NewIdx)) return false;
 
@@ -202,7 +198,7 @@ void AWeaponInventoryBase::RemoveWeapon(int32 WeaponID)
 		{
 			if (!GetIsEqualWeaponType(GetWeaponType(WeaponID), GetWeaponType(InventoryArray[CurrentIdx].WeaponID)))
 			{
-				OwnerCharacterRef->SwitchWeaponActorToAnotherType();
+				OwnerCharacterRef->SwitchWeaponActor(GetCurrentWeaponRef()->GetWeaponType());
 				OwnerCharacterRef->EquipWeapon(GetCurrentWeaponRef());
 			}
 			GetCurrentWeaponRef()->InitWeapon(InventoryArray[CurrentIdx].WeaponID);
@@ -369,13 +365,8 @@ int32 AWeaponInventoryBase::CheckWeaponDuplicate(int32 TargetWeaponID)
 
 bool AWeaponInventoryBase::GetIsEqualWeaponType(EWeaponType TypeA, EWeaponType TypeB)
 {
-	//invalid 한 ID가 전달되었다면 false 반환
-	if (TypeA == EWeaponType::E_None || TypeB == EWeaponType::E_None) return false;
-
-	//그렇지 않다면 근거리 or 원거리 동일 여부를 반환
-	return (TypeA == EWeaponType::E_Melee && TypeB == EWeaponType::E_Melee)
-		   || (TypeA != EWeaponType::E_Melee && TypeB != EWeaponType::E_Melee);
-}
+	return TypeA == TypeB;
+	}
 
 bool AWeaponInventoryBase::GetIsFocused()
 {

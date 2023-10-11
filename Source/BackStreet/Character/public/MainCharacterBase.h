@@ -57,6 +57,29 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		UCameraComponent* FollowingCamera;
 
+// ------- Throw Test -----------
+
+	UFUNCTION()
+		void ReadyToThrow();
+
+	UFUNCTION()
+		void Throw();
+
+	UFUNCTION()
+		void SetAimingMode(bool bNewState);
+
+	UFUNCTION()
+		void UpdateAimingState();
+
+	UFUNCTION()
+		FVector GetThrowDestination();
+
+	UPROPERTY()
+		FTimerHandle AimingTimerHandle;
+
+	UPROPERTY()
+		bool bIsAiming = false;
+
 // ------- Character Action ------- 
 public:
 	UFUNCTION()
@@ -143,13 +166,6 @@ public:
 public:
 	UFUNCTION(BlueprintCallable)
 		virtual bool PickWeapon(int32 NewWeaponID) override;
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class AWeaponInventoryBase* GetSubInventoryRef();
-
-	UPROPERTY()
-		class AWeaponInventoryBase* SubInventoryRef;
-
 
 // -------- VFX -----------
 protected:
