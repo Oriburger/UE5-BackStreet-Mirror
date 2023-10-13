@@ -15,6 +15,15 @@ enum class EStageCategoryInfo : uint8
 
 };
 
+UENUM(BlueprintType)
+enum class EWaveCategoryInfo : uint8
+{
+	E_None				  	UMETA(DisplayName = "None"),
+	E_Hades					UMETA(DisplayName = "Hades"),
+	E_Defense			  	UMETA(DisplayName = "Defense"),
+	E_TimeAttack			UMETA(DisplayName = "TimeAttack"),
+};
+
 USTRUCT(BlueprintType)
 struct FStageEnemyRankStruct : public FTableRowBase
 {
@@ -32,25 +41,15 @@ public:
 
 };
 
+
 USTRUCT(BlueprintType)
-struct FStageEnemyTypeStruct : public FTableRowBase
+struct FWaveEnemyStruct : public FTableRowBase
 {
 	GENERATED_BODY()
 
 public:
-
-	UPROPERTY(EditAnywhere)
-		FName StageType;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<int32> IDList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 MaxSpawn;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 MinSpawn;
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		TMap<int32, int32> EnemyList; // EnemyID,스폰 수
 
 };
 
@@ -81,6 +80,24 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blueprint")
 		TArray<UBlueprint*> CraftingBoxBPList;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
+		int32 MaxSpawnItem;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
+		int32 MinSpawnItem;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		EWaveCategoryInfo WaveType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		int32 MaxWave; // 총 웨이브 수
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
+		TArray<int32> WaveComposition;// 각 웨이브 단계에 스폰할 Enemy 목록의 데이터 테이블 ID를 지님, 항상 총 웨이브 수 만큼의 요소가 들어있어야함
+
+
+
+	// 제거할 항목
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
 		TArray<int32> NormalEnemyIDList;
 
@@ -92,12 +109,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
 		int32 MinSpawnEnemy;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
-		int32 MaxSpawnItem;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
-		int32 MinSpawnItem;
 
 };
 
@@ -128,6 +139,9 @@ public:
 
 	UPROPERTY()
 		FName LevelToLoad;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		int32 Wave;
 
 	UPROPERTY()
 		bool bIsVisited;

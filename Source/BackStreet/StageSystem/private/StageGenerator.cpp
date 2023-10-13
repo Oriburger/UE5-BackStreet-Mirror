@@ -55,6 +55,7 @@ void UStageGenerator::InitStageData(FVector Vector, int32 Ypos, int32 Xpos, clas
 	Target->AddGateInfo(false); // RIGHT
 
 	Target->SetStageCategoryType(EStageCategoryInfo::E_Normal);
+	Target->SetWave(0);
 
 	Target->SetIsValid(true);
 	Target->SetIsVisited(false);

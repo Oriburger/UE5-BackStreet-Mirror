@@ -98,6 +98,8 @@ void AResourceManager::SpawnMonster(class AStageData* Target)
 		monster->InitEnemyStat();
 		monster->InitAsset(enemyIDList[enemyIDIdx]);
 	}
+	Target->SetWave(Target->GetWave() + 1);
+
 }
 
 void AResourceManager::SpawnBossMonster(class AStageData* Target)
@@ -241,11 +243,33 @@ void AResourceManager::DieMonster(AEnemyCharacterBase* Target)
 	if (currentStage->GetMonsterList().IsEmpty())
 	{
 		UE_LOG(LogTemp, Log, TEXT("AResourceManager::DieMonster: Stage Clear BroadCast StgaeClearDelegate"));
+		//Wave 체크
+		// 1) 웨이브 진행 -> 웨이브 단계 증가, 몬스터 스폰
+		// 2) 웨이브 끝 -> 스테이지 완료 ( 스폰 바인딩 )
+		if (CheckWave(currentStage))
+		{
+			currentStage->SetIsClear(true);
+			SpawnRewardBox(currentStage);
 
-		currentStage->SetIsClear(true);
-		SpawnRewardBox(currentStage);
+			Cast<AChapterManagerBase>(GetOwner())->CheckChapterClear();
+		}
+		else
+		{
+			SpawnMonster(currentStage); // 웨이브별 스폰 몬스터 수정
+			BindDelegate(currentStage);
+		}
+	}
+}
 
-		Cast<AChapterManagerBase>(GetOwner())->CheckChapterClear();
+bool AResourceManager::CheckWave(class AStageData* Target)
+{
+	if (Target->GetWave()<Target->GetStageTypeInfo().MaxWave)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
 	}
 }
 

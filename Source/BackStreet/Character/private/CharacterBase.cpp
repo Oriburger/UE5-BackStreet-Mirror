@@ -284,155 +284,173 @@ void ACharacterBase::ResetAtkIntervalTimer()
 void ACharacterBase::InitAsset(int32 NewEnemyID)
 {
 	AssetInfo = GetAssetInfoWithID(NewEnemyID);
-	//SetCharacterAnimAssetInfoData(CharacterID);
 
-	if (!AssetInfo.CharacterMesh.IsNull() || !AssetInfo.CharacterMeshMaterial.IsNull() || !AssetInfo.AnimClass.IsNull())
+
+	UE_LOG(LogTemp, Log, TEXT("InitAsset::ID %d"), NewEnemyID);
+	TArray<FSoftObjectPath> AssetToStream;
+
+	// Mesh 관련
+	AssetToStream.AddUnique(AssetInfo.CharacterMesh.ToSoftObjectPath());
+	AssetToStream.AddUnique(AssetInfo.CharacterMeshMaterial.ToSoftObjectPath());
+
+	// Animation 관련
+	AssetToStream.AddUnique(AssetInfo.AnimClass.ToSoftObjectPath());
+
+	if (!AssetInfo.MeleeAttackAnimMontageList.IsEmpty())
 	{
-		TArray<FSoftObjectPath> AssetToStream;
-
-		// Mesh 관련
-		AssetToStream.AddUnique(AssetInfo.CharacterMesh.ToSoftObjectPath());
-		AssetToStream.AddUnique(AssetInfo.CharacterMeshMaterial.ToSoftObjectPath());
-
-		// Animation 관련
-		AssetToStream.AddUnique(AssetInfo.AnimClass.ToSoftObjectPath());
-
-		if (!AssetInfo.MeleeAttackAnimMontageList.IsEmpty())
+		for (int32 i = 0; i < AssetInfo.MeleeAttackAnimMontageList.Num(); i++)
 		{
-			for (int32 i = 0; i < AssetInfo.MeleeAttackAnimMontageList.Num(); i++)
-			{
-				AssetToStream.AddUnique(AssetInfo.MeleeAttackAnimMontageList[i].ToSoftObjectPath());
-			}
+			AssetToStream.AddUnique(AssetInfo.MeleeAttackAnimMontageList[i].ToSoftObjectPath());
 		}
-
-		if (!AssetInfo.ShootAnimMontageList.IsEmpty())
-		{
-			for(int32 i=0;i< AssetInfo.ShootAnimMontageList.Num();i++)
-			{
-				AssetToStream.AddUnique(AssetInfo.ShootAnimMontageList[i].ToSoftObjectPath());
-			}
-		}
-	
-		if (!AssetInfo.ThrowAnimMontageList.IsEmpty())
-		{
-			for (int32 i = 0; i < AssetInfo.ThrowAnimMontageList.Num(); i++)
-			{
-				AssetToStream.AddUnique(AssetInfo.ThrowAnimMontageList[i].ToSoftObjectPath());
-			}
-		}
-
-		if (!AssetInfo.ReloadAnimMontageList.IsEmpty())
-		{
-			for (int32 i = 0; i < AssetInfo.ReloadAnimMontageList.Num(); i++)
-			{
-				AssetToStream.AddUnique(AssetInfo.ReloadAnimMontageList[i].ToSoftObjectPath());
-			}
-		}
-
-		if (!AssetInfo.HitAnimMontageList.IsEmpty())
-		{
-			for (int32 i = 0; i < AssetInfo.HitAnimMontageList.Num(); i++)
-			{
-				AssetToStream.AddUnique(AssetInfo.HitAnimMontageList[i].ToSoftObjectPath());
-			}
-		}
-
-		if (!AssetInfo.RollAnimMontageList.IsEmpty())
-		{
-			for (int32 i = 0; i < AssetInfo.RollAnimMontageList.Num(); i++)
-			{
-				AssetToStream.AddUnique(AssetInfo.RollAnimMontageList[i].ToSoftObjectPath());
-			}
-		}
-	
-		if (!AssetInfo.InvestigateAnimMontageList.IsEmpty())
-		{
-			for (int32 i = 0; i < AssetInfo.InvestigateAnimMontageList.Num(); i++)
-			{
-				AssetToStream.AddUnique(AssetInfo.InvestigateAnimMontageList[i].ToSoftObjectPath());
-			}
-		}
-
-		if (!AssetInfo.DieAnimMontageList.IsEmpty())
-		{
-			for (int32 i = 0; i < AssetInfo.DieAnimMontageList.Num(); i++)
-			{
-				AssetToStream.AddUnique(AssetInfo.DieAnimMontageList[i].ToSoftObjectPath());
-			}
-		}
-
-		if (!AssetInfo.PointMontageList.IsEmpty())
-		{
-			for (int32 i = 0; i < AssetInfo.PointMontageList.Num(); i++)
-			{
-				AssetToStream.AddUnique(AssetInfo.PointMontageList[i].ToSoftObjectPath());
-			}
-		}
-
-		// Sound
-
-		AssetToStream.AddUnique(AssetInfo.RollSound.ToSoftObjectPath());
-		AssetToStream.AddUnique(AssetInfo.BuffSound.ToSoftObjectPath());
-		AssetToStream.AddUnique(AssetInfo.DebuffSound.ToSoftObjectPath());
-		AssetToStream.AddUnique(AssetInfo.HitImpactSound.ToSoftObjectPath());
-
-
-		// VFX
-		if (!AssetInfo.DebuffNiagaraEffectList.IsEmpty())
-		{
-			for (int32 i = 0; i < AssetInfo.DebuffNiagaraEffectList.Num(); i++)
-			{
-				AssetToStream.AddUnique(AssetInfo.DebuffNiagaraEffectList[i].ToSoftObjectPath());
-			}
-		}
-
-		// material
-
-		AssetToStream.AddUnique(AssetInfo.NormalMaterial.ToSoftObjectPath());
-		AssetToStream.AddUnique(AssetInfo.WallThroughMaterial.ToSoftObjectPath());
-		if (!AssetInfo.EmotionTextureList.IsEmpty())
-		{
-			for (int32 i = 0; i < AssetInfo.EmotionTextureList.Num(); i++)
-			{
-				AssetToStream.AddUnique(AssetInfo.EmotionTextureList[i].ToSoftObjectPath());
-			}
-		}
-
-		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
-		streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &ACharacterBase::SetAsset));
-
-	/*	if (IsValid(AssetInfo.CharacterMesh.Get()) && IsValid(AssetInfo.CharacterMeshMaterial.Get()) && IsValid(AssetInfo.AnimClass.Get()))
-		{
-			InitializeAsset();
-		}
-		else
-		{
-			FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
-			streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &ACharacterBase::InitializeAsset));
-		}*/
 	}
+
+	if (!AssetInfo.ShootAnimMontageList.IsEmpty())
+	{
+		for(int32 i=0;i< AssetInfo.ShootAnimMontageList.Num();i++)
+		{
+			AssetToStream.AddUnique(AssetInfo.ShootAnimMontageList[i].ToSoftObjectPath());
+		}
+	}
+
+	if (!AssetInfo.ThrowAnimMontageList.IsEmpty())
+	{
+		for (int32 i = 0; i < AssetInfo.ThrowAnimMontageList.Num(); i++)
+		{
+			AssetToStream.AddUnique(AssetInfo.ThrowAnimMontageList[i].ToSoftObjectPath());
+		}
+	}
+
+	if (!AssetInfo.ReloadAnimMontageList.IsEmpty())
+	{
+		for (int32 i = 0; i < AssetInfo.ReloadAnimMontageList.Num(); i++)
+		{
+			AssetToStream.AddUnique(AssetInfo.ReloadAnimMontageList[i].ToSoftObjectPath());
+		}
+	}
+
+	if (!AssetInfo.HitAnimMontageList.IsEmpty())
+	{
+		for (int32 i = 0; i < AssetInfo.HitAnimMontageList.Num(); i++)
+		{
+			AssetToStream.AddUnique(AssetInfo.HitAnimMontageList[i].ToSoftObjectPath());
+		}
+	}
+
+	if (!AssetInfo.RollAnimMontageList.IsEmpty())
+	{
+		for (int32 i = 0; i < AssetInfo.RollAnimMontageList.Num(); i++)
+		{
+			AssetToStream.AddUnique(AssetInfo.RollAnimMontageList[i].ToSoftObjectPath());
+		}
+	}
+
+	if (!AssetInfo.InvestigateAnimMontageList.IsEmpty())
+	{
+
+		for (int32 i = 0; i < AssetInfo.InvestigateAnimMontageList.Num(); i++)
+		{
+			AssetToStream.AddUnique(AssetInfo.InvestigateAnimMontageList[i].ToSoftObjectPath());
+		}
+	}
+
+	if (!AssetInfo.DieAnimMontageList.IsEmpty())
+	{
+		for (int32 i = 0; i < AssetInfo.DieAnimMontageList.Num(); i++)
+		{
+			AssetToStream.AddUnique(AssetInfo.DieAnimMontageList[i].ToSoftObjectPath());
+		}
+	}
+
+	if (!AssetInfo.PointMontageList.IsEmpty())
+	{
+		for (int32 i = 0; i < AssetInfo.PointMontageList.Num(); i++)
+		{
+			AssetToStream.AddUnique(AssetInfo.PointMontageList[i].ToSoftObjectPath());
+		}
+	}
+
+	// Sound
+
+	AssetToStream.AddUnique(AssetInfo.RollSound.ToSoftObjectPath());
+	AssetToStream.AddUnique(AssetInfo.BuffSound.ToSoftObjectPath());
+	AssetToStream.AddUnique(AssetInfo.DebuffSound.ToSoftObjectPath());
+	AssetToStream.AddUnique(AssetInfo.HitImpactSound.ToSoftObjectPath());
+
+
+	// VFX
+	if (!AssetInfo.DebuffNiagaraEffectList.IsEmpty())
+	{
+		for (int32 i = 0; i < AssetInfo.DebuffNiagaraEffectList.Num(); i++)
+		{
+			AssetToStream.AddUnique(AssetInfo.DebuffNiagaraEffectList[i].ToSoftObjectPath());
+		}
+	}
+
+	// material
+
+	AssetToStream.AddUnique(AssetInfo.NormalMaterial.ToSoftObjectPath());
+	AssetToStream.AddUnique(AssetInfo.WallThroughMaterial.ToSoftObjectPath());
+
+	if (!AssetInfo.EmotionTextureList.IsEmpty())
+	{
+		for (int32 i = 0; i < AssetInfo.EmotionTextureList.Num(); i++)
+		{
+			AssetToStream.AddUnique(AssetInfo.EmotionTextureList[i].ToSoftObjectPath());
+		}
+	}
+
+	FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
+	streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &ACharacterBase::SetAsset));
+
+	
+	
 }
 
 
 void ACharacterBase::SetAsset()
 {
-	if (AssetInfo.CharacterMesh.IsNull() || !IsValid(AssetInfo.CharacterMesh.Get())) return;
-	if (AssetInfo.CharacterMeshMaterial.IsNull() || !IsValid(AssetInfo.CharacterMeshMaterial.Get())) return;
-	if (AssetInfo.AnimClass.IsNull() || !IsValid(AssetInfo.AnimClass.Get())) return;
+	UE_LOG(LogTemp, Log, TEXT("SetAsset::ID %d"), CharacterID);
 
-	GetCapsuleComponent()->SetRelativeScale3D(AssetInfo.InitialCapsuleComponentScale);
 
-	GetMesh()->SetSkeletalMesh(AssetInfo.CharacterMesh.Get());
-	GetMesh()->SetRelativeLocation(AssetInfo.InitialLocation);
-	GetMesh()->SetWorldRotation(AssetInfo.InitialRotation);
-	GetMesh()->SetRelativeScale3D(AssetInfo.InitialScale);
+	if (AssetInfo.CharacterMesh.IsValid())
+	{
+		GetCapsuleComponent()->SetRelativeScale3D(AssetInfo.InitialCapsuleComponentScale);
 
-	GetMesh()->SetMaterial(0, AssetInfo.CharacterMeshMaterial.Get());
-	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimClass.Get()->GetAnimBlueprintGeneratedClass());
+		GetMesh()->SetSkeletalMesh(AssetInfo.CharacterMesh.Get());
+		GetMesh()->SetRelativeLocation(AssetInfo.InitialLocation);
+		GetMesh()->SetWorldRotation(AssetInfo.InitialRotation);
+		GetMesh()->SetRelativeScale3D(AssetInfo.InitialScale);
+	}
+	
+	if (AssetInfo.CharacterMeshMaterial.IsValid())
+	{
+		GetMesh()->SetMaterial(0, AssetInfo.CharacterMeshMaterial.Get());
+	}
+
+	if (!AssetInfo.AnimClass.IsNull())
+	{
+		if (AssetInfo.AnimClass.Get())
+		{
+			
+			GetMesh()->SetAnimInstanceClass(AssetInfo.AnimClass.Get());
+			
+		}
+		else
+		{
+			UE_LOG(LogTemp, Log, TEXT("Failed to Set Animclass::Get"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("Failed to Set Animclass::IsNull"));
+	}
+
 	InitAnimAsset();
 	InitSoundAsset();
 	InitVFXAsset();
 	InitMaterialAsset();
+
+	UE_LOG(LogTemp, Log, TEXT("SetAsset::ID %d Set Complete"), CharacterID);
 
 }
 

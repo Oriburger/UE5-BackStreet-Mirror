@@ -55,6 +55,13 @@ public:
 	UFUNCTION()
 		void CleanStageItem(class AStageData* Target);
 
+	// Wave ฐüทร
+public:
+	UFUNCTION()
+		bool CheckWave(class AStageData* Target);
+
+
+
 public:
 	UFUNCTION()
 		TSubclassOf<AEnemyCharacterBase> GetEnemyWithID(int32 EnemyID);
@@ -75,5 +82,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<TSubclassOf<class ACraftBoxBase>> CraftingBoxAssets;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UDataTable* WaveCompositionDataTable;
 	
 };

@@ -59,7 +59,13 @@ public:
 		FName GetLevelToLoad() { return StageInfo.LevelToLoad; }
 
 	UFUNCTION()
+		int32 GetWave() { return StageInfo.Wave; }
+
+	UFUNCTION()
 		void SetLevelToLoad(FName Level) { StageInfo.LevelToLoad = Level; }
+
+	UFUNCTION()
+		void SetWave(int32 Wave) { StageInfo.Wave = Wave; }
 
 	UFUNCTION()
 		bool GetIsClear() { return StageInfo.bIsClear; }
