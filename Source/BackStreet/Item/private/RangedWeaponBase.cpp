@@ -17,6 +17,12 @@ ARangedWeaponBase::ARangedWeaponBase()
 	PrimaryActorTick.bCanEverTick = false;
 	this->Tags.Add("Ranged");
 
+	static ConstructorHelpers::FObjectFinder<UDataTable> projectileStatInfoTableFinder(TEXT("/Game/Weapon/Data/D_ProjectileStatTable.D_ProjectileStatTable"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> projectileAssetInfoTableFinder(TEXT("/Game/Weapon/Data/D_ProjectileAssetInfo.D_ProjectileAssetInfo"));
+	checkf(projectileStatInfoTableFinder.Succeeded(), TEXT("statInfoTable 탐색에 실패했습니다."));
+	checkf(projectileAssetInfoTableFinder.Succeeded(), TEXT("assetInfoTable 클래스 탐색에 실패했습니다."));
+	ProjectileStatInfoTable = projectileStatInfoTableFinder.Object;
+	ProjectileAssetInfoTable = projectileAssetInfoTableFinder.Object;
 }
 
 void ARangedWeaponBase::Attack()
@@ -64,6 +70,23 @@ FProjectileAssetInfoStruct ARangedWeaponBase::GetProjectileAssetInfo(int32 Targe
 	return FProjectileAssetInfoStruct();
 }
 
+FProjectileStatStruct ARangedWeaponBase::GetProjectileStatInfo(int32 TargetProjectileID)
+{
+	//캐시에 기록이 되어있다면?
+	if (ProjectileStatInfo.ProjectileID == TargetProjectileID) return ProjectileStatInfo;
+
+	//없다면 새로 읽어옴
+	else if (ProjectileAssetInfoTable != nullptr && TargetProjectileID != 0)
+	{
+		FProjectileStatStruct* newInfo = nullptr;
+		FString rowName = FString::FromInt(TargetProjectileID);
+
+		newInfo = ProjectileStatInfoTable->FindRow<FProjectileStatStruct>(FName(rowName), rowName);
+		if (newInfo != nullptr) return *newInfo;
+	}
+	return FProjectileStatStruct();
+}
+
 void ARangedWeaponBase::ClearAllTimerHandle()
 {
 	Super::ClearAllTimerHandle();
@@ -85,9 +108,10 @@ void ARangedWeaponBase::InitWeaponAsset()
 	{
 		ShootNiagaraEmitter = rangedWeaponAssetInfo.ShootEffectParticle.Get();
 	}
-	if (rangedWeaponAssetInfo.ProjectileID && ProjectileAssetInfoTable != nullptr)
+	if (rangedWeaponAssetInfo.ProjectileID)
 	{
 		ProjectileAssetInfo = GetProjectileAssetInfo(rangedWeaponAssetInfo.ProjectileID);
+		ProjectileStatInfo = GetProjectileStatInfo(rangedWeaponAssetInfo.ProjectileID);
 	}
 }
 
@@ -122,9 +146,8 @@ AProjectileBase* ARangedWeaponBase::CreateProjectile()
 	if (IsValid(newProjectile) && ProjectileAssetInfo.ProjectileID != 0)
 	{
 		newProjectile->SetOwner(this);
-		newProjectile->InitProjectile(OwnerCharacterRef.Get(), ProjectileAssetInfo);
+		newProjectile->InitProjectile(OwnerCharacterRef.Get(), ProjectileAssetInfo, ProjectileStatInfo);
 		newProjectile->ProjectileStat.ProjectileDamage *= WeaponStat.WeaponDamageRate; //버프/디버프로 인해 강화/너프된 값을 반영
-		newProjectile->ProjectileStat.ProjectileSpeed *= WeaponStat.WeaponAtkSpeedRate;
 		return newProjectile;
 	}
 	return nullptr;

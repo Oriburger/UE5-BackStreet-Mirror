@@ -129,19 +129,3 @@ void ABackStreetGameModeBase::UpdateCharacterStatWithID(ACharacterBase* TargetCh
 		}
 	}
 }
-
-void ABackStreetGameModeBase::UpdateProjectileStatWithID(AProjectileBase* TargetProjectile, const int32 ProjectileID)
-{
-	if (IsValid(TargetProjectile) && IsValid(ProjectileStatTable))
-	{
-		FString rowName = FString::FromInt(ProjectileID);
-		FProjectileStatStruct* newStat = ProjectileStatTable->FindRow<FProjectileStatStruct>(FName(rowName), rowName);
-		if (newStat != nullptr)
-		{
-			TargetProjectile->UpdateProjectileStat(*newStat);
-		}
-	}
-}
-
-
-

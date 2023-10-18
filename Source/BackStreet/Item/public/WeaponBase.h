@@ -55,11 +55,11 @@ public:
 //--------- 데이터 테이블, 에셋 관련 ----------------------
 protected:
 	//무기 에셋 정보 테이블
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* WeaponAssetInfoTable;
 	
 	//무기 스탯 테이블
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
+	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* WeaponStatInfoTable;
 
 	virtual void InitWeaponAsset();

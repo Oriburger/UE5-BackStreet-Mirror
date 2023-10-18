@@ -102,24 +102,25 @@ void AMeleeWeaponBase::MeleeAttack()
 	bool bIsMeleeTraceSucceed = false;
 
 	TArray<FVector> currTracePositionList = GetCurrentMeleePointList();
-	bIsMeleeTraceSucceed = CheckMeleeAttackTarget(hitResult, currTracePositionList);
+	//bIsMeleeTraceSucceed//
+	AActor* target = CheckMeleeAttackTargetWithSphereTrace(); //CheckMeleeAttackTarget(hitResult, currTracePositionList);
 	MeleePrevTracePointList = currTracePositionList;
 
 	//hitResult가 Valid하다면 아래 조건문에서 데미지를 가함
-	if (bIsMeleeTraceSucceed)
+	if (IsValid(target))//bIsMeleeTraceSucceed)
 	{
 		//효과를 출력
-		ActivateMeleeHitEffect(hitResult.Location);
+		ActivateMeleeHitEffect(target->GetActorLocation());//hitResult.Location);
 
 		//데미지를 주고, 중복 체크를 해준다.
-		UGameplayStatics::ApplyDamage(hitResult.GetActor(), WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate
+		UGameplayStatics::ApplyDamage(target/*hitResult.GetActor()*/, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate
 			, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
-		MeleeLineTraceQueryParams.AddIgnoredActor(hitResult.GetActor());
+		MeleeLineTraceQueryParams.AddIgnoredActor(target); //hitResult.GetActor());
 
 		//디버프도 부여
 		if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
 		{
-			GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(hitResult.GetActor())
+			GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(target)// hitResult.GetActor())
 				, OwnerCharacterRef.Get(), WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
 		}
 

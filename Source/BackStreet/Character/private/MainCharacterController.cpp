@@ -56,10 +56,10 @@ FVector AMainCharacterController::GetCursorDeprojectionWorldLocation()
 
 	//카메라에서 커서의 바닥 위치까지 LineTrace를 진행 -> 실제 커서의 월드 상호작용 위치가 hitResult.Location에 담김
 	GetWorld()->LineTraceMultiByChannel(hitResultList, traceStartLocation, traceEndLocation
-										, ECollisionChannel::ECC_Camera);
+										, ECollisionChannel::ECC_GameTraceChannel2);
 
 	if (hitResultList.Num())
-	{
+	{	
 		for (FHitResult& hitResult : hitResultList)
 		{
 			if (!IsValid(hitResult.GetActor()) || hitResult.GetActor()->IsActorBeingDestroyed()) continue;

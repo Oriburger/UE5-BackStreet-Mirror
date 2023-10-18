@@ -11,10 +11,13 @@ struct FProjectileStatStruct : public FTableRowBase
 public:
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+		int32 ProjectileID;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		FName ProjectileName;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		FName Description;
 
 	//폭발 타입의 발사체인지? (RadialDamage)

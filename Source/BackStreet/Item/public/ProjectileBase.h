@@ -73,7 +73,7 @@ protected:
 //------ ÇÙ½É ÇÔ¼ö  ------------------
 public:
 	UFUNCTION()
-		void InitProjectile(class ACharacterBase* NewCharacterRef, FProjectileAssetInfoStruct NewAssetInfo);
+		void InitProjectile(class ACharacterBase* NewCharacterRef, FProjectileAssetInfoStruct NewAssetInfo, FProjectileStatStruct NewStatInfo);
 
 	UFUNCTION()
 		void UpdateProjectileStat(FProjectileStatStruct NewStat);

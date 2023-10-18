@@ -78,9 +78,6 @@ public:
 		void UpdateCharacterStatWithID(class ACharacterBase* TargetCharacter, const uint32 CharacterID);
 
 	UFUNCTION()
-		void UpdateProjectileStatWithID(class AProjectileBase* TargetProjectile, const int32 ProjectileID);
-
-	UFUNCTION()
 		class UDebuffManager* GetGlobalDebuffManagerRef() { return DebuffManager; }
 
 	UFUNCTION(BlueprintCallable)

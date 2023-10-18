@@ -16,35 +16,47 @@
 // Sets default values
 AProjectileBase::AProjectileBase()
 {
+	PrimaryActorTick.bCanEverTick = true;
+	SetActorTickInterval(0.01f);
 
 	RootComponent = SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERE_COLLISION"));
-	SphereCollision->SetCollisionProfileName(TEXT("OverlapAll"));
-	
+	SphereCollision->SetCollisionProfileName(TEXT("Projectile"));
+		
 	TargetingCollision = CreateDefaultSubobject<USphereComponent>(TEXT("TARGETING_COLLISION"));
 	TargetingCollision->SetupAttachment(RootComponent);
 	TargetingCollision->SetWorldScale3D(FVector(5.0f));
+	TargetingCollision->SetCollisionProfileName(TEXT("Projectile"));
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PROJECTILE_MESH"));
 	Mesh->SetupAttachment(RootComponent);
 	Mesh->SetRelativeScale3D({ 0.5f, 0.5f, 0.5f });
-	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	 
+	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision); 
+	Mesh->SetCollisionProfileName("NoCollision");
+
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("PROJECTILE_MOVEMENT"));
 	ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
 	ProjectileMovement->MaxSpeed = ProjectileStat.ProjectileSpeed;
 	ProjectileMovement->bAutoActivate = false;
-	PrimaryActorTick.bCanEverTick = false;
+
 }
 
 // Called when the game starts or when spawned
 void AProjectileBase::BeginPlay()
 {
-	Super::BeginPlay();
+	Super::BeginPlay();	
 	
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnProjectileBeginOverlap);
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnTargetBeginOverlap);
 
+	SetActorRotation(UKismetMathLibrary::RandomRotator());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+}
+
+void AProjectileBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	Mesh->SetRelativeRotation(ProjectileMovement->Velocity.Rotation());
 }
 
 void AProjectileBase::InitProjectileAsset()
@@ -53,7 +65,6 @@ void AProjectileBase::InitProjectileAsset()
 	{
 		Mesh->SetStaticMesh(ProjectileAssetInfo.ProjectileMesh.Get());
 		Mesh->SetRelativeLocation(ProjectileAssetInfo.InitialLocation);
-		Mesh->SetRelativeRotation(ProjectileAssetInfo.InitialRotation);
 		Mesh->SetRelativeScale3D(ProjectileAssetInfo.InitialScale);
 		Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
@@ -71,12 +82,11 @@ void AProjectileBase::InitProjectileAsset()
 		ExplosionSound = ProjectileAssetInfo.ExplosionSound.Get();
 }
 
-void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectileAssetInfoStruct NewAssetInfo)
+void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectileAssetInfoStruct NewAssetInfo, FProjectileStatStruct NewStatInfo)
 {
 	if (IsValid(NewCharacterRef))
 	{
-		GamemodeRef->UpdateProjectileStatWithID(this, ProjectileID);
-
+		UpdateProjectileStat(NewStatInfo);
 		OwnerCharacterRef = NewCharacterRef;
 		SpawnInstigator = OwnerCharacterRef->GetController();
 	}
@@ -108,7 +118,7 @@ void AProjectileBase::UpdateProjectileStat(FProjectileStatStruct NewStat)
 {
 	ProjectileStat = NewStat;
 	ProjectileMovement->bIsHomingProjectile = ProjectileStat.bIsHoming; 
-	ProjectileMovement->ProjectileGravityScale = ProjectileStat.GravityScale;
+	//ProjectileMovement->ProjectileGravityScale = ProjectileStat.GravityScale;
 	ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
 	ProjectileMovement->MaxSpeed = ProjectileStat.ProjectileSpeed;
 }
@@ -181,11 +191,3 @@ void AProjectileBase::ActivateProjectileMovement()
 	ProjectileMovement->Activate();
 	bIsActivated = true; 
 }
-
-// Called every frame
-void AProjectileBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-

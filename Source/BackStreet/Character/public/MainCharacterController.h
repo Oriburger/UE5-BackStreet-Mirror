@@ -30,11 +30,11 @@ public:
 	UFUNCTION()
 		FRotator GetRotationToCursor();
 
-	//마지막에 클릭이 된 커서로의 Rotation을 반환
+	//마지막에 클릭이 된 커서로의 Rotation을		
 	UFUNCTION()
 		FRotator GetLastRotationToCursor();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FVector GetCursorDeprojectionWorldLocation();
 
 	//특정 Action 키가 아직 눌려있는지 확인

@@ -62,4 +62,7 @@ private:
 
 	//매번 업데이트 할 변수 / 발사체가 발사될 방향
 		FVector ThrowDirection;
+
+	//마지막으로 던진 발사체의 스탯 정보
+		FProjectileStatStruct ProjectileStat;
 };

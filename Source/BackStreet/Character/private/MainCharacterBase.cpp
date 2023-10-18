@@ -22,7 +22,7 @@
 #include "../../CraftingSystem/public/CraftBoxBase.h"
 #define MAX_CAMERA_BOOM_LENGTH 1450.0f
 #define MIN_CAMERA_BOOM_LENGTH 250.0f
-#define MAX_THROW_DISTANCE 700.0f
+#define MAX_THROW_DISTANCE 700.0f //AThrowWeaponBase와 통일 (추후 하나의 파일로 통합 예정)
 
 // Sets default values
 AMainCharacterBase::AMainCharacterBase()
@@ -83,7 +83,7 @@ void AMainCharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	UpdateWallThroughEffect();
-	if (bIsAiming) UpdateAimingState();
+	//if (bIsAiming) UpdateAimingState();
 }
 
 // Called to bind functionality to input
@@ -114,7 +114,7 @@ void AMainCharacterBase::ReadyToThrow()
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;
 	SetAimingMode(true);
-	//GetWorldTimerManager().SetTimer(AimingTimerHandle, this, &AMainCharacterBase::UpdateAimingState, 0.01f, true);
+	GetWorldTimerManager().SetTimer(AimingTimerHandle, this, &AMainCharacterBase::UpdateAimingState, 0.01f, true);
 }
 
 void AMainCharacterBase::Throw()
@@ -150,7 +150,7 @@ void AMainCharacterBase::UpdateAimingState()
 	FPredictProjectilePathResult predictProjectilePathResult = Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->GetProjectilePathPredictResult();
 	for (FPredictProjectilePathPointData& point : predictProjectilePathResult.PathData)
 	{
-		DrawDebugSphere(GetWorld(), point.Location, 3.0f, 6, FColor::Red, false, 0.01f, 0, 3.0f);
+		DrawDebugSphere(GetWorld(), point.Location, 3.0f, 6, FColor::Red, false, 0.015f, 0, 3.0f);
 	}
 }
 

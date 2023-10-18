@@ -68,16 +68,27 @@ protected:
 
 protected:
 	//발사체의 에셋 테이블
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Weapon|Projectile")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Weapon|Projectile")
 		UDataTable* ProjectileAssetInfoTable;
+
+	//발사체의 스탯 테이블
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Weapon|Projectile")
+		UDataTable* ProjectileStatInfoTable;
 
 	//발사체의 에셋 정보를 담을 캐시 변수
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Weapon|Projectile")
 		FProjectileAssetInfoStruct ProjectileAssetInfo;
 
+	//발사체의 스탯을 담을 캐시 변수
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Weapon|Projectile")
+		FProjectileStatStruct ProjectileStatInfo;
+
+	UFUNCTION()
+		FProjectileStatStruct GetProjectileStatInfo(int32 TargetProjectileID);
+
 	UFUNCTION()
 		FProjectileAssetInfoStruct GetProjectileAssetInfo(int32 TargetProjectileID);
-
+	
 //--------타이머 관련--------------------
 protected:
 	virtual void ClearAllTimerHandle() override;
