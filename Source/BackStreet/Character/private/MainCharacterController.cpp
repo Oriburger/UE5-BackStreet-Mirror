@@ -69,7 +69,6 @@ FVector AMainCharacterController::GetCursorDeprojectionWorldLocation()
 			UE_LOG(LogTemp, Warning, TEXT("Mouse Hit to {%s}"), *str);
 
 			return hitResult.Location;
-			
 		}
 	}
 	return FVector();

@@ -43,6 +43,7 @@ void AMeleeWeaponBase::StopAttack()
 	GetWorldTimerManager().ClearTimer(MeleeAtkTimerHandle);
 	MeleePrevTracePointList.Empty();
 	MeleeLineTraceQueryParams.ClearIgnoredActors();
+	IgnoreActorList.Empty();
 	MeleeTrailParticle->Deactivate();
 }
 
@@ -96,6 +97,43 @@ void AMeleeWeaponBase::InitWeaponAsset()
 		HitImpactSound = MeleeWeaponAssetInfo.HitImpactSound.Get();
 }
 
+TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
+{
+	if (!OwnerCharacterRef.IsValid()) return TArray<AActor*>(); 
+
+	//캐릭터 전방에서 Sphere 오버랩 체크를 한다.
+	FVector traceStartPos = OwnerCharacterRef->GetActorLocation()
+							+ OwnerCharacterRef->GetMesh()->GetRightVector() * 100.0f;
+	TEnumAsByte<EObjectTypeQuery> pawnTypeQuery = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
+	TArray<AActor*> overlapResultList, meleeDamageTargetList;
+
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), traceStartPos, 125.0f, { pawnTypeQuery }
+		, ACharacterBase::StaticClass(), IgnoreActorList, overlapResultList);
+
+	DrawDebugSphere(GetWorld(), traceStartPos, 125.0f, 30, FColor::White, false, 1.5f, 1, 1.0f);
+
+	//오버랩 결과를 돌며 실제 데미지 타겟을 찾아낸다. 
+	//캐릭터 - 타겟 방향의 라인트레이스에서 중간에 장애물이 있다면 타겟은 유효하지 않다.
+	FCollisionQueryParams collisionQueryParam;
+	collisionQueryParam.AddIgnoredActor(OwnerCharacterRef.Get());
+	collisionQueryParam.AddIgnoredActor(this);
+	for (auto& target : overlapResultList)
+	{
+		if (!IsValid(target)) continue;
+
+		FHitResult hitResult;
+		GetWorld()->LineTraceSingleByChannel(hitResult, OwnerCharacterRef->GetActorLocation()
+			, target->GetActorLocation(), ECollisionChannel::ECC_Camera, collisionQueryParam);
+
+		if (hitResult.bBlockingHit && hitResult.GetActor() == target)
+		{
+			IgnoreActorList.Add(target);
+			meleeDamageTargetList.Add(target);
+		}
+	}
+	return meleeDamageTargetList;
+}
+
 void AMeleeWeaponBase::MeleeAttack()
 {
 	FHitResult hitResult;
@@ -103,29 +141,32 @@ void AMeleeWeaponBase::MeleeAttack()
 
 	TArray<FVector> currTracePositionList = GetCurrentMeleePointList();
 	//bIsMeleeTraceSucceed//
-	AActor* target = CheckMeleeAttackTargetWithSphereTrace(); //CheckMeleeAttackTarget(hitResult, currTracePositionList);
+	TArray<AActor*> targetList = CheckMeleeAttackTargetWithSphereTrace(); //CheckMeleeAttackTarget(hitResult, currTracePositionList);
 	MeleePrevTracePointList = currTracePositionList;
 
-	//hitResult가 Valid하다면 아래 조건문에서 데미지를 가함
-	if (IsValid(target))//bIsMeleeTraceSucceed)
+	for (auto& target : targetList)
 	{
-		//효과를 출력
-		ActivateMeleeHitEffect(target->GetActorLocation());//hitResult.Location);
-
-		//데미지를 주고, 중복 체크를 해준다.
-		UGameplayStatics::ApplyDamage(target/*hitResult.GetActor()*/, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate
-			, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
-		MeleeLineTraceQueryParams.AddIgnoredActor(target); //hitResult.GetActor());
-
-		//디버프도 부여
-		if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
+		//hitResult가 Valid하다면 아래 조건문에서 데미지를 가함
+		if (IsValid(target))//bIsMeleeTraceSucceed)
 		{
-			GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(target)// hitResult.GetActor())
-				, OwnerCharacterRef.Get(), WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
-		}
+			//효과를 출력
+			ActivateMeleeHitEffect(target->GetActorLocation());//hitResult.Location);
 
-		//내구도를 업데이트
-		UpdateDurabilityState();
+			//데미지를 주고, 중복 체크를 해준다.
+			UGameplayStatics::ApplyDamage(target/*hitResult.GetActor()*/, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate
+				, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
+			MeleeLineTraceQueryParams.AddIgnoredActor(target); //hitResult.GetActor());
+
+			//디버프도 부여
+			if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
+			{
+				GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(target)// hitResult.GetActor())
+					, OwnerCharacterRef.Get(), WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
+			}
+
+			//내구도를 업데이트
+			UpdateDurabilityState();
+		}
 	}
 }
 

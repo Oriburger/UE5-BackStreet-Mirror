@@ -52,8 +52,8 @@ protected:
 
 //-------- Melee 관련 ---------------------------
 public:
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-		AActor* CheckMeleeAttackTargetWithSphereTrace();
+	UFUNCTION(BlueprintCallable)
+		TArray<AActor*> CheckMeleeAttackTargetWithSphereTrace();
 
 	//근접 공격을 수행
 	UFUNCTION()
@@ -78,6 +78,9 @@ private:
 
 	UPROPERTY()
 		TArray<FVector> MeleePrevTracePointList;
+		
+	//근접 공격의 오버랩 체크 시, 무시할 액터의 리스트이다.
+	TArray<AActor*> IgnoreActorList; 
 
 	//UPROPERTY()
 	FCollisionQueryParams MeleeLineTraceQueryParams;
