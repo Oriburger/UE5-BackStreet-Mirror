@@ -102,16 +102,34 @@ TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
 	if (!OwnerCharacterRef.IsValid()) return TArray<AActor*>(); 
 
 	//캐릭터 전방에서 Sphere 오버랩 체크를 한다.
-	FVector traceStartPos = OwnerCharacterRef->GetActorLocation()
-							+ OwnerCharacterRef->GetMesh()->GetRightVector() * 100.0f;
+	//FVector traceStartPos = OwnerCharacterRef->GetActorLocation();
+	//float traceRadius = 250.0f;
+	//if (!bIsCentralAttackMode)
+	//{
+	//	traceRadius /= 2;
+	//	traceStartPos += OwnerCharacterRef->GetMesh()->GetRightVector() * 100.0f;
+	//}
+	FVector traceStartPos = (WeaponMesh->GetSocketLocation("GrabPoint")
+							+ WeaponMesh->GetSocketLocation("End")) / 2;
+	float traceRadius = UKismetMathLibrary::Vector_Distance(WeaponMesh->GetSocketLocation("GrabPoint")
+						, WeaponMesh->GetSocketLocation("End")) + 10.0f;
+	
 	TEnumAsByte<EObjectTypeQuery> pawnTypeQuery = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
 	TArray<AActor*> overlapResultList, meleeDamageTargetList;
+	
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), traceStartPos, traceRadius, { pawnTypeQuery }
+											 , ACharacterBase::StaticClass(), IgnoreActorList, overlapResultList);
+	//DrawDebugSphere(GetWorld(), traceStartPos, traceRadius, 30, FColor::White, false, 1.5f, 1, 1.0f);
 
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), traceStartPos, 125.0f, { pawnTypeQuery }
-		, ACharacterBase::StaticClass(), IgnoreActorList, overlapResultList);
+	/*
+	UKismetSystemLibrary::CapsuleOverlapActors(GetWorld(), traceStartPos, traceRadius, traceHeight
+						,{ pawnTypeQuery }, ACharacterBase::StaticClass(), IgnoreActorList, overlapResultList);
 
-	DrawDebugSphere(GetWorld(), traceStartPos, 125.0f, 30, FColor::White, false, 1.5f, 1, 1.0f);
-
+	
+	FRotator rotation = UKismetMathLibrary::FindLookAtRotation(WeaponMesh->GetSocketLocation("GrabPoint")
+																, WeaponMesh->GetSocketLocation("End"));
+	DrawDebugCapsule(GetWorld(), traceStartPos, traceHeight, traceRadius, rotation.Quaternion(), FColor::White, false, 1.5f, 1, 2.0f);
+	*/
 	//오버랩 결과를 돌며 실제 데미지 타겟을 찾아낸다. 
 	//캐릭터 - 타겟 방향의 라인트레이스에서 중간에 장애물이 있다면 타겟은 유효하지 않다.
 	FCollisionQueryParams collisionQueryParam;

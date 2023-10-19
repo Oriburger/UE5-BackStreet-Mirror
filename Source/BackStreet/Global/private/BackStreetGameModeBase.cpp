@@ -122,7 +122,7 @@ void ABackStreetGameModeBase::UpdateCharacterStatWithID(ACharacterBase* TargetCh
 			NewStat.CharacterMaxHP = typeInfo->CharacterMaxHP;
 			NewStat.CharacterDefense = typeInfo->CharacterDefense;
 			NewStat.CharacterAtkSpeed = typeInfo->CharacterAtkSpeed;
-			NewStat.CharacterAtkMultiplier = typeInfo->CharacterAtkMultiplier;
+			NewStat.CharacterAtkMultiplier = typeInfo->CharacterAtkMultiplier;	
 			NewStat.CharacterMoveSpeed = typeInfo->CharacterMoveSpeed;
 
 			TargetCharacter->UpdateCharacterStat(NewStat);
