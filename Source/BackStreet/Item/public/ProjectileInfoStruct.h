@@ -24,6 +24,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsExplosive;
 
+	//총알형 발사체인지? (bSimulatePhysics 유무)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool bIsBullet; 
+
 	//발사체의 속도
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float ProjectileSpeed = 2000.0f;

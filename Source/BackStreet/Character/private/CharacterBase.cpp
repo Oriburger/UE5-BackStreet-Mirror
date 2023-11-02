@@ -47,12 +47,14 @@ void ACharacterBase::BeginPlay()
 
 	if (IsValid(SubInventoryRef) && !SubInventoryRef->IsActorBeingDestroyed())
 	{
+		SubInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		SubInventoryRef->SetOwner(this);
 		SubInventoryRef->InitInventory(4);
 	}
 
 	if (IsValid(InventoryRef) && !InventoryRef->IsActorBeingDestroyed())
 	{
+		InventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		InventoryRef->SetOwner(this);
 		InventoryRef->InitInventory();
 		InitWeaponActors();

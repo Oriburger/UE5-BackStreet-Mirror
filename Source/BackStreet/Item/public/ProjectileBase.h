@@ -45,10 +45,12 @@ protected:
 	UFUNCTION()
 		void InitProjectileAsset();
 
+	UFUNCTION()
+		void DestroyWithEffect(FVector Location = FVector(0.0f));
+
 	//현재 무기의 에셋 정보
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
 		FProjectileAssetInfoStruct ProjectileAssetInfo;
-
 //------- 기본 프로퍼티 -------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
