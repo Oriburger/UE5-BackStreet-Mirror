@@ -12,6 +12,7 @@
 #include "../../Item/public/RewardBoxBase.h"
 #include "../../Item/public/ItemBoxBase.h"
 #include "../../Item/public/ItemBase.h"
+#include "Engine/DamageEvents.h"
 #include "../../CraftingSystem/public/CraftBoxBase.h"
 #include "Engine/LevelStreaming.h"
 
@@ -37,14 +38,14 @@ void AResourceManager::SpawnStageActor(class AStageData* Target)
 	UE_LOG(LogTemp, Log, TEXT("AResourceManager::SpawnStageActor -> Start Spawn"));
 	if (!IsValid(Target))
 		return;
-	if (Target->GetStageType() == EStageCategoryInfo::E_Normal)
+	if (Target->GetStageCategoryType() == EStageCategoryInfo::E_Normal)
 	{
 			SpawnMonster(Target);
 			SpawnItem(Target);
 			SpawnCraftingBox(Target);
 
 	}
-	else if (Target->GetStageType() == EStageCategoryInfo::E_Boss)
+	else if (Target->GetStageCategoryType() == EStageCategoryInfo::E_Boss)
 	{
 			SpawnBossMonster(Target);
 			SpawnItem(Target);
@@ -58,11 +59,11 @@ void AResourceManager::SpawnStageActor(class AStageData* Target)
 void AResourceManager::SpawnMonster(class AStageData* Target)
 {
 	if (!IsValid(Target))
-		return;
-	uint16 type = FMath::RandRange(0, MAX_STAGE_TYPE - 1);
-	FStageEnemyTypeStruct stageTypeInfo = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()))->GetStageTypeInfoWithRow(type);
-	TArray<int32> enemyIDList = stageTypeInfo.IDList;
-	int8 spawnNum = FMath::RandRange(stageTypeInfo.MinSpawn, stageTypeInfo.MaxSpawn);
+		return;	
+	FStageInfoStruct stageType = Target->GetStageTypeInfo();
+	TArray<int32> enemyIDList = stageType.NormalEnemyIDList;
+	int8 spawnNum = FMath::RandRange(stageType.MinSpawnEnemy, stageType.MaxSpawnEnemy);
+
 	TArray<FVector> monsterSpawnPoint = Target->GetMonsterSpawnPoints();
 	if (monsterSpawnPoint.IsEmpty())
 		return;
@@ -89,12 +90,14 @@ void AResourceManager::SpawnMonster(class AStageData* Target)
 		spawnLocation = spawnLocation + FVector(0, 0, 200);
 		actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 		
-		AEnemyCharacterBase* monster = GetWorld()->SpawnActor<AEnemyCharacterBase>(GetEnemyWithID(enemyIDList[enemyIDIdx]), spawnLocation, FRotator::ZeroRotator, actorSpawnParameters);
+		AEnemyCharacterBase* monster = GetWorld()->SpawnActor<AEnemyCharacterBase>(EnemyAssets[0], spawnLocation, FRotator::ZeroRotator, actorSpawnParameters);
 		if (!IsValid(monster))
 			return;
 		Target->AddMonsterList(monster);
-		monster->EnemyID = enemyIDList[enemyIDIdx];
+		UE_LOG(LogTemp, Log, TEXT("AResourceManager::SpawnMonster SetEnemyID %d"), enemyIDList[enemyIDIdx]);
+		monster->CharacterID = enemyIDList[enemyIDIdx];
 		monster->InitEnemyStat();
+		monster->InitAsset(enemyIDList[enemyIDIdx]);
 	}
 }
 
@@ -116,8 +119,9 @@ void AResourceManager::SpawnBossMonster(class AStageData* Target)
 		return;
 	Target->AddMonsterList(monster);
 	// 수정 필요 하드코딩..
-	monster->EnemyID = 1200;
+	monster->CharacterID = 1200;
 	monster->InitEnemyStat();
+	monster->InitAsset(1200);
 	
 }
 
@@ -259,19 +263,19 @@ TSubclassOf<AEnemyCharacterBase> AResourceManager::GetEnemyWithID(int32 EnemyID)
 		enemy = EnemyAssets[0];
 		break;
 	case 1003:
-		enemy = EnemyAssets[2];
+		enemy = EnemyAssets[0];
 		break;
 	case 1100:
-		enemy = EnemyAssets[1];
+		enemy = EnemyAssets[0];
 		break;
 	case 1101:
-		enemy = EnemyAssets[3];
+		enemy = EnemyAssets[0];
 		break;
 	case 1102:
-		enemy = EnemyAssets[3];
+		enemy = EnemyAssets[0];
 		break;
 	case 1200:
-		enemy = EnemyAssets[4];
+		enemy = EnemyAssets[0];
 		break;
 	default:
 		UE_LOG(LogTemp, Log, TEXT("Wrong ID"));
@@ -279,13 +283,6 @@ TSubclassOf<AEnemyCharacterBase> AResourceManager::GetEnemyWithID(int32 EnemyID)
 		break;
 	}
 	return enemy;
-}
-
-FName AResourceManager::GetRandomMap()
-{
-	if (MapNames.IsEmpty()) return FName();
-	uint8 idx = FMath::RandRange(0, MapNames.Num() - 1);
-	return MapNames[idx];
 }
 
 void AResourceManager::CleanAllResource()

@@ -16,46 +16,35 @@ class BACKSTREET_API ARangedWeaponBase : public AWeaponBase
 
 public:
 	ARangedWeaponBase();
-	//공격 처리
-	UFUNCTION(BlueprintCallable)
-		virtual void Attack() override;
+	
+	virtual void Attack();
 
-	//공격 마무리 처리
-	UFUNCTION(BlueprintCallable)
-		virtual void StopAttack() override;
+	virtual void StopAttack();
 
-	UFUNCTION(BlueprintCallable)
-		virtual float GetAttackRange() override;
+	virtual float GetAttackRange();
 
-//------ 스탯/상태 관련 ---------------------------------
+//------ Ranged 오버라이더블 ----------------------------
+public:
+	virtual bool TryFireProjectile();
+
+	//장전을 시도. 현재 상태에 따른 성공 여부를 반환
+	virtual bool TryReload();
+
+	//탄환의 개수를 더함 (ExtraAmmoCount까지)
+	virtual void AddAmmo(int32 Count);
+
+//------ 기본 ---------------------------------
 protected:
 	UFUNCTION(BlueprintCallable)
 		virtual void UpdateWeaponStat(FWeaponStatStruct NewStat) override;
 
-//------ VFX ----------------------------------
-protected:
-	//발사 순간에 출력될 이미터 (임시, 추후 데이터 테이블로 관리 예정)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class UNiagaraSystem* ShootNiagaraEmitter;
-
-private:
-	//투사체가 발사되는 이펙트를 출력한다
-	UFUNCTION()
-		void SpawnShootNiagaraEffect();
-
-//------ Projectile 관련----------------------------
-public:
-	//발사체를 생성
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		class AProjectileBase* CreateProjectile();
 
-	//발사체 초기화 및 발사를 시도 
+//------- Getter / Setter ---------------------------
+public:
 	UFUNCTION()
-		bool TryFireProjectile();
-
-	//장전을 시도. 현재 상태에 따른 성공 여부를 반환
-	UFUNCTION(BlueprintCallable)
-		bool TryReload();
+		void SetInfiniteAmmoMode(bool NewMode) { WeaponStat.RangedWeaponStat.bIsInfiniteAmmo = NewMode; }
 
 	//남은 탄환의 개수를 반환 - Stat.ExtraAmmoCount
 	UFUNCTION(BlueprintCallable)
@@ -64,22 +53,43 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetCanReload();
 
-	//탄환의 개수를 더함 (ExtraAmmoCount까지)
-	UFUNCTION(BlueprintCallable)
-		void AddAmmo(int32 Count);
-
-	//탄창의 개수를 더함 (+= MaxAmmoPerMagazine*Count)
+//------ Asset----------------------------------
+protected:
 	UFUNCTION()
-		void AddMagazine(int32 Count);
+		virtual void InitWeaponAsset() override;
 
+	//발사 순간에 출력될 이미터 (임시, 추후 데이터 테이블로 관리 예정)
+	UPROPERTY(VisibleInstanceOnly)
+		class UNiagaraSystem* ShootNiagaraEmitter;
+
+	//투사체가 발사되는 이펙트를 출력한다
 	UFUNCTION()
-		void SetInfiniteAmmoMode(bool NewMode) { WeaponStat.RangedWeaponStat.bIsInfiniteAmmo = NewMode; }
+		void SpawnShootNiagaraEffect();
 
 protected:
-	//SoftObjRef로 대체 예정
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Weapon")
-		TSubclassOf<class AProjectileBase> ProjectileClass;
+	//발사체의 에셋 테이블
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Weapon|Projectile")
+		UDataTable* ProjectileAssetInfoTable;
 
+	//발사체의 스탯 테이블
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Weapon|Projectile")
+		UDataTable* ProjectileStatInfoTable;
+
+	//발사체의 에셋 정보를 담을 캐시 변수
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Weapon|Projectile")
+		FProjectileAssetInfoStruct ProjectileAssetInfo;
+
+	//발사체의 스탯을 담을 캐시 변수
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Weapon|Projectile")
+		FProjectileStatStruct ProjectileStatInfo;
+
+	UFUNCTION()
+		FProjectileStatStruct GetProjectileStatInfo(int32 TargetProjectileID);
+
+	UFUNCTION()
+		FProjectileAssetInfoStruct GetProjectileAssetInfo(int32 TargetProjectileID);
+	
+//--------타이머 관련--------------------
 protected:
 	virtual void ClearAllTimerHandle() override;
 

@@ -12,10 +12,14 @@
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+
 #define TURN_TIME_OUT_SEC 1.0f
 
 AEnemyCharacterBase::AEnemyCharacterBase()
 {
+	PrimaryActorTick.bCanEverTick = false;
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
 	FloatingHpBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("FLOATING_HP_BAR"));
 	FloatingHpBar->SetupAttachment(GetCapsuleComponent());
 	FloatingHpBar->SetRelativeLocation(FVector(0.0f, 0.0f, 85.0f));
@@ -23,8 +27,7 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	FloatingHpBar->SetDrawSize({ 80.0f, 10.0f });
 
 	bUseControllerRotationYaw = false;
-	PrimaryActorTick.bCanEverTick = false;
-	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	this->Tags.Add("Enemy");
 }
@@ -34,16 +37,18 @@ void AEnemyCharacterBase::BeginPlay()
 	Super::BeginPlay();
 	
 	SpawnDefaultController();
+
 	InitFloatingHpWidget();
 	InitEnemyStat();
+	
 	SetDefaultWeapon();
-
 	InitDynamicMeshMaterial(GetMesh()->GetMaterial(0));
 }
 
 void AEnemyCharacterBase::InitEnemyStat()
 {
-	GamemodeRef->UpdateCharacterStatWithID(this, EnemyID);
+	UE_LOG(LogTemp, Warning, TEXT("My ID : %d"), CharacterID);
+	GamemodeRef->UpdateCharacterStatWithID(this, CharacterID);
 	CharacterState.CharacterCurrHP = CharacterStat.CharacterMaxHP;
 	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.CharacterMoveSpeed;
 	SetDefaultStat();
@@ -84,8 +89,8 @@ void AEnemyCharacterBase::Attack()
 	Super::Attack();
 
 	float attackSpeed = 0.5f;
-	if(IsValid(GetWeaponActorRef()))
-		attackSpeed = FMath::Min(1.5f, CharacterStat.CharacterAtkSpeed * GetWeaponActorRef()->GetWeaponStat().WeaponAtkSpeedRate);
+	if(IsValid(GetCurrentWeaponRef()))
+		attackSpeed = FMath::Min(1.5f, CharacterStat.CharacterAtkSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
 
 	GetWorldTimerManager().SetTimer(AtkIntervalHandle, this, &ACharacterBase::ResetAtkIntervalTimer
 		, 1.0f, false, FMath::Max(0.0f, 1.5f - attackSpeed));
@@ -135,45 +140,45 @@ void AEnemyCharacterBase::SpawnDeathItems()
 {
 	int32 totalSpawnItemCount = UKismetMathLibrary::RandomIntegerInRange(0, MaxSpawnItemCount);
 	int32 trySpawnCount = 0; //스폰 시도를 한 횟수
-	
+
 	TArray<AItemBase*> spawnedItemList;
 
 	UE_LOG(LogTemp, Warning, TEXT("totalSpawnItemCount %d"), totalSpawnItemCount);
 
-	if (SpawnItemTypeList.IsValidIndex(0)&&SpawnItemTypeList[0] == EItemCategoryInfo::E_Mission)
+	if (SpawnItemTypeList.IsValidIndex(0) && SpawnItemTypeList[0] == EItemCategoryInfo::E_Mission)
 	{
-		AItemBase* newItem = GamemodeRef->SpawnItemToWorld((uint8)SpawnItemTypeList[0], SpawnItemIDList[0], GetActorLocation() + FMath::VRand() * 10.0f);
+		/*AItemBase* newItem = GamemodeRef->SpawnItemToWorld(SpawnItemIDList[0], GetActorLocation() + FMath::VRand() * 10.0f);
 		if (IsValid(newItem))
 		{
 			spawnedItemList.Add(newItem);
 			//newItem->Dele_MissionItemSpawned.BindUFunction(target, FName("TryAddMissionItem"));
-		}
+		}*/
 	}
 	else
 	{
-		while(totalSpawnItemCount)
+		while (totalSpawnItemCount)
 		{
 			if (++trySpawnCount > totalSpawnItemCount * 3) break; //스폰할 아이템 개수의 3배만큼 시도
-			
-			const int32 itemIdx = UKismetMathLibrary::RandomIntegerInRange(0, SpawnItemIDList.Num()-1);
+
+			const int32 itemIdx = UKismetMathLibrary::RandomIntegerInRange(0, SpawnItemIDList.Num() - 1);
 			if (!SpawnItemTypeList.IsValidIndex(itemIdx) || !ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
-			
+
 			const uint8 itemType = (uint8)SpawnItemTypeList[itemIdx];
 			const uint8 itemID = SpawnItemIDList[itemIdx];
 			const float spawnProbability = ItemSpawnProbabilityList[itemIdx];
-			
-			if(FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
+
+			if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
 			{
-				AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemType, itemID, GetActorLocation() + FMath::VRand() * 10.0f);
-			
+				AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 10.0f);
+
 				if (IsValid(newItem))
 				{
 					spawnedItemList.Add(newItem);
 					totalSpawnItemCount -= 1;
 				}
 			}
-		}	
-	}		
+		}
+	}
 	for (auto& targetItem : spawnedItemList)
 	{
 		targetItem->ActivateProjectileMovement();

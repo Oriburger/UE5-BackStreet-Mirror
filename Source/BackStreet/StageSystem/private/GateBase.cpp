@@ -147,7 +147,7 @@ void AGateBase::CheckHaveToActive()
 	}
 	if (this->Tags.Find(FName(TEXT("ChapterGate"))) != INDEX_NONE)
 	{
-		if (stage->GetStageType() != EStageCategoryInfo::E_Boss)
+		if (stage->GetStageCategoryType() != EStageCategoryInfo::E_Boss)
 		{
 			Destroy();
 		}

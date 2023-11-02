@@ -34,13 +34,9 @@ public:
 
 // ----- 기본 프로퍼티 -----------
 public:
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
-		int32 EnemyID;
-
 	//적이 최초로 소유하는 무기의 ID
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		int32 DefaultWeaponID;
+		int32 DefaultWeaponID = 11100;
 
 	//최대 스폰할 아이템의 개수. 미션 아이템은 무시.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem", meta = (UIMin = 0, UIMax = 2))
@@ -111,13 +107,6 @@ public:
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void InitFloatingHpWidget();
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		USoundCue* HitImpactSound;
-
-protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Animation")
-		class UAnimMontage* PreChaseAnimMontage;
 
 public:
 	void ClearAllTimerHandle();
