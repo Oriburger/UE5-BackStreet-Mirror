@@ -117,6 +117,9 @@ public:
 	//무기를 Drop한다. (월드에서 아예 사라진다.)
 	virtual void DropWeapon();
 
+	UFUNCTION()
+		bool TrySwitchToSubWeapon(int32 SubWeaponIdx);
+
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class AWeaponInventoryBase* GetInventoryRef();
 

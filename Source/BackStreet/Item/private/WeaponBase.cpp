@@ -48,6 +48,11 @@ void AWeaponBase::InitWeapon(int32 NewWeaponID)
 
 	if (NewWeaponID == 0)
 	{
+		WeaponStat = FWeaponStatStruct();
+		WeaponState = FWeaponStateStruct();
+		WeaponAssetInfo = FWeaponAssetInfoStruct();
+		WeaponMesh->SetStaticMesh(nullptr);
+	
 		if (ActorHasTag(FName("Melee")))
 			WeaponStat.WeaponType = EWeaponType::E_Melee;
 
@@ -59,6 +64,8 @@ void AWeaponBase::InitWeapon(int32 NewWeaponID)
 
 		else
 			WeaponStat.WeaponType =  EWeaponType::E_None;
+
+		return;
 	}
 
 	//FWeaponStatStruct newStat = GetWeaponStatInfoWithID(WeaponID);
@@ -68,7 +75,6 @@ void AWeaponBase::InitWeapon(int32 NewWeaponID)
 	FWeaponAssetInfoStruct newAssetInfo = GetWeaponAssetInfoWithID(WeaponID);
 	WeaponAssetInfo = newAssetInfo; 
 
-	UE_LOG(LogTemp, Warning, TEXT("Init Weapon : %d"), newAssetInfo.RangedWeaponAssetInfo.ProjectileID);
 	if (WeaponID != 0)
 	{
 		TArray<FSoftObjectPath> tempStream, assetToStream;
@@ -94,7 +100,6 @@ void AWeaponBase::InitWeapon(int32 NewWeaponID)
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &AWeaponBase::InitWeaponAsset));
 	}
-	else WeaponMesh->SetStaticMesh(nullptr);
 }
 
 
@@ -208,6 +213,8 @@ void AWeaponBase::UpdateDurabilityState()
 		ClearAllTimerHandle();
 		OwnerCharacterRef.Get()->StopAttack();
 		OnWeaponBeginDestroy.Broadcast();
+		OwnerCharacterRef.Get()->DropWeapon();
+		return;
 	}
 	OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
 }

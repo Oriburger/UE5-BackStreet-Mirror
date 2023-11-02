@@ -21,23 +21,27 @@ AProjectileBase::AProjectileBase()
 
 	RootComponent = SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERE_COLLISION"));
 	SphereCollision->SetCollisionProfileName(TEXT("Projectile"));
-		
+	SphereCollision->SetNotifyRigidBodyCollision(true);
+	SphereCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
 	TargetingCollision = CreateDefaultSubobject<USphereComponent>(TEXT("TARGETING_COLLISION"));
 	TargetingCollision->SetupAttachment(RootComponent);
 	TargetingCollision->SetWorldScale3D(FVector(5.0f));
-	TargetingCollision->SetCollisionProfileName(TEXT("Projectile"));
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PROJECTILE_MESH"));
 	Mesh->SetupAttachment(RootComponent);
-	Mesh->SetRelativeScale3D({ 0.5f, 0.5f, 0.5f });
-	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision); 
-	Mesh->SetCollisionProfileName("NoCollision");
+	Mesh->SetWorldScale3D({ 0.5f, 0.5f, 0.5f });
+	Mesh->SetRelativeRotation(FRotator(0.0f));
+	Mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	Mesh->SetCollisionProfileName("Item");
+	Mesh->SetNotifyRigidBodyCollision(true);	
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("PROJECTILE_MOVEMENT"));
 	ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
-	ProjectileMovement->MaxSpeed = ProjectileStat.ProjectileSpeed;
+	ProjectileMovement->MaxSpeed = 3000.0f;
 	ProjectileMovement->bAutoActivate = false;
 
+	InitialLifeSpan = 10.0f;
 }
 
 // Called when the game starts or when spawned
@@ -47,6 +51,7 @@ void AProjectileBase::BeginPlay()
 	
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnProjectileBeginOverlap);
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnTargetBeginOverlap);
+	SphereCollision->OnComponentHit.AddDynamic(this, &AProjectileBase::OnProjectileHit);
 
 	SetActorRotation(UKismetMathLibrary::RandomRotator());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
@@ -56,7 +61,8 @@ void AProjectileBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	Mesh->SetRelativeRotation(ProjectileMovement->Velocity.Rotation());
+	if(ProjectileMovement->IsActive())
+		Mesh->SetRelativeRotation(ProjectileMovement->Velocity.Rotation());
 }
 
 void AProjectileBase::InitProjectileAsset()
@@ -65,8 +71,7 @@ void AProjectileBase::InitProjectileAsset()
 	{
 		Mesh->SetStaticMesh(ProjectileAssetInfo.ProjectileMesh.Get());
 		Mesh->SetRelativeLocation(ProjectileAssetInfo.InitialLocation);
-		Mesh->SetRelativeScale3D(ProjectileAssetInfo.InitialScale);
-		Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		Mesh->SetWorldScale3D(ProjectileAssetInfo.InitialScale);
 	}
 
 	if (ProjectileAssetInfo.HitEffectParticle.IsValid())
@@ -78,6 +83,9 @@ void AProjectileBase::InitProjectileAsset()
 	if (ProjectileAssetInfo.HitSound.IsValid())
 		HitSound = ProjectileAssetInfo.HitSound.Get();
 
+	if (ProjectileAssetInfo.ExplosionParticle.IsValid())
+		ExplosionParticle = ProjectileAssetInfo.ExplosionParticle.Get();
+
 	if (ProjectileAssetInfo.ExplosionSound.IsValid())
 		ExplosionSound = ProjectileAssetInfo.ExplosionSound.Get();
 }
@@ -86,14 +94,13 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectil
 {
 	if (IsValid(NewCharacterRef))
 	{
-		UpdateProjectileStat(NewStatInfo);
 		OwnerCharacterRef = NewCharacterRef;
 		SpawnInstigator = OwnerCharacterRef->GetController();
 	}
-
 	ProjectileID = NewAssetInfo.ProjectileID;
-
+	UpdateProjectileStat(NewStatInfo);
 	ProjectileAssetInfo = NewAssetInfo;
+
 	if (ProjectileID != 0)
 	{
 		TArray<FSoftObjectPath> tempStream, assetToStream;
@@ -120,7 +127,6 @@ void AProjectileBase::UpdateProjectileStat(FProjectileStatStruct NewStat)
 	ProjectileMovement->bIsHomingProjectile = ProjectileStat.bIsHoming; 
 	//ProjectileMovement->ProjectileGravityScale = ProjectileStat.GravityScale;
 	ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
-	ProjectileMovement->MaxSpeed = ProjectileStat.ProjectileSpeed;
 }
 
 void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex
@@ -130,60 +136,95 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 	if (!OwnerCharacterRef.IsValid() || !GamemodeRef.IsValid()) return;
 	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Item")) return;
 
+
 	if (OtherActor->ActorHasTag("Character"))
 	{
 		if (OtherActor == OwnerCharacterRef.Get() || OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
 
+		//디버프가 있다면?
+		if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
+		{
+			GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(ProjectileStat.DebuffType, Cast<ACharacterBase>(OtherActor), OwnerCharacterRef.Get()
+				, ProjectileStat.DebuffTotalTime, ProjectileStat.DebuffVariable);
+		}
+
 		//폭발하는 발사체라면?
 		if (ProjectileStat.bIsExplosive)
 		{
-			UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), ProjectileStat.ProjectileDamage, ProjectileStat.ProjectileDamage / 2.0f
-														, SweepResult.Location, 100.0f, 200.0f, 25.0f, nullptr, {}, OwnerCharacterRef.Get(), OwnerCharacterRef.Get()->Controller);
-			GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, SweepResult.Location, 100.0f);
-			
-			if (ExplosionSound != nullptr)
-			{
-				const float soundVolume = OwnerCharacterRef.Get()->ActorHasTag("Player") ? 1.0f : 0.2f;
-				UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation(), soundVolume);
-			}
+			Explode();
+			return;
 		}
 		else
 		{
 			const float totalDamage = ProjectileStat.ProjectileDamage * OwnerCharacterRef.Get()->GetCharacterStat().CharacterAtkMultiplier;
-			UGameplayStatics::ApplyDamage(OtherActor, totalDamage,SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
+			UGameplayStatics::ApplyDamage(OtherActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
 			GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Hit, SweepResult.Location, 100.0f);
-		}
 
-		if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
-		{
-			GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(ProjectileStat.DebuffType, Cast<ACharacterBase>(OtherActor), OwnerCharacterRef.Get()
-																		, ProjectileStat.DebuffTotalTime, ProjectileStat.DebuffVariable);
+			FTransform targetTransform = { FRotator(), SweepResult.Location, {1.0f, 1.0f, 1.0f} };
+			if (HitSound != nullptr)
+			{
+				const float soundVolume = OwnerCharacterRef.Get()->ActorHasTag("Player") ? 1.0f : 0.2;
+				UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, GetActorLocation(), soundVolume);
+			}
+			if (HitParticle != nullptr)
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, targetTransform);
+
+			if (HitNiagaraParticle != nullptr)
+				UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitNiagaraParticle, targetTransform.GetLocation(), targetTransform.GetRotation().Rotator());
+
+			Destroy();
 		}
 	}
+}
 
-	FTransform targetTransform = { FRotator(), SweepResult.Location, {1.0f, 1.0f, 1.0f} };
-	if (HitSound != nullptr)
-	{
-		const float soundVolume = OwnerCharacterRef.Get()->ActorHasTag("Player") ? 1.0f : 0.2;
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, GetActorLocation(), soundVolume);
-	}
-	if(HitParticle != nullptr)
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, targetTransform);
+void AProjectileBase::OnProjectileHit(UPrimitiveComponent* HitComponet, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	//메시 콜리전으로만 바닥과 상호작용 하도록 지정
+	SphereCollision->SetRelativeScale3D(FVector(0.1f));
+	Mesh->SetWorldScale3D(ProjectileAssetInfo.InitialScale);
 
-	if(HitNiagaraParticle != nullptr)
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitNiagaraParticle, targetTransform.GetLocation(), targetTransform.GetRotation().Rotator());
+	//피직스를 설정하고 구르도록 임펄스를 제공
+	SphereCollision->SetSimulatePhysics(true);
+	SphereCollision->AddAngularImpulseInDegrees(ProjectileMovement->Velocity);
 
-	Destroy();
+	//폭발이 가능한 발사체라면?
+	if(ProjectileStat.bIsExplosive)
+		GetWorldTimerManager().SetTimer(AutoExplodeTimer, this, &AProjectileBase::Explode, 1.5f, false);
 }
 
 void AProjectileBase::OnTargetBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
+{		
 	if (!IsValid(OtherActor) || !OwnerCharacterRef.IsValid()) return;
 	if ( OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
 	if (!ProjectileStat.bIsHoming || OtherActor == OwnerCharacterRef.Get() || !bIsActivated) return;
 
 	ProjectileMovement->HomingTargetComponent = OverlappedComp;
 	ProjectileMovement->bIsHomingProjectile = true;
+}
+
+void AProjectileBase::Explode()
+{
+	if (IsActorBeingDestroyed() || !IsValid(this)) return; 
+	if (!GamemodeRef.IsValid() || !OwnerCharacterRef.IsValid()) return; 
+	if (!ProjectileStat.bIsExplosive) return;
+
+	//--- 데미지 관련 --------------
+	TArray<AActor*> ignoreActors = { (AActor*)this };
+	UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), ProjectileStat.ProjectileDamage, ProjectileStat.ProjectileDamage * 0.2f
+		, GetActorLocation(), 125.0f, 250.0f, 0.5f, nullptr, ignoreActors, OwnerCharacterRef.Get()
+		, OwnerCharacterRef.Get()->GetController(), ECC_WorldStatic);
+
+	//--- 이펙트 출력 --------------
+	if (ExplosionParticle != nullptr)
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionParticle, GetActorLocation(), GetActorRotation());
+	if (ExplosionSound != nullptr)
+	{
+		const float soundVolume = OwnerCharacterRef.Get()->ActorHasTag("Player") ? 1.0f : 0.2f;
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation(), soundVolume);
+	}
+	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 100.0f); //카메라 셰이크 이벤트
+
+	Destroy();
 }
 
 void AProjectileBase::ActivateProjectileMovement()

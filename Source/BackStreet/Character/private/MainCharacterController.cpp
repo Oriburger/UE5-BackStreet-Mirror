@@ -66,7 +66,6 @@ FVector AMainCharacterController::GetCursorDeprojectionWorldLocation()
 			if (hitResult.GetActor() == GetPawn()) continue;
 			
 			FString str = UKismetSystemLibrary::GetDisplayName(hitResult.GetActor());
-			UE_LOG(LogTemp, Warning, TEXT("Mouse Hit to {%s}"), *str);
 
 			return hitResult.Location;
 		}

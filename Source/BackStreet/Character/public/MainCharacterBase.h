@@ -141,6 +141,10 @@ public:
 	UFUNCTION()
 		void RotateToCursor();
 
+	//1~4번의 키를 눌러 보조무기를 장착한다.
+	UFUNCTION()
+		void PickSubWeapon();
+
 	UFUNCTION()
 		TArray<AActor*> GetNearInteractionActorList();
 

@@ -101,14 +101,6 @@ TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
 {
 	if (!OwnerCharacterRef.IsValid()) return TArray<AActor*>(); 
 
-	//캐릭터 전방에서 Sphere 오버랩 체크를 한다.
-	//FVector traceStartPos = OwnerCharacterRef->GetActorLocation();
-	//float traceRadius = 250.0f;
-	//if (!bIsCentralAttackMode)
-	//{
-	//	traceRadius /= 2;
-	//	traceStartPos += OwnerCharacterRef->GetMesh()->GetRightVector() * 100.0f;
-	//}
 	FVector traceStartPos = (WeaponMesh->GetSocketLocation("GrabPoint")
 							+ WeaponMesh->GetSocketLocation("End")) / 2;
 	float traceRadius = UKismetMathLibrary::Vector_Distance(WeaponMesh->GetSocketLocation("GrabPoint")
@@ -119,17 +111,7 @@ TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
 	
 	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), traceStartPos, traceRadius, { pawnTypeQuery }
 											 , ACharacterBase::StaticClass(), IgnoreActorList, overlapResultList);
-	//DrawDebugSphere(GetWorld(), traceStartPos, traceRadius, 30, FColor::White, false, 1.5f, 1, 1.0f);
-
-	/*
-	UKismetSystemLibrary::CapsuleOverlapActors(GetWorld(), traceStartPos, traceRadius, traceHeight
-						,{ pawnTypeQuery }, ACharacterBase::StaticClass(), IgnoreActorList, overlapResultList);
-
 	
-	FRotator rotation = UKismetMathLibrary::FindLookAtRotation(WeaponMesh->GetSocketLocation("GrabPoint")
-																, WeaponMesh->GetSocketLocation("End"));
-	DrawDebugCapsule(GetWorld(), traceStartPos, traceHeight, traceRadius, rotation.Quaternion(), FColor::White, false, 1.5f, 1, 2.0f);
-	*/
 	//오버랩 결과를 돌며 실제 데미지 타겟을 찾아낸다. 
 	//캐릭터 - 타겟 방향의 라인트레이스에서 중간에 장애물이 있다면 타겟은 유효하지 않다.
 	FCollisionQueryParams collisionQueryParam;
@@ -158,27 +140,26 @@ void AMeleeWeaponBase::MeleeAttack()
 	bool bIsMeleeTraceSucceed = false;
 
 	TArray<FVector> currTracePositionList = GetCurrentMeleePointList();
-	//bIsMeleeTraceSucceed//
-	TArray<AActor*> targetList = CheckMeleeAttackTargetWithSphereTrace(); //CheckMeleeAttackTarget(hitResult, currTracePositionList);
+	TArray<AActor*> targetList = CheckMeleeAttackTargetWithSphereTrace(); 
 	MeleePrevTracePointList = currTracePositionList;
 
 	for (auto& target : targetList)
 	{
-		//hitResult가 Valid하다면 아래 조건문에서 데미지를 가함
-		if (IsValid(target))//bIsMeleeTraceSucceed)
+		//target가 Valid하다면 아래 조건문에서 데미지를 가함
+		if (IsValid(target))
 		{
 			//효과를 출력
-			ActivateMeleeHitEffect(target->GetActorLocation());//hitResult.Location);
+			ActivateMeleeHitEffect(target->GetActorLocation());
 
 			//데미지를 주고, 중복 체크를 해준다.
-			UGameplayStatics::ApplyDamage(target/*hitResult.GetActor()*/, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate
+			UGameplayStatics::ApplyDamage(target, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate
 				, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
-			MeleeLineTraceQueryParams.AddIgnoredActor(target); //hitResult.GetActor());
+			MeleeLineTraceQueryParams.AddIgnoredActor(target); 
 
 			//디버프도 부여
 			if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
 			{
-				GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(target)// hitResult.GetActor())
+				GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(target)
 					, OwnerCharacterRef.Get(), WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
 			}
 

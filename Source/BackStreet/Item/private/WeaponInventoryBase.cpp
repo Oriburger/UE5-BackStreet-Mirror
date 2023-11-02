@@ -258,14 +258,12 @@ void AWeaponInventoryBase::SyncCurrentWeaponInfo(bool bIsLoadActorInfo)
 	//액터 정보를 인벤토리 정보로 업데이트
 	if (!bIsLoadActorInfo)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("<-- ID : %d, Ammo : %d"), InventoryArray[GetCurrentIdx()].WeaponID, InventoryArray[GetCurrentIdx()].WeaponState.RangedWeaponState.CurrentAmmoCount);
 		GetCurrentWeaponRef()->SetWeaponStat( InventoryArray[GetCurrentIdx()].WeaponStat );
 		GetCurrentWeaponRef()->SetWeaponState( InventoryArray[GetCurrentIdx()].WeaponState );
 	}
 	//인벤토리 정보를 액터 정보로 업데이트
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("--> ID : %d, Ammo : %d"), InventoryArray[GetCurrentIdx()].WeaponID, InventoryArray[GetCurrentIdx()].WeaponState.RangedWeaponState.CurrentAmmoCount);
 		InventoryArray[GetCurrentIdx()].WeaponStat = GetCurrentWeaponRef()->GetWeaponStat();
 		InventoryArray[GetCurrentIdx()].WeaponState = GetCurrentWeaponRef()->GetWeaponState();
 	}
@@ -402,7 +400,6 @@ FInventoryItemInfoStruct AWeaponInventoryBase::GetWeaponInfoByID(int32 WeaponID)
 		if (inventoryItem.WeaponID == WeaponID)
 			return inventoryItem;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("@@@@@@@@@@@Critical Error@@@@@@@@@"));
 	return FInventoryItemInfoStruct();
 }
 

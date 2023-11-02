@@ -5,6 +5,7 @@
 #include "../../Item/public/WeaponInventoryBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "../../Global/public/AssetManagerBase.h"
+#include "Engine/DamageEvents.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Animation/AnimMontage.h"
@@ -186,7 +187,9 @@ void ACharacterBase::Die()
 {
 	if (IsValid(InventoryRef) && !InventoryRef->IsActorBeingDestroyed())
 	{
-		InventoryRef->RemoveCurrentWeapon();
+		//캐릭터가 죽으면 3가지 타입의 무기 액터를 순차적으로 반환
+		for (int weaponIdx = 2; weaponIdx >= 0; weaponIdx--)
+			WeaponActorList[weaponIdx]->Destroy();
 		InventoryRef->Destroy();
 	}
 	if (IsValid(GetCurrentWeaponRef()) && !GetCurrentWeaponRef()->IsActorBeingDestroyed())
@@ -631,6 +634,7 @@ bool ACharacterBase::EquipWeapon(AWeaponBase* TargetWeapon)
 	TargetWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, "Weapon_R");
 	TargetWeapon->SetActorRelativeLocation(FVector(0.0f), false);
 	TargetWeapon->SetOwnerCharacter(this);
+	CurrentWeaponRef = TargetWeapon;
 	return true;
 }
 
@@ -650,9 +654,33 @@ void ACharacterBase::SwitchToNextWeapon()
 
 void ACharacterBase::DropWeapon()
 {
-	if (!IsValid(InventoryRef)) return;
-	InventoryRef->RemoveCurrentWeapon();
+	if (!IsValid(GetCurrentWeaponRef())) return;
+	
+	if (CurrentWeaponRef->GetWeaponType() == EWeaponType::E_Throw)
+	{
+		SubInventoryRef->RemoveCurrentWeapon();
+		SwitchWeaponActor(EWeaponType::E_Melee);
+		InventoryRef->EquipWeaponByIdx(0);
+	}
+	else InventoryRef->RemoveCurrentWeapon();
+	
+	SwitchToNextWeapon();
+		
 	/*---- 현재 무기를 월드에 버리는 기능은 미구현 -----*/
+}
+
+bool ACharacterBase::TrySwitchToSubWeapon(int32 SubWeaponIdx)
+{
+	if (SubWeaponIdx >= SubInventoryRef->GetCurrentWeaponCount()) return false;
+
+	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
+		SubInventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
+	else
+		InventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
+	//SubInventoryRef->SetCurrentIdx(SubWeaponIdx); //인덱스 지정	
+	SubInventoryRef->EquipWeaponByIdx(SubWeaponIdx);
+
+	return true;
 }
 
 AWeaponInventoryBase* ACharacterBase::GetInventoryRef()
@@ -675,7 +703,6 @@ AWeaponBase* ACharacterBase::GetCurrentWeaponRef()
 
 void ACharacterBase::SwitchWeaponActor(EWeaponType TargetWeaponType)
 {
-	
 	if (!WeaponActorList.IsValidIndex((int32)TargetWeaponType-1)) return;
 	if (!IsValid(WeaponActorList[(int32)TargetWeaponType-1]))  return;
 	if (!IsValid(GetCurrentWeaponRef())) return; 

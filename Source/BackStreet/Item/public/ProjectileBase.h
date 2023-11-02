@@ -55,22 +55,25 @@ public:
 		int32 ProjectileID;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Sound")
 		USoundCue* HitSound;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Sound")
 		USoundCue* ExplosionSound;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|VFX")
 		UParticleSystem* HitParticle;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|VFX")
 		class UNiagaraSystem* HitNiagaraParticle;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|VFX")
+		class UNiagaraSystem* ExplosionParticle;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
 		struct FProjectileStatStruct ProjectileStat;
 
-//------ 핵심 함수  ------------------
+//------ 기본 함수  ------------------
 public:
 	UFUNCTION()
 		void InitProjectile(class ACharacterBase* NewCharacterRef, FProjectileAssetInfoStruct NewAssetInfo, FProjectileStatStruct NewStatInfo);
@@ -83,8 +86,8 @@ public:
 			, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-		void OnTargetBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex
-			, bool bFromSweep, const FHitResult& SweepResult);
+		void OnProjectileHit(class UPrimitiveComponent* HitComponet, class AActor* OtherActor, class UPrimitiveComponent* OtherComp
+			, FVector NormalImpulse, const FHitResult& Hit);
 
 	UFUNCTION(BlueprintCallable)
 		void ActivateProjectileMovement();
@@ -92,10 +95,21 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		ACharacterBase* GetOwnerCharacterRef() { return OwnerCharacterRef.Get(); }
 
+public:
+	UFUNCTION()
+		void OnTargetBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex
+			, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void Explode();	
+
 //------ private 프로퍼티 ------------------
 private: 
 	UPROPERTY()
 		bool bIsActivated = false;
+
+	UPROPERTY()
+		FTimerHandle AutoExplodeTimer;
 
 	UPROPERTY()
 		AController* SpawnInstigator;

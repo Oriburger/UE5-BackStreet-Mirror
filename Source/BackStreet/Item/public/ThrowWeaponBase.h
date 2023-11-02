@@ -53,8 +53,11 @@ public:
 	UFUNCTION()
 		void CalculateThrowDirection(FVector NewDestination);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FVector GetThrowDirection() { return ThrowDirection; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FVector GetThrowDestination() { return ThrowDestination; }
 
 private:
 	//매번 업데이트 할 변수 / 발사체가 도착할 위치
@@ -63,6 +66,24 @@ private:
 	//매번 업데이트 할 변수 / 발사체가 발사될 방향
 		FVector ThrowDirection;
 
+	//매번 업데이트 할 변수 / 발사체가 날아갈 속력
+		float ThrowSpeed;
+
 	//마지막으로 던진 발사체의 스탯 정보
 		FProjectileStatStruct ProjectileStat;
+
+//------- 타이머 관련 -------------------------------
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetThrowDelayRemainingTime();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)		
+		bool GetCanThrow() { return GetThrowDelayRemainingTime() == 0; }
+
+protected:
+	
+
+private:
+	//투척 딜레이 타이머 핸들
+		FTimerHandle ThrowDelayHandle;
 };

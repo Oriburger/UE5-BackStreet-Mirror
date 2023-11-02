@@ -12,6 +12,7 @@
 #include "../../Item/public/RewardBoxBase.h"
 #include "../../Item/public/ItemBoxBase.h"
 #include "../../Item/public/ItemBase.h"
+#include "Engine/DamageEvents.h"
 #include "../../CraftingSystem/public/CraftBoxBase.h"
 #include "Engine/LevelStreaming.h"
 

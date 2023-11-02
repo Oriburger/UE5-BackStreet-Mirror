@@ -22,7 +22,7 @@
 #include "../../CraftingSystem/public/CraftBoxBase.h"
 #define MAX_CAMERA_BOOM_LENGTH 1450.0f
 #define MIN_CAMERA_BOOM_LENGTH 250.0f
-#define MAX_THROW_DISTANCE 700.0f //AThrowWeaponBase와 통일 (추후 하나의 파일로 통합 예정)
+#define MAX_THROW_DISTANCE 1200.0f //AThrowWeaponBase와 통일 (추후 하나의 파일로 통합 예정)
 
 // Sets default values
 AMainCharacterBase::AMainCharacterBase()
@@ -83,7 +83,6 @@ void AMainCharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	UpdateWallThroughEffect();
-	//if (bIsAiming) UpdateAimingState();
 }
 
 // Called to bind functionality to input
@@ -105,12 +104,20 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("SwitchWeapon", IE_Pressed, this, &AMainCharacterBase::SwitchToNextWeapon);
 	PlayerInputComponent->BindAction("PickItem", IE_Pressed, this, &AMainCharacterBase::TryInvestigate);
 	PlayerInputComponent->BindAction("DropWeapon", IE_Pressed, this, &AMainCharacterBase::DropWeapon);
+
+	
+	PlayerInputComponent->BindAction("SelectSubWeaponA", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
+	PlayerInputComponent->BindAction("SelectSubWeaponB", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
+	PlayerInputComponent->BindAction("SelectSubWeaponC", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
+	PlayerInputComponent->BindAction("SelectSubWeaponD", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
 }
 
 void AMainCharacterBase::ReadyToThrow()
 {
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (!IsValid(GetCurrentWeaponRef()) ||GetCurrentWeaponRef()->GetWeaponType() != EWeaponType::E_Throw) return;
+	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->GetWeaponType() != EWeaponType::E_Throw) return;
+	if (!Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->GetCanThrow()) return; //딜레이 중이라면 반환
+	if (GetCurrentWeaponRef()->WeaponID == 0) return;
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;
 	SetAimingMode(true);
@@ -150,7 +157,7 @@ void AMainCharacterBase::UpdateAimingState()
 	FPredictProjectilePathResult predictProjectilePathResult = Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->GetProjectilePathPredictResult();
 	for (FPredictProjectilePathPointData& point : predictProjectilePathResult.PathData)
 	{
-		DrawDebugSphere(GetWorld(), point.Location, 3.0f, 6, FColor::Red, false, 0.015f, 0, 3.0f);
+		DrawDebugSphere(GetWorld(), point.Location, 3.0f, 2, FColor::Red, false, 0.015f, 0, 3.0f);
 	}
 }
 
@@ -410,6 +417,24 @@ void AMainCharacterBase::RotateToCursor()
 	}), 1.0f, false);
 }
 
+void AMainCharacterBase::PickSubWeapon()
+{
+	int32 targetIdx = -1;
+	if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponA"))) targetIdx = 0;
+	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponB"))) targetIdx = 1;
+	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponC"))) targetIdx = 2;
+	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponD"))) targetIdx = 3;
+
+	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw && GetSubInventoryRef()->GetCurrentIdx() == targetIdx)
+	{
+		GetInventoryRef()->EquipWeaponByIdx(0);
+	}
+	else if (!TrySwitchToSubWeapon(targetIdx))
+	{
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
+	}
+}
+
 TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
 {
 	TArray<AActor*> totalItemList;
@@ -529,6 +554,7 @@ void AMainCharacterBase::DeactivateBuffEffect()
 
 void AMainCharacterBase::UpdateWallThroughEffect()
 {
+	if (!IsValid(GetWorld())) return;
 	FHitResult hitResult;
 	const FVector& traceBeginPos = FollowingCamera->GetComponentLocation();
 	const FVector& traceEndPos = GetMesh()->GetComponentLocation();

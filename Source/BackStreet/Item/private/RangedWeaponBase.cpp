@@ -136,6 +136,7 @@ AProjectileBase* ARangedWeaponBase::CreateProjectile()
 
 	SpawnLocation = SpawnLocation + OwnerCharacterRef->GetMesh()->GetForwardVector() * 20.0f;
 	SpawnLocation = SpawnLocation + OwnerCharacterRef->GetMesh()->GetRightVector() * 50.0f;
+	SpawnLocation = SpawnLocation + FVector(0.0f, 0.0f, 50.0f);
 
 	SpawnRotation.Pitch = SpawnRotation.Roll = 0.0f;
 	SpawnRotation.Yaw += 90.0f;
