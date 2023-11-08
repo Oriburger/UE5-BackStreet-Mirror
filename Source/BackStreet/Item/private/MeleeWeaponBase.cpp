@@ -120,6 +120,8 @@ TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
 	for (auto& target : overlapResultList)
 	{
 		if (!IsValid(target)) continue;
+		if (!target->ActorHasTag("Character")) continue;
+		if (target->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) continue; 
 
 		FHitResult hitResult;
 		GetWorld()->LineTraceSingleByChannel(hitResult, OwnerCharacterRef->GetActorLocation()
