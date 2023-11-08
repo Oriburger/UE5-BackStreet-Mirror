@@ -91,7 +91,7 @@ public:
 		int32 CharacterID;
 
 	//적 이름
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")ㅉ
 		FName CharacterName;
 
 	//스폰할 적 스켈레탈 메시 정보 저장
@@ -107,6 +107,7 @@ public:
 		FVector InitialLocation;
 
 	//메시의 초기 회전 정보
+	//현재 미사용, -90도로 고정
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
 		FRotator InitialRotation;
 
