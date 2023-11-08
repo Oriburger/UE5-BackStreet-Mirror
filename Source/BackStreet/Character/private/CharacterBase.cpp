@@ -135,6 +135,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 								, AActor* DamageCauser)
 {
 	if (!IsValid(DamageCauser)) return 0.0f; 
+	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
 
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
@@ -147,6 +148,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	CharacterState.CharacterCurrHP = FMath::Max(0.0f, CharacterState.CharacterCurrHP);
 	if (CharacterState.CharacterCurrHP == 0.0f)
 	{
+		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
 		Die();
 	}
 	else if (AnimAssetData.HitAnimMontageList.Num() > 0)
@@ -159,6 +161,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 float ACharacterBase::TakeDebuffDamage(float DamageAmount, ECharacterDebuffType DebuffType, AActor* Causer)
 {
+	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
 	if (!IsValid(Causer)) return 0.0f;
 	TakeDamage(DamageAmount, FDamageEvent(), nullptr, Causer);
 	return DamageAmount;
@@ -174,6 +177,7 @@ void ACharacterBase::TakeHeal(float HealAmountRate, bool bIsTimerEvent, uint8 Bu
 void ACharacterBase::TakeKnockBack(AActor* Causer, float Strength)
 {
 	if (!IsValid(Causer) || Causer->IsActorBeingDestroyed()) return;
+	if (GetIsActionActive(ECharacterActionType::E_Die)) return;
 
 	FVector knockBackDirection = GetActorLocation() - Causer->GetActorLocation();
 	knockBackDirection = knockBackDirection.GetSafeNormal();
@@ -200,7 +204,6 @@ void ACharacterBase::Die()
 	}
 
 	ClearAllTimerHandle();
-	CharacterState.CharacterActionState = ECharacterActionType::E_Die;
 	CharacterStat.bIsInvincibility = true;
 	ClearAllTimerHandle();
 	GetCharacterMovement()->Deactivate();

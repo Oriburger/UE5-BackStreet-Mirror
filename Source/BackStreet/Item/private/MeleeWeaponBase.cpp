@@ -122,6 +122,7 @@ TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
 		if (!IsValid(target)) continue;
 		if (!target->ActorHasTag("Character")) continue;
 		if (target->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) continue; 
+		if (Cast<ACharacterBase>(target)->GetIsActionActive(ECharacterActionType::E_Die)) continue;
 
 		FHitResult hitResult;
 		GetWorld()->LineTraceSingleByChannel(hitResult, OwnerCharacterRef->GetActorLocation()

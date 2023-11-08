@@ -91,7 +91,7 @@ public:
 		int32 CharacterID;
 
 	//적 이름
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")ㅉ
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FName CharacterName;
 
 	//스폰할 적 스켈레탈 메시 정보 저장
