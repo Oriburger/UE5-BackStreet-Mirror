@@ -107,6 +107,7 @@ public:
 		FVector InitialLocation;
 
 	//메시의 초기 회전 정보
+	//현재 미사용, -90도로 고정
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
 		FRotator InitialRotation;
 
