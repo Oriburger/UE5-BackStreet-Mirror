@@ -13,6 +13,7 @@ enum class ECharacterAbilityType : uint8
 	E_TripleShot		UMETA(DisplayName = "TripleShot")
 };
 
+UENUM(BlueprintType)
 enum class ESkillGrade : uint8
 {
 	E_None				UMETA(DisplayName = "None"),
