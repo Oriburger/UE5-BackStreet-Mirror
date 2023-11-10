@@ -38,6 +38,9 @@ public:
 	//Input에 Binding 되어 공격을 시도 (AnimMontage를 호출)
 	virtual void TryAttack();
 
+	///Input에 Binding 되어 스킬공격을 시도 (AnimMontage를 호출)
+	virtual void TrySkillAttack(ACharacterBase* Target);
+
 	//AnimNotify에 Binding 되어 실제 공격을 수행
 	virtual void Attack();
 
@@ -161,6 +164,22 @@ private:
 
 	//무기 액터를 스폰
 	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
+
+// ----- 스킬 관련 --------------------------
+protected:
+	virtual void SetSkillSet();
+
+	virtual void SetSkillGrade();
+
+protected:
+	UPROPERTY()
+	struct FSkillSetStruct SkillSetStruct;
+
+	UPROPERTY()
+	ESkillGrade SkillGrade;
+
+	UPROPERTY()
+	class USkillManagerBase* SkillManagerRef;
 
 // ---- Asset -------------------
 public:

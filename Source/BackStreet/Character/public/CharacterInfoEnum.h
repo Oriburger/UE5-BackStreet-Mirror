@@ -13,6 +13,15 @@ enum class ECharacterAbilityType : uint8
 	E_TripleShot		UMETA(DisplayName = "TripleShot")
 };
 
+enum class ESkillGrade : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_Common			UMETA(DisplayName = "Common"),
+	E_Rare				UMETA(DisplayName = "Rare"),
+	E_Epic					UMETA(DisplayName = "Epic"),
+	E_Regend			UMETA(DisplayName = "Regend")
+};
+
 UENUM(BlueprintType)
 enum class ECharacterDebuffType : uint8
 {

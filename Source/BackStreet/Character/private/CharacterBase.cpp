@@ -11,6 +11,7 @@
 #include "Animation/AnimMontage.h"
 #include "Engine/StreamableManager.h"
 #include "Engine/AssetManager.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase()
@@ -44,6 +45,7 @@ void ACharacterBase::BeginPlay()
 	InventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	SubInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	SkillManagerRef = GamemodeRef->GetGlobalSkillmanagerBaseRef();
 
 	if (IsValid(SubInventoryRef) && !SubInventoryRef->IsActorBeingDestroyed())
 	{
@@ -262,6 +264,35 @@ void ACharacterBase::TryAttack()
 	{
 		PlayAnimMontage(targetAnimList[nextAnimIdx], attackSpeed + 0.25f);
 	}
+}
+
+void ACharacterBase::TrySkillAttack(ACharacterBase* Target)
+{
+	if (!IsValid(WeaponRef)) return;
+	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
+
+	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
+	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
+
+	const float attackSpeed = FMath::Clamp(CharacterStat.CharacterAtkSpeed * WeaponRef->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
+
+	UAnimMontage* targetAnim = WeaponRef->GetWeaponStat().SkillAnimMontage;
+
+	if (IsValid(targetAnim))
+	{
+		PlayAnimMontage(targetAnim, attackSpeed + 0.25f);
+	}
+}
+
+void ACharacterBase::SetSkillSet()
+{
+	//virtual
+}
+
+
+void ACharacterBase::SetSkillGrade()
+{
+	//virtual
 }
 
 void ACharacterBase::Attack()
