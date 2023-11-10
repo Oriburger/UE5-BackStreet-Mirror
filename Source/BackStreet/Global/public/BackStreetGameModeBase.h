@@ -80,6 +80,9 @@ public:
 	UFUNCTION()
 		class UDebuffManager* GetGlobalDebuffManagerRef() { return DebuffManager; }
 
+	UFUNCTION()
+		class USkillManagerBase* GetGlobalSkillmanagerBaseRef() { return SkillManagerBase; }
+
 	UFUNCTION(BlueprintCallable)
 		class AChapterManagerBase* GetChapterManagerRef() { return ChapterManager; }
 
@@ -122,6 +125,9 @@ protected:
 
 	UPROPERTY()
 		class UDebuffManager* DebuffManager;
+
+	UPROPERTY()
+		class USkillManagerBase* SkillManagerBase;
 
 	UPROPERTY(BlueprintReadWrite)
 		class AChapterManagerBase* ChapterManager;
