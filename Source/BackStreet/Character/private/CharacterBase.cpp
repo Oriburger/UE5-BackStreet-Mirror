@@ -268,15 +268,16 @@ void ACharacterBase::TryAttack()
 
 void ACharacterBase::TrySkillAttack(ACharacterBase* Target)
 {
-	if (!IsValid(WeaponRef)) return;
+	AWeaponBase* weaponRef = GetCurrentWeaponRef();
+	if (!IsValid(weaponRef)) return;
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
 
-	const float attackSpeed = FMath::Clamp(CharacterStat.CharacterAtkSpeed * WeaponRef->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
+	const float attackSpeed = FMath::Clamp(CharacterStat.CharacterAtkSpeed * weaponRef->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
-	UAnimMontage* targetAnim = WeaponRef->GetWeaponStat().SkillAnimMontage;
+	UAnimMontage* targetAnim = weaponRef->GetWeaponStat().SkillAnimMontage;
 
 	if (IsValid(targetAnim))
 	{

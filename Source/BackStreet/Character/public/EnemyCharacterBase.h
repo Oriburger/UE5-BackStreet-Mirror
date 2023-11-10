@@ -64,6 +64,9 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual void TrySkillAttack(ACharacterBase* Target) override;
+
+	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
 
 	UFUNCTION(BlueprintCallable)
@@ -97,6 +100,14 @@ protected:
 private:
 	UPROPERTY()
 		float DefaultKnockBackStrength = 2000.0f;
+
+// ---- ½ºÅ³ / ÄÞº¸ ------------
+protected:
+	UFUNCTION()
+	virtual void SetSkillSet() override;
+
+	UFUNCTION()
+	virtual void SetSkillGrade() override;
 
 // ---- VFX ---------------------
 public:

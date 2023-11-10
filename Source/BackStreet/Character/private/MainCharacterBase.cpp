@@ -20,6 +20,10 @@
 #include "TimerManager.h"
 #include "../../Item/public/RewardBoxBase.h"
 #include "../../CraftingSystem/public/CraftBoxBase.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Animation/AnimMontage.h"
+#include "../../Global/public/SkillManagerBase.h"
+#include "../public/CharacterBase.h"
 #define MAX_CAMERA_BOOM_LENGTH 1450.0f
 #define MIN_CAMERA_BOOM_LENGTH 250.0f
 #define MAX_THROW_DISTANCE 1200.0f //AThrowWeaponBase와 통일 (추후 하나의 파일로 통합 예정)
@@ -348,6 +352,7 @@ void AMainCharacterBase::TryAttack()
 	}
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
+	this->Tags.Add("Attack|Common");
 	Super::TryAttack();
 	RotateToCursor();
 
@@ -357,6 +362,117 @@ void AMainCharacterBase::TryAttack()
 			TryAttack(); //0.1초 뒤에 체크해서 계속 눌려있는 상태라면, Attack을 반복한다. 
 	}), 0.1f, false);
 }
+
+void AMainCharacterBase::TrySkillAttack(ACharacterBase* Target)
+{
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
+		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+
+	if (!IsValid(InventoryRef) || !IsValid(GetCurrentWeaponRef()))
+	{
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
+	}
+
+	//공격을 하고, 커서 위치로 Rotation을 조정
+	Super::TrySkillAttack(Target);
+
+	if (IsValid(SkillManagerRef))
+	{
+		SkillManagerRef->ActivateSkill(SkillSetStruct, this, Target);
+	}
+
+	RotateToCursor();
+}
+
+void AMainCharacterBase::SetSkillSet()
+{
+	if(GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw) return;
+	SkillSetStruct = GetCurrentWeaponRef()->GetWeaponStat().SkillSetStruct;
+}
+
+void AMainCharacterBase::UpdateSkillGauge()
+{
+	AWeaponBase* weaponRef = GetCurrentWeaponRef();
+	if (IsValid(weaponRef))
+	{
+		CharacterState.CharacterCurrComboGauge += weaponRef->GetWeaponStat().SkillGaugeInfo.ComboIncreasement;
+	}
+}
+
+void AMainCharacterBase::UseSkillGauge()
+{
+	AWeaponBase* weaponRef = GetCurrentWeaponRef();
+	if (IsValid(weaponRef))
+	{
+		FWeaponStatStruct weaponStat =weaponRef->GetWeaponStat();
+		if (WeaponStat.WeaponID != weaponRef->GetWeaponStat().WeaponID)
+		{
+			WeaponStat = weaponRef->GetWeaponStat();
+			SetSkillSet();
+
+			if (!WeaponSkillInfo.Contains(WeaponStat.WeaponID))
+			{
+				WeaponSkillInfo.Add(WeaponStat.WeaponID, WeaponStat.SkillGaugeInfo);
+			}
+		}
+
+		SetSkillGrade();
+
+		switch (SkillGrade)
+		{
+		case ESkillGrade::E_None:
+			return;
+		case ESkillGrade::E_Common:
+			CharacterState.CharacterCurrComboGauge -= WeaponStat.SkillGaugeInfo.SkillCommonReq;
+			UE_LOG(LogTemp, Log, TEXT("CommonSkill"));
+			break;
+		case ESkillGrade::E_Rare:
+			CharacterState.CharacterCurrComboGauge -= WeaponStat.SkillGaugeInfo.SkillRareReq;
+			UE_LOG(LogTemp, Log, TEXT("RareSkill"));
+			break;
+		case ESkillGrade::E_Epic:
+			CharacterState.CharacterCurrComboGauge -= WeaponStat.SkillGaugeInfo.SkillEpicReq;
+			UE_LOG(LogTemp, Log, TEXT("EpicSkill"));
+			break;
+		case ESkillGrade::E_Regend:
+			CharacterState.CharacterCurrComboGauge -= WeaponStat.SkillGaugeInfo.SkillRegendReq;
+			UE_LOG(LogTemp, Log, TEXT("RegendSkill"));
+			break;
+		}
+		TrySkillAttack(nullptr);
+
+	}
+}
+
+void AMainCharacterBase::SetSkillGrade()
+{
+	float currComboGauge = this->CharacterState.CharacterCurrComboGauge;
+	FSkillGaugeInfo  skillGaugeInfo = WeaponStat.SkillGaugeInfo;
+
+	if (UKismetMathLibrary::InRange_FloatFloat(currComboGauge, skillGaugeInfo.SkillCommonReq, skillGaugeInfo.SkillRareReq, true, false))
+	{
+		SkillGrade = ESkillGrade::E_Common;
+	}
+	else if (UKismetMathLibrary::InRange_FloatFloat(currComboGauge, skillGaugeInfo.SkillRareReq, skillGaugeInfo.SkillEpicReq, true, false))
+	{
+		SkillGrade = ESkillGrade::E_Rare;
+	}
+	else if (UKismetMathLibrary::InRange_FloatFloat(currComboGauge, skillGaugeInfo.SkillEpicReq, skillGaugeInfo.SkillRegendReq, true, false))
+	{
+		SkillGrade = ESkillGrade::E_Epic;
+	}
+	else if (currComboGauge >= skillGaugeInfo.SkillRegendReq)
+	{
+		SkillGrade = ESkillGrade::E_Regend;
+	}
+	else
+	{
+		SkillGrade = ESkillGrade::E_None;
+	}
+
+	SkillSetStruct.SkillGrade = SkillGrade;
+}
+
 
 void AMainCharacterBase::Attack()
 {

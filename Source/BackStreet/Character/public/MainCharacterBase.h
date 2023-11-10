@@ -115,6 +115,9 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual void TrySkillAttack(ACharacterBase* Target) override;
+
+	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
 
 	UFUNCTION(BlueprintCallable)
@@ -170,6 +173,29 @@ public:
 public:
 	UFUNCTION(BlueprintCallable)
 		virtual bool PickWeapon(int32 NewWeaponID) override;
+
+//------- ½ºÅ³ / ÄÞº¸----------
+private:
+	UPROPERTY()
+	FWeaponStatStruct WeaponStat;
+
+	UPROPERTY()
+	TMap<int32, FSkillGaugeInfo> WeaponSkillInfo;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void UpdateSkillGauge();
+
+	UFUNCTION(BlueprintCallable)
+	void UseSkillGauge();
+
+protected:
+	UFUNCTION()
+	virtual void SetSkillSet() override;
+
+	UFUNCTION()
+	virtual void SetSkillGrade() override;
+
 
 // -------- VFX -----------
 protected:

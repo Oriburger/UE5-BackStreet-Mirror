@@ -140,10 +140,11 @@ protected:
 	UFUNCTION()
 		void SwitchWeaponActor(EWeaponType TargetWeaponType);
 
-private:
+protected:
 	UPROPERTY()
 		class AWeaponInventoryBase* InventoryRef;
 
+private:
 	UPROPERTY()
 		class AWeaponInventoryBase* SubInventoryRef;
 
@@ -151,11 +152,14 @@ private:
 	UPROPERTY()
 		TArray<class AWeaponBase*> WeaponActorList;
 
+protected:
 	UPROPERTY()
 		TWeakObjectPtr<class AWeaponBase> CurrentWeaponRef;
 
 	//0번째 : 근접 무기 / 1번째 : 원거리 무기
 	//하나의 WeaponBase로 통일을 한다면 이렇게 하지 않아도 될텐데..
+
+private:
 	UPROPERTY()
 		TArray<TSubclassOf<class AWeaponBase>> WeaponClassList; 
 

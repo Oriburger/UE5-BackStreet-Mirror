@@ -9,9 +9,12 @@
 #include "../../Item/public/ItemBase.h"
 #include "../../StageSystem/public/StageInfoStruct.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
+#include "../../Global/public/SkillManagerBase.h"
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "../public/CharacterBase.h"
+#include "../public/MainCharacterBase.h"
 
 #define TURN_TIME_OUT_SEC 1.0f
 
@@ -30,6 +33,8 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	this->Tags.Add("Enemy");
+	// 난이도 조정용 Tag
+	this->Tags.Add("Easy");
 }
 
 void AEnemyCharacterBase::BeginPlay()
@@ -63,7 +68,16 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 
 	//const float knockBackStrength = 100000.0f;
-	
+
+
+	if (DamageCauser->ActorHasTag("Player"))
+	{
+		if (DamageCauser->ActorHasTag("Attack|Common"))
+		{
+			Cast<AMainCharacterBase>(DamageCauser)->UpdateSkillGauge();
+			DamageCauser->Tags.Remove("Attack|Common");
+		}
+	}	
 
 	//데미지가 전체 체력의 20% 미만이면 넉백이 출력되지 않는다.
 	if(DamageAmount >= GetCharacterStat().CharacterMaxHP * 0.2f)
@@ -82,6 +96,44 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 void AEnemyCharacterBase::TryAttack()
 {
 	Super::TryAttack();
+}
+
+void AEnemyCharacterBase::TrySkillAttack(ACharacterBase* Target)
+{
+	Super::TrySkillAttack(Target);
+
+	SetSkillSet();
+
+	if (IsValid(SkillManagerRef))
+	{
+		SkillManagerRef->ActivateSkill(SkillSetStruct, this, Target);
+	}
+}
+
+void AEnemyCharacterBase::SetSkillSet()
+{
+	SkillSetStruct = FEnemyStatStruct().SkillSetStruct;
+	SkillSetStruct.SkillGrade = SkillGrade;
+}
+
+void AEnemyCharacterBase::SetSkillGrade()
+{
+	if (ActorHasTag("Easy"))
+	{
+		SkillGrade = ESkillGrade::E_Common;
+	}
+	else if (ActorHasTag("Nomal"))
+	{
+		SkillGrade = ESkillGrade::E_Rare;
+	}
+	else if (ActorHasTag("Hard"))
+	{
+		SkillGrade = ESkillGrade::E_Epic;
+	}
+	else if (ActorHasTag("Extreme"))
+	{
+		SkillGrade = ESkillGrade::E_Regend;
+	}
 }
 
 void AEnemyCharacterBase::Attack()

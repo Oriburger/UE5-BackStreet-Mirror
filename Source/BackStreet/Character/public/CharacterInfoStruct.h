@@ -78,6 +78,10 @@ public:
 	//PlayerMaxHP는 1.0f
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float CharacterCurrHP;
+
+	//Player Combo게이지
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float CharacterCurrComboGauge;
 };
 
 USTRUCT(BlueprintType)
