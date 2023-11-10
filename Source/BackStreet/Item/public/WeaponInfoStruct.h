@@ -2,6 +2,7 @@
 
 #include "Engine/DataTable.h"
 #include "../../Character/public/CharacterInfoEnum.h"
+#include "../../SkillSystem/public/SkillInfoStruct.h"
 #include "ProjectileInfoStruct.h"
 #include "WeaponInfoStruct.generated.h"
 
@@ -113,6 +114,17 @@ public:
 	//인벤토리를 차지하는 칸 수
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		uint8 WeaponWeight = 1;
+
+	//Weapon Skill 게이지 사용량 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FSkillGaugeInfo SkillGaugeInfo;
+
+	//Skill ID List
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FSkillSetStruct SkillSetStruct;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		UAnimMontage* SkillAnimMontage;
 
 	//----- 근거리 Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
