@@ -21,7 +21,6 @@ enum class EWaveCategoryInfo : uint8
 	E_None				  	UMETA(DisplayName = "None"),
 	E_Hades					UMETA(DisplayName = "Hades"),
 	E_Defense			  	UMETA(DisplayName = "Defense"),
-	E_TimeAttack			UMETA(DisplayName = "TimeAttack"),
 };
 
 USTRUCT(BlueprintType)
@@ -95,6 +94,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
 		TArray<int32> WaveComposition;// 각 웨이브 단계에 스폰할 Enemy 목록의 데이터 테이블 ID를 지님, 항상 총 웨이브 수 만큼의 요소가 들어있어야함
 
+	// 웨이브타입이 디펜스인 경우
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		TMap<int32, float> ClearTimeForEachWave; // 웨이브별 버텨야하는 시간
 
 
 	// 제거할 항목
@@ -153,6 +155,12 @@ public:
 		bool bIsValid;
 
 	UPROPERTY()
+		int32 MonsterSpawnPointOrderIdx;
+
+	UPROPERTY()
+		TMap<int32, int32> ExistEnemyList;
+
+	UPROPERTY()
 		TArray<FVector> MonsterSpawnPoints;
 
 	UPROPERTY()
@@ -192,10 +200,10 @@ public:
 		ULevelStreaming* LevelRef;
 
 	UPROPERTY()
-		FTimerHandle StageTimerHandle;
+		FTimerHandle WaveTimerHandle;
 
 	UPROPERTY()
-		int32 StageTime;
+		int32 WaveTime;
 
 
 };

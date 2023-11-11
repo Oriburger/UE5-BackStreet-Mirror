@@ -190,6 +190,13 @@ public:
 	UFUNCTION()
 		void SetLevelRef(ULevelStreaming* Target) { StageInfo.LevelRef = Target; }
 
+	// юс╫ц
+	UFUNCTION()
+		FStageDataStruct GetStageInfo() { return StageInfo; }
+
+	UFUNCTION()
+		FStageDataStruct SetStageInfo(FStageDataStruct StageData) { StageInfo = StageData; return StageInfo; }
+
 private:
 	UPROPERTY()
 		FStageDataStruct StageInfo;

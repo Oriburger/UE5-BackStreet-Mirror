@@ -58,9 +58,34 @@ public:
 	// Wave 관련
 public:
 	UFUNCTION()
-		bool CheckWave(class AStageData* Target);
+		bool CheckAllWaveClear(class AStageData* Target);
 
+	// 클리어 체크 및 스폰 관련 타이머 설정, 시간되면 Clear Wave 호출 
+	UFUNCTION()
+		void SetDefenseWaveTimer(class AStageData* Target,float time);
 
+	// 모든 몬스터 삭제, 다음 웨이브 혹은 스테이지 클리어
+	UFUNCTION()
+		void ClearDefenseWave(class AStageData* Target);
+
+	UFUNCTION()
+		void CalculateWaveTime();
+
+	UFUNCTION()
+		void SpawnDefenseWave();
+
+	// 웨이브별 초기 세팅, SpawnStageActor에서 호출할듯?
+	UFUNCTION()
+		void SetWave(class AStageData* Target);
+
+	UFUNCTION()
+		void SpawnMonsterWithID(class AStageData* Target, int32 EnemyID);
+
+	UFUNCTION()
+		int32 GetSpawnPointIdx(class AStageData* Target);
+
+	UFUNCTION()
+		void ManageDefenseWaveMonsterCount(class AStageData* Target, int32 EnemyID, bool IsSpawn);
 
 public:
 	UFUNCTION()
@@ -84,5 +109,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UDataTable* WaveCompositionDataTable;
+
+public:
+	UPROPERTY()
+		FTimerHandle SpawnTimerHandle;
 	
 };
