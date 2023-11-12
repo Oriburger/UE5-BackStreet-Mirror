@@ -30,8 +30,6 @@ bool UDebuffManager::SetDebuffTimer(ECharacterDebuffType DebuffType, ACharacterB
 {
 	if (!GamemodeRef.IsValid() || !IsValid(Target) || Target->IsActorBeingDestroyed()) return false;
 
-	UE_LOG(LogTemp, Warning, TEXT("TRY #2"));
-
 	FTimerDelegate timerDelegate, healTimerDelegate, dotDamageDelegate;
 	FTimerHandle& timerHandle = GetDebuffTimerHandleRef(DebuffType, Target);
 
@@ -48,8 +46,6 @@ bool UDebuffManager::SetDebuffTimer(ECharacterDebuffType DebuffType, ACharacterB
 
 		return SetDebuffTimer(DebuffType, Target, Causer, FMath::Min(TotalTime + remainTime, MAX_DEBUFF_TIME), Variable);
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("TRY #3"));
 
 	/*---- 디버프 타이머 세팅 ----------------------------*/
 	Variable = FMath::Min(1.0f, FMath::Abs(Variable)); //값 정제

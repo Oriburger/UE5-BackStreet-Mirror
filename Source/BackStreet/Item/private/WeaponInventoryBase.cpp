@@ -65,8 +65,6 @@ void AWeaponInventoryBase::EquipWeapon(int32 NewWeaponID)
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 
 	// 근거리무기랑 원거리무기를 교체
-	//UE_LOG(LogTemp, Warning, TEXT("Try Swap :%d %d"), GetCurrentWeaponRef()->GetWeaponType(), GetWeaponType(NewWeaponID));
-	
 	OwnerCharacterRef.Get()->SwitchWeaponActor(GetWeaponType(NewWeaponID));
 	OwnerCharacterRef.Get()->EquipWeapon(GetCurrentWeaponRef()); //Attach
 	GetCurrentWeaponRef()->InitWeapon(NewWeaponID);
@@ -198,7 +196,7 @@ void AWeaponInventoryBase::RemoveWeapon(int32 WeaponID)
 		{
 			if (!GetIsEqualWeaponType(GetWeaponType(WeaponID), GetWeaponType(InventoryArray[CurrentIdx].WeaponID)))
 			{
-				OwnerCharacterRef->SwitchWeaponActor(GetCurrentWeaponRef()->GetWeaponType());
+				OwnerCharacterRef->SwitchWeaponActor(GetWeaponType(InventoryArray[CurrentIdx].WeaponID));
 				OwnerCharacterRef->EquipWeapon(GetCurrentWeaponRef());
 			}
 			GetCurrentWeaponRef()->InitWeapon(InventoryArray[CurrentIdx].WeaponID);
