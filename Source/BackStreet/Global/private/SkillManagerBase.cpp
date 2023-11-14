@@ -30,17 +30,15 @@ void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemod
 
 void USkillManagerBase::ActivateSkill(FSkillSetStruct SkillSet, AActor* Causer, ACharacterBase* Target)
 {
-	if (!IsValid(Causer) || !IsValid(Target)) return;
+	if (!IsValid(Causer)) return;
 	//ensure(IsValid(Causer)); 
 	//check(IsValid(Causer));
 	SkillSetStruct = SkillSet;
 	SkillIDArray = SkillSetStruct.SkillIDList;
 	SkillIntervalArray = SkillSetStruct.SkillIntervalList;
-
 	for (uint8 idx = 0; idx < SkillIDArray.Num(); idx++)
 	{
 		int32 skillID = SkillIDArray[idx];
-
 		if (skillID == 0)
 		{
 			ComposeSkillMap(skillID, Causer, Target);
@@ -52,8 +50,7 @@ void USkillManagerBase::ActivateSkill(FSkillSetStruct SkillSet, AActor* Causer, 
 
 		}
 	}
-	//임시코드
-	//Target = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+
 }
 
 float USkillManagerBase::GetDelayInterval(int32 SkillListIdx, TArray<float> SkillIntervalList)
@@ -94,16 +91,14 @@ void USkillManagerBase::ComposeSkillMap(int32 SkillID, AActor* Causer, ACharacte
 
 ASkillBase* USkillManagerBase::MakeSkillBase(int32 SkillID)
 {
-	UDataTable* D_SkillInfo = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/SkillSystem/Data/D_SkillInfo.D_SkillInfo'"));
-	FString Skillkey = UKismetStringLibrary::Conv_IntToString(SkillID);
-	FSkillInfoStruct* SkillInfo = D_SkillInfo->FindRow<FSkillInfoStruct>((FName)Skillkey, Skillkey);
-
-	if (SkillInfo != nullptr)
+	UDataTable* SkillInfoTable = LoadObject<UDataTable>(nullptr, TEXT("/Game/Skill/Data/D_SkillInfo.D_SkillInfo"));
+	FString skillkey = UKismetStringLibrary::Conv_IntToString(SkillID);
+	FSkillInfoStruct* skillInfo = SkillInfoTable->FindRow<FSkillInfoStruct>((FName)skillkey, skillkey);
+	if (skillInfo != nullptr)
 	{
-		ASkillBase* SkillBaseRef = Cast<ASkillBase>(GetWorld()->SpawnActor(SkillInfo->SkillBaseClassRef));
+		ASkillBase* SkillBaseRef = Cast<ASkillBase>(GetWorld()->SpawnActor(skillInfo->SkillBaseClassRef));
 		SkillRefMap.Add(SkillID, SkillBaseRef);
 		return SkillBaseRef;
 	}
 	return nullptr;
 }
-

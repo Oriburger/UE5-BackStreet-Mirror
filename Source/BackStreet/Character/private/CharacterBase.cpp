@@ -45,7 +45,6 @@ void ACharacterBase::BeginPlay()
 	InventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	SubInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	SkillManagerRef = GamemodeRef->GetGlobalSkillmanagerBaseRef();
 
 	if (IsValid(SubInventoryRef) && !SubInventoryRef->IsActorBeingDestroyed())
 	{

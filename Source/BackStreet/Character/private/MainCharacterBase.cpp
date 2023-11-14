@@ -375,10 +375,9 @@ void AMainCharacterBase::TrySkillAttack(ACharacterBase* Target)
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	Super::TrySkillAttack(Target);
-
-	if (IsValid(SkillManagerRef))
+	if (IsValid(GamemodeRef->GetGlobalSkillmanagerBaseRef()))
 	{
-		SkillManagerRef->ActivateSkill(SkillSetStruct, this, Target);
+		GamemodeRef->GetGlobalSkillmanagerBaseRef()->ActivateSkill(SkillSetStruct, this, Target);
 	}
 
 	RotateToCursor();

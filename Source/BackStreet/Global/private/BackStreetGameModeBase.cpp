@@ -58,7 +58,6 @@ void ABackStreetGameModeBase::InitializeGame()
 		//------ Global Skill Manager √ ±‚»≠ --------
 		SkillManagerBase = NewObject<USkillManagerBase>(this, USkillManagerBase::StaticClass(), FName("SkillManagerBase"));
 		SkillManagerBase->InitSkillManagerBase(this);
-
 	}
 }
 

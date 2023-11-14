@@ -104,9 +104,9 @@ void AEnemyCharacterBase::TrySkillAttack(ACharacterBase* Target)
 
 	SetSkillSet();
 
-	if (IsValid(SkillManagerRef))
+	if (IsValid(GamemodeRef->GetGlobalSkillmanagerBaseRef()))
 	{
-		SkillManagerRef->ActivateSkill(SkillSetStruct, this, Target);
+		GamemodeRef->GetGlobalSkillmanagerBaseRef()->ActivateSkill(SkillSetStruct, this, Target);
 	}
 }
 
