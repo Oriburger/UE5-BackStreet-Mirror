@@ -24,6 +24,12 @@ private:
 		void InitStageData(FVector Vector, int32 Ypos, int32 Xpos, class AStageData* Target);
 
 	UFUNCTION()
+		void SetStageType();
+
+	UFUNCTION()
+		void SetStageMap();
+
+	UFUNCTION()
 		void RecursiveBacktracking();
 
 	UFUNCTION()		

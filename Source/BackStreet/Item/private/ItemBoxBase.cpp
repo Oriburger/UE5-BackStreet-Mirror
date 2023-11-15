@@ -28,11 +28,6 @@ AItemBoxBase::AItemBoxBase()
 	
 	ParticleComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ITEM_NIAGARA_COMPONENT"));
 	ParticleComponent->SetupAttachment(RootComponent);
-
-	//미션 아이템 명시적 추가
-	SpawnItemTypeList.Add(EItemCategoryInfo::E_Mission);
-	SpawnItemIDList.Add(0);
-	ItemSpawnProbabilityList.Add(100.0f);
 }
 
 // Called when the game starts or when spawned
@@ -98,12 +93,11 @@ void AItemBoxBase::OnMeshHit(UPrimitiveComponent* HitComponent, AActor* OtherAct
 TArray<AItemBase*> AItemBoxBase::SpawnItems(int32 TargetSpawnCount)
 {
 	//프로퍼티 내 각 배열 세팅이 올바르지 않은 경우
-	if (SpawnItemTypeList.Num() != SpawnItemIDList.Num() || SpawnItemIDList.Num() != ItemSpawnProbabilityList.Num()) return TArray<AItemBase*>();
+	if (SpawnItemIDList.Num() != ItemSpawnProbabilityList.Num()) return TArray<AItemBase*>();
 
 	TArray<AItemBase*> itemList; //반환할 아이템 리스트 
 	TSet<int32> duplicateCheckSet; //중복 체크 Set
 
-	bool bMissionItemFlag = !bIncludeMissionItem; //미션 아이템 스폰 체크, 아이템 박스 당 최대 1개
 	int32 currentSpawnCount = 0;
 	int32 currentTryCount = 0;
 
@@ -111,11 +105,10 @@ TArray<AItemBase*> AItemBoxBase::SpawnItems(int32 TargetSpawnCount)
 	{
 		if (++currentTryCount >= MAX_TRY_SPAWN_COUNT) break;
 
-		int32 targetItemInfoIdx = !bMissionItemFlag ? 0 : UKismetMathLibrary::RandomIntegerInRange(1, SpawnItemTypeList.Num()-1);
-		const int32 targetItemType = (int32)SpawnItemTypeList[targetItemInfoIdx];
+		int32 targetItemInfoIdx = UKismetMathLibrary::RandomIntegerInRange(1, SpawnItemIDList.Num()-1);
 		const int32 targetItemID = SpawnItemIDList[targetItemInfoIdx];
 		const float targetItemProbability = ItemSpawnProbabilityList[targetItemInfoIdx];
-		const int32 targetItemKey = targetItemType * 1000 + targetItemID; //Set에 넣어 중복 체크를 할때 사용할 고유 키 값.
+		const int32 targetItemKey = targetItemID; //Set에 넣어 중복 체크를 할때 사용할 고유 키 값.
 
 		//이미 해당 아이템을 스폰했다면? 다시 선택
 		if (duplicateCheckSet.Contains(targetItemKey)) continue;
@@ -124,20 +117,15 @@ TArray<AItemBase*> AItemBoxBase::SpawnItems(int32 TargetSpawnCount)
 		{
 			const float randomValue = UKismetMathLibrary::RandomFloatInRange(-10.0f, 10.0f);
 			const FVector spawnLocation = GetActorLocation() + FVector(randomValue, randomValue, currentSpawnCount * SpawnLocationInterval + 125.0f);
-			AItemBase* newItem = GamemodeRef.Get()->SpawnItemToWorld(targetItemType, targetItemID, spawnLocation);
+			AItemBase* newItem = GamemodeRef.Get()->SpawnItemToWorld(targetItemID, spawnLocation);
 
 			if (IsValid(newItem))
 			{
 				itemList.Add(newItem);
 				newItem->SetActorScale3D(FVector(0.1));
-				newItem->InitItem((EItemCategoryInfo)targetItemType, targetItemID);
 
-				if (targetItemType == (int32)EItemCategoryInfo::E_Mission)
-				{
-					OnMissionItemSpawned.ExecuteIfBound(newItem); //새 아이템을 UMission에 등록
-				}
-				bMissionItemFlag = (bMissionItemFlag || (EItemCategoryInfo)targetItemType == EItemCategoryInfo::E_Mission);
-
+				//OnMissionItemSpawned.ExecuteIfBound(newItem); //새 아이템을 UMission에 등록
+				
 				currentSpawnCount++;
 				duplicateCheckSet.Add(targetItemKey); //성공적으로 스폰한 아이템은 셋에 넣어 보관
 			}

@@ -66,7 +66,7 @@ public:
 		void PlayCameraShakeEffect(ECameraShakeType EffectType, FVector Location, float Radius = 100.0f);
 
 	UFUNCTION()
-		AItemBase* SpawnItemToWorld(uint8 ItemType, int32 ItemID, FVector SpawnLocation);
+		AItemBase* SpawnItemToWorld(int32 ItemID, FVector SpawnLocation);
 
 	UFUNCTION(BlueprintCallable)
 		bool IsLobbyStage();
@@ -78,22 +78,10 @@ public:
 		void UpdateCharacterStatWithID(class ACharacterBase* TargetCharacter, const uint32 CharacterID);
 
 	UFUNCTION()
-		void UpdateWeaponStat(class AWeaponBase* TargetWeapon, FWeaponStatStruct NewStat);
-
-	UFUNCTION()
-		void UpdateWeaponStatWithID(class AWeaponBase* TargetWeapon, const int32 WeaponID);
-
-	UFUNCTION()
-		void UpdateProjectileStatWithID(class AProjectileBase* TargetProjectile, const int32 ProjectileID);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FWeaponStatStruct GetWeaponStatInfoWithID(const int32 WeaponID);
-
-	UFUNCTION()
-		FStageEnemyTypeStruct GetStageTypeInfoWithRow(uint16 rowName);
-
-	UFUNCTION()
 		class UDebuffManager* GetGlobalDebuffManagerRef() { return DebuffManager; }
+
+	UFUNCTION()
+		class USkillManagerBase* GetGlobalSkillmanagerBaseRef() { return SkillManagerBase; }
 
 	UFUNCTION(BlueprintCallable)
 		class AChapterManagerBase* GetChapterManagerRef() { return ChapterManager; }
@@ -111,50 +99,24 @@ public:
 		void PopUpClearUI();
 
 
-	// ------ Asset Info ----------------------------
-public:
-	//캐릭터의 애니메이션 에셋 데이터를 읽어들임
-	UFUNCTION()
-		FCharacterAnimAssetInfoStruct GetCharacterAnimAssetInfoData(const int32 CharacterID);
-
-protected:
-	//애니메이션 에셋 경로 저장 데이터 테이블
-	UPROPERTY(EditDefaultsOnly, Category = "Asset|Data")
-		UDataTable* AnimAssetInfoTable;
-
-	//VFX 에셋 경로 저장 데이터 테이블
-	UPROPERTY(EditDefaultsOnly, Category = "Asset|Data")
-		UDataTable* VFXssetInfoTable;
-
-private:
-	//추후 따로 뺄 예정
-	UPROPERTY()
-		FCharacterAssetInfoStruct CachedCharacterAssetInfoData;
-
 // ------ Data Table -----------------------------
 protected:
 	//적의 스탯 테이블
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* EnemyStatTable;
-	
-	//무기 스탯 테이블
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* WeaponStatTable;
 
 	//발사체 스탯 테이블
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* ProjectileStatTable;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* StageTypeTable;
 
 // ----- Class Info ------------------------------------ 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
 		TArray<TSubclassOf<UCameraShakeBase> > CameraShakeEffectList;
 	
-	//EItemCategoryInfo의 값이 Idx
+	//스폰할 아이템 클래스 (초기화를 위한 데이터테이블이 포함된 BP를 지정해야함)
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Item")
-		TMap<int32, TSubclassOf<class AItemBase> > ItemClassMap;
+		TSubclassOf<class AItemBase> ItemClass;
 
 //------ 그 외 프로퍼티 ---------------
 protected:
@@ -163,6 +125,9 @@ protected:
 
 	UPROPERTY()
 		class UDebuffManager* DebuffManager;
+
+	UPROPERTY()
+		class USkillManagerBase* SkillManagerBase;
 
 	UPROPERTY(BlueprintReadWrite)
 		class AChapterManagerBase* ChapterManager;

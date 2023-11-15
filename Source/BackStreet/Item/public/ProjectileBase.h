@@ -13,6 +13,7 @@ class BACKSTREET_API AProjectileBase : public AActor
 	GENERATED_BODY()
 
 	friend class ARangedWeaponBase;
+	friend class AThrowWeaponBase;
 
 //------ Global, Component -------------------
 public:	
@@ -39,31 +40,45 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UProjectileMovementComponent* ProjectileMovement;
 
+//------- 에셋 관련 ----------------------
+protected:
+	UFUNCTION()
+		void InitProjectileAsset();
+
+	UFUNCTION()
+		void DestroyWithEffect(FVector Location = FVector(0.0f));
+
+	//현재 무기의 에셋 정보
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
+		FProjectileAssetInfoStruct ProjectileAssetInfo;
 //------- 기본 프로퍼티 -------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
 		int32 ProjectileID;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Sound")
 		USoundCue* HitSound;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Sound")
 		USoundCue* ExplosionSound;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|VFX")
 		UParticleSystem* HitParticle;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|VFX")
 		class UNiagaraSystem* HitNiagaraParticle;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|VFX")
+		class UNiagaraSystem* ExplosionParticle;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
 		struct FProjectileStatStruct ProjectileStat;
 
-//------ 핵심 함수  ------------------
+//------ 기본 함수  ------------------
 public:
 	UFUNCTION()
-		void InitProjectile(class ACharacterBase* NewCharacterRef);
+		void InitProjectile(class ACharacterBase* NewCharacterRef, FProjectileAssetInfoStruct NewAssetInfo, FProjectileStatStruct NewStatInfo);
 
 	UFUNCTION()
 		void UpdateProjectileStat(FProjectileStatStruct NewStat);
@@ -73,8 +88,8 @@ public:
 			, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-		void OnTargetBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex
-			, bool bFromSweep, const FHitResult& SweepResult);
+		void OnProjectileHit(class UPrimitiveComponent* HitComponet, class AActor* OtherActor, class UPrimitiveComponent* OtherComp
+			, FVector NormalImpulse, const FHitResult& Hit);
 
 	UFUNCTION(BlueprintCallable)
 		void ActivateProjectileMovement();
@@ -82,10 +97,21 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		ACharacterBase* GetOwnerCharacterRef() { return OwnerCharacterRef.Get(); }
 
+public:
+	UFUNCTION()
+		void OnTargetBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex
+			, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void Explode();	
+
 //------ private 프로퍼티 ------------------
 private: 
 	UPROPERTY()
 		bool bIsActivated = false;
+
+	UPROPERTY()
+		FTimerHandle AutoExplodeTimer;
 
 	UPROPERTY()
 		AController* SpawnInstigator;

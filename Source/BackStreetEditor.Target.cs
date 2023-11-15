@@ -9,6 +9,7 @@ public class BackStreetEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
-		ExtraModuleNames.AddRange( new string[] { "BackStreet" } );
+        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_2;
+        ExtraModuleNames.AddRange( new string[] { "BackStreet" } );
 	}
 }

@@ -57,6 +57,29 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		UCameraComponent* FollowingCamera;
 
+// ------- Throw Test -----------
+
+	UFUNCTION()
+		void ReadyToThrow();
+
+	UFUNCTION()
+		void Throw();
+
+	UFUNCTION()
+		void SetAimingMode(bool bNewState);
+
+	UFUNCTION()
+		void UpdateAimingState();
+
+	UFUNCTION()
+		FVector GetThrowDestination();
+
+	UPROPERTY()
+		FTimerHandle AimingTimerHandle;
+
+	UPROPERTY()
+		bool bIsAiming = false;
+
 // ------- Character Action ------- 
 public:
 	UFUNCTION()
@@ -92,6 +115,9 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual void TrySkillAttack(ACharacterBase* Target) override;
+
+	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
 
 	UFUNCTION(BlueprintCallable)
@@ -118,6 +144,10 @@ public:
 	UFUNCTION()
 		void RotateToCursor();
 
+	//1~4번의 키를 눌러 보조무기를 장착한다.
+	UFUNCTION()
+		void PickSubWeapon();
+
 	UFUNCTION()
 		TArray<AActor*> GetNearInteractionActorList();
 
@@ -139,6 +169,34 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType);
 
+// -------- Inventory --------------
+public:
+	UFUNCTION(BlueprintCallable)
+		virtual bool PickWeapon(int32 NewWeaponID) override;
+
+//------- 스킬 / 콤보----------
+private:
+	UPROPERTY()
+	FWeaponStatStruct WeaponStat;
+
+	UPROPERTY()
+	TMap<int32, FSkillGaugeInfo> WeaponSkillInfo;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void UpdateSkillGauge();
+
+	UFUNCTION(BlueprintCallable)
+	void UseSkillGauge();
+
+protected:
+	UFUNCTION()
+	virtual void SetSkillSet() override;
+
+	UFUNCTION()
+	virtual void SetSkillGrade() override;
+
+
 // -------- VFX -----------
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
@@ -146,18 +204,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UNiagaraComponent* DirectionNiagaraEmitter;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		TArray<class UNiagaraSystem*> DebuffNiagaraEffectList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
-		class UMaterialInterface* NormalMaterial;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
-		class UMaterialInterface* WallThroughMaterial;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
-		TArray<class UTexture*> EmotionTextureList;
 
 private:
 	UPROPERTY()
@@ -181,20 +227,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
 		class UAudioComponent* AudioComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* RollSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* ErrorSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* BuffSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* DebuffSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Animation")
-		class UAnimMontage* InvestigateAnimation;
 
 // ------- 그 외 -----------
 public:

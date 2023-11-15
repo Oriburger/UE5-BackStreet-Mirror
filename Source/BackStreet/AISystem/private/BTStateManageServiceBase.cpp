@@ -122,7 +122,7 @@ bool UBTStateManageServiceBase::CheckAttackState()
 	if( BlackboardRef.Get()->GetValueAsBool(FName("HasRangedWeapon")) && !BlackboardRef.Get()->GetValueAsBool(FName("HasLineOfSight"))) return false;
 
 	ACharacter* targetCharacterRef = Cast<ACharacter>(BlackboardRef.Get()->GetValueAsObject(FName("TargetCharacter")));
-	AWeaponBase* weaponActorRef = OwnerCharacterRef.Get()->GetWeaponActorRef();
+	AWeaponBase* weaponActorRef = OwnerCharacterRef.Get()->GetCurrentWeaponRef();
 	
 	float distanceToTarget = IsValid(targetCharacterRef) ? GetDistanceTo(targetCharacterRef->GetActorLocation()) : 100.0f;
 	float attackRange = IsValid(weaponActorRef) ? (weaponActorRef->GetAttackRange()) : 100.0f;

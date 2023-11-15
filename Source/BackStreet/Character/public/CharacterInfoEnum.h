@@ -14,6 +14,16 @@ enum class ECharacterAbilityType : uint8
 };
 
 UENUM(BlueprintType)
+enum class ESkillGrade : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_Common			UMETA(DisplayName = "Common"),
+	E_Rare				UMETA(DisplayName = "Rare"),
+	E_Epic					UMETA(DisplayName = "Epic"),
+	E_Regend			UMETA(DisplayName = "Regend")
+};
+
+UENUM(BlueprintType)
 enum class ECharacterDebuffType : uint8
 {
 	E_None				UMETA(DisplayName = "None"),
@@ -48,5 +58,6 @@ enum class ECharacterActionType : uint8
 	E_Jump			UMETA(DisplayName = "Jump"),
 	E_Reload		UMETA(DisplayName = "Reload"),
 	E_Stun			UMETA(DisplayName = "Stun"),
-	E_Die			UMETA(DisplayName = "Die")
+	E_Die			UMETA(DisplayName = "Die"),
+	E_Throw			UMETA(DisplayName = "Throw")
 };

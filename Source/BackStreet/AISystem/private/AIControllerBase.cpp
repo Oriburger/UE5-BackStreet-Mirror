@@ -94,7 +94,7 @@ void AAIControllerBase::UpdateNewWeapon()
 {
 	if(!IsValid(GetPawn())) return;
 
-	AWeaponBase* weaponActorRef = Cast<ACharacterBase>(GetPawn())->GetWeaponActorRef();
+	AWeaponBase* weaponActorRef = Cast<ACharacterBase>(GetPawn())->GetCurrentWeaponRef();
 
 	if (IsValid(weaponActorRef))
 	{
