@@ -47,7 +47,6 @@ void AEnemyCharacterBase::BeginPlay()
 
 void AEnemyCharacterBase::InitEnemyStat()
 {
-	UE_LOG(LogTemp, Warning, TEXT("My ID : %d"), CharacterID);
 	GamemodeRef->UpdateCharacterStatWithID(this, CharacterID);
 	CharacterState.CharacterCurrHP = CharacterStat.CharacterMaxHP;
 	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.CharacterMoveSpeed;

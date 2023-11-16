@@ -683,7 +683,6 @@ bool ACharacterBase::TrySwitchToSubWeapon(int32 SubWeaponIdx)
 		SubInventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
 	else
 		InventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
-	//SubInventoryRef->SetCurrentIdx(SubWeaponIdx); //인덱스 지정	
 	SubInventoryRef->EquipWeaponByIdx(SubWeaponIdx);
 
 	return true;
@@ -711,8 +710,8 @@ void ACharacterBase::SwitchWeaponActor(EWeaponType TargetWeaponType)
 {
 	if (!WeaponActorList.IsValidIndex((int32)TargetWeaponType-1)) return;
 	if (!IsValid(WeaponActorList[(int32)TargetWeaponType-1]))  return;
-	if (!IsValid(GetCurrentWeaponRef())) return; 
-	
+	if (!IsValid(GetCurrentWeaponRef())) return;
+
 	GetCurrentWeaponRef()->SetActorHiddenInGame(true);
 	GetCurrentWeaponRef()->InitWeapon(0);
 	CurrentWeaponRef = WeaponActorList[(int32)TargetWeaponType - 1];
