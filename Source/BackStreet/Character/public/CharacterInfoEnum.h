@@ -39,25 +39,27 @@ enum class ECharacterDebuffType : uint8
 UENUM(BlueprintType)
 enum class EAIBehaviorType : uint8
 {
-	E_Idle			UMETA(DisplayName = "Idle"),
-	E_Patrol		UMETA(DisplayName = "Patrol"),
-	E_Detect		UMETA(DisplayName = "Detect"),
+	E_Idle				UMETA(DisplayName = "Idle"),
+	E_Patrol			UMETA(DisplayName = "Patrol"),
+	E_Detect			UMETA(DisplayName = "Detect"),
 	E_Chase			UMETA(DisplayName = "Chase"),
-	E_Attack		UMETA(DisplayName = "Attack"),
-	E_Return		UMETA(DisplayName = "Return"),
+	E_Attack			UMETA(DisplayName = "Attack"),
+	E_SkillAttack		UMETA(DisplayName = "SkillAttack"),
+	E_Return			UMETA(DisplayName = "Return"),
 	E_Stun			UMETA(DisplayName = "Stun")
 };
 
 UENUM(BlueprintType)
 enum class ECharacterActionType : uint8
 {
-	E_Idle			UMETA(DisplayName = "Idle"),
-	E_Attack		UMETA(DisplayName = "Attack"),
-	E_Hit			UMETA(DisplayName = "Hit"),
-	E_Roll			UMETA(DisplayName = "Roll"),
+	E_Idle				UMETA(DisplayName = "Idle"),
+	E_Attack			UMETA(DisplayName = "Attack"),
+	E_SkillAttack		UMETA(DisplayName = "SkillAttack"),
+	E_Hit				UMETA(DisplayName = "Hit"),
+	E_Roll				UMETA(DisplayName = "Roll"),
 	E_Jump			UMETA(DisplayName = "Jump"),
-	E_Reload		UMETA(DisplayName = "Reload"),
+	E_Reload			UMETA(DisplayName = "Reload"),
 	E_Stun			UMETA(DisplayName = "Stun"),
-	E_Die			UMETA(DisplayName = "Die"),
+	E_Die				UMETA(DisplayName = "Die"),
 	E_Throw			UMETA(DisplayName = "Throw")
 };

@@ -272,7 +272,7 @@ void ACharacterBase::TrySkillAttack(ACharacterBase* Target)
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
-	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
+	CharacterState.CharacterActionState = ECharacterActionType::E_SkillAttack;
 
 	const float attackSpeed = FMath::Clamp(CharacterStat.CharacterAtkSpeed * weaponRef->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
