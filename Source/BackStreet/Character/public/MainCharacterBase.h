@@ -175,27 +175,9 @@ public:
 		virtual bool PickWeapon(int32 NewWeaponID) override;
 
 //------- ½ºÅ³ / ÄÞº¸----------
-private:
-	UPROPERTY()
-	FWeaponStatStruct WeaponStat;
-
-	UPROPERTY()
-	TMap<int32, FSkillGaugeInfo> WeaponSkillInfo;
-
 public:
 	UFUNCTION(BlueprintCallable)
-	void UpdateSkillGauge();
-
-	UFUNCTION(BlueprintCallable)
-	void UseSkillGauge();
-
-protected:
-	UFUNCTION()
-	virtual void SetSkillSet() override;
-
-	UFUNCTION()
-	virtual void SetSkillGrade() override;
-
+	void AddSkillGauge();
 
 // -------- VFX -----------
 protected:

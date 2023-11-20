@@ -81,7 +81,7 @@ public:
 
 	//Player Combo∞‘¿Ã¡ˆ
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		float CharacterCurrComboGauge;
+		float CharacterCurrSkillGauge;
 };
 
 USTRUCT(BlueprintType)

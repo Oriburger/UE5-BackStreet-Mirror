@@ -101,14 +101,6 @@ private:
 	UPROPERTY()
 		float DefaultKnockBackStrength = 2000.0f;
 
-// ---- ½ºÅ³ / ÄÞº¸ ------------
-protected:
-	UFUNCTION()
-	virtual void SetSkillSet() override;
-
-	UFUNCTION()
-	virtual void SetSkillGrade() override;
-
 // ---- VFX ---------------------
 public:
 	UFUNCTION(BlueprintCallable)

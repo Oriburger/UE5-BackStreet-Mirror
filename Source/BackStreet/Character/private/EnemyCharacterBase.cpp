@@ -74,7 +74,7 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	{
 		if (DamageCauser->ActorHasTag("Attack|Common"))
 		{
-			Cast<AMainCharacterBase>(DamageCauser)->UpdateSkillGauge();
+			Cast<AMainCharacterBase>(DamageCauser)->AddSkillGauge();
 			DamageCauser->Tags.Remove("Attack|Common");
 		}
 	}	
@@ -102,37 +102,9 @@ void AEnemyCharacterBase::TrySkillAttack(ACharacterBase* Target)
 {
 	Super::TrySkillAttack(Target);
 
-	SetSkillSet();
-
 	if (IsValid(GamemodeRef->GetGlobalSkillmanagerBaseRef()))
 	{
-		GamemodeRef->GetGlobalSkillmanagerBaseRef()->ActivateSkill(SkillSetStruct, this, Target);
-	}
-}
-
-void AEnemyCharacterBase::SetSkillSet()
-{
-	SkillSetStruct = FEnemyStatStruct().SkillSetStruct;
-	SkillSetStruct.SkillGrade = SkillGrade;
-}
-
-void AEnemyCharacterBase::SetSkillGrade()
-{
-	if (ActorHasTag("Easy"))
-	{
-		SkillGrade = ESkillGrade::E_Common;
-	}
-	else if (ActorHasTag("Nomal"))
-	{
-		SkillGrade = ESkillGrade::E_Rare;
-	}
-	else if (ActorHasTag("Hard"))
-	{
-		SkillGrade = ESkillGrade::E_Epic;
-	}
-	else if (ActorHasTag("Extreme"))
-	{
-		SkillGrade = ESkillGrade::E_Regend;
+		GamemodeRef->GetGlobalSkillmanagerBaseRef()->ActivateSkill(this, Target);
 	}
 }
 

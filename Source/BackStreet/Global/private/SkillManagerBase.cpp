@@ -5,6 +5,9 @@
 #include "../../SkillSystem/public/SkillBase.h"
 #include "../../Character/public/CharacterBase.h"
 #include "Kismet/KismetStringLibrary.h"
+#include "../../Item/public/WeaponBase.h"
+#include "../../Character/public/MainCharacterBase.h"
+#include "Kismet/KismetMathLibrary.h"
 
 USkillManagerBase::USkillManagerBase()
 {
@@ -28,17 +31,19 @@ void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemod
 	GamemodeRef = NewGamemodeRef;
 }
 
-void USkillManagerBase::ActivateSkill(FSkillSetStruct SkillSet, AActor* Causer, ACharacterBase* Target)
+void USkillManagerBase::ActivateSkill(AActor* Causer, ACharacterBase* Target)
 {
 	if (!IsValid(Causer)) return;
-	//ensure(IsValid(Causer)); 
-	//check(IsValid(Causer));
-	SkillSetStruct = SkillSet;
-	SkillIDArray = SkillSetStruct.SkillIDList;
-	SkillIntervalArray = SkillSetStruct.SkillIntervalList;
-	for (uint8 idx = 0; idx < SkillIDArray.Num(); idx++)
+
+	TArray<int32> skillIDArray;
+
+	SetSkillSet(Causer);
+	skillIDArray = SkillSetInfo.SkillIDList;
+	SkillIntervalArray = SkillSetInfo.SkillIntervalList;
+
+	for (uint8 idx = 0; idx < skillIDArray.Num(); idx++)
 	{
-		int32 skillID = SkillIDArray[idx];
+		int32 skillID = skillIDArray[idx];
 		if (skillID == 0)
 		{
 			ComposeSkillMap(skillID, Causer, Target);
@@ -47,10 +52,80 @@ void USkillManagerBase::ActivateSkill(FSkillSetStruct SkillSet, AActor* Causer, 
 		{
 			GetDelayInterval(idx, SkillIntervalArray);
 			ComposeSkillMap(skillID, Causer, Target);
-
 		}
 	}
+}
 
+void USkillManagerBase::SetSkillSet(AActor* Causer) {
+	ACharacterBase* causer = Cast<ACharacterBase>(Causer);
+	if (!IsValid(causer)||!IsValid(causer->GetCurrentWeaponRef())) return;
+
+	//Player 인경우
+	if (causer->ActorHasTag("Player")) {
+		float currSkillGauge = Cast<AMainCharacterBase>(causer)->GetCharacterState().CharacterCurrSkillGauge;
+		
+		FWeaponStatStruct currWeaponStat = causer->GetCurrentWeaponRef()->GetWeaponStat();
+
+		//Grade확인
+		if (UKismetMathLibrary::InRange_FloatFloat(currSkillGauge, currWeaponStat.SkillGaugeInfo.SkillCommonReq, currWeaponStat.SkillGaugeInfo.SkillRareReq, true, false))
+		{
+			currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Common;
+		}
+		else if (UKismetMathLibrary::InRange_FloatFloat(currSkillGauge, currWeaponStat.SkillGaugeInfo.SkillRareReq, currWeaponStat.SkillGaugeInfo.SkillEpicReq, true, false))
+		{
+			currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Rare;
+		}
+		else if (UKismetMathLibrary::InRange_FloatFloat(currSkillGauge, currWeaponStat.SkillGaugeInfo.SkillEpicReq, currWeaponStat.SkillGaugeInfo.SkillRegendReq, true, false))
+		{
+			currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Epic;
+		}
+		else if (currSkillGauge >= currWeaponStat.SkillGaugeInfo.SkillRegendReq)
+		{
+			currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Regend;
+		}
+		else
+		{
+			currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
+		}
+		
+		causer->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
+		SkillSetInfo = currWeaponStat.SkillSetInfo;
+	}
+
+	//Enemy인 경우
+	else if (causer->ActorHasTag("Enemy"))
+	{
+		if (SkillSetInfoMap.Contains(causer->GetCurrentWeaponRef()->GetWeaponStat().WeaponID))
+		{
+			SkillSetInfo = *SkillSetInfoMap.Find(causer->GetCurrentWeaponRef()->GetWeaponStat().WeaponID);
+		}
+		else
+		{
+			SkillSetInfo = causer->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo;
+
+			if (causer->ActorHasTag("Easy"))
+			{
+				SkillSetInfo.SkillGrade = ESkillGrade::E_Common;
+			}
+			else if (causer->ActorHasTag("Nomal"))
+			{
+				SkillSetInfo.SkillGrade = ESkillGrade::E_Rare;
+			}
+			else if (causer->ActorHasTag("Hard"))
+			{
+				SkillSetInfo.SkillGrade = ESkillGrade::E_Epic;
+			}
+			else if (causer->ActorHasTag("Extreme"))
+			{
+				SkillSetInfo.SkillGrade = ESkillGrade::E_Regend;
+			}
+			else
+			{
+				SkillSetInfo.SkillGrade = ESkillGrade::E_None;
+			}
+			SkillSetInfoMap.Add(causer->GetCurrentWeaponRef()->GetWeaponStat().WeaponID, causer->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo);
+		}
+	}
 }
 
 float USkillManagerBase::GetDelayInterval(int32 SkillListIdx, TArray<float> SkillIntervalList)
@@ -71,12 +146,15 @@ float USkillManagerBase::GetDelayInterval(int32 SkillListIdx, TArray<float> Skil
 
 void USkillManagerBase::ComposeSkillMap(int32 SkillID, AActor* Causer, ACharacterBase* Target)
 {
+	if(Cast<AMainCharacterBase>(Causer)->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo.SkillGrade == ESkillGrade::E_None)
+		return;
+
 	if (SkillRefMap.Contains(SkillID) == true)
 	{
 		ASkillBase* skill = *SkillRefMap.Find(SkillID);
 		if (IsValid(skill))
 		{
-			skill->InitSkill(Causer, Target, SkillSetStruct.SkillGrade);
+			skill->InitSkill(Causer, Target, SkillSetInfo.SkillGrade);
 		}
 	}
 	else
@@ -84,7 +162,7 @@ void USkillManagerBase::ComposeSkillMap(int32 SkillID, AActor* Causer, ACharacte
 		ASkillBase* skill = MakeSkillBase(SkillID);
 		if (IsValid(skill))
 		{
-			skill->InitSkill(Causer, Target, SkillSetStruct.SkillGrade);
+			skill->InitSkill(Causer, Target, SkillSetInfo.SkillGrade);
 		}
 	}
 }

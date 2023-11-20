@@ -121,10 +121,7 @@ public:
 
 	//Skill ID List
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FSkillSetStruct SkillSetStruct;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		UAnimMontage* SkillAnimMontage;
+		FSkillSetInfo SkillSetInfo;
 
 	//----- ±Ù°Å¸® Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

@@ -11,14 +11,18 @@ UCLASS()
 class BACKSTREET_API USkillManagerBase : public UObject
 {
 	GENERATED_BODY()
-	public:
+public:
 	USkillManagerBase();
 
 	UFUNCTION()
 	void InitSkillManagerBase(class ABackStreetGameModeBase* NewGamemodeRef);
 
 	UFUNCTION()
-	void ActivateSkill(FSkillSetStruct SkillSet, AActor* Causer, class ACharacterBase* Target);
+	void ActivateSkill(AActor* Causer, class ACharacterBase* Target);
+
+protected:
+	UFUNCTION()
+	void SetSkillSet(AActor* Causer);
 
 	UFUNCTION()
 	void ComposeSkillMap(int32 SkillID, AActor* Causer, ACharacterBase* Target);
@@ -28,18 +32,20 @@ class BACKSTREET_API USkillManagerBase : public UObject
 
 	UFUNCTION()
 	float GetDelayInterval(int32 SkillListIdx, TArray<float> SkillIntervalList);
+
 private:
+	//Àû ¸÷ÀÇ ½ºÅ³¼Â Á¤º¸ ¸Ê
 	UPROPERTY()
-	FSkillSetStruct SkillSetStruct;
-
-	UPROPERTY()
-	TArray<int32> SkillIDArray;
-
-	UPROPERTY()
-	TArray<float> SkillIntervalArray;
+	TMap<int32,FSkillSetInfo> SkillSetInfoMap;
 
 	UPROPERTY()
 	TMap<int32, class ASkillBase*> SkillRefMap;
+
+	UPROPERTY()
+	FSkillSetInfo SkillSetInfo;
+
+	UPROPERTY()
+	TArray<float> SkillIntervalArray;
 
 	UPROPERTY()
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;

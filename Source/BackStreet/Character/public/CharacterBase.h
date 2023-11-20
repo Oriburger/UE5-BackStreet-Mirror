@@ -171,13 +171,8 @@ private:
 
 // ----- 스킬 관련 --------------------------
 protected:
-	virtual void SetSkillSet();
-
-	virtual void SetSkillGrade();
-
-protected:
 	UPROPERTY()
-	struct FSkillSetStruct SkillSetStruct;
+	struct FSkillSetInfo SkillSetInfo;
 
 	UPROPERTY()
 	ESkillGrade SkillGrade;

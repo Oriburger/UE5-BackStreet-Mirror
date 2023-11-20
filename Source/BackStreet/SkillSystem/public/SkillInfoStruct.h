@@ -25,7 +25,7 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FSkillSetStruct
+struct FSkillSetInfo
 {
 public:
 	GENERATED_USTRUCT_BODY()
@@ -40,6 +40,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<float> SkillIntervalList;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UAnimMontage* SkillAnimMontage;
+
 };
 
 USTRUCT(BlueprintType)
@@ -50,13 +53,13 @@ public:
 
 	//Combo 게이지 증가 비율
 		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float ComboIncreasement = 0.1;
+		float SkillGaugeAug = 0.1;
 
 	//Common 스킬 요구 게이지량
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float SkillCommonReq = 1.0;
 
-	// Rare 스킬 요구 게이지량UPROPERTY
+	// Rare 스킬 요구 게이지량
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float SkillRareReq = 2.0;
 

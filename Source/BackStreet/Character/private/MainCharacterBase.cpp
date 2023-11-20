@@ -1,6 +1,4 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "../public/MainCharacterBase.h"
 #include "../public/MainCharacterController.h"
 #include "../public/AbilityManagerBase.h"
@@ -20,7 +18,6 @@
 #include "TimerManager.h"
 #include "../../Item/public/RewardBoxBase.h"
 #include "../../CraftingSystem/public/CraftBoxBase.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "Animation/AnimMontage.h"
 #include "../../Global/public/SkillManagerBase.h"
 #include "../public/CharacterBase.h"
@@ -377,99 +374,48 @@ void AMainCharacterBase::TrySkillAttack(ACharacterBase* Target)
 	Super::TrySkillAttack(Target);
 	if (IsValid(GamemodeRef->GetGlobalSkillmanagerBaseRef()))
 	{
-		GamemodeRef->GetGlobalSkillmanagerBaseRef()->ActivateSkill(SkillSetStruct, this, Target);
+		GamemodeRef->GetGlobalSkillmanagerBaseRef()->ActivateSkill(this, Target);
 	}
+
+	FWeaponStatStruct weaponStat = GetCurrentWeaponRef()->GetWeaponStat();
+
+	UE_LOG(LogTemp, Log, TEXT("Enum : %d\n"), weaponStat.SkillSetInfo.SkillGrade);
+	switch (weaponStat.SkillSetInfo.SkillGrade)
+	{
+	case ESkillGrade::E_None:
+		return;
+	case ESkillGrade::E_Common:
+		CharacterState.CharacterCurrSkillGauge -= weaponStat.SkillGaugeInfo.SkillCommonReq;
+		UE_LOG(LogTemp, Log, TEXT("CommonSkill"));
+		break;
+	case ESkillGrade::E_Rare:
+		CharacterState.CharacterCurrSkillGauge -= weaponStat.SkillGaugeInfo.SkillRareReq;
+		UE_LOG(LogTemp, Log, TEXT("RareSkill"));
+		break;
+	case ESkillGrade::E_Epic:
+		CharacterState.CharacterCurrSkillGauge -= weaponStat.SkillGaugeInfo.SkillEpicReq;
+		UE_LOG(LogTemp, Log, TEXT("EpicSkill"));
+		break;
+	case ESkillGrade::E_Regend:
+		CharacterState.CharacterCurrSkillGauge -= weaponStat.SkillGaugeInfo.SkillRegendReq;
+		UE_LOG(LogTemp, Log, TEXT("RegendSkill"));
+		break;
+	}
+	weaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
+	GetCurrentWeaponRef()->SetWeaponStat(weaponStat);
 
 	RotateToCursor();
 }
 
-void AMainCharacterBase::SetSkillSet()
+void AMainCharacterBase::AddSkillGauge()
 {
-	if(GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw) return;
-	SkillSetStruct = GetCurrentWeaponRef()->GetWeaponStat().SkillSetStruct;
-}
+	if (!IsValid(InventoryRef) || !IsValid(GetCurrentWeaponRef()))
+	{
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없어 스킬을 사용할 수 없습니다. ")), FColor::White);
+	}
 
-void AMainCharacterBase::UpdateSkillGauge()
-{
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
-	if (IsValid(weaponRef))
-	{
-		CharacterState.CharacterCurrComboGauge += weaponRef->GetWeaponStat().SkillGaugeInfo.ComboIncreasement;
-	}
-}
-
-void AMainCharacterBase::UseSkillGauge()
-{
-	AWeaponBase* weaponRef = GetCurrentWeaponRef();
-	if (IsValid(weaponRef))
-	{
-		FWeaponStatStruct weaponStat =weaponRef->GetWeaponStat();
-		if (WeaponStat.WeaponID != weaponRef->GetWeaponStat().WeaponID)
-		{
-			WeaponStat = weaponRef->GetWeaponStat();
-			SetSkillSet();
-
-			if (!WeaponSkillInfo.Contains(WeaponStat.WeaponID))
-			{
-				WeaponSkillInfo.Add(WeaponStat.WeaponID, WeaponStat.SkillGaugeInfo);
-			}
-		}
-
-		SetSkillGrade();
-
-		switch (SkillGrade)
-		{
-		case ESkillGrade::E_None:
-			return;
-		case ESkillGrade::E_Common:
-			CharacterState.CharacterCurrComboGauge -= WeaponStat.SkillGaugeInfo.SkillCommonReq;
-			UE_LOG(LogTemp, Log, TEXT("CommonSkill"));
-			break;
-		case ESkillGrade::E_Rare:
-			CharacterState.CharacterCurrComboGauge -= WeaponStat.SkillGaugeInfo.SkillRareReq;
-			UE_LOG(LogTemp, Log, TEXT("RareSkill"));
-			break;
-		case ESkillGrade::E_Epic:
-			CharacterState.CharacterCurrComboGauge -= WeaponStat.SkillGaugeInfo.SkillEpicReq;
-			UE_LOG(LogTemp, Log, TEXT("EpicSkill"));
-			break;
-		case ESkillGrade::E_Regend:
-			CharacterState.CharacterCurrComboGauge -= WeaponStat.SkillGaugeInfo.SkillRegendReq;
-			UE_LOG(LogTemp, Log, TEXT("RegendSkill"));
-			break;
-		}
-		TrySkillAttack(nullptr);
-
-	}
-}
-
-void AMainCharacterBase::SetSkillGrade()
-{
-	float currComboGauge = this->CharacterState.CharacterCurrComboGauge;
-	FSkillGaugeInfo  skillGaugeInfo = WeaponStat.SkillGaugeInfo;
-
-	if (UKismetMathLibrary::InRange_FloatFloat(currComboGauge, skillGaugeInfo.SkillCommonReq, skillGaugeInfo.SkillRareReq, true, false))
-	{
-		SkillGrade = ESkillGrade::E_Common;
-	}
-	else if (UKismetMathLibrary::InRange_FloatFloat(currComboGauge, skillGaugeInfo.SkillRareReq, skillGaugeInfo.SkillEpicReq, true, false))
-	{
-		SkillGrade = ESkillGrade::E_Rare;
-	}
-	else if (UKismetMathLibrary::InRange_FloatFloat(currComboGauge, skillGaugeInfo.SkillEpicReq, skillGaugeInfo.SkillRegendReq, true, false))
-	{
-		SkillGrade = ESkillGrade::E_Epic;
-	}
-	else if (currComboGauge >= skillGaugeInfo.SkillRegendReq)
-	{
-		SkillGrade = ESkillGrade::E_Regend;
-	}
-	else
-	{
-		SkillGrade = ESkillGrade::E_None;
-	}
-
-	SkillSetStruct.SkillGrade = SkillGrade;
+	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeInfo.SkillGaugeAug;
 }
 
 

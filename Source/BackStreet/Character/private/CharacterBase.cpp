@@ -276,23 +276,12 @@ void ACharacterBase::TrySkillAttack(ACharacterBase* Target)
 
 	const float attackSpeed = FMath::Clamp(CharacterStat.CharacterAtkSpeed * weaponRef->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
-	UAnimMontage* targetAnim = weaponRef->GetWeaponStat().SkillAnimMontage;
+	UAnimMontage* targetAnim = weaponRef->GetWeaponStat().SkillSetInfo.SkillAnimMontage;
 
 	if (IsValid(targetAnim))
 	{
 		PlayAnimMontage(targetAnim, attackSpeed + 0.25f);
 	}
-}
-
-void ACharacterBase::SetSkillSet()
-{
-	//virtual
-}
-
-
-void ACharacterBase::SetSkillGrade()
-{
-	//virtual
 }
 
 void ACharacterBase::Attack()

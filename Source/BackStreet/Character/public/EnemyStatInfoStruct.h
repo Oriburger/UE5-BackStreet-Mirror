@@ -39,6 +39,6 @@ public:
 		TArray<float> EnemySkillIntervalList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintreadOnly)
-		FSkillSetStruct SkillSetStruct;
+		FSkillSetInfo SkillSetInfo;
 
 };
