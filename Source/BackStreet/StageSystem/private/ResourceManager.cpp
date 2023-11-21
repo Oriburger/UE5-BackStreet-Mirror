@@ -481,7 +481,7 @@ int32 AResourceManager::SelectSpawnMonsterAmount(class AStageData* Target)
 	
 	return spawnNum;
 }
-
+// puah test
 void AResourceManager::CleanAllResource()
 {
 	UE_LOG(LogTemp, Log, TEXT("AStageManagerBase::CleanAllResource"));
