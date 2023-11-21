@@ -38,7 +38,7 @@ void AChapterManagerBase::SetLobbyStage()
 		{
 			UE_LOG(LogTemp, Log, TEXT("AChapterManagerBase::SetLobbyStage: Find LobbyStage"));
 			LobbyStage = Cast<AStageData>(target);
-			Cast<AStageData>(target)->SetStageType(EStageCategoryInfo::E_Lobby);
+			Cast<AStageData>(target)->SetStageCategoryType(EStageCategoryInfo::E_Lobby);
 		}
 	}
 }
@@ -67,7 +67,7 @@ bool AChapterManagerBase::IsChapterClear()
 {
 	for (AStageData* stage : StageList)
 	{
-		if (stage->GetStageType() == EStageCategoryInfo::E_Boss)
+		if (stage->GetStageCategoryType() == EStageCategoryInfo::E_Boss)
 		{
 			if (stage->GetIsClear())
 				return true;
@@ -140,9 +140,10 @@ void AChapterManagerBase::InitChapterManager()
 
 void AChapterManagerBase::CreateChapter()
 {
+	ChapterLV++;
+	InitStageTypeArray();
 	StageList=StageGenerator->CreateMaze();
 	CurrentStage = nullptr;
-	ChapterLV++;
 	StatWeight += 0.1f;
 }
 
@@ -157,8 +158,47 @@ void AChapterManagerBase::InitStartGate()
 	}
 }
 
+void AChapterManagerBase::InitStageTypeArray()
+{
+	TArray<FStageInfoStruct*> allStageInfo;
+	StageTypeTable->GetAllRows<FStageInfoStruct>(TEXT("GetStageTypeTable"), allStageInfo);
+	
+	NormalStageTypes.Empty();
+	BossStageTypes.Empty();
+
+	for (FStageInfoStruct* target : allStageInfo)
+	{
+		if (target->ChapterLevel == ChapterLV)
+		{
+			if (target->StageType == EStageCategoryInfo::E_Normal)
+			{
+				NormalStageTypes.Add(*target);
+			}
+			else if (target->StageType == EStageCategoryInfo::E_Boss)
+			{
+				BossStageTypes.Add(*target);
+			}
+		}
+	}
+}
+
 void AChapterManagerBase::UpdateMapUI()
 {
 	Cast<ABackStreetGameModeBase>(GetOwner())->UpdateMiniMapUI();
 }
 
+FStageInfoStruct AChapterManagerBase::GetStageTypeInfoWithType(EStageCategoryInfo Type)
+{
+	if (Type == EStageCategoryInfo::E_Boss)
+	{
+		int32 idx = FMath::RandRange(0, BossStageTypes.Num() - 1);
+		return BossStageTypes[idx];
+	}
+	else if (Type == EStageCategoryInfo::E_Normal)
+	{
+		int32 idx = FMath::RandRange(0, NormalStageTypes.Num() - 1);
+		return NormalStageTypes[idx];
+	}
+	
+	return FStageInfoStruct();
+}
