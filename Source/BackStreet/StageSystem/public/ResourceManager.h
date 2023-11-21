@@ -23,9 +23,6 @@ public:
 		void SpawnStageActor(class AStageData* Target);
 
 	UFUNCTION()
-		void SpawnMonster(class AStageData* Target);
-
-	UFUNCTION()
 		void SpawnBossMonster(class AStageData* Target);
 
 	UFUNCTION()
@@ -36,9 +33,6 @@ public:
 
 	UFUNCTION()
 		void SpawnCraftingBox(class AStageData* Target);
-
-	UFUNCTION()
-		void BindDelegate(class AStageData* Target);
 
 	UFUNCTION()
 		void DieMonster(AEnemyCharacterBase* Target);
@@ -72,24 +66,39 @@ public:
 		void CalculateWaveTime();
 
 	UFUNCTION()
-		void SpawnDefenseWave();
+		void SpawnDefenseWave(class AStageData* Target);
 
-	// 웨이브별 초기 세팅, SpawnStageActor에서 호출할듯?
+	UFUNCTION()
+		void SpawnHadesWave(class AStageData* Target);
+
 	UFUNCTION()
 		void SetWave(class AStageData* Target);
 
-	UFUNCTION()
-		void SpawnMonsterWithID(class AStageData* Target, int32 EnemyID);
-
-	UFUNCTION()
-		int32 GetSpawnPointIdx(class AStageData* Target);
+	/*UFUNCTION()
+		void SpawnMonsterWithID(class AStageData* Target, int32 EnemyID);*/
 
 	UFUNCTION()
 		void ManageDefenseWaveMonsterCount(class AStageData* Target, int32 EnemyID, bool IsSpawn);
 
 public:
+	// Spawn 세분화 작업
 	UFUNCTION()
-		TSubclassOf<AEnemyCharacterBase> GetEnemyWithID(int32 EnemyID);
+		AEnemyCharacterBase* SpawnMonster(class AStageData* Target, int32 EnemyID, FVector Location);
+
+	UFUNCTION()
+		void BindMonsterDelegate(class AStageData* Target, class AEnemyCharacterBase* Monster);
+
+	UFUNCTION()
+		FVector GetSpawnLocation(class AStageData* Target);
+
+	UFUNCTION()
+		int32 GetSpawnPointIdx(class AStageData* Target);
+
+	UFUNCTION()
+		int32 SelectSpawnMonsterID(class AStageData* Target);
+
+	UFUNCTION()
+		int32 SelectSpawnMonsterAmount(class AStageData* Target);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
