@@ -202,10 +202,12 @@ void ACharacterBase::Die()
 	{
 		GetCurrentWeaponRef()->ClearAllTimerHandle();
 	}
+	//모든 타이머를 제거한다. (타이머 매니저의 것도)
+	ClearAllTimerHandle();
+	GamemodeRef->GetGlobalDebuffManagerRef()->ClearAllDebuffTimer(this);
 
-	ClearAllTimerHandle();
+	//무적 처리를 하고, Movement를 비활성화
 	CharacterStat.bIsInvincibility = true;
-	ClearAllTimerHandle();
 	GetCharacterMovement()->Deactivate();
 	bUseControllerRotationYaw = false;
 
