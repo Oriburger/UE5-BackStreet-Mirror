@@ -185,7 +185,7 @@ protected:
 		void InitMaterialAsset();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FCharacterAssetInfoStruct GetAssetInfoWithID(const int32 GetEnemyID);
+		FCharacterAssetInfoStruct GetAssetInfoWithID(const int32 TargetCharacterID);
 
 protected:
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")

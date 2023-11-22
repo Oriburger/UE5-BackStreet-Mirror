@@ -96,7 +96,7 @@ void AResourceManager::SpawnMonster(class AStageData* Target)
 		Target->AddMonsterList(monster);
 		UE_LOG(LogTemp, Log, TEXT("AResourceManager::SpawnMonster SetEnemyID %d"), enemyIDList[enemyIDIdx]);
 		monster->CharacterID = enemyIDList[enemyIDIdx];
-		monster->InitEnemyStat();
+		monster->InitEnemyStat(enemyIDList[enemyIDIdx]);
 		monster->InitAsset(enemyIDList[enemyIDIdx]);
 	}
 }
@@ -120,7 +120,7 @@ void AResourceManager::SpawnBossMonster(class AStageData* Target)
 	Target->AddMonsterList(monster);
 	// 수정 필요 하드코딩..
 	monster->CharacterID = 1200;
-	monster->InitEnemyStat();
+	monster->InitEnemyStat(1200);
 	monster->InitAsset(1200);
 	
 }

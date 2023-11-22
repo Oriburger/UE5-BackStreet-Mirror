@@ -32,26 +32,25 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|UI")
 		class UWidgetComponent* FloatingHpBar;
 
-// ----- 기본 프로퍼티 -----------
-public:
+protected:
 	//적이 최초로 소유하는 무기의 ID
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		int32 DefaultWeaponID = 11100;
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay")
+		int32 DefaultWeaponID;
 
 	//최대 스폰할 아이템의 개수. 미션 아이템은 무시.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem", meta = (UIMin = 0, UIMax = 2))
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Drop")
 		int32 MaxSpawnItemCount;
 
 	//적이 죽고 스폰할 아이템의 Type 리스트 (각 아이템은 Idx로 구별)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Drop")
 		TArray<EItemCategoryInfo> SpawnItemTypeList;
 
 	//적이 죽구 스폰할 아이템 ID 리스트 (각 아이템은 Idx로 구별)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Drop")
 		TArray<uint8> SpawnItemIDList;
 
 	//적이 죽고 스폰할 아이템의 스폰 확률 리스트  (0.0f ~ 1.0f),  (각 아이템은 Idx로 구별)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Drop")
 		TArray<float> ItemSpawnProbabilityList;
 
 // ----- Action ---------------
@@ -82,14 +81,11 @@ public:
 // ----- 캐릭터 스탯 및 상태 관련 ---------
 public:
 	UFUNCTION(BlueprintCallable)
-		void InitEnemyStat();
+		void InitEnemyStat(int32 NewCharacterID);
 
 protected:
 	UFUNCTION()
 		void SetDefaultWeapon();
-
-	UFUNCTION()
-		void SetDefaultStat();
 
 	UFUNCTION()
 		void SpawnDeathItems();
@@ -97,6 +93,10 @@ protected:
 private:
 	UPROPERTY()
 		float DefaultKnockBackStrength = 2000.0f;
+
+	//적의 스탯 테이블
+	UPROPERTY()
+		UDataTable* EnemyStatTable;
 
 // ---- VFX ---------------------
 public:

@@ -41,6 +41,8 @@ ACharacterBase::ACharacterBase()
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CharacterID = AssetInfo.CharacterID;
 	InitCharacterState();
 
 	InventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
@@ -615,12 +617,12 @@ void ACharacterBase::InitMaterialAsset()
 	}
 }
 
-FCharacterAssetInfoStruct ACharacterBase::GetAssetInfoWithID(const int32 GetEnemyID)
+FCharacterAssetInfoStruct ACharacterBase::GetAssetInfoWithID(const int32 TargetCharacterID)
 {
 	if (AssetDataInfoTable != nullptr)
 	{
 		FCharacterAssetInfoStruct* newInfo = nullptr;
-		FString rowName = FString::FromInt(GetEnemyID);
+		FString rowName = FString::FromInt(TargetCharacterID);
 
 		newInfo = AssetDataInfoTable->FindRow<FCharacterAssetInfoStruct>(FName(rowName), rowName);
 

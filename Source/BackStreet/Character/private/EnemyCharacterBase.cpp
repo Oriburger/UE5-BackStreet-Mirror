@@ -30,6 +30,14 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	this->Tags.Add("Enemy");
+
+	static ConstructorHelpers::FObjectFinder<UDataTable> statTableFinder(TEXT("/Game/Character/EnemyCharacter/Data/D_EnemyStatDataTable.D_EnemyStatDataTable"));
+	//클래스를 제대로 명시하지 않았으면 크래시를 띄움
+	checkf(statTableFinder.Succeeded(), TEXT("Enemy Stat Table 탐색에 실패했습니다."));
+	if(statTableFinder.Succeeded())
+	{
+		EnemyStatTable = statTableFinder.Object;
+	}
 }
 
 void AEnemyCharacterBase::BeginPlay()
@@ -38,19 +46,39 @@ void AEnemyCharacterBase::BeginPlay()
 	
 	SpawnDefaultController();
 
+	InitEnemyStat(CharacterID);
 	InitFloatingHpWidget();
-	InitEnemyStat();
 	
 	SetDefaultWeapon();
 	InitDynamicMeshMaterial(GetMesh()->GetMaterial(0));
 }
 
-void AEnemyCharacterBase::InitEnemyStat()
+void AEnemyCharacterBase::InitEnemyStat(int32 NewCharacterID)
 {
-	GamemodeRef->UpdateCharacterStatWithID(this, CharacterID);
-	CharacterState.CharacterCurrHP = CharacterStat.CharacterMaxHP;
-	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.CharacterMoveSpeed;
-	SetDefaultStat();
+	//DataTable로 부터 Read
+	FString rowName = FString::FromInt(NewCharacterID);
+	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
+
+	UE_LOG(LogTemp, Warning, TEXT("Init Enemy Stat %d"), NewCharacterID);
+	if (newStat != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("---Success"));
+		//기본 스탯 설정
+		UpdateCharacterStat(newStat->EnemyStat);
+		CharacterState.CharacterCurrHP = CharacterStat.CharacterMaxHP;
+		GetCharacterMovement()->MaxWalkSpeed = CharacterStat.CharacterMoveSpeed;
+		CharacterStat.bInfinite = true;
+
+		//드롭 아이템 설정
+		ItemSpawnProbabilityList = newStat->ItemSpawnProbabilityList;
+		MaxSpawnItemCount = newStat->MaxSpawnItemCount;
+		SpawnItemIDList = newStat->SpawnItemIDList;
+		SpawnItemTypeList = newStat->SpawnItemTypeList;
+		
+		//기본 무기 설정
+		DefaultWeaponID = newStat->DefaultWeaponID;
+		SetDefaultWeapon();
+	}
 }
 
 float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -128,11 +156,6 @@ void AEnemyCharacterBase::SetDefaultWeapon()
 			Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();
 		}
 	}
-}
-
-void AEnemyCharacterBase::SetDefaultStat()
-{
-	CharacterStat.bInfinite = true;
 }
 
 void AEnemyCharacterBase::SpawnDeathItems()
@@ -223,7 +246,6 @@ void AEnemyCharacterBase::Turn(float Angle)
 float AEnemyCharacterBase::PlayPreChaseAnimation()
 {
 	if (PreChaseAnimMontage == nullptr) return 0.0f;
-
 	return PlayAnimMontage(PreChaseAnimMontage);
 }
 

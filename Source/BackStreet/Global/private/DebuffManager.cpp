@@ -206,23 +206,15 @@ void UDebuffManager::ClearAllDebuffTimer(ACharacterBase* Target)
 	if (Target == nullptr) return; 
 	if (!TimerInfoMap.Contains(Target->GetUniqueID())) return;
 
-	UE_LOG(LogTemp, Warning, TEXT("ClearAllDebuffTimer #1"));
 	const uint16 startIdx = 0;
 	const uint16 endIdx = MAX_DEBUFF_IDX;
 
 	FDebuffTimerInfoStruct timerInfo = *(TimerInfoMap.Find(Target->GetUniqueID()));
 	TArray<FTimerHandle>& timerListRef = timerInfo.TimerHandleList;
-	UE_LOG(LogTemp, Warning, TEXT("ClearAllDebuffTimer #2"));
 	for (auto& targetTimer : timerListRef)
 	{
-		if (GamemodeRef.Get()->GetWorldTimerManager().IsTimerActive(targetTimer))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Oh My God!"));
-		}
-		UE_LOG(LogTemp, Warning, TEXT("ClearAllDebuffTimer #3"));
 		GamemodeRef.Get()->GetWorldTimerManager().ClearTimer(targetTimer);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("ClearAllDebuffTimer #4"));
 	TimerInfoMap.Remove(Target->GetUniqueID());
 }
 
