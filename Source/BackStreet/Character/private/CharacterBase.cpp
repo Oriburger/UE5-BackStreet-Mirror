@@ -33,6 +33,8 @@ ACharacterBase::ACharacterBase()
 	WeaponClassList.Add(meleeWeaponClassFinder.Class);
 	WeaponClassList.Add(throwWeaponClassFinder.Class);
 	WeaponClassList.Add(shootWeaponClassFinder.Class);
+
+	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
 }
 
 // Called when the game starts or when spawned
