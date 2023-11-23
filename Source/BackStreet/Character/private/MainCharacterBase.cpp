@@ -362,12 +362,14 @@ void AMainCharacterBase::TryAttack()
 
 void AMainCharacterBase::TrySkillAttack(ACharacterBase* Target)
 {
+	ensure(GetCurrentWeaponRef() != nullptr);
+
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-
-	if (!IsValid(InventoryRef) || !IsValid(GetCurrentWeaponRef()))
+	
+	if (GetCurrentWeaponRef()->WeaponID == 0)
 	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없어 스킬을 사용할 수 없습니다. ")), FColor::White);
 	}
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
@@ -409,10 +411,7 @@ void AMainCharacterBase::TrySkillAttack(ACharacterBase* Target)
 
 void AMainCharacterBase::AddSkillGauge()
 {
-	if (!IsValid(InventoryRef) || !IsValid(GetCurrentWeaponRef()))
-	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없어 스킬을 사용할 수 없습니다. ")), FColor::White);
-	}
+	ensure(GetCurrentWeaponRef() != nullptr);
 
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
 	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeInfo.SkillGaugeAug;
