@@ -64,7 +64,7 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void TrySkillAttack(ACharacterBase* Target) override;
+		virtual void TrySkillAttack(ACharacterBase* Target) override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
