@@ -36,6 +36,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<UAnimMontage*> HitAnimMontageList;
 
+	//스킬 애니메이션 / 무기 ID로 매핑하여 관리
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<UAnimMontage*> SkillAnimMontageList;
+
 	//구르기 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<UAnimMontage*> RollAnimMontageList;

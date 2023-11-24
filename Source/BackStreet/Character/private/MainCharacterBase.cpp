@@ -370,6 +370,7 @@ void AMainCharacterBase::TrySkillAttack(ACharacterBase* Target)
 	if (GetCurrentWeaponRef()->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없어 스킬을 사용할 수 없습니다. ")), FColor::White);
+		return;
 	}
 
 	//공격을 하고, 커서 위치로 Rotation을 조정

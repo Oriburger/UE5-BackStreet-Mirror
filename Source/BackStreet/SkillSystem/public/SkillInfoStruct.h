@@ -11,16 +11,16 @@ public:
 
 	public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 SkillID;
+		int32 SkillID;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName SkillName;
+		FName SkillName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName SKillDescription;
+		FName SKillDescription;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class ASkillBase> SkillBaseClassRef;
+		TSubclassOf<class ASkillBase> SkillBaseClassRef;
 
 };
 
@@ -32,17 +32,13 @@ public:
 
 	public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	ESkillGrade SkillGrade;
+		ESkillGrade SkillGrade;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<int32> SkillIDList;
+		TArray<int32> SkillIDList;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<float> SkillIntervalList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UAnimMontage* SkillAnimMontage;
-
+		TArray<float> SkillIntervalList;
 };
 
 USTRUCT(BlueprintType)
@@ -52,22 +48,32 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	//Combo 게이지 증가 비율
-		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float SkillGaugeAug = 0.1;
 
 	//Common 스킬 요구 게이지량
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	float SkillCommonReq = 1.0;
+		float SkillCommonReq = 1.0;
 
 	// Rare 스킬 요구 게이지량
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	float SkillRareReq = 2.0;
+		float SkillRareReq = 2.0;
 
 	// epic 스킬 요구 게이지량
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	float SkillEpicReq = 3.0;
+		float SkillEpicReq = 3.0;
 
 	// Regend 스킬 요구 게이지량
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	float SkillRegendReq = 4.0;
+		float SkillRegendReq = 4.0;
+};
+
+USTRUCT(BlueprintType)
+struct FSkillAnimMontageStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<TSoftObjectPtr<UAnimMontage>> SkillAnimMontageList;
 };
