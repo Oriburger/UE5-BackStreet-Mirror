@@ -51,6 +51,6 @@ public:
 		int32 DefaultWeaponID = 11100;
 
 	//Info data of dropping item when enemy dies
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Drop")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FEnemyDropInfoStruct DropInfo;
 };
