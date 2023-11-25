@@ -11,19 +11,20 @@ struct FDebuffTimerInfoStruct
 public:
 	GENERATED_USTRUCT_BODY()
 
-		UPROPERTY()
+	UPROPERTY()
 		TArray<FTimerHandle> TimerHandleList;
 
 	UPROPERTY()
 		TArray<float> ResetValueHandleList;
 };
 
-/**
- */
+DECLARE_DELEGATE_OneParam(FDeleDebuffClear, ACharacterBase*);
+
 UCLASS()
 class BACKSTREET_API UDebuffManager : public UObject
 {
 	GENERATED_BODY()
+
 public:
 	// Sets default values for this character's properties
 	UDebuffManager();
@@ -46,7 +47,11 @@ public:
 
 	//모든 Debuff의 타이머를 해제
 	UFUNCTION()
-		void ClearAllDebuffTimer();
+		void ClearDebuffManagerTimer();
+
+	//특정 캐릭터의 디버프 타이머를 제거한다. / 캐릭터 스폰과 동시에 바인딩 하며, 사망 시 Execute 한다.
+	UFUNCTION()
+		void ClearAllDebuffTimer(ACharacterBase* Target);
 
 	//디버프가 활성화 되어있는지 반환
 	UFUNCTION()
@@ -82,6 +87,5 @@ private:
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
 	//캐릭터의 Actor id - 디버프 타이머(+ 초기화 값) 정보를 저장
-	UPROPERTY()
-		TMap<int32, FDebuffTimerInfoStruct> TimerInfoMap;
+	TMap<int32, FDebuffTimerInfoStruct> TimerInfoMap;
 };

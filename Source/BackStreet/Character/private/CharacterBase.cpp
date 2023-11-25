@@ -33,12 +33,16 @@ ACharacterBase::ACharacterBase()
 	WeaponClassList.Add(meleeWeaponClassFinder.Class);
 	WeaponClassList.Add(throwWeaponClassFinder.Class);
 	WeaponClassList.Add(shootWeaponClassFinder.Class);
+
+	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
 }
 
 // Called when the game starts or when spawned
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CharacterID = AssetInfo.CharacterID;
 	InitCharacterState();
 
 	InventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
@@ -202,10 +206,12 @@ void ACharacterBase::Die()
 	{
 		GetCurrentWeaponRef()->ClearAllTimerHandle();
 	}
+	//모든 타이머를 제거한다. (타이머 매니저의 것도)
+	ClearAllTimerHandle();
+	GamemodeRef->GetGlobalDebuffManagerRef()->ClearAllDebuffTimer(this);
 
-	ClearAllTimerHandle();
+	//무적 처리를 하고, Movement를 비활성화
 	CharacterStat.bIsInvincibility = true;
-	ClearAllTimerHandle();
 	GetCharacterMovement()->Deactivate();
 	bUseControllerRotationYaw = false;
 
@@ -611,12 +617,12 @@ void ACharacterBase::InitMaterialAsset()
 	}
 }
 
-FCharacterAssetInfoStruct ACharacterBase::GetAssetInfoWithID(const int32 GetEnemyID)
+FCharacterAssetInfoStruct ACharacterBase::GetAssetInfoWithID(const int32 TargetCharacterID)
 {
 	if (AssetDataInfoTable != nullptr)
 	{
 		FCharacterAssetInfoStruct* newInfo = nullptr;
-		FString rowName = FString::FromInt(GetEnemyID);
+		FString rowName = FString::FromInt(TargetCharacterID);
 
 		newInfo = AssetDataInfoTable->FindRow<FCharacterAssetInfoStruct>(FName(rowName), rowName);
 
