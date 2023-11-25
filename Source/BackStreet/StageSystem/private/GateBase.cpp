@@ -35,9 +35,12 @@ void AGateBase::Tick(float DeltaTime)
 void AGateBase::BeginPlay()
 {
 	Super::BeginPlay();
+	bIsGateActive = true;
 	if (this->ActorHasTag(FName("Off")))
+	{
 		DeactivateGate();
-	
+
+	}
 }
 
 void AGateBase::InitGate()
@@ -65,21 +68,32 @@ void AGateBase::EnterGate()
 		InitGate();
 	}
 	if (this->ActorHasTag(FName("Off")))
+	{
+		bIsGateActive = false;
 		return;
+	}
+	
 	RequestMoveStage();
 }
 
-void AGateBase::ActivateChapterGate()
+void AGateBase::ActivateGate()
 {
-	UE_LOG(LogTemp, Log, TEXT("AGateBase:ActivateChapterGate"));
+	
+	bIsGateActive = true;
 	if (!GateMaterialList.IsValidIndex(1)) return;
 	Mesh->SetMaterial(0, GateMaterialList[1]);
 
 }
 
-void AGateBase::ActivateNormalGate()
+void AGateBase::ActivateChapterGateMaterial()
 {
-	UE_LOG(LogTemp, Log, TEXT("AGateBase:ActivateNormalGate"));
+	if (!GateMaterialList.IsValidIndex(1)) return;
+	Mesh->SetMaterial(0, GateMaterialList[1]);
+
+}
+
+void AGateBase::ActivateNormalGateMaterial()
+{
 	if (!GateMaterialList.IsValidIndex(0)) return;
 	Mesh->SetMaterial(0, GateMaterialList[0]);
 
@@ -87,7 +101,16 @@ void AGateBase::ActivateNormalGate()
 
 void AGateBase::DeactivateGate()
 {
+
+	DeactivateGateMaterial();
+	bIsGateActive = false;
+
+}
+
+void AGateBase::DeactivateGateMaterial()
+{
 	UE_LOG(LogTemp, Log, TEXT("AGateBase:DeactivateGate"));
+	bIsGateActive = false;
 	if (!GateMaterialList.IsValidIndex(2)) return;
 	Mesh->SetMaterial(0, GateMaterialList[2]);
 
@@ -153,11 +176,11 @@ void AGateBase::CheckHaveToActive()
 		}
 		if (GamemodeRef.Get()->GetChapterManagerRef()->IsChapterClear())
 		{
-			ActivateChapterGate();
+			ActivateChapterGateMaterial();
 		}
 		else
 		{
-			DeactivateGate();
+			DeactivateGateMaterial();
 		}
 	
 	}
@@ -193,6 +216,6 @@ void AGateBase::CheckHaveToActive()
 			}
 		}
 
-		ActivateNormalGate();
+		ActivateNormalGateMaterial();
 	}
 }

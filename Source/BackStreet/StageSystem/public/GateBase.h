@@ -51,18 +51,27 @@ public:
 		void RequestMoveStage();
 
 	UFUNCTION(BlueprintCallable)
-		void ActivateChapterGate();
+		void ActivateGate();
 
 	UFUNCTION(BlueprintCallable)
-		void ActivateNormalGate();
+		void ActivateChapterGateMaterial();
+
+	UFUNCTION(BlueprintCallable)
+		void ActivateNormalGateMaterial();
 
 	UFUNCTION(BlueprintCallable)
 		void DeactivateGate();
+
+	UFUNCTION(BlueprintCallable)
+		void DeactivateGateMaterial();
 	
 	UFUNCTION(BlueprintCallable)
 		void CheckHaveToActive();
 
-
+private:
+	// Gate 활성화 여부
+	UPROPERTY()
+		bool bIsGateActive;
 
 //-------- 그 외-----------------------
 public:

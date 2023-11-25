@@ -63,7 +63,7 @@ bool AChapterManagerBase::CheckChapterClear()
 		{
 			AGateBase* target = Cast<AGateBase>(gate);
 			if(target->ActorHasTag(FName("ChapterGate")))
-				target->ActivateChapterGate();
+				target->ActivateChapterGateMaterial();
 		}
 		return true;
 	}
