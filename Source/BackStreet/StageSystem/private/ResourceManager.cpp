@@ -1,6 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "../public/ResourceManager.h"
 #include "../public/StageData.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
@@ -10,6 +8,7 @@
 #include "../../Character/public/MainCharacterBase.h"
 #include "../../AISystem/public/AIControllerBase.h"
 #include "../../Item/public/RewardBoxBase.h"
+#include "../public/WaveManager.h"
 #include "../../Item/public/ItemBoxBase.h"
 #include "../../Item/public/ItemBase.h"
 #include "../../CraftingSystem/public/CraftBoxBase.h"
@@ -25,21 +24,26 @@ void AResourceManager::BeginPlay()
 	Super::BeginPlay();
 
 	ABackStreetGameModeBase* gameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (!IsValid(gameModeRef))
-		return;
+	ensure(gameModeRef != nullptr);
+
 	gameModeRef->ClearResourceDelegate.AddDynamic(this, &AResourceManager::CleanAllResource);
 	gameModeRef->ChapterClearResourceDelegate.AddDynamic(this, &AResourceManager::CleanAllResource);
 	
 }
 
+void AResourceManager::InitReference(class AWaveManager* Target)
+{
+	WaveManager = Target;
+}
+
 void AResourceManager::SpawnStageActor(class AStageData* Target)
 {
 	UE_LOG(LogTemp, Log, TEXT("AResourceManager::SpawnStageActor -> Start Spawn"));
-	if (!IsValid(Target))
-		return;
+	ensure(Target != nullptr);
+
 	if (Target->GetStageCategoryType() == EStageCategoryInfo::E_Normal)
 	{
-			SetWave(Target);
+			WaveManager->SetWave(Target);
 			SpawnItem(Target);
 			SpawnCraftingBox(Target);
 
@@ -56,20 +60,20 @@ void AResourceManager::SpawnStageActor(class AStageData* Target)
 
 void AResourceManager::SpawnBossMonster(class AStageData* Target)
 {
-	if (!IsValid(Target))
-		return;
+	ensure(Target != nullptr);
+
 	FActorSpawnParameters actorSpawnParameters;
 	TArray<FVector> monsterSpawnPoint = Target->GetMonsterSpawnPoints();
-	if (monsterSpawnPoint.IsEmpty())
-		return;
+	ensure(!monsterSpawnPoint.IsEmpty());
+
 	uint16 idx = FMath::RandRange(0, monsterSpawnPoint.Num() - 1);
 	FVector spawnLocation = monsterSpawnPoint[idx];
 	spawnLocation = spawnLocation + FVector(0, 0, 200);
 	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
 	AEnemyCharacterBase* monster = GetWorld()->SpawnActor<AEnemyCharacterBase>(BossAssets[0], spawnLocation, FRotator::ZeroRotator, actorSpawnParameters);
-	if (!IsValid(monster))
-		return;
+	ensure(monster != nullptr);
+
 	Target->AddMonsterList(monster);
 	// 수정 필요 하드코딩..
 	monster->CharacterID = 1200;
@@ -80,11 +84,11 @@ void AResourceManager::SpawnBossMonster(class AStageData* Target)
 
 void AResourceManager::SpawnItem(class AStageData* Target)
 {
-	if (!IsValid(Target))
-		return;
+	ensure(Target != nullptr);
+
 	TArray<FVector> itemSpawnPoints = Target->GetItemSpawnPoints();
-	if (itemSpawnPoints.IsEmpty())
-		return;
+	ensure(!itemSpawnPoints.IsEmpty());
+
 	for (int i = 0; i < 100; i++)
 	{
 		int32 selectidxA = FMath::RandRange(0, itemSpawnPoints.Num() - 1);
@@ -104,8 +108,7 @@ void AResourceManager::SpawnItem(class AStageData* Target)
 		FVector spawnLocation = itemSpawnPoints[i];
 		spawnLocation = spawnLocation + FVector(0, 0, 200);
 		AItemBoxBase* item = GetWorld()->SpawnActor<AItemBoxBase>(ItemBoxAssets[type], spawnLocation, FRotator::ZeroRotator);
-		if (!IsValid(item))
-			return;
+		ensure(item != nullptr);
 		item->InitItemBox(false);
 		Target->AddItemBoxList(item);
 		
@@ -115,31 +118,29 @@ void AResourceManager::SpawnItem(class AStageData* Target)
 
 void AResourceManager::SpawnRewardBox(class AStageData* Target)
 {
-	if (!IsValid(Target))
-		return;
+	ensure(Target != nullptr);
+
 	TArray<FVector> rewardBoxSpawnPoint = Target->GetRewardBoxSpawnPoint();
-	if (rewardBoxSpawnPoint.IsEmpty())
-		return;
+	ensure(!rewardBoxSpawnPoint.IsEmpty());
 	FActorSpawnParameters actorSpawnParameters;
 	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	ARewardBoxBase* rewardBox;
 	if (!RewardBoxAssets.IsValidIndex(0) || !rewardBoxSpawnPoint.IsValidIndex(0))
 		return;
 	rewardBox = GetWorld()->SpawnActor<ARewardBoxBase>(RewardBoxAssets[0], rewardBoxSpawnPoint[0], FRotator(0, 90, 0), actorSpawnParameters);
-	if (!IsValid(rewardBox))
-		return;
-		Target->SetRewardBox(rewardBox);
+	ensure(rewardBox != nullptr);
+	Target->SetRewardBox(rewardBox);
 
 }
 
 void AResourceManager::SpawnCraftingBox(class AStageData* Target)
 {
-	if (!IsValid(Target))
-		return;
+	ensure(Target != nullptr);
+
 	TArray<FVector> craftingBoxSpawnPoint = Target->GetCraftingBoxSpawnPoint();
 	TArray<FRotator> craftingBoxSpawnRotatorPoint = Target->GetCraftingBoxSpawnRotatorPoint();
-	if (craftingBoxSpawnPoint.IsEmpty())
-		return;
+	ensure(!craftingBoxSpawnRotatorPoint.IsEmpty());
+
 
 	for (int i = 0; i < 100; i++)
 	{
@@ -164,8 +165,7 @@ void AResourceManager::SpawnCraftingBox(class AStageData* Target)
 	if (!CraftingBoxAssets.IsValidIndex(0) || !craftingBoxSpawnPoint.IsValidIndex(0))
 		return;
 	craftBox = GetWorld()->SpawnActor<ACraftBoxBase>(CraftingBoxAssets[0], craftingBoxSpawnPoint[0], craftingBoxSpawnRotatorPoint[0], actorSpawnParameters);
-	if (!IsValid(craftBox))
-		return;
+	ensure(craftBox != nullptr);
 	Target->SetCraftingBox(craftBox);
 
 }
@@ -179,226 +179,9 @@ void AResourceManager::DieMonster(AEnemyCharacterBase* Target)
 
 	currentStage->RemoveMonsterList(Target);
 
-	// 웨이브 타입이 하데스인 경우에만 실행
-	if (currentStage->GetStageTypeInfo().WaveType == EWaveCategoryInfo::E_Hades)
-	{
-		if (currentStage->GetMonsterList().IsEmpty())
-		{
-			UE_LOG(LogTemp, Log, TEXT("AResourceManager::DieMonster: Stage Clear BroadCast StgaeClearDelegate"));
-			//Wave 체크
-			// 1) 웨이브 진행 -> 웨이브 단계 증가, 몬스터 스폰
-			// 2) 웨이브 끝 -> 스테이지 완료 ( 스폰 바인딩 )
-			if (CheckAllWaveClear(currentStage))
-			{
-				currentStage->SetIsClear(true);
-				SpawnRewardBox(currentStage);
-
-				Cast<AChapterManagerBase>(GetOwner())->CheckChapterClear();
-			}
-			else
-			{
-				SpawnHadesWave(currentStage);
-
-			}
-		}
-	}
-	else if(currentStage->GetStageTypeInfo().WaveType == EWaveCategoryInfo::E_Defense)
-	{
-		// ID별 몬스터 수 관리
-		if (currentStage->GetStageTypeInfo().WaveType == EWaveCategoryInfo::E_Defense)
-		{
-			ManageDefenseWaveMonsterCount(currentStage, Target->CharacterID, false);
-		}
-	}
+	WaveManager->CheckWaveCategorybytype(currentStage, Target);
 }
 
-bool AResourceManager::CheckAllWaveClear(class AStageData* Target)
-{
-	if (Target->GetWave()<Target->GetStageTypeInfo().MaxWave)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-}
-
-void AResourceManager::SetDefenseWaveTimer(class AStageData* Target, float time)
-{
-	// 웨이브 시간 세팅
-	float totalTime = *Target->GetStageTypeInfo().ClearTimeForEachWave.Find(Target->GetWave());
-
-	FStageDataStruct newStageData = Target->GetStageInfo();
-	newStageData.WaveTime = totalTime;
-	Target->SetStageInfo(newStageData);
-
-	// 스폰 타이머 세팅
-	//GetWorldTimerManager().SetTimer(SpawnTimerHandle, this, &AResourceManager::SpawnDefenseWave, 3.0f, true, 0.0f);
-
-	// 웨이브 타이머 세팅
-//	GetWorldTimerManager().SetTimer(Target->GetStageInfo().WaveTimerHandle, this, &AResourceManager::CalculateWaveTime, 1.0f, false, 0.0f);
-
-	Target->SetWave(Target->GetWave() + 1);
-}
-
-void AResourceManager::ClearDefenseWave(class AStageData* Target)
-{
-	// 몬스터 삭제
-	if (!IsValid(Target)) return;
-	for (int32 idx = Target->GetMonsterList().Num() - 1; idx >= 0; idx--)
-	{
-		TWeakObjectPtr<class AEnemyCharacterBase> target = Target->GetMonsterIdx(idx);
-		if (target.IsValid())
-		{
-			GetWorld()->GetTimerManager().ClearAllTimersForObject(target.Get());
-			target->TakeDamage(100000.0f, FDamageEvent(), nullptr, this);
-		}
-	}
-
-	if (CheckAllWaveClear(Target))
-	{
-		// 스테이지 클리어 로직
-		Target->SetIsClear(true);
-		SpawnRewardBox(Target);
-
-		Cast<AChapterManagerBase>(GetOwner())->CheckChapterClear();
-	}
-	else
-	{
-		// 웨이브 클리어 로직 다음 웨이브 시작
-		SetDefenseWaveTimer(Target, 0.0);
-		
-	}
-
-}
-
-void AResourceManager::CalculateWaveTime()
-{
-	AStageData* currentStage = Cast<AChapterManagerBase>(GetOwner())->GetCurrentStage();
-	if (!IsValid(currentStage)) return;
-
-	FStageDataStruct newStageData = currentStage->GetStageInfo();
-	int32 time = currentStage->GetStageInfo().WaveTime;
-	time--;
-
-	newStageData.WaveTime = time;
-	currentStage->SetStageInfo(newStageData);
-
-	if (time < 0)
-	{
-		ClearDefenseWave(currentStage);
-		// 타이머 반환
-		GetWorldTimerManager().ClearTimer(SpawnTimerHandle);
-//		GetWorldTimerManager().ClearTimer(currentStage->GetStageInfo().WaveTimerHandle);
-
-	}
-
-}
-
-void AResourceManager::SetWave(class AStageData* Target)
-{
-	switch (Target->GetStageTypeInfo().WaveType)
-	{
-		case EWaveCategoryInfo::E_Hades:
-			SpawnHadesWave(Target);
-			break;
-		case EWaveCategoryInfo::E_Defense:
-			SpawnDefenseWave(Target);
-			break;
-	default:
-		break;
-	}
-	
-}
-
-void AResourceManager::SpawnDefenseWave(class AStageData* Target)
-{
-
-}
-
-void AResourceManager::SpawnHadesWave(class AStageData* Target)
-{
-	int32 spawnamount = SelectSpawnMonsterAmount(Target);
-
-	for (int32 i = 0; i < spawnamount; i++)
-	{
-		int32 enemyID = SelectSpawnMonsterID(Target);
-		FVector spawnLocation = GetSpawnLocation(Target);
-		BindMonsterDelegate(Target,SpawnMonster(Target,enemyID, spawnLocation));
-	}
-	Target->SetWave(Target->GetWave() + 1);
-}
-
-//void AResourceManager::SpawnMonsterWithID(class AStageData* Target, int32 EnemyID)
-//{
-//	TArray<FVector> monsterSpawnPoint = Target->GetMonsterSpawnPoints();
-//	int32 idx = GetSpawnPointIdx(Target);
-//
-//	FActorSpawnParameters actorSpawnParameters;
-//	FVector spawnLocation = monsterSpawnPoint[idx];
-//	spawnLocation = spawnLocation + FVector(0, 0, 200);
-//	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-//
-//	AEnemyCharacterBase* monster = GetWorld()->SpawnActor<AEnemyCharacterBase>(EnemyAssets[0], spawnLocation, FRotator::ZeroRotator, actorSpawnParameters);
-//	if (!IsValid(monster))
-//		return;
-//	Target->AddMonsterList(monster);
-//	UE_LOG(LogTemp, Log, TEXT("AResourceManager::SpawnMonster SetEnemyID %d"), EnemyID);
-//	monster->CharacterID = EnemyID;
-//	monster->InitEnemyStat();
-//
-//
-//	// 바인딩 작업
-//	FString name = monster->GetController()->GetName();
-//	Target->AIOffDelegate.AddDynamic(Cast<AAIControllerBase>(monster->GetController()), &AAIControllerBase::DeactivateAI);
-//	Target->AIOnDelegate.AddDynamic(Cast<AAIControllerBase>(monster->GetController()), &AAIControllerBase::ActivateAI);
-//	monster->EnemyDeathDelegate.BindUFunction(this, FName("DieMonster"));
-//
-//	// 디펜스 웨이브의 경우 몬스터 숫자 기록
-//	if (Target->GetStageTypeInfo().WaveType == EWaveCategoryInfo::E_Defense)
-//	{
-//		ManageDefenseWaveMonsterCount(Target, EnemyID, true);
-//	}
-//}
-
-void AResourceManager::ManageDefenseWaveMonsterCount(class AStageData* Target, int32 EnemyID, bool IsSpawn)
-{
-	TMap<int32, int32> enemyList = Target->GetStageInfo().ExistEnemyList;
-	FStageDataStruct newStageData = Target->GetStageInfo();
-
-	if (IsSpawn)
-	{
-		if (enemyList.FindKey(EnemyID)!=nullptr)
-		{
-			int32 num = *enemyList.FindKey(EnemyID);
-			num++;
-			enemyList.Add(EnemyID, num);
-		}
-		else
-		{
-			enemyList.Add(EnemyID, 1);
-		}
-
-	}
-	else 
-	{
-		if (enemyList.FindKey(EnemyID) != nullptr)
-		{
-			int32 num = *enemyList.FindKey(EnemyID);
-			num--;
-			enemyList.Add(EnemyID, num);
-		}
-		else
-		{
-			UE_LOG(LogTemp, Log, TEXT("AResourceManager:: Error"));
-
-		}
-
-	}
-	newStageData.ExistEnemyList = enemyList;
-	Target->SetStageInfo(newStageData);
-}
 
 AEnemyCharacterBase* AResourceManager::SpawnMonster(class AStageData* Target, int32 EnemyID, FVector Location)
 {
@@ -407,7 +190,7 @@ AEnemyCharacterBase* AResourceManager::SpawnMonster(class AStageData* Target, in
 
 	AEnemyCharacterBase* monster = GetWorld()->SpawnActor<AEnemyCharacterBase>(EnemyAssets[0], Location, FRotator::ZeroRotator, actorSpawnParameters);
 	Target->AddMonsterList(monster);
-	UE_LOG(LogTemp, Log, TEXT("AResourceManager::SpawnMonster SetEnemyID %d"), EnemyID);
+
 	monster->CharacterID = EnemyID;
 	monster->InitEnemyStat();
 	monster->InitAsset(EnemyID);
@@ -418,8 +201,7 @@ AEnemyCharacterBase* AResourceManager::SpawnMonster(class AStageData* Target, in
 
 void AResourceManager::BindMonsterDelegate(class AStageData* Target, class AEnemyCharacterBase* Monster)
 {
-	if (!IsValid(Target))
-		return;
+	ensure(Target != nullptr);
 
 	FString name = Monster->GetController()->GetName();
 	Target->AIOffDelegate.AddDynamic(Cast<AAIControllerBase>(Monster->GetController()), &AAIControllerBase::DeactivateAI);
@@ -463,8 +245,7 @@ int32 AResourceManager::GetSpawnPointIdx(class AStageData* Target)
 
 int32 AResourceManager::SelectSpawnMonsterID(class AStageData* Target)
 {
-	if (!IsValid(Target))
-		return -1;
+	ensure(Target != nullptr);
 	FStageInfoStruct stageType = Target->GetStageTypeInfo();
 	TArray<int32> enemyIDList = stageType.NormalEnemyIDList;
 	int32 enemyIDIdx = FMath::RandRange(0, enemyIDList.Num() - 1);
@@ -474,20 +255,19 @@ int32 AResourceManager::SelectSpawnMonsterID(class AStageData* Target)
 
 int32 AResourceManager::SelectSpawnMonsterAmount(class AStageData* Target)
 {
-	if (!IsValid(Target))
-		return -1;
+
+	ensure(Target != nullptr);
 	FStageInfoStruct stageType = Target->GetStageTypeInfo();
 	int32 spawnNum = FMath::RandRange(stageType.MinSpawnEnemy, stageType.MaxSpawnEnemy);
 	
 	return spawnNum;
 }
-// puah test
+
 void AResourceManager::CleanAllResource()
 {
-	UE_LOG(LogTemp, Log, TEXT("AStageManagerBase::CleanAllResource"));
-
 	TArray<AStageData*> stages = Cast<AChapterManagerBase>(GetOwner())->GetStages();
-	if (stages.IsEmpty()) return;
+	ensure(!stages.IsEmpty());
+
 	for (int32 idx = stages.Num()-1; idx>=0; idx--)
 	{
 		AStageData* stage = stages[idx];
@@ -508,8 +288,7 @@ void AResourceManager::CleanAllResource()
 
 void AResourceManager::CleanStage(class AStageData* Target)
 {
-	if (!IsValid(Target)) return;
-	UE_LOG(LogTemp, Log, TEXT("AStageManagerBase::CleanStage"));
+	ensure(Target != nullptr);
 
 	CleanStageMonster(Target);
 	CleanStageItem(Target);
@@ -527,7 +306,7 @@ void AResourceManager::CleanStage(class AStageData* Target)
 
 void AResourceManager::CleanStageMonster(class AStageData* Target)
 {
-	if (!IsValid(Target)) return;
+	ensure(Target != nullptr);
 	for (int32 idx = Target->GetMonsterList().Num() - 1; idx >= 0; idx--)
 	{
 		TWeakObjectPtr<class AEnemyCharacterBase> target = Target->GetMonsterIdx(idx);
@@ -541,7 +320,7 @@ void AResourceManager::CleanStageMonster(class AStageData* Target)
 
 void AResourceManager::CleanStageItem(class AStageData* Target)
 {
-	if (!IsValid(Target)) return;
+	ensure(Target != nullptr);
 	for (int32 idx = Target->GetItemBoxList().Num() - 1; idx >= 0; idx--)
 	{
 		TWeakObjectPtr<class AItemBoxBase> target = Target->GetItemBoxIdx(idx);

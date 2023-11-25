@@ -6,6 +6,7 @@
 #include "../public/TransitionManager.h"
 #include "../public/StageGenerator.h"
 #include "../public/ResourceManager.h"
+#include "../public/WaveManager.h"
 #include "../public/StageData.h"
 #include "../public/GateBase.h"
 
@@ -25,6 +26,12 @@ void AChapterManagerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AChapterManagerBase::InitChapterManager()
+{
+	ResourceManager->InitReference(WaveManager);
+	WaveManager->InitReference(this, ResourceManager);
 }
 
 void AChapterManagerBase::SetLobbyStage()
@@ -93,7 +100,7 @@ void AChapterManagerBase::MoveChapter()
 
 		ResourceManager->CleanAllResource();
 		CreateChapter();
-		InitChapterManager();
+		ResetChapter();
 		// UI Update
 		gameModeRef->SetMiniMapUI();
 		gameModeRef->UpdateMiniMapUI();
@@ -113,12 +120,15 @@ void AChapterManagerBase::CreateChapterManager()
 
 	StageGenerator = NewObject<UStageGenerator>(this);
 	TransitionManager = NewObject<UTransitionManager>(this);
-
+	WaveManager = NewObject<AWaveManager>(this);
 
 	CreateResourceManager();
 	CreateChapter();
 	SetLobbyStage();
+
 	InitChapterManager();
+	ResetChapter();
+	WaveManager->InitWaveManager(this);
 }
 
 void AChapterManagerBase::CreateResourceManager()
@@ -130,9 +140,8 @@ void AChapterManagerBase::CreateResourceManager()
 	ResourceManager = GetWorld()->SpawnActor<AResourceManager>(ResourceManagerClass,FVector(0,0,0), FRotator(0, 90, 0), actorSpawnParameters);
 }
 
-void AChapterManagerBase::InitChapterManager()
+void AChapterManagerBase::ResetChapter()
 {
-	// Level에 있는 초기화 필요한 Actor 초기화시키기 , 바인딩 , 및 참조 초기화 코드 등
 	TransitionManager->InitTransitionManager();
 	TransitionManager->InitChapter(StageList);
 	CurrentStage = LobbyStage;
