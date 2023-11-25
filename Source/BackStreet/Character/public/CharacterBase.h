@@ -172,13 +172,13 @@ private:
 // ----- 스킬 관련 --------------------------
 protected:
 	UPROPERTY()
-	struct FSkillSetInfo SkillSetInfo;
+		struct FSkillSetInfo SkillSetInfo;
 
 	UPROPERTY()
-	ESkillGrade SkillGrade;
+		ESkillGrade SkillGrade;
 
 	UPROPERTY()
-	class USkillManagerBase* SkillManagerRef;
+		class USkillManagerBase* SkillManagerRef;
 
 // ---- Asset -------------------
 public:

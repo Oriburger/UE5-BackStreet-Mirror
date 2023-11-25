@@ -115,7 +115,7 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void TrySkillAttack(ACharacterBase* Target) override;
+		virtual void TrySkillAttack(ACharacterBase* Target) override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
@@ -177,7 +177,7 @@ public:
 //------- ½ºÅ³ / ÄÞº¸----------
 public:
 	UFUNCTION(BlueprintCallable)
-	void AddSkillGauge();
+		void AddSkillGauge();
 
 // -------- VFX -----------
 protected:

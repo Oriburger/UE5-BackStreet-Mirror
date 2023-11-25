@@ -25,6 +25,15 @@ enum class EWeaponType : uint8
 	E_Shoot				UMETA(DisplayName = "Shoot")
 };
 
+UENUM(BlueprintType)
+enum class EWeaponTargetingType : uint8
+{
+	E_None					UMETA(DisplayName = "None"),
+	E_SingleTargeting		UMETA(DisplayName = "SingleTargeting"),
+	E_TracedTargeting		UMETA(DisplayName = "TracedTargeting"),
+	E_InRangeTargeting	UMETA(DisplayName = "InRangeTargeting")
+};
+
 USTRUCT(BlueprintType)
 struct FMeleeWeaponStatStruct : public FTableRowBase
 {
@@ -114,6 +123,10 @@ public:
 	//인벤토리를 차지하는 칸 수
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		uint8 WeaponWeight = 1;
+
+	//Targeting 방식
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		EWeaponTargetingType TargetType;
 
 	//Weapon Skill 게이지 사용량 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

@@ -274,13 +274,11 @@ void ACharacterBase::TrySkillAttack(ACharacterBase* Target)
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
 	CharacterState.CharacterActionState = ECharacterActionType::E_SkillAttack;
 
-	const float attackSpeed = FMath::Clamp(CharacterStat.CharacterAtkSpeed * weaponRef->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
-
-	UAnimMontage* targetAnim = weaponRef->GetWeaponStat().SkillSetInfo.SkillAnimMontage;
-
-	if (IsValid(targetAnim))
+	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageList;
+	for (UAnimMontage* targetAnim : targetAnimList) 
 	{
-		PlayAnimMontage(targetAnim, attackSpeed + 0.25f);
+		if (IsValid(targetAnim))
+			PlayAnimMontage(targetAnim);
 	}
 }
 
@@ -382,6 +380,18 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 			for (int32 i = 0; i < AssetInfo.HitAnimMontageList.Num(); i++)
 			{
 				AssetToStream.AddUnique(AssetInfo.HitAnimMontageList[i].ToSoftObjectPath());
+			}
+		}
+
+		for (auto index = AssetInfo.SkillAnimMontageMap.CreateConstIterator(); index; ++index)
+		{
+			TArray<TSoftObjectPtr<UAnimMontage>> skillAnimMontageList = index.Value().SkillAnimMontageList;
+			for (auto& anim : skillAnimMontageList)
+			{
+				if (!skillAnimMontageList.IsEmpty())
+				{
+					AssetToStream.AddUnique(anim.ToSoftObjectPath());
+				}
 			}
 		}
 
@@ -531,6 +541,18 @@ bool ACharacterBase::InitAnimAsset()
 		{
 			if (anim.IsValid())
 				animAssetList.HitAnimMontageList.AddUnique(anim.Get());
+		}
+	}
+	for (auto index = AssetInfo.SkillAnimMontageMap.CreateConstIterator(); index; ++index)
+	{
+		TArray<TSoftObjectPtr<UAnimMontage>> skillAnimMontageList = index.Value().SkillAnimMontageList;
+		if (!skillAnimMontageList.IsEmpty())
+		{
+			for (auto& anim : skillAnimMontageList)
+			{
+				if (anim.IsValid())
+					animAssetList.SkillAnimMontageList.AddUnique(anim.Get());
+			}
 		}
 	}
 
