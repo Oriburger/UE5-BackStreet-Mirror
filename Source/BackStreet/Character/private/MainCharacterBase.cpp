@@ -362,14 +362,14 @@ void AMainCharacterBase::TryAttack()
 
 void AMainCharacterBase::TrySkillAttack(ACharacterBase* Target)
 {
-	ensure(GetCurrentWeaponRef() != nullptr);
+	check(GetCurrentWeaponRef() != nullptr);
 
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	
-	if (GetCurrentWeaponRef()->WeaponID == 0)
+	if (GetCurrentWeaponRef()->WeaponID == 0||GetCharacterState().CharacterCurrSkillGauge==0)
 	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없어 스킬을 사용할 수 없습니다. ")), FColor::White);
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬을 사용할 수 없습니다. ")), FColor::White);
 		return;
 	}
 
@@ -412,7 +412,7 @@ void AMainCharacterBase::TrySkillAttack(ACharacterBase* Target)
 
 void AMainCharacterBase::AddSkillGauge()
 {
-	ensure(GetCurrentWeaponRef() != nullptr);
+	check(GetCurrentWeaponRef() != nullptr);
 
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
 	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeInfo.SkillGaugeAug;
