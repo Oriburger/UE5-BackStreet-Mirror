@@ -147,7 +147,7 @@ void UDebuffManager::ClearDebuffManagerTimer()
 	for (auto timerListIterator = TimerInfoMap.CreateIterator(); timerListIterator; ++timerListIterator)
 	{
 		TArray<FTimerHandle>& timerListRef = timerListIterator->Value.TimerHandleList;
-		for (auto& targetTimer : timerListRef)
+		for (FTimerHandle& targetTimer : timerListRef)
 		{
 			GamemodeRef.Get()->GetWorldTimerManager().ClearTimer(targetTimer);
 		}

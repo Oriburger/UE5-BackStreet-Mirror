@@ -33,25 +33,10 @@ public:
 		class UWidgetComponent* FloatingHpBar;
 
 protected:
-	//적이 최초로 소유하는 무기의 ID
+	//Stat data of enemy character including stat, default weapon, drop info
+	//EnemyStatStruct.EnemyStat member initializes the parent's member CharacterStat
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay")
-		int32 DefaultWeaponID;
-
-	//최대 스폰할 아이템의 개수. 미션 아이템은 무시.
-	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Drop")
-		int32 MaxSpawnItemCount;
-
-	//적이 죽고 스폰할 아이템의 Type 리스트 (각 아이템은 Idx로 구별)
-	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Drop")
-		TArray<EItemCategoryInfo> SpawnItemTypeList;
-
-	//적이 죽구 스폰할 아이템 ID 리스트 (각 아이템은 Idx로 구별)
-	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Drop")
-		TArray<uint8> SpawnItemIDList;
-
-	//적이 죽고 스폰할 아이템의 스폰 확률 리스트  (0.0f ~ 1.0f),  (각 아이템은 Idx로 구별)
-	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Drop")
-		TArray<float> ItemSpawnProbabilityList;
+		FEnemyStatStruct EnemyStat;
 
 // ----- Action ---------------
 public:
@@ -80,10 +65,13 @@ public:
 
 // ----- 캐릭터 스탯 및 상태 관련 ---------
 public:
+	//Initialize EnemyCharacter except asset info.
+	//+) It is better to use virtual function 'initCharacter' to all character classes (enemy, main, parent)
 	UFUNCTION(BlueprintCallable)
-		void InitEnemyStat(int32 NewCharacterID);
+		void InitEnemyCharacter(int32 NewCharacterID);
 
-protected:
+private:
+	//Set default weapon actor using weapon inventory
 	UFUNCTION()
 		void SetDefaultWeapon();
 

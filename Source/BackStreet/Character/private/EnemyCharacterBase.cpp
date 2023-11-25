@@ -46,38 +46,41 @@ void AEnemyCharacterBase::BeginPlay()
 	
 	SpawnDefaultController();
 
-	InitEnemyStat(CharacterID);
+	InitEnemyCharacter(CharacterID);
 	InitFloatingHpWidget();
 	
 	SetDefaultWeapon();
 	InitDynamicMeshMaterial(GetMesh()->GetMaterial(0));
 }
 
-void AEnemyCharacterBase::InitEnemyStat(int32 NewCharacterID)
+void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 {
 	//DataTable로 부터 Read
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
 
-	UE_LOG(LogTemp, Warning, TEXT("Init Enemy Stat %d"), NewCharacterID);
 	if (newStat != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("---Success"));
-		//기본 스탯 설정
-		UpdateCharacterStat(newStat->EnemyStat);
-		CharacterState.CharacterCurrHP = CharacterStat.CharacterMaxHP;
-		GetCharacterMovement()->MaxWalkSpeed = CharacterStat.CharacterMoveSpeed;
+		EnemyStat = *newStat;
+
+		//Set CharacterStat with setting default additional stat bInfinite (infinite use of ammo)
+		UpdateCharacterStat(EnemyStat.CharacterStat);
 		CharacterStat.bInfinite = true;
 
-		//드롭 아이템 설정
-		ItemSpawnProbabilityList = newStat->ItemSpawnProbabilityList;
-		MaxSpawnItemCount = newStat->MaxSpawnItemCount;
-		SpawnItemIDList = newStat->SpawnItemIDList;
-		SpawnItemTypeList = newStat->SpawnItemTypeList;
-		
 		//기본 무기 설정
-		DefaultWeaponID = newStat->DefaultWeaponID;
 		SetDefaultWeapon();
+	}
+}
+
+void AEnemyCharacterBase::SetDefaultWeapon()
+{
+	if (IsValid(GetInventoryRef()))
+	{
+		bool result = GetInventoryRef()->AddWeapon(EnemyStat.DefaultWeaponID);
+		if (result)
+		{
+			Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();
+		}
 	}
 }
 
@@ -146,28 +149,17 @@ void AEnemyCharacterBase::Die()
 	}
 }
 
-void AEnemyCharacterBase::SetDefaultWeapon()
-{
-	if (IsValid(GetInventoryRef()))
-	{
-		bool result = GetInventoryRef()->AddWeapon(DefaultWeaponID);
-		if (result)
-		{
-			Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();
-		}
-	}
-}
-
 void AEnemyCharacterBase::SpawnDeathItems()
 {
-	int32 totalSpawnItemCount = UKismetMathLibrary::RandomIntegerInRange(0, MaxSpawnItemCount);
+	FEnemyDropInfoStruct dropInfo = EnemyStat.DropInfo;
+
+	int32 totalSpawnItemCount = UKismetMathLibrary::RandomIntegerInRange(0, dropInfo.MaxSpawnItemCount);
 	int32 trySpawnCount = 0; //스폰 시도를 한 횟수
 
 	TArray<AItemBase*> spawnedItemList;
 
-	UE_LOG(LogTemp, Warning, TEXT("totalSpawnItemCount %d"), totalSpawnItemCount);
-
-	if (SpawnItemTypeList.IsValidIndex(0) && SpawnItemTypeList[0] == EItemCategoryInfo::E_Mission)
+	if (dropInfo.SpawnItemTypeList.IsValidIndex(0) 
+		&& dropInfo.SpawnItemTypeList[0] == EItemCategoryInfo::E_Mission)
 	{
 		/*AItemBase* newItem = GamemodeRef->SpawnItemToWorld(SpawnItemIDList[0], GetActorLocation() + FMath::VRand() * 10.0f);
 		if (IsValid(newItem))
@@ -182,12 +174,13 @@ void AEnemyCharacterBase::SpawnDeathItems()
 		{
 			if (++trySpawnCount > totalSpawnItemCount * 3) break; //스폰할 아이템 개수의 3배만큼 시도
 
-			const int32 itemIdx = UKismetMathLibrary::RandomIntegerInRange(0, SpawnItemIDList.Num() - 1);
-			if (!SpawnItemTypeList.IsValidIndex(itemIdx) || !ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
+			const int32 itemIdx = UKismetMathLibrary::RandomIntegerInRange(0, dropInfo.SpawnItemIDList.Num() - 1);
+			if (!dropInfo.SpawnItemTypeList.IsValidIndex(itemIdx)
+				|| !dropInfo.ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
 
-			const uint8 itemType = (uint8)SpawnItemTypeList[itemIdx];
-			const uint8 itemID = SpawnItemIDList[itemIdx];
-			const float spawnProbability = ItemSpawnProbabilityList[itemIdx];
+			const uint8 itemType = (uint8)dropInfo.SpawnItemTypeList[itemIdx];
+			const uint8 itemID = dropInfo.SpawnItemIDList[itemIdx];
+			const float spawnProbability = dropInfo.ItemSpawnProbabilityList[itemIdx];
 
 			if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
 			{
