@@ -22,14 +22,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void InitChapterManager();
 
 	UFUNCTION(BlueprintCallable)
 		void SetLobbyStage();
-
-	UFUNCTION(BlueprintCallable)
-		void CreateChapterManager();
 
 	UFUNCTION()
 		void CreateResourceManager();

@@ -30,8 +30,26 @@ void AChapterManagerBase::Tick(float DeltaTime)
 
 void AChapterManagerBase::InitChapterManager()
 {
+	FActorSpawnParameters spawnParams;
+	FRotator rotator;
+	FVector spawnLocation = FVector::ZeroVector;
+
+	ChapterLV = 0;
+	StatWeight = 0.0f;
+
+	StageGenerator = NewObject<UStageGenerator>(this);
+	TransitionManager = NewObject<UTransitionManager>(this);
+	WaveManager = NewObject<AWaveManager>(this);
+
+	CreateResourceManager();
+	CreateChapter();
+	SetLobbyStage();
+
 	ResourceManager->InitReference(WaveManager);
 	WaveManager->InitReference(this, ResourceManager);
+
+	ResetChapter();
+	WaveManager->InitWaveManager(this);
 }
 
 void AChapterManagerBase::SetLobbyStage()
@@ -109,27 +127,6 @@ void AChapterManagerBase::MoveChapter()
 
 }
 
-void AChapterManagerBase::CreateChapterManager()
-{
-	FActorSpawnParameters spawnParams;
-	FRotator rotator;
-	FVector spawnLocation = FVector::ZeroVector;
-
-	ChapterLV = 0;
-	StatWeight = 0.0f;
-
-	StageGenerator = NewObject<UStageGenerator>(this);
-	TransitionManager = NewObject<UTransitionManager>(this);
-	WaveManager = NewObject<AWaveManager>(this);
-
-	CreateResourceManager();
-	CreateChapter();
-	SetLobbyStage();
-
-	InitChapterManager();
-	ResetChapter();
-	WaveManager->InitWaveManager(this);
-}
 
 void AChapterManagerBase::CreateResourceManager()
 {

@@ -39,7 +39,7 @@ void AResourceManager::InitReference(class AWaveManager* Target)
 void AResourceManager::SpawnStageActor(class AStageData* Target)
 {
 	UE_LOG(LogTemp, Log, TEXT("AResourceManager::SpawnStageActor -> Start Spawn"));
-	ensure(Target != nullptr);
+	checkf(Target != nullptr,TEXT("Target Spawn Stage Is InValid"));
 
 	if (Target->GetStageCategoryType() == EStageCategoryInfo::E_Normal)
 	{
@@ -170,7 +170,7 @@ void AResourceManager::SpawnCraftingBox(class AStageData* Target)
 
 }
 
-void AResourceManager::DieMonster(AEnemyCharacterBase* Target)
+void AResourceManager::RemoveMonsterFromList(AEnemyCharacterBase* Target)
 {
 	if (!IsValid(GetOwner())||!IsValid(Target)) return;
 
@@ -179,7 +179,7 @@ void AResourceManager::DieMonster(AEnemyCharacterBase* Target)
 
 	currentStage->RemoveMonsterList(Target);
 
-	WaveManager->CheckWaveCategorybytype(currentStage, Target);
+	WaveManager->CheckWaveCategoryByType(currentStage, Target);
 }
 
 
@@ -206,7 +206,7 @@ void AResourceManager::BindMonsterDelegate(class AStageData* Target, class AEnem
 	FString name = Monster->GetController()->GetName();
 	Target->AIOffDelegate.AddDynamic(Cast<AAIControllerBase>(Monster->GetController()), &AAIControllerBase::DeactivateAI);
 	Target->AIOnDelegate.AddDynamic(Cast<AAIControllerBase>(Monster->GetController()), &AAIControllerBase::ActivateAI);
-	Monster->EnemyDeathDelegate.BindUFunction(this, FName("DieMonster"));
+	Monster->EnemyDeathDelegate.BindUFunction(this, FName("RemoveMonsterFromList"));
 	
 }
 

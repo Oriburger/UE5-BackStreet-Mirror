@@ -33,7 +33,7 @@ bool AWaveManager::CheckAllWaveClear(class AStageData* Target)
 	}
 }
 
-void AWaveManager::CheckWaveCategorybytype(class AStageData* Target, AEnemyCharacterBase* Enemy)
+void AWaveManager::CheckWaveCategoryByType(class AStageData* Target, AEnemyCharacterBase* Enemy)
 {
 	if (Target->GetStageTypeInfo().WaveType == EWaveCategoryInfo::E_Hades)
 	{
@@ -188,7 +188,7 @@ void AWaveManager::CalculateWaveTime()
 //	FString name = monster->GetController()->GetName();
 //	Target->AIOffDelegate.AddDynamic(Cast<AAIControllerBase>(monster->GetController()), &AAIControllerBase::DeactivateAI);
 //	Target->AIOnDelegate.AddDynamic(Cast<AAIControllerBase>(monster->GetController()), &AAIControllerBase::ActivateAI);
-//	monster->EnemyDeathDelegate.BindUFunction(this, FName("DieMonster"));
+//	monster->EnemyDeathDelegate.BindUFunction(this, FName("RemoveMonsterFromList"));
 //
 //	// 디펜스 웨이브의 경우 몬스터 숫자 기록
 //	if (Target->GetStageTypeInfo().WaveType == EWaveCategoryInfo::E_Defense)

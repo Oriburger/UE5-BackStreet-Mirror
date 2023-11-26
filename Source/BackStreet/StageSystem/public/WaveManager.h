@@ -39,7 +39,7 @@ public:
 
 	// 함수명 고민중.., 몬스터가 죽으면 호출되어 웨이브 클리어 여부 체크 및 몬스터 수 관리
 	UFUNCTION()
-		void CheckWaveCategorybytype(class AStageData* Target, AEnemyCharacterBase* Enemy);
+		void CheckWaveCategoryByType(class AStageData* Target, AEnemyCharacterBase* Enemy);
 
 	// 스테이지 타입별 웨이브 설정
 	UFUNCTION()
