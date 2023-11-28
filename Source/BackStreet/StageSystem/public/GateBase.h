@@ -41,6 +41,9 @@ public:
 	UFUNCTION()
 		void InitGate();
 
+	UFUNCTION()
+		void BindGateDelegate();
+
 	UFUNCTION(BlueprintCallable)
 		void AddGate();
 
@@ -54,22 +57,24 @@ public:
 		void ActivateGate();
 
 	UFUNCTION(BlueprintCallable)
-		void ActivateChapterGateMaterial();
-
-	UFUNCTION(BlueprintCallable)
-		void ActivateNormalGateMaterial();
-
-	UFUNCTION(BlueprintCallable)
 		void DeactivateGate();
 
 	UFUNCTION(BlueprintCallable)
+		void ActivateChapterGateAfterCheck();
+
+	UFUNCTION()
+		void ActivateChapterGateMaterial();
+
+	UFUNCTION()
+		void ActivateNormalGateMaterial();
+
+	UFUNCTION()
 		void DeactivateGateMaterial();
 	
 	UFUNCTION(BlueprintCallable)
 		void CheckHaveToActive();
 
 private:
-	// Gate 활성화 여부
 	UPROPERTY()
 		bool bIsGateActive;
 
@@ -78,9 +83,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
 		TArray<class UMaterialInterface*> GateMaterialList;
-
-	UPROPERTY(VisibleAnywhere)
-		FTimerHandle FadeOutEffectHandle;
 
 private:
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;

@@ -36,7 +36,7 @@ void AGateBase::BeginPlay()
 {
 	Super::BeginPlay();
 	bIsGateActive = true;
-	if (this->ActorHasTag(FName("Off")))
+	if (this->ActorHasTag(FName("Tutorial")))
 	{
 		DeactivateGate();
 
@@ -47,10 +47,28 @@ void AGateBase::InitGate()
 {
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 	if (!GamemodeRef.IsValid()) return;
+
 	CheckHaveToActive();
+
 	if(!MoveStageDelegate.IsBound())
 		MoveStageDelegate.BindUFunction(GamemodeRef.Get()->GetChapterManagerRef()->GetTransitionManager(), FName("TryMoveStage"));
 	AddGate();
+	BindGateDelegate();
+
+}
+
+void AGateBase::BindGateDelegate()
+{
+	if (this->ActorHasTag(FName("StartGate"))) return;
+
+	AStageData* stage = GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage();
+	if (!IsValid(stage)) return;
+
+	stage->GateOffDelegate.AddDynamic(this, &AGateBase::DeactivateGate);
+	if (this->ActorHasTag(FName("ChapterGate")))
+		stage->GateOnDelegate.AddDynamic(this, &AGateBase::ActivateChapterGateAfterCheck);
+	else
+		stage->GateOnDelegate.AddDynamic(this, &AGateBase::ActivateGate);
 
 }
 
@@ -63,25 +81,37 @@ void AGateBase::AddGate()
 
 void AGateBase::EnterGate()
 {
+	if (!bIsGateActive) return;
+
 	if (this->ActorHasTag(FName("StartGate")))
 	{
 		InitGate();
 	}
-	if (this->ActorHasTag(FName("Off")))
-	{
-		bIsGateActive = false;
-		return;
-	}
-	
+
 	RequestMoveStage();
 }
 
 void AGateBase::ActivateGate()
 {
-	
 	bIsGateActive = true;
-	if (!GateMaterialList.IsValidIndex(1)) return;
-	Mesh->SetMaterial(0, GateMaterialList[1]);
+
+	if (this->ActorHasTag(FName("ChapterGate")))
+		ActivateChapterGateMaterial();
+	else
+		ActivateNormalGateMaterial();
+
+}
+
+void AGateBase::DeactivateGate()
+{
+	bIsGateActive = false;
+	DeactivateGateMaterial();
+}
+
+void AGateBase::ActivateChapterGateAfterCheck()
+{
+	if (GamemodeRef.Get()->GetChapterManagerRef()->IsChapterClear())
+		ActivateGate();
 
 }
 
@@ -99,13 +129,6 @@ void AGateBase::ActivateNormalGateMaterial()
 
 }
 
-void AGateBase::DeactivateGate()
-{
-
-	DeactivateGateMaterial();
-	bIsGateActive = false;
-
-}
 
 void AGateBase::DeactivateGateMaterial()
 {
@@ -120,38 +143,25 @@ void AGateBase::RequestMoveStage()
 {
 	if (!GamemodeRef.IsValid()) return;
 	if (this->ActorHasTag(FName("StartGate")))
-	{
 		MoveStageDelegate.Execute(EDirection::E_Start);
-	}
 	else if (this->ActorHasTag(FName("ChapterGate")))
 	{
 		if (GamemodeRef.Get()->GetChapterManagerRef()->IsChapterClear())
-		{
 			MoveStageDelegate.Execute(EDirection::E_Chapter);
-			
-		}else
-		{
+		else
 			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("미션을 클리어해주세요.")), FColor::White);
-		}
+	
 	}
 	else
 	{
 		if (this->ActorHasTag(FName("UP")))
-		{
 			MoveStageDelegate.Execute(EDirection::E_UP);
-		}
 		else if (this->ActorHasTag(FName("DOWN")))
-		{
 			MoveStageDelegate.Execute(EDirection::E_DOWN);
-		}
 		else if (this->ActorHasTag(FName("RIGHT")))
-		{
 			MoveStageDelegate.Execute(EDirection::E_RIGHT);
-		}
 		else if (this->ActorHasTag(FName("LEFT")))
-		{
 			MoveStageDelegate.Execute(EDirection::E_LEFT);
-		}
 
 	}
 }
@@ -162,27 +172,24 @@ void AGateBase::CheckHaveToActive()
 	AStageData* stage = GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage();
 
 	if (!IsValid(stage)) return;
-
 	if (!this->Tags.IsValidIndex(0)) return;
-	if (this->Tags.Find(FName(TEXT("StartGate"))) != INDEX_NONE)
-	{
-		return;
-	}
+	if (this->Tags.Find(FName(TEXT("StartGate"))) != INDEX_NONE) return;
+
+
 	if (this->Tags.Find(FName(TEXT("ChapterGate"))) != INDEX_NONE)
 	{
 		if (stage->GetStageCategoryType() != EStageCategoryInfo::E_Boss)
 		{
 			Destroy();
+				return;
 		}
+
 		if (GamemodeRef.Get()->GetChapterManagerRef()->IsChapterClear())
-		{
-			ActivateChapterGateMaterial();
-		}
+			ActivateGate();
 		else
-		{
-			DeactivateGateMaterial();
-		}
-	
+			DeactivateGate();
+		
+
 	}
 	else
 	{
@@ -216,6 +223,6 @@ void AGateBase::CheckHaveToActive()
 			}
 		}
 
-		ActivateNormalGateMaterial();
+		ActivateGate();
 	}
 }

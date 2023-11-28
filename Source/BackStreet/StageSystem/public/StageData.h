@@ -6,6 +6,8 @@
 #include "StageData.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateAIContorl);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateGateControl);
+
 
 UCLASS()
 class BACKSTREET_API AStageData : public AActor
@@ -21,6 +23,13 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateAIContorl AIOffDelegate;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateGateControl GateOnDelegate;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateGateControl GateOffDelegate;
+
 
 public:
 	AStageData();
@@ -196,6 +205,14 @@ public:
 
 	UFUNCTION()
 		FStageDataStruct SetStageInfo(FStageDataStruct StageData) { StageInfo = StageData; return StageInfo; }
+
+	// Open All Gate in the Stage ( Chapter Gate is Open After Checking )
+	UFUNCTION(BlueprintCallable)
+		void OpenAllGate() { GateOnDelegate.Broadcast(); return; }
+
+	// Close All Gate in the Stage
+	UFUNCTION(BlueprintCallable)
+		void CloseAllGate() { GateOffDelegate.Broadcast(); return; }
 
 private:
 	UPROPERTY()
