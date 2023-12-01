@@ -10,6 +10,9 @@ void AWaveManager::InitWaveManager(class AChapterManagerBase* Target)
 {
 
 	// 델리게이트 바인딩 작업
+	// SpawnRewardBox 스폰
+	// SpawnMonster
+	// CheckChapterClear
 	
 }
 
@@ -23,14 +26,10 @@ void AWaveManager::InitReference(class AChapterManagerBase* TargetA, class AReso
 
 bool AWaveManager::CheckAllWaveClear(class AStageData* Target)
 {
-	if (Target->GetWave() < Target->GetStageTypeInfo().MaxWave)
-	{
+	if (Target->GetCurrentWaveLevel() < Target->GetStageTypeInfo().MaxWave)
 		return false;
-	}
 	else
-	{
 		return true;
-	}
 }
 
 void AWaveManager::CheckWaveCategoryByType(class AStageData* Target, AEnemyCharacterBase* Enemy)
@@ -39,10 +38,8 @@ void AWaveManager::CheckWaveCategoryByType(class AStageData* Target, AEnemyChara
 	{
 		if (Target->GetMonsterList().IsEmpty())
 		{
-			//Wave 체크
-			// 1) 웨이브 진행 -> 웨이브 단계 증가, 몬스터 스폰
-			// 2) 웨이브 끝 -> 스테이지 완료 ( 스폰 바인딩 )
-			// 아래 함수 리팩토링( 델리게이트로 웨이브 클리어 체크 후 웨이브에서 챕터 클리어 및 하데스 스폰 요청)
+			Target->SetCurrentWaveLevel(Target->GetCurrentWaveLevel() + 1);
+
 			if (CheckAllWaveClear(Target))
 			{
 				Target->SetIsClear(true);
@@ -51,26 +48,18 @@ void AWaveManager::CheckWaveCategoryByType(class AStageData* Target, AEnemyChara
 				Cast<AChapterManagerBase>(GetOwner())->CheckChapterClear();
 			}
 			else
-			{
 				SpawnHadesWave(Target);
-
-			}
 		}
 	}
 	else if (Target->GetStageTypeInfo().WaveType == EWaveCategoryInfo::E_Defense)
-	{
-		// ID별 몬스터 수 관리
-		if (Target->GetStageTypeInfo().WaveType == EWaveCategoryInfo::E_Defense)
-		{
 			ManageDefenseWaveMonsterCount(Target, Enemy->CharacterID, false);
-		}
-	}
+		
 }
-
 
 
 void AWaveManager::SetWave(class AStageData* Target)
 {
+	UE_LOG(LogTemp, Log, TEXT("AWaveManager::SetWave -> Start"));
 	switch (Target->GetStageTypeInfo().WaveType)
 	{
 	case EWaveCategoryInfo::E_Hades:
@@ -85,11 +74,6 @@ void AWaveManager::SetWave(class AStageData* Target)
 
 }
 
-void AWaveManager::SpawnDefenseWave(class AStageData* Target)
-{
-
-}
-
 void AWaveManager::SpawnHadesWave(class AStageData* Target)
 {
 	int32 spawnamount = ResourceManager->SelectSpawnMonsterAmount(Target);
@@ -97,105 +81,76 @@ void AWaveManager::SpawnHadesWave(class AStageData* Target)
 	for (int32 i = 0; i < spawnamount; i++)
 	{
 		int32 enemyID = ResourceManager->SelectSpawnMonsterID(Target);
-		FVector spawnLocation = ResourceManager->GetSpawnLocation(Target);
-		ResourceManager->BindMonsterDelegate(Target, ResourceManager->SpawnMonster(Target, enemyID, spawnLocation));
+		ResourceManager->SpawnMonster(Target, enemyID);
 	}
-	Target->SetWave(Target->GetWave() + 1);
 }
 
-void AWaveManager::SetDefenseWaveTimer(class AStageData* Target, float time)
+void AWaveManager::SpawnDefenseWave(class AStageData* Target)
 {
-	// 웨이브 시간 세팅
-	float totalTime = *Target->GetStageTypeInfo().ClearTimeForEachWave.Find(Target->GetWave());
+	Target->CloseAllGate();
+	SetDefenseWaveClearTimer(Target);
+	SetDefenseWaveSpawnTimer(Target);
 
-	FStageDataStruct newStageData = Target->GetStageInfo();
-	newStageData.WaveTime = totalTime;
-	Target->SetStageInfo(newStageData);
-
-	// 스폰 타이머 세팅
-	//GetWorldTimerManager().SetTimer(SpawnTimerHandle, this, &AResourceManager::SpawnDefenseWave, 3.0f, true, 0.0f);
-
-	// 웨이브 타이머 세팅
-//	GetWorldTimerManager().SetTimer(Target->GetStageInfo().WaveTimerHandle, this, &AResourceManager::CalculateWaveTime, 1.0f, false, 0.0f);
-
-	Target->SetWave(Target->GetWave() + 1);
 }
 
-void AWaveManager::ClearDefenseWave(class AStageData* Target)
+void AWaveManager::SetDefenseWaveClearTimer(class AStageData* Target)
 {
+	// Get Wave Clear Time
+	float totalTime = *Target->GetStageTypeInfo().ClearTimeForEachWave.Find(Target->GetCurrentWaveLevel() + 1);
+	GetWorldTimerManager().SetTimer(Target->GetDefenseWaveClearTimeTimerHandle(), this, &AWaveManager::ClearDefenseWave, 60.0f, false);
+}
 
-	ResourceManager->CleanStageMonster(Target);
+void AWaveManager::SetDefenseWaveSpawnTimer(class AStageData* Target)
+{
+	// Get Spawn Interval Time
+	float intervalTime;
+	// Temporary) Need To Fix
+	intervalTime = 3.0f;
+	GetWorldTimerManager().SetTimer(Target->GetDefenseWaveSpawnTimerHandle(), this, &AWaveManager::SpawnDefenseWaveMonster, intervalTime , true, 0.0f);
+}
 
-	if (CheckAllWaveClear(Target))
+void AWaveManager::ClearDefenseWaveTimer(class AStageData* Target)
+{
+	GetWorldTimerManager().ClearTimer(Target->GetDefenseWaveClearTimeTimerHandle());
+	GetWorldTimerManager().ClearTimer(Target->GetDefenseWaveSpawnTimerHandle());
+}
+
+void AWaveManager::SpawnDefenseWaveMonster()
+{
+	UE_LOG(LogTemp, Log, TEXT("AWaveManager::SpawnDefenseWaveMonster"));
+	AStageData* stage = Cast<AChapterManagerBase>(GetOwner())->GetCurrentStage();
+
+	// Select Spawn EnemyID
+	int32 enemyID = 1001;
+
+	ResourceManager->SpawnMonster(stage, enemyID);
+	ManageDefenseWaveMonsterCount(stage, enemyID, true);
+}
+
+void AWaveManager::ClearDefenseWave()
+{
+	AStageData* stage = Cast<AChapterManagerBase>(GetOwner())->GetCurrentStage();
+
+	ClearDefenseWaveTimer(stage);
+	ResourceManager->CleanStageMonster(stage);
+	stage->SetCurrentWaveLevel(stage->GetCurrentWaveLevel() + 1);
+
+	UE_LOG(LogTemp, Log, TEXT("AWaveManager::ClearDefenseWave"));
+
+	if (CheckAllWaveClear(stage))
 	{
 		// 스테이지 클리어 로직
-		Target->SetIsClear(true);
-		ResourceManager->SpawnRewardBox(Target);
+		stage->SetIsClear(true);
+		ResourceManager->SpawnRewardBox(stage);
 
 		Cast<AChapterManagerBase>(GetOwner())->CheckChapterClear();
+		stage->OpenAllGate();
+
 	}
 	else
-	{
-		// 웨이브 클리어 로직 다음 웨이브 시작
-		SetDefenseWaveTimer(Target, 0.0);
-
-	}
+		SpawnDefenseWave(stage);
 
 }
-
-void AWaveManager::CalculateWaveTime()
-{
-	AStageData* currentStage = Cast<AChapterManagerBase>(GetOwner())->GetCurrentStage();
-	if (!IsValid(currentStage)) return;
-
-	FStageDataStruct newStageData = currentStage->GetStageInfo();
-	int32 time = currentStage->GetStageInfo().WaveTime;
-	time--;
-
-	newStageData.WaveTime = time;
-	currentStage->SetStageInfo(newStageData);
-
-	if (time < 0)
-	{
-		ClearDefenseWave(currentStage);
-		// 타이머 반환
-		GetWorldTimerManager().ClearTimer(SpawnTimerHandle);
-		//		GetWorldTimerManager().ClearTimer(currentStage->GetStageInfo().WaveTimerHandle);
-
-	}
-
-}
-//void AWaveManager::SpawnMonsterWithID(class AStageData* Target, int32 EnemyID)
-//{
-//	TArray<FVector> monsterSpawnPoint = Target->GetMonsterSpawnPoints();
-//	int32 idx = GetSpawnPointIdx(Target);
-//
-//	FActorSpawnParameters actorSpawnParameters;
-//	FVector spawnLocation = monsterSpawnPoint[idx];
-//	spawnLocation = spawnLocation + FVector(0, 0, 200);
-//	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-//
-//	AEnemyCharacterBase* monster = GetWorld()->SpawnActor<AEnemyCharacterBase>(EnemyAssets[0], spawnLocation, FRotator::ZeroRotator, actorSpawnParameters);
-//	if (!IsValid(monster))
-//		return;
-//	Target->AddMonsterList(monster);
-//	UE_LOG(LogTemp, Log, TEXT("AResourceManager::SpawnMonster SetEnemyID %d"), EnemyID);
-//	monster->CharacterID = EnemyID;
-//	monster->InitEnemyStat();
-//
-//
-//	// 바인딩 작업
-//	FString name = monster->GetController()->GetName();
-//	Target->AIOffDelegate.AddDynamic(Cast<AAIControllerBase>(monster->GetController()), &AAIControllerBase::DeactivateAI);
-//	Target->AIOnDelegate.AddDynamic(Cast<AAIControllerBase>(monster->GetController()), &AAIControllerBase::ActivateAI);
-//	monster->EnemyDeathDelegate.BindUFunction(this, FName("RemoveMonsterFromList"));
-//
-//	// 디펜스 웨이브의 경우 몬스터 숫자 기록
-//	if (Target->GetStageTypeInfo().WaveType == EWaveCategoryInfo::E_Defense)
-//	{
-//		ManageDefenseWaveMonsterCount(Target, EnemyID, true);
-//	}
-//}
 
 void AWaveManager::ManageDefenseWaveMonsterCount(class AStageData* Target, int32 EnemyID, bool IsSpawn)
 {
@@ -226,7 +181,7 @@ void AWaveManager::ManageDefenseWaveMonsterCount(class AStageData* Target, int32
 		}
 		else
 		{
-			UE_LOG(LogTemp, Log, TEXT("AResourceManager:: Error"));
+			UE_LOG(LogTemp, Log, TEXT("AWaveManager:: ManageDefenseWaveMonsterCount Error"));
 
 		}
 

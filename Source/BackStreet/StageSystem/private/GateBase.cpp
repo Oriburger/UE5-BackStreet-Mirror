@@ -37,18 +37,16 @@ void AGateBase::BeginPlay()
 	Super::BeginPlay();
 	bIsGateActive = true;
 	if (this->ActorHasTag(FName("Tutorial")))
-	{
 		DeactivateGate();
 
-	}
 }
 
 void AGateBase::InitGate()
 {
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
-	if (!GamemodeRef.IsValid()) return;
+	checkf(GamemodeRef.IsValid(), TEXT("GamemodeRef Is InValid"));
 
-	CheckHaveToActive();
+	CheckHaveToNeed();
 
 	if(!MoveStageDelegate.IsBound())
 		MoveStageDelegate.BindUFunction(GamemodeRef.Get()->GetChapterManagerRef()->GetTransitionManager(), FName("TryMoveStage"));
@@ -59,23 +57,32 @@ void AGateBase::InitGate()
 
 void AGateBase::BindGateDelegate()
 {
+	AStageData* stage = GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage();
+	checkf(IsValid(stage), TEXT("Stage Is InValid"));
+
+	if (!IsValid(this))
+	{
+		UE_LOG(LogTemp, Error, TEXT("AGateBase::BindGateDelegate -> Start Stage: %s Gate : %s Is Pending Kill"), *stage->GetName(),*this->GetName());
+		return;
+	}
 	if (this->ActorHasTag(FName("StartGate"))) return;
 
-	AStageData* stage = GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage();
-	if (!IsValid(stage)) return;
-
+	UE_LOG(LogTemp, Error, TEXT("AGateBase::BindGateDelegate -> Start Stage: %s"), *stage->GetName());
 	stage->GateOffDelegate.AddDynamic(this, &AGateBase::DeactivateGate);
+
+	
 	if (this->ActorHasTag(FName("ChapterGate")))
 		stage->GateOnDelegate.AddDynamic(this, &AGateBase::ActivateChapterGateAfterCheck);
 	else
 		stage->GateOnDelegate.AddDynamic(this, &AGateBase::ActivateGate);
+	UE_LOG(LogTemp, Error, TEXT("AGateBase::BindGateDelegate -> Complete Stage: %s"),*stage->GetName());
 
 }
 
 void AGateBase::AddGate()
 {
 	AStageData* stage = GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage();
-	if (!IsValid(stage)) return;
+	checkf(IsValid(stage), TEXT("Stage Is InValid"));
 	stage->AddGateList(this);
 }
 
@@ -84,15 +91,14 @@ void AGateBase::EnterGate()
 	if (!bIsGateActive) return;
 
 	if (this->ActorHasTag(FName("StartGate")))
-	{
 		InitGate();
-	}
 
 	RequestMoveStage();
 }
 
 void AGateBase::ActivateGate()
 {
+	UE_LOG(LogTemp, Log, TEXT("AGateBase:ActivateGate"));
 	bIsGateActive = true;
 
 	if (this->ActorHasTag(FName("ChapterGate")))
@@ -104,6 +110,7 @@ void AGateBase::ActivateGate()
 
 void AGateBase::DeactivateGate()
 {
+	UE_LOG(LogTemp, Log, TEXT("AGateBase:DeactivateGate"));
 	bIsGateActive = false;
 	DeactivateGateMaterial();
 }
@@ -117,14 +124,14 @@ void AGateBase::ActivateChapterGateAfterCheck()
 
 void AGateBase::ActivateChapterGateMaterial()
 {
-	if (!GateMaterialList.IsValidIndex(1)) return;
+	checkf(GateMaterialList.IsValidIndex(1), TEXT("GateMaterialList[1] Is InValid"));
 	Mesh->SetMaterial(0, GateMaterialList[1]);
 
 }
 
 void AGateBase::ActivateNormalGateMaterial()
 {
-	if (!GateMaterialList.IsValidIndex(0)) return;
+	checkf(GateMaterialList.IsValidIndex(0), TEXT("GateMaterialList[0] Is InValid"));
 	Mesh->SetMaterial(0, GateMaterialList[0]);
 
 }
@@ -132,20 +139,20 @@ void AGateBase::ActivateNormalGateMaterial()
 
 void AGateBase::DeactivateGateMaterial()
 {
-	UE_LOG(LogTemp, Log, TEXT("AGateBase:DeactivateGate"));
-	bIsGateActive = false;
-	if (!GateMaterialList.IsValidIndex(2)) return;
+	checkf(GateMaterialList.IsValidIndex(2), TEXT("GateMaterialList[2] Is InValid"));
 	Mesh->SetMaterial(0, GateMaterialList[2]);
+	UE_LOG(LogTemp, Log, TEXT("AGateBase:DeactivateGate Complete"));
 
 }
 
 void AGateBase::RequestMoveStage()
 {
-	if (!GamemodeRef.IsValid()) return;
+	checkf(GamemodeRef.IsValid(), TEXT("GamemodeRef Is InValid"));
 	if (this->ActorHasTag(FName("StartGate")))
 		MoveStageDelegate.Execute(EDirection::E_Start);
 	else if (this->ActorHasTag(FName("ChapterGate")))
 	{
+		// Need to Delete And Migrate
 		if (GamemodeRef.Get()->GetChapterManagerRef()->IsChapterClear())
 			MoveStageDelegate.Execute(EDirection::E_Chapter);
 		else
@@ -166,15 +173,15 @@ void AGateBase::RequestMoveStage()
 	}
 }
 
-void AGateBase::CheckHaveToActive()
+void AGateBase::CheckHaveToNeed()
 {
-	if (!GamemodeRef.IsValid()) return;
+	checkf(GamemodeRef.IsValid(), TEXT("GamemodeRef Is InValid"));
 	AStageData* stage = GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage();
 
-	if (!IsValid(stage)) return;
-	if (!this->Tags.IsValidIndex(0)) return;
-	if (this->Tags.Find(FName(TEXT("StartGate"))) != INDEX_NONE) return;
+	checkf(IsValid(stage), TEXT("Stage Is InValid"));
+	checkf(this->Tags.IsValidIndex(0), TEXT("Gate Tag[0] Is InValid"));
 
+	if (this->Tags.Find(FName(TEXT("StartGate"))) != INDEX_NONE) return;
 
 	if (this->Tags.Find(FName(TEXT("ChapterGate"))) != INDEX_NONE)
 	{
@@ -187,13 +194,12 @@ void AGateBase::CheckHaveToActive()
 		if (GamemodeRef.Get()->GetChapterManagerRef()->IsChapterClear())
 			ActivateGate();
 		else
-			DeactivateGate();
-		
+			DeactivateGate(); 
 
 	}
 	else
 	{
-		if (!this->Tags.IsValidIndex(1)) return;
+		checkf(this->Tags.IsValidIndex(1), TEXT("Gate Tags[1] Is InValid"));
 		for (int i = 0; i < 4; i++)
 		{
 			if (!stage->GetGateInfoDir(EDirection(i)))
@@ -202,19 +208,31 @@ void AGateBase::CheckHaveToActive()
 				{
 				case 0:
 					if (this->Tags.Find(FName(TEXT("UP"))) != INDEX_NONE)
+					{
 						Destroy();
+						return;
+					}
 					break;
 				case 1:
 					if (this->Tags.Find(FName(TEXT("DOWN"))) != INDEX_NONE)
+					{
 						Destroy();
+						return;
+					}
 					break;
 				case 2:
 					if (this->Tags.Find(FName(TEXT("LEFT"))) != INDEX_NONE)
+					{
 						Destroy();
+						return;
+					}
 					break;
 				case 3:
 					if (this->Tags.Find(FName(TEXT("RIGHT"))) != INDEX_NONE)
+					{
 						Destroy();
+						return;
+					}
 					break;
 				default:
 					break;

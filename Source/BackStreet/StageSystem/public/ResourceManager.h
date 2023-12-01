@@ -71,10 +71,13 @@ public:
 		void CleanStageItem(class AStageData* Target);
 
 public:
+	// Create Monster And Bind Monster Delegate
+	UFUNCTION()
+		AEnemyCharacterBase* SpawnMonster(class AStageData* Target, int32 EnemyID);
 
 	// Creates a monster on the target stage
 	UFUNCTION()
-		AEnemyCharacterBase* SpawnMonster(class AStageData* Target, int32 EnemyID, FVector Location);
+		AEnemyCharacterBase* CreateMonster(class AStageData* Target, int32 EnemyID, FVector Location);
 
 	// Bind delegates related to the stage system and monsters
 	UFUNCTION()

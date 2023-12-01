@@ -6,7 +6,7 @@
 #include "StageData.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateAIContorl);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateGateControl);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateGate);
 
 
 UCLASS()
@@ -25,10 +25,10 @@ public:
 		FDelegateAIContorl AIOffDelegate;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateGateControl GateOnDelegate;
+		FDelegateGate GateOnDelegate;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateGateControl GateOffDelegate;
+		FDelegateGate GateOffDelegate;
 
 
 public:
@@ -68,13 +68,13 @@ public:
 		FName GetLevelToLoad() { return StageInfo.LevelToLoad; }
 
 	UFUNCTION()
-		int32 GetWave() { return StageInfo.Wave; }
+		int32 GetCurrentWaveLevel() { return StageInfo.CurrentWaveLevel; }
 
 	UFUNCTION()
 		void SetLevelToLoad(FName Level) { StageInfo.LevelToLoad = Level; }
 
 	UFUNCTION()
-		void SetWave(int32 Wave) { StageInfo.Wave = Wave; }
+		void SetCurrentWaveLevel(int32 CurrentWaveLevel) { StageInfo.CurrentWaveLevel = CurrentWaveLevel; }
 
 	UFUNCTION()
 		bool GetIsClear() { return StageInfo.bIsClear; }
@@ -214,7 +214,22 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void CloseAllGate() { GateOffDelegate.Broadcast(); return; }
 
+	// Return DefenseWaveSpawnTimerHandle
+	UFUNCTION(BlueprintCallable)
+		FTimerHandle& GetDefenseWaveSpawnTimerHandle() { return DefenseWaveSpawnTimerHandle; }
+
+	// Return DefenseWaveClearTimeTimerHandle
+	UFUNCTION(BlueprintCallable)
+		FTimerHandle& GetDefenseWaveClearTimeTimerHandle() { return DefenseWaveClearTimeTimerHandle; }
+
 private:
 	UPROPERTY()
 		FStageDataStruct StageInfo;
+
+	UPROPERTY()
+		FTimerHandle DefenseWaveSpawnTimerHandle;
+
+	UPROPERTY()
+		FTimerHandle DefenseWaveClearTimeTimerHandle;
+
 };

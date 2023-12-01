@@ -53,20 +53,23 @@ public:
 	UFUNCTION()
 		void SpawnDefenseWave(class AStageData* Target);
 
-	// 클리어 체크 및 스폰 관련 타이머 설정, 시간되면 Clear Wave 호출 
+	// Set Timer related to Clear Time
 	UFUNCTION()
-		void SetDefenseWaveTimer(class AStageData* Target, float time);
+		void SetDefenseWaveClearTimer(class AStageData* Target);
+
+	//  Set Timer related to Spawn Time
+	UFUNCTION()
+		void SetDefenseWaveSpawnTimer(class AStageData* Target);
+
+	UFUNCTION()
+		void ClearDefenseWaveTimer(class AStageData* Target);
+
+	UFUNCTION()
+		void SpawnDefenseWaveMonster();
 
 	// 모든 몬스터 삭제, 다음 웨이브 혹은 스테이지 클리어
 	UFUNCTION()
-		void ClearDefenseWave(class AStageData* Target);
-
-	//  디펜스 웨이브의 시간 계산
-	UFUNCTION()
-		void CalculateWaveTime();
-
-	/*UFUNCTION()
-		void SpawnMonsterWithID(class AStageData* Target, int32 EnemyID);*/
+		void ClearDefenseWave();
 
 	// 디펜스 웨이브의 스테이지에 존재하는 몬스터 수 관리
 	UFUNCTION()
@@ -77,8 +80,8 @@ public:
 
 	TWeakObjectPtr<class AResourceManager> ResourceManager;
 
-public:
-	UPROPERTY()
-		FTimerHandle SpawnTimerHandle;
+//public:
+//	UPROPERTY()
+//		FTimerHandle SpawnTimerHandle;
 
 };

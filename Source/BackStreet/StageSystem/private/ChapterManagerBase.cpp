@@ -178,12 +178,13 @@ void AChapterManagerBase::InitStageTypeArray()
 		{
 			if (target->StageType == EStageCategoryInfo::E_Normal)
 			{
-				NormalStageTypes.Add(*target);
+				// Temporary) Debug Code Need To Fix
+				if(target->WaveType==EWaveCategoryInfo::E_Defense)
+					NormalStageTypes.Add(*target);
 			}
 			else if (target->StageType == EStageCategoryInfo::E_Boss)
-			{
 				BossStageTypes.Add(*target);
-			}
+			
 		}
 	}
 }

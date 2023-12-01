@@ -143,7 +143,7 @@ public:
 		FName LevelToLoad;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		int32 Wave;
+		int32 CurrentWaveLevel;
 
 	UPROPERTY()
 		bool bIsVisited;
@@ -198,12 +198,5 @@ public:
 
 	UPROPERTY()
 		ULevelStreaming* LevelRef;
-
-	UPROPERTY()
-		FTimerHandle WaveTimerHandle;
-
-	UPROPERTY()
-		int32 WaveTime;
-
 
 };

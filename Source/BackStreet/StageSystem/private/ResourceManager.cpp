@@ -182,8 +182,17 @@ void AResourceManager::RemoveMonsterFromList(AEnemyCharacterBase* Target)
 	WaveManager->CheckWaveCategoryByType(currentStage, Target);
 }
 
+AEnemyCharacterBase* AResourceManager::SpawnMonster(class AStageData* Target, int32 EnemyID)
+{
+	FVector spawnLocation = GetSpawnLocation(Target);
+	AEnemyCharacterBase* monster = CreateMonster(Target, EnemyID, spawnLocation);
+	BindMonsterDelegate(Target, monster);
 
-AEnemyCharacterBase* AResourceManager::SpawnMonster(class AStageData* Target, int32 EnemyID, FVector Location)
+	return monster;
+}
+
+
+AEnemyCharacterBase* AResourceManager::CreateMonster(class AStageData* Target, int32 EnemyID, FVector Location)
 {
 	FActorSpawnParameters actorSpawnParameters;
 	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
@@ -255,7 +264,6 @@ int32 AResourceManager::SelectSpawnMonsterID(class AStageData* Target)
 
 int32 AResourceManager::SelectSpawnMonsterAmount(class AStageData* Target)
 {
-
 	ensure(Target != nullptr);
 	FStageInfoStruct stageType = Target->GetStageTypeInfo();
 	int32 spawnNum = FMath::RandRange(stageType.MinSpawnEnemy, stageType.MaxSpawnEnemy);
