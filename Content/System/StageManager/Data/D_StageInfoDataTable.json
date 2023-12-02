@@ -1,0 +1,72 @@
+[
+	{
+		"Name": "100",
+		"StageID": 100,
+		"ChapterLevel": 1,
+		"StageType": "E_Normal",
+		"LevelList": [
+			"TypeA",
+			"TypeB",
+			"TypeC",
+			"TypeD"
+		],
+		"ItemBoxBPList": [],
+		"RewardBoxBPList": [],
+		"CraftingBoxBPList": [],
+		"MaxSpawnItem": 1,
+		"MinSpawnItem": 6,
+		"WaveType": "E_Hades",
+		"MaxWave": 3,
+		"WaveComposition": [ 1, 2, 1 ],
+		"NormalEnemyIDList": [ 1100, 1001, 1003, 1002 ],
+		"BossEnemyIDList": [],
+		"MaxSpawnEnemy": 1,
+		"MinSpawnEnemy": 5
+	},
+	{
+		"Name": "101",
+		"StageID": 101,
+		"ChapterLevel": 1,
+		"StageType": "E_Normal",
+		"LevelList": [
+			"TypeB",
+			"TypeC",
+			"TypeD",
+			"TypeE",
+			"TypeF"
+		],
+		"ItemBoxBPList": [],
+		"RewardBoxBPList": [],
+		"CraftingBoxBPList": [],
+		"MaxSpawnItem": 4,
+		"MinSpawnItem": 7,
+		"WaveType": "E_Hades",
+		"MaxWave": 5,
+		"WaveComposition": [ 1, 2, 1, 1, 2 ],
+		"NormalEnemyIDList": [ 1001, 1003, 1002, 1101, 1102 ],
+		"BossEnemyIDList": [],
+		"MaxSpawnEnemy": 3,
+		"MinSpawnEnemy": 9
+	},
+	{
+		"Name": "200",
+		"StageID": 200,
+		"ChapterLevel": 1,
+		"StageType": "E_Boss",
+		"LevelList": [
+			"TypeC"
+		],
+		"ItemBoxBPList": [],
+		"RewardBoxBPList": [],
+		"CraftingBoxBPList": [],
+		"MaxSpawnItem": 4,
+		"MinSpawnItem": 7,
+		"WaveType": "E_None",
+		"MaxWave": 0,
+		"WaveComposition": [],
+		"NormalEnemyIDList": [],
+		"BossEnemyIDList": [ 1200 ],
+		"MaxSpawnEnemy": 3,
+		"MinSpawnEnemy": 1
+	}
+]

@@ -12,6 +12,8 @@
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+
+
 #define TURN_TIME_OUT_SEC 1.0f
 
 AEnemyCharacterBase::AEnemyCharacterBase()
@@ -37,13 +39,13 @@ void AEnemyCharacterBase::BeginPlay()
 	InitFloatingHpWidget();
 	InitEnemyStat();
 	SetDefaultWeapon();
-
 	InitDynamicMeshMaterial(GetMesh()->GetMaterial(0));
 }
 
 void AEnemyCharacterBase::InitEnemyStat()
 {
-	GamemodeRef->UpdateCharacterStatWithID(this, EnemyID);
+	UE_LOG(LogTemp, Warning, TEXT("My ID : %d"), CharacterID);
+	GamemodeRef->UpdateCharacterStatWithID(this, CharacterID);
 	CharacterState.CharacterCurrHP = CharacterStat.CharacterMaxHP;
 	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.CharacterMoveSpeed;
 	SetDefaultStat();
@@ -142,12 +144,12 @@ void AEnemyCharacterBase::SpawnDeathItems()
 
 	if (SpawnItemTypeList.IsValidIndex(0)&&SpawnItemTypeList[0] == EItemCategoryInfo::E_Mission)
 	{
-		AItemBase* newItem = GamemodeRef->SpawnItemToWorld((uint8)SpawnItemTypeList[0], SpawnItemIDList[0], GetActorLocation() + FMath::VRand() * 10.0f);
+		/*AItemBase* newItem = GamemodeRef->SpawnItemToWorld(SpawnItemIDList[0], GetActorLocation() + FMath::VRand() * 10.0f);
 		if (IsValid(newItem))
 		{
 			spawnedItemList.Add(newItem);
 			//newItem->Dele_MissionItemSpawned.BindUFunction(target, FName("TryAddMissionItem"));
-		}
+		}*/
 	}
 	else
 	{
@@ -164,7 +166,7 @@ void AEnemyCharacterBase::SpawnDeathItems()
 			
 			if(FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
 			{
-				AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemType, itemID, GetActorLocation() + FMath::VRand() * 10.0f);
+				AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 10.0f);
 			
 				if (IsValid(newItem))
 				{
@@ -180,6 +182,7 @@ void AEnemyCharacterBase::SpawnDeathItems()
 		targetItem->ActivateItem();
 	}
 }
+
 
 void AEnemyCharacterBase::SetFacialMaterialEffect(bool NewState)
 {

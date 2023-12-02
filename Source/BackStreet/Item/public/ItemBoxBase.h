@@ -80,10 +80,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Settings", meta = (UIMin = 1, UIMax = 10))
 		int32 MinSpawnItemCount;
 
-	//현재 아이템 박스가 스폰 가능한 아이템의 Category Type 리스트 : idx별로 아이템을 구분  / 미션 아이템은 0번에 필수로 포함!!
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Settings")
-		TArray<EItemCategoryInfo> SpawnItemTypeList;
-
 	//현재 아이템 박스가 스폰 가능한 아이템의 ID 리스트 : idx별로 아이템을 구분 / 미션 아이템은 0번에 필수로 포함!!
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Settings")
 		TArray<int32> SpawnItemIDList;

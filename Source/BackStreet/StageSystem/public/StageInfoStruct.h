@@ -15,6 +15,14 @@ enum class EStageCategoryInfo : uint8
 
 };
 
+UENUM(BlueprintType)
+enum class EWaveCategoryInfo : uint8
+{
+	E_None				  	UMETA(DisplayName = "None"),
+	E_Hades					UMETA(DisplayName = "Hades"),
+	E_Defense			  	UMETA(DisplayName = "Defense"),
+};
+
 USTRUCT(BlueprintType)
 struct FStageEnemyRankStruct : public FTableRowBase
 {
@@ -32,27 +40,80 @@ public:
 
 };
 
+
 USTRUCT(BlueprintType)
-struct FStageEnemyTypeStruct : public FTableRowBase
+struct FWaveEnemyStruct : public FTableRowBase
 {
 	GENERATED_BODY()
 
 public:
-
-	UPROPERTY(EditAnywhere)
-		FName StageType;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<int32> IDList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 MaxSpawn;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 MinSpawn;
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		TMap<int32, int32> EnemyList; // EnemyID,스폰 수
 
 };
+
+USTRUCT(BlueprintType)
+struct FStageInfoStruct : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		int32 StageID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		int32 ChapterLevel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		EStageCategoryInfo StageType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		TArray<FName> LevelList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blueprint")
+		TArray<UBlueprint*> ItemBoxBPList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blueprint")
+		TArray<UBlueprint*> RewardBoxBPList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blueprint")
+		TArray<UBlueprint*> CraftingBoxBPList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
+		int32 MaxSpawnItem;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
+		int32 MinSpawnItem;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		EWaveCategoryInfo WaveType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		int32 MaxWave; // 총 웨이브 수
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
+		TArray<int32> WaveComposition;// 각 웨이브 단계에 스폰할 Enemy 목록의 데이터 테이블 ID를 지님, 항상 총 웨이브 수 만큼의 요소가 들어있어야함
+
+	// 웨이브타입이 디펜스인 경우
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		TMap<int32, float> ClearTimeForEachWave; // 웨이브별 버텨야하는 시간
+
+
+	// 제거할 항목
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
+		TArray<int32> NormalEnemyIDList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
+		TArray<int32> BossEnemyIDList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
+		int32 MaxSpawnEnemy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
+		int32 MinSpawnEnemy;
+
+};
+
 
 USTRUCT(BlueprintType)
 struct FStageDataStruct : public FTableRowBase
@@ -73,10 +134,16 @@ public:
 		TArray<bool> GateInfo;
 
 	UPROPERTY()
-		EStageCategoryInfo Type;
+		EStageCategoryInfo StageCategoryType;
+
+	UPROPERTY()
+		FStageInfoStruct StageType;
 
 	UPROPERTY()
 		FName LevelToLoad;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		int32 CurrentWaveLevel;
 
 	UPROPERTY()
 		bool bIsVisited;
@@ -86,6 +153,12 @@ public:
 
 	UPROPERTY()
 		bool bIsValid;
+
+	UPROPERTY()
+		int32 MonsterSpawnPointOrderIdx;
+
+	UPROPERTY()
+		TMap<int32, int32> ExistEnemyList;
 
 	UPROPERTY()
 		TArray<FVector> MonsterSpawnPoints;
@@ -125,12 +198,5 @@ public:
 
 	UPROPERTY()
 		ULevelStreaming* LevelRef;
-
-	UPROPERTY()
-		FTimerHandle StageTimerHandle;
-
-	UPROPERTY()
-		int32 StageTime;
-
 
 };

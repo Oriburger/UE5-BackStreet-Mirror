@@ -128,7 +128,10 @@ void AMainCharacterBase::MoveRight(float Value)
 
 void AMainCharacterBase::Roll()
 {
+	UE_LOG(LogTemp, Log, TEXT("Roll"));
+
 	if (!GetIsActionActive(ECharacterActionType::E_Idle)) return;
+	UE_LOG(LogTemp, Log, TEXT("Roll if"));
 
 	FVector newDirection(0.0f);
 	FRotator newRotation = FRotator();

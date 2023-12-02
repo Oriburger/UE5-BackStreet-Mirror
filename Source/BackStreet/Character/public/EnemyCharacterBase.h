@@ -34,10 +34,6 @@ public:
 
 // ----- 기본 프로퍼티 -----------
 public:
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
-		int32 EnemyID;
-
 	//적이 최초로 소유하는 무기의 ID
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		int32 DefaultWeaponID;
@@ -112,12 +108,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void InitFloatingHpWidget();
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		USoundCue* HitImpactSound;
 
-protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Animation")
-		class UAnimMontage* PreChaseAnimMontage;
 
 public:
 	void ClearAllTimerHandle();

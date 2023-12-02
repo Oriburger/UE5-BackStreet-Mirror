@@ -32,8 +32,10 @@ TArray<class AStageData*> UStageGenerator::CreateMaze()
 	RecursiveBacktracking();
 
 	int32 bossIdx = FMath::RandRange(0, Stages.Num() - 1);
-	Stages[bossIdx]->SetStageType(EStageCategoryInfo::E_Boss);
+	Stages[bossIdx]->SetStageCategoryType(EStageCategoryInfo::E_Boss);
 
+	SetStageType();
+	SetStageMap();
 	UE_LOG(LogTemp, Log, TEXT("Complete Create Maze"));
 
 
@@ -52,14 +54,34 @@ void UStageGenerator::InitStageData(FVector Vector, int32 Ypos, int32 Xpos, clas
 	Target->AddGateInfo(false); // LEFT
 	Target->AddGateInfo(false); // RIGHT
 
-	Target->SetStageType(EStageCategoryInfo::E_Normal);
+	Target->SetStageCategoryType(EStageCategoryInfo::E_Normal);
+	Target->SetCurrentWaveLevel(0);
 
 	Target->SetIsValid(true);
 	Target->SetIsVisited(false);
 	Target->SetIsClear(false);
 
-	Target->SetLevelToLoad(Cast<AChapterManagerBase>(this->GetOuter())->GetResourceManager()->GetRandomMap());
+}
 
+void UStageGenerator::SetStageType()
+{
+	for (AStageData* stage : Stages)
+	{
+		if (stage->GetStageCategoryType() == EStageCategoryInfo::E_Boss)
+			stage->SetStageTypeInfo(Cast<AChapterManagerBase>(this->GetOuter())->GetStageTypeInfoWithType(EStageCategoryInfo::E_Boss));
+		else if (stage->GetStageCategoryType() == EStageCategoryInfo::E_Normal)
+			stage->SetStageTypeInfo(Cast<AChapterManagerBase>(this->GetOuter())->GetStageTypeInfoWithType(EStageCategoryInfo::E_Normal));
+	}
+}
+
+void UStageGenerator::SetStageMap()
+{
+	for (AStageData* stage : Stages)
+	{
+		FStageInfoStruct typeInfo = stage->GetStageTypeInfo();
+		int32 mapIdx = FMath::RandRange(0, typeInfo.LevelList.Num() - 1);
+		stage->SetLevelToLoad(typeInfo.LevelList[mapIdx]);
+	}
 }
 
 void UStageGenerator::RecursiveBacktracking()
@@ -70,13 +92,9 @@ void UStageGenerator::RecursiveBacktracking()
 	AStageData* nexttile = GetRandomNeighbourTile(currenttile);
 
 	if (nexttile->GetIsValid())
-	{
 		VisitTile(currenttile, nexttile);
-	}
 	else
-	{
 		Tracks.Pop();
-	}
 
 	RecursiveBacktracking();
 }
@@ -135,9 +153,8 @@ void UStageGenerator::VisitTile(class AStageData* CurrentTilePara, class AStageD
 class AStageData* UStageGenerator::GetTile(int32 XPosition, int32 YPosition)
 {
 	if (XPosition >= 0 && XPosition < MAX_GRID_SIZE && YPosition >= 0 && YPosition < MAX_GRID_SIZE)
-	{
 		return (Stages[(YPosition * MAX_GRID_SIZE) + XPosition]);
-	}
+	
 	return nullptr;
 	
 }

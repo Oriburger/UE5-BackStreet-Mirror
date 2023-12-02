@@ -39,6 +39,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UProjectileMovementComponent* ProjectileMovement;
 
+//------- 에셋 관련 ----------------------
+protected:
+	UFUNCTION()
+		void InitProjectileAsset();
+
+	//현재 무기의 에셋 정보
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
+		FProjectileAssetInfoStruct ProjectileAssetInfo;
+
 //------- 기본 프로퍼티 -------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
@@ -63,7 +72,7 @@ protected:
 //------ 핵심 함수  ------------------
 public:
 	UFUNCTION()
-		void InitProjectile(class ACharacterBase* NewCharacterRef);
+		void InitProjectile(class ACharacterBase* NewCharacterRef, FProjectileAssetInfoStruct NewAssetInfo);
 
 	UFUNCTION()
 		void UpdateProjectileStat(FProjectileStatStruct NewStat);
