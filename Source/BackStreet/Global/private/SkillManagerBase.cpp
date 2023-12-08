@@ -39,22 +39,18 @@ void USkillManagerBase::ActivateSkill(AActor* Causer, ACharacterBase* Target)
 {
 	if (!IsValid(Causer)) return;
 
-	TArray<int32> skillIDArray;
-
 	SetSkillSet(Causer);
-	skillIDArray = SkillSetInfo.SkillIDList;
-	SkillIntervalArray = SkillSetInfo.SkillIntervalList;
 
-	for (uint8 idx = 0; idx < skillIDArray.Num(); idx++)
+	for (uint8 idx = 0; idx < SkillSetInfo.SkillIDList.Num(); idx++)
 	{
-		int32 skillID = skillIDArray[idx];
+		int32 skillID = SkillSetInfo.SkillIDList[idx];
 		if (skillID == 0)
 		{
 			ComposeSkillMap(skillID, Causer, Target);
 		}
 		else
 		{
-			GetDelayInterval(idx, SkillIntervalArray);
+			GetDelayInterval(idx, SkillSetInfo.SkillIntervalList);
 			ComposeSkillMap(skillID, Causer, Target);
 		}
 	}
@@ -132,19 +128,18 @@ void USkillManagerBase::SetSkillSet(AActor* Causer) {
 	}
 }
 
-float USkillManagerBase::GetDelayInterval(int32 SkillListIdx, TArray<float> SkillIntervalList)
+void USkillManagerBase::GetDelayInterval(int32 SkillListIdx, TArray<float> SkillIntervalList)
 {
 	float SkillInterval;
 
 	if (SkillIntervalList.IsValidIndex(SkillListIdx) == true)
 	{
 		SkillInterval = SkillIntervalList[SkillListIdx];
-		//delay
-		return SkillInterval;
+		//delay ÇÔ¼ö
 	}
 	else
 	{
-		return 0.0f;
+
 	}
 }
 

@@ -40,7 +40,7 @@ protected:
 
 	//SkillID에 맞추어 스킬간 사용 간격을 지정하고, Delay를 부여함
 	UFUNCTION()
-		float GetDelayInterval(int32 SkillListIdx, TArray<float> SkillIntervalList);
+		void GetDelayInterval(int32 SkillListIdx, TArray<float> SkillIntervalList);
 
 	//스킬 스탯 테이블
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay|Data")
@@ -55,9 +55,6 @@ private:
 
 	UPROPERTY()
 		FSkillSetInfo SkillSetInfo;
-
-	UPROPERTY()
-		TArray<float> SkillIntervalArray;
 
 	UPROPERTY()
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;

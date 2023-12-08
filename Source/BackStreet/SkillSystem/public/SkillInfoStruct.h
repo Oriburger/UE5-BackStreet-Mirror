@@ -83,6 +83,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<float> SkillIntervalList;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<float> SkillAnimPlayRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<float> SkillAnimInterval;
 };
 
 USTRUCT(BlueprintType)
