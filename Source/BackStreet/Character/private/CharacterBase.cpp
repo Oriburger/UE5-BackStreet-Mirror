@@ -168,6 +168,12 @@ float ACharacterBase::TakeDebuffDamage(float DamageAmount, ECharacterDebuffType 
 	return DamageAmount;
 }
 
+void ACharacterBase::SetActionState(ECharacterActionType Type)
+{
+	CharacterState.CharacterActionState = Type;
+	return;
+}
+
 void ACharacterBase::TakeHeal(float HealAmountRate, bool bIsTimerEvent, uint8 BuffDebuffType)
 {
 	CharacterState.CharacterCurrHP += CharacterStat.CharacterMaxHP * HealAmountRate;
@@ -272,7 +278,7 @@ void ACharacterBase::TrySkillAttack(ACharacterBase* Target)
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
-	CharacterState.CharacterActionState = ECharacterActionType::E_SkillAttack;
+	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
 
 	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageList;
 	for (UAnimMontage* targetAnim : targetAnimList) 

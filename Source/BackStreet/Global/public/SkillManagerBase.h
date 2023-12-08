@@ -19,8 +19,11 @@ public:
 		void InitSkillManagerBase(class ABackStreetGameModeBase* NewGamemodeRef);
 
 	//SkillManagerBase에서 스킬의 정보를 처리함
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void ActivateSkill(AActor* Causer, class ACharacterBase* Target);
+
+	UFUNCTION()
+		UDataTable* GetSkillInfoTable() { return SkillInfoTable; }
 
 protected:
 	//FSkillSet에 정보를 불러와 생성함
@@ -39,6 +42,9 @@ protected:
 	UFUNCTION()
 		float GetDelayInterval(int32 SkillListIdx, TArray<float> SkillIntervalList);
 
+	//스킬 스탯 테이블
+	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay|Data")
+		UDataTable* SkillInfoTable;
 private:
 	//적 몹의 스킬셋 정보 맵
 	UPROPERTY()

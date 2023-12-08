@@ -44,7 +44,7 @@ enum class EAIBehaviorType : uint8
 	E_Detect			UMETA(DisplayName = "Detect"),
 	E_Chase			UMETA(DisplayName = "Chase"),
 	E_Attack			UMETA(DisplayName = "Attack"),
-	E_SkillAttack		UMETA(DisplayName = "SkillAttack"),
+	E_Skill				UMETA(DisplayName = "Skill"),
 	E_Return			UMETA(DisplayName = "Return"),
 	E_Stun			UMETA(DisplayName = "Stun")
 };
@@ -54,7 +54,7 @@ enum class ECharacterActionType : uint8
 {
 	E_Idle				UMETA(DisplayName = "Idle"),
 	E_Attack			UMETA(DisplayName = "Attack"),
-	E_SkillAttack		UMETA(DisplayName = "SkillAttack"),
+	E_Skill				UMETA(DisplayName = "Skill"),
 	E_Hit				UMETA(DisplayName = "Hit"),
 	E_Roll				UMETA(DisplayName = "Roll"),
 	E_Jump			UMETA(DisplayName = "Jump"),

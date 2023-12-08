@@ -80,7 +80,7 @@ public:
 	UFUNCTION()
 		class UDebuffManager* GetGlobalDebuffManagerRef() { return DebuffManager; }
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		class USkillManagerBase* GetGlobalSkillmanagerBaseRef() { return SkillManagerBase; }
 
 	UFUNCTION(BlueprintCallable)

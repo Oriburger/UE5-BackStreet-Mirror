@@ -17,6 +17,10 @@ USkillManagerBase::USkillManagerBase()
 		TempTimerHandleList.Add(FTimerHandle());
 		TempResetValueList.Add(0.0f);
 	}*/
+
+	static ConstructorHelpers::FObjectFinder<UDataTable> statInfoTableFinder(TEXT("/Game/Skill/Data/D_SkillInfo.D_SkillInfo"));
+	checkf(statInfoTableFinder.Succeeded(), TEXT("skillInfoTable 탐색에 실패했습니다."));
+	SkillInfoTable = statInfoTableFinder.Object;
 }
 
 void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemodeRef)
@@ -149,12 +153,12 @@ void USkillManagerBase::ComposeSkillMap(int32 SkillID, AActor* Causer, ACharacte
 	if(Cast<AMainCharacterBase>(Causer)->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo.SkillGrade == ESkillGrade::E_None)
 		return;
 
-	if (SkillRefMap.Contains(SkillID) == true)
+	if (SkillRefMap.Contains(SkillID))
 	{
 		ASkillBase* skill = *SkillRefMap.Find(SkillID);
 		if (IsValid(skill))
 		{
-			skill->InitSkill(Causer, Target, SkillSetInfo.SkillGrade);
+			skill->InitSkill(Causer, Target, SkillID, SkillSetInfo.SkillGrade);
 		}
 	}
 	else
@@ -162,21 +166,26 @@ void USkillManagerBase::ComposeSkillMap(int32 SkillID, AActor* Causer, ACharacte
 		ASkillBase* skill = MakeSkillBase(SkillID);
 		if (IsValid(skill))
 		{
-			skill->InitSkill(Causer, Target, SkillSetInfo.SkillGrade);
+			skill->InitSkill(Causer, Target, SkillID, SkillSetInfo.SkillGrade);
 		}
 	}
 }
 
 ASkillBase* USkillManagerBase::MakeSkillBase(int32 SkillID)
 {
-	UDataTable* SkillInfoTable = LoadObject<UDataTable>(nullptr, TEXT("/Game/Skill/Data/D_SkillInfo.D_SkillInfo"));
 	FString skillkey = UKismetStringLibrary::Conv_IntToString(SkillID);
 	FSkillInfoStruct* skillInfo = SkillInfoTable->FindRow<FSkillInfoStruct>((FName)skillkey, skillkey);
 	if (skillInfo != nullptr)
 	{
-		ASkillBase* SkillBaseRef = Cast<ASkillBase>(GetWorld()->SpawnActor(skillInfo->SkillBaseClassRef));
-		SkillRefMap.Add(SkillID, SkillBaseRef);
-		return SkillBaseRef;
+		ASkillBase* skillBaseRef = Cast<ASkillBase>(GetWorld()->SpawnActor(skillInfo->SkillBaseClassRef));
+		if (IsValid(skillBaseRef))
+		{
+			skillBaseRef->SetSkillManagerRef(this);
+			SkillRefMap.Add(SkillID, skillBaseRef);
+			return skillBaseRef;
+		}
 	}
 	return nullptr;
 }
+
+
