@@ -11,13 +11,6 @@
 
 USkillManagerBase::USkillManagerBase()
 {
-	//추후 초기화를 위한 Temp 배열을 초기화
-	/*for (int idx = 0; idx <= DEBUFF_DAMAGE_TIMER_IDX; idx++)
-	{
-		TempTimerHandleList.Add(FTimerHandle());
-		TempResetValueList.Add(0.0f);
-	}*/
-
 	static ConstructorHelpers::FObjectFinder<UDataTable> statInfoTableFinder(TEXT("/Game/Skill/Data/D_SkillInfo.D_SkillInfo"));
 	checkf(statInfoTableFinder.Succeeded(), TEXT("skillInfoTable 탐색에 실패했습니다."));
 	SkillInfoTable = statInfoTableFinder.Object;
@@ -26,38 +19,44 @@ USkillManagerBase::USkillManagerBase()
 void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemodeRef)
 {
 	if (!IsValid(NewGamemodeRef)) return;
-
-	/*for (int newTimerIdx = 0; newTimerIdx <= MAX_DEBUFF_IDX; newTimerIdx += 1)
-	{
-		TempTimerHandleList.Add(FTimerHandle());
-		TempResetValueList.Add(0.0f);
-	}*/
 	GamemodeRef = NewGamemodeRef;
 }
 
-void USkillManagerBase::ActivateSkill(AActor* Causer, ACharacterBase* Target)
+TArray<ASkillBase*> USkillManagerBase::ActivateSkill(AActor* NewCauser, ACharacterBase* NewTarget)
 {
-	if (!IsValid(Causer)) return;
+	SkillList.Empty();
+	if (!IsValid(Causer)) return SkillList;
+	
+	Causer = NewCauser;
+	Target = NewTarget;
 
 	SetSkillSet(Causer);
 
 	for (uint8 idx = 0; idx < SkillSetInfo.SkillIDList.Num(); idx++)
 	{
-		int32 skillID = SkillSetInfo.SkillIDList[idx];
-		if (skillID == 0)
+		if (idx != 0)
 		{
-			ComposeSkillMap(skillID, Causer, Target);
+			DelaySkillInterval(idx);
 		}
-		else
+		ASkillBase* skill = ComposeSkillMap(SkillSetInfo.SkillIDList[idx]);
+		skill->InitSkill(Causer, Target, SkillSetInfo.SkillIDList[idx], SkillSetInfo.SkillGrade);
+		SkillList.Add(skill);
+	}
+	return SkillList;
+}
+
+void USkillManagerBase::DestroySkill(TArray<ASkillBase*> UsedSkillList)
+{
+	for (ASkillBase* skill : UsedSkillList) {
+		if (IsValid(skill))
 		{
-			GetDelayInterval(idx, SkillSetInfo.SkillIntervalList);
-			ComposeSkillMap(skillID, Causer, Target);
+			skill->DestroySkill();
 		}
 	}
 }
 
-void USkillManagerBase::SetSkillSet(AActor* Causer) {
-	ACharacterBase* causer = Cast<ACharacterBase>(Causer);
+void USkillManagerBase::SetSkillSet(AActor* NewCauser) {
+	ACharacterBase* causer = Cast<ACharacterBase>(NewCauser);
 	if (!IsValid(causer)||!IsValid(causer->GetCurrentWeaponRef())) return;
 
 	//Player 인경우
@@ -128,47 +127,36 @@ void USkillManagerBase::SetSkillSet(AActor* Causer) {
 	}
 }
 
-void USkillManagerBase::GetDelayInterval(int32 SkillListIdx, TArray<float> SkillIntervalList)
+void USkillManagerBase::DelaySkillInterval(uint8 NewIndex)
 {
-	float SkillInterval;
-
-	if (SkillIntervalList.IsValidIndex(SkillListIdx) == true)
-	{
-		SkillInterval = SkillIntervalList[SkillListIdx];
-		//delay 함수
-	}
-	else
-	{
-
-	}
+	 float SkillInterval = Cast<ACharacterBase> (Causer)->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo.SkillIntervalList[NewIndex];
+	 GetWorld()->GetTimerManager().SetTimer(SkillTimerHandle, FTimerDelegate::CreateLambda([&]()
+		 {
+			 ClearAllTimerHandle();
+		 }), SkillInterval, false);
 }
 
-void USkillManagerBase::ComposeSkillMap(int32 SkillID, AActor* Causer, ACharacterBase* Target)
+ASkillBase* USkillManagerBase::ComposeSkillMap(int32 NewSkillID)
 {
+	ASkillBase* skill =nullptr;
 	if(Cast<AMainCharacterBase>(Causer)->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo.SkillGrade == ESkillGrade::E_None)
-		return;
+		return skill;
 
-	if (SkillRefMap.Contains(SkillID))
+	if (SkillRefMap.Contains(NewSkillID))
 	{
-		ASkillBase* skill = *SkillRefMap.Find(SkillID);
-		if (IsValid(skill))
-		{
-			skill->InitSkill(Causer, Target, SkillID, SkillSetInfo.SkillGrade);
-		}
+		skill = *SkillRefMap.Find(NewSkillID);
 	}
 	else
 	{
-		ASkillBase* skill = MakeSkillBase(SkillID);
-		if (IsValid(skill))
-		{
-			skill->InitSkill(Causer, Target, SkillID, SkillSetInfo.SkillGrade);
-		}
+		skill = MakeSkillBase(NewSkillID);
+		SkillRefMap.Add(NewSkillID, skill);
 	}
+	return skill;
 }
 
-ASkillBase* USkillManagerBase::MakeSkillBase(int32 SkillID)
+ASkillBase* USkillManagerBase::MakeSkillBase(int32 NewSkillID)
 {
-	FString skillkey = UKismetStringLibrary::Conv_IntToString(SkillID);
+	FString skillkey = UKismetStringLibrary::Conv_IntToString(NewSkillID);
 	FSkillInfoStruct* skillInfo = SkillInfoTable->FindRow<FSkillInfoStruct>((FName)skillkey, skillkey);
 	if (skillInfo != nullptr)
 	{
@@ -176,11 +164,16 @@ ASkillBase* USkillManagerBase::MakeSkillBase(int32 SkillID)
 		if (IsValid(skillBaseRef))
 		{
 			skillBaseRef->SetSkillManagerRef(this);
-			SkillRefMap.Add(SkillID, skillBaseRef);
+			SkillRefMap.Add(NewSkillID, skillBaseRef);
 			return skillBaseRef;
 		}
 	}
 	return nullptr;
+}
+
+void USkillManagerBase::ClearAllTimerHandle()
+{
+	GamemodeRef.Get()->GetWorldTimerManager().ClearTimer(SkillTimerHandle);
 }
 
 

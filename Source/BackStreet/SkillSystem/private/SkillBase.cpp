@@ -69,6 +69,10 @@ void ASkillBase::InitSkill_Implementation(AActor* Causer, class ACharacterBase* 
 	}
 }
 
+void ASkillBase::DestroySkill_Implementation()
+{
+}
+
 void ASkillBase::SetSkillManagerRef(USkillManagerBase* NewSkillManager)
 {
 	SkillManagerRef = NewSkillManager;

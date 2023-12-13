@@ -20,7 +20,10 @@ public:
 
 	//SkillManagerBase에서 스킬의 정보를 처리함
 	UFUNCTION(BlueprintCallable)
-		void ActivateSkill(AActor* Causer, class ACharacterBase* Target);
+		TArray<class ASkillBase*> ActivateSkill(AActor* NewCauser, class ACharacterBase* NewTarget);
+
+	UFUNCTION(BlueprintCallable)
+		void DestroySkill(TArray<ASkillBase*> UsedSkillList);
 
 	UFUNCTION()
 		UDataTable* GetSkillInfoTable() { return SkillInfoTable; }
@@ -28,24 +31,34 @@ public:
 protected:
 	//FSkillSet에 정보를 불러와 생성함
 	UFUNCTION()
-		void SetSkillSet(AActor* Causer);
+		void SetSkillSet(AActor* NewCauser);
 
 	//SkillMap에 ID에 맞는 스킬객체가 없다면 추가함
 	UFUNCTION()
-		void ComposeSkillMap(int32 SkillID, AActor* Causer, ACharacterBase* Target);
+		ASkillBase* ComposeSkillMap(int32 NewSkillID);
 	
 	//SkillMap에 추가할 스킬 객체를 생성함
 	UFUNCTION()
-		class ASkillBase* MakeSkillBase(int32 SkillID);
+		class ASkillBase* MakeSkillBase(int32 NewSkillID);
 
 	//SkillID에 맞추어 스킬간 사용 간격을 지정하고, Delay를 부여함
 	UFUNCTION()
-		void GetDelayInterval(int32 SkillListIdx, TArray<float> SkillIntervalList);
+		void DelaySkillInterval(uint8 NewIndex);
 
 	//스킬 스탯 테이블
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* SkillInfoTable;
+
+	UFUNCTION()
+		void ClearAllTimerHandle();
+
 private:
+	UPROPERTY()
+		AActor* Causer;
+
+	UPROPERTY()
+		ACharacterBase* Target;
+
 	//적 몹의 스킬셋 정보 맵
 	UPROPERTY()
 		TMap<int32,FSkillSetInfo> SkillSetInfoMap;
@@ -54,8 +67,14 @@ private:
 		TMap<int32, class ASkillBase*> SkillRefMap;
 
 	UPROPERTY()
+		TArray<class ASkillBase*> SkillList;
+
+	UPROPERTY()
 		FSkillSetInfo SkillSetInfo;
 
 	UPROPERTY()
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+	UPROPERTY()
+		FTimerHandle SkillTimerHandle;
 };

@@ -44,6 +44,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void InitSkill(AActor* Causer, class ACharacterBase* Target, int32 NewSkillID, ESkillGrade SkillGrade);
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+		void DestroySkill();
+
 	UFUNCTION()
 				void SetSkillManagerRef(class USkillManagerBase* NewSkillManager);
 
