@@ -127,3 +127,13 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<TSoftObjectPtr<UAnimMontage>> SkillAnimMontageList;
 };
+
+USTRUCT(BlueprintType)
+struct FSkillAnimAssetMontageStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<UAnimMontage*> SkillAnimMontageList;
+};

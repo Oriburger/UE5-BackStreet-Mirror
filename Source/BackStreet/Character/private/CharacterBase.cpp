@@ -274,17 +274,20 @@ void ACharacterBase::TryAttack()
 void ACharacterBase::TrySkillAttack(ACharacterBase* Target)
 {
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
-	if (!IsValid(weaponRef)) return;
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
 	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
 
-	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageList;
-	for (UAnimMontage* targetAnim : targetAnimList) 
+	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList;
+
+	int32 idx=0;
+	if (targetAnimList.IsValidIndex(idx))
 	{
-		if (IsValid(targetAnim))
-			PlayAnimMontage(targetAnim);
+		//delay(weaponRef->WeaponStat.SkillSetInfo.SkillAnimInterval[idx])
+		float animPlayTime = PlayAnimMontage(targetAnimList[idx], weaponRef->WeaponStat.SkillSetInfo.SkillAnimPlayRate[idx]);
+		//delay(animPlayTime)
+		idx++;
 	}
 }
 
@@ -551,13 +554,13 @@ bool ACharacterBase::InitAnimAsset()
 	}
 	for (auto index = AssetInfo.SkillAnimMontageMap.CreateConstIterator(); index; ++index)
 	{
-		TArray<TSoftObjectPtr<UAnimMontage>> skillAnimMontageList = index.Value().SkillAnimMontageList;
-		if (!skillAnimMontageList.IsEmpty())
-		{
-			for (auto& anim : skillAnimMontageList)
+		if (!index.Value().SkillAnimMontageList.IsEmpty())
+		{	
+			animAssetList.SkillAnimMontageMap.Add(index.Key());
+			for (TSoftObjectPtr<UAnimMontage> anim : index.Value().SkillAnimMontageList)
 			{
 				if (anim.IsValid())
-					animAssetList.SkillAnimMontageList.AddUnique(anim.Get());
+					animAssetList.SkillAnimMontageMap.Find(index.Key())->SkillAnimMontageList.AddUnique(anim.Get());
 			}
 		}
 	}
