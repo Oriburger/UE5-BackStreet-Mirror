@@ -149,7 +149,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> HitAnimMontageList;
 
-	//스킬 애니메이션 / Map으로 관리
+	//무기 ID, 스킬 애니메이션/ Map으로 관리
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TMap<int32, FSkillAnimMontageStruct> SkillAnimMontageMap;
 

@@ -61,6 +61,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void ResetActionState(bool bForceReset = false);
 
+	//Set Player's Action State
+	UFUNCTION(BlueprintCallable)
+		void SetActionState(ECharacterActionType Type);
+
 	//플레이어가 체력을 회복함 (일회성)
 	UFUNCTION()
 		void TakeHeal(float HealAmountRate, bool bIsTimerEvent = false, uint8 BuffDebuffType = 0);
@@ -170,15 +174,7 @@ private:
 	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
 
 // ----- 스킬 관련 --------------------------
-protected:
-	UPROPERTY()
-		struct FSkillSetInfo SkillSetInfo;
 
-	UPROPERTY()
-		ESkillGrade SkillGrade;
-
-	UPROPERTY()
-		class USkillManagerBase* SkillManagerRef;
 
 // ---- Asset -------------------
 public:
@@ -279,4 +275,8 @@ protected:
 
 	UPROPERTY()
 		FTimerHandle ReloadTimerHandle;
+
+	UPROPERTY()
+		FTimerHandle SkillTimerHandle;
+
 };

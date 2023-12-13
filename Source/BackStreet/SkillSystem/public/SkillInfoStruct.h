@@ -9,19 +9,63 @@ struct FSkillInfoStruct : public FTableRowBase
 public:
 	GENERATED_USTRUCT_BODY()
 
-	public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		int32 SkillID;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FName SkillName;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FName SKillDescription;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		FName SkillDescription;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		TSubclassOf<class ASkillBase> SkillBaseClassRef;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		UTexture2D* SkillIconImage;
+};
+
+USTRUCT(BlueprintType)
+struct FSkillAssetInfoStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	//스킬 ID
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		int32 SkillID;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		FName SkillName;
+
+	//스폰할 스킬 스태틱 메시 정보 저장
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+		TSoftObjectPtr<UStaticMesh> SkillMesh;
+
+	//메시의 초기 위치 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+		FVector InitialLocation;
+
+	//메시의 초기 회전 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+		FRotator InitialRotation;
+
+	//메시의 초기 크기 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+		FVector InitialScale;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UParticleSystem> EffectParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UParticleSystem> DestroyEffectParticle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		TSoftObjectPtr<class USoundCue> SkillSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		TSoftObjectPtr<class USoundCue> SkillFailSound;
 };
 
 USTRUCT(BlueprintType)
@@ -39,6 +83,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<float> SkillIntervalList;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<float> SkillAnimPlayRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<float> SkillAnimInterval;
 };
 
 USTRUCT(BlueprintType)
@@ -76,4 +126,14 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<TSoftObjectPtr<UAnimMontage>> SkillAnimMontageList;
+};
+
+USTRUCT(BlueprintType)
+struct FSkillAnimAssetMontageStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<UAnimMontage*> SkillAnimMontageList;
 };

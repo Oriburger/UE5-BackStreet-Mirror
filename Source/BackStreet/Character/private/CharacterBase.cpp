@@ -168,6 +168,12 @@ float ACharacterBase::TakeDebuffDamage(float DamageAmount, ECharacterDebuffType 
 	return DamageAmount;
 }
 
+void ACharacterBase::SetActionState(ECharacterActionType Type)
+{
+	CharacterState.CharacterActionState = Type;
+	return;
+}
+
 void ACharacterBase::TakeHeal(float HealAmountRate, bool bIsTimerEvent, uint8 BuffDebuffType)
 {
 	CharacterState.CharacterCurrHP += CharacterStat.CharacterMaxHP * HealAmountRate;
@@ -268,17 +274,32 @@ void ACharacterBase::TryAttack()
 void ACharacterBase::TrySkillAttack(ACharacterBase* Target)
 {
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
-	if (!IsValid(weaponRef)) return;
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
-	CharacterState.CharacterActionState = ECharacterActionType::E_SkillAttack;
+	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
 
-	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageList;
-	for (UAnimMontage* targetAnim : targetAnimList) 
+	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList;
+
+	int32 idx=0;
+	while (targetAnimList.IsValidIndex(idx))
 	{
-		if (IsValid(targetAnim))
-			PlayAnimMontage(targetAnim);
+		GetWorldTimerManager().ClearTimer(SkillTimerHandle);
+		//Timer of Animation Interval
+		GetWorld()->GetTimerManager().SetTimer(SkillTimerHandle, FTimerDelegate::CreateLambda([&]() 
+			{
+				GetWorld()->GetTimerManager().ClearTimer(SkillTimerHandle);
+			}), weaponRef->WeaponStat.SkillSetInfo.SkillAnimInterval[idx], false);
+
+		float animPlayTime = PlayAnimMontage(targetAnimList[idx], weaponRef->WeaponStat.SkillSetInfo.SkillAnimPlayRate[idx]);
+		
+		//Timer of Animation Play
+		GetWorld()->GetTimerManager().SetTimer(SkillTimerHandle, FTimerDelegate::CreateLambda([&]() 
+			{
+				GetWorld()->GetTimerManager().ClearTimer(SkillTimerHandle);
+			}), animPlayTime, false);
+
+		idx++;
 	}
 }
 
@@ -545,13 +566,13 @@ bool ACharacterBase::InitAnimAsset()
 	}
 	for (auto index = AssetInfo.SkillAnimMontageMap.CreateConstIterator(); index; ++index)
 	{
-		TArray<TSoftObjectPtr<UAnimMontage>> skillAnimMontageList = index.Value().SkillAnimMontageList;
-		if (!skillAnimMontageList.IsEmpty())
-		{
-			for (auto& anim : skillAnimMontageList)
+		if (!index.Value().SkillAnimMontageList.IsEmpty())
+		{	
+			animAssetList.SkillAnimMontageMap.Add(index.Key());
+			for (TSoftObjectPtr<UAnimMontage> anim : index.Value().SkillAnimMontageList)
 			{
 				if (anim.IsValid())
-					animAssetList.SkillAnimMontageList.AddUnique(anim.Get());
+					animAssetList.SkillAnimMontageMap.Find(index.Key())->SkillAnimMontageList.AddUnique(anim.Get());
 			}
 		}
 	}
@@ -805,4 +826,5 @@ void ACharacterBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
+	GetWorldTimerManager().ClearTimer(SkillTimerHandle);
 }

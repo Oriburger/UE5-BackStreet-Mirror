@@ -1,0 +1,30 @@
+[
+	{
+		"Name": "NewRow",
+		"SkillID": 1111,
+		"SkillName": "Dash",
+		"SkillMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticle": "None",
+		"DestroyEffectParticle": "None",
+		"SkillSound": "None",
+		"SkillFailSound": "None"
+	}
+]
