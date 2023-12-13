@@ -275,4 +275,8 @@ protected:
 
 	UPROPERTY()
 		FTimerHandle ReloadTimerHandle;
+
+	UPROPERTY()
+		FTimerHandle SkillTimerHandle;
+
 };

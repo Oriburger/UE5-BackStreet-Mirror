@@ -282,11 +282,23 @@ void ACharacterBase::TrySkillAttack(ACharacterBase* Target)
 	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList;
 
 	int32 idx=0;
-	if (targetAnimList.IsValidIndex(idx))
+	while (targetAnimList.IsValidIndex(idx))
 	{
-		//delay(weaponRef->WeaponStat.SkillSetInfo.SkillAnimInterval[idx])
+		GetWorldTimerManager().ClearTimer(SkillTimerHandle);
+		//Timer of Animation Interval
+		GetWorld()->GetTimerManager().SetTimer(SkillTimerHandle, FTimerDelegate::CreateLambda([&]() 
+			{
+				GetWorld()->GetTimerManager().ClearTimer(SkillTimerHandle);
+			}), weaponRef->WeaponStat.SkillSetInfo.SkillAnimInterval[idx], false);
+
 		float animPlayTime = PlayAnimMontage(targetAnimList[idx], weaponRef->WeaponStat.SkillSetInfo.SkillAnimPlayRate[idx]);
-		//delay(animPlayTime)
+		
+		//Timer of Animation Play
+		GetWorld()->GetTimerManager().SetTimer(SkillTimerHandle, FTimerDelegate::CreateLambda([&]() 
+			{
+				GetWorld()->GetTimerManager().ClearTimer(SkillTimerHandle);
+			}), animPlayTime, false);
+
 		idx++;
 	}
 }
@@ -814,4 +826,5 @@ void ACharacterBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
+	GetWorldTimerManager().ClearTimer(SkillTimerHandle);
 }

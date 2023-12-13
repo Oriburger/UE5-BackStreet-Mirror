@@ -375,10 +375,6 @@ void AMainCharacterBase::TrySkillAttack(ACharacterBase* Target)
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	Super::TrySkillAttack(Target);
-	if (IsValid(GamemodeRef->GetGlobalSkillmanagerBaseRef()))
-	{
-		GamemodeRef->GetGlobalSkillmanagerBaseRef()->ActivateSkill(this, Target);
-	}
 
 	FWeaponStatStruct weaponStat = GetCurrentWeaponRef()->GetWeaponStat();
 
