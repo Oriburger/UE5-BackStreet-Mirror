@@ -19,25 +19,8 @@ UENUM(BlueprintType)
 enum class EWaveCategoryInfo : uint8
 {
 	E_None				  	UMETA(DisplayName = "None"),
-	E_Hades					UMETA(DisplayName = "Hades"),
-	E_Defense			  	UMETA(DisplayName = "Defense"),
-};
-
-USTRUCT(BlueprintType)
-struct FStageEnemyRankStruct : public FTableRowBase
-{
-	GENERATED_BODY()
-
-public:
-	UPROPERTY(EditAnywhere)
-		uint8 StageLevel;
-
-	UPROPERTY(EditAnywhere)
-		FName StageType;
-
-	UPROPERTY(EditAnywhere)
-		FEnemyStatStruct StatData;
-
+	E_NomalWave					UMETA(DisplayName = "E_NomalWave"),
+	E_TimeLimitWave			  	UMETA(DisplayName = "E_TimeLimitWave"),
 };
 
 
@@ -98,19 +81,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
 		TMap<int32, float> ClearTimeForEachWave; // 웨이브별 버텨야하는 시간
 
-
-	// 제거할 항목
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
-		TArray<int32> NormalEnemyIDList;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
-		TArray<int32> BossEnemyIDList;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
-		int32 MaxSpawnEnemy;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
-		int32 MinSpawnEnemy;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		float SpawnInterval;
 
 };
 

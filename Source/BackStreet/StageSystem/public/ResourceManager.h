@@ -91,13 +91,13 @@ public:
 	UFUNCTION()
 		int32 GetSpawnPointIdx(class AStageData* Target);
 
-	// Select the ID of the monster to spawn
-	UFUNCTION()
-		int32 SelectSpawnMonsterID(class AStageData* Target);
+	//// Select the ID of the monster to spawn
+	//UFUNCTION()
+	//	int32 SelectSpawnMonsterID(class AStageData* Target);
 
-	// Select the total amount of monsters to spawn
-	UFUNCTION()
-		int32 SelectSpawnMonsterAmount(class AStageData* Target);
+	//// Select the total amount of monsters to spawn
+	//UFUNCTION()
+	//	int32 SelectSpawnMonsterAmount(class AStageData* Target);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

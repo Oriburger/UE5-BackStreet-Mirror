@@ -25,6 +25,8 @@ public:
 		FDelegateStage ClearDefenseWaveDelegate;
 
 public:
+	AWaveManager();
+
 	// 델리게이트 바인딩
 	UFUNCTION()
 		void InitWaveManager(class AChapterManagerBase* Target);
@@ -73,15 +75,23 @@ public:
 
 	// 디펜스 웨이브의 스테이지에 존재하는 몬스터 수 관리
 	UFUNCTION()
-		void ManageDefenseWaveMonsterCount(class AStageData* Target, int32 EnemyID, bool IsSpawn);
+		void ManageWaveMonsterCount(class AStageData* Target, int32 EnemyID, bool IsSpawn);
+
+	// Select EnemyID To Spawn
+	UFUNCTION()
+		int32 SelectEnemyID();
+
+	// Get the total number of enemy spawned during a wave
+	UFUNCTION()
+		int32 GetTotalNumberOfEnemySpawn(class AStageData* Target);
 
 public:
 	TWeakObjectPtr<class AChapterManagerBase> ChapterManager;
 
 	TWeakObjectPtr<class AResourceManager> ResourceManager;
 
-//public:
-//	UPROPERTY()
-//		FTimerHandle SpawnTimerHandle;
+public:
+	UDataTable* WaveEnemyDataTable;
+
 
 };
