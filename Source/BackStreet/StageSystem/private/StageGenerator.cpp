@@ -56,6 +56,7 @@ void UStageGenerator::InitStageData(FVector Vector, int32 Ypos, int32 Xpos, clas
 
 	Target->SetStageCategoryType(EStageCategoryInfo::E_Normal);
 	Target->SetCurrentWaveLevel(0);
+	Target->SetMonsterSpawnPointOrderIdx(0);
 
 	Target->SetIsValid(true);
 	Target->SetIsVisited(false);

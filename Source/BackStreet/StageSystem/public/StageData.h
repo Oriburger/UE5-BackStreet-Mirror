@@ -77,6 +77,9 @@ public:
 		void SetCurrentWaveLevel(int32 CurrentWaveLevel) { StageInfo.CurrentWaveLevel = CurrentWaveLevel; }
 
 	UFUNCTION()
+		void SetMonsterSpawnPointOrderIdx(int32 MonsterSpawnPointOrderIdx) { StageInfo.MonsterSpawnPointOrderIdx = MonsterSpawnPointOrderIdx; }
+
+	UFUNCTION()
 		bool GetIsClear() { return StageInfo.bIsClear; }
 
 	UFUNCTION()
@@ -208,11 +211,11 @@ public:
 
 	// Open All Gate in the Stage ( Chapter Gate is Open After Checking )
 	UFUNCTION(BlueprintCallable)
-		void OpenAllGate() { GateOnDelegate.Broadcast(); return; }
+		void OpenAllGate(); /*{ GateOnDelegate.Broadcast(); return; }*/
 
 	// Close All Gate in the Stage
 	UFUNCTION(BlueprintCallable)
-		void CloseAllGate() { GateOffDelegate.Broadcast(); return; }
+		void CloseAllGate();
 
 	// Return DefenseWaveSpawnTimerHandle
 	UFUNCTION(BlueprintCallable)

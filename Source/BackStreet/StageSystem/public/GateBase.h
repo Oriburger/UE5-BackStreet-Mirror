@@ -73,6 +73,9 @@ public:
 	// Check If Gate Is Needed
 	UFUNCTION(BlueprintCallable)
 		void CheckHaveToNeed();
+	// Deactivate Gate If stage Type is TimeLimitWave
+	UFUNCTION(BlueprintCallable)
+		void SetTimeLimitWaveGate();
 
 private:
 	UPROPERTY()

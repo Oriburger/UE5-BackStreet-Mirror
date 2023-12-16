@@ -52,7 +52,7 @@ void AGateBase::InitGate()
 		MoveStageDelegate.BindUFunction(GamemodeRef.Get()->GetChapterManagerRef()->GetTransitionManager(), FName("TryMoveStage"));
 	AddGate();
 	BindGateDelegate();
-
+	SetTimeLimitWaveGate();
 }
 
 void AGateBase::BindGateDelegate()
@@ -67,15 +67,12 @@ void AGateBase::BindGateDelegate()
 	}
 	if (this->ActorHasTag(FName("StartGate"))) return;
 
-	UE_LOG(LogTemp, Error, TEXT("AGateBase::BindGateDelegate -> Start Stage: %s"), *stage->GetName());
-	stage->GateOffDelegate.AddDynamic(this, &AGateBase::DeactivateGate);
+	//UE_LOG(LogTemp, Error, TEXT("AGateBase::BindGateDelegate -> Start Stage: %s"), *stage->GetName());
+	//stage->GateOffDelegate.AddDynamic(this, &AGateBase::DeactivateGate);
 
-	
-	if (this->ActorHasTag(FName("ChapterGate")))
-		stage->GateOnDelegate.AddDynamic(this, &AGateBase::ActivateChapterGateAfterCheck);
-	else
-		stage->GateOnDelegate.AddDynamic(this, &AGateBase::ActivateGate);
-	UE_LOG(LogTemp, Error, TEXT("AGateBase::BindGateDelegate -> Complete Stage: %s"),*stage->GetName());
+
+	//stage->GateOnDelegate.AddDynamic(this, &AGateBase::ActivateGate);
+	//UE_LOG(LogTemp, Error, TEXT("AGateBase::BindGateDelegate -> Complete Stage: %s"),*stage->GetName());
 
 }
 
@@ -99,18 +96,21 @@ void AGateBase::EnterGate()
 void AGateBase::ActivateGate()
 {
 	UE_LOG(LogTemp, Log, TEXT("AGateBase:ActivateGate"));
-	bIsGateActive = true;
 
 	if (this->ActorHasTag(FName("ChapterGate")))
-		ActivateChapterGateMaterial();
-	else
-		ActivateNormalGateMaterial();
+	{
+		ActivateChapterGateAfterCheck();
+			return;
+	}
+	
+	bIsGateActive = true;
+	ActivateNormalGateMaterial();
 
 }
 
 void AGateBase::DeactivateGate()
 {
-	UE_LOG(LogTemp, Log, TEXT("AGateBase:DeactivateGate"));
+	UE_LOG(LogTemp, Error, TEXT("AGateBase::DeactivateGate Gate : %s "), *this->GetName());
 	bIsGateActive = false;
 	DeactivateGateMaterial();
 }
@@ -118,7 +118,10 @@ void AGateBase::DeactivateGate()
 void AGateBase::ActivateChapterGateAfterCheck()
 {
 	if (GamemodeRef.Get()->GetChapterManagerRef()->IsChapterClear())
-		ActivateGate();
+	{
+		bIsGateActive = true;
+		ActivateChapterGateMaterial();
+	}
 
 }
 
@@ -243,4 +246,12 @@ void AGateBase::CheckHaveToNeed()
 
 		ActivateGate();
 	}
+}
+
+
+void AGateBase::SetTimeLimitWaveGate()
+{
+	AStageData* stage = GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage();
+	if (stage->GetStageTypeInfo().WaveType == EWaveCategoryInfo::E_TimeLimitWave && !stage->GetIsClear())
+		DeactivateGate();
 }

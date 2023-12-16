@@ -203,6 +203,8 @@ AEnemyCharacterBase* AResourceManager::CreateMonster(class AStageData* Target, i
 	monster->CharacterID = EnemyID;
 	monster->InitEnemyStat();
 	monster->InitAsset(EnemyID);
+	WaveManager->ManageWaveMonsterCount(Target, monster->CharacterID, true);
+
 
 	return monster;
 
@@ -251,25 +253,25 @@ int32 AResourceManager::GetSpawnPointIdx(class AStageData* Target)
 	return currentIdx;
 
 }
+//
+//int32 AResourceManager::SelectSpawnMonsterID(class AStageData* Target)
+//{
+//	ensure(Target != nullptr);
+//	FStageInfoStruct stageType = Target->GetStageTypeInfo();
+//	TArray<int32> enemyIDList = stageType.NormalEnemyIDList;
+//	int32 enemyIDIdx = FMath::RandRange(0, enemyIDList.Num() - 1);
+//
+//	return enemyIDList[enemyIDIdx];
+//}
 
-int32 AResourceManager::SelectSpawnMonsterID(class AStageData* Target)
-{
-	ensure(Target != nullptr);
-	FStageInfoStruct stageType = Target->GetStageTypeInfo();
-	TArray<int32> enemyIDList = stageType.NormalEnemyIDList;
-	int32 enemyIDIdx = FMath::RandRange(0, enemyIDList.Num() - 1);
-
-	return enemyIDList[enemyIDIdx];
-}
-
-int32 AResourceManager::SelectSpawnMonsterAmount(class AStageData* Target)
-{
-	ensure(Target != nullptr);
-	FStageInfoStruct stageType = Target->GetStageTypeInfo();
-	int32 spawnNum = FMath::RandRange(stageType.MinSpawnEnemy, stageType.MaxSpawnEnemy);
-	
-	return spawnNum;
-}
+//int32 AResourceManager::SelectSpawnMonsterAmount(class AStageData* Target)
+//{
+//	ensure(Target != nullptr);
+//	FStageInfoStruct stageType = Target->GetStageTypeInfo();
+//	int32 spawnNum = FMath::RandRange(stageType.MinSpawnEnemy, stageType.MaxSpawnEnemy);
+//	
+//	return spawnNum;
+//}
 
 void AResourceManager::CleanAllResource()
 {

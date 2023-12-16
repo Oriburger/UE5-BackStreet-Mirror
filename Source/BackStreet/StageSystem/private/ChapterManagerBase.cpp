@@ -179,7 +179,7 @@ void AChapterManagerBase::InitStageTypeArray()
 			if (target->StageType == EStageCategoryInfo::E_Normal)
 			{
 				// Temporary) Debug Code Need To Fix
-				if(target->WaveType==EWaveCategoryInfo::E_Defense)
+				//if(target->WaveType==EWaveCategoryInfo::E_TimeLimitWave)
 					NormalStageTypes.Add(*target);
 			}
 			else if (target->StageType == EStageCategoryInfo::E_Boss)
