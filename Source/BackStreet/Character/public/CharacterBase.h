@@ -59,7 +59,7 @@ public:
 
 	//플레이어의 ActionState를 Idle로 전환한다.
 	UFUNCTION(BlueprintCallable)
-		void ResetActionState(bool bForceReset = false);
+			void ResetActionState		(bool bForceReset = false);
 
 	//Set Player's Action State
 	UFUNCTION(BlueprintCallable)
@@ -269,6 +269,14 @@ protected:
 	UFUNCTION()
 		virtual void ClearAllTimerHandle();
 
+	UFUNCTION()
+		void PlaySkillAnimation();
+
+	UPROPERTY()
+		int Curr ;
+	UPROPERTY()
+		int Threshold;
+
 	//공격 간 딜레이 핸들
 	UPROPERTY()
 		FTimerHandle AtkIntervalHandle;
@@ -277,6 +285,6 @@ protected:
 		FTimerHandle ReloadTimerHandle;
 
 	UPROPERTY()
-		FTimerHandle SkillTimerHandle;
+		TArray<FTimerHandle> SkillAnimPlayTimerHandleList;
 
 };

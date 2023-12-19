@@ -278,29 +278,31 @@ void ACharacterBase::TrySkillAttack(ACharacterBase* Target)
 
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
 	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
+	Curr = 0;
+	Threshold = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
+	UE_LOG(LogTemp, Log, TEXT("threshold : %d \n"), Threshold);
+	SkillAnimPlayTimerHandleList.SetNum(Threshold);
+	PlaySkillAnimation();
+}
 
-	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList;
-
-	int32 idx=0;
-	while (targetAnimList.IsValidIndex(idx))
+void ACharacterBase::PlaySkillAnimation()
+{
+	if (Curr >= Threshold)
 	{
-		GetWorldTimerManager().ClearTimer(SkillTimerHandle);
-		//Timer of Animation Interval
-		GetWorld()->GetTimerManager().SetTimer(SkillTimerHandle, FTimerDelegate::CreateLambda([&]() 
-			{
-				GetWorld()->GetTimerManager().ClearTimer(SkillTimerHandle);
-			}), weaponRef->WeaponStat.SkillSetInfo.SkillAnimInterval[idx], false);
-
-		float animPlayTime = PlayAnimMontage(targetAnimList[idx], weaponRef->WeaponStat.SkillSetInfo.SkillAnimPlayRate[idx]);
-		
-		//Timer of Animation Play
-		GetWorld()->GetTimerManager().SetTimer(SkillTimerHandle, FTimerDelegate::CreateLambda([&]() 
-			{
-				GetWorld()->GetTimerManager().ClearTimer(SkillTimerHandle);
-			}), animPlayTime, false);
-
-		idx++;
+		UE_LOG(LogTemp, Log, TEXT("Remove SkillAnimPlayTimerHanlde List\n"));
+		SkillAnimPlayTimerHandleList.Empty();
+		return;
 	}
+	
+	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(GetCurrentWeaponRef()->WeaponID)->SkillAnimMontageList;
+	float animPlayTime = PlayAnimMontage(targetAnimList[Curr], GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRate[Curr]);
+	UE_LOG(LogTemp, Log, TEXT("AnimPlayTime : %f \n"), animPlayTime);
+	GetWorld()->GetTimerManager().SetTimer(SkillAnimPlayTimerHandleList[Curr], FTimerDelegate::CreateLambda([&]()
+		{
+			Curr += 1;
+			PlaySkillAnimation();
+		}), animPlayTime, false);
+	return;
 }
 
 void ACharacterBase::Attack()
@@ -826,5 +828,5 @@ void ACharacterBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
-	GetWorldTimerManager().ClearTimer(SkillTimerHandle);
+	SkillAnimPlayTimerHandleList.Empty();
 }
