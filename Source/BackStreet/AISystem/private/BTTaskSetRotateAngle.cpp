@@ -25,7 +25,6 @@ void UBTTaskSetRotateAngle::InitializeFromAsset(UBehaviorTree& Asset)
     UBlackboardData* bbAsset = GetBlackboardAsset();
     if (bbAsset != nullptr)
     {
-        TargetCharacterBBKey.ResolveSelectedKey(*bbAsset);
         TargetRotationBBKey.ResolveSelectedKey(*bbAsset);
         ChaseEndFlagBBKey.ResolveSelectedKey(*bbAsset);
     }

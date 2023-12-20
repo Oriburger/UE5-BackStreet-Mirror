@@ -23,9 +23,6 @@ public:
 
 	UPROPERTY(EditInstanceOnly)
 		FBlackboardKeySelector ChaseEndFlagBBKey;
-
-	UPROPERTY(EditInstanceOnly)
-		FBlackboardKeySelector TargetCharacterBBKey;
 	
 	UPROPERTY(EditInstanceOnly)
 		FBlackboardKeySelector TargetRotationBBKey;
