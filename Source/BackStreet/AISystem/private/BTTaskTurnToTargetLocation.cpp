@@ -38,11 +38,11 @@ void UBTTaskTurnToTargetLocation::InitializeFromAsset(UBehaviorTree& Asset)
 EBTNodeResult::Type UBTTaskTurnToTargetLocation::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
     Super::ExecuteTask(OwnerComp, NodeMemory);
-
     OwnerCharacterRef = Cast<AEnemyCharacterBase>(OwnerComp.GetAIOwner()->GetPawn());
     BlackboardRef = OwnerComp.GetBlackboardComponent();
-
+    
     InitTargetLocationFromBBKey();
+    
     OwnerCharacterRef->SetActorRotation(GetTurnRotation(OwnerCharacterRef.Get()));
  
     return EBTNodeResult::Succeeded;

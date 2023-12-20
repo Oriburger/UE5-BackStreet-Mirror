@@ -117,9 +117,9 @@ bool UBTStateManageServiceBase::CheckChaseState()
 bool UBTStateManageServiceBase::CheckAttackState()
 {
 	if (!BlackboardRef.IsValid()) return false;
-	if (!BlackboardRef.Get()->GetValueAsBool(FName("ReadyToAttack"))) return false;
-	if (!BlackboardRef.Get()->GetValueAsBool(FName("PreChaseAnimFlag"))) return false;
-	if ( BlackboardRef.Get()->GetValueAsBool(FName("HasRangedWeapon")) && !BlackboardRef.Get()->GetValueAsBool(FName("HasLineOfSight"))) return false;
+	if(!BlackboardRef.Get()->GetValueAsBool(FName("ReadyToAttack"))) return false;
+	if(!BlackboardRef.Get()->GetValueAsBool(FName("PreChaseAnimFlag"))) return false;
+	if( BlackboardRef.Get()->GetValueAsBool(FName("HasRangedWeapon")) && !BlackboardRef.Get()->GetValueAsBool(FName("HasLineOfSight"))) return false;
 
 	ACharacter* targetCharacterRef = Cast<ACharacter>(BlackboardRef.Get()->GetValueAsObject(FName("TargetCharacter")));
 	AWeaponBase* weaponActorRef = OwnerCharacterRef.Get()->GetCurrentWeaponRef();
