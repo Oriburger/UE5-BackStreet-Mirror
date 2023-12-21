@@ -46,8 +46,8 @@ EBTNodeResult::Type UBTTaskSetRotateAngle::ExecuteTask(UBehaviorTreeComponent& O
         return EBTNodeResult::Failed;
 
     //Check return task is done.
-    if (!GetIsPatrolTaskDone())
-        return EBTNodeResult::Failed;
+    //if (!GetIsPatrolTaskDone())
+    //     return EBTNodeResult::Failed;
        
     float targetAngle = OwnerCharacterRef.Get()->GetActorRotation().Yaw;
     targetAngle = bIsRightTurn ? targetAngle + RotateAngleRight : targetAngle - RotateAngleLeft;

@@ -52,23 +52,37 @@ EBTNodeResult::Type UBTTaskTurnToTargetLocation::ExecuteTask(UBehaviorTreeCompon
 FRotator UBTTaskTurnToTargetLocation::GetTurnRotation(APawn* ControlledPawn)
 {   
     if (!IsValid(ControlledPawn)) return FRotator();
-    
-    FVector targetLocation;
+
+    //if key type is frotator -> get target rotation using target rotation 
     if (TargetBBKey.SelectedKeyType == UBlackboardKeyType_Rotator::StaticClass())
-        return BlackboardRef->GetValueAsRotator(TargetBBKey.SelectedKeyName);
-    else if (TargetBBKey.SelectedKeyType == UBlackboardKeyType_Object::StaticClass())
-        targetLocation = Cast<AActor>(BlackboardRef->GetValueAsObject(TargetBBKey.SelectedKeyName))->GetActorLocation();
+    {
+        FRotator pawnRotation = ControlledPawn->GetActorRotation();
+        FRotator targetRotation = BlackboardRef->GetValueAsRotator(TargetBBKey.SelectedKeyName);
+        if (UKismetMathLibrary::EqualEqual_RotatorRotator(pawnRotation, targetRotation, 2.0f))
+            return targetRotation;
+        return UKismetMathLibrary::RInterpTo(pawnRotation, targetRotation, GetWorld()->GetDeltaSeconds(), 2.0f);
+    }
+    //other cases
+    FVector targetLocation;
+    if (TargetBBKey.SelectedKeyType == UBlackboardKeyType_Object::StaticClass())
+    {
+        AActor* targetActor = Cast<AActor>(BlackboardRef->GetValueAsObject(TargetBBKey.SelectedKeyName));
+        if (!IsValid(targetActor))
+            return FRotator();
+        targetLocation = targetActor->GetActorLocation();
+    }
     else if (TargetBBKey.SelectedKeyType == UBlackboardKeyType_Vector::StaticClass())
         targetLocation = BlackboardRef->GetValueAsVector(TargetBBKey.SelectedKeyName);
     else 
         return FRotator();
 
+    //Get target rotation using target location.
     FVector directionToTarget = targetLocation - ControlledPawn->GetActorLocation();
     directionToTarget.Z = 0.0f;
 
     FRotator pawnRotation = ControlledPawn->GetActorRotation(); 
     FRotator targetRotation = UKismetMathLibrary::MakeRotFromX(directionToTarget);
-    
+
     return UKismetMathLibrary::RInterpTo(pawnRotation, targetRotation, GetWorld()->GetDeltaSeconds(), 2.0f);
 }   
     
