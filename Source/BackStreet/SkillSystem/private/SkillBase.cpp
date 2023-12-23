@@ -31,21 +31,11 @@ void ASkillBase::BeginPlay()
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
-void ASkillBase::InitSkill_Implementation(AActor* Causer, class ACharacterBase* Target, int32 NewSkillID, ESkillGrade SkillGrade)
+void ASkillBase::InitSkill_Implementation(AActor* NewCauser, class ACharacterBase* NewTarget)
 {
-	//Stat, State 초기화 
-	SkillID = NewSkillID;
-
-	if (NewSkillID == 0)
-	{
-		SkillAssetInfo = FSkillAssetInfoStruct();
-		SkillMesh->SetStaticMesh(nullptr);
-		return;
-	}
-
-	//FSkillStatStruct newStat = GetSkillnStatInfoWithID(SkillID);
-	//UpdateSkillStat(newStat);
-
+	Causer =NewCauser;
+	Target = NewTarget;
+	
 	//에셋 초기화
 	FSkillAssetInfoStruct newAssetInfo = GetSkillAssetInfoWithID(SkillID);
 	SkillAssetInfo = newAssetInfo;
@@ -71,6 +61,7 @@ void ASkillBase::InitSkill_Implementation(AActor* Causer, class ACharacterBase* 
 
 void ASkillBase::DestroySkill_Implementation()
 {
+
 }
 
 void ASkillBase::SetSkillManagerRef(USkillManagerBase* NewSkillManager)
@@ -127,10 +118,6 @@ FSkillAssetInfoStruct ASkillBase::GetSkillAssetInfoWithID(int32 TargetSkillID)
 	}
 	return FSkillAssetInfoStruct();
 }
-
-void ASkillBase::SkillAttack() {}
-
-void ASkillBase::StopSkillAttack() {}
 
 void ASkillBase::PlayEffectSound(USoundCue* EffectSound)
 {

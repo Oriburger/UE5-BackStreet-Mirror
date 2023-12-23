@@ -23,19 +23,27 @@ public:
 		TArray<class ASkillBase*> ActivateSkill(AActor* NewCauser, class ACharacterBase* NewTarget);
 
 	UFUNCTION(BlueprintCallable)
-		void DestroySkill(TArray<ASkillBase*> UsedSkillList);
+		void DestroySkill(AActor* NewCauser, TArray<ASkillBase*> UsedSkillList);
 
 	UFUNCTION()
 		UDataTable* GetSkillInfoTable() { return SkillInfoTable; }
 
 protected:
-	//FSkillSet에 정보를 불러와 생성함
+	//Set MainCharacter's Skill Grade by Compare SkillGauge
 	UFUNCTION()
-		void SetSkillSet(AActor* NewCauser);
+		void SetMainCharacterSkillGrade(AActor* NewCauser);
+
+	//Set EnemyCharacter's Skill Grade by Compare Defficulty
+	UFUNCTION()
+		void SetEnemyCharacterSkillGrade(AActor* NewCauser);
+	
+	//Return is Not E_None
+	UFUNCTION()
+		bool IsValidGrade(AActor* NewCauser);
 
 	//SkillMap에 ID에 맞는 스킬객체가 없다면 추가함
 	UFUNCTION()
-		ASkillBase* ComposeSkillMap(int32 NewSkillID);
+		ASkillBase* ComposeSkillMap(AActor* NewCauser, int32 NewSkillID);
 	
 	//SkillMap에 추가할 스킬 객체를 생성함
 	UFUNCTION()
@@ -54,23 +62,10 @@ protected:
 
 private:
 	UPROPERTY()
-		AActor* Causer;
-
-	UPROPERTY()
-		ACharacterBase* Target;
-
-	//적 몹의 스킬셋 정보 맵
-	UPROPERTY()
-		TMap<int32,FSkillSetInfo> SkillSetInfoMap;
-
-	UPROPERTY()
 		TMap<int32, class ASkillBase*> SkillRefMap;
 
 	UPROPERTY()
 		TArray<class ASkillBase*> SkillList;
-
-	UPROPERTY()
-		FSkillSetInfo SkillSetInfo;
 
 	UPROPERTY()
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;

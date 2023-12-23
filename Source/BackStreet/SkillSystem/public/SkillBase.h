@@ -30,27 +30,27 @@ public:
 
 //------- 기본 프로퍼티, Action -------------------
 public:
-	//공격 처리
-	virtual void SkillAttack();
-
-	//공격 마무리 처리
-	virtual void StopSkillAttack();
-
 	//필수 지정 프로퍼티
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
 		int32 SkillID;
 
-	//스킬를 초기화 한다. (스탯은 반드시 따로 초기화 해주어야한다.)
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
+		AActor* Causer;
+		
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
+		ACharacterBase* Target;
+
+	//Reset Skill
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-		void InitSkill(AActor* Causer, class ACharacterBase* Target, int32 NewSkillID, ESkillGrade SkillGrade);
+		void InitSkill(AActor* NewCauser, class ACharacterBase* NewTarget);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void DestroySkill();
 
 	UFUNCTION()
-				void SetSkillManagerRef(class USkillManagerBase* NewSkillManager);
+		void SetSkillManagerRef(class USkillManagerBase* NewSkillManager);
 
-	//--------- 데이터 테이블, 에셋 관련 ----------------------
+//--------- 데이터 테이블, 에셋 관련 ----------------------
 protected:
 	//스킬 에셋 정보 테이블
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
@@ -84,7 +84,6 @@ protected:
 		class USoundCue* SkillFailSound;
 
 protected:
-	//모든 타이머를 해제
 	UFUNCTION(BlueprintCallable)
 		virtual void ClearAllTimerHandle();
 
@@ -98,6 +97,6 @@ protected:
 	//소유자 캐릭터 약 참조
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 
-	//
+	//SkillManager Weak Pointer
 	TWeakObjectPtr<class USkillManagerBase> SkillManagerRef;
 };

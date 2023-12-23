@@ -10,17 +10,17 @@
 	{
 		"Name": "1111",
 		"SkillID": 1111,
-		"SkillName": "Dash",
+		"SkillName": "Teleport",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/MainCharacter/BP_Dash.BP_Dash_C'",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/MainCharacter/Skill_Teleport.Skill_Teleport_C'",
 		"SkillIconImage": "None"
 	},
 	{
 		"Name": "1112",
 		"SkillID": 1112,
-		"SkillName": "Teleport",
+		"SkillName": "Dash",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/MainCharacter/BP_Teleport.BP_Teleport_C'",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/MainCharacter/Skill_Dash.Skill_Dash_C'",
 		"SkillIconImage": "None"
 	}
 ]

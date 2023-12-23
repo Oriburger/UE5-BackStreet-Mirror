@@ -280,7 +280,6 @@ void ACharacterBase::TrySkillAttack(ACharacterBase* Target)
 	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
 	Curr = 0;
 	Threshold = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
-	UE_LOG(LogTemp, Log, TEXT("threshold : %d \n"), Threshold);
 	SkillAnimPlayTimerHandleList.SetNum(Threshold);
 	PlaySkillAnimation();
 }
@@ -289,14 +288,12 @@ void ACharacterBase::PlaySkillAnimation()
 {
 	if (Curr >= Threshold)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Remove SkillAnimPlayTimerHanlde List\n"));
 		SkillAnimPlayTimerHandleList.Empty();
 		return;
 	}
 	
 	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(GetCurrentWeaponRef()->WeaponID)->SkillAnimMontageList;
 	float animPlayTime = PlayAnimMontage(targetAnimList[Curr], GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRate[Curr]);
-	UE_LOG(LogTemp, Log, TEXT("AnimPlayTime : %f \n"), animPlayTime);
 	GetWorld()->GetTimerManager().SetTimer(SkillAnimPlayTimerHandleList[Curr], FTimerDelegate::CreateLambda([&]()
 		{
 			Curr += 1;
