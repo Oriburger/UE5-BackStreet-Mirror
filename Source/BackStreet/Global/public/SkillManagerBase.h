@@ -20,7 +20,7 @@ public:
 
 	//SkillManagerBase에서 스킬의 정보를 처리함
 	UFUNCTION(BlueprintCallable)
-		TArray<class ASkillBase*> ActivateSkill(AActor* NewCauser, class ACharacterBase* NewTarget);
+		TArray<class ASkillBase*> ActivateSkill(AActor* NewCauser, TArray<ACharacterBase*> NewTargetList);
 
 	UFUNCTION(BlueprintCallable)
 		void DestroySkill(AActor* NewCauser, TArray<ASkillBase*> UsedSkillList);

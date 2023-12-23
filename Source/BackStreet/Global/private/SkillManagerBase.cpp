@@ -22,7 +22,7 @@ void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemod
 	GamemodeRef = NewGamemodeRef;
 }
 
-TArray<ASkillBase*> USkillManagerBase::ActivateSkill(AActor* NewCauser, ACharacterBase* NewTarget)
+TArray<ASkillBase*> USkillManagerBase::ActivateSkill(AActor* NewCauser, TArray<ACharacterBase*> NewTargetList)
 {
 	SkillList.Empty();
 	ACharacterBase* causer = Cast<ACharacterBase>(NewCauser);
@@ -47,7 +47,7 @@ TArray<ASkillBase*> USkillManagerBase::ActivateSkill(AActor* NewCauser, ACharact
 			DelaySkillInterval(idx);
 		}
 		ASkillBase* skill = ComposeSkillMap(causer, skillSetInfo.SkillIDList[idx]);
-		skill->InitSkill(NewCauser, NewTarget);
+		skill->InitSkill(NewCauser, NewTargetList);
 		SkillList.Add(skill);
 	}
 	return SkillList;
@@ -61,9 +61,14 @@ void USkillManagerBase::DestroySkill(AActor* NewCauser, TArray<ASkillBase*> Used
 		if (IsValid(skill))
 		{
 			FWeaponStatStruct currWeaponStat = causer->GetCurrentWeaponRef()->GetWeaponStat();
+			FTransform skillTransform;
+			FVector skillLocation;
+			skillLocation.Set(0, 0, -400);
+			skillTransform.SetLocation(skillLocation);
 			currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
 			causer->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
-			skill->DestroySkill();
+			skill->SetActorTransform(skillTransform);
+			skill->SetActorHiddenInGame(true);
 		}
 	}
 }
@@ -164,6 +169,7 @@ ASkillBase* USkillManagerBase::ComposeSkillMap(AActor* NewCauser, int32 NewSkill
 	if (SkillRefMap.Contains(NewSkillID))
 	{
 		skill = *SkillRefMap.Find(NewSkillID);
+		skill->SetActorHiddenInGame(false);
 	}
 	else
 	{

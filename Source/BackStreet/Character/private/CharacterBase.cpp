@@ -271,7 +271,7 @@ void ACharacterBase::TryAttack()
 	}
 }
 
-void ACharacterBase::TrySkillAttack(ACharacterBase* Target)
+void ACharacterBase::TrySkillAttack()
 {
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;

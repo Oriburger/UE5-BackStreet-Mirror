@@ -31,10 +31,10 @@ void ASkillBase::BeginPlay()
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
-void ASkillBase::InitSkill_Implementation(AActor* NewCauser, class ACharacterBase* NewTarget)
+void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList)
 {
-	Causer =NewCauser;
-	Target = NewTarget;
+	Causer = NewCauser;
+	TargetList = NewTargetList;
 	
 	//에셋 초기화
 	FSkillAssetInfoStruct newAssetInfo = GetSkillAssetInfoWithID(SkillID);
@@ -57,11 +57,7 @@ void ASkillBase::InitSkill_Implementation(AActor* NewCauser, class ACharacterBas
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &ASkillBase::InitSkillAsset));
 	}
-}
-
-void ASkillBase::DestroySkill_Implementation()
-{
-
+	StartSkill();
 }
 
 void ASkillBase::SetSkillManagerRef(USkillManagerBase* NewSkillManager)

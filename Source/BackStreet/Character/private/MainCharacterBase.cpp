@@ -360,7 +360,7 @@ void AMainCharacterBase::TryAttack()
 	}), 0.1f, false);
 }
 
-void AMainCharacterBase::TrySkillAttack(ACharacterBase* Target)
+void AMainCharacterBase::TrySkillAttack()
 {
 	check(GetCurrentWeaponRef() != nullptr);
 
@@ -374,7 +374,7 @@ void AMainCharacterBase::TrySkillAttack(ACharacterBase* Target)
 	}
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
-	Super::TrySkillAttack(Target);
+	Super::TrySkillAttack();
 
 	//Reset Weapon Skill Grade
 	FWeaponStatStruct weaponStat = GetCurrentWeaponRef()->GetWeaponStat();

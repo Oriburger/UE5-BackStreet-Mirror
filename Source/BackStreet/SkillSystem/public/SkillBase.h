@@ -38,14 +38,14 @@ public:
 		AActor* Causer;
 		
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
-		ACharacterBase* Target;
+		TArray<class ACharacterBase*> TargetList;
 
 	//Reset Skill
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-		void InitSkill(AActor* NewCauser, class ACharacterBase* NewTarget);
+	UFUNCTION()
+		void InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList);
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-		void DestroySkill();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void StartSkill();
 
 	UFUNCTION()
 		void SetSkillManagerRef(class USkillManagerBase* NewSkillManager);
