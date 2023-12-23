@@ -8,7 +8,6 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateAIContorl);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateGate);
 
-
 UCLASS()
 class BACKSTREET_API AStageData : public AActor
 {
@@ -203,7 +202,7 @@ public:
 		void SetLevelRef(ULevelStreaming* Target) { StageInfo.LevelRef = Target; }
 
 	// юс╫ц
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		FStageDataStruct GetStageInfo() { return StageInfo; }
 
 	UFUNCTION()
@@ -211,7 +210,7 @@ public:
 
 	// Open All Gate in the Stage ( Chapter Gate is Open After Checking )
 	UFUNCTION(BlueprintCallable)
-		void OpenAllGate(); /*{ GateOnDelegate.Broadcast(); return; }*/
+		void OpenAllGate();
 
 	// Close All Gate in the Stage
 	UFUNCTION(BlueprintCallable)
@@ -224,6 +223,10 @@ public:
 	// Return DefenseWaveClearTimeTimerHandle
 	UFUNCTION(BlueprintCallable)
 		FTimerHandle& GetDefenseWaveClearTimeTimerHandle() { return DefenseWaveClearTimeTimerHandle; }
+
+	// Do Task Related Stage Clear
+	UFUNCTION()
+		void DoStageClearTask();
 
 private:
 	UPROPERTY()

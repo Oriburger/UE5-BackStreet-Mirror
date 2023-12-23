@@ -26,9 +26,7 @@ void AResourceManager::BeginPlay()
 	ABackStreetGameModeBase* gameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	ensure(gameModeRef != nullptr);
 
-	gameModeRef->ClearResourceDelegate.AddDynamic(this, &AResourceManager::CleanAllResource);
-	gameModeRef->ChapterClearResourceDelegate.AddDynamic(this, &AResourceManager::CleanAllResource);
-	
+	gameModeRef->ClearResourceDelegate.AddDynamic(this, &AResourceManager::CleanAllResource);	
 }
 
 void AResourceManager::InitReference(class AWaveManager* Target)

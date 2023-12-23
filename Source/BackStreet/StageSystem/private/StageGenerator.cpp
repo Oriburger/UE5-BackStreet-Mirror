@@ -20,6 +20,7 @@ TArray<class AStageData*> UStageGenerator::CreateMaze()
 			FRotator rotator;
 
 			AStageData* target = NewObject<AStageData>(this->GetOuter());
+			target->SetOwner(Cast<AChapterManagerBase>(this->GetOuter()));
 			InitStageData(spawnLocation, y, x, target);
 
 			Stages.Push(target);
