@@ -20,10 +20,7 @@ public:
 
 	//SkillManagerBase에서 스킬의 정보를 처리함
 	UFUNCTION(BlueprintCallable)
-		TArray<class ASkillBase*> ActivateSkill(AActor* NewCauser, TArray<ACharacterBase*> NewTargetList);
-
-	UFUNCTION(BlueprintCallable)
-		void DestroySkill(AActor* NewCauser, TArray<ASkillBase*> UsedSkillList);
+		void ActivateSkill(AActor* NewCauser, TArray<ACharacterBase*> NewTargetList);
 
 	UFUNCTION()
 		UDataTable* GetSkillInfoTable() { return SkillInfoTable; }
@@ -63,9 +60,6 @@ protected:
 private:
 	UPROPERTY()
 		TMap<int32, class ASkillBase*> SkillRefMap;
-
-	UPROPERTY()
-		TArray<class ASkillBase*> SkillList;
 
 	UPROPERTY()
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;

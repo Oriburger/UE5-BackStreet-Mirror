@@ -4,6 +4,8 @@
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 #include "../../Global/public/SkillManagerBase.h"
+#include "../../Character/public/CharacterBase.h"
+#include "../../Item/public/WeaponBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 
 // Sets default values
@@ -58,6 +60,23 @@ void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& New
 		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &ASkillBase::InitSkillAsset));
 	}
 	StartSkill();
+}
+
+void ASkillBase::DestroySkill()
+{
+	class ACharacterBase* causer = Cast<class ACharacterBase>(Causer);
+	if (!IsValid(causer) || !IsValid(causer->GetCurrentWeaponRef())) return;
+
+	FWeaponStatStruct currWeaponStat = causer->GetCurrentWeaponRef()->GetWeaponStat();
+	FTransform skillTransform;
+	FVector skillLocation;
+	skillLocation.Set(0, 0, -400);
+	skillTransform.SetLocation(skillLocation);
+	currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
+	causer->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
+	this->SetActorTransform(skillTransform);
+	this->SetActorHiddenInGame(true);
+	TargetList.Empty();
 }
 
 void ASkillBase::SetSkillManagerRef(USkillManagerBase* NewSkillManager)

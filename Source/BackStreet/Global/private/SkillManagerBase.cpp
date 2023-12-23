@@ -22,11 +22,10 @@ void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemod
 	GamemodeRef = NewGamemodeRef;
 }
 
-TArray<ASkillBase*> USkillManagerBase::ActivateSkill(AActor* NewCauser, TArray<ACharacterBase*> NewTargetList)
+void USkillManagerBase::ActivateSkill(AActor* NewCauser, TArray<ACharacterBase*> NewTargetList)
 {
-	SkillList.Empty();
 	ACharacterBase* causer = Cast<ACharacterBase>(NewCauser);
-	if (!IsValid(causer)) return SkillList;
+	if (!IsValid(causer)) return;
 	
 	if (causer->ActorHasTag("Player"))
 	{
@@ -36,9 +35,9 @@ TArray<ASkillBase*> USkillManagerBase::ActivateSkill(AActor* NewCauser, TArray<A
 	{
 		SetEnemyCharacterSkillGrade(causer);
 	}
-	else return SkillList;
+	else return;
 	
-	if (!IsValidGrade(causer)) return SkillList;
+	if (!IsValidGrade(causer)) return;
 	FSkillSetInfo skillSetInfo =  causer->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo;
 	for (uint8 idx = 0; idx < skillSetInfo.SkillIDList.Num(); idx++)
 	{
@@ -48,29 +47,8 @@ TArray<ASkillBase*> USkillManagerBase::ActivateSkill(AActor* NewCauser, TArray<A
 		}
 		ASkillBase* skill = ComposeSkillMap(causer, skillSetInfo.SkillIDList[idx]);
 		skill->InitSkill(NewCauser, NewTargetList);
-		SkillList.Add(skill);
 	}
-	return SkillList;
-}
-
-void USkillManagerBase::DestroySkill(AActor* NewCauser, TArray<ASkillBase*> UsedSkillList)
-{
-	ACharacterBase* causer = Cast<ACharacterBase>(NewCauser);
-	if (!IsValid(causer) || !IsValid(causer->GetCurrentWeaponRef())) return;
-	for (ASkillBase* skill : UsedSkillList) {
-		if (IsValid(skill))
-		{
-			FWeaponStatStruct currWeaponStat = causer->GetCurrentWeaponRef()->GetWeaponStat();
-			FTransform skillTransform;
-			FVector skillLocation;
-			skillLocation.Set(0, 0, -400);
-			skillTransform.SetLocation(skillLocation);
-			currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
-			causer->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
-			skill->SetActorTransform(skillTransform);
-			skill->SetActorHiddenInGame(true);
-		}
-	}
+	return;
 }
 
 void USkillManagerBase::SetMainCharacterSkillGrade(AActor* NewCauser) 

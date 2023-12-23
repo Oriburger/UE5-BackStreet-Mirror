@@ -47,6 +47,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void StartSkill();
 
+	UFUNCTION(BlueprintCallable)
+		void DestroySkill();
+
 	UFUNCTION()
 		void SetSkillManagerRef(class USkillManagerBase* NewSkillManager);
 
