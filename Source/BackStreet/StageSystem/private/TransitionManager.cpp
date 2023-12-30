@@ -41,7 +41,7 @@ void UTransitionManager::TryMoveStage(EDirection Dir)
 	AStageData* currentStage = ChapterManager.Get()->GetCurrentStage();
 	if (!IsValid(currentStage)) return;
 
-	GamemodeRef.Get()->FadeOutDelegate.Broadcast();
+	GamemodeRef.Get()->UIAnimationDelegate.Broadcast(FName("FadeOut"));
 
 	IsMoveStage = true;
 	MoveDirection = Dir;

@@ -1,6 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "../public/StageData.h"
 #include "../public/GateBase.h"
+#include "../public/ChapterManagerBase.h"
+#include "../public/ResourceManager.h"
+#include "../../Global/public/BackStreetGameModeBase.h"
 
 void AStageData::BeginPlay()
 {
@@ -23,35 +26,8 @@ void AStageData::OpenAllGate()
 			UE_LOG(LogTemp, Error, TEXT("AStageData::OpenAllGate -> Gate : %s Is Activate"), *GetGateList()[idx]->GetName());
 			GetGateList()[idx]->ActivateGate();
 		}
-		/*if (GetGateList()[idx] == nullptr)
-			GetGateList().RemoveAt(idx);
-		else
-		{
-			GetGateList()[idx]->ActivateGate();
-		}*/
+		
 	}
-
-	//if (GateOffDelegate.IsBound())
-	//{
-	//	if(GateOffDelegate.GetAllObjects().Num() == GetGateList().Num())
-	//		GateOffDelegate.Broadcast();
-	//	else
-	//	{
-	//		for (AGateBase* target : GetGateList())
-	//		{
-	//			target->BindGateDelegate();
-	//		}
-	//		GateOffDelegate.Broadcast();
-	//	}
-	//}
-	//else
-	//{
-	//	for (AGateBase* target : GetGateList())
-	//	{
-	//		target->BindGateDelegate();
-	//	}
-	//	GateOffDelegate.Broadcast();
-	//}
 }
 
 void AStageData::CloseAllGate()
@@ -66,26 +42,15 @@ void AStageData::CloseAllGate()
 			GetGateList()[idx]->DeactivateGate();
 		}	
 	}
+}
 
-	//if (GateOffDelegate.IsBound())
-	//{
-	//	if(GateOffDelegate.GetAllObjects().Num() == GetGateList().Num())
-	//		GateOffDelegate.Broadcast();
-	//	else
-	//	{
-	//		for (AGateBase* target : GetGateList())
-	//		{
-	//			target->BindGateDelegate();
-	//		}
-	//		GateOffDelegate.Broadcast();
-	//	}
-	//}
-	//else
-	//{
-	//	for (AGateBase* target : GetGateList())
-	//	{
-	//		target->BindGateDelegate();
-	//	}
-	//	GateOffDelegate.Broadcast();
-	//}
+void AStageData::DoStageClearTask()
+{
+	SetIsClear(true);
+	Cast<AChapterManagerBase>(GetOwner())->GetResourceManager()->SpawnRewardBox(this);
+	Cast<AChapterManagerBase>(GetOwner())->DoChapterClearTaskAfterCheck();
+	OpenAllGate();
+	if(GetStageCategoryType()!=EStageCategoryInfo::E_Boss)
+		Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()))->UIAnimationDelegate.Broadcast(FName("StageClear"));
+
 }

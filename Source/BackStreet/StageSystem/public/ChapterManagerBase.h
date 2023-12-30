@@ -32,7 +32,7 @@ public:
 		void CreateResourceManager();
 
 	UFUNCTION()
-		bool CheckChapterClear();
+		bool DoChapterClearTaskAfterCheck();
 
 	UFUNCTION()
 		void MoveChapter();

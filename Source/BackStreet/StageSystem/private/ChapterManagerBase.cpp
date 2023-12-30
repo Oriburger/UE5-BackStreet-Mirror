@@ -68,20 +68,22 @@ void AChapterManagerBase::SetLobbyStage()
 	}
 }
 
-bool AChapterManagerBase::CheckChapterClear()
+bool AChapterManagerBase::DoChapterClearTaskAfterCheck()
 {
 	if (IsChapterClear())
 	{
 		// 챕터 클리어 관련 로직 실행
-		UE_LOG(LogTemp, Log, TEXT("AChapterManagerBase::CheckChapterClear: Clear Chapter"));
+		UE_LOG(LogTemp, Log, TEXT("AChapterManagerBase::DoChapterClearTaskAfterCheck: Clear Chapter"));
 
 		TArray<AActor*> gates;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGateBase::StaticClass(), gates);
 		for (AActor* gate : gates)
 		{
 			AGateBase* target = Cast<AGateBase>(gate);
-			if(target->ActorHasTag(FName("ChapterGate")))
-				target->ActivateChapterGateMaterial();
+			if (target->ActorHasTag(FName("ChapterGate")))
+				target->ActivateChapterGateAfterCheck();
+
+
 		}
 		return true;
 	}
@@ -192,6 +194,7 @@ void AChapterManagerBase::InitStageTypeArray()
 void AChapterManagerBase::UpdateMapUI()
 {
 	Cast<ABackStreetGameModeBase>(GetOwner())->UpdateMiniMapUI();
+	WaveManager->UpdateWaveUI(CurrentStage);
 }
 
 FStageInfoStruct AChapterManagerBase::GetStageTypeInfoWithType(EStageCategoryInfo Type)

@@ -17,16 +17,10 @@ AWaveManager::AWaveManager()
 
 void AWaveManager::InitWaveManager(class AChapterManagerBase* Target)
 {
-	/*WaveEnemyDataTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/System/StageManager/Data/D_WaveEnemyDataTable.D_WaveEnemyDataTable'"));
-	if (WaveEnemyDataTable)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AWaveManager::InitWaveManager) DataTable is not found!"));
-	}*/
+	AStageData* stage = Cast<AChapterManagerBase>(GetOwner())->GetCurrentStage();
+	WaveUpdateDelegate.AddDynamic(Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode()), &ABackStreetGameModeBase::UpdateWaveInfoUI);
 
-	// 델리게이트 바인딩 작업
-	// SpawnRewardBox 스폰
-	// SpawnMonster
-	// CheckChapterClear
+	UpdateWaveUI(stage);
 	
 }
 
@@ -56,18 +50,31 @@ void AWaveManager::CheckWaveCategoryByType(class AStageData* Target, AEnemyChara
 			Target->SetCurrentWaveLevel(Target->GetCurrentWaveLevel() + 1);
 
 			if (CheckAllWaveClear(Target))
-			{
-				Target->SetIsClear(true);
-				ResourceManager->SpawnRewardBox(Target);
-
-				Cast<AChapterManagerBase>(GetOwner())->CheckChapterClear();
-			}
+				Target->DoStageClearTask();
 			else
-				SpawnHadesWave(Target);
+			{
+				if (WaveIntervalTimerDelegate.IsBound())
+					WaveIntervalTimerDelegate.Unbind();
+
+				WaveIntervalTimerDelegate.BindUFunction(this, FName("SpawnHadesWave"), Target);
+				Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()))->UIAnimationDelegate.Broadcast(FName("NextWave"));
+				GetWorld()->GetTimerManager().SetTimer(WaveIntervalTimerHandle, WaveIntervalTimerDelegate, 6.f, false);
+
+			}
+			UpdateWaveUI(Target);
 		}
 	}
 	else if (Target->GetStageTypeInfo().WaveType == EWaveCategoryInfo::E_TimeLimitWave)
 			ManageWaveMonsterCount(Target, Enemy->CharacterID, false);
+	else if (Target->GetStageCategoryType() == EStageCategoryInfo::E_Boss)
+	{
+		if (Target->GetMonsterList().IsEmpty())
+		{
+			Target->DoStageClearTask();
+			Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()))->UIAnimationDelegate.Broadcast(FName("ChapterClear"));
+			UpdateWaveUI(Target);
+		}
+	}
 		
 }
 
@@ -86,7 +93,7 @@ void AWaveManager::SetWave(class AStageData* Target)
 	default:
 		break;
 	}
-
+	UpdateWaveUI(Target);
 }
 
 void AWaveManager::SpawnHadesWave(class AStageData* Target)
@@ -104,6 +111,7 @@ void AWaveManager::SpawnHadesWave(class AStageData* Target)
 void AWaveManager::SpawnDefenseWave(class AStageData* Target)
 {
 	Target->CloseAllGate();
+	UpdateWaveUI(Target);
 	SetDefenseWaveClearTimer(Target);
 	SetDefenseWaveSpawnTimer(Target);
 
@@ -112,8 +120,8 @@ void AWaveManager::SpawnDefenseWave(class AStageData* Target)
 void AWaveManager::SetDefenseWaveClearTimer(class AStageData* Target)
 {
 	// Get Wave Clear Time
-	float totalTime = *Target->GetStageTypeInfo().ClearTimeForEachWave.Find(Target->GetCurrentWaveLevel() + 1);
-	GetWorldTimerManager().SetTimer(Target->GetDefenseWaveClearTimeTimerHandle(), this, &AWaveManager::ClearDefenseWave, 60.0f, false);
+	float totalTime = Target->GetStageTypeInfo().ClearTimeForEachWave.FindRef(Target->GetCurrentWaveLevel() + 1);
+	GetWorldTimerManager().SetTimer(Target->GetDefenseWaveClearTimeTimerHandle(), this, &AWaveManager::ClearDefenseWave, totalTime, false);
 }
 
 void AWaveManager::SetDefenseWaveSpawnTimer(class AStageData* Target)
@@ -138,6 +146,7 @@ void AWaveManager::SpawnDefenseWaveMonster()
 	UE_LOG(LogTemp, Log, TEXT("AWaveManager::SpawnDefenseWaveMonster ID: %d"),enemyID);
 	if (enemyID == -1) return;
 	ResourceManager->SpawnMonster(stage, enemyID);
+
 }
 
 void AWaveManager::ClearDefenseWave()
@@ -152,17 +161,18 @@ void AWaveManager::ClearDefenseWave()
 
 	if (CheckAllWaveClear(stage))
 	{
-		// 스테이지 클리어 로직
-		stage->SetIsClear(true);
-		ResourceManager->SpawnRewardBox(stage);
-
-		Cast<AChapterManagerBase>(GetOwner())->CheckChapterClear();
-		stage->OpenAllGate();
-
+		stage->DoStageClearTask();
+		UpdateWaveUI(stage);
 	}
 	else
-		SpawnDefenseWave(stage);
+	{
+		if (WaveIntervalTimerDelegate.IsBound())
+			WaveIntervalTimerDelegate.Unbind();
 
+		WaveIntervalTimerDelegate.BindUFunction(this, FName("SpawnDefenseWave"), stage);
+		Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()))->UIAnimationDelegate.Broadcast(FName("NextWave"));
+		GetWorld()->GetTimerManager().SetTimer(WaveIntervalTimerHandle, WaveIntervalTimerDelegate, 6.f, false);
+	}
 }
 
 void AWaveManager::ManageWaveMonsterCount(class AStageData* Target, int32 EnemyID, bool IsSpawn)
@@ -251,4 +261,22 @@ int32 AWaveManager::GetTotalNumberOfEnemySpawn(class AStageData* Target)
 		totalNumber += pair.Value;
 	
 	return totalNumber;
+}
+
+void AWaveManager::UpdateWaveUI(class AStageData* Target)
+{
+	int32 currWave = Target->GetCurrentWaveLevel();
+	int32 endWave = Target->GetStageTypeInfo().MaxWave;
+
+	if(Target->GetStageCategoryType()==EStageCategoryInfo::E_Lobby)
+		WaveUpdateDelegate.Broadcast(-1,-1);
+	else if (Target->GetStageCategoryType() == EStageCategoryInfo::E_Boss)
+	{
+		if(Target->GetIsClear())
+			WaveUpdateDelegate.Broadcast(1, 1);
+		else
+			WaveUpdateDelegate.Broadcast(0, 1);
+	}
+	else
+		WaveUpdateDelegate.Broadcast(currWave, endWave);
 }

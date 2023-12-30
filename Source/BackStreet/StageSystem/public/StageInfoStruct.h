@@ -108,7 +108,7 @@ public:
 	UPROPERTY()
 		EStageCategoryInfo StageCategoryType;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FStageInfoStruct StageType;
 
 	UPROPERTY()

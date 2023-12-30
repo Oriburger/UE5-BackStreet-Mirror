@@ -6,6 +6,7 @@
 #include "WaveManager.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateStage, class AStageData*, Target);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateWaveUpdate, int32, CurrWave, int32, EndWave);
 
 UCLASS()
 class BACKSTREET_API AWaveManager : public AActor
@@ -23,6 +24,9 @@ public:
 	// Gate 활성화 및 몬스터 스폰 종료
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateStage ClearDefenseWaveDelegate;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateWaveUpdate WaveUpdateDelegate;
 
 public:
 	AWaveManager();
@@ -85,12 +89,23 @@ public:
 	UFUNCTION()
 		int32 GetTotalNumberOfEnemySpawn(class AStageData* Target);
 
+	// Call WaveUpdateDelegate
+	UFUNCTION()
+		void UpdateWaveUI(class AStageData* Target);
+
+
 public:
 	TWeakObjectPtr<class AChapterManagerBase> ChapterManager;
 
 	TWeakObjectPtr<class AResourceManager> ResourceManager;
 
 public:
+
+	UPROPERTY()
+		FTimerHandle WaveIntervalTimerHandle;
+
+		FTimerDelegate  WaveIntervalTimerDelegate;
+
 	UDataTable* WaveEnemyDataTable;
 
 
