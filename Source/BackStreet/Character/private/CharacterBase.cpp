@@ -152,7 +152,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
 		Die();
 	}
-	else if (AnimAssetData.HitAnimMontageList.Num() > 0)
+	else if (AnimAssetData.HitAnimMontageList.Num() > 0&&this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
 	{
 		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AnimAssetData.HitAnimMontageList.Num() - 1);
 		PlayAnimMontage(AnimAssetData.HitAnimMontageList[randomIdx]);
@@ -271,36 +271,35 @@ void ACharacterBase::TryAttack()
 	}
 }
 
-void ACharacterBase::TrySkillAttack(ACharacterBase* Target)
+void ACharacterBase::TrySkillAttack()
 {
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
 	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
+	Curr = 0;
+	Threshold = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
+	SkillAnimPlayTimerHandleList.SetNum(Threshold);
+	PlaySkillAnimation();
+}
 
-	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList;
-
-	int32 idx=0;
-	while (targetAnimList.IsValidIndex(idx))
+void ACharacterBase::PlaySkillAnimation()
+{
+	if (Curr >= Threshold)
 	{
-		GetWorldTimerManager().ClearTimer(SkillTimerHandle);
-		//Timer of Animation Interval
-		GetWorld()->GetTimerManager().SetTimer(SkillTimerHandle, FTimerDelegate::CreateLambda([&]() 
-			{
-				GetWorld()->GetTimerManager().ClearTimer(SkillTimerHandle);
-			}), weaponRef->WeaponStat.SkillSetInfo.SkillAnimInterval[idx], false);
-
-		float animPlayTime = PlayAnimMontage(targetAnimList[idx], weaponRef->WeaponStat.SkillSetInfo.SkillAnimPlayRate[idx]);
-		
-		//Timer of Animation Play
-		GetWorld()->GetTimerManager().SetTimer(SkillTimerHandle, FTimerDelegate::CreateLambda([&]() 
-			{
-				GetWorld()->GetTimerManager().ClearTimer(SkillTimerHandle);
-			}), animPlayTime, false);
-
-		idx++;
+		SkillAnimPlayTimerHandleList.Empty();
+		return;
 	}
+	
+	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(GetCurrentWeaponRef()->WeaponID)->SkillAnimMontageList;
+	float animPlayTime = PlayAnimMontage(targetAnimList[Curr], GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRate[Curr]);
+	GetWorld()->GetTimerManager().SetTimer(SkillAnimPlayTimerHandleList[Curr], FTimerDelegate::CreateLambda([&]()
+		{
+			Curr += 1;
+			PlaySkillAnimation();
+		}), animPlayTime, false);
+	return;
 }
 
 void ACharacterBase::Attack()
@@ -826,5 +825,5 @@ void ACharacterBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
-	GetWorldTimerManager().ClearTimer(SkillTimerHandle);
+	SkillAnimPlayTimerHandleList.Empty();
 }

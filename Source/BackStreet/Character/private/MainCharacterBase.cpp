@@ -360,7 +360,7 @@ void AMainCharacterBase::TryAttack()
 	}), 0.1f, false);
 }
 
-void AMainCharacterBase::TrySkillAttack(ACharacterBase* Target)
+void AMainCharacterBase::TrySkillAttack()
 {
 	check(GetCurrentWeaponRef() != nullptr);
 
@@ -374,32 +374,10 @@ void AMainCharacterBase::TrySkillAttack(ACharacterBase* Target)
 	}
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
-	Super::TrySkillAttack(Target);
+	Super::TrySkillAttack();
 
+	//Reset Weapon Skill Grade
 	FWeaponStatStruct weaponStat = GetCurrentWeaponRef()->GetWeaponStat();
-
-	UE_LOG(LogTemp, Log, TEXT("Enum : %d\n"), weaponStat.SkillSetInfo.SkillGrade);
-	switch (weaponStat.SkillSetInfo.SkillGrade)
-	{
-	case ESkillGrade::E_None:
-		return;
-	case ESkillGrade::E_Common:
-		CharacterState.CharacterCurrSkillGauge -= weaponStat.SkillGaugeInfo.SkillCommonReq;
-		UE_LOG(LogTemp, Log, TEXT("CommonSkill"));
-		break;
-	case ESkillGrade::E_Rare:
-		CharacterState.CharacterCurrSkillGauge -= weaponStat.SkillGaugeInfo.SkillRareReq;
-		UE_LOG(LogTemp, Log, TEXT("RareSkill"));
-		break;
-	case ESkillGrade::E_Epic:
-		CharacterState.CharacterCurrSkillGauge -= weaponStat.SkillGaugeInfo.SkillEpicReq;
-		UE_LOG(LogTemp, Log, TEXT("EpicSkill"));
-		break;
-	case ESkillGrade::E_Regend:
-		CharacterState.CharacterCurrSkillGauge -= weaponStat.SkillGaugeInfo.SkillRegendReq;
-		UE_LOG(LogTemp, Log, TEXT("RegendSkill"));
-		break;
-	}
 	weaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
 	GetCurrentWeaponRef()->SetWeaponStat(weaponStat);
 

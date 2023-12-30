@@ -98,14 +98,24 @@ void AEnemyCharacterBase::TryAttack()
 	Super::TryAttack();
 }
 
-void AEnemyCharacterBase::TrySkillAttack(ACharacterBase* Target)
+void AEnemyCharacterBase::TrySkillAttack()
 {
-	Super::TrySkillAttack(Target);
+	check(GetCurrentWeaponRef() != nullptr);
 
-	if (IsValid(GamemodeRef->GetGlobalSkillmanagerBaseRef()))
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Skill
+		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+
+	if (GetCurrentWeaponRef()->WeaponID == 0)
 	{
-		GamemodeRef->GetGlobalSkillmanagerBaseRef()->ActivateSkill(this, Target);
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬을 사용할 수 없습니다. ")), FColor::White);
+		return;
 	}
+
+	//공격을 하고, 커서 위치로 Rotation을 조정
+	Super::TrySkillAttack();
+
+	//Reset Weapon Skill Grade
+	FWeaponStatStruct weaponStat = GetCurrentWeaponRef()->GetWeaponStat();
 }
 
 void AEnemyCharacterBase::Attack()

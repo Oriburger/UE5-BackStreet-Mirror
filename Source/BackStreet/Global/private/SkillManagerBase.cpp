@@ -22,129 +22,132 @@ void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemod
 	GamemodeRef = NewGamemodeRef;
 }
 
-TArray<ASkillBase*> USkillManagerBase::ActivateSkill(AActor* NewCauser, ACharacterBase* NewTarget)
+void USkillManagerBase::ActivateSkill(AActor* NewCauser, TArray<ACharacterBase*> NewTargetList)
 {
-	SkillList.Empty();
-	if (!IsValid(Causer)) return SkillList;
+	ACharacterBase* causer = Cast<ACharacterBase>(NewCauser);
+	if (!IsValid(causer)) return;
 	
-	Causer = NewCauser;
-	Target = NewTarget;
-
-	SetSkillSet(Causer);
-
-	for (uint8 idx = 0; idx < SkillSetInfo.SkillIDList.Num(); idx++)
+	if (causer->ActorHasTag("Player"))
+	{
+		SetMainCharacterSkillGrade(causer);
+	}
+	else if (causer->ActorHasTag("Enemy"))
+	{
+		SetEnemyCharacterSkillGrade(causer);
+	}
+	else return;
+	
+	if (!IsValidGrade(causer)) return;
+	FSkillSetInfo skillSetInfo =  causer->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo;
+	for (uint8 idx = 0; idx < skillSetInfo.SkillIDList.Num(); idx++)
 	{
 		if (idx != 0)
 		{
 			DelaySkillInterval(idx);
 		}
-		ASkillBase* skill = ComposeSkillMap(SkillSetInfo.SkillIDList[idx]);
-		skill->InitSkill(Causer, Target, SkillSetInfo.SkillIDList[idx], SkillSetInfo.SkillGrade);
-		SkillList.Add(skill);
+		ASkillBase* skill = ComposeSkillMap(causer, skillSetInfo.SkillIDList[idx]);
+		skill->InitSkill(NewCauser, NewTargetList);
 	}
-	return SkillList;
+	return;
 }
 
-void USkillManagerBase::DestroySkill(TArray<ASkillBase*> UsedSkillList)
+void USkillManagerBase::SetMainCharacterSkillGrade(AActor* NewCauser) 
 {
-	for (ASkillBase* skill : UsedSkillList) {
-		if (IsValid(skill))
-		{
-			skill->DestroySkill();
-		}
-	}
-}
-
-void USkillManagerBase::SetSkillSet(AActor* NewCauser) {
 	ACharacterBase* causer = Cast<ACharacterBase>(NewCauser);
 	if (!IsValid(causer)||!IsValid(causer->GetCurrentWeaponRef())) return;
+	
+	float currSkillGauge = Cast<AMainCharacterBase>(causer)->GetCharacterState().CharacterCurrSkillGauge;
+	FWeaponStatStruct currWeaponStat = causer->GetCurrentWeaponRef()->GetWeaponStat();
+	FCharacterStateStruct currCharacterState = causer->GetCharacterState();
 
-	//Player 인경우
-	if (causer->ActorHasTag("Player")) {
-		float currSkillGauge = Cast<AMainCharacterBase>(causer)->GetCharacterState().CharacterCurrSkillGauge;
-		
-		FWeaponStatStruct currWeaponStat = causer->GetCurrentWeaponRef()->GetWeaponStat();
-
-		//Grade확인
-		if (UKismetMathLibrary::InRange_FloatFloat(currSkillGauge, currWeaponStat.SkillGaugeInfo.SkillCommonReq, currWeaponStat.SkillGaugeInfo.SkillRareReq, true, false))
-		{
-			currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Common;
-		}
-		else if (UKismetMathLibrary::InRange_FloatFloat(currSkillGauge, currWeaponStat.SkillGaugeInfo.SkillRareReq, currWeaponStat.SkillGaugeInfo.SkillEpicReq, true, false))
-		{
-			currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Rare;
-		}
-		else if (UKismetMathLibrary::InRange_FloatFloat(currSkillGauge, currWeaponStat.SkillGaugeInfo.SkillEpicReq, currWeaponStat.SkillGaugeInfo.SkillRegendReq, true, false))
-		{
-			currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Epic;
-		}
-		else if (currSkillGauge >= currWeaponStat.SkillGaugeInfo.SkillRegendReq)
-		{
-			currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Regend;
-		}
-		else
-		{
-			currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
-		}
-		
-		causer->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
-		SkillSetInfo = currWeaponStat.SkillSetInfo;
-	}
-
-	//Enemy인 경우
-	else if (causer->ActorHasTag("Enemy"))
+	//Grade확인
+	if (UKismetMathLibrary::InRange_FloatFloat(currSkillGauge, currWeaponStat.SkillGaugeInfo.SkillCommonReq, currWeaponStat.SkillGaugeInfo.SkillRareReq, true, false))
 	{
-		if (SkillSetInfoMap.Contains(causer->GetCurrentWeaponRef()->GetWeaponStat().WeaponID))
-		{
-			SkillSetInfo = *SkillSetInfoMap.Find(causer->GetCurrentWeaponRef()->GetWeaponStat().WeaponID);
-		}
-		else
-		{
-			SkillSetInfo = causer->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo;
-
-			if (causer->ActorHasTag("Easy"))
-			{
-				SkillSetInfo.SkillGrade = ESkillGrade::E_Common;
-			}
-			else if (causer->ActorHasTag("Nomal"))
-			{
-				SkillSetInfo.SkillGrade = ESkillGrade::E_Rare;
-			}
-			else if (causer->ActorHasTag("Hard"))
-			{
-				SkillSetInfo.SkillGrade = ESkillGrade::E_Epic;
-			}
-			else if (causer->ActorHasTag("Extreme"))
-			{
-				SkillSetInfo.SkillGrade = ESkillGrade::E_Regend;
-			}
-			else
-			{
-				SkillSetInfo.SkillGrade = ESkillGrade::E_None;
-			}
-			SkillSetInfoMap.Add(causer->GetCurrentWeaponRef()->GetWeaponStat().WeaponID, causer->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo);
-		}
+		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Common;
+		currCharacterState.CharacterCurrSkillGauge -= currWeaponStat.SkillGaugeInfo.SkillCommonReq;
+		causer->UpdateCharacterState(currCharacterState);
+		UE_LOG(LogTemp, Log, TEXT("CommonSkill"));
 	}
+	else if (UKismetMathLibrary::InRange_FloatFloat(currSkillGauge, currWeaponStat.SkillGaugeInfo.SkillRareReq, currWeaponStat.SkillGaugeInfo.SkillEpicReq, true, false))
+	{
+		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Rare;
+		currCharacterState.CharacterCurrSkillGauge -= currWeaponStat.SkillGaugeInfo.SkillRareReq;
+		causer->UpdateCharacterState(currCharacterState);
+		UE_LOG(LogTemp, Log, TEXT("RareSkill"));
+	}
+	else if (UKismetMathLibrary::InRange_FloatFloat(currSkillGauge, currWeaponStat.SkillGaugeInfo.SkillEpicReq, currWeaponStat.SkillGaugeInfo.SkillRegendReq, true, false))
+	{
+		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Epic;
+		currCharacterState.CharacterCurrSkillGauge -= currWeaponStat.SkillGaugeInfo.SkillEpicReq;
+		causer->UpdateCharacterState(currCharacterState);
+		UE_LOG(LogTemp, Log, TEXT("EpicSkill"));
+	}
+	else if (currSkillGauge >= currWeaponStat.SkillGaugeInfo.SkillRegendReq)
+	{
+		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Regend;
+		currCharacterState.CharacterCurrSkillGauge -= currWeaponStat.SkillGaugeInfo.SkillRegendReq;
+		causer->UpdateCharacterState(currCharacterState);
+		UE_LOG(LogTemp, Log, TEXT("RegendSkill"));
+	}
+	else
+	{
+		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
+	}
+	causer->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
+}
+
+void USkillManagerBase::SetEnemyCharacterSkillGrade(AActor* NewCauser)
+{
+	ACharacterBase* causer = Cast<ACharacterBase>(NewCauser);
+	if (!IsValid(causer) || !IsValid(causer->GetCurrentWeaponRef())) return;
+	
+	FWeaponStatStruct currWeaponStat = causer->GetCurrentWeaponRef()->GetWeaponStat();
+
+	if (causer->ActorHasTag("Easy"))
+	{
+		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Common;
+	}
+	else if (causer->ActorHasTag("Nomal"))
+	{
+		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Rare;
+	}
+	else if (causer->ActorHasTag("Hard"))
+	{
+		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Epic;
+	}
+	else if (causer->ActorHasTag("Extreme"))
+	{
+		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Regend;
+	}
+	else
+	{
+		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
+	}
+	causer->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
+}
+
+
+bool USkillManagerBase::IsValidGrade(AActor* NewCauser)
+{
+	if(Cast<ACharacterBase>(NewCauser)->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo.SkillGrade ==ESkillGrade::E_None) return false;
+	else return true;
 }
 
 void USkillManagerBase::DelaySkillInterval(uint8 NewIndex)
 {
-	 float SkillInterval = Cast<ACharacterBase> (Causer)->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo.SkillIntervalList[NewIndex];
-	 GetWorld()->GetTimerManager().SetTimer(SkillTimerHandle, FTimerDelegate::CreateLambda([&]()
-		 {
-			 ClearAllTimerHandle();
-		 }), SkillInterval, false);
+
 }
 
-ASkillBase* USkillManagerBase::ComposeSkillMap(int32 NewSkillID)
+ASkillBase* USkillManagerBase::ComposeSkillMap(AActor* NewCauser, int32 NewSkillID)
 {
 	ASkillBase* skill =nullptr;
-	if(Cast<AMainCharacterBase>(Causer)->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo.SkillGrade == ESkillGrade::E_None)
+	if(Cast<AMainCharacterBase>(NewCauser)->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo.SkillGrade == ESkillGrade::E_None)
 		return skill;
 
 	if (SkillRefMap.Contains(NewSkillID))
 	{
 		skill = *SkillRefMap.Find(NewSkillID);
+		skill->SetActorHiddenInGame(false);
 	}
 	else
 	{
