@@ -316,7 +316,7 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 	AssetInfo = GetAssetInfoWithID(NewEnemyID);
 	//SetCharacterAnimAssetInfoData(CharacterID);
 
-	if (!AssetInfo.CharacterMesh.IsNull() && !AssetInfo.CharacterMeshMaterial.IsNull() && !AssetInfo.AnimClass.IsNull())
+	if (!AssetInfo.CharacterMesh.IsNull() && !AssetInfo.CharacterMeshMaterial.IsNull()/* && !AssetInfo.AnimBlueprint.IsNull()*/)
 	{
 		TArray<FSoftObjectPath> AssetToStream;
 
@@ -325,7 +325,7 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 		AssetToStream.AddUnique(AssetInfo.CharacterMeshMaterial.ToSoftObjectPath());
 
 		// Animation 관련
-		AssetToStream.AddUnique(AssetInfo.AnimClass.ToSoftObjectPath());
+		//AssetToStream.AddUnique(AssetInfo.AnimBlueprint.ToSoftObjectPath());
 
 		if (!AssetInfo.MeleeAttackAnimMontageList.IsEmpty())
 		{
@@ -348,7 +348,7 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 			for (int32 i = 0; i < AssetInfo.ThrowAnimMontageList.Num(); i++)
 			{
 				AssetToStream.AddUnique(AssetInfo.ThrowAnimMontageList[i].ToSoftObjectPath());
-			}
+			}	
 		}
 
 		if (!AssetInfo.ReloadAnimMontageList.IsEmpty())
@@ -431,15 +431,6 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &ACharacterBase::SetAsset));
 
-	/*	if (IsValid(AssetInfo.CharacterMesh.Get()) && IsValid(AssetInfo.CharacterMeshMaterial.Get()) && IsValid(AssetInfo.AnimClass.Get()))
-		{
-			InitializeAsset();
-		}
-		else
-		{
-			FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
-			streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &ACharacterBase::InitializeAsset));
-		}*/
 	}
 }
 
@@ -448,7 +439,7 @@ void ACharacterBase::SetAsset()
 {
 	if (AssetInfo.CharacterMesh.IsNull() || !IsValid(AssetInfo.CharacterMesh.Get())) return;
 	if (AssetInfo.CharacterMeshMaterial.IsNull() || !IsValid(AssetInfo.CharacterMeshMaterial.Get())) return;
-	if (AssetInfo.AnimClass.IsNull() || !IsValid(AssetInfo.AnimClass.Get())) return;
+	//if (AssetInfo.AnimBlueprint.IsNull() || !IsValid(AssetInfo.AnimBlueprint.Get())) return;
 
 	GetCapsuleComponent()->SetWorldRotation(FRotator::ZeroRotator);
 	GetCapsuleComponent()->SetRelativeScale3D(AssetInfo.InitialCapsuleComponentScale);
@@ -459,7 +450,7 @@ void ACharacterBase::SetAsset()
 	GetMesh()->SetRelativeScale3D(AssetInfo.InitialScale);
 
 	GetMesh()->SetMaterial(0, AssetInfo.CharacterMeshMaterial.Get());
-	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimClass.Get()->GetAnimBlueprintGeneratedClass());
+	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimBlueprint);
 	InitAnimAsset();
 	InitSoundAsset();
 	InitVFXAsset();
