@@ -41,12 +41,10 @@ void USkillManagerBase::ActivateSkill(AActor* NewCauser, TArray<ACharacterBase*>
 	FSkillSetInfo skillSetInfo =  causer->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo;
 	for (uint8 idx = 0; idx < skillSetInfo.SkillIDList.Num(); idx++)
 	{
-		if (idx != 0)
-		{
-			DelaySkillInterval(idx);
-		}
 		ASkillBase* skill = ComposeSkillMap(causer, skillSetInfo.SkillIDList[idx]);
-		skill->InitSkill(NewCauser, NewTargetList);
+		float skillStartTiming = skillSetInfo.TotalSkillPlayTime * skillSetInfo.SkillStartTimingRate[idx];
+		skill->InitSkill(NewCauser, NewTargetList, skillStartTiming);
+		
 	}
 	return;
 }
@@ -133,11 +131,6 @@ bool USkillManagerBase::IsValidGrade(AActor* NewCauser)
 	else return true;
 }
 
-void USkillManagerBase::DelaySkillInterval(uint8 NewIndex)
-{
-
-}
-
 ASkillBase* USkillManagerBase::ComposeSkillMap(AActor* NewCauser, int32 NewSkillID)
 {
 	ASkillBase* skill =nullptr;
@@ -173,10 +166,4 @@ ASkillBase* USkillManagerBase::MakeSkillBase(int32 NewSkillID)
 	}
 	return nullptr;
 }
-
-void USkillManagerBase::ClearAllTimerHandle()
-{
-	GamemodeRef.Get()->GetWorldTimerManager().ClearTimer(SkillTimerHandle);
-}
-
 

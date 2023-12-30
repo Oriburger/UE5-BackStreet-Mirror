@@ -124,6 +124,9 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
+	FWeaponStatStruct currWeaponStat = this->GetCurrentWeaponRef()->GetWeaponStat();
+	currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
+	this->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
 	StopAttack();
 
 	if (!GetWorldTimerManager().IsTimerActive(AtkIntervalHandle))
@@ -275,11 +278,22 @@ void ACharacterBase::TrySkillAttack()
 {
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
+	float totalSkillAnimPlayTime = 0;
+	int skillAnimIndex =0 ;
+	Curr = 0;
 
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
 	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
-	Curr = 0;
+
 	Threshold = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
+	//Total skill animation play time which is using for init skill timing.
+	for (UAnimMontage* skillAnimMontage : AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList) 
+	{
+		totalSkillAnimPlayTime += skillAnimMontage->CalculateSequenceLength()/GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRate[skillAnimIndex];
+		GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.TotalSkillPlayTime = totalSkillAnimPlayTime;
+		skillAnimIndex++;
+	}
+
 	SkillAnimPlayTimerHandleList.SetNum(Threshold);
 	PlaySkillAnimation();
 }

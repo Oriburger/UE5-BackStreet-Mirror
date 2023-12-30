@@ -364,8 +364,9 @@ void AMainCharacterBase::TrySkillAttack()
 {
 	check(GetCurrentWeaponRef() != nullptr);
 
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Skill
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	//if CharacterActionType is E_Skill or E_Idle 
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
+		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 
 	if (GetCurrentWeaponRef()->WeaponID == 0||GetCharacterState().CharacterCurrSkillGauge==0)
 	{
@@ -375,11 +376,6 @@ void AMainCharacterBase::TrySkillAttack()
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	Super::TrySkillAttack();
-
-	//Reset Weapon Skill Grade
-	FWeaponStatStruct weaponStat = GetCurrentWeaponRef()->GetWeaponStat();
-	weaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
-	GetCurrentWeaponRef()->SetWeaponStat(weaponStat);
 
 	RotateToCursor();
 }

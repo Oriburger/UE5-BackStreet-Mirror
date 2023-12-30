@@ -40,9 +40,12 @@ public:
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
 		TArray<class ACharacterBase*> TargetList;
 
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
+		float SkillStartTiming;
+
 	//Reset Skill
 	UFUNCTION()
-		void InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList);
+		void InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, float NewSkillStartTiming);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void StartSkill();
@@ -85,13 +88,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
 		class USoundCue* SkillFailSound;
-
-protected:
-	UFUNCTION(BlueprintCallable)
-		virtual void ClearAllTimerHandle();
-
-	UPROPERTY()
-		FTimerHandle SkillTimerHandle;
 
 protected:
 	//게임모드 약 참조
