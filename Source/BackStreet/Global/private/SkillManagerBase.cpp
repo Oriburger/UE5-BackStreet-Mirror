@@ -42,7 +42,7 @@ void USkillManagerBase::ActivateSkill(AActor* NewCauser, TArray<ACharacterBase*>
 	for (uint8 idx = 0; idx < skillSetInfo.SkillIDList.Num(); idx++)
 	{
 		ASkillBase* skill = ComposeSkillMap(causer, skillSetInfo.SkillIDList[idx]);
-		float skillStartTiming = skillSetInfo.TotalSkillPlayTime * skillSetInfo.SkillStartTimingRate[idx];
+		float skillStartTiming = skillSetInfo.TotalSkillPlayTime * skillSetInfo.SkillStartTimingRateList[idx];
 		skill->InitSkill(NewCauser, NewTargetList, skillStartTiming);
 		
 	}

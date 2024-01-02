@@ -82,14 +82,14 @@ public:
 		TArray<int32> SkillIDList;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<float> SkillAnimPlayRate;
+		TArray<float> SkillAnimPlayRateList;
+
+	//Rate value(Criterion is TotalAnimPlayTime) which is used to indicate the interval between each skill
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<float> SkillStartTimingRateList;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float TotalSkillPlayTime;
-
-	//This property is used to indicate the interval between each skill
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<float> SkillStartTimingRate;
 };
 
 USTRUCT(BlueprintType)
