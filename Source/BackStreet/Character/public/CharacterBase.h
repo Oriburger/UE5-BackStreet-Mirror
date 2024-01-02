@@ -173,9 +173,6 @@ private:
 	//무기 액터를 스폰
 	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
 
-// ----- 스킬 관련 --------------------------
-
-
 // ---- Asset -------------------
 public:
 	// 외부에서 Init하기위해 Call
@@ -272,11 +269,6 @@ protected:
 	UFUNCTION()
 		void PlaySkillAnimation();
 
-	UPROPERTY()
-		int Curr ;
-	UPROPERTY()
-		int Threshold;
-
 	//공격 간 딜레이 핸들
 	UPROPERTY()
 		FTimerHandle AtkIntervalHandle;
@@ -286,5 +278,14 @@ protected:
 
 	UPROPERTY()
 		TArray<FTimerHandle> SkillAnimPlayTimerHandleList;
+
+private:
+	//Current number of multiple SkillAnimPlayTimers
+	UPROPERTY()
+		int SkillAnimPlayTimerCurr;
+
+	//Threshold number of multiple SkillAnimPlayTimer
+	UPROPERTY()
+		int SkillAnimPlayTimerThreshold;
 
 };

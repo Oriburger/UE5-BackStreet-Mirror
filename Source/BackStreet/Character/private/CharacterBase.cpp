@@ -280,12 +280,12 @@ void ACharacterBase::TrySkillAttack()
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 	float totalSkillAnimPlayTime = 0;
 	int skillAnimIndex =0 ;
-	Curr = 0;
+	SkillAnimPlayTimerCurr = 0;
 
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
 	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
 
-	Threshold = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
+	SkillAnimPlayTimerThreshold = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
 	//Total skill animation play time which is using for init skill timing.
 	for (UAnimMontage* skillAnimMontage : AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList) 
 	{
@@ -294,23 +294,23 @@ void ACharacterBase::TrySkillAttack()
 		skillAnimIndex++;
 	}
 
-	SkillAnimPlayTimerHandleList.SetNum(Threshold);
+	SkillAnimPlayTimerHandleList.SetNum(SkillAnimPlayTimerThreshold);
 	PlaySkillAnimation();
 }
 
 void ACharacterBase::PlaySkillAnimation()
 {
-	if (Curr >= Threshold)
+	if (SkillAnimPlayTimerCurr >= SkillAnimPlayTimerThreshold)
 	{
 		SkillAnimPlayTimerHandleList.Empty();
 		return;
 	}
 	
 	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(GetCurrentWeaponRef()->WeaponID)->SkillAnimMontageList;
-	float animPlayTime = PlayAnimMontage(targetAnimList[Curr], GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRate[Curr]);
-	GetWorld()->GetTimerManager().SetTimer(SkillAnimPlayTimerHandleList[Curr], FTimerDelegate::CreateLambda([&]()
+	float animPlayTime = PlayAnimMontage(targetAnimList[SkillAnimPlayTimerCurr], GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRate[SkillAnimPlayTimerCurr]);
+	GetWorld()->GetTimerManager().SetTimer(SkillAnimPlayTimerHandleList[SkillAnimPlayTimerCurr], FTimerDelegate::CreateLambda([&]()
 		{
-			Curr += 1;
+			SkillAnimPlayTimerCurr += 1;
 			PlaySkillAnimation();
 		}), animPlayTime, false);
 	return;
