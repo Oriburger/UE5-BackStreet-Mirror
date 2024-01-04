@@ -40,9 +40,6 @@ public:
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
 		TArray<class ACharacterBase*> TargetList;
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
-		float SkillStartTiming;
-
 	//Reset Skill
 	UFUNCTION()
 		void InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, float NewSkillStartTiming);
@@ -98,4 +95,9 @@ protected:
 
 	//SkillManager Weak Pointer
 	TWeakObjectPtr<class USkillManagerBase> SkillManagerRef;
+
+//-------- ≈∏¿Ã∏” --------------------------------------------
+protected:
+	UPROPERTY()
+		FTimerHandle SkillStartTimingTimerHandle;
 };

@@ -38,7 +38,6 @@ void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& New
 	TargetList.Empty();
 	Causer = NewCauser;
 	TargetList = NewTargetList;
-	SkillStartTiming = NewSkillStartTiming;
 	
 	//에셋 초기화
 	FSkillAssetInfoStruct newAssetInfo = GetSkillAssetInfoWithID(SkillID);
@@ -60,7 +59,11 @@ void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& New
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &ASkillBase::InitSkillAsset));
 	}
-	StartSkill();
+	GetWorld()->GetTimerManager().SetTimer(SkillStartTimingTimerHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			StartSkill();
+			GetWorldTimerManager().ClearTimer(SkillStartTimingTimerHandle);
+		}), NewSkillStartTiming, false);
 }
 
 void ASkillBase::DestroySkill()
