@@ -1,0 +1,26 @@
+[
+	{
+		"Name": "0",
+		"SkillID": 0,
+		"SkillName": "None",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "None",
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "1111",
+		"SkillID": 1111,
+		"SkillName": "Teleport",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/BPS_Teleport.BPS_Teleport_C'",
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "1112",
+		"SkillID": 1112,
+		"SkillName": "Dash",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/BPS_Dash.BPS_Dash_C'",
+		"SkillIconImage": "None"
+	}
+]

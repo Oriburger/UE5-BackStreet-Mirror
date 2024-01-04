@@ -11,6 +11,7 @@
 #include "Animation/AnimMontage.h"
 #include "Engine/StreamableManager.h"
 #include "Engine/AssetManager.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase()
@@ -123,6 +124,9 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
+	FWeaponStatStruct currWeaponStat = this->GetCurrentWeaponRef()->GetWeaponStat();
+	currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
+	this->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
 	StopAttack();
 
 	if (!GetWorldTimerManager().IsTimerActive(AtkIntervalHandle))
@@ -151,7 +155,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
 		Die();
 	}
-	else if (AnimAssetData.HitAnimMontageList.Num() > 0)
+	else if (AnimAssetData.HitAnimMontageList.Num() > 0&&this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
 	{
 		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AnimAssetData.HitAnimMontageList.Num() - 1);
 		PlayAnimMontage(AnimAssetData.HitAnimMontageList[randomIdx]);
@@ -165,6 +169,12 @@ float ACharacterBase::TakeDebuffDamage(float DamageAmount, ECharacterDebuffType 
 	if (!IsValid(Causer)) return 0.0f;
 	TakeDamage(DamageAmount, FDamageEvent(), nullptr, Causer);
 	return DamageAmount;
+}
+
+void ACharacterBase::SetActionState(ECharacterActionType Type)
+{
+	CharacterState.CharacterActionState = Type;
+	return;
 }
 
 void ACharacterBase::TakeHeal(float HealAmountRate, bool bIsTimerEvent, uint8 BuffDebuffType)
@@ -266,6 +276,49 @@ void ACharacterBase::TryAttack()
 	}
 }
 
+void ACharacterBase::TrySkill()
+{
+	AWeaponBase* weaponRef = GetCurrentWeaponRef();
+	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
+	float totalSkillAnimPlayTime = 0;
+	int skillAnimIndex =0 ;
+	SkillAnimPlayTimerCurr = 0;
+
+	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
+	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
+
+	SkillAnimPlayTimerThreshold = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
+	
+	//Total skill animation play time which is using for init skill timing.
+	for (UAnimMontage* skillAnimMontage : AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList) 
+	{
+		totalSkillAnimPlayTime += skillAnimMontage->CalculateSequenceLength()/GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRateList[skillAnimIndex];
+		GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.TotalSkillPlayTime = totalSkillAnimPlayTime;
+		skillAnimIndex++;
+	}
+
+	SkillAnimPlayTimerHandleList.SetNum(SkillAnimPlayTimerThreshold);
+	PlaySkillAnimation();
+}
+
+void ACharacterBase::PlaySkillAnimation()
+{
+	if (SkillAnimPlayTimerCurr >= SkillAnimPlayTimerThreshold)
+	{
+		SkillAnimPlayTimerHandleList.Empty();
+		return;
+	}
+	
+	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(GetCurrentWeaponRef()->WeaponID)->SkillAnimMontageList;
+	float animPlayTime = PlayAnimMontage(targetAnimList[SkillAnimPlayTimerCurr], GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRateList[SkillAnimPlayTimerCurr]);
+	GetWorld()->GetTimerManager().SetTimer(SkillAnimPlayTimerHandleList[SkillAnimPlayTimerCurr], FTimerDelegate::CreateLambda([&]()
+		{
+			SkillAnimPlayTimerCurr += 1;
+			PlaySkillAnimation();
+		}), animPlayTime, false);
+	return;
+}
+
 void ACharacterBase::Attack()
 {
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
@@ -364,6 +417,18 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 			for (int32 i = 0; i < AssetInfo.HitAnimMontageList.Num(); i++)
 			{
 				AssetToStream.AddUnique(AssetInfo.HitAnimMontageList[i].ToSoftObjectPath());
+			}
+		}
+
+		for (auto index = AssetInfo.SkillAnimMontageMap.CreateConstIterator(); index; ++index)
+		{
+			TArray<TSoftObjectPtr<UAnimMontage>> skillAnimMontageList = index.Value().SkillAnimMontageList;
+			for (auto& anim : skillAnimMontageList)
+			{
+				if (!skillAnimMontageList.IsEmpty())
+				{
+					AssetToStream.AddUnique(anim.ToSoftObjectPath());
+				}
 			}
 		}
 
@@ -504,6 +569,18 @@ bool ACharacterBase::InitAnimAsset()
 		{
 			if (anim.IsValid())
 				animAssetList.HitAnimMontageList.AddUnique(anim.Get());
+		}
+	}
+	for (auto index = AssetInfo.SkillAnimMontageMap.CreateConstIterator(); index; ++index)
+	{
+		if (!index.Value().SkillAnimMontageList.IsEmpty())
+		{	
+			animAssetList.SkillAnimMontageMap.Add(index.Key());
+			for (TSoftObjectPtr<UAnimMontage> anim : index.Value().SkillAnimMontageList)
+			{
+				if (anim.IsValid())
+					animAssetList.SkillAnimMontageMap.Find(index.Key())->SkillAnimMontageList.AddUnique(anim.Get());
+			}
 		}
 	}
 
@@ -755,4 +832,5 @@ void ACharacterBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
+	SkillAnimPlayTimerHandleList.Empty();
 }

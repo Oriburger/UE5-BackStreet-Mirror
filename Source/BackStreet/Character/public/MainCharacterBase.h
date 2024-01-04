@@ -115,6 +115,9 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
+		virtual void TrySkill() override;
+
+	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
 
 	UFUNCTION(BlueprintCallable)
@@ -170,6 +173,11 @@ public:
 public:
 	UFUNCTION(BlueprintCallable)
 		virtual bool PickWeapon(int32 NewWeaponID) override;
+
+//------- ½ºÅ³ / ÄÞº¸----------
+public:
+	UFUNCTION(BlueprintCallable)
+		void AddSkillGauge();
 
 // -------- VFX -----------
 protected:
