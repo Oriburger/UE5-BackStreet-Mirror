@@ -38,7 +38,7 @@ void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& New
 	TargetList.Empty();
 	Causer = NewCauser;
 	TargetList = NewTargetList;
-	
+
 	//에셋 초기화
 	FSkillAssetInfoStruct newAssetInfo = GetSkillAssetInfoWithID(SkillID);
 	SkillAssetInfo = newAssetInfo;
@@ -61,6 +61,7 @@ void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& New
 	}
 	GetWorld()->GetTimerManager().SetTimer(SkillStartTimingTimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
+			this->SetActorHiddenInGame(false);
 			StartSkill();
 			GetWorldTimerManager().ClearTimer(SkillStartTimingTimerHandle);
 		}), NewSkillStartTiming, false);

@@ -832,5 +832,9 @@ void ACharacterBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
+	for (int num=0 ; num < SkillAnimPlayTimerHandleList.Num(); num++)
+	{
+		GetWorldTimerManager().ClearTimer(SkillAnimPlayTimerHandleList[num]);
+	}
 	SkillAnimPlayTimerHandleList.Empty();
 }

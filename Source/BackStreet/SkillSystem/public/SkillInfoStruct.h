@@ -76,9 +76,6 @@ public:
 
 	public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		ESkillGrade SkillGrade;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<int32> SkillIDList;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -88,8 +85,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<float> SkillStartTimingRateList;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY()
+		ESkillGrade SkillGrade;
+
+	UPROPERTY()
 		float TotalSkillPlayTime;
+
+	UPROPERTY()
+		TMap<int32, class ASkillBase*> SkillRefMap;
 };
 
 USTRUCT(BlueprintType)

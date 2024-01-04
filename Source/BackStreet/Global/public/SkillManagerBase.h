@@ -44,16 +44,13 @@ protected:
 	
 	//SkillMap에 추가할 스킬 객체를 생성함
 	UFUNCTION()
-		class ASkillBase* MakeSkillBase(int32 NewSkillID);
+		class ASkillBase* MakeSkillBase(AActor* NewCauser, int32 NewSkillID);
 
 	//스킬 스탯 테이블
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* SkillInfoTable;
 
 private:
-	UPROPERTY()
-		TMap<int32, class ASkillBase*> SkillRefMap;
-
 	UPROPERTY()
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 };
