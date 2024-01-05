@@ -210,7 +210,7 @@ void ACharacterBase::Die()
 			for (TPair<int32, ASkillBase*>& skillIdx : WeaponActorList[weaponIdx]->GetWeaponStat().SkillSetInfo.SkillRefMap)
 			{
 				ASkillBase* skill = skillIdx.Value;
-				skill->DestroySkill();
+				skill->ClearAllTimerHandle();
 				skill->Destroy();
 			}
 			WeaponActorList[weaponIdx]->GetWeaponStat().SkillSetInfo.SkillRefMap.Empty();
@@ -290,6 +290,11 @@ void ACharacterBase::TrySkill()
 {
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
+	if (weaponRef->GetWeaponStat().SkillSetInfo.SkillIDList.IsEmpty())
+	{
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Skill is not binded to this Weapon")), FColor::White);
+		return;
+	}
 	float totalSkillAnimPlayTime = 0;
 	int skillAnimIndex =0 ;
 	SkillAnimPlayTimerCurr = 0;
