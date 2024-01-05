@@ -48,6 +48,9 @@ public:
 		void StartSkill();
 
 	UFUNCTION(BlueprintCallable)
+		void HideSkill();
+
+	UFUNCTION()
 		void DestroySkill();
 
 	UFUNCTION()
@@ -97,6 +100,10 @@ protected:
 	TWeakObjectPtr<class USkillManagerBase> SkillManagerRef;
 
 //-------- ≈∏¿Ã∏” --------------------------------------------
+public:
+	UFUNCTION()
+		void ClearAllTimerHandle();
+	
 protected:
 	UPROPERTY()
 		FTimerHandle SkillStartTimingTimerHandle;

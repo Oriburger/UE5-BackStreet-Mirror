@@ -5,6 +5,7 @@
 #include "../../Item/public/WeaponInventoryBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "../../Global/public/AssetManagerBase.h"
+#include "../../SkillSystem/public/SkillBase.h"
 #include "Engine/DamageEvents.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -205,8 +206,17 @@ void ACharacterBase::Die()
 	{
 		//캐릭터가 죽으면 3가지 타입의 무기 액터를 순차적으로 반환
 		for (int weaponIdx = 2; weaponIdx >= 0; weaponIdx--)
+		{
+			for (TPair<int32, ASkillBase*>& skillIdx : WeaponActorList[weaponIdx]->GetWeaponStat().SkillSetInfo.SkillRefMap)
+			{
+				ASkillBase* skill = skillIdx.Value;
+				skill->DestroySkill();
+				skill->Destroy();
+			}
+			WeaponActorList[weaponIdx]->GetWeaponStat().SkillSetInfo.SkillRefMap.Empty();
 			WeaponActorList[weaponIdx]->Destroy();
-		InventoryRef->Destroy();
+			InventoryRef->Destroy();
+		}
 	}
 	if (IsValid(GetCurrentWeaponRef()) && !GetCurrentWeaponRef()->IsActorBeingDestroyed())
 	{

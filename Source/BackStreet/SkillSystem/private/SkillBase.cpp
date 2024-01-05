@@ -67,7 +67,7 @@ void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& New
 		}), NewSkillStartTiming, false);
 }
 
-void ASkillBase::DestroySkill()
+void ASkillBase::HideSkill()
 {
 	class ACharacterBase* causer = Cast<class ACharacterBase>(Causer);
 	if (!IsValid(causer) || !IsValid(causer->GetCurrentWeaponRef())) return;
@@ -78,6 +78,11 @@ void ASkillBase::DestroySkill()
 	skillTransform.SetLocation(skillLocation);
 	this->SetActorTransform(skillTransform);
 	this->SetActorHiddenInGame(true);
+}
+
+void ASkillBase::DestroySkill()
+{
+	ClearAllTimerHandle();
 }
 
 void ASkillBase::SetSkillManagerRef(USkillManagerBase* NewSkillManager)
@@ -139,4 +144,9 @@ void ASkillBase::PlayEffectSound(USoundCue* EffectSound)
 {
 	if (EffectSound == nullptr) return;
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), EffectSound, GetActorLocation());
+}
+
+void ASkillBase::ClearAllTimerHandle()
+{
+	GetWorldTimerManager().ClearTimer(SkillStartTimingTimerHandle);
 }
