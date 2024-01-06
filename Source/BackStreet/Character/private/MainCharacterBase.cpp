@@ -1,6 +1,4 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "../public/MainCharacterBase.h"
 #include "../public/MainCharacterController.h"
 #include "../public/AbilityManagerBase.h"
@@ -20,6 +18,8 @@
 #include "TimerManager.h"
 #include "../../Item/public/RewardBoxBase.h"
 #include "../../CraftingSystem/public/CraftBoxBase.h"
+#include "Animation/AnimMontage.h"
+#include "../../Global/public/SkillManagerBase.h"
 #define MAX_CAMERA_BOOM_LENGTH 1450.0f
 #define MIN_CAMERA_BOOM_LENGTH 250.0f
 #define MAX_THROW_DISTANCE 1200.0f //AThrowWeaponBase와 통일 (추후 하나의 파일로 통합 예정)
@@ -348,6 +348,7 @@ void AMainCharacterBase::TryAttack()
 	}
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
+	this->Tags.Add("Attack|Common");
 	Super::TryAttack();
 	RotateToCursor();
 
@@ -357,6 +358,35 @@ void AMainCharacterBase::TryAttack()
 			TryAttack(); //0.1초 뒤에 체크해서 계속 눌려있는 상태라면, Attack을 반복한다. 
 	}), 0.1f, false);
 }
+
+void AMainCharacterBase::TrySkill()
+{
+	check(GetCurrentWeaponRef() != nullptr);
+
+	//if CharacterActionType is E_Skill or E_Idle return
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
+		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	 
+	if (GetCurrentWeaponRef()->WeaponID == 0||GetCharacterState().CharacterCurrSkillGauge==0)
+	{
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬을 사용할 수 없습니다. ")), FColor::White);
+		return;
+	}
+
+	//공격을 하고, 커서 위치로 Rotation을 조정
+	Super::TrySkill();
+
+	RotateToCursor();
+}
+
+void AMainCharacterBase::AddSkillGauge()
+{
+	check(GetCurrentWeaponRef() != nullptr);
+
+	AWeaponBase* weaponRef = GetCurrentWeaponRef();
+	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeInfo.SkillGaugeAug;
+}
+
 
 void AMainCharacterBase::Attack()
 {
