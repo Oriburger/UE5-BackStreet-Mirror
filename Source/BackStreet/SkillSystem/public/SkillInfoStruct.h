@@ -76,19 +76,23 @@ public:
 
 	public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		ESkillGrade SkillGrade;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<int32> SkillIDList;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<float> SkillIntervalList;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<float> SkillAnimPlayRate;
+		TArray<float> SkillAnimPlayRateList;
 
+	//Rate value(Criterion is TotalAnimPlayTime) which is used to indicate the interval between each skill
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<float> SkillAnimInterval;
+		TArray<float> SkillStartTimingRateList;
+
+	UPROPERTY()
+		ESkillGrade SkillGrade;
+
+	UPROPERTY()
+		float TotalSkillPlayTime;
+
+	UPROPERTY()
+		TMap<int32, class ASkillBase*> SkillRefMap;
 };
 
 USTRUCT(BlueprintType)

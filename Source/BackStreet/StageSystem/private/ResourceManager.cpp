@@ -302,7 +302,7 @@ void AResourceManager::CleanAllResource()
 	ABackStreetGameModeBase* gamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (IsValid(gamemodeRef))
 	{
-		gamemodeRef->GetGlobalDebuffManagerRef()->ClearAllDebuffTimer();
+		gamemodeRef->GetGlobalDebuffManagerRef()->ClearDebuffManagerTimer();
 	}
 
 	if(IsValid(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))

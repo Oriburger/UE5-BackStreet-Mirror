@@ -5,6 +5,7 @@
 #include "../../Item/public/WeaponInventoryBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "../../Global/public/AssetManagerBase.h"
+#include "../../SkillSystem/public/SkillBase.h"
 #include "Engine/DamageEvents.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -124,6 +125,9 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
+	FWeaponStatStruct currWeaponStat = this->GetCurrentWeaponRef()->GetWeaponStat();
+	currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
+	this->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
 	StopAttack();
 
 	if (!GetWorldTimerManager().IsTimerActive(AtkIntervalHandle))
@@ -202,17 +206,28 @@ void ACharacterBase::Die()
 	{
 		//캐릭터가 죽으면 3가지 타입의 무기 액터를 순차적으로 반환
 		for (int weaponIdx = 2; weaponIdx >= 0; weaponIdx--)
+		{
+			for (TPair<int32, ASkillBase*>& skillIdx : WeaponActorList[weaponIdx]->GetWeaponStat().SkillSetInfo.SkillRefMap)
+			{
+				ASkillBase* skill = skillIdx.Value;
+				skill->ClearAllTimerHandle();
+				skill->Destroy();
+			}
+			WeaponActorList[weaponIdx]->GetWeaponStat().SkillSetInfo.SkillRefMap.Empty();
 			WeaponActorList[weaponIdx]->Destroy();
-		InventoryRef->Destroy();
+			InventoryRef->Destroy();
+		}
 	}
 	if (IsValid(GetCurrentWeaponRef()) && !GetCurrentWeaponRef()->IsActorBeingDestroyed())
 	{
 		GetCurrentWeaponRef()->ClearAllTimerHandle();
 	}
+	//모든 타이머를 제거한다. (타이머 매니저의 것도)
+	ClearAllTimerHandle();
+	GamemodeRef->GetGlobalDebuffManagerRef()->ClearAllDebuffTimer(this);
 
-	ClearAllTimerHandle();
+	//무적 처리를 하고, Movement를 비활성화
 	CharacterStat.bIsInvincibility = true;
-	ClearAllTimerHandle();
 	GetCharacterMovement()->Deactivate();
 	bUseControllerRotationYaw = false;
 
@@ -271,32 +286,49 @@ void ACharacterBase::TryAttack()
 	}
 }
 
-void ACharacterBase::TrySkillAttack()
+void ACharacterBase::TrySkill()
 {
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
+	if (weaponRef->GetWeaponStat().SkillSetInfo.SkillIDList.IsEmpty())
+	{
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Skill is not binded to this Weapon")), FColor::White);
+		return;
+	}
+	float totalSkillAnimPlayTime = 0;
+	int skillAnimIndex =0 ;
+	SkillAnimPlayTimerCurr = 0;
 
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
 	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
-	Curr = 0;
-	Threshold = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
-	SkillAnimPlayTimerHandleList.SetNum(Threshold);
+
+	SkillAnimPlayTimerThreshold = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
+	
+	//Total skill animation play time which is using for init skill timing.
+	for (UAnimMontage* skillAnimMontage : AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList) 
+	{
+		totalSkillAnimPlayTime += skillAnimMontage->CalculateSequenceLength()/GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRateList[skillAnimIndex];
+		GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.TotalSkillPlayTime = totalSkillAnimPlayTime;
+		skillAnimIndex++;
+	}
+
+	SkillAnimPlayTimerHandleList.SetNum(SkillAnimPlayTimerThreshold);
 	PlaySkillAnimation();
 }
 
 void ACharacterBase::PlaySkillAnimation()
 {
-	if (Curr >= Threshold)
+	if (SkillAnimPlayTimerCurr >= SkillAnimPlayTimerThreshold)
 	{
 		SkillAnimPlayTimerHandleList.Empty();
 		return;
 	}
 	
 	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(GetCurrentWeaponRef()->WeaponID)->SkillAnimMontageList;
-	float animPlayTime = PlayAnimMontage(targetAnimList[Curr], GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRate[Curr]);
-	GetWorld()->GetTimerManager().SetTimer(SkillAnimPlayTimerHandleList[Curr], FTimerDelegate::CreateLambda([&]()
+	float animPlayTime = PlayAnimMontage(targetAnimList[SkillAnimPlayTimerCurr], GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRateList[SkillAnimPlayTimerCurr]);
+	GetWorld()->GetTimerManager().SetTimer(SkillAnimPlayTimerHandleList[SkillAnimPlayTimerCurr], FTimerDelegate::CreateLambda([&]()
 		{
-			Curr += 1;
+			SkillAnimPlayTimerCurr += 1;
 			PlaySkillAnimation();
 		}), animPlayTime, false);
 	return;
@@ -352,7 +384,7 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 	AssetInfo = GetAssetInfoWithID(NewEnemyID);
 	//SetCharacterAnimAssetInfoData(CharacterID);
 
-	if (!AssetInfo.CharacterMesh.IsNull() && !AssetInfo.CharacterMeshMaterial.IsNull() && !AssetInfo.AnimClass.IsNull())
+	if (!AssetInfo.CharacterMesh.IsNull() && !AssetInfo.CharacterMeshMaterial.IsNull()/* && !AssetInfo.AnimBlueprint.IsNull()*/)
 	{
 		TArray<FSoftObjectPath> AssetToStream;
 
@@ -361,7 +393,7 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 		AssetToStream.AddUnique(AssetInfo.CharacterMeshMaterial.ToSoftObjectPath());
 
 		// Animation 관련
-		AssetToStream.AddUnique(AssetInfo.AnimClass.ToSoftObjectPath());
+		//AssetToStream.AddUnique(AssetInfo.AnimBlueprint.ToSoftObjectPath());
 
 		if (!AssetInfo.MeleeAttackAnimMontageList.IsEmpty())
 		{
@@ -384,7 +416,7 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 			for (int32 i = 0; i < AssetInfo.ThrowAnimMontageList.Num(); i++)
 			{
 				AssetToStream.AddUnique(AssetInfo.ThrowAnimMontageList[i].ToSoftObjectPath());
-			}
+			}	
 		}
 
 		if (!AssetInfo.ReloadAnimMontageList.IsEmpty())
@@ -479,15 +511,6 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &ACharacterBase::SetAsset));
 
-	/*	if (IsValid(AssetInfo.CharacterMesh.Get()) && IsValid(AssetInfo.CharacterMeshMaterial.Get()) && IsValid(AssetInfo.AnimClass.Get()))
-		{
-			InitializeAsset();
-		}
-		else
-		{
-			FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
-			streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &ACharacterBase::InitializeAsset));
-		}*/
 	}
 }
 
@@ -496,7 +519,7 @@ void ACharacterBase::SetAsset()
 {
 	if (AssetInfo.CharacterMesh.IsNull() || !IsValid(AssetInfo.CharacterMesh.Get())) return;
 	if (AssetInfo.CharacterMeshMaterial.IsNull() || !IsValid(AssetInfo.CharacterMeshMaterial.Get())) return;
-	if (AssetInfo.AnimClass.IsNull() || !IsValid(AssetInfo.AnimClass.Get())) return;
+	//if (AssetInfo.AnimBlueprint.IsNull() || !IsValid(AssetInfo.AnimBlueprint.Get())) return;
 
 	GetCapsuleComponent()->SetWorldRotation(FRotator::ZeroRotator);
 	GetCapsuleComponent()->SetRelativeScale3D(AssetInfo.InitialCapsuleComponentScale);
@@ -507,7 +530,7 @@ void ACharacterBase::SetAsset()
 	GetMesh()->SetRelativeScale3D(AssetInfo.InitialScale);
 
 	GetMesh()->SetMaterial(0, AssetInfo.CharacterMeshMaterial.Get());
-	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimClass.Get()->GetAnimBlueprintGeneratedClass());
+	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimBlueprint);
 	InitAnimAsset();
 	InitSoundAsset();
 	InitVFXAsset();
@@ -745,7 +768,6 @@ bool ACharacterBase::TrySwitchToSubWeapon(int32 SubWeaponIdx)
 		SubInventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
 	else
 		InventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
-	//SubInventoryRef->SetCurrentIdx(SubWeaponIdx); //인덱스 지정	
 	SubInventoryRef->EquipWeaponByIdx(SubWeaponIdx);
 
 	return true;
@@ -773,8 +795,8 @@ void ACharacterBase::SwitchWeaponActor(EWeaponType TargetWeaponType)
 {
 	if (!WeaponActorList.IsValidIndex((int32)TargetWeaponType-1)) return;
 	if (!IsValid(WeaponActorList[(int32)TargetWeaponType-1]))  return;
-	if (!IsValid(GetCurrentWeaponRef())) return; 
-	
+	if (!IsValid(GetCurrentWeaponRef())) return;
+
 	GetCurrentWeaponRef()->SetActorHiddenInGame(true);
 	GetCurrentWeaponRef()->InitWeapon(0);
 	CurrentWeaponRef = WeaponActorList[(int32)TargetWeaponType - 1];
@@ -825,5 +847,9 @@ void ACharacterBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
+	for (int num=0 ; num < SkillAnimPlayTimerHandleList.Num(); num++)
+	{
+		GetWorldTimerManager().ClearTimer(SkillAnimPlayTimerHandleList[num]);
+	}
 	SkillAnimPlayTimerHandleList.Empty();
 }

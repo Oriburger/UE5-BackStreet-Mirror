@@ -41,12 +41,10 @@ void USkillManagerBase::ActivateSkill(AActor* NewCauser, TArray<ACharacterBase*>
 	FSkillSetInfo skillSetInfo =  causer->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo;
 	for (uint8 idx = 0; idx < skillSetInfo.SkillIDList.Num(); idx++)
 	{
-		if (idx != 0)
-		{
-			DelaySkillInterval(idx);
-		}
 		ASkillBase* skill = ComposeSkillMap(causer, skillSetInfo.SkillIDList[idx]);
-		skill->InitSkill(NewCauser, NewTargetList);
+		float skillStartTiming = skillSetInfo.TotalSkillPlayTime * skillSetInfo.SkillStartTimingRateList[idx];
+		skill->InitSkill(NewCauser, NewTargetList, skillStartTiming);
+
 	}
 	return;
 }
@@ -133,32 +131,30 @@ bool USkillManagerBase::IsValidGrade(AActor* NewCauser)
 	else return true;
 }
 
-void USkillManagerBase::DelaySkillInterval(uint8 NewIndex)
-{
-
-}
-
 ASkillBase* USkillManagerBase::ComposeSkillMap(AActor* NewCauser, int32 NewSkillID)
 {
 	ASkillBase* skill =nullptr;
-	if(Cast<AMainCharacterBase>(NewCauser)->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo.SkillGrade == ESkillGrade::E_None)
-		return skill;
-
-	if (SkillRefMap.Contains(NewSkillID))
+	ACharacterBase* causer = Cast<ACharacterBase>(NewCauser);
+	FSkillSetInfo skillSetInfo = causer->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo;
+	TMap<int32, class ASkillBase* > skillRefMap = skillSetInfo.SkillRefMap;
+	if (causer->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo.SkillGrade == ESkillGrade::E_None)
 	{
-		skill = *SkillRefMap.Find(NewSkillID);
-		skill->SetActorHiddenInGame(false);
+		return skill;
+	}
+	if (causer->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo.SkillRefMap.Contains(NewSkillID))
+	{
+		skill = *skillRefMap.Find(NewSkillID);
 	}
 	else
 	{
-		skill = MakeSkillBase(NewSkillID);
-		SkillRefMap.Add(NewSkillID, skill);
+		skill = MakeSkillBase(NewCauser, NewSkillID);
 	}
 	return skill;
 }
 
-ASkillBase* USkillManagerBase::MakeSkillBase(int32 NewSkillID)
+ASkillBase* USkillManagerBase::MakeSkillBase(AActor* NewCauser, int32 NewSkillID)
 {
+	ACharacterBase* causer = Cast<ACharacterBase>(NewCauser);
 	FString skillkey = UKismetStringLibrary::Conv_IntToString(NewSkillID);
 	FSkillInfoStruct* skillInfo = SkillInfoTable->FindRow<FSkillInfoStruct>((FName)skillkey, skillkey);
 	if (skillInfo != nullptr)
@@ -166,17 +162,17 @@ ASkillBase* USkillManagerBase::MakeSkillBase(int32 NewSkillID)
 		ASkillBase* skillBaseRef = Cast<ASkillBase>(GetWorld()->SpawnActor(skillInfo->SkillBaseClassRef));
 		if (IsValid(skillBaseRef))
 		{
+			FWeaponStatStruct weaponStat = causer->GetCurrentWeaponRef()->GetWeaponStat();
+			FSkillSetInfo skillSetInfo =  weaponStat.SkillSetInfo;
+
 			skillBaseRef->SetSkillManagerRef(this);
-			SkillRefMap.Add(NewSkillID, skillBaseRef);
+			skillSetInfo.SkillRefMap.Add(NewSkillID, skillBaseRef);
+			weaponStat.SkillSetInfo = skillSetInfo;
+			causer->GetCurrentWeaponRef()->SetWeaponStat(weaponStat);
+
 			return skillBaseRef;
 		}
 	}
 	return nullptr;
 }
-
-void USkillManagerBase::ClearAllTimerHandle()
-{
-	GamemodeRef.Get()->GetWorldTimerManager().ClearTimer(SkillTimerHandle);
-}
-
 

@@ -20,7 +20,6 @@
 #include "../../CraftingSystem/public/CraftBoxBase.h"
 #include "Animation/AnimMontage.h"
 #include "../../Global/public/SkillManagerBase.h"
-#include "../public/CharacterBase.h"
 #define MAX_CAMERA_BOOM_LENGTH 1450.0f
 #define MIN_CAMERA_BOOM_LENGTH 250.0f
 #define MAX_THROW_DISTANCE 1200.0f //AThrowWeaponBase와 통일 (추후 하나의 파일로 통합 예정)
@@ -360,13 +359,14 @@ void AMainCharacterBase::TryAttack()
 	}), 0.1f, false);
 }
 
-void AMainCharacterBase::TrySkillAttack()
+void AMainCharacterBase::TrySkill()
 {
 	check(GetCurrentWeaponRef() != nullptr);
 
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Skill
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-
+	//if CharacterActionType is E_Skill or E_Idle return
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
+		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	 
 	if (GetCurrentWeaponRef()->WeaponID == 0||GetCharacterState().CharacterCurrSkillGauge==0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬을 사용할 수 없습니다. ")), FColor::White);
@@ -374,12 +374,7 @@ void AMainCharacterBase::TrySkillAttack()
 	}
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
-	Super::TrySkillAttack();
-
-	//Reset Weapon Skill Grade
-	FWeaponStatStruct weaponStat = GetCurrentWeaponRef()->GetWeaponStat();
-	weaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
-	GetCurrentWeaponRef()->SetWeaponStat(weaponStat);
+	Super::TrySkill();
 
 	RotateToCursor();
 }

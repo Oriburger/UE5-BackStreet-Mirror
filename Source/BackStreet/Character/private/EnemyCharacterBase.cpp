@@ -13,7 +13,6 @@
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "../public/CharacterBase.h"
 #include "../public/MainCharacterBase.h"
 
 #define TURN_TIME_OUT_SEC 1.0f
@@ -52,7 +51,6 @@ void AEnemyCharacterBase::BeginPlay()
 
 void AEnemyCharacterBase::InitEnemyStat()
 {
-	UE_LOG(LogTemp, Warning, TEXT("My ID : %d"), CharacterID);
 	GamemodeRef->UpdateCharacterStatWithID(this, CharacterID);
 	CharacterState.CharacterCurrHP = CharacterStat.CharacterMaxHP;
 	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.CharacterMoveSpeed;
@@ -98,7 +96,7 @@ void AEnemyCharacterBase::TryAttack()
 	Super::TryAttack();
 }
 
-void AEnemyCharacterBase::TrySkillAttack()
+void AEnemyCharacterBase::TrySkill()
 {
 	check(GetCurrentWeaponRef() != nullptr);
 
@@ -112,7 +110,7 @@ void AEnemyCharacterBase::TrySkillAttack()
 	}
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
-	Super::TrySkillAttack();
+	Super::TrySkill();
 
 	//Reset Weapon Skill Grade
 	FWeaponStatStruct weaponStat = GetCurrentWeaponRef()->GetWeaponStat();

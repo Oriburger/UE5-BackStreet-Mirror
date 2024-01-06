@@ -33,15 +33,15 @@ void ASkillBase::BeginPlay()
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
-void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList)
+void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, float NewSkillStartTiming)
 {
+	TargetList.Empty();
 	Causer = NewCauser;
 	TargetList = NewTargetList;
-	
+
 	//에셋 초기화
 	FSkillAssetInfoStruct newAssetInfo = GetSkillAssetInfoWithID(SkillID);
 	SkillAssetInfo = newAssetInfo;
-
 	if (SkillID != 0)
 	{
 		TArray<FSoftObjectPath> tempStream, assetToStream;
@@ -59,24 +59,30 @@ void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& New
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &ASkillBase::InitSkillAsset));
 	}
-	StartSkill();
+	GetWorld()->GetTimerManager().SetTimer(SkillStartTimingTimerHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			this->SetActorHiddenInGame(false);
+			StartSkill();
+			GetWorldTimerManager().ClearTimer(SkillStartTimingTimerHandle);
+		}), NewSkillStartTiming, false);
 }
 
-void ASkillBase::DestroySkill()
+void ASkillBase::HideSkill()
 {
 	class ACharacterBase* causer = Cast<class ACharacterBase>(Causer);
 	if (!IsValid(causer) || !IsValid(causer->GetCurrentWeaponRef())) return;
 
-	FWeaponStatStruct currWeaponStat = causer->GetCurrentWeaponRef()->GetWeaponStat();
 	FTransform skillTransform;
 	FVector skillLocation;
 	skillLocation.Set(0, 0, -400);
 	skillTransform.SetLocation(skillLocation);
-	currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
-	causer->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
 	this->SetActorTransform(skillTransform);
 	this->SetActorHiddenInGame(true);
-	TargetList.Empty();
+}
+
+void ASkillBase::DestroySkill()
+{
+	ClearAllTimerHandle();
 }
 
 void ASkillBase::SetSkillManagerRef(USkillManagerBase* NewSkillManager)
@@ -142,5 +148,5 @@ void ASkillBase::PlayEffectSound(USoundCue* EffectSound)
 
 void ASkillBase::ClearAllTimerHandle()
 {
-	GetWorldTimerManager().ClearTimer(SkillTimerHandle);
+	GetWorldTimerManager().ClearTimer(SkillStartTimingTimerHandle);
 }

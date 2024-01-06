@@ -42,12 +42,15 @@ public:
 
 	//Reset Skill
 	UFUNCTION()
-		void InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList);
+		void InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, float NewSkillStartTiming);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void StartSkill();
 
 	UFUNCTION(BlueprintCallable)
+		void HideSkill();
+
+	UFUNCTION()
 		void DestroySkill();
 
 	UFUNCTION()
@@ -87,13 +90,6 @@ protected:
 		class USoundCue* SkillFailSound;
 
 protected:
-	UFUNCTION(BlueprintCallable)
-		virtual void ClearAllTimerHandle();
-
-	UPROPERTY()
-		FTimerHandle SkillTimerHandle;
-
-protected:
 	//게임모드 약 참조
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
@@ -102,4 +98,13 @@ protected:
 
 	//SkillManager Weak Pointer
 	TWeakObjectPtr<class USkillManagerBase> SkillManagerRef;
+
+//-------- 타이머 --------------------------------------------
+public:
+	UFUNCTION()
+		void ClearAllTimerHandle();
+	
+protected:
+	UPROPERTY()
+		FTimerHandle SkillStartTimingTimerHandle;
 };

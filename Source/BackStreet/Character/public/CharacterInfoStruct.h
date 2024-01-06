@@ -127,8 +127,8 @@ public:
 	
 	//스폰할 적 스켈레탈 메시 정보 저장
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TSoftObjectPtr<UAnimBlueprint> AnimClass;
-
+		UAnimBlueprintGeneratedClass* AnimBlueprint;
+	
 	//근접 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> MeleeAttackAnimMontageList;

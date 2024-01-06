@@ -44,26 +44,13 @@ protected:
 	
 	//SkillMap에 추가할 스킬 객체를 생성함
 	UFUNCTION()
-		class ASkillBase* MakeSkillBase(int32 NewSkillID);
-
-	//SkillID에 맞추어 스킬간 사용 간격을 지정하고, Delay를 부여함
-	UFUNCTION()
-		void DelaySkillInterval(uint8 NewIndex);
+		class ASkillBase* MakeSkillBase(AActor* NewCauser, int32 NewSkillID);
 
 	//스킬 스탯 테이블
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* SkillInfoTable;
 
-	UFUNCTION()
-		void ClearAllTimerHandle();
-
 private:
 	UPROPERTY()
-		TMap<int32, class ASkillBase*> SkillRefMap;
-
-	UPROPERTY()
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
-
-	UPROPERTY()
-		FTimerHandle SkillTimerHandle;
 };

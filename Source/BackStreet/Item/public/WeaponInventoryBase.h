@@ -65,7 +65,7 @@ private:
 		FWeaponStatStruct GetWeaponStatInfoWithID(int32 TargetWeaponID);
 
 public: 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		EWeaponType GetWeaponType(int32 TargetWeaponID);
 
 //----- 인벤토리 핵심 로직-------------------------------
