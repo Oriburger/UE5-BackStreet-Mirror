@@ -42,7 +42,7 @@ public:
 public:
 	//Reset Skill
 	UFUNCTION()
-		void InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, float NewSkillStartTiming);
+		void InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, int32 NewSkillID, float NewSkillStartTiming);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void StartSkill();
@@ -55,7 +55,11 @@ public:
 
 //--------- DataTable, Asset ----------------------
 protected:
-	virtual void InitSkillAsset();
+	UFUNCTION()
+		void InitAsset(int32 NewSkillID);
+	
+	UFUNCTION()
+		void SetAsset();
 
 	//Skill Asset Info Table
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
@@ -72,20 +76,20 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FSkillInfoStruct GetSkillInfoWithID(int32 TargetSkillID);
 
-//-------- ETC. (Ref,  VFX)-------------------------------
 protected:
-	UFUNCTION()
-		void PlayEffectSound(class USoundCue* EffectSound);
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|SFX")
+		TArray<USoundCue*> SkillSoundList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class UParticleSystem* DestroyEffectParticle;
+		TArray<class UNiagaraSystem*> SkillEffectParticleList;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* SkillSound;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraSystem* SkillDestroyEffectParticle;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* SkillFailSound;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Image")
+		class UTexture2D* SkillIconImage;
 
+//-------- ETC. (Ref)-------------------------------
 protected:
 	//GameMode Soft Ref
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
@@ -95,6 +99,9 @@ protected:
 
 	//SkillManager Weak Pointer
 	TWeakObjectPtr<class USkillManagerBase> SkillManagerRef;
+
+	UFUNCTION(BlueprintCallable)
+		void PlayEffectSound(USoundCue* EffectSound);
 
 //-------- Timer --------------------------------------------
 public:
