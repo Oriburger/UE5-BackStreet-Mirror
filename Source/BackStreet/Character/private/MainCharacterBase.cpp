@@ -363,7 +363,6 @@ void AMainCharacterBase::TrySkill()
 {
 	check(GetCurrentWeaponRef() != nullptr);
 
-	//if CharacterActionType is E_Skill or E_Idle return
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	 
@@ -373,9 +372,9 @@ void AMainCharacterBase::TrySkill()
 		return;
 	}
 
-	//공격을 하고, 커서 위치로 Rotation을 조정
 	Super::TrySkill();
 
+	//Try Skill and adjust rotation to cursor position
 	RotateToCursor();
 }
 

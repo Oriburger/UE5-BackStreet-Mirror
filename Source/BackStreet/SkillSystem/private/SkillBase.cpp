@@ -22,7 +22,7 @@ ASkillBase::ASkillBase()
 	SkillMesh->SetupAttachment(DefaultSceneRoot);
 	
 	static ConstructorHelpers::FObjectFinder<UDataTable> assetInfoTableFinder(TEXT("/Game/Skill/Data/D_SkillAssetInfo.D_SkillAssetInfo"));
-	checkf(assetInfoTableFinder.Succeeded(), TEXT("assetInfoTable 클래스 탐색에 실패했습니다."));
+	checkf(assetInfoTableFinder.Succeeded(), TEXT("AssetInfoTable class discovery failed."));
 	SkillAssetInfoTable = assetInfoTableFinder.Object;
 }
 
@@ -39,7 +39,7 @@ void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& New
 	Causer = NewCauser;
 	TargetList = NewTargetList;
 
-	//에셋 초기화
+	//Reset Asset
 	FSkillAssetInfoStruct newAssetInfo = GetSkillAssetInfoWithID(SkillID);
 	SkillAssetInfo = newAssetInfo;
 	if (SkillID != 0)
@@ -78,11 +78,6 @@ void ASkillBase::HideSkill()
 	skillTransform.SetLocation(skillLocation);
 	this->SetActorTransform(skillTransform);
 	this->SetActorHiddenInGame(true);
-}
-
-void ASkillBase::DestroySkill()
-{
-	ClearAllTimerHandle();
 }
 
 void ASkillBase::SetSkillManagerRef(USkillManagerBase* NewSkillManager)

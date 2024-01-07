@@ -28,9 +28,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		UStaticMeshComponent* SkillMesh;
 
-//------- 기본 프로퍼티, Action -------------------
+//------- Default Property, Action -------------------
 public:
-	//필수 지정 프로퍼티
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
 		int32 SkillID;
 
@@ -40,6 +39,7 @@ public:
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
 		TArray<class ACharacterBase*> TargetList;
 
+public:
 	//Reset Skill
 	UFUNCTION()
 		void InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, float NewSkillStartTiming);
@@ -51,20 +51,17 @@ public:
 		void HideSkill();
 
 	UFUNCTION()
-		void DestroySkill();
-
-	UFUNCTION()
 		void SetSkillManagerRef(class USkillManagerBase* NewSkillManager);
 
-//--------- 데이터 테이블, 에셋 관련 ----------------------
+//--------- DataTable, Asset ----------------------
 protected:
-	//스킬 에셋 정보 테이블
+	virtual void InitSkillAsset();
+
+	//Skill Asset Info Table
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* SkillAssetInfoTable;
 
-	virtual void InitSkillAsset();
-
-	//현재 스킬의 에셋 정보
+	//Current Asset info
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
 		FSkillAssetInfoStruct SkillAssetInfo;
 
@@ -75,7 +72,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FSkillInfoStruct GetSkillInfoWithID(int32 TargetSkillID);
 
-//-------- 그 외 (Ref VFX 등)-------------------------------
+//-------- ETC. (Ref,  VFX)-------------------------------
 protected:
 	UFUNCTION()
 		void PlayEffectSound(class USoundCue* EffectSound);
@@ -90,16 +87,16 @@ protected:
 		class USoundCue* SkillFailSound;
 
 protected:
-	//게임모드 약 참조
+	//GameMode Soft Ref
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
-	//소유자 캐릭터 약 참조
+	//Owner Character Soft Ref
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 
 	//SkillManager Weak Pointer
 	TWeakObjectPtr<class USkillManagerBase> SkillManagerRef;
 
-//-------- 타이머 --------------------------------------------
+//-------- Timer --------------------------------------------
 public:
 	UFUNCTION()
 		void ClearAllTimerHandle();

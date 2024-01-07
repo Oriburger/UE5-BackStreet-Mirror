@@ -11,19 +11,20 @@ UCLASS()
 class BACKSTREET_API USkillManagerBase : public UObject
 {
 	GENERATED_BODY()
+	
+//------ Global, Component -------------------
 public:
 	USkillManagerBase();
 	
-	//SkillManagerBase를 생성
+	//Initiate Skill Asset Data and Skill
 	UFUNCTION()
 		void InitSkillManagerBase(class ABackStreetGameModeBase* NewGamemodeRef);
 
-	//SkillManagerBase에서 스킬의 정보를 처리함
+//------- Default Property, Action -------------------
+public:
+	//SkillManagerBase processes information for the skill
 	UFUNCTION(BlueprintCallable)
 		void ActivateSkill(AActor* NewCauser, TArray<ACharacterBase*> NewTargetList);
-
-	UFUNCTION()
-		UDataTable* GetSkillInfoTable() { return SkillInfoTable; }
 
 protected:
 	//Set MainCharacter's Skill Grade by Compare SkillGauge
@@ -33,23 +34,31 @@ protected:
 	//Set EnemyCharacter's Skill Grade by Compare Defficulty
 	UFUNCTION()
 		void SetEnemyCharacterSkillGrade(AActor* NewCauser);
-	
+
 	//Return is Not E_None
 	UFUNCTION()
 		bool IsValidGrade(AActor* NewCauser);
 
-	//SkillMap에 ID에 맞는 스킬객체가 없다면 추가함
+	//Add skill at SkillMap if there is no skill object that matches the ID
 	UFUNCTION()
 		ASkillBase* ComposeSkillMap(AActor* NewCauser, int32 NewSkillID);
-	
-	//SkillMap에 추가할 스킬 객체를 생성함
+
+	//Create New skill ref
 	UFUNCTION()
 		class ASkillBase* MakeSkillBase(AActor* NewCauser, int32 NewSkillID);
 
-	//스킬 스탯 테이블
+
+//--------- DataTable ----------------------
+public:
+	UFUNCTION()
+		UDataTable* GetSkillInfoTable() { return SkillInfoTable; }
+
+protected:
+	//Skill Info Table
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* SkillInfoTable;
 
+//-------- ETC. (Ref)-------------------------------
 private:
 	UPROPERTY()
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
