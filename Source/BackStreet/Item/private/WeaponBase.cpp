@@ -39,7 +39,6 @@ void AWeaponBase::BeginPlay()
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
-
 void AWeaponBase::InitWeapon(int32 NewWeaponID)
 {
 	//Stat, State 초기화 
