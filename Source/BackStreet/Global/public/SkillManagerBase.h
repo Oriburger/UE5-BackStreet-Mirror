@@ -50,7 +50,7 @@ protected:
 
 //--------- DataTable ----------------------
 public:
-	UFUNCTION()
+	UFUNCTION(BlueprintPure, BlueprintCallable)
 		UDataTable* GetSkillInfoTable() { return SkillInfoTable; }
 
 protected:
