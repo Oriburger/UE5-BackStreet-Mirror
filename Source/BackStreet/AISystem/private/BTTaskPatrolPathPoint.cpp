@@ -112,7 +112,7 @@ void UBTTaskPatrolPathPoint::OnMoveCompleted(FAIRequestID RequestID, EPathFollow
         UE_LOG(LogTemp, Warning, TEXT("UBTTaskPatrolPathPoint::OnMoveCompleted %d"), PathPatrolComponent->CurrentPointIdx);
         MoveToPatrolPoint();
 
-        // TimerHandle 초기화
+        // TimerHandle Init
         GetWorld()->GetTimerManager().ClearTimer(PointWaitTimerHandle);
-     }), delayTime, false);	// 반복하려면 false를 true로 변경)
+     }), delayTime, false); 
 }

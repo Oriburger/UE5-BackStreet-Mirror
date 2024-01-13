@@ -36,10 +36,10 @@ protected:
 		void OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result);
 
 protected:
-	//소유자 캐릭터 약참조
+	//OwnerCharacter Ref
 	TWeakObjectPtr<class AEnemyCharacterBase> OwnerCharacterRef;
 
-	//블랙보드 컴포넌트
+	//BlackComponent Ref
 	TWeakObjectPtr<UBlackboardComponent> BlackboardRef;
 
 private:
