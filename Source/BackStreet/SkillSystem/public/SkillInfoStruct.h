@@ -23,6 +23,18 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		TSubclassOf<class ASkillBase> SkillBaseClassRef;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<FName, float> SkillCommonVariableMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<FName, float> SkillRareVariableMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<FName, float> SkillEpicVariableMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<FName, float> SkillRegendVariableMap;
 };
 
 USTRUCT(BlueprintType)
