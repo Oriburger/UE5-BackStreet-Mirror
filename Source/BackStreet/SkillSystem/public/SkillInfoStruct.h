@@ -1,5 +1,7 @@
 #pragma once
 #include "Engine/DataTable.h"
+#include "Sound/SoundCue.h"
+#include "NiagaraSystem.h"
 #include "../../Character/public/CharacterInfoEnum.h"
 #include "SkillInfoStruct.generated.h"
 
@@ -23,7 +25,16 @@ public:
 		TSubclassOf<class ASkillBase> SkillBaseClassRef;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		UTexture2D* SkillIconImage;
+		TMap<FName, float> SkillCommonVariableMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<FName, float> SkillRareVariableMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<FName, float> SkillEpicVariableMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<FName, float> SkillRegendVariableMap;
 };
 
 USTRUCT(BlueprintType)
@@ -41,7 +52,7 @@ public:
 
 	//스폰할 스킬 스태틱 메시 정보 저장
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
-		TSoftObjectPtr<UStaticMesh> SkillMesh;
+		TSoftObjectPtr<UStaticMesh> SkillActorMesh;
 
 	//메시의 초기 위치 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
@@ -56,16 +67,16 @@ public:
 		FVector InitialScale;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
-		TSoftObjectPtr<class UParticleSystem> EffectParticle;
+		TArray<TSoftObjectPtr<UNiagaraSystem>> EffectParticleList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
-		TSoftObjectPtr<class UParticleSystem> DestroyEffectParticle;
+		TSoftObjectPtr<UNiagaraSystem> DestroyEffectParticle;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-		TSoftObjectPtr<class USoundCue> SkillSound;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TArray<TSoftObjectPtr<USoundCue>> SkillSoundList;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-		TSoftObjectPtr<class USoundCue> SkillFailSound;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UTexture2D> SkillIconImage;
 };
 
 USTRUCT(BlueprintType)

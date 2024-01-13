@@ -4,6 +4,7 @@
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 #include "../../Global/public/SkillManagerBase.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Item/public/WeaponBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
@@ -22,7 +23,7 @@ ASkillBase::ASkillBase()
 	SkillMesh->SetupAttachment(DefaultSceneRoot);
 	
 	static ConstructorHelpers::FObjectFinder<UDataTable> assetInfoTableFinder(TEXT("/Game/Skill/Data/D_SkillAssetInfo.D_SkillAssetInfo"));
-	checkf(assetInfoTableFinder.Succeeded(), TEXT("assetInfoTable 클래스 탐색에 실패했습니다."));
+	checkf(assetInfoTableFinder.Succeeded(), TEXT("AssetInfoTable class discovery failed."));
 	SkillAssetInfoTable = assetInfoTableFinder.Object;
 }
 
@@ -33,38 +34,125 @@ void ASkillBase::BeginPlay()
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
-void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, float NewSkillStartTiming)
+void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, int32 NewSkillID, float NewSkillStartTiming)
 {
 	TargetList.Empty();
 	Causer = NewCauser;
 	TargetList = NewTargetList;
+	SkillID = NewSkillID;
 
-	//에셋 초기화
-	FSkillAssetInfoStruct newAssetInfo = GetSkillAssetInfoWithID(SkillID);
-	SkillAssetInfo = newAssetInfo;
-	if (SkillID != 0)
+	//Reset Asset
+	InitAsset(SkillID);
+
+	SkillInfo = GetSkillInfoWithID(SkillID);
+	switch (GetSkillGrade())
 	{
-		TArray<FSoftObjectPath> tempStream, assetToStream;
-		tempStream.AddUnique(SkillAssetInfo.SkillMesh.ToSoftObjectPath());
-		tempStream.AddUnique(SkillAssetInfo.EffectParticle.ToSoftObjectPath());
-		tempStream.AddUnique(SkillAssetInfo.DestroyEffectParticle.ToSoftObjectPath());
-		tempStream.AddUnique(SkillAssetInfo.SkillSound.ToSoftObjectPath());
-		tempStream.AddUnique(SkillAssetInfo.SkillFailSound.ToSoftObjectPath());
+			case ESkillGrade::E_Common:
+				if (!SkillInfo.SkillCommonVariableMap.IsEmpty())
+				{
+					SkillGradeVariableMap = SkillInfo.SkillCommonVariableMap;
+					UE_LOG(LogTemp, Log, TEXT("SkillCommon Variable"));
+				}
+				break;
 
-		for (auto& assetPath : tempStream)
-		{
-			if (!assetPath.IsValid() || assetPath.IsNull()) continue;
-			assetToStream.AddUnique(assetPath);
-		}
-		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
-		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &ASkillBase::InitSkillAsset));
+			case ESkillGrade::E_Rare:
+				if (!SkillInfo.SkillRareVariableMap.IsEmpty())
+				{
+					SkillGradeVariableMap = SkillInfo.SkillRareVariableMap;
+					UE_LOG(LogTemp, Log, TEXT("SkillRare Variable"));
+				}
+				break;
+
+			case ESkillGrade::E_Epic:
+				if (!SkillInfo.SkillEpicVariableMap.IsEmpty())
+				{
+					SkillGradeVariableMap = SkillInfo.SkillEpicVariableMap;
+					UE_LOG(LogTemp, Log, TEXT("SkillEpic Variable"));
+				}
+				break;
+
+			case ESkillGrade::E_Regend:
+				if (!SkillInfo.SkillRegendVariableMap.IsEmpty())
+				{
+					SkillGradeVariableMap = SkillInfo.SkillRegendVariableMap;
+					UE_LOG(LogTemp, Log, TEXT("SkillRegend Variable"));
+				}
+				break;
+			
+			default:
+				break;
 	}
+
 	GetWorld()->GetTimerManager().SetTimer(SkillStartTimingTimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
 			this->SetActorHiddenInGame(false);
 			StartSkill();
 			GetWorldTimerManager().ClearTimer(SkillStartTimingTimerHandle);
 		}), NewSkillStartTiming, false);
+}
+
+void ASkillBase::InitAsset(int32 NewSkillID) 
+{
+	SkillAssetInfo = GetSkillAssetInfoWithID(SkillID);
+	TArray<FSoftObjectPath> AssetToStream;
+
+	// Mesh
+	AssetToStream.AddUnique(SkillAssetInfo.SkillActorMesh.ToSoftObjectPath());
+
+	//SFX
+	if (!SkillAssetInfo.SkillSoundList.IsEmpty())
+	{
+		for (int32 i = 0; i < SkillAssetInfo.SkillSoundList.Num(); i++)
+		{
+			AssetToStream.AddUnique(SkillAssetInfo.SkillSoundList[i].ToSoftObjectPath());
+		}
+	}
+
+	//VFX
+	if (!SkillAssetInfo.EffectParticleList.IsEmpty())
+	{
+		for (int32 i = 0; i < SkillAssetInfo.SkillSoundList.Num(); i++)
+		{
+			AssetToStream.AddUnique(SkillAssetInfo.EffectParticleList[i].ToSoftObjectPath());
+		}
+	}
+
+	AssetToStream.AddUnique(SkillAssetInfo.DestroyEffectParticle.ToSoftObjectPath());
+
+	//Image
+	AssetToStream.AddUnique(SkillAssetInfo.SkillIconImage.ToSoftObjectPath());
+
+	FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
+	streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &ASkillBase::SetAsset));
+}
+
+void ASkillBase::SetAsset()
+{
+	//SFX
+	if (!SkillAssetInfo.SkillSoundList.IsEmpty())
+	{
+		for (TSoftObjectPtr<USoundCue> sound : SkillAssetInfo.SkillSoundList)
+		{
+			if (sound.IsValid())
+				SkillSoundList.AddUnique(sound.Get());
+
+		}
+	}
+	
+	//VFX
+	if (!SkillAssetInfo.EffectParticleList.IsEmpty())
+	{
+		for (TSoftObjectPtr<UNiagaraSystem> effect : SkillAssetInfo.EffectParticleList)
+		{
+			if (effect.IsValid())
+				SkillEffectParticleList.AddUnique(effect.Get());
+		}
+	}
+
+	SkillDestroyEffectParticle = SkillAssetInfo.DestroyEffectParticle.Get();
+	
+	//Image
+	SkillIconImage = SkillAssetInfo.SkillIconImage.Get();
 }
 
 void ASkillBase::HideSkill()
@@ -80,35 +168,9 @@ void ASkillBase::HideSkill()
 	this->SetActorHiddenInGame(true);
 }
 
-void ASkillBase::DestroySkill()
-{
-	ClearAllTimerHandle();
-}
-
 void ASkillBase::SetSkillManagerRef(USkillManagerBase* NewSkillManager)
 {
 	SkillManagerRef = NewSkillManager;
-}
-
-void ASkillBase::InitSkillAsset()
-{
-	if (SkillAssetInfo.SkillMesh.IsValid())
-	{
-		SkillMesh->SetStaticMesh(SkillAssetInfo.SkillMesh.Get());
-		SkillMesh->SetRelativeLocation(SkillAssetInfo.InitialLocation);
-		SkillMesh->SetRelativeRotation(SkillAssetInfo.InitialRotation);
-		SkillMesh->SetRelativeScale3D(SkillAssetInfo.InitialScale);
-		SkillMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	}
-
-	if (SkillAssetInfo.DestroyEffectParticle.IsValid())
-		DestroyEffectParticle = SkillAssetInfo.DestroyEffectParticle.Get();
-
-	if (SkillAssetInfo.SkillSound.IsValid())
-		SkillSound = SkillAssetInfo.SkillSound.Get();
-
-	if (SkillAssetInfo.SkillFailSound.IsValid())
-		SkillFailSound = SkillAssetInfo.SkillFailSound.Get();
 }
 
 FSkillInfoStruct ASkillBase::GetSkillInfoWithID(int32 TargetSkillID)
@@ -149,4 +211,9 @@ void ASkillBase::PlayEffectSound(USoundCue* EffectSound)
 void ASkillBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(SkillStartTimingTimerHandle);
+}
+
+ESkillGrade ASkillBase::GetSkillGrade()
+{
+	return Cast<ACharacterBase> (Causer)->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo.SkillGrade;
 }

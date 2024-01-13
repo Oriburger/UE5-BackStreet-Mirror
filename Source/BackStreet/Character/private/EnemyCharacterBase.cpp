@@ -105,15 +105,11 @@ void AEnemyCharacterBase::TrySkill()
 
 	if (GetCurrentWeaponRef()->WeaponID == 0)
 	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬을 사용할 수 없습니다. ")), FColor::White);
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("The Skill Is Not Available")), FColor::White);
 		return;
 	}
 
-	//공격을 하고, 커서 위치로 Rotation을 조정
 	Super::TrySkill();
-
-	//Reset Weapon Skill Grade
-	FWeaponStatStruct weaponStat = GetCurrentWeaponRef()->GetWeaponStat();
 }
 
 void AEnemyCharacterBase::Attack()
