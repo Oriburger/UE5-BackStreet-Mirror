@@ -63,7 +63,6 @@ void ASkillBase::InitAsset(int32 NewSkillID)
 	//SFX
 	if (!SkillAssetInfo.SkillSoundList.IsEmpty())
 	{
-		UE_LOG(LogTemp, Log, TEXT("#"));
 		for (int32 i = 0; i < SkillAssetInfo.SkillSoundList.Num(); i++)
 		{
 			AssetToStream.AddUnique(SkillAssetInfo.SkillSoundList[i].ToSoftObjectPath());
@@ -96,17 +95,18 @@ void ASkillBase::SetAsset()
 		for (TSoftObjectPtr<USoundCue> sound : SkillAssetInfo.SkillSoundList)
 		{
 			if (sound.IsValid())
-				SkillAssetInfo.SkillSoundList.AddUnique(sound.Get());
+				SkillSoundList.AddUnique(sound.Get());
+
 		}
 	}
-
+	
 	//VFX
 	if (!SkillAssetInfo.EffectParticleList.IsEmpty())
 	{
 		for (TSoftObjectPtr<UNiagaraSystem> effect : SkillAssetInfo.EffectParticleList)
 		{
 			if (effect.IsValid())
-				SkillAssetInfo.EffectParticleList.AddUnique(effect.Get());
+				SkillEffectParticleList.AddUnique(effect.Get());
 		}
 	}
 
