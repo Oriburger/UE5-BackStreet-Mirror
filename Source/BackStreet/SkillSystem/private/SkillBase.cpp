@@ -44,6 +44,45 @@ void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& New
 	//Reset Asset
 	InitAsset(SkillID);
 
+	SkillInfo = GetSkillInfoWithID(SkillID);
+	switch (GetSkillGrade())
+	{
+			case ESkillGrade::E_Common:
+				if (!SkillInfo.SkillCommonVariableMap.IsEmpty())
+				{
+					SkillGradeVariableMap = SkillInfo.SkillCommonVariableMap;
+					UE_LOG(LogTemp, Log, TEXT("SkillCommon Variable"));
+				}
+				break;
+
+			case ESkillGrade::E_Rare:
+				if (!SkillInfo.SkillRareVariableMap.IsEmpty())
+				{
+					SkillGradeVariableMap = SkillInfo.SkillRareVariableMap;
+					UE_LOG(LogTemp, Log, TEXT("SkillRare Variable"));
+				}
+				break;
+
+			case ESkillGrade::E_Epic:
+				if (!SkillInfo.SkillEpicVariableMap.IsEmpty())
+				{
+					SkillGradeVariableMap = SkillInfo.SkillEpicVariableMap;
+					UE_LOG(LogTemp, Log, TEXT("SkillEpic Variable"));
+				}
+				break;
+
+			case ESkillGrade::E_Regend:
+				if (!SkillInfo.SkillRegendVariableMap.IsEmpty())
+				{
+					SkillGradeVariableMap = SkillInfo.SkillRegendVariableMap;
+					UE_LOG(LogTemp, Log, TEXT("SkillRegend Variable"));
+				}
+				break;
+			
+			default:
+				break;
+	}
+
 	GetWorld()->GetTimerManager().SetTimer(SkillStartTimingTimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
 			this->SetActorHiddenInGame(false);
@@ -63,7 +102,6 @@ void ASkillBase::InitAsset(int32 NewSkillID)
 	//SFX
 	if (!SkillAssetInfo.SkillSoundList.IsEmpty())
 	{
-		UE_LOG(LogTemp, Log, TEXT("#"));
 		for (int32 i = 0; i < SkillAssetInfo.SkillSoundList.Num(); i++)
 		{
 			AssetToStream.AddUnique(SkillAssetInfo.SkillSoundList[i].ToSoftObjectPath());
@@ -96,17 +134,18 @@ void ASkillBase::SetAsset()
 		for (TSoftObjectPtr<USoundCue> sound : SkillAssetInfo.SkillSoundList)
 		{
 			if (sound.IsValid())
-				SkillAssetInfo.SkillSoundList.AddUnique(sound.Get());
+				SkillSoundList.AddUnique(sound.Get());
+
 		}
 	}
-
+	
 	//VFX
 	if (!SkillAssetInfo.EffectParticleList.IsEmpty())
 	{
 		for (TSoftObjectPtr<UNiagaraSystem> effect : SkillAssetInfo.EffectParticleList)
 		{
 			if (effect.IsValid())
-				SkillAssetInfo.EffectParticleList.AddUnique(effect.Get());
+				SkillEffectParticleList.AddUnique(effect.Get());
 		}
 	}
 
@@ -172,4 +211,9 @@ void ASkillBase::PlayEffectSound(USoundCue* EffectSound)
 void ASkillBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(SkillStartTimingTimerHandle);
+}
+
+ESkillGrade ASkillBase::GetSkillGrade()
+{
+	return Cast<ACharacterBase> (Causer)->GetCurrentWeaponRef()->GetWeaponStat().SkillSetInfo.SkillGrade;
 }

@@ -39,6 +39,9 @@ public:
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
 		TArray<class ACharacterBase*> TargetList;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TMap<FName, float> SkillGradeVariableMap;
+
 public:
 	//Reset Skill
 	UFUNCTION()
@@ -53,6 +56,9 @@ public:
 	UFUNCTION()
 		void SetSkillManagerRef(class USkillManagerBase* NewSkillManager);
 
+	UFUNCTION()
+		ESkillGrade GetSkillGrade();
+
 //--------- DataTable, Asset ----------------------
 protected:
 	UFUNCTION()
@@ -61,9 +67,17 @@ protected:
 	UFUNCTION()
 		void SetAsset();
 
+	//Skill Info Table
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		UDataTable* SkillInfoTable;
+
 	//Skill Asset Info Table
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* SkillAssetInfoTable;
+
+	//Current Asset info
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
+		FSkillInfoStruct SkillInfo;
 
 	//Current Asset info
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
