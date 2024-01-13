@@ -4,23 +4,31 @@
 #include "../public/RangedWeaponBase.h"
 #include "../public/ProjectileBase.h"
 #include "../public/WeaponBase.h"
+#include "../public/WeaponInventoryBase.h"
 #include "../../Global/public/DebuffManager.h"
 #include "NiagaraFunctionLibrary.h"
 #include "../../Character/public/CharacterBase.h"
+#include "../../Character/public/MainCharacterBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define AUTO_RELOAD_DELAY_VALUE 0.1
 
 ARangedWeaponBase::ARangedWeaponBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	this->Tags.Add("Ranged");
+
+	static ConstructorHelpers::FObjectFinder<UDataTable> projectileStatInfoTableFinder(TEXT("/Game/Weapon/Data/D_ProjectileStatTable.D_ProjectileStatTable"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> projectileAssetInfoTableFinder(TEXT("/Game/Weapon/Data/D_ProjectileAssetInfo.D_ProjectileAssetInfo"));
+	checkf(projectileStatInfoTableFinder.Succeeded(), TEXT("statInfoTable 탐색에 실패했습니다."));
+	checkf(projectileAssetInfoTableFinder.Succeeded(), TEXT("assetInfoTable 클래스 탐색에 실패했습니다."));
+	ProjectileStatInfoTable = projectileStatInfoTableFinder.Object;
+	ProjectileAssetInfoTable = projectileAssetInfoTableFinder.Object;
 }
 
 void ARangedWeaponBase::Attack()
 {
 	if (WeaponID == 0) return; 
 	Super::Attack();
-
-	this->Tags.Add("Ranged");
 
 	bool result = TryFireProjectile();
 	PlayEffectSound(result ? AttackSound : AttackFailSound);
@@ -62,6 +70,23 @@ FProjectileAssetInfoStruct ARangedWeaponBase::GetProjectileAssetInfo(int32 Targe
 	return FProjectileAssetInfoStruct();
 }
 
+FProjectileStatStruct ARangedWeaponBase::GetProjectileStatInfo(int32 TargetProjectileID)
+{
+	//캐시에 기록이 되어있다면?
+	if (ProjectileStatInfo.ProjectileID == TargetProjectileID) return ProjectileStatInfo;
+
+	//없다면 새로 읽어옴
+	else if (ProjectileAssetInfoTable != nullptr && TargetProjectileID != 0)
+	{
+		FProjectileStatStruct* newInfo = nullptr;
+		FString rowName = FString::FromInt(TargetProjectileID);
+
+		newInfo = ProjectileStatInfoTable->FindRow<FProjectileStatStruct>(FName(rowName), rowName);
+		if (newInfo != nullptr) return *newInfo;
+	}
+	return FProjectileStatStruct();
+}
+
 void ARangedWeaponBase::ClearAllTimerHandle()
 {
 	Super::ClearAllTimerHandle();
@@ -83,9 +108,10 @@ void ARangedWeaponBase::InitWeaponAsset()
 	{
 		ShootNiagaraEmitter = rangedWeaponAssetInfo.ShootEffectParticle.Get();
 	}
-	if (rangedWeaponAssetInfo.ProjectileID && ProjectileAssetInfoTable != nullptr)
+	if (rangedWeaponAssetInfo.ProjectileID)
 	{
 		ProjectileAssetInfo = GetProjectileAssetInfo(rangedWeaponAssetInfo.ProjectileID);
+		ProjectileStatInfo = GetProjectileStatInfo(rangedWeaponAssetInfo.ProjectileID);
 	}
 }
 
@@ -110,6 +136,7 @@ AProjectileBase* ARangedWeaponBase::CreateProjectile()
 
 	SpawnLocation = SpawnLocation + OwnerCharacterRef->GetMesh()->GetForwardVector() * 20.0f;
 	SpawnLocation = SpawnLocation + OwnerCharacterRef->GetMesh()->GetRightVector() * 50.0f;
+	SpawnLocation = SpawnLocation + FVector(0.0f, 0.0f, 50.0f);
 
 	SpawnRotation.Pitch = SpawnRotation.Roll = 0.0f;
 	SpawnRotation.Yaw += 90.0f;
@@ -120,9 +147,8 @@ AProjectileBase* ARangedWeaponBase::CreateProjectile()
 	if (IsValid(newProjectile) && ProjectileAssetInfo.ProjectileID != 0)
 	{
 		newProjectile->SetOwner(this);
-		newProjectile->InitProjectile(OwnerCharacterRef.Get(), ProjectileAssetInfo);
+		newProjectile->InitProjectile(OwnerCharacterRef.Get(), ProjectileAssetInfo, ProjectileStatInfo);
 		newProjectile->ProjectileStat.ProjectileDamage *= WeaponStat.WeaponDamageRate; //버프/디버프로 인해 강화/너프된 값을 반영
-		newProjectile->ProjectileStat.ProjectileSpeed *= WeaponStat.WeaponAtkSpeedRate;
 		return newProjectile;
 	}
 	return nullptr;
@@ -156,12 +182,6 @@ void ARangedWeaponBase::AddAmmo(int32 Count)
 	WeaponState.RangedWeaponState.ExtraAmmoCount = (WeaponState.RangedWeaponState.ExtraAmmoCount + Count) % MAX_AMMO_LIMIT_CNT;
 }
 
-void ARangedWeaponBase::AddMagazine(int32 Count)
-{
-	if (WeaponStat.RangedWeaponStat.bIsInfiniteAmmo || WeaponState.RangedWeaponState.ExtraAmmoCount >= MAX_AMMO_LIMIT_CNT) return;
-	WeaponState.RangedWeaponState.ExtraAmmoCount = (WeaponState.RangedWeaponState.ExtraAmmoCount + WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine * Count) % MAX_AMMO_LIMIT_CNT;
-}
-
 bool ARangedWeaponBase::TryFireProjectile()
 {
 	if (!OwnerCharacterRef.IsValid()) return false;
@@ -193,6 +213,7 @@ bool ARangedWeaponBase::TryFireProjectile()
 				if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
 				{
 					WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
+					OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
 				}
 				newProjectile->ActivateProjectileMovement();
 				SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
@@ -201,7 +222,16 @@ bool ARangedWeaponBase::TryFireProjectile()
 			//탄환이 다 되었다면? 자동으로 제거
 			if (WeaponState.RangedWeaponState.CurrentAmmoCount == 0 && WeaponState.RangedWeaponState.ExtraAmmoCount == 0)
 			{
-				OwnerCharacterRef.Get()->DropWeapon();
+				//플레이어가 소유한 보조무기라면? 보조무기 인벤토리에서 제거
+				if (OwnerCharacterRef.Get()->ActorHasTag("Player") && WeaponStat.WeaponType == EWeaponType::E_Throw)
+				{
+					Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->GetSubInventoryRef()->RemoveCurrentWeapon();
+				}
+				//그렇지 않다면 일반 인벤토리에서 제거 
+				else
+				{
+					OwnerCharacterRef.Get()->GetInventoryRef()->RemoveCurrentWeapon();
+				}
 			}
 
 		}), 0.1f * (float)idx, false);

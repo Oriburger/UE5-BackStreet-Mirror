@@ -12,6 +12,7 @@
 #include "../../Character/public/CharacterBase.h"
 #include "../../Character/public/MainCharacterBase.h"
 #include "../public/AssetManagerBase.h"
+#include "../public/SkillManagerBase.h"
 
 ABackStreetGameModeBase::ABackStreetGameModeBase()
 {
@@ -53,6 +54,9 @@ void ABackStreetGameModeBase::InitializeGame()
 		DebuffManager = NewObject<UDebuffManager>(this, UDebuffManager::StaticClass(), FName("BuffDebuffManager"));
 		DebuffManager->InitDebuffManager(this);
 
+		//------ Global Skill Manager √ ±‚»≠ --------
+		SkillManagerBase = NewObject<USkillManagerBase>(this, USkillManagerBase::StaticClass(), FName("SkillManagerBase"));
+		SkillManagerBase->InitSkillManagerBase(this);
 	}
 }
 
@@ -121,26 +125,10 @@ void ABackStreetGameModeBase::UpdateCharacterStatWithID(ACharacterBase* TargetCh
 			NewStat.CharacterMaxHP = typeInfo->CharacterMaxHP;
 			NewStat.CharacterDefense = typeInfo->CharacterDefense;
 			NewStat.CharacterAtkSpeed = typeInfo->CharacterAtkSpeed;
-			NewStat.CharacterAtkMultiplier = typeInfo->CharacterAtkMultiplier;
+			NewStat.CharacterAtkMultiplier = typeInfo->CharacterAtkMultiplier;	
 			NewStat.CharacterMoveSpeed = typeInfo->CharacterMoveSpeed;
 
 			TargetCharacter->UpdateCharacterStat(NewStat);
 		}
 	}
 }
-
-void ABackStreetGameModeBase::UpdateProjectileStatWithID(AProjectileBase* TargetProjectile, const int32 ProjectileID)
-{
-	if (IsValid(TargetProjectile) && IsValid(ProjectileStatTable))
-	{
-		FString rowName = FString::FromInt(ProjectileID);
-		FProjectileStatStruct* newStat = ProjectileStatTable->FindRow<FProjectileStatStruct>(FName(rowName), rowName);
-		if (newStat != nullptr)
-		{
-			TargetProjectile->UpdateProjectileStat(*newStat);
-		}
-	}
-}
-
-
-

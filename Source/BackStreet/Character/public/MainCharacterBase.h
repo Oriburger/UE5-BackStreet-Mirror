@@ -57,6 +57,29 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		UCameraComponent* FollowingCamera;
 
+// ------- Throw Test -----------
+
+	UFUNCTION()
+		void ReadyToThrow();
+
+	UFUNCTION()
+		void Throw();
+
+	UFUNCTION()
+		void SetAimingMode(bool bNewState);
+
+	UFUNCTION()
+		void UpdateAimingState();
+
+	UFUNCTION()
+		FVector GetThrowDestination();
+
+	UPROPERTY()
+		FTimerHandle AimingTimerHandle;
+
+	UPROPERTY()
+		bool bIsAiming = false;
+
 // ------- Character Action ------- 
 public:
 	UFUNCTION()
@@ -92,6 +115,9 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
+		virtual void TrySkill() override;
+
+	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
 
 	UFUNCTION(BlueprintCallable)
@@ -118,6 +144,10 @@ public:
 	UFUNCTION()
 		void RotateToCursor();
 
+	//1~4번의 키를 눌러 보조무기를 장착한다.
+	UFUNCTION()
+		void PickSubWeapon();
+
 	UFUNCTION()
 		TArray<AActor*> GetNearInteractionActorList();
 
@@ -138,6 +168,16 @@ public:
 		
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType);
+
+// -------- Inventory --------------
+public:
+	UFUNCTION(BlueprintCallable)
+		virtual bool PickWeapon(int32 NewWeaponID) override;
+
+//------- 스킬 / 콤보----------
+public:
+	UFUNCTION(BlueprintCallable)
+		void AddSkillGauge();
 
 // -------- VFX -----------
 protected:

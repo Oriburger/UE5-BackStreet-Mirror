@@ -30,8 +30,6 @@ bool UDebuffManager::SetDebuffTimer(ECharacterDebuffType DebuffType, ACharacterB
 {
 	if (!GamemodeRef.IsValid() || !IsValid(Target) || Target->IsActorBeingDestroyed()) return false;
 
-	UE_LOG(LogTemp, Warning, TEXT("TRY #2"));
-
 	FTimerDelegate timerDelegate, healTimerDelegate, dotDamageDelegate;
 	FTimerHandle& timerHandle = GetDebuffTimerHandleRef(DebuffType, Target);
 
@@ -49,8 +47,6 @@ bool UDebuffManager::SetDebuffTimer(ECharacterDebuffType DebuffType, ACharacterB
 		return SetDebuffTimer(DebuffType, Target, Causer, FMath::Min(TotalTime + remainTime, MAX_DEBUFF_TIME), Variable);
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("TRY #3"));
-
 	/*---- 디버프 타이머 세팅 ----------------------------*/
 	Variable = FMath::Min(1.0f, FMath::Abs(Variable)); //값 정제
 	characterState.CharacterDebuffState |= (1 << (int)DebuffType);
@@ -62,7 +58,7 @@ bool UDebuffManager::SetDebuffTimer(ECharacterDebuffType DebuffType, ACharacterB
 	case ECharacterDebuffType::E_Poison:
 		dotDamageDelegate.BindUFunction(Target, FName("TakeDebuffDamage"), Variable, DebuffType, Causer); \
 
-			UE_LOG(LogTemp, Warning, TEXT("%lf"), Variable);
+		UE_LOG(LogTemp, Warning, TEXT("%lf"), Variable);
 
 		if (!(GetTimerHandleListRef(Target)).IsValidIndex(DEBUFF_DAMAGE_TIMER_IDX))
 		{
@@ -143,7 +139,7 @@ void UDebuffManager::ClearDebuffTimer(ECharacterDebuffType DebuffType, ACharacte
 	GamemodeRef.Get()->GetWorldTimerManager().ClearTimer(GetDebuffTimerHandleRef(DebuffType, Target));
 }
 
-void UDebuffManager::ClearAllDebuffTimer()
+void UDebuffManager::ClearDebuffManagerTimer()
 {
 	const uint16 startIdx = 0;
 	const uint16 endIdx = MAX_DEBUFF_IDX;
@@ -204,6 +200,31 @@ float& UDebuffManager::GetDebuffResetValueRef(ECharacterDebuffType DebuffType, A
 	return TempResetValue;
 }
 
+
+void UDebuffManager::ClearAllDebuffTimer(ACharacterBase* Target)
+{
+	if (Target == nullptr) return; 
+	if (!TimerInfoMap.Contains(Target->GetUniqueID())) return;
+
+	UE_LOG(LogTemp, Warning, TEXT("ClearAllDebuffTimer #1"));
+	const uint16 startIdx = 0;
+	const uint16 endIdx = MAX_DEBUFF_IDX;
+
+	FDebuffTimerInfoStruct timerInfo = *(TimerInfoMap.Find(Target->GetUniqueID()));
+	TArray<FTimerHandle>& timerListRef = timerInfo.TimerHandleList;
+	UE_LOG(LogTemp, Warning, TEXT("ClearAllDebuffTimer #2"));
+	for (auto& targetTimer : timerListRef)
+	{
+		if (GamemodeRef.Get()->GetWorldTimerManager().IsTimerActive(targetTimer))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Oh My God!"));
+		}
+		UE_LOG(LogTemp, Warning, TEXT("ClearAllDebuffTimer #3"));
+		GamemodeRef.Get()->GetWorldTimerManager().ClearTimer(targetTimer);
+	}
+	UE_LOG(LogTemp, Warning, TEXT("ClearAllDebuffTimer #4"));
+	TimerInfoMap.Remove(Target->GetUniqueID());
+}
 
 TArray<FTimerHandle>& UDebuffManager::GetTimerHandleListRef(ACharacterBase* Target)
 {

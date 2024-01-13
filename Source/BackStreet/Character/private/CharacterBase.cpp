@@ -5,10 +5,14 @@
 #include "../../Item/public/WeaponInventoryBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "../../Global/public/AssetManagerBase.h"
+#include "../../SkillSystem/public/SkillBase.h"
+#include "Engine/DamageEvents.h"
+#include "UObject/ConstructorHelpers.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Animation/AnimMontage.h"
 #include "Engine/StreamableManager.h"
 #include "Engine/AssetManager.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase()
@@ -17,9 +21,20 @@ ACharacterBase::ACharacterBase()
 	PrimaryActorTick.bCanEverTick = true;
 	this->Tags.Add("Character");
 
-	InventoryComponent = CreateDefaultSubobject<UChildActorComponent>(TEXT("INVENTORY"));
-	InventoryComponent->SetupAttachment(GetCapsuleComponent());
+	static ConstructorHelpers::FClassFinder<AWeaponInventoryBase> weaponInventoryClassFinder(TEXT("/Game/Weapon/Blueprint/BP_WeaponInventory"));
+	static ConstructorHelpers::FClassFinder<AWeaponBase> meleeWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_MeleeWeaponBase"));
+	static ConstructorHelpers::FClassFinder<AWeaponBase> throwWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_ThrowWeaponBase"));
+	static ConstructorHelpers::FClassFinder<AWeaponBase> shootWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_ShootWeaponBase"));
 
+	//클래스를 제대로 명시하지 않았으면 크래시를 띄움
+	checkf(weaponInventoryClassFinder.Succeeded(), TEXT("Weapon Inventory 클래스 탐색에 실패했습니다."));
+	checkf(meleeWeaponClassFinder.Succeeded(), TEXT("Melee Weapon 클래스 탐색에 실패했습니다.")); 
+	checkf(shootWeaponClassFinder.Succeeded(), TEXT("Ranged Weapon 클래스 탐색에 실패했습니다."));
+
+	WeaponInventoryClass = weaponInventoryClassFinder.Class; 
+	WeaponClassList.Add(meleeWeaponClassFinder.Class);
+	WeaponClassList.Add(throwWeaponClassFinder.Class);
+	WeaponClassList.Add(shootWeaponClassFinder.Class);
 }
 
 // Called when the game starts or when spawned
@@ -28,13 +43,23 @@ void ACharacterBase::BeginPlay()
 	Super::BeginPlay();
 	InitCharacterState();
 
-	InventoryRef = Cast<AWeaponInventoryBase>(InventoryComponent->GetChildActor());
+	InventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
+	SubInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+
+	if (IsValid(SubInventoryRef) && !SubInventoryRef->IsActorBeingDestroyed())
+	{
+		SubInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+		SubInventoryRef->SetOwner(this);
+		SubInventoryRef->InitInventory(4);
+	}
 
 	if (IsValid(InventoryRef) && !InventoryRef->IsActorBeingDestroyed())
 	{
+		InventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		InventoryRef->SetOwner(this);
 		InventoryRef->InitInventory();
+		InitWeaponActors();
 	}
 }
 
@@ -89,8 +114,8 @@ void ACharacterBase::UpdateCharacterState(FCharacterStateStruct NewState)
 
 void ACharacterBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
-	if (!IsValid(WeaponRef) || InventoryRef->IsActorBeingDestroyed()) return;
-	WeaponRef->UpdateWeaponStat(NewStat);
+	if (!IsValid(GetCurrentWeaponRef()) || InventoryRef->IsActorBeingDestroyed()) return;
+	GetCurrentWeaponRef()->UpdateWeaponStat(NewStat);
 }
 
 void ACharacterBase::ResetActionState(bool bForceReset)
@@ -100,6 +125,9 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
+	FWeaponStatStruct currWeaponStat = this->GetCurrentWeaponRef()->GetWeaponStat();
+	currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
+	this->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
 	StopAttack();
 
 	if (!GetWorldTimerManager().IsTimerActive(AtkIntervalHandle))
@@ -112,6 +140,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 								, AActor* DamageCauser)
 {
 	if (!IsValid(DamageCauser)) return 0.0f; 
+	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
 
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
@@ -124,9 +153,10 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	CharacterState.CharacterCurrHP = FMath::Max(0.0f, CharacterState.CharacterCurrHP);
 	if (CharacterState.CharacterCurrHP == 0.0f)
 	{
+		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
 		Die();
 	}
-	else if (AnimAssetData.HitAnimMontageList.Num() > 0)
+	else if (AnimAssetData.HitAnimMontageList.Num() > 0&&this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
 	{
 		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AnimAssetData.HitAnimMontageList.Num() - 1);
 		PlayAnimMontage(AnimAssetData.HitAnimMontageList[randomIdx]);
@@ -136,9 +166,16 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 float ACharacterBase::TakeDebuffDamage(float DamageAmount, ECharacterDebuffType DebuffType, AActor* Causer)
 {
+	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
 	if (!IsValid(Causer)) return 0.0f;
 	TakeDamage(DamageAmount, FDamageEvent(), nullptr, Causer);
 	return DamageAmount;
+}
+
+void ACharacterBase::SetActionState(ECharacterActionType Type)
+{
+	CharacterState.CharacterActionState = Type;
+	return;
 }
 
 void ACharacterBase::TakeHeal(float HealAmountRate, bool bIsTimerEvent, uint8 BuffDebuffType)
@@ -151,6 +188,7 @@ void ACharacterBase::TakeHeal(float HealAmountRate, bool bIsTimerEvent, uint8 Bu
 void ACharacterBase::TakeKnockBack(AActor* Causer, float Strength)
 {
 	if (!IsValid(Causer) || Causer->IsActorBeingDestroyed()) return;
+	if (GetIsActionActive(ECharacterActionType::E_Die)) return;
 
 	FVector knockBackDirection = GetActorLocation() - Causer->GetActorLocation();
 	knockBackDirection = knockBackDirection.GetSafeNormal();
@@ -166,18 +204,30 @@ void ACharacterBase::Die()
 {
 	if (IsValid(InventoryRef) && !InventoryRef->IsActorBeingDestroyed())
 	{
-		InventoryRef->RemoveCurrentWeapon();
-		InventoryRef->Destroy();
+		//캐릭터가 죽으면 3가지 타입의 무기 액터를 순차적으로 반환
+		for (int weaponIdx = 2; weaponIdx >= 0; weaponIdx--)
+		{
+			for (TPair<int32, ASkillBase*>& skillIdx : WeaponActorList[weaponIdx]->GetWeaponStat().SkillSetInfo.SkillRefMap)
+			{
+				ASkillBase* skill = skillIdx.Value;
+				skill->ClearAllTimerHandle();
+				skill->Destroy();
+			}
+			WeaponActorList[weaponIdx]->GetWeaponStat().SkillSetInfo.SkillRefMap.Empty();
+			WeaponActorList[weaponIdx]->Destroy();
+			InventoryRef->Destroy();
+		}
 	}
-	if (IsValid(WeaponRef) && !WeaponRef->IsActorBeingDestroyed())
+	if (IsValid(GetCurrentWeaponRef()) && !GetCurrentWeaponRef()->IsActorBeingDestroyed())
 	{
-		WeaponRef->ClearAllTimerHandle();
+		GetCurrentWeaponRef()->ClearAllTimerHandle();
 	}
+	//모든 타이머를 제거한다. (타이머 매니저의 것도)
+	ClearAllTimerHandle();
+	GamemodeRef->GetGlobalDebuffManagerRef()->ClearAllDebuffTimer(this);
 
-	ClearAllTimerHandle();
-	CharacterState.CharacterActionState = ECharacterActionType::E_Die;
+	//무적 처리를 하고, Movement를 비활성화
 	CharacterStat.bIsInvincibility = true;
-	ClearAllTimerHandle();
 	GetCharacterMovement()->Deactivate();
 	bUseControllerRotationYaw = false;
 
@@ -193,7 +243,7 @@ void ACharacterBase::Die()
 
 void ACharacterBase::TryAttack()
 {
-	if (!IsValid(WeaponRef)) return;
+	if (!IsValid(GetCurrentWeaponRef())) return;
 	if (GetWorldTimerManager().IsTimerActive(AtkIntervalHandle)) return;
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 	
@@ -201,29 +251,29 @@ void ACharacterBase::TryAttack()
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
 
 	int32 nextAnimIdx = 0;
-	const float attackSpeed = FMath::Clamp(CharacterStat.CharacterAtkSpeed * WeaponRef->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
+	const float attackSpeed = FMath::Clamp(CharacterStat.CharacterAtkSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
 	TArray<UAnimMontage*> targetAnimList;
-	switch (WeaponRef->GetWeaponStat().WeaponType)
+	switch (GetCurrentWeaponRef()->GetWeaponStat().WeaponType)
 	{
 	case EWeaponType::E_Melee:
 		if (AnimAssetData.MeleeAttackAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = WeaponRef->GetCurrentComboCnt() % AnimAssetData.MeleeAttackAnimMontageList.Num();
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AnimAssetData.MeleeAttackAnimMontageList.Num();
 		}
 		targetAnimList = AnimAssetData.MeleeAttackAnimMontageList;
 		break;
 	case EWeaponType::E_Shoot:
 		if (AnimAssetData.ShootAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = WeaponRef->GetCurrentComboCnt() % AnimAssetData.ShootAnimMontageList.Num();
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AnimAssetData.ShootAnimMontageList.Num();
 		}
 		targetAnimList = AnimAssetData.ShootAnimMontageList;
 		break;
 	case EWeaponType::E_Throw:
 		if (AnimAssetData.ThrowAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = WeaponRef->GetCurrentComboCnt() % AnimAssetData.ThrowAnimMontageList.Num();
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AnimAssetData.ThrowAnimMontageList.Num();
 		}
 		targetAnimList = AnimAssetData.ThrowAnimMontageList;
 		break;
@@ -236,31 +286,79 @@ void ACharacterBase::TryAttack()
 	}
 }
 
+void ACharacterBase::TrySkill()
+{
+	AWeaponBase* weaponRef = GetCurrentWeaponRef();
+	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
+	if (weaponRef->GetWeaponStat().SkillSetInfo.SkillIDList.IsEmpty())
+	{
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Skill is not binded to this Weapon")), FColor::White);
+		return;
+	}
+	float totalSkillAnimPlayTime = 0;
+	int skillAnimIndex =0 ;
+	SkillAnimPlayTimerCurr = 0;
+
+	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
+	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
+
+	SkillAnimPlayTimerThreshold = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
+	
+	//Total skill animation play time which is using for init skill timing.
+	for (UAnimMontage* skillAnimMontage : AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList) 
+	{
+		totalSkillAnimPlayTime += skillAnimMontage->CalculateSequenceLength()/GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRateList[skillAnimIndex];
+		GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.TotalSkillPlayTime = totalSkillAnimPlayTime;
+		skillAnimIndex++;
+	}
+
+	SkillAnimPlayTimerHandleList.SetNum(SkillAnimPlayTimerThreshold);
+	PlaySkillAnimation();
+}
+
+void ACharacterBase::PlaySkillAnimation()
+{
+	if (SkillAnimPlayTimerCurr >= SkillAnimPlayTimerThreshold)
+	{
+		SkillAnimPlayTimerHandleList.Empty();
+		return;
+	}
+	
+	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(GetCurrentWeaponRef()->WeaponID)->SkillAnimMontageList;
+	float animPlayTime = PlayAnimMontage(targetAnimList[SkillAnimPlayTimerCurr], GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRateList[SkillAnimPlayTimerCurr]);
+	GetWorld()->GetTimerManager().SetTimer(SkillAnimPlayTimerHandleList[SkillAnimPlayTimerCurr], FTimerDelegate::CreateLambda([&]()
+		{
+			SkillAnimPlayTimerCurr += 1;
+			PlaySkillAnimation();
+		}), animPlayTime, false);
+	return;
+}
+
 void ACharacterBase::Attack()
 {
-	if (!IsValid(WeaponRef) || WeaponRef->IsActorBeingDestroyed()) return;
+	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 	
-	const float attackSpeed = FMath::Min(1.5f, CharacterStat.CharacterAtkSpeed * WeaponRef->GetWeaponStat().WeaponAtkSpeedRate);
+	const float attackSpeed = FMath::Min(1.5f, CharacterStat.CharacterAtkSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
 
-	WeaponRef->Attack();
+	GetCurrentWeaponRef()->Attack();
 }
  
 void ACharacterBase::StopAttack()
 {
-	if (!IsValid(WeaponRef) || WeaponRef->IsActorBeingDestroyed()) return;
-	WeaponRef->StopAttack();
+	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
+	GetCurrentWeaponRef()->StopAttack();
 }
 
 void ACharacterBase::TryReload()
 {
-	if (!IsValid(WeaponRef) || WeaponRef->IsActorBeingDestroyed()) return;
+	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 
-	if (WeaponRef->GetWeaponStat().WeaponType != EWeaponType::E_Shoot
-		&& WeaponRef->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return; 
+	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponType != EWeaponType::E_Shoot
+		&& GetCurrentWeaponRef()->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return; 
 	
-	if (!Cast<ARangedWeaponBase>(WeaponRef)->GetCanReload()) return;
+	if (!Cast<ARangedWeaponBase>(GetCurrentWeaponRef())->GetCanReload()) return;
 
-	float reloadTime = WeaponRef->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
+	float reloadTime = GetCurrentWeaponRef()->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
 	if (AnimAssetData.ReloadAnimMontageList.Num() > 0)
 	{
 		UAnimMontage* reloadAnim = AnimAssetData.ReloadAnimMontageList[0];
@@ -270,7 +368,7 @@ void ACharacterBase::TryReload()
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Reload;
 	GetWorldTimerManager().SetTimer(ReloadTimerHandle, FTimerDelegate::CreateLambda([&](){
-		Cast<ARangedWeaponBase>(WeaponRef)->TryReload();
+		Cast<ARangedWeaponBase>(GetCurrentWeaponRef())->TryReload();
 		ResetActionState(true);
 	}), 1.0f, false, reloadTime);
 }
@@ -284,174 +382,159 @@ void ACharacterBase::ResetAtkIntervalTimer()
 void ACharacterBase::InitAsset(int32 NewEnemyID)
 {
 	AssetInfo = GetAssetInfoWithID(NewEnemyID);
+	//SetCharacterAnimAssetInfoData(CharacterID);
 
-
-	UE_LOG(LogTemp, Log, TEXT("InitAsset::ID %d"), NewEnemyID);
-	TArray<FSoftObjectPath> AssetToStream;
-
-	// Mesh 관련
-	AssetToStream.AddUnique(AssetInfo.CharacterMesh.ToSoftObjectPath());
-	AssetToStream.AddUnique(AssetInfo.CharacterMeshMaterial.ToSoftObjectPath());
-
-	// Animation 관련
-	AssetToStream.AddUnique(AssetInfo.AnimClass.ToSoftObjectPath());
-
-	if (!AssetInfo.MeleeAttackAnimMontageList.IsEmpty())
+	if (!AssetInfo.CharacterMesh.IsNull() && !AssetInfo.CharacterMeshMaterial.IsNull()/* && !AssetInfo.AnimBlueprint.IsNull()*/)
 	{
-		for (int32 i = 0; i < AssetInfo.MeleeAttackAnimMontageList.Num(); i++)
+		TArray<FSoftObjectPath> AssetToStream;
+
+		// Mesh 관련
+		AssetToStream.AddUnique(AssetInfo.CharacterMesh.ToSoftObjectPath());
+		AssetToStream.AddUnique(AssetInfo.CharacterMeshMaterial.ToSoftObjectPath());
+
+		// Animation 관련
+		//AssetToStream.AddUnique(AssetInfo.AnimBlueprint.ToSoftObjectPath());
+
+		if (!AssetInfo.MeleeAttackAnimMontageList.IsEmpty())
 		{
-			AssetToStream.AddUnique(AssetInfo.MeleeAttackAnimMontageList[i].ToSoftObjectPath());
+			for (int32 i = 0; i < AssetInfo.MeleeAttackAnimMontageList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.MeleeAttackAnimMontageList[i].ToSoftObjectPath());
+			}
 		}
-	}
 
-	if (!AssetInfo.ShootAnimMontageList.IsEmpty())
-	{
-		for(int32 i=0;i< AssetInfo.ShootAnimMontageList.Num();i++)
+		if (!AssetInfo.ShootAnimMontageList.IsEmpty())
 		{
-			AssetToStream.AddUnique(AssetInfo.ShootAnimMontageList[i].ToSoftObjectPath());
+			for(int32 i=0;i< AssetInfo.ShootAnimMontageList.Num();i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.ShootAnimMontageList[i].ToSoftObjectPath());
+			}
 		}
-	}
-
-	if (!AssetInfo.ThrowAnimMontageList.IsEmpty())
-	{
-		for (int32 i = 0; i < AssetInfo.ThrowAnimMontageList.Num(); i++)
-		{
-			AssetToStream.AddUnique(AssetInfo.ThrowAnimMontageList[i].ToSoftObjectPath());
-		}
-	}
-
-	if (!AssetInfo.ReloadAnimMontageList.IsEmpty())
-	{
-		for (int32 i = 0; i < AssetInfo.ReloadAnimMontageList.Num(); i++)
-		{
-			AssetToStream.AddUnique(AssetInfo.ReloadAnimMontageList[i].ToSoftObjectPath());
-		}
-	}
-
-	if (!AssetInfo.HitAnimMontageList.IsEmpty())
-	{
-		for (int32 i = 0; i < AssetInfo.HitAnimMontageList.Num(); i++)
-		{
-			AssetToStream.AddUnique(AssetInfo.HitAnimMontageList[i].ToSoftObjectPath());
-		}
-	}
-
-	if (!AssetInfo.RollAnimMontageList.IsEmpty())
-	{
-		for (int32 i = 0; i < AssetInfo.RollAnimMontageList.Num(); i++)
-		{
-			AssetToStream.AddUnique(AssetInfo.RollAnimMontageList[i].ToSoftObjectPath());
-		}
-	}
-
-	if (!AssetInfo.InvestigateAnimMontageList.IsEmpty())
-	{
-
-		for (int32 i = 0; i < AssetInfo.InvestigateAnimMontageList.Num(); i++)
-		{
-			AssetToStream.AddUnique(AssetInfo.InvestigateAnimMontageList[i].ToSoftObjectPath());
-		}
-	}
-
-	if (!AssetInfo.DieAnimMontageList.IsEmpty())
-	{
-		for (int32 i = 0; i < AssetInfo.DieAnimMontageList.Num(); i++)
-		{
-			AssetToStream.AddUnique(AssetInfo.DieAnimMontageList[i].ToSoftObjectPath());
-		}
-	}
-
-	if (!AssetInfo.PointMontageList.IsEmpty())
-	{
-		for (int32 i = 0; i < AssetInfo.PointMontageList.Num(); i++)
-		{
-			AssetToStream.AddUnique(AssetInfo.PointMontageList[i].ToSoftObjectPath());
-		}
-	}
-
-	// Sound
-
-	AssetToStream.AddUnique(AssetInfo.RollSound.ToSoftObjectPath());
-	AssetToStream.AddUnique(AssetInfo.BuffSound.ToSoftObjectPath());
-	AssetToStream.AddUnique(AssetInfo.DebuffSound.ToSoftObjectPath());
-	AssetToStream.AddUnique(AssetInfo.HitImpactSound.ToSoftObjectPath());
-
-
-	// VFX
-	if (!AssetInfo.DebuffNiagaraEffectList.IsEmpty())
-	{
-		for (int32 i = 0; i < AssetInfo.DebuffNiagaraEffectList.Num(); i++)
-		{
-			AssetToStream.AddUnique(AssetInfo.DebuffNiagaraEffectList[i].ToSoftObjectPath());
-		}
-	}
-
-	// material
-
-	AssetToStream.AddUnique(AssetInfo.NormalMaterial.ToSoftObjectPath());
-	AssetToStream.AddUnique(AssetInfo.WallThroughMaterial.ToSoftObjectPath());
-
-	if (!AssetInfo.EmotionTextureList.IsEmpty())
-	{
-		for (int32 i = 0; i < AssetInfo.EmotionTextureList.Num(); i++)
-		{
-			AssetToStream.AddUnique(AssetInfo.EmotionTextureList[i].ToSoftObjectPath());
-		}
-	}
-
-	FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
-	streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &ACharacterBase::SetAsset));
-
 	
+		if (!AssetInfo.ThrowAnimMontageList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetInfo.ThrowAnimMontageList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.ThrowAnimMontageList[i].ToSoftObjectPath());
+			}	
+		}
+
+		if (!AssetInfo.ReloadAnimMontageList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetInfo.ReloadAnimMontageList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.ReloadAnimMontageList[i].ToSoftObjectPath());
+			}
+		}
+
+		if (!AssetInfo.HitAnimMontageList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetInfo.HitAnimMontageList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.HitAnimMontageList[i].ToSoftObjectPath());
+			}
+		}
+
+		for (auto index = AssetInfo.SkillAnimMontageMap.CreateConstIterator(); index; ++index)
+		{
+			TArray<TSoftObjectPtr<UAnimMontage>> skillAnimMontageList = index.Value().SkillAnimMontageList;
+			for (auto& anim : skillAnimMontageList)
+			{
+				if (!skillAnimMontageList.IsEmpty())
+				{
+					AssetToStream.AddUnique(anim.ToSoftObjectPath());
+				}
+			}
+		}
+
+		if (!AssetInfo.RollAnimMontageList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetInfo.RollAnimMontageList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.RollAnimMontageList[i].ToSoftObjectPath());
+			}
+		}
 	
+		if (!AssetInfo.InvestigateAnimMontageList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetInfo.InvestigateAnimMontageList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.InvestigateAnimMontageList[i].ToSoftObjectPath());
+			}
+		}
+
+		if (!AssetInfo.DieAnimMontageList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetInfo.DieAnimMontageList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.DieAnimMontageList[i].ToSoftObjectPath());
+			}
+		}
+
+		if (!AssetInfo.PointMontageList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetInfo.PointMontageList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.PointMontageList[i].ToSoftObjectPath());
+			}
+		}
+
+		// Sound
+
+		AssetToStream.AddUnique(AssetInfo.RollSound.ToSoftObjectPath());
+		AssetToStream.AddUnique(AssetInfo.BuffSound.ToSoftObjectPath());
+		AssetToStream.AddUnique(AssetInfo.DebuffSound.ToSoftObjectPath());
+		AssetToStream.AddUnique(AssetInfo.HitImpactSound.ToSoftObjectPath());
+
+
+		// VFX
+		if (!AssetInfo.DebuffNiagaraEffectList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetInfo.DebuffNiagaraEffectList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.DebuffNiagaraEffectList[i].ToSoftObjectPath());
+			}
+		}
+
+		// material
+
+		AssetToStream.AddUnique(AssetInfo.NormalMaterial.ToSoftObjectPath());
+		AssetToStream.AddUnique(AssetInfo.WallThroughMaterial.ToSoftObjectPath());
+		if (!AssetInfo.EmotionTextureList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetInfo.EmotionTextureList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.EmotionTextureList[i].ToSoftObjectPath());
+			}
+		}
+
+		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
+		streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &ACharacterBase::SetAsset));
+
+	}
 }
 
 
 void ACharacterBase::SetAsset()
 {
-	UE_LOG(LogTemp, Log, TEXT("SetAsset::ID %d"), CharacterID);
+	if (AssetInfo.CharacterMesh.IsNull() || !IsValid(AssetInfo.CharacterMesh.Get())) return;
+	if (AssetInfo.CharacterMeshMaterial.IsNull() || !IsValid(AssetInfo.CharacterMeshMaterial.Get())) return;
+	//if (AssetInfo.AnimBlueprint.IsNull() || !IsValid(AssetInfo.AnimBlueprint.Get())) return;
 
+	GetCapsuleComponent()->SetWorldRotation(FRotator::ZeroRotator);
+	GetCapsuleComponent()->SetRelativeScale3D(AssetInfo.InitialCapsuleComponentScale);
 
-	if (AssetInfo.CharacterMesh.IsValid())
-	{
-		GetCapsuleComponent()->SetRelativeScale3D(AssetInfo.InitialCapsuleComponentScale);
+	GetMesh()->SetSkeletalMesh(AssetInfo.CharacterMesh.Get());
+	GetMesh()->SetRelativeLocation(AssetInfo.InitialLocation);
+	GetMesh()->SetWorldRotation(FRotator(0.0f, -90.0f, 0.0f));
+	GetMesh()->SetRelativeScale3D(AssetInfo.InitialScale);
 
-		GetMesh()->SetSkeletalMesh(AssetInfo.CharacterMesh.Get());
-		GetMesh()->SetRelativeLocation(AssetInfo.InitialLocation);
-		GetMesh()->SetWorldRotation(AssetInfo.InitialRotation);
-		GetMesh()->SetRelativeScale3D(AssetInfo.InitialScale);
-	}
-	
-	if (AssetInfo.CharacterMeshMaterial.IsValid())
-	{
-		GetMesh()->SetMaterial(0, AssetInfo.CharacterMeshMaterial.Get());
-	}
-
-	if (!AssetInfo.AnimClass.IsNull())
-	{
-		if (AssetInfo.AnimClass.Get())
-		{
-			
-			GetMesh()->SetAnimInstanceClass(AssetInfo.AnimClass.Get());
-			
-		}
-		else
-		{
-			UE_LOG(LogTemp, Log, TEXT("Failed to Set Animclass::Get"));
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("Failed to Set Animclass::IsNull"));
-	}
-
+	GetMesh()->SetMaterial(0, AssetInfo.CharacterMeshMaterial.Get());
+	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimBlueprint);
 	InitAnimAsset();
 	InitSoundAsset();
 	InitVFXAsset();
 	InitMaterialAsset();
-
-	UE_LOG(LogTemp, Log, TEXT("SetAsset::ID %d Set Complete"), CharacterID);
-
 }
 
 bool ACharacterBase::InitAnimAsset()
@@ -501,6 +584,18 @@ bool ACharacterBase::InitAnimAsset()
 		{
 			if (anim.IsValid())
 				animAssetList.HitAnimMontageList.AddUnique(anim.Get());
+		}
+	}
+	for (auto index = AssetInfo.SkillAnimMontageMap.CreateConstIterator(); index; ++index)
+	{
+		if (!index.Value().SkillAnimMontageList.IsEmpty())
+		{	
+			animAssetList.SkillAnimMontageMap.Add(index.Key());
+			for (TSoftObjectPtr<UAnimMontage> anim : index.Value().SkillAnimMontageList)
+			{
+				if (anim.IsValid())
+					animAssetList.SkillAnimMontageMap.Find(index.Key())->SkillAnimMontageList.AddUnique(anim.Get());
+			}
 		}
 	}
 
@@ -630,7 +725,7 @@ bool ACharacterBase::EquipWeapon(AWeaponBase* TargetWeapon)
 	TargetWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, "Weapon_R");
 	TargetWeapon->SetActorRelativeLocation(FVector(0.0f), false);
 	TargetWeapon->SetOwnerCharacter(this);
-	SetWeaponActorRef(TargetWeapon);
+	CurrentWeaponRef = TargetWeapon;
 	return true;
 }
 
@@ -644,16 +739,38 @@ bool ACharacterBase::PickWeapon(int32 NewWeaponID)
 void ACharacterBase::SwitchToNextWeapon()
 {
 	if (!IsValid(InventoryRef)) return;
-	if (!IsValid(WeaponRef) || WeaponRef->IsActorBeingDestroyed()) return;
+	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 	InventoryRef->SwitchToNextWeapon();
 }
 
 void ACharacterBase::DropWeapon()
 {
-	if (!IsValid(InventoryRef)) return;
-
-	InventoryRef->RemoveCurrentWeapon();
+	if (!IsValid(GetCurrentWeaponRef())) return;
+	
+	if (CurrentWeaponRef->GetWeaponType() == EWeaponType::E_Throw)
+	{
+		SubInventoryRef->RemoveCurrentWeapon();
+		SwitchWeaponActor(EWeaponType::E_Melee);
+		InventoryRef->EquipWeaponByIdx(0);
+	}
+	else InventoryRef->RemoveCurrentWeapon();
+	
+	SwitchToNextWeapon();
+		
 	/*---- 현재 무기를 월드에 버리는 기능은 미구현 -----*/
+}
+
+bool ACharacterBase::TrySwitchToSubWeapon(int32 SubWeaponIdx)
+{
+	if (SubWeaponIdx >= SubInventoryRef->GetCurrentWeaponCount()) return false;
+
+	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
+		SubInventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
+	else
+		InventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
+	SubInventoryRef->EquipWeaponByIdx(SubWeaponIdx);
+
+	return true;
 }
 
 AWeaponInventoryBase* ACharacterBase::GetInventoryRef()
@@ -662,20 +779,77 @@ AWeaponInventoryBase* ACharacterBase::GetInventoryRef()
 	return InventoryRef;
 }
 
-void ACharacterBase::SetWeaponActorRef(AWeaponBase* NewWeapon)
-{
-	WeaponRef = NewWeapon;
+AWeaponInventoryBase* ACharacterBase::GetSubInventoryRef()
+{	
+	if (!IsValid(SubInventoryRef) || SubInventoryRef->IsActorBeingDestroyed()) return nullptr;
+	return SubInventoryRef;
 }
 
-AWeaponBase* ACharacterBase::GetWeaponActorRef()
+AWeaponBase* ACharacterBase::GetCurrentWeaponRef()
 {
-	if (!IsValid(WeaponRef) || WeaponRef->IsActorBeingDestroyed()) return nullptr;
+	if (!CurrentWeaponRef.IsValid()) return nullptr;
+	return CurrentWeaponRef.Get();
+}
 
-	return WeaponRef;
+void ACharacterBase::SwitchWeaponActor(EWeaponType TargetWeaponType)
+{
+	if (!WeaponActorList.IsValidIndex((int32)TargetWeaponType-1)) return;
+	if (!IsValid(WeaponActorList[(int32)TargetWeaponType-1]))  return;
+	if (!IsValid(GetCurrentWeaponRef())) return;
+
+	GetCurrentWeaponRef()->SetActorHiddenInGame(true);
+	GetCurrentWeaponRef()->InitWeapon(0);
+	CurrentWeaponRef = WeaponActorList[(int32)TargetWeaponType - 1];
+	GetCurrentWeaponRef()->SetActorHiddenInGame(false);
+}
+
+AWeaponBase* ACharacterBase::SpawnWeaponActor(EWeaponType TargetWeaponType)
+{
+	checkf(WeaponClassList.Num() == 3, TEXT("초기 무기 클래스 지정이 실패했습니다."));
+	TSubclassOf<AWeaponBase> weaponClass = WeaponClassList[(int)TargetWeaponType-1];
+
+	if (!IsValid(weaponClass))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Weapon Class가 Invalid 합니다."));
+		return nullptr;
+	}
+	FActorSpawnParameters spawnParams;
+	spawnParams.Owner = this;
+	spawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	const FVector spawnLocation = GetActorLocation();
+	const FRotator spawnRotation = FRotator();
+	const FVector spawnScale3D = ActorHasTag("Player") ? FVector(2.0f) : FVector(1.0f / GetCapsuleComponent()->GetComponentScale().X);
+	FTransform spawnTransform = FTransform(spawnRotation, spawnLocation, spawnScale3D);
+	AWeaponBase* newWeapon = Cast<AWeaponBase>(GetWorld()->SpawnActor(weaponClass, &spawnTransform, spawnParams));
+	newWeapon->InitWeapon(0);
+
+	return newWeapon;
+}
+
+void ACharacterBase::InitWeaponActors()
+{
+	if (!WeaponActorList.IsEmpty()) return; 
+
+	//근접과 원거리의 무기 액터를 스폰
+	for (int idx = 0; idx < 3; idx++)
+	{
+		WeaponActorList.Add(SpawnWeaponActor((EWeaponType)(idx+1)));
+		WeaponActorList[idx]->SetOwner(this);
+		checkf(IsValid(WeaponActorList[idx]), TEXT("무기 %d 타입 스폰에 실패했습니다."));
+		EquipWeapon(WeaponActorList[idx]);
+	}
+	EquipWeapon(WeaponActorList[0]);
+	CurrentWeaponRef = WeaponActorList[0];
 }
 
 void ACharacterBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
+	for (int num=0 ; num < SkillAnimPlayTimerHandleList.Num(); num++)
+	{
+		GetWorldTimerManager().ClearTimer(SkillAnimPlayTimerHandleList[num]);
+	}
+	SkillAnimPlayTimerHandleList.Empty();
 }

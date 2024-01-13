@@ -14,6 +14,8 @@ AMeleeWeaponBase::AMeleeWeaponBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	this->Tags.Add("Melee");
+
 	MeleeTrailParticle = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ITEM_NIAGARA_COMPONENT"));
 	MeleeTrailParticle->SetupAttachment(WeaponMesh);
 	MeleeTrailParticle->bAutoActivate = false;
@@ -23,8 +25,6 @@ void AMeleeWeaponBase::Attack()
 {
 	if (WeaponID == 0) return;
 	Super::Attack();
-
-	this->Tags.Add("Melee");
 	
 	PlayEffectSound(AttackSound);
 	GetWorldTimerManager().SetTimer(MeleeAtkTimerHandle, this, &AMeleeWeaponBase::MeleeAttack, 0.01f, true);
@@ -43,6 +43,7 @@ void AMeleeWeaponBase::StopAttack()
 	GetWorldTimerManager().ClearTimer(MeleeAtkTimerHandle);
 	MeleePrevTracePointList.Empty();
 	MeleeLineTraceQueryParams.ClearIgnoredActors();
+	IgnoreActorList.Empty();
 	MeleeTrailParticle->Deactivate();
 }
 
@@ -96,37 +97,78 @@ void AMeleeWeaponBase::InitWeaponAsset()
 		HitImpactSound = MeleeWeaponAssetInfo.HitImpactSound.Get();
 }
 
+TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
+{
+	if (!OwnerCharacterRef.IsValid()) return TArray<AActor*>(); 
+
+	FVector traceStartPos = (WeaponMesh->GetSocketLocation("GrabPoint")
+							+ WeaponMesh->GetSocketLocation("End")) / 2;
+	float traceRadius = UKismetMathLibrary::Vector_Distance(WeaponMesh->GetSocketLocation("GrabPoint")
+						, WeaponMesh->GetSocketLocation("End")) + 10.0f;
+	
+	TEnumAsByte<EObjectTypeQuery> pawnTypeQuery = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
+	TArray<AActor*> overlapResultList, meleeDamageTargetList;
+	
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), traceStartPos, traceRadius, { pawnTypeQuery }
+											 , ACharacterBase::StaticClass(), IgnoreActorList, overlapResultList);
+	
+	//오버랩 결과를 돌며 실제 데미지 타겟을 찾아낸다. 
+	//캐릭터 - 타겟 방향의 라인트레이스에서 중간에 장애물이 있다면 타겟은 유효하지 않다.
+	FCollisionQueryParams collisionQueryParam;
+	collisionQueryParam.AddIgnoredActor(OwnerCharacterRef.Get());
+	collisionQueryParam.AddIgnoredActor(this);
+	for (auto& target : overlapResultList)
+	{
+		if (!IsValid(target)) continue;
+		if (!target->ActorHasTag("Character")) continue;
+		if (target->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) continue; 
+		if (Cast<ACharacterBase>(target)->GetIsActionActive(ECharacterActionType::E_Die)) continue;
+
+		FHitResult hitResult;
+		GetWorld()->LineTraceSingleByChannel(hitResult, OwnerCharacterRef->GetActorLocation()
+			, target->GetActorLocation(), ECollisionChannel::ECC_Camera, collisionQueryParam);
+
+		if (hitResult.bBlockingHit && hitResult.GetActor() == target)
+		{
+			IgnoreActorList.Add(target);
+			meleeDamageTargetList.Add(target);
+		}
+	}
+	return meleeDamageTargetList;
+}
+
 void AMeleeWeaponBase::MeleeAttack()
 {
 	FHitResult hitResult;
 	bool bIsMeleeTraceSucceed = false;
 
 	TArray<FVector> currTracePositionList = GetCurrentMeleePointList();
-	bIsMeleeTraceSucceed = CheckMeleeAttackTarget(hitResult, currTracePositionList);
+	TArray<AActor*> targetList = CheckMeleeAttackTargetWithSphereTrace(); 
 	MeleePrevTracePointList = currTracePositionList;
 
-	//hitResult가 Valid하다면 아래 조건문에서 데미지를 가함
-	if (bIsMeleeTraceSucceed)
+	for (auto& target : targetList)
 	{
-		//효과를 출력
-		ActivateMeleeHitEffect(hitResult.Location);
-
-		//데미지를 주고, 중복 체크를 해준다.
-		UGameplayStatics::ApplyDamage(hitResult.GetActor(), WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate
-			, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
-		MeleeLineTraceQueryParams.AddIgnoredActor(hitResult.GetActor());
-
-		//디버프도 부여
-		if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
+		//target가 Valid하다면 아래 조건문에서 데미지를 가함
+		if (IsValid(target))
 		{
-			GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(hitResult.GetActor())
-				, OwnerCharacterRef.Get(), WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
-		}
-		//커스텀 이벤트 
-		OnMeleeAttackSuccess(hitResult, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage);
+			//효과를 출력
+			ActivateMeleeHitEffect(target->GetActorLocation());
 
-		//내구도를 업데이트
-		UpdateDurabilityState();
+			//데미지를 주고, 중복 체크를 해준다.
+			UGameplayStatics::ApplyDamage(target, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate
+				, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
+			MeleeLineTraceQueryParams.AddIgnoredActor(target); 
+
+			//디버프도 부여
+			if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
+			{
+				GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(target)
+					, OwnerCharacterRef.Get(), WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
+			}
+
+			//내구도를 업데이트
+			UpdateDurabilityState();
+		}
 	}
 }
 
