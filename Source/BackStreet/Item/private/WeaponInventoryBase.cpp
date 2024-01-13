@@ -21,8 +21,6 @@ void AWeaponInventoryBase::Tick(float DeltaTime)
 void AWeaponInventoryBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 }
 
 FWeaponStatStruct AWeaponInventoryBase::GetWeaponStatInfoWithID(int32 TargetWeaponID)
@@ -36,58 +34,55 @@ FWeaponStatStruct AWeaponInventoryBase::GetWeaponStatInfoWithID(int32 TargetWeap
 		if (newInfo != nullptr) return *newInfo;
 	}
 	return FWeaponStatStruct();
-}
+}	
 
 EWeaponType AWeaponInventoryBase::GetWeaponType(int32 TargetWeaponID)
 {
+	for (uint8 inventoryIdx = 0; inventoryIdx < GetCurrentWeaponCount(); inventoryIdx++)
+	{
+		if (InventoryArray[inventoryIdx].WeaponID == TargetWeaponID)
+			return InventoryArray[inventoryIdx].WeaponStat.WeaponType;
+	}
 	return GetWeaponStatInfoWithID(TargetWeaponID).WeaponType;
 }
 
-void AWeaponInventoryBase::InitInventory()
+void AWeaponInventoryBase::InitInventory(int32 NewMaxCapacity)
 {
 	if (!IsValid(GetOwner()) || !GetOwner()->ActorHasTag("Character"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AInventory는 CharacterBase 이외의 클래스에서는 소유할 수 없습니다."));
-		check(0);
+		UE_LOG(LogTemp, Warning, TEXT("AInventory는 CharacterBase 이외의 클래스에서는 소유할 수 없습니다."));	
+		checkf(false, TEXT("AInventory는 CharacterBase 이외의 클래스에서는 소유할 수 없습니다."));
 	}
-
+	MaxCapacity = NewMaxCapacity;
 	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
-
+		
 	InventoryArray.Empty();
 }
 
 void AWeaponInventoryBase::EquipWeapon(int32 NewWeaponID)
 {
-	//최초로 무기를 집을 경우에만 수행 (1회만 수행되어야함)
-	if (!CurrentWeaponRef.IsValid() || CurrentWeaponRef->IsActorBeingDestroyed())
+	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
+
+	// 근거리무기랑 원거리무기를 교체
+	OwnerCharacterRef.Get()->SwitchWeaponActor(GetWeaponType(NewWeaponID));
+	OwnerCharacterRef.Get()->EquipWeapon(GetCurrentWeaponRef()); //Attach
+	GetCurrentWeaponRef()->InitWeapon(NewWeaponID);
+}
+
+bool AWeaponInventoryBase::EquipWeaponByIdx(int32 NewIdx)	
+{
+	if (!InventoryArray.IsValidIndex(NewIdx)) return false;
+
+	EquipWeapon(GetCurrentWeaponInfo().WeaponID);
+	SyncCurrentWeaponInfo(false);
+
+	while (GetCurrentIdx() != NewIdx)
 	{
-		AWeaponBase* newWeapon = SpawnWeaponActor(NewWeaponID);
-
-		UE_LOG(LogTemp, Warning, TEXT("Spawn Initial Actor"));
-
-		if (IsValid(newWeapon) && !newWeapon->IsActorBeingDestroyed())
-		{
-			SetCurrentWeaponRef(newWeapon);
-			OwnerCharacterRef.Get()->EquipWeapon(newWeapon);
-		}
+		bool result = SwitchToNextWeapon();
+		if (!result) return false;
 	}
-	else
-	{
-		//check(GetCurrentWeaponRef()->GetWeaponStat().WeaponType != EWeaponType::E_None);
-		//check(GetWeaponType(NewWeaponID) != EWeaponType::E_None);
-
-		UE_LOG(LogTemp, Warning, TEXT("%d %d"), GetCurrentWeaponRef()->WeaponID, NewWeaponID);
-			
-		// 근거리무기랑 원거리무기를 교체
-		if (!GetIsEqualWeaponType(GetCurrentWeaponRef()->WeaponID, NewWeaponID))
-		{
-			SwitchWeaponActorToAnotherType();
-			OwnerCharacterRef.Get()->EquipWeapon(GetCurrentWeaponRef());
-		}
-	}
-	if (IsValid(GetCurrentWeaponRef()))
-		GetCurrentWeaponRef()->InitWeapon(NewWeaponID);
+	return true;
 }
 
 bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
@@ -102,7 +97,9 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 	if (duplicateIdx == -1)
 	{
 		//Weapon이 InValid하면 안됨
-		if (GetIsInventoryEmpty()) EquipWeapon(NewWeaponID);
+		if (GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 0
+			&& GetWeaponType(NewWeaponID) != EWeaponType::E_Throw
+			&& GetCurrentCapacity() == 0) EquipWeapon(NewWeaponID);
 		if (!IsValid(GetCurrentWeaponRef())) return false;
 
 		FWeaponStatStruct newStat; 
@@ -127,7 +124,7 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 			SyncCurrentWeaponInfo(false);
 		}
 	}
-	//중복이 된다면 (발사체인 경우를 체크하고, 탄환을 추가)
+	//중복이 된다면 (발사체인 경우를 체크하고, 탄환을 추가)	
 	else
 	{
 		//Weapon이 InValid하면 안됨. 중복이 된다는 것은 인벤토리에 무기가 있다는 것이기 때문
@@ -156,7 +153,7 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 			if (duplicateIdx == CurrentIdx) SyncCurrentWeaponInfo(false);
 		}
 	}
-
+	
 	//인벤토리를 무게에 따라 정렬
 	SortInventory();
 
@@ -192,15 +189,14 @@ void AWeaponInventoryBase::RemoveWeapon(int32 WeaponID)
 		if (GetCurrentWeaponCount() == 0)
 		{
 			GetCurrentWeaponRef()->InitWeapon(0);
-			OwnerCharacterRef->SetWeaponActorRef(nullptr);
 		}
 
 		//그렇지 않다면, 해당 무기 액터를 다시 초기화하여 재활용 
 		else
 		{
-			if (!GetIsEqualWeaponType(WeaponID, InventoryArray[CurrentIdx].WeaponID))
+			if (!GetIsEqualWeaponType(GetWeaponType(WeaponID), GetWeaponType(InventoryArray[CurrentIdx].WeaponID)))
 			{
-				SwitchWeaponActorToAnotherType();
+				OwnerCharacterRef->SwitchWeaponActor(GetWeaponType(InventoryArray[CurrentIdx].WeaponID));
 				OwnerCharacterRef->EquipWeapon(GetCurrentWeaponRef());
 			}
 			GetCurrentWeaponRef()->InitWeapon(InventoryArray[CurrentIdx].WeaponID);
@@ -210,7 +206,7 @@ void AWeaponInventoryBase::RemoveWeapon(int32 WeaponID)
 	SortInventory();
 	
 	// 무기 드랍 델리게이트 호출
-	if (OnDropWeapon.IsBound())
+	if (OnDropWeapon.IsBound())	
 		OnDropWeapon.Broadcast();
 
 	// 인벤토리가 업데이트 되었음을 알리는 델리게이트 호출
@@ -234,10 +230,9 @@ bool AWeaponInventoryBase::SwitchToNextWeapon()
 
 	//기존 무기의 최신 액터 정보를 저장
 	SyncCurrentWeaponInfo(true);
-
+	
 	//무기 액터를 다음칸의 무기 정보로 초기화하고 장착
 	EquipWeapon(InventoryArray[nextIdx].WeaponID);
-	GetCurrentWeaponRef()->InitWeapon(InventoryArray[nextIdx].WeaponID);
 
 	//새로운 '현재' 인덱스를 등록하고 배열에서 정보를 꺼내옴
 	SetCurrentIdx(nextIdx);
@@ -255,7 +250,8 @@ void AWeaponInventoryBase::SyncCurrentWeaponInfo(bool bIsLoadActorInfo)
 	if (!OwnerCharacterRef.IsValid()) return;
 	if (GetCurrentWeaponCount() == 0) return;
 	if (!InventoryArray.IsValidIndex(GetCurrentIdx())) return;
-	if (!IsValid(GetCurrentWeaponRef())) 	return;
+	if (!IsValid(GetCurrentWeaponRef())) return;
+	if (!GetIsEqualWeaponType(GetCurrentWeaponInfo().WeaponStat.WeaponType, GetCurrentWeaponRef()->GetWeaponType())) return;
 
 	//액터 정보를 인벤토리 정보로 업데이트
 	if (!bIsLoadActorInfo)
@@ -269,7 +265,7 @@ void AWeaponInventoryBase::SyncCurrentWeaponInfo(bool bIsLoadActorInfo)
 		InventoryArray[GetCurrentIdx()].WeaponStat = GetCurrentWeaponRef()->GetWeaponStat();
 		InventoryArray[GetCurrentIdx()].WeaponState = GetCurrentWeaponRef()->GetWeaponState();
 	}
-	OnInventoryItemIsUpdated.Broadcast(GetCurrentIdx(), true, InventoryArray[GetCurrentIdx()]);
+	OnInventoryItemIsUpdated.Broadcast(GetCurrentIdx(), GetIsFocused(), InventoryArray[GetCurrentIdx()]);
 }
 
 bool AWeaponInventoryBase::GetWeaponIsContained(int32 WeaponID)
@@ -305,41 +301,7 @@ bool AWeaponInventoryBase::TryAddAmmoToWeapon(int32 WeaponID, int32 AmmoCount)
 
 	return true;
 }
-
-AWeaponBase* AWeaponInventoryBase::SpawnWeaponActor(int32 WeaponID)
-{
-	if (!OwnerCharacterRef.IsValid()) return nullptr;
-	
-	int32 weaponType = (int32)GetWeaponType(WeaponID);
-	check(WeaponClassList.IsValidIndex(weaponType)); //클래스 지정이 잘 되어있는지 확인
-
-	UClass* targetClass = WeaponClassList[weaponType];
-	UClass* anotherTypeClass = WeaponClassList[weaponType == 1 ? 2 : 1];
-	if (!IsValid(targetClass) || !IsValid(anotherTypeClass) || weaponType == 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Weapon Class가 Invalid 합니다."));
-		return nullptr;
-	}
-	FActorSpawnParameters spawnParams;
-	spawnParams.Owner = OwnerCharacterRef.Get();
-	spawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-	const FVector spawnLocation = OwnerCharacterRef.Get()->GetActorLocation();
-	const FRotator spawnRotation = FRotator();
-	const FVector spawnScale3D = OwnerCharacterRef.Get()->ActorHasTag("Player") ? FVector(2.0f) : FVector(1.0f / OwnerCharacterRef.Get()->GetCapsuleComponent()->GetComponentScale().X);
-	FTransform spawnTransform = FTransform(spawnRotation, spawnLocation, spawnScale3D);
-	AWeaponBase* newWeapon = Cast<AWeaponBase>(GetWorld()->SpawnActor(targetClass, &spawnTransform, spawnParams));
-	HiddenWeaponRef = Cast<AWeaponBase>(GetWorld()->SpawnActor(anotherTypeClass, &spawnTransform, spawnParams));
-
-	if (!CurrentWeaponRef.IsValid())
-	{
-		OwnerCharacterRef.Get()->SetWeaponActorRef(newWeapon);
-		CurrentWeaponRef = newWeapon;
-	}
-	
-	return newWeapon;
-}
-
+		
 void AWeaponInventoryBase::ClearInventory()
 {
 	RemoveCurrentWeapon();
@@ -397,35 +359,28 @@ int32 AWeaponInventoryBase::CheckWeaponDuplicate(int32 TargetWeaponID)
 	return -1;
 }
 
-bool AWeaponInventoryBase::GetIsEqualWeaponType(int32 WeaponIDA, int32 WeaponIDB)
+bool AWeaponInventoryBase::GetIsEqualWeaponType(EWeaponType TypeA, EWeaponType TypeB)
 {
-	//invalid 한 ID가 전달되었다면 false 반환
-	if (GetWeaponType(WeaponIDA) == EWeaponType::E_None || GetWeaponType(WeaponIDB) == EWeaponType::E_None) return false;
+	return TypeA == TypeB;
+	}
 
-	//그렇지 않다면 근거리 or 원거리 동일 여부를 반환
-	return (GetWeaponType(WeaponIDA) == EWeaponType::E_Melee && GetWeaponType(WeaponIDB) == EWeaponType::E_Melee)
-		   || (GetWeaponType(WeaponIDA) != EWeaponType::E_Melee && GetWeaponType(WeaponIDB) != EWeaponType::E_Melee);
+bool AWeaponInventoryBase::GetIsFocused()
+{
+	return GetIsEqualWeaponType(InventoryArray[GetCurrentIdx()].WeaponStat.WeaponType
+		, GetCurrentWeaponRef()->GetWeaponType());
 }
 
-void AWeaponInventoryBase::SwitchWeaponActorToAnotherType()
+bool AWeaponInventoryBase::SetCurrentIdx(int32 NewIdx)
 {
-	if (!CurrentWeaponRef.IsValid() || !IsValid(HiddenWeaponRef)) return;
-
-	//Swap하기
-	AWeaponBase* tempWeaponPtr = CurrentWeaponRef.Get();
-	SetCurrentWeaponRef(HiddenWeaponRef);
-	HiddenWeaponRef = tempWeaponPtr;
-
-	//Visibility 전환
-	HiddenWeaponRef->SetActorHiddenInGame(true);
-	GetCurrentWeaponRef()->SetActorHiddenInGame(false);
-	HiddenWeaponRef->InitWeapon(0);
+	if (!InventoryArray.IsValidIndex(NewIdx)) return false;
+	CurrentIdx = NewIdx;
+	return false;
 }
 
 AWeaponBase* AWeaponInventoryBase::GetCurrentWeaponRef()
 {
-	if (!CurrentWeaponRef.IsValid()) return nullptr;
-	return CurrentWeaponRef.Get();
+	if (!OwnerCharacterRef.IsValid()) return nullptr;
+	return OwnerCharacterRef->GetCurrentWeaponRef();
 }
 
 FInventoryItemInfoStruct AWeaponInventoryBase::GetCurrentWeaponInfo()
@@ -434,17 +389,20 @@ FInventoryItemInfoStruct AWeaponInventoryBase::GetCurrentWeaponInfo()
 	return InventoryArray[GetCurrentIdx()];
 }
 
+FInventoryItemInfoStruct AWeaponInventoryBase::GetWeaponInfoByID(int32 WeaponID)
+{
+	if (!GetWeaponIsContained(WeaponID)) return FInventoryItemInfoStruct();
+	
+	for(FInventoryItemInfoStruct& inventoryItem :InventoryArray)
+	{
+		if (inventoryItem.WeaponID == WeaponID)
+			return inventoryItem;
+	}
+	return FInventoryItemInfoStruct();
+}
+
 int32 AWeaponInventoryBase::GetNextInventoryIdx()
 {
 	if (GetCurrentWeaponCount() == 0) return 0;
 	return (GetCurrentIdx() + 1) % InventoryArray.Num();
-}
-
-void AWeaponInventoryBase::SetCurrentWeaponRef(AWeaponBase* NewWeapon)
-{
-	if (!IsValid(NewWeapon)) return;
-	if (!CurrentWeaponRef.Get()->OnWeaponBeginDestroy.IsBound())
-		CurrentWeaponRef.Get()->OnWeaponBeginDestroy.AddDynamic(this, &AWeaponInventoryBase::RemoveCurrentWeapon);
-	CurrentWeaponRef = NewWeapon;
-	CurrentWeaponRef.Get()->SetOwnerCharacter(OwnerCharacterRef.Get());
 }

@@ -1,11 +1,10 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "../public/MainCharacterBase.h"
 #include "../public/MainCharacterController.h"
 #include "../public/AbilityManagerBase.h"
 #include "../../Global/public/DebuffManager.h"
 #include "../../Item/public/WeaponBase.h"
+#include "../../Item/public/ThrowWeaponBase.h"
 #include "../../Item/public/WeaponInventoryBase.h"
 #include "../../Item/public/ItemBase.h"
 #include "../../Item/public/ItemBoxBase.h"
@@ -13,20 +12,24 @@
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "../../StageSystem/public/StageData.h"
 #include "../../StageSystem/public/GateBase.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Components/AudioComponent.h"
 #include "Animation/AnimInstance.h"
 #include "TimerManager.h"
 #include "../../Item/public/RewardBoxBase.h"
 #include "../../CraftingSystem/public/CraftBoxBase.h"
+#include "Animation/AnimMontage.h"
+#include "../../Global/public/SkillManagerBase.h"
 #define MAX_CAMERA_BOOM_LENGTH 1450.0f
 #define MIN_CAMERA_BOOM_LENGTH 250.0f
+#define MAX_THROW_DISTANCE 1200.0f //AThrowWeaponBase와 통일 (추후 하나의 파일로 통합 예정)
 
 // Sets default values
 AMainCharacterBase::AMainCharacterBase()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	SetActorTickInterval(0.1f);
+	//SetActorTickInterval(0.1f);
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CAMERA_BOOM"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -68,7 +71,7 @@ void AMainCharacterBase::BeginPlay()
 	Super::BeginPlay();
 	
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-
+	
 	InitDynamicMeshMaterial(NormalMaterial);
 
 	AbilityManagerRef = NewObject<UAbilityManagerBase>(this, UAbilityManagerBase::StaticClass(), FName("AbilityfManager"));
@@ -94,11 +97,86 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	
 	PlayerInputComponent->BindAction("Roll", IE_Pressed, this, &AMainCharacterBase::Roll);
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AMainCharacterBase::TryAttack);
+	PlayerInputComponent->BindAction("Throw", IE_Pressed, this, &AMainCharacterBase::ReadyToThrow);
+	PlayerInputComponent->BindAction("Throw", IE_Released, this, &AMainCharacterBase::Throw);
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMainCharacterBase::TryReload);
 
 	PlayerInputComponent->BindAction("SwitchWeapon", IE_Pressed, this, &AMainCharacterBase::SwitchToNextWeapon);
 	PlayerInputComponent->BindAction("PickItem", IE_Pressed, this, &AMainCharacterBase::TryInvestigate);
 	PlayerInputComponent->BindAction("DropWeapon", IE_Pressed, this, &AMainCharacterBase::DropWeapon);
+
+	
+	PlayerInputComponent->BindAction("SelectSubWeaponA", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
+	PlayerInputComponent->BindAction("SelectSubWeaponB", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
+	PlayerInputComponent->BindAction("SelectSubWeaponC", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
+	PlayerInputComponent->BindAction("SelectSubWeaponD", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
+}
+
+void AMainCharacterBase::ReadyToThrow()
+{
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->GetWeaponType() != EWeaponType::E_Throw) return;
+	if (!Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->GetCanThrow()) return; //딜레이 중이라면 반환
+	if (GetCurrentWeaponRef()->WeaponID == 0) return;
+
+	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;
+	SetAimingMode(true);
+	GetWorldTimerManager().SetTimer(AimingTimerHandle, this, &AMainCharacterBase::UpdateAimingState, 0.01f, true);
+}
+
+void AMainCharacterBase::Throw()
+{
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
+
+	ResetActionState();
+	SetAimingMode(false);
+
+	GetWorldTimerManager().ClearTimer(AimingTimerHandle);
+
+	if (IsValid(GetCurrentWeaponRef()) && GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
+	{
+		Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->Throw();
+	}
+}
+
+void AMainCharacterBase::SetAimingMode(bool bNewState)
+{
+	bIsAiming = bNewState;	
+	GetCharacterMovement()->bOrientRotationToMovement = !bNewState;
+	this->bUseControllerRotationYaw = bNewState;
+}
+
+void AMainCharacterBase::UpdateAimingState()
+{	
+	if (!IsValid(GetCurrentWeaponRef())) return;
+	if (GetCurrentWeaponRef()->GetWeaponType() != EWeaponType::E_Throw) return;
+
+	RotateToCursor();
+	Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->CalculateThrowDirection(GetThrowDestination());
+
+	FPredictProjectilePathResult predictProjectilePathResult = Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->GetProjectilePathPredictResult();
+	for (FPredictProjectilePathPointData& point : predictProjectilePathResult.PathData)
+	{
+		DrawDebugSphere(GetWorld(), point.Location, 3.0f, 2, FColor::Red, false, 0.015f, 0, 3.0f);
+	}
+}
+
+FVector AMainCharacterBase::GetThrowDestination()
+{
+	FVector cursorWorldLocation = GetController<AMainCharacterController>()->GetCursorDeprojectionWorldLocation();
+	if (cursorWorldLocation == FVector(0.0f)) return FVector(0.0f);
+
+	//커서와 손 위치의 Z값을 일치시킴
+	FVector startLocation = GetMesh()->GetSocketLocation("weapon_r");
+	startLocation = { startLocation.X, startLocation.Y, cursorWorldLocation.Z };
+
+	//그 상태에서 거리를 재서 최대 거리를 벗어나지 않는다면 그대로 커서 위치 반환
+	if (UKismetMathLibrary::Vector_Distance(startLocation, cursorWorldLocation) < MAX_THROW_DISTANCE)
+		return cursorWorldLocation;
+
+	//그렇지 않다면, 최대 거리 만큼 제한하여 반환
+	startLocation += UKismetMathLibrary::Normal(cursorWorldLocation - startLocation) * MAX_THROW_DISTANCE;
+	return startLocation;
 }
 
 void AMainCharacterBase::MoveForward(float Value)
@@ -111,7 +189,6 @@ void AMainCharacterBase::MoveForward(float Value)
 		if (OnMove.IsBound())
 			OnMove.Broadcast();
 	}
-
 }
 
 void AMainCharacterBase::MoveRight(float Value)
@@ -169,7 +246,7 @@ void AMainCharacterBase::Roll()
 		&& IsValid(AnimAssetData.RollAnimMontageList[0]))
 	{
 		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.CharacterMoveSpeed / 500.0f));
-	}	
+	}
 
 	if (OnRoll.IsBound())
 		OnRoll.Broadcast();
@@ -265,13 +342,16 @@ void AMainCharacterBase::TryAttack()
 {
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw) return;
 
-	if (!IsValid(InventoryRef) || !IsValid(GetWeaponActorRef()))
+	if (GetCurrentWeaponRef()->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
+		return;
 	}
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
+	this->Tags.Add("Attack|Common");
 	Super::TryAttack();
 	RotateToCursor();
 
@@ -281,6 +361,35 @@ void AMainCharacterBase::TryAttack()
 			TryAttack(); //0.1초 뒤에 체크해서 계속 눌려있는 상태라면, Attack을 반복한다. 
 	}), 0.1f, false);
 }
+
+void AMainCharacterBase::TrySkill()
+{
+	check(GetCurrentWeaponRef() != nullptr);
+
+	//if CharacterActionType is E_Skill or E_Idle return
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
+		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	 
+	if (GetCurrentWeaponRef()->WeaponID == 0||GetCharacterState().CharacterCurrSkillGauge==0)
+	{
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬을 사용할 수 없습니다. ")), FColor::White);
+		return;
+	}
+
+	//공격을 하고, 커서 위치로 Rotation을 조정
+	Super::TrySkill();
+
+	RotateToCursor();
+}
+
+void AMainCharacterBase::AddSkillGauge()
+{
+	check(GetCurrentWeaponRef() != nullptr);
+
+	AWeaponBase* weaponRef = GetCurrentWeaponRef();
+	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeInfo.SkillGaugeAug;
+}
+
 
 void AMainCharacterBase::Attack()
 {
@@ -294,9 +403,9 @@ void AMainCharacterBase::Attack()
 void AMainCharacterBase::StopAttack()
 {
 	Super::StopAttack();
-	if (IsValid(GetWeaponActorRef()))
+	if (IsValid(GetCurrentWeaponRef()))
 	{
-		GetWeaponActorRef()->StopAttack();
+		GetCurrentWeaponRef()->StopAttack();
 	}
 }
 
@@ -319,9 +428,11 @@ void AMainCharacterBase::Die()
 void AMainCharacterBase::RotateToCursor()
 {
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Attack) return;
+		&& CharacterState.CharacterActionState != ECharacterActionType::E_Attack
+		&& CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
 	FRotator newRotation = PlayerControllerRef.Get()->GetRotationToCursor();
+	DrawDebugSphere(GetWorld(), PlayerControllerRef.Get()->GetCursorDeprojectionWorldLocation(), 10.0f, 5, FColor::Yellow, false, 1.0f, 1, 5);
 	if (newRotation != FRotator())
 	{
 		newRotation.Pitch = newRotation.Roll = 0.0f;
@@ -337,6 +448,24 @@ void AMainCharacterBase::RotateToCursor()
 		newRotation.Yaw = FMath::Fmod((newRotation.Yaw + 90.0f), 360.0f);
 		SetActorRotation(newRotation.Quaternion(), ETeleportType::ResetPhysics);
 	}), 1.0f, false);
+}
+
+void AMainCharacterBase::PickSubWeapon()
+{
+	int32 targetIdx = -1;
+	if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponA"))) targetIdx = 0;
+	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponB"))) targetIdx = 1;
+	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponC"))) targetIdx = 2;
+	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponD"))) targetIdx = 3;
+
+	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw && GetSubInventoryRef()->GetCurrentIdx() == targetIdx)
+	{
+		GetInventoryRef()->EquipWeaponByIdx(0);
+	}
+	else if (!TrySwitchToSubWeapon(targetIdx))
+	{
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
+	}
 }
 
 TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
@@ -418,6 +547,25 @@ bool AMainCharacterBase::GetIsAbilityActive(const ECharacterAbilityType TargetAb
 	return AbilityManagerRef->GetIsAbilityActive(TargetAbilityType);
 }
 
+bool AMainCharacterBase::PickWeapon(int32 NewWeaponID)
+{
+	if (!IsValid(GetInventoryRef()) || !IsValid(GetSubInventoryRef())) return false;
+	
+	bool result = false; 
+	EWeaponType weaponType = GetInventoryRef()->GetWeaponType(NewWeaponID);
+	
+	if (weaponType == EWeaponType::E_Throw)
+	{
+		result = GetSubInventoryRef()->AddWeapon(NewWeaponID);
+	}
+	else if(weaponType != EWeaponType::E_None)
+	{
+		result = GetInventoryRef()->AddWeapon(NewWeaponID);
+	}
+
+	return result;
+}
+
 void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)
 {
 	TArray<UNiagaraSystem*>* targetEmitterList = &DebuffNiagaraEffectList;
@@ -439,6 +587,7 @@ void AMainCharacterBase::DeactivateBuffEffect()
 
 void AMainCharacterBase::UpdateWallThroughEffect()
 {
+	if (!IsValid(GetWorld())) return;
 	FHitResult hitResult;
 	const FVector& traceBeginPos = FollowingCamera->GetComponentLocation();
 	const FVector& traceEndPos = GetMesh()->GetComponentLocation();

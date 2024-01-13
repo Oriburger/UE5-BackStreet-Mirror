@@ -73,10 +73,10 @@ public:
 		void UpdateCharacterStatWithID(class ACharacterBase* TargetCharacter, const uint32 CharacterID);
 
 	UFUNCTION()
-		void UpdateProjectileStatWithID(class AProjectileBase* TargetProjectile, const int32 ProjectileID);
-
-	UFUNCTION()
 		class UDebuffManager* GetGlobalDebuffManagerRef() { return DebuffManager; }
+
+	UFUNCTION(BlueprintCallable)
+		class USkillManagerBase* GetGlobalSkillmanagerBaseRef() { return SkillManagerBase; }
 
 	UFUNCTION(BlueprintCallable)
 		class AChapterManagerBase* GetChapterManagerRef() { return ChapterManager; }
@@ -120,6 +120,9 @@ protected:
 
 	UPROPERTY()
 		class UDebuffManager* DebuffManager;
+
+	UPROPERTY()
+		class USkillManagerBase* SkillManagerBase;
 
 	UPROPERTY(BlueprintReadWrite)
 		class AChapterManagerBase* ChapterManager;

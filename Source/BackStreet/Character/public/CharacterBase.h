@@ -9,6 +9,8 @@ class BACKSTREET_API ACharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
+	friend class AWeaponInventoryBase;
+
 //----- Global / Component ----------
 public:
 	// Sets default values for this character's properties
@@ -36,6 +38,9 @@ public:
 	//Input에 Binding 되어 공격을 시도 (AnimMontage를 호출)
 	virtual void TryAttack();
 
+	///Input에 Binding 되어 스킬공격을 시도 (AnimMontage를 호출)
+	virtual void TrySkill();
+
 	//AnimNotify에 Binding 되어 실제 공격을 수행
 	virtual void Attack();
 
@@ -54,7 +59,11 @@ public:
 
 	//플레이어의 ActionState를 Idle로 전환한다.
 	UFUNCTION(BlueprintCallable)
-		void ResetActionState(bool bForceReset = false);
+			void ResetActionState		(bool bForceReset = false);
+
+	//Set Player's Action State
+	UFUNCTION(BlueprintCallable)
+		void SetActionState(ECharacterActionType Type);
 
 	//플레이어가 체력을 회복함 (일회성)
 	UFUNCTION()
@@ -66,6 +75,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void TakeKnockBack(AActor* Causer, float Strength);
+
+	//공격Action 사이의 Interval을 관리하는 타이머를 해제
+	UFUNCTION()
+		void ResetAtkIntervalTimer();
 
 // ------- Character Stat/State ------------------------------
 public:
@@ -103,8 +116,7 @@ public:
 		bool EquipWeapon(class AWeaponBase* TargetWeapon);
 
 	//무기를 집는다. 인벤토리가 꽉 찼다면 false를 반환
-	UFUNCTION(BlueprintCallable)
-		bool PickWeapon(int32 NewWeaponID);
+	virtual bool PickWeapon(int32 NewWeaponID);
 
 	//다음 무기로 전환한다. 전환에 실패하면 false를 반환
 	virtual void SwitchToNextWeapon();
@@ -112,19 +124,53 @@ public:
 	//무기를 Drop한다. (월드에서 아예 사라진다.)
 	virtual void DropWeapon();
 
+	UFUNCTION()
+		bool TrySwitchToSubWeapon(int32 SubWeaponIdx);
+
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class AWeaponInventoryBase* GetInventoryRef();
 
-	UFUNCTION()
-		void SetWeaponActorRef(class AWeaponBase* NewWeapon);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class AWeaponInventoryBase* GetSubInventoryRef();
 
 	//무기 Ref를 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class AWeaponBase* GetWeaponActorRef();
+		class AWeaponBase* GetCurrentWeaponRef();
 
-	//공격Action 사이의 Interval을 관리하는 타이머를 해제
+protected:
+	UPROPERTY()
+		TSubclassOf<class AWeaponInventoryBase> WeaponInventoryClass;
+
 	UFUNCTION()
-		void ResetAtkIntervalTimer();
+		void SwitchWeaponActor(EWeaponType TargetWeaponType);
+
+private:
+	UPROPERTY()
+		class AWeaponInventoryBase* InventoryRef;
+
+	UPROPERTY()
+		class AWeaponInventoryBase* SubInventoryRef;
+
+	//0번째 : 들고 있는 무기 / 1번째, 숨겨져 있는 다른 타임의무기
+	UPROPERTY()
+		TArray<class AWeaponBase*> WeaponActorList;
+
+protected:
+	UPROPERTY()
+		TWeakObjectPtr<class AWeaponBase> CurrentWeaponRef;
+
+	//0번째 : 근접 무기 / 1번째 : 원거리 무기
+	//하나의 WeaponBase로 통일을 한다면 이렇게 하지 않아도 될텐데..
+
+private:
+	UPROPERTY()
+		TArray<TSubclassOf<class AWeaponBase>> WeaponClassList; 
+
+	//초기 무기 액터들을 스폰하고 초기화 한다.
+	void InitWeaponActors();
+
+	//무기 액터를 스폰
+	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
 
 // ---- Asset -------------------
 public:
@@ -211,12 +257,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
 		FCharacterStateStruct CharacterState;
 
-	UPROPERTY()
-		class AWeaponInventoryBase* InventoryRef;
-
-	UPROPERTY()
-		class AWeaponBase* WeaponRef;
-
 	//Gamemode 약 참조
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
@@ -225,10 +265,26 @@ protected:
 	UFUNCTION()
 		virtual void ClearAllTimerHandle();
 
+	UFUNCTION()
+		void PlaySkillAnimation();
+
 	//공격 간 딜레이 핸들
 	UPROPERTY()
 		FTimerHandle AtkIntervalHandle;
 
 	UPROPERTY()
 		FTimerHandle ReloadTimerHandle;
+
+	UPROPERTY()
+		TArray<FTimerHandle> SkillAnimPlayTimerHandleList;
+
+private:
+	//Current number of multiple SkillAnimPlayTimers
+	UPROPERTY()
+		int SkillAnimPlayTimerCurr;
+
+	//Threshold number of multiple SkillAnimPlayTimer
+	UPROPERTY()
+		int SkillAnimPlayTimerThreshold;
+
 };

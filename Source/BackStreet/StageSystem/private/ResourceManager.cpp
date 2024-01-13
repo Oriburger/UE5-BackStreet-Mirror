@@ -11,6 +11,7 @@
 #include "../public/WaveManager.h"
 #include "../../Item/public/ItemBoxBase.h"
 #include "../../Item/public/ItemBase.h"
+#include "Engine/DamageEvents.h"
 #include "../../CraftingSystem/public/CraftBoxBase.h"
 #include "Engine/LevelStreaming.h"
 
@@ -287,7 +288,7 @@ void AResourceManager::CleanAllResource()
 	ABackStreetGameModeBase* gamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (IsValid(gamemodeRef))
 	{
-		gamemodeRef->GetGlobalDebuffManagerRef()->ClearAllDebuffTimer();
+		gamemodeRef->GetGlobalDebuffManagerRef()->ClearDebuffManagerTimer();
 	}
 
 	if(IsValid(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))

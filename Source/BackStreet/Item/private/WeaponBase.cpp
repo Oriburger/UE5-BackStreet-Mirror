@@ -4,6 +4,7 @@
 #include "Components/AudioComponent.h"
 #include "../../Global/public/DebuffManager.h"
 #include "../../Character/public/CharacterBase.h"
+#include "../public/WeaponInventoryBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
@@ -22,6 +23,13 @@ AWeaponBase::AWeaponBase()
 
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPON_MESH"));
 	WeaponMesh->SetupAttachment(DefaultSceneRoot);
+	
+	static ConstructorHelpers::FObjectFinder<UDataTable> statInfoTableFinder(TEXT("/Game/Weapon/Data/D_WeaponStatTable.D_WeaponStatTable"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> assetInfoTableFinder(TEXT("/Game/Weapon/Data/D_WeaponAssetInfo.D_WeaponAssetInfo"));
+	checkf(statInfoTableFinder.Succeeded(), TEXT("statInfoTable 탐색에 실패했습니다."));
+	checkf(assetInfoTableFinder.Succeeded(), TEXT("assetInfoTable 클래스 탐색에 실패했습니다."));
+	WeaponStatInfoTable = statInfoTableFinder.Object;
+	WeaponAssetInfoTable = assetInfoTableFinder.Object;
 }
 
 // Called when the game starts or when spawned
@@ -31,12 +39,33 @@ void AWeaponBase::BeginPlay()
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
-
 void AWeaponBase::InitWeapon(int32 NewWeaponID)
 {
 	//Stat, State 초기화 
 	WeaponID = NewWeaponID;
 	WeaponStat.WeaponID = WeaponID;
+
+	if (NewWeaponID == 0)
+	{
+		WeaponStat = FWeaponStatStruct();
+		WeaponState = FWeaponStateStruct();
+		WeaponAssetInfo = FWeaponAssetInfoStruct();
+		WeaponMesh->SetStaticMesh(nullptr);
+	
+		if (ActorHasTag(FName("Melee")))
+			WeaponStat.WeaponType = EWeaponType::E_Melee;
+
+		else if (ActorHasTag(FName("Throw")))
+			WeaponStat.WeaponType = EWeaponType::E_Throw;
+
+		else if (ActorHasTag(FName("Shoot"))) 
+			WeaponStat.WeaponType = EWeaponType::E_Shoot;
+
+		else
+			WeaponStat.WeaponType =  EWeaponType::E_None;
+
+		return;
+	}
 
 	//FWeaponStatStruct newStat = GetWeaponStatInfoWithID(WeaponID);
 	//UpdateWeaponStat(newStat);
@@ -44,6 +73,7 @@ void AWeaponBase::InitWeapon(int32 NewWeaponID)
 	//에셋 초기화
 	FWeaponAssetInfoStruct newAssetInfo = GetWeaponAssetInfoWithID(WeaponID);
 	WeaponAssetInfo = newAssetInfo; 
+
 	if (WeaponID != 0)
 	{
 		TArray<FSoftObjectPath> tempStream, assetToStream;
@@ -69,7 +99,6 @@ void AWeaponBase::InitWeapon(int32 NewWeaponID)
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &AWeaponBase::InitWeaponAsset));
 	}
-	else WeaponMesh->SetStaticMesh(nullptr);
 }
 
 
@@ -140,6 +169,7 @@ void AWeaponBase::StopAttack() { }
 void AWeaponBase::UpdateComboState()
 {
 	WeaponState.ComboCount = (WeaponState.ComboCount + 1); 
+	OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
 }
 
 void AWeaponBase::SetResetComboTimer()
@@ -182,11 +212,22 @@ void AWeaponBase::UpdateDurabilityState()
 		ClearAllTimerHandle();
 		OwnerCharacterRef.Get()->StopAttack();
 		OnWeaponBeginDestroy.Broadcast();
+		OwnerCharacterRef.Get()->DropWeapon();
+		return;
 	}
+	OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
 }
 
 float AWeaponBase::GetAttackRange() 
 { 
 	if(WeaponStat.WeaponType == EWeaponType::E_Melee) return 25.0f;
 	return 200.0f;
+}
+
+EWeaponType AWeaponBase::GetWeaponType()
+{
+	if (ActorHasTag("Melee")) return EWeaponType::E_Melee;
+	else if (ActorHasTag("Shoot")) return EWeaponType::E_Shoot;
+	else if (ActorHasTag("Throw")) return EWeaponType::E_Throw;
+	return EWeaponType();
 }

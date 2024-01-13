@@ -36,6 +36,8 @@ AItemBase::AItemBase()
 	InfoWidgetComponent->SetupAttachment(MeshComponent);
 	InfoWidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 50.0f));
 	InfoWidgetComponent->SetWorldRotation(FRotator(0.0f, 180.0f, 0.0f));
+	InfoWidgetComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	InfoWidgetComponent->SetVisibility(false);
 
 	ParticleComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ITEM_NIAGARA_COMPONENT"));
 	ParticleComponent->SetupAttachment(MeshComponent);
@@ -117,7 +119,6 @@ void AItemBase::OnItemPicked(AActor* Causer)
 		if (Causer->ActorHasTag("Player"))
 		{
 			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
-			UE_LOG(LogTemp, Warning, TEXT("targetWeaopnID : %d"), targetWeaponID);
 			if (!playerRef->PickWeapon(targetWeaponID)) return;
 		}
 		break;

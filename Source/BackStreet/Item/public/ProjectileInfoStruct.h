@@ -11,15 +11,22 @@ struct FProjectileStatStruct : public FTableRowBase
 public:
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		int32 ProjectileID;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FName ProjectileName;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FName Description;
 
 	//폭발 타입의 발사체인지? (RadialDamage)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsExplosive;
+
+	//총알형 발사체인지? (bSimulatePhysics 유무)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool bIsBullet; 
 
 	//발사체의 속도
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -79,6 +86,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UNiagaraSystem> HitEffectParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UNiagaraSystem> ExplosionParticle;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UParticleSystem> HitEffectParticleLegacy;

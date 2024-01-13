@@ -36,7 +36,7 @@ public:
 public:
 	//적이 최초로 소유하는 무기의 ID
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		int32 DefaultWeaponID;
+		int32 DefaultWeaponID = 11100;
 
 	//최대 스폰할 아이템의 개수. 미션 아이템은 무시.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem", meta = (UIMin = 0, UIMax = 2))
@@ -62,6 +62,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		virtual void TryAttack() override;
+
+	UFUNCTION(BlueprintCallable)
+		virtual void TrySkill() override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
@@ -107,8 +110,6 @@ public:
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void InitFloatingHpWidget();
-
-
 
 public:
 	void ClearAllTimerHandle();

@@ -82,7 +82,7 @@ public:
 };
 
 //인벤토리를 구성하는 요소들의 정보를 담은 구조체
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType)	
 struct FInventoryItemInfoStruct
 {
 public:

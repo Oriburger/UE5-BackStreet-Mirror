@@ -14,6 +14,7 @@ UCLASS()
 class BACKSTREET_API AWeaponInventoryBase : public AActor
 {
 	GENERATED_BODY()
+
 //------ Delegate ---------------------------------
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
@@ -38,6 +39,9 @@ public:
 
 //------ Global ------------------------------------
 public:
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void PrintDebugMessage(); 
+
 	AWeaponInventoryBase();
 
 	virtual void Tick(float DeltaTime) override;
@@ -60,18 +64,26 @@ private:
 	UFUNCTION()
 		FWeaponStatStruct GetWeaponStatInfoWithID(int32 TargetWeaponID);
 
-	UFUNCTION()
+public: 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		EWeaponType GetWeaponType(int32 TargetWeaponID);
 
 //----- 인벤토리 핵심 로직-------------------------------
 public: 
 	//인벤토리를 초기화
 	UFUNCTION()
-		void InitInventory();
+		void InitInventory(int32 NewMaxCapacity = 6);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FInventoryItemInfoStruct> GetInventoryArray() { return InventoryArray; }
 
 	//무기를 장착
 	UFUNCTION()
 		void EquipWeapon(int32 NewWeaponID);
+
+	//새로운 인덱스로 전환
+	UFUNCTION(BlueprintCallable)
+		bool EquipWeaponByIdx(int32 NewIdx);
 
 	//무기 추가를 시도. 불가능하면 false를 반환
 	UFUNCTION(BlueprintCallable)
@@ -97,13 +109,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool GetWeaponIsContained(int32 WeaponID);
 	
+	//현재 인벤토리가 선택이 되어있는지?
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsFocused();
+
 	UFUNCTION(BlueprintCallable)
 		bool TryAddAmmoToWeapon(int32 WeaponID, int32 AmmoCount);
 
 protected:
-	UFUNCTION()
-		class AWeaponBase* SpawnWeaponActor(int32 WeaponID);
-
 	//인벤토리를 비움
 	UFUNCTION()
 		void ClearInventory();
@@ -122,15 +135,13 @@ protected:
 		int32 CheckWeaponDuplicate(int32 TargetWeaponID);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsEqualWeaponType(int32 WeaponIDA, int32 WeaponIDB);
-
-private:
-	//Melee <-> Ranged Weapon Actor을 전환
-	UFUNCTION()
-		void SwitchWeaponActorToAnotherType();
+		bool GetIsEqualWeaponType(EWeaponType TypeA, EWeaponType TypeB);
 
 //------ 프로퍼티 관련 ----------------------------------
 public:
+	UFUNCTION(BlueprintCallable)
+		bool SetCurrentIdx(int32 NewIdx);
+
 	//현재 선택된 인벤토리 Idx를 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetCurrentIdx() {  return CurrentIdx;  }
@@ -148,18 +159,15 @@ public:
 	UFUNCTION()
 		class AWeaponBase* GetCurrentWeaponRef();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FInventoryItemInfoStruct GetCurrentWeaponInfo();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FInventoryItemInfoStruct GetWeaponInfoByID(int32 WeaponID);
 
 private:
 	UFUNCTION()
 		int32 GetNextInventoryIdx();
-
-	UFUNCTION()
-		void SetCurrentWeaponRef(class AWeaponBase* NewWeapon);
-
-	UFUNCTION()
-		void SetCurrentIdx(int32 newValue) { CurrentIdx = newValue; };
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (UIMin = 1, UIMax = 10))
@@ -175,11 +183,6 @@ private:
 	UPROPERTY()
 		int32 TotalWeight = 0;
 
-	//근, 원거리 무기 전환을 위한 포인터 변수 
-	//GC 방지를 위해 인벤토리 소유로 두고, RawPtr을 사용한다
-	UPROPERTY()
-		AWeaponBase* HiddenWeaponRef;
-
 //---- 그 외 Ref Ptr------------------------------
 private: 
 	//게임모드 Ref
@@ -187,8 +190,4 @@ private:
 
 	//인벤토리 소유자 플레이어 
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
-
-	//현재 장비하고 있는 WeaponRef
-	TWeakObjectPtr<class AWeaponBase> CurrentWeaponRef;
-
 };
