@@ -264,7 +264,8 @@ int32 AWaveManager::GetTotalNumberOfEnemySpawn(class AStageData* Target)
 }
 
 void AWaveManager::UpdateWaveUI(class AStageData* Target)
-{
+{   
+	if(!IsValid(Target)) return;
 	int32 currWave = Target->GetCurrentWaveLevel();
 	int32 endWave = Target->GetStageTypeInfo().MaxWave;
 
