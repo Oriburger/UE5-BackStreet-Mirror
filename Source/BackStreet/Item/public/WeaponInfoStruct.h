@@ -2,6 +2,7 @@
 
 #include "Engine/DataTable.h"
 #include "../../Character/public/CharacterInfoEnum.h"
+#include "../../SkillSystem/public/SkillInfoStruct.h"
 #include "ProjectileInfoStruct.h"
 #include "WeaponInfoStruct.generated.h"
 
@@ -22,6 +23,15 @@ enum class EWeaponType : uint8
 	E_Melee				UMETA(DisplayName = "Melee"),
 	E_Throw				UMETA(DisplayName = "Throw"),
 	E_Shoot				UMETA(DisplayName = "Shoot")
+};
+
+UENUM(BlueprintType)
+enum class EWeaponTargetingType : uint8
+{
+	E_None					UMETA(DisplayName = "None"),
+	E_SingleTargeting		UMETA(DisplayName = "SingleTargeting"),
+	E_TracedTargeting		UMETA(DisplayName = "TracedTargeting"),
+	E_InRangeTargeting	UMETA(DisplayName = "InRangeTargeting")
 };
 
 USTRUCT(BlueprintType)
@@ -113,6 +123,18 @@ public:
 	//인벤토리를 차지하는 칸 수
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		uint8 WeaponWeight = 1;
+
+	//Targeting 방식
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		EWeaponTargetingType TargetType;
+
+	//Weapon Skill 게이지 사용량 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FSkillGaugeInfo SkillGaugeInfo;
+
+	//Skill ID List
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FSkillSetInfo SkillSetInfo;
 
 	//----- 근거리 Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
