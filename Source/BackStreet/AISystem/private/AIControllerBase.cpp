@@ -57,6 +57,7 @@ void AAIControllerBase::DeactivateAI()
 
 void AAIControllerBase::InitAIPerceptionSystem()
 {
+	/*
 	SightPerceptionConfig = CreateOptionalDefaultSubobject<UAISenseConfig_Sight>(TEXT("SIGHT_CONFIG"));
 	SetPerceptionComponent(*AIPerceptionComponent);
 
@@ -68,7 +69,7 @@ void AAIControllerBase::InitAIPerceptionSystem()
 
 	AIPerceptionComponent->SetDominantSense(*SightPerceptionConfig->GetSenseImplementation());
 	GetPerceptionComponent()->ConfigureSense(*SightPerceptionConfig);
-	GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AAIControllerBase::UpdateTargetPerception);
+	GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AAIControllerBase::UpdateTargetPerception);*/
 }
 
 void AAIControllerBase::UpdateTargetPerception(AActor* Actor, FAIStimulus Stimulus)
