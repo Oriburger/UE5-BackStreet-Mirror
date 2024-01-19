@@ -28,9 +28,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		UStaticMeshComponent* SkillMesh;
 
-//------- 기본 프로퍼티, Action -------------------
+//------- Default Property, Action -------------------
 public:
-	//필수 지정 프로퍼티
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
 		int32 SkillID;
 
@@ -40,9 +39,13 @@ public:
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
 		TArray<class ACharacterBase*> TargetList;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TMap<FName, float> SkillGradeVariableMap;
+
+public:
 	//Reset Skill
 	UFUNCTION()
-		void InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, float NewSkillStartTiming);
+		void InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, int32 NewSkillID, float NewSkillStartTiming);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void StartSkill();
@@ -51,20 +54,32 @@ public:
 		void HideSkill();
 
 	UFUNCTION()
-		void DestroySkill();
-
-	UFUNCTION()
 		void SetSkillManagerRef(class USkillManagerBase* NewSkillManager);
 
-//--------- 데이터 테이블, 에셋 관련 ----------------------
+	UFUNCTION()
+		ESkillGrade GetSkillGrade();
+
+//--------- DataTable, Asset ----------------------
 protected:
-	//스킬 에셋 정보 테이블
+	UFUNCTION()
+		void InitAsset(int32 NewSkillID);
+	
+	UFUNCTION()
+		void SetAsset();
+
+	//Skill Info Table
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		UDataTable* SkillInfoTable;
+
+	//Skill Asset Info Table
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* SkillAssetInfoTable;
 
-	virtual void InitSkillAsset();
+	//Current Asset info
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
+		FSkillInfoStruct SkillInfo;
 
-	//현재 스킬의 에셋 정보
+	//Current Asset info
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
 		FSkillAssetInfoStruct SkillAssetInfo;
 
@@ -75,31 +90,34 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FSkillInfoStruct GetSkillInfoWithID(int32 TargetSkillID);
 
-//-------- 그 외 (Ref VFX 등)-------------------------------
 protected:
-	UFUNCTION()
-		void PlayEffectSound(class USoundCue* EffectSound);
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|SFX")
+		TArray<USoundCue*> SkillSoundList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class UParticleSystem* DestroyEffectParticle;
+		TArray<class UNiagaraSystem*> SkillEffectParticleList;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* SkillSound;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraSystem* SkillDestroyEffectParticle;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* SkillFailSound;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Image")
+		class UTexture2D* SkillIconImage;
 
+//-------- ETC. (Ref)-------------------------------
 protected:
-	//게임모드 약 참조
+	//GameMode Soft Ref
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
-	//소유자 캐릭터 약 참조
+	//Owner Character Soft Ref
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 
 	//SkillManager Weak Pointer
 	TWeakObjectPtr<class USkillManagerBase> SkillManagerRef;
 
-//-------- 타이머 --------------------------------------------
+	UFUNCTION(BlueprintCallable)
+		void PlayEffectSound(USoundCue* EffectSound);
+
+//-------- Timer --------------------------------------------
 public:
 	UFUNCTION()
 		void ClearAllTimerHandle();

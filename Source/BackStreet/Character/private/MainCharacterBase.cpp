@@ -82,7 +82,7 @@ void AMainCharacterBase::BeginPlay()
 void AMainCharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	UpdateWallThroughEffect();
+	//UpdateWallThroughEffect();
 }
 
 // Called to bind functionality to input
@@ -363,19 +363,18 @@ void AMainCharacterBase::TrySkill()
 {
 	check(GetCurrentWeaponRef() != nullptr);
 
-	//if CharacterActionType is E_Skill or E_Idle return
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	 
-	if (GetCurrentWeaponRef()->WeaponID == 0||GetCharacterState().CharacterCurrSkillGauge==0)
+	if (GetCurrentWeaponRef()->WeaponID == 0||GetCharacterState().CharacterCurrSkillGauge<GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.SkillCommonReq)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬을 사용할 수 없습니다. ")), FColor::White);
 		return;
 	}
 
-	//공격을 하고, 커서 위치로 Rotation을 조정
 	Super::TrySkill();
 
+	//Try Skill and adjust rotation to cursor position
 	RotateToCursor();
 }
 
@@ -583,7 +582,7 @@ void AMainCharacterBase::DeactivateBuffEffect()
 }
 
 void AMainCharacterBase::UpdateWallThroughEffect()
-{
+{/*
 	if (!IsValid(GetWorld())) return;
 	FHitResult hitResult;
 	const FVector& traceBeginPos = FollowingCamera->GetComponentLocation();
@@ -603,7 +602,7 @@ void AMainCharacterBase::UpdateWallThroughEffect()
 			InitDynamicMeshMaterial(NormalMaterial);
 			bIsWallThroughEffectActivated = false;
 		}
-	}
+	}*/
 }
 
 void AMainCharacterBase::SetFacialDamageEffect(bool NewState)

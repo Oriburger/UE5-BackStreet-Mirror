@@ -3,7 +3,7 @@
 		"Name": "0",
 		"SkillID": 0,
 		"SkillName": "None",
-		"SkillMesh": "None",
+		"SkillActorMesh": "None",
 		"InitialLocation":
 		{
 			"X": 0,
@@ -22,16 +22,16 @@
 			"Y": 0,
 			"Z": 0
 		},
-		"EffectParticle": "None",
+		"EffectParticleList": [],
 		"DestroyEffectParticle": "None",
-		"SkillSound": "None",
-		"SkillFailSound": "None"
+		"SkillSoundList": [],
+		"SkillIconImage": "None"
 	},
 	{
 		"Name": "1111",
 		"SkillID": 1111,
-		"SkillName": "Dash",
-		"SkillMesh": "None",
+		"SkillName": "Teleport",
+		"SkillActorMesh": "None",
 		"InitialLocation":
 		{
 			"X": 0,
@@ -50,16 +50,18 @@
 			"Y": 0,
 			"Z": 0
 		},
-		"EffectParticle": "None",
+		"EffectParticleList": [],
 		"DestroyEffectParticle": "None",
-		"SkillSound": "None",
-		"SkillFailSound": "None"
+		"SkillSoundList": [
+			"None"
+		],
+		"SkillIconImage": "None"
 	},
 	{
 		"Name": "1112",
 		"SkillID": 1112,
-		"SkillName": "Teleport",
-		"SkillMesh": "None",
+		"SkillName": "Dash",
+		"SkillActorMesh": "None",
 		"InitialLocation":
 		{
 			"X": 0,
@@ -78,9 +80,11 @@
 			"Y": 0,
 			"Z": 0
 		},
-		"EffectParticle": "None",
+		"EffectParticleList": [],
 		"DestroyEffectParticle": "None",
-		"SkillSound": "None",
-		"SkillFailSound": "None"
+		"SkillSoundList": [
+			"/Game/Asset/StarterContent/Audio/Collapse_Cue.Collapse_Cue"
+		],
+		"SkillIconImage": "None"
 	}
 ]
