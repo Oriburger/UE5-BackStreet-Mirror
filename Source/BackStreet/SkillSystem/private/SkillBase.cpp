@@ -51,7 +51,6 @@ void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& New
 				if (!SkillInfo.SkillCommonVariableMap.IsEmpty())
 				{
 					SkillGradeVariableMap = SkillInfo.SkillCommonVariableMap;
-					UE_LOG(LogTemp, Log, TEXT("SkillCommon Variable"));
 				}
 				break;
 
@@ -59,23 +58,20 @@ void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& New
 				if (!SkillInfo.SkillRareVariableMap.IsEmpty())
 				{
 					SkillGradeVariableMap = SkillInfo.SkillRareVariableMap;
-					UE_LOG(LogTemp, Log, TEXT("SkillRare Variable"));
 				}
 				break;
 
-			case ESkillGrade::E_Epic:
-				if (!SkillInfo.SkillEpicVariableMap.IsEmpty())
+			case ESkillGrade::E_Legend:
+				if (!SkillInfo.SkillLegendVariableMap.IsEmpty())
 				{
-					SkillGradeVariableMap = SkillInfo.SkillEpicVariableMap;
-					UE_LOG(LogTemp, Log, TEXT("SkillEpic Variable"));
+					SkillGradeVariableMap = SkillInfo.SkillLegendVariableMap;
 				}
 				break;
 
-			case ESkillGrade::E_Regend:
-				if (!SkillInfo.SkillRegendVariableMap.IsEmpty())
+			case ESkillGrade::E_Mythic:
+				if (!SkillInfo.SkillMythicVariableMap.IsEmpty())
 				{
-					SkillGradeVariableMap = SkillInfo.SkillRegendVariableMap;
-					UE_LOG(LogTemp, Log, TEXT("SkillRegend Variable"));
+					SkillGradeVariableMap = SkillInfo.SkillMythicVariableMap;
 				}
 				break;
 			
