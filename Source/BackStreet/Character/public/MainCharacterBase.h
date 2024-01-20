@@ -119,6 +119,9 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
+		virtual void TrySkill() override;
+
+	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
 
 	UFUNCTION(BlueprintCallable)
@@ -175,7 +178,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual bool PickWeapon(int32 NewWeaponID) override;
 
-// -------- VFX -----------
+//-------- Skill ---------------------
+public:
+	//Add Skill Gauge when attacking(E_Attack) Enemy.
+	UFUNCTION(BlueprintCallable)
+		void AddSkillGauge();
+
+// -------- VFX --------------------
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UNiagaraComponent* BuffNiagaraEmitter;

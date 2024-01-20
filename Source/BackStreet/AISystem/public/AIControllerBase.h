@@ -36,22 +36,26 @@ public:
 //--Perception 관련 ---------------------
 protected:
 	//시야 범위
-	UPROPERTY(EditDefaultsOnly, Category = "AI|Perception")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Perception")
 		float SightRadius;
 
 	//최대 시야 수명
-	UPROPERTY(EditDefaultsOnly, Category = "AI|Perception")
-		float MaxSightAge = 5.5f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "AI|Perception")
-		class UAISenseConfig_Sight* SightPerceptionConfig;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Perception")
+		float MaxSightAge = 5.5f;	
 
 public:
+	UFUNCTION(BlueprintCallable)
+		void UpdateTargetPerception(AActor* Actor, FAIStimulus Stimulus);
+
+private:
 	UFUNCTION()
-		void InitAIPerceptionSystem();
+		void ProcessSight(AActor* Actor, FAIStimulus Stimulus);
 
 	UFUNCTION()
-		void UpdateTargetPerception(AActor* Actor, FAIStimulus Stimulus);
+		void ProcessHearing(AActor* Actor, FAIStimulus Stimulus);
+
+	UFUNCTION()
+		void ProcessPrediction(AActor* Actor, FAIStimulus Stimulus);
 
 //-- Blackboard 관련 ----------------------
 public:

@@ -4,6 +4,7 @@
 #include "Engine/DataTable.h"
 #include "../../Item/public/ItemInfoStruct.h"
 #include "CharacterInfoStruct.h"
+#include "../../SkillSystem/public/SkillInfoStruct.h"
 #include "EnemyStatInfoStruct.generated.h"
 
 
@@ -49,6 +50,17 @@ public:
 	//적이 최초로 소유하는 무기의 ID
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		int32 DefaultWeaponID = 11100;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
+		float CharacterAtkSpeed;	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<int32> EnemySkillList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<float> EnemySkillIntervalList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintreadOnly)
+		FSkillSetInfo SkillSetInfo;
 
 	//Info data of dropping item when enemy dies
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
