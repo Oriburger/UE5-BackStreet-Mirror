@@ -83,7 +83,7 @@ void AMainCharacterBase::BeginPlay()
 void AMainCharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	UpdateWallThroughEffect();
+	//UpdateWallThroughEffect();
 }
 
 void AMainCharacterBase::OnCapsuleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -595,7 +595,7 @@ void AMainCharacterBase::DeactivateBuffEffect()
 }
 
 void AMainCharacterBase::UpdateWallThroughEffect()
-{
+{/*
 	if (!IsValid(GetWorld())) return;
 	FHitResult hitResult;
 	const FVector& traceBeginPos = FollowingCamera->GetComponentLocation();
@@ -615,7 +615,7 @@ void AMainCharacterBase::UpdateWallThroughEffect()
 			InitDynamicMeshMaterial(NormalMaterial);
 			bIsWallThroughEffectActivated = false;
 		}
-	}
+	}*/
 }
 
 void AMainCharacterBase::SetFacialDamageEffect(bool NewState)
