@@ -8,13 +8,13 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AISenseConfig_Hearing.h"
+#include "Perception/AISenseConfig_Prediction.h"
 #include "Perception/AIPerceptionComponent.h"
 
 AAIControllerBase::AAIControllerBase()
 {
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AI_PERCEPTION"));
-
-	InitAIPerceptionSystem();
 }
 
 void AAIControllerBase::OnPossess(APawn* PossessedPawn)
@@ -55,24 +55,25 @@ void AAIControllerBase::DeactivateAI()
 	GetBrainComponent()->StopLogic(FString("GameOver"));
 }
 
-void AAIControllerBase::InitAIPerceptionSystem()
+void AAIControllerBase::UpdateTargetPerception(AActor* Actor, FAIStimulus Stimulus)
 {
-	/*
-	SightPerceptionConfig = CreateOptionalDefaultSubobject<UAISenseConfig_Sight>(TEXT("SIGHT_CONFIG"));
-	SetPerceptionComponent(*AIPerceptionComponent);
+	TSubclassOf<UAISense> senseClass = UAIPerceptionSystem::GetSenseClassForStimulus(GetWorld(), Stimulus);
 
-	SightPerceptionConfig->DetectionByAffiliation.bDetectEnemies = true;
-	SightPerceptionConfig->DetectionByAffiliation.bDetectNeutrals = true;
-	SightPerceptionConfig->DetectionByAffiliation.bDetectFriendlies = false;
-	SightPerceptionConfig->SetMaxAge(MaxSightAge);
-	SightPerceptionConfig->SightRadius = SightRadius;
+	if (senseClass == UAISense_Sight::StaticClass())
+		ProcessSight(Actor, Stimulus);
 
-	AIPerceptionComponent->SetDominantSense(*SightPerceptionConfig->GetSenseImplementation());
-	GetPerceptionComponent()->ConfigureSense(*SightPerceptionConfig);
-	GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AAIControllerBase::UpdateTargetPerception);*/
+	else if(senseClass == UAISense_Hearing::StaticClass())
+		ProcessHearing(Actor, Stimulus);
+
+	else
+	{
+		ProcessPrediction(Actor, Stimulus);
+		UE_LOG(LogTemp, Warning, TEXT("Prediction!!!!"));
+	}
+		
 }
 
-void AAIControllerBase::UpdateTargetPerception(AActor* Actor, FAIStimulus Stimulus)
+void AAIControllerBase::ProcessSight(AActor* Actor, FAIStimulus Stimulus)
 {
 	if (IsValid(Actor) && Actor->ActorHasTag("Player") && Stimulus.WasSuccessfullySensed())
 	{
@@ -84,11 +85,34 @@ void AAIControllerBase::UpdateTargetPerception(AActor* Actor, FAIStimulus Stimul
 	{
 		GetBlackboardComponent()->SetValueAsBool("HasLineOfSight", false);
 		GetWorldTimerManager().SetTimer(SightLossTimerHandle, FTimerDelegate::CreateLambda([&]()
-		{
-			GetBlackboardComponent()->SetValueAsObject("TargetCharacter", nullptr);
-		}), 1.0f, false, MaxSightAge);
+			{
+				GetBlackboardComponent()->SetValueAsObject("TargetCharacter", nullptr);
+			}), 1.0f, false, MaxSightAge);
 	}
-	
+}
+
+void AAIControllerBase::ProcessHearing(AActor* Actor, FAIStimulus Stimulus)
+{
+	if (!Stimulus.WasSuccessfullySensed()) return;
+	GetBlackboardComponent()->SetValueAsBool("HasHeardSomething", true);
+	GetBlackboardComponent()->SetValueAsVector("HearingLocation", Stimulus.StimulusLocation);
+}
+
+void AAIControllerBase::ProcessPrediction(AActor* Actor, FAIStimulus Stimulus)
+{
+	if (Stimulus.WasSuccessfullySensed())
+	{
+		GetBlackboardComponent()->SetValueAsBool("HasPrediction", true);
+		GetBlackboardComponent()->SetValueAsVector("PredictLocation", Stimulus.StimulusLocation);
+	}
+	else
+	{
+		GetBlackboardComponent()->SetValueAsBool("HasPrediction", false);
+
+		UObject* target = GetBlackboardComponent()->GetValueAsObject("TargetCharacter");
+		FVector targetLocation = (target == nullptr ? FVector() : Cast<AActor>(target)->GetActorLocation());
+		GetBlackboardComponent()->SetValueAsVector("PredictLocation", targetLocation);
+	}
 }
 
 void AAIControllerBase::UpdateNewWeapon()
