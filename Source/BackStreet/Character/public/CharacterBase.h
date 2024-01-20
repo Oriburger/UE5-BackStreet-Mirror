@@ -38,6 +38,9 @@ public:
 	//Input에 Binding 되어 공격을 시도 (AnimMontage를 호출)
 	virtual void TryAttack();
 
+	///Input에 Binding 되어 스킬공격을 시도 (AnimMontage를 호출)
+	virtual void TrySkill();
+
 	//AnimNotify에 Binding 되어 실제 공격을 수행
 	virtual void Attack();
 
@@ -56,7 +59,11 @@ public:
 
 	//플레이어의 ActionState를 Idle로 전환한다.
 	UFUNCTION(BlueprintCallable)
-		void ResetActionState(bool bForceReset = false);
+			void ResetActionState		(bool bForceReset = false);
+
+	//Set Player's Action State
+	UFUNCTION(BlueprintCallable)
+		void SetActionState(ECharacterActionType Type);
 
 	//플레이어가 체력을 회복함 (일회성)
 	UFUNCTION()
@@ -148,11 +155,14 @@ private:
 	UPROPERTY()
 		TArray<class AWeaponBase*> WeaponActorList;
 
+protected:
 	UPROPERTY()
 		TWeakObjectPtr<class AWeaponBase> CurrentWeaponRef;
 
 	//0번째 : 근접 무기 / 1번째 : 원거리 무기
 	//하나의 WeaponBase로 통일을 한다면 이렇게 하지 않아도 될텐데..
+
+private:
 	UPROPERTY()
 		TArray<TSubclassOf<class AWeaponBase>> WeaponClassList; 
 
@@ -255,10 +265,26 @@ protected:
 	UFUNCTION()
 		virtual void ClearAllTimerHandle();
 
+	UFUNCTION()
+		void PlaySkillAnimation();
+
 	//공격 간 딜레이 핸들
 	UPROPERTY()
 		FTimerHandle AtkIntervalHandle;
 
 	UPROPERTY()
 		FTimerHandle ReloadTimerHandle;
+
+	UPROPERTY()
+		TArray<FTimerHandle> SkillAnimPlayTimerHandleList;
+
+private:
+	//Current number of multiple SkillAnimPlayTimers
+	UPROPERTY()
+		int SkillAnimPlayTimerCurr;
+
+	//Threshold number of multiple SkillAnimPlayTimer
+	UPROPERTY()
+		int SkillAnimPlayTimerThreshold;
+
 };

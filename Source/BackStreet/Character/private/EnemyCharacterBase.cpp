@@ -9,9 +9,11 @@
 #include "../../Item/public/ItemBase.h"
 #include "../../StageSystem/public/StageInfoStruct.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
+#include "../../Global/public/SkillManagerBase.h"
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "../public/MainCharacterBase.h"
 
 #define TURN_TIME_OUT_SEC 1.0f
 
@@ -30,6 +32,8 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	this->Tags.Add("Enemy");
+	// 난이도 조정용 Tag
+	this->Tags.Add("Easy");
 
 	static ConstructorHelpers::FObjectFinder<UDataTable> statTableFinder(TEXT("/Game/Character/EnemyCharacter/Data/D_EnemyStatDataTable.D_EnemyStatDataTable"));
 	//클래스를 제대로 명시하지 않았으면 크래시를 띄움
@@ -93,7 +97,16 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 
 	//const float knockBackStrength = 100000.0f;
-	
+
+
+	if (DamageCauser->ActorHasTag("Player"))
+	{
+		if (DamageCauser->ActorHasTag("Attack|Common"))
+		{
+			Cast<AMainCharacterBase>(DamageCauser)->AddSkillGauge();
+			DamageCauser->Tags.Remove("Attack|Common");
+		}
+	}	
 
 	//데미지가 전체 체력의 20% 미만이면 넉백이 출력되지 않는다.
 	if(DamageAmount >= GetCharacterStat().CharacterMaxHP * 0.2f)
@@ -112,6 +125,22 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 void AEnemyCharacterBase::TryAttack()
 {
 	Super::TryAttack();
+}
+
+void AEnemyCharacterBase::TrySkill()
+{
+	check(GetCurrentWeaponRef() != nullptr);
+
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Skill
+		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+
+	if (GetCurrentWeaponRef()->WeaponID == 0)
+	{
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("The Skill Is Not Available")), FColor::White);
+		return;
+	}
+
+	Super::TrySkill();
 }
 
 void AEnemyCharacterBase::Attack()

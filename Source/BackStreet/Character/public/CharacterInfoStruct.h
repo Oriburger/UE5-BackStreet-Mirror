@@ -5,6 +5,7 @@
 #include "Sound/SoundCue.h"
 #include "NiagaraSystem.h"
 #include "CharacterInfoEnum.h"
+#include "../../SkillSystem/public/SkillInfoStruct.h"
 #include "CharacterInfoStruct.generated.h"
 
 UENUM(BlueprintType)
@@ -78,6 +79,10 @@ public:
 	//PlayerMaxHP는 1.0f
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float CharacterCurrHP;
+
+	//Player Combo게이지
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float CharacterCurrSkillGauge;
 };
 
 USTRUCT(BlueprintType)
@@ -122,8 +127,8 @@ public:
 	
 	//스폰할 적 스켈레탈 메시 정보 저장
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TSoftObjectPtr<UAnimBlueprint> AnimClass;
-
+		UAnimBlueprintGeneratedClass* AnimBlueprint;
+	
 	//근접 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> MeleeAttackAnimMontageList;
@@ -143,6 +148,10 @@ public:
 	//타격 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> HitAnimMontageList;
+
+	//무기 ID, 스킬 애니메이션/ Map으로 관리
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TMap<int32, FSkillAnimMontageStruct> SkillAnimMontageMap;
 
 	//구르기 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")

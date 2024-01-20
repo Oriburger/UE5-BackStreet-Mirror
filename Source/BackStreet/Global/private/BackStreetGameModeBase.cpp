@@ -12,6 +12,7 @@
 #include "../../Character/public/CharacterBase.h"
 #include "../../Character/public/MainCharacterBase.h"
 #include "../public/AssetManagerBase.h"
+#include "../public/SkillManagerBase.h"
 
 ABackStreetGameModeBase::ABackStreetGameModeBase()
 {
@@ -48,6 +49,9 @@ void ABackStreetGameModeBase::InitializeGame()
 		DebuffManager = NewObject<UDebuffManager>(this, UDebuffManager::StaticClass(), FName("BuffDebuffManager"));
 		DebuffManager->InitDebuffManager(this);
 
+		//------ Global Skill Manager √ ±‚»≠ --------
+		SkillManagerBase = NewObject<USkillManagerBase>(this, USkillManagerBase::StaticClass(), FName("SkillManagerBase"));
+		SkillManagerBase->InitSkillManagerBase(this);
 	}
 }
 

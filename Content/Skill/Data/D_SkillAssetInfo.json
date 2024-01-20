@@ -1,0 +1,90 @@
+[
+	{
+		"Name": "0",
+		"SkillID": 0,
+		"SkillName": "None",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [],
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "1111",
+		"SkillID": 1111,
+		"SkillName": "Teleport",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [
+			"None"
+		],
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "1112",
+		"SkillID": 1112,
+		"SkillName": "Dash",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [
+			"/Game/Asset/StarterContent/Audio/Collapse_Cue.Collapse_Cue"
+		],
+		"SkillIconImage": "None"
+	}
+]
