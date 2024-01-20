@@ -73,7 +73,8 @@ void UBTStateManageServiceBase::UpdateAIState()
 		}
 		else
 		{
-			AIBehaviorState = EAIBehaviorType::E_Return;
+			AIBehaviorState = EAIBehaviorType::E_Patrol;
+			//AIBehaviorState = EAIBehaviorType::E_Return;
 		}
 	}
 	else if (CheckChaseState())

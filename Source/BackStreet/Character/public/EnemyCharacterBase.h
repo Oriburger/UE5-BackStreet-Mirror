@@ -32,27 +32,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|UI")
 		class UWidgetComponent* FloatingHpBar;
 
-// ----- 기본 프로퍼티 -----------
-public:
-	//적이 최초로 소유하는 무기의 ID
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		int32 DefaultWeaponID = 11100;
-
-	//최대 스폰할 아이템의 개수. 미션 아이템은 무시.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem", meta = (UIMin = 0, UIMax = 2))
-		int32 MaxSpawnItemCount;
-
-	//적이 죽고 스폰할 아이템의 Type 리스트 (각 아이템은 Idx로 구별)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
-		TArray<EItemCategoryInfo> SpawnItemTypeList;
-
-	//적이 죽구 스폰할 아이템 ID 리스트 (각 아이템은 Idx로 구별)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
-		TArray<uint8> SpawnItemIDList;
-
-	//적이 죽고 스폰할 아이템의 스폰 확률 리스트  (0.0f ~ 1.0f),  (각 아이템은 Idx로 구별)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
-		TArray<float> ItemSpawnProbabilityList;
+protected:
+	//Stat data of enemy character including stat, default weapon, drop info
+	//EnemyStatStruct.EnemyStat member initializes the parent's member CharacterStat
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay")
+		FEnemyStatStruct EnemyStat;
 
 // ----- Action ---------------
 public:
@@ -84,15 +68,15 @@ public:
 
 // ----- 캐릭터 스탯 및 상태 관련 ---------
 public:
+	//Initialize EnemyCharacter except asset info.
+	//+) It is better to use virtual function 'initCharacter' to all character classes (enemy, main, parent)
 	UFUNCTION(BlueprintCallable)
-		void InitEnemyStat();
+		void InitEnemyCharacter(int32 NewCharacterID);
 
-protected:
+private:
+	//Set default weapon actor using weapon inventory
 	UFUNCTION()
 		void SetDefaultWeapon();
-
-	UFUNCTION()
-		void SetDefaultStat();
 
 	UFUNCTION()
 		void SpawnDeathItems();
@@ -100,6 +84,10 @@ protected:
 private:
 	UPROPERTY()
 		float DefaultKnockBackStrength = 2000.0f;
+
+	//적의 스탯 테이블
+	UPROPERTY()
+		UDataTable* EnemyStatTable;
 
 // ---- VFX ---------------------
 public:
