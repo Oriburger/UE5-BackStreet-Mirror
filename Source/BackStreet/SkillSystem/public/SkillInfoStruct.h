@@ -31,7 +31,7 @@ public:
 		TMap<FName, float> SkillRareVariableMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<FName, float> SkillRegendVariableMap;
+		TMap<FName, float> SkillLegendVariableMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		TMap<FName, float> SkillMythicVariableMap;
@@ -124,9 +124,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float SkillRareReq = 2.0;
 
-	// regend skill gauge requirement
+	// Legend skill gauge requirement
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float SkillRegendReq = 3.0;
+		float SkillLegendReq = 3.0;
 
 	// mythic skill gauge requirement
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

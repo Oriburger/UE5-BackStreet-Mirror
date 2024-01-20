@@ -61,10 +61,10 @@ void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& New
 				}
 				break;
 
-			case ESkillGrade::E_Regend:
-				if (!SkillInfo.SkillRegendVariableMap.IsEmpty())
+			case ESkillGrade::E_Legend:
+				if (!SkillInfo.SkillLegendVariableMap.IsEmpty())
 				{
-					SkillGradeVariableMap = SkillInfo.SkillRegendVariableMap;
+					SkillGradeVariableMap = SkillInfo.SkillLegendVariableMap;
 				}
 				break;
 

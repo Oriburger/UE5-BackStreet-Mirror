@@ -67,19 +67,19 @@ void USkillManagerBase::SetMainCharacterSkillGrade(AActor* NewCauser)
 		causer->UpdateCharacterState(currCharacterState);
 		UE_LOG(LogTemp, Log, TEXT("CommonSkill"));
 	}
-	else if (UKismetMathLibrary::InRange_FloatFloat(currSkillGauge, currWeaponStat.SkillGaugeInfo.SkillRareReq, currWeaponStat.SkillGaugeInfo.SkillRegendReq, true, false))
+	else if (UKismetMathLibrary::InRange_FloatFloat(currSkillGauge, currWeaponStat.SkillGaugeInfo.SkillRareReq, currWeaponStat.SkillGaugeInfo.SkillLegendReq, true, false))
 	{
 		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Rare;
 		currCharacterState.CharacterCurrSkillGauge -= currWeaponStat.SkillGaugeInfo.SkillRareReq;
 		causer->UpdateCharacterState(currCharacterState);
 		UE_LOG(LogTemp, Log, TEXT("RareSkill"));
 	}
-	else if (UKismetMathLibrary::InRange_FloatFloat(currSkillGauge, currWeaponStat.SkillGaugeInfo.SkillRegendReq, currWeaponStat.SkillGaugeInfo.SkillMythicReq, true, false))
+	else if (UKismetMathLibrary::InRange_FloatFloat(currSkillGauge, currWeaponStat.SkillGaugeInfo.SkillLegendReq, currWeaponStat.SkillGaugeInfo.SkillMythicReq, true, false))
 	{
-		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Regend;
-		currCharacterState.CharacterCurrSkillGauge -= currWeaponStat.SkillGaugeInfo.SkillRegendReq;
+		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Legend;
+		currCharacterState.CharacterCurrSkillGauge -= currWeaponStat.SkillGaugeInfo.SkillLegendReq;
 		causer->UpdateCharacterState(currCharacterState);
-		UE_LOG(LogTemp, Log, TEXT("RegendSkill"));
+		UE_LOG(LogTemp, Log, TEXT("LegendSkill"));
 	}
 	else if (currSkillGauge >= currWeaponStat.SkillGaugeInfo.SkillMythicReq)
 	{
@@ -112,7 +112,7 @@ void USkillManagerBase::SetEnemyCharacterSkillGrade(AActor* NewCauser)
 	}
 	else if (causer->ActorHasTag("Hard"))
 	{
-		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Regend;
+		currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_Legend;
 	}
 	else if (causer->ActorHasTag("Extreme"))
 	{
