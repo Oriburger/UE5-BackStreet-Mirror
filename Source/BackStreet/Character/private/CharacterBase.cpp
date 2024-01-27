@@ -379,6 +379,75 @@ void ACharacterBase::ResetAtkIntervalTimer()
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 }
 
+TArray<AActor*> ACharacterBase::CheckTargetList()
+{
+	if (!GetCurrentWeaponRef()->GetWeaponStat().TraceInfo.IsTraceNeeded) return TArray<AActor*>();
+	TEnumAsByte<EObjectTypeQuery> pawnTypeQuery = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
+	TArray<AActor*> overlapResultList, targetList;
+	TArray<FHitResult> hitResultList;
+	FCollisionQueryParams collisionQueryParam;
+
+	FVector traceStartPos = GetCurrentWeaponRef()->WeaponMesh->GetSocketLocation("GrabPoint");
+	FVector traceEndPos = GetCurrentWeaponRef()->WeaponMesh->GetSocketLocation("End") / 2;
+
+	switch (GetCurrentWeaponRef()->GetWeaponStat().TraceInfo.TraceType)
+	{
+	case ETraceType::E_LineTrace:
+		collisionQueryParam.AddIgnoredActor(this);
+		collisionQueryParam.AddIgnoredActor(GetCurrentWeaponRef());
+
+		GetWorld()->LineTraceMultiByChannel(hitResultList, traceStartPos, traceEndPos, ECC_Visibility, collisionQueryParam);
+		for (auto& target : hitResultList)
+		{
+			if (target.bBlockingHit)
+			{
+				IgnoreActorList.Add(target.GetActor());
+				targetList.Add(target.GetActor());
+			}
+		}
+		return targetList;
+
+	case ETraceType::E_BoxTrace:
+		UKismetSystemLibrary::BoxOverlapActors(GetWorld(), traceStartPos, GetCurrentWeaponRef()->GetWeaponStat().TraceInfo.BoxTraceExtent,
+			{ pawnTypeQuery }, ACharacterBase::StaticClass(), IgnoreActorList, overlapResultList);
+		break;
+
+	case ETraceType::E_CapsuleTrace:
+		UKismetSystemLibrary::CapsuleOverlapActors(GetWorld(), traceStartPos, GetCurrentWeaponRef()->GetWeaponStat().TraceInfo.CapsuleTraceRadius,
+			GetCurrentWeaponRef()->GetWeaponStat().TraceInfo.CapsuleTraceHalfHight,
+			{ pawnTypeQuery }, ACharacterBase::StaticClass(), IgnoreActorList, overlapResultList);
+		break;
+
+	case ETraceType::E_SphereTrace:
+		UKismetSystemLibrary::SphereOverlapActors(GetWorld(), traceStartPos, GetCurrentWeaponRef()->GetWeaponStat().TraceInfo.SphereTraceRadius,
+			{ pawnTypeQuery }, ACharacterBase::StaticClass(), IgnoreActorList, overlapResultList);
+		break;
+
+	default:
+		return TArray<AActor*>();
+	}
+
+	collisionQueryParam.AddIgnoredActor(this);
+	collisionQueryParam.AddIgnoredActor(GetCurrentWeaponRef());
+	for (auto& target : overlapResultList)
+	{
+		if (!IsValid(target)) continue;
+		if (!target->ActorHasTag("Character")) continue;
+		if (Cast<ACharacterBase>(target)->GetIsActionActive(ECharacterActionType::E_Die)) continue;
+
+		FHitResult hitResult;
+		GetWorld()->LineTraceSingleByChannel(hitResult, GetActorLocation()
+			, target->GetActorLocation(), ECollisionChannel::ECC_Camera, collisionQueryParam);
+
+		if (hitResult.bBlockingHit && hitResult.GetActor() == target)
+		{
+			IgnoreActorList.Add(target);
+			targetList.Add(target);
+		}
+	}
+	return targetList;
+}
+
 void ACharacterBase::InitAsset(int32 NewEnemyID)
 {
 	AssetInfo = GetAssetInfoWithID(NewEnemyID);

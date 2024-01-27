@@ -16,6 +16,44 @@ enum class EEmotionType : uint8
 	E_Death				UMETA(DisplayName = "Death")
 };
 
+UENUM(BlueprintType)
+enum class ETraceType : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_LineTrace			UMETA(DisplayName = "LineTrace"),
+	E_BoxTrace			UMETA(DisplayName = "BoxTrace"),
+	E_CapsuleTrace 	UMETA(DisplayName = "CapsuleTrace"),
+	E_SphereTrace		UMETA(DisplayName = "SphereTrace")
+};
+
+USTRUCT(BlueprintType)
+struct FTraceInfo : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	bool IsTraceNeeded;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	ETraceType TraceType;
+	
+	//BoxTrace
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FVector BoxTraceExtent;
+
+	//CapsuleTrace
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		float CapsuleTraceRadius;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		float CapsuleTraceHalfHight;
+
+	//SphereTrace
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		float SphereTraceRadius;
+};
+
 USTRUCT(BlueprintType)
 struct FCharacterStatStruct : public FTableRowBase
 {

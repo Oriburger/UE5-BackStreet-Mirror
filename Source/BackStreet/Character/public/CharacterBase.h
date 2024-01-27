@@ -172,6 +172,16 @@ private:
 	//무기 액터를 스폰
 	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
 
+//---- Trace --------------------
+
+public:
+	UFUNCTION(BlueprintCallable)
+		TArray<AActor*> CheckTargetList();
+
+private:
+	UPROPERTY()
+		TArray<AActor*> IgnoreActorList;
+
 // ---- Asset -------------------
 public:
 	// 외부에서 Init하기위해 Call
