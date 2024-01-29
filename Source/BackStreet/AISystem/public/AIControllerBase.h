@@ -30,19 +30,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void DeactivateAI();
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|AI")
-		class UAIPerceptionComponent* AIPerceptionComponent;
-
 //--Perception 관련 ---------------------
-protected:
-	//시야 범위
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Perception")
-		float SightRadius;
-
-	//최대 시야 수명
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Perception")
-		float MaxSightAge = 5.5f;	
-
 public:
 	UFUNCTION(BlueprintCallable)
 		void UpdateTargetPerception(AActor* Actor, FAIStimulus Stimulus);
