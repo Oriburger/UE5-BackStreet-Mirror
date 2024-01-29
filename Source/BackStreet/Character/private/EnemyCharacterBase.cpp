@@ -32,11 +32,12 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	this->Tags.Add("Enemy");
-	// 난이도 조정용 Tag
 	this->Tags.Add("Easy");
 
+	
 	static ConstructorHelpers::FObjectFinder<UDataTable> statTableFinder(TEXT("/Game/Character/EnemyCharacter/Data/D_EnemyStatDataTable.D_EnemyStatDataTable"));
-	//클래스를 제대로 명시하지 않았으면 크래시를 띄움
+	
+	//if stat table is not identified on editor, crash event is force activated.
 	checkf(statTableFinder.Succeeded(), TEXT("Enemy Stat Table 탐색에 실패했습니다."));
 	if(statTableFinder.Succeeded())
 	{
@@ -59,7 +60,7 @@ void AEnemyCharacterBase::BeginPlay()
 
 void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 {
-	//DataTable로 부터 Read
+	// Read from dataTable
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
 
@@ -71,7 +72,7 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		UpdateCharacterStat(EnemyStat.CharacterStat);
 		CharacterStat.bInfinite = true;
 
-		//기본 무기 설정
+		//Set default weapon
 		SetDefaultWeapon();
 	}
 }
