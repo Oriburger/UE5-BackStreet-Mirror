@@ -15,19 +15,19 @@ struct FEnemyDropInfoStruct
 
 public:
 
-	//최대 스폰할 아이템의 개수. 미션 아이템은 무시.
+	//Max item count to spawn after dead event.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem", meta = (UIMin = 0, UIMax = 2))
 		int32 MaxSpawnItemCount;
 
-	//적이 죽고 스폰할 아이템의 Type 리스트 (각 아이템은 Idx로 구별)
+	//Item type list to spawn after dead event. (each item is identified by index)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
 		TArray<EItemCategoryInfo> SpawnItemTypeList;
 
-	//적이 죽구 스폰할 아이템 ID 리스트 (각 아이템은 Idx로 구별)
+	//Item ID list to spawn after dead event.(each item is identified by index)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
 		TArray<uint8> SpawnItemIDList;
 
-	//적이 죽고 스폰할 아이템의 스폰 확률 리스트  (0.0f ~ 1.0f),  (각 아이템은 Idx로 구별)
+	//Item spawn percentage list.  (0.0f ~ 1.0f), (each item is identified by index)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
 		TArray<float> ItemSpawnProbabilityList;
 };
@@ -47,15 +47,17 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FCharacterStatStruct CharacterStat;
 
-	//적이 최초로 소유하는 무기의 ID
+	//Enemy's Default Weapon ID
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		int32 DefaultWeaponID = 11100;
 
 	//Info data of dropping item when enemy dies
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FEnemyDropInfoStruct DropInfo;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
 		float CharacterAtkSpeed;	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<int32> EnemySkillList;
 
