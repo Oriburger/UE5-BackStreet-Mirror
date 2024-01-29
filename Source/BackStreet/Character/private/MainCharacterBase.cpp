@@ -362,8 +362,8 @@ void AMainCharacterBase::TryAttack()
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	this->Tags.Add("Attack|Common");
-	Super::TryAttack();
 	RotateToCursor();
+	Super::TryAttack();
 
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
 	GetWorld()->GetTimerManager().SetTimer(AttackLoopTimerHandle, FTimerDelegate::CreateLambda([&]() {
@@ -436,8 +436,8 @@ void AMainCharacterBase::Die()
 
 void AMainCharacterBase::RotateToCursor()
 {
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Attack) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
 	FRotator newRotation = PlayerControllerRef.Get()->GetRotationToCursor();
