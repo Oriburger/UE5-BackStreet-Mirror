@@ -47,6 +47,10 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+		void OnCapsuleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp
+						, FVector NormalImpulse, const FHitResult& Hit);
+
 // ------- 컴포넌트 ----------
 public:
 	//플레이어 메인 카메라 붐
@@ -174,12 +178,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual bool PickWeapon(int32 NewWeaponID) override;
 
-//------- 스킬 / 콤보----------
+//-------- Skill ---------------------
 public:
+	//Add Skill Gauge when attacking(E_Attack) Enemy.
 	UFUNCTION(BlueprintCallable)
 		void AddSkillGauge();
 
-// -------- VFX -----------
+// -------- VFX --------------------
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UNiagaraComponent* BuffNiagaraEmitter;

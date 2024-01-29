@@ -32,8 +32,17 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	this->Tags.Add("Enemy");
-	// 난이도 조정용 Tag
 	this->Tags.Add("Easy");
+
+	
+	static ConstructorHelpers::FObjectFinder<UDataTable> statTableFinder(TEXT("/Game/Character/EnemyCharacter/Data/D_EnemyStatDataTable.D_EnemyStatDataTable"));
+	
+	//if stat table is not identified on editor, crash event is force activated.
+	checkf(statTableFinder.Succeeded(), TEXT("Enemy Stat Table 탐색에 실패했습니다."));
+	if(statTableFinder.Succeeded())
+	{
+		EnemyStatTable = statTableFinder.Object;
+	}
 }
 
 void AEnemyCharacterBase::BeginPlay()
@@ -42,19 +51,42 @@ void AEnemyCharacterBase::BeginPlay()
 	
 	SpawnDefaultController();
 
+	InitEnemyCharacter(CharacterID);
 	InitFloatingHpWidget();
-	InitEnemyStat();
 	
 	SetDefaultWeapon();
 	InitDynamicMeshMaterial(GetMesh()->GetMaterial(0));
 }
 
-void AEnemyCharacterBase::InitEnemyStat()
+void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 {
-	GamemodeRef->UpdateCharacterStatWithID(this, CharacterID);
-	CharacterState.CharacterCurrHP = CharacterStat.CharacterMaxHP;
-	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.CharacterMoveSpeed;
-	SetDefaultStat();
+	// Read from dataTable
+	FString rowName = FString::FromInt(NewCharacterID);
+	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
+
+	if (newStat != nullptr)
+	{
+		EnemyStat = *newStat;
+
+		//Set CharacterStat with setting default additional stat bInfinite (infinite use of ammo)
+		UpdateCharacterStat(EnemyStat.CharacterStat);
+		CharacterStat.bInfinite = true;
+
+		//Set default weapon
+		SetDefaultWeapon();
+	}
+}
+
+void AEnemyCharacterBase::SetDefaultWeapon()
+{
+	if (IsValid(GetInventoryRef()))
+	{
+		bool result = GetInventoryRef()->AddWeapon(EnemyStat.DefaultWeaponID);
+		if (result)
+		{
+			Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();
+		}
+	}
 }
 
 float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -105,15 +137,11 @@ void AEnemyCharacterBase::TrySkill()
 
 	if (GetCurrentWeaponRef()->WeaponID == 0)
 	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬을 사용할 수 없습니다. ")), FColor::White);
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("The Skill Is Not Available")), FColor::White);
 		return;
 	}
 
-	//공격을 하고, 커서 위치로 Rotation을 조정
 	Super::TrySkill();
-
-	//Reset Weapon Skill Grade
-	FWeaponStatStruct weaponStat = GetCurrentWeaponRef()->GetWeaponStat();
 }
 
 void AEnemyCharacterBase::Attack()
@@ -151,33 +179,17 @@ void AEnemyCharacterBase::Die()
 	}
 }
 
-void AEnemyCharacterBase::SetDefaultWeapon()
-{
-	if (IsValid(GetInventoryRef()))
-	{
-		bool result = GetInventoryRef()->AddWeapon(DefaultWeaponID);
-		if (result)
-		{
-			Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();
-		}
-	}
-}
-
-void AEnemyCharacterBase::SetDefaultStat()
-{
-	CharacterStat.bInfinite = true;
-}
-
 void AEnemyCharacterBase::SpawnDeathItems()
 {
-	int32 totalSpawnItemCount = UKismetMathLibrary::RandomIntegerInRange(0, MaxSpawnItemCount);
+	FEnemyDropInfoStruct dropInfo = EnemyStat.DropInfo;
+
+	int32 totalSpawnItemCount = UKismetMathLibrary::RandomIntegerInRange(0, dropInfo.MaxSpawnItemCount);
 	int32 trySpawnCount = 0; //스폰 시도를 한 횟수
 
 	TArray<AItemBase*> spawnedItemList;
 
-	UE_LOG(LogTemp, Warning, TEXT("totalSpawnItemCount %d"), totalSpawnItemCount);
-
-	if (SpawnItemTypeList.IsValidIndex(0) && SpawnItemTypeList[0] == EItemCategoryInfo::E_Mission)
+	if (dropInfo.SpawnItemTypeList.IsValidIndex(0) 
+		&& dropInfo.SpawnItemTypeList[0] == EItemCategoryInfo::E_Mission)
 	{
 		/*AItemBase* newItem = GamemodeRef->SpawnItemToWorld(SpawnItemIDList[0], GetActorLocation() + FMath::VRand() * 10.0f);
 		if (IsValid(newItem))
@@ -192,12 +204,13 @@ void AEnemyCharacterBase::SpawnDeathItems()
 		{
 			if (++trySpawnCount > totalSpawnItemCount * 3) break; //스폰할 아이템 개수의 3배만큼 시도
 
-			const int32 itemIdx = UKismetMathLibrary::RandomIntegerInRange(0, SpawnItemIDList.Num() - 1);
-			if (!SpawnItemTypeList.IsValidIndex(itemIdx) || !ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
+			const int32 itemIdx = UKismetMathLibrary::RandomIntegerInRange(0, dropInfo.SpawnItemIDList.Num() - 1);
+			if (!dropInfo.SpawnItemTypeList.IsValidIndex(itemIdx)
+				|| !dropInfo.ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
 
-			const uint8 itemType = (uint8)SpawnItemTypeList[itemIdx];
-			const uint8 itemID = SpawnItemIDList[itemIdx];
-			const float spawnProbability = ItemSpawnProbabilityList[itemIdx];
+			const uint8 itemType = (uint8)dropInfo.SpawnItemTypeList[itemIdx];
+			const uint8 itemID = dropInfo.SpawnItemIDList[itemIdx];
+			const float spawnProbability = dropInfo.ItemSpawnProbabilityList[itemIdx];
 
 			if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
 			{
@@ -256,7 +269,6 @@ void AEnemyCharacterBase::Turn(float Angle)
 float AEnemyCharacterBase::PlayPreChaseAnimation()
 {
 	if (PreChaseAnimMontage == nullptr) return 0.0f;
-
 	return PlayAnimMontage(PreChaseAnimMontage);
 }
 

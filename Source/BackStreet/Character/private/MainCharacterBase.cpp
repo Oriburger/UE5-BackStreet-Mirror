@@ -55,6 +55,7 @@ AMainCharacterBase::AMainCharacterBase()
 
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
 
+	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
 
 	this->bUseControllerRotationYaw = false;
 	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
@@ -82,8 +83,20 @@ void AMainCharacterBase::BeginPlay()
 void AMainCharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	UpdateWallThroughEffect();
+	//UpdateWallThroughEffect();
 }
+
+void AMainCharacterBase::OnCapsuleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if (!IsValid(OtherActor) || OtherActor->IsActorBeingDestroyed() || !OtherActor->ActorHasTag("Character")) return;
+
+	FVector impulse = OtherActor->GetActorLocation() - GetActorLocation();
+	impulse.Z = 0;
+	impulse.Normalize();
+	impulse = impulse * ((GetVelocity().Length() == 0.0f ? 50.0f : 500.0f) * 100.0f);
+	Cast<ACharacterBase>(OtherActor)->GetCharacterMovement()->AddImpulse(impulse);
+}
+
 
 // Called to bind functionality to input
 void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -352,8 +365,8 @@ void AMainCharacterBase::TryAttack()
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	this->Tags.Add("Attack|Common");
-	Super::TryAttack();
 	RotateToCursor();
+	Super::TryAttack();
 
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
 	GetWorld()->GetTimerManager().SetTimer(AttackLoopTimerHandle, FTimerDelegate::CreateLambda([&]() {
@@ -366,19 +379,18 @@ void AMainCharacterBase::TrySkill()
 {
 	check(GetCurrentWeaponRef() != nullptr);
 
-	//if CharacterActionType is E_Skill or E_Idle return
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	 
-	if (GetCurrentWeaponRef()->WeaponID == 0||GetCharacterState().CharacterCurrSkillGauge==0)
+	if (GetCurrentWeaponRef()->WeaponID == 0||GetCharacterState().CharacterCurrSkillGauge<GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.SkillCommonReq)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬을 사용할 수 없습니다. ")), FColor::White);
 		return;
 	}
 
-	//공격을 하고, 커서 위치로 Rotation을 조정
 	Super::TrySkill();
 
+	//Try Skill and adjust rotation to cursor position
 	RotateToCursor();
 }
 
@@ -427,8 +439,8 @@ void AMainCharacterBase::Die()
 
 void AMainCharacterBase::RotateToCursor()
 {
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Attack) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
 	FRotator newRotation = PlayerControllerRef.Get()->GetRotationToCursor();
@@ -586,7 +598,7 @@ void AMainCharacterBase::DeactivateBuffEffect()
 }
 
 void AMainCharacterBase::UpdateWallThroughEffect()
-{
+{/*
 	if (!IsValid(GetWorld())) return;
 	FHitResult hitResult;
 	const FVector& traceBeginPos = FollowingCamera->GetComponentLocation();
@@ -606,7 +618,7 @@ void AMainCharacterBase::UpdateWallThroughEffect()
 			InitDynamicMeshMaterial(NormalMaterial);
 			bIsWallThroughEffectActivated = false;
 		}
-	}
+	}*/
 }
 
 void AMainCharacterBase::SetFacialDamageEffect(bool NewState)

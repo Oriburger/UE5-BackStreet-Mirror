@@ -17,12 +17,6 @@
 ABackStreetGameModeBase::ABackStreetGameModeBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Character/EnemyCharacter/Data/D_EnemyStatDataTable.D_EnemyStatDataTable"));
-	if (DataTable.Succeeded())
-	{
-		EnemyStatTable = DataTable.Object;
-	}
-
 }
 
 void ABackStreetGameModeBase::BeginPlay()
@@ -108,27 +102,5 @@ void ABackStreetGameModeBase::UpdateCharacterStat(ACharacterBase* TargetCharacte
 	if (IsValid(TargetCharacter))
 	{
 		TargetCharacter->UpdateCharacterStat(NewStat);
-	}
-}
-
-void ABackStreetGameModeBase::UpdateCharacterStatWithID(ACharacterBase* TargetCharacter, const uint32 CharacterID)
-{
-	if (IsValid(TargetCharacter) && TargetCharacter->ActorHasTag("Enemy")&&CharacterID!=0)
-	{
-		//DataTable·Î ºÎÅÍ Read
-		FString rowName = FString::FromInt(CharacterID);
-		FEnemyStatStruct* typeInfo = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
-
-		if (typeInfo)
-		{
-			FCharacterStatStruct NewStat;
-			NewStat.CharacterMaxHP = typeInfo->CharacterMaxHP;
-			NewStat.CharacterDefense = typeInfo->CharacterDefense;
-			NewStat.CharacterAtkSpeed = typeInfo->CharacterAtkSpeed;
-			NewStat.CharacterAtkMultiplier = typeInfo->CharacterAtkMultiplier;	
-			NewStat.CharacterMoveSpeed = typeInfo->CharacterMoveSpeed;
-
-			TargetCharacter->UpdateCharacterStat(NewStat);
-		}
 	}
 }

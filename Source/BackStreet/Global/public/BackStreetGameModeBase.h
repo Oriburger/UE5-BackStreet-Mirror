@@ -70,9 +70,6 @@ public:
 		void UpdateCharacterStat(class ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat);
 
 	UFUNCTION()
-		void UpdateCharacterStatWithID(class ACharacterBase* TargetCharacter, const uint32 CharacterID);
-
-	UFUNCTION()
 		class UDebuffManager* GetGlobalDebuffManagerRef() { return DebuffManager; }
 
 	UFUNCTION(BlueprintCallable)
@@ -92,17 +89,6 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void PlayUIAnimation(FName AnimationName);
-
-
-// ------ Data Table -----------------------------
-protected:
-	//적의 스탯 테이블
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* EnemyStatTable;
-
-	//발사체 스탯 테이블
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* ProjectileStatTable;
 
 
 // ----- Class Info ------------------------------------ 
