@@ -65,8 +65,4 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintreadOnly)
 		FSkillSetInfo SkillSetInfo;
-
-	//Info data of dropping item when enemy dies
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		FEnemyDropInfoStruct DropInfo;
 };

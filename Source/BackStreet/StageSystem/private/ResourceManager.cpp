@@ -59,47 +59,6 @@ void AResourceManager::SpawnStageActor(class AStageData* Target)
 
 void AResourceManager::SpawnBossMonster(class AStageData* Target)
 {
-	ensure(Target != nullptr);
-
-	TArray<FVector> monsterSpawnPoint = Target->GetMonsterSpawnPoints();
-	if (monsterSpawnPoint.IsEmpty())
-		return;
-	for (int32 i = 0; i < 100; i++)
-	{
-		int32 selectidxA = FMath::RandRange(0, monsterSpawnPoint.Num() - 1);
-		int32 selectidxB = FMath::RandRange(0, monsterSpawnPoint.Num() - 1);
-		FVector temp;
-
-		temp = monsterSpawnPoint[selectidxA];
-		monsterSpawnPoint[selectidxA] = monsterSpawnPoint[selectidxB];
-		monsterSpawnPoint[selectidxB] = temp;
-
-	}
-
-	if (enemyIDList.IsEmpty())
-		return;
-	for (int32 i = 0; i < spawnNum; i++)
-	{
-		int32 enemyIDIdx = FMath::RandRange(0, enemyIDList.Num() - 1);
-
-		FActorSpawnParameters actorSpawnParameters;
-		FVector spawnLocation = monsterSpawnPoint[i];
-		spawnLocation = spawnLocation + FVector(0, 0, 200);
-		actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		
-		AEnemyCharacterBase* monster = GetWorld()->SpawnActor<AEnemyCharacterBase>(EnemyAssets[0], spawnLocation, FRotator::ZeroRotator, actorSpawnParameters);
-		if (!IsValid(monster))
-			return;
-		Target->AddMonsterList(monster);
-		UE_LOG(LogTemp, Log, TEXT("AResourceManager::SpawnMonster SetEnemyID %d"), enemyIDList[enemyIDIdx]);
-		monster->CharacterID = enemyIDList[enemyIDIdx];
-		monster->InitEnemyCharacter(enemyIDList[enemyIDIdx]);
-		monster->InitAsset(enemyIDList[enemyIDIdx]);
-	}
-}
-
-void AResourceManager::SpawnBossMonster(class AStageData* Target)
-{
 	if (!IsValid(Target))
 		return;
 	FActorSpawnParameters actorSpawnParameters;
@@ -241,7 +200,7 @@ AEnemyCharacterBase* AResourceManager::CreateMonster(class AStageData* Target, i
 	Target->AddMonsterList(monster);
 
 	monster->CharacterID = EnemyID;
-	monster->InitEnemyStat();
+	monster->InitEnemyCharacter(EnemyID);
 	monster->InitAsset(EnemyID);
 	WaveManager->ManageWaveMonsterCount(Target, monster->CharacterID, true);
 
