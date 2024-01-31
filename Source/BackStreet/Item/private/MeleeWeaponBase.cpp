@@ -65,7 +65,6 @@ void AMeleeWeaponBase::ClearAllTimerHandle()
 void AMeleeWeaponBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
 	Super::UpdateWeaponStat(NewStat);
-	// State 초기화
 }
 
 void AMeleeWeaponBase::InitWeaponAsset()
@@ -112,8 +111,8 @@ TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
 	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), traceStartPos, traceRadius, { pawnTypeQuery }
 											 , ACharacterBase::StaticClass(), IgnoreActorList, overlapResultList);
 	
-	//오버랩 결과를 돌며 실제 데미지 타겟을 찾아낸다. 
-	//캐릭터 - 타겟 방향의 라인트레이스에서 중간에 장애물이 있다면 타겟은 유효하지 않다.
+	//Find target to apply damage in overlap result array
+	//Character - Check if there's any obstacle between causer and target.
 	FCollisionQueryParams collisionQueryParam;
 	collisionQueryParam.AddIgnoredActor(OwnerCharacterRef.Get());
 	collisionQueryParam.AddIgnoredActor(this);
@@ -148,25 +147,25 @@ void AMeleeWeaponBase::MeleeAttack()
 
 	for (auto& target : targetList)
 	{
-		//target가 Valid하다면 아래 조건문에서 데미지를 가함
+		//if target is valid, apply damage
 		if (IsValid(target))
 		{
-			//효과를 출력
+			//Activate Melee Hit Effect
 			ActivateMeleeHitEffect(target->GetActorLocation());
 
-			//데미지를 주고, 중복 체크를 해준다.
+			//Apply Damage
 			UGameplayStatics::ApplyDamage(target, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate * OwnerCharacterRef.Get()->GetCharacterStat().CharacterAtkMultiplier
 				, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
 			MeleeLineTraceQueryParams.AddIgnoredActor(target); 
 
-			//디버프도 부여
+			//Apply Debuff 
 			if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
 			{
 				GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(target)
 					, OwnerCharacterRef.Get(), WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
 			}
 
-			//내구도를 업데이트
+			//Update Durability
 			UpdateDurabilityState();
 		}
 	}

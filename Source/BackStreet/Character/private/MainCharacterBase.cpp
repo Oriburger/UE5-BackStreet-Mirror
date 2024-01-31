@@ -55,6 +55,7 @@ AMainCharacterBase::AMainCharacterBase()
 
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
 
+	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
 
 	this->bUseControllerRotationYaw = false;
 	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
@@ -84,6 +85,18 @@ void AMainCharacterBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	//UpdateWallThroughEffect();
 }
+
+void AMainCharacterBase::OnCapsuleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if (!IsValid(OtherActor) || OtherActor->IsActorBeingDestroyed() || !OtherActor->ActorHasTag("Character")) return;
+
+	FVector impulse = OtherActor->GetActorLocation() - GetActorLocation();
+	impulse.Z = 0;
+	impulse.Normalize();
+	impulse = impulse * ((GetVelocity().Length() == 0.0f ? 50.0f : 500.0f) * 100.0f);
+	Cast<ACharacterBase>(OtherActor)->GetCharacterMovement()->AddImpulse(impulse);
+}
+
 
 // Called to bind functionality to input
 void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -349,8 +362,8 @@ void AMainCharacterBase::TryAttack()
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	this->Tags.Add("Attack|Common");
-	Super::TryAttack();
 	RotateToCursor();
+	Super::TryAttack();
 
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
 	GetWorld()->GetTimerManager().SetTimer(AttackLoopTimerHandle, FTimerDelegate::CreateLambda([&]() {
@@ -423,8 +436,8 @@ void AMainCharacterBase::Die()
 
 void AMainCharacterBase::RotateToCursor()
 {
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Attack) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
 	FRotator newRotation = PlayerControllerRef.Get()->GetRotationToCursor();
