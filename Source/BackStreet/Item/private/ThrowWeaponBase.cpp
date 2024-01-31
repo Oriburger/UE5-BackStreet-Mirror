@@ -117,8 +117,6 @@ void AThrowWeaponBase::CalculateThrowDirection(FVector NewDestination)
 
 	ThrowDestination = NewDestination;
 
-	DrawDebugSphere(GetWorld(), ThrowDestination, 8.0f, 12, FColor::Red, false, 0.025, 0, 5.0f);
-
 	ThrowDirection = FVector(0.0f);
 	const float initialSpeed = FMath::Clamp(ProjectileStat.ProjectileSpeed, 900.0f, 2000.0f);
 	const bool bIsHighArc = UKismetMathLibrary::Vector_Distance(GetActorLocation(), ThrowDestination) >= (MAX_THROW_DISTANCE / 2.0f);
