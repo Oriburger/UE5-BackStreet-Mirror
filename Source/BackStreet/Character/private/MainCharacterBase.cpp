@@ -170,7 +170,7 @@ void AMainCharacterBase::UpdateAimingState()
 	FPredictProjectilePathResult predictProjectilePathResult = Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->GetProjectilePathPredictResult();
 	for (FPredictProjectilePathPointData& point : predictProjectilePathResult.PathData)
 	{
-		//DrawDebugSphere(---);
+		//DrawDebugSphere(GetWorld(), point.Location, 3.0f, 2, FColor::Red, false, 0.015f, 0, 3.0f);
 	}
 }
 
@@ -444,6 +444,7 @@ void AMainCharacterBase::RotateToCursor()
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
 	FRotator newRotation = PlayerControllerRef.Get()->GetRotationToCursor();
+	//DrawDebugSphere(GetWorld(), PlayerControllerRef.Get()->GetCursorDeprojectionWorldLocation(), 10.0f, 5, FColor::Yellow, false, 1.0f, 1, 5);
 	if (newRotation != FRotator())
 	{
 		newRotation.Pitch = newRotation.Roll = 0.0f;
