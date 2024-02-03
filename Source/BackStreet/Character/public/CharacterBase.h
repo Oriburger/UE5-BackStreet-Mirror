@@ -74,7 +74,7 @@ public:
 		float TakeDebuffDamage(float DamageAmount, ECharacterDebuffType DebuffType, AActor* Causer);
 
 	UFUNCTION(BlueprintCallable)
-		void TakeKnockBack(AActor* Causer, float Strength);
+		void ApplyKnockBack(AActor* Target, float Strength);
 
 	//공격Action 사이의 Interval을 관리하는 타이머를 해제
 	UFUNCTION()
@@ -171,6 +171,16 @@ private:
 
 	//무기 액터를 스폰
 	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
+
+//---- Trace --------------------
+
+public:
+	UFUNCTION(BlueprintCallable)
+		TArray<AActor*> CheckTargetList();
+
+private:
+	UPROPERTY()
+		TArray<AActor*> IgnoreActorList;
 
 // ---- Asset -------------------
 public:

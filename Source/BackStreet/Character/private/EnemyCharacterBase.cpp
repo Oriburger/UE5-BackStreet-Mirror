@@ -77,12 +77,6 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		}
 	}	
 
-	//데미지가 전체 체력의 20% 미만이면 넉백이 출력되지 않는다.
-	if(DamageAmount >= GetCharacterStat().CharacterMaxHP * 0.2f)
-	{
-		TakeKnockBack(DamageCauser, DefaultKnockBackStrength);
-	}
-
 	GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, FTimerDelegate::CreateLambda([&]() {
 		if (CharacterState.CharacterActionState == ECharacterActionType::E_Hit)
 			ResetActionState();
