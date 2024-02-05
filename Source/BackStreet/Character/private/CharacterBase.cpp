@@ -185,19 +185,19 @@ void ACharacterBase::TakeHeal(float HealAmountRate, bool bIsTimerEvent, uint8 Bu
 	return;
 }
 
-void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
+void ACharacterBase::TakeKnockBack(AActor* Causer, float Strength)
 {
-	if (!IsValid(Target) || Target->IsActorBeingDestroyed()) return;
+	if (!IsValid(Causer) || Causer->IsActorBeingDestroyed()) return;
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return;
 
-	FVector knockBackDirection = Target->GetActorLocation() - GetActorLocation();
+	FVector knockBackDirection = GetActorLocation() - Causer->GetActorLocation();
 	knockBackDirection = knockBackDirection.GetSafeNormal();
 	knockBackDirection *= Strength;
 	knockBackDirection.Z = 0.0f;
 
 	//GetCharacterMovement()->AddImpulse(knockBackDirection);
-	Cast<ACharacterBase>(Target)->LaunchCharacter(knockBackDirection, true, false);
-	Cast<ACharacterBase>(Target)->CharacterState.CharacterActionState = ECharacterActionType::E_Hit;
+	LaunchCharacter(knockBackDirection, true, false);
+	CharacterState.CharacterActionState = ECharacterActionType::E_Hit;
 }
 
 void ACharacterBase::Die()

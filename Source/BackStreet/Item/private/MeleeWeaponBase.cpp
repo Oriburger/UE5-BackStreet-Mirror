@@ -154,7 +154,6 @@ void AMeleeWeaponBase::MeleeAttack()
 			//효과를 출력
 			ActivateMeleeHitEffect(target->GetActorLocation());
 
-			OwnerCharacterRef.Get()->ApplyKnockBack(target, 2000.0f);
 			//데미지를 주고, 중복 체크를 해준다.
 			UGameplayStatics::ApplyDamage(target, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate
 				, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
