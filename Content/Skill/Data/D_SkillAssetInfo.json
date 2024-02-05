@@ -82,9 +82,63 @@
 		},
 		"EffectParticleList": [],
 		"DestroyEffectParticle": "None",
-		"SkillSoundList": [
-			"/Game/Asset/StarterContent/Audio/Collapse_Cue.Collapse_Cue"
-		],
+		"SkillSoundList": [],
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "1113",
+		"SkillID": 1113,
+		"SkillName": "WeaponTransform",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [],
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "1114",
+		"SkillID": 1114,
+		"SkillName": "KnockBack",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [],
 		"SkillIconImage": "None"
 	}
 ]

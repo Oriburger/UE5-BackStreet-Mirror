@@ -5,22 +5,99 @@
 		"SkillName": "None",
 		"SkillDescription": "None",
 		"SkillBaseClassRef": "None",
-		"SkillIconImage": "None"
+		"SkillCommonVariableMap":
+		{
+		},
+		"SkillRareVariableMap":
+		{
+		},
+		"SkillLegendVariableMap":
+		{
+		},
+		"SkillMythicVariableMap":
+		{
+		}
 	},
 	{
 		"Name": "1111",
 		"SkillID": 1111,
 		"SkillName": "Teleport",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/BPS_Teleport.BPS_Teleport_C'",
-		"SkillIconImage": "None"
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_Teleport.BPS_Teleport_C'",
+		"SkillCommonVariableMap":
+		{
+			"AttackRange": 2
+		},
+		"SkillRareVariableMap":
+		{
+			"AttackRange": 3
+		},
+		"SkillLegendVariableMap":
+		{
+		},
+		"SkillMythicVariableMap":
+		{
+		}
 	},
 	{
 		"Name": "1112",
 		"SkillID": 1112,
 		"SkillName": "Dash",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/BPS_Dash.BPS_Dash_C'",
-		"SkillIconImage": "None"
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_Dash.BPS_Dash_C'",
+		"SkillCommonVariableMap":
+		{
+		},
+		"SkillRareVariableMap":
+		{
+		},
+		"SkillLegendVariableMap":
+		{
+		},
+		"SkillMythicVariableMap":
+		{
+		}
+	},
+	{
+		"Name": "1113",
+		"SkillID": 1113,
+		"SkillName": "WeaponTransform",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_WeaponTransform.BPS_WeaponTransform_C'",
+		"SkillCommonVariableMap":
+		{
+		},
+		"SkillRareVariableMap":
+		{
+		},
+		"SkillLegendVariableMap":
+		{
+		},
+		"SkillMythicVariableMap":
+		{
+		}
+	},
+	{
+		"Name": "1114",
+		"SkillID": 1114,
+		"SkillName": "Knockback",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_Knockback.BPS_Knockback_C'",
+		"SkillCommonVariableMap":
+		{
+			"Knockback Energy": 1000
+		},
+		"SkillRareVariableMap":
+		{
+			"Knockback Energy": 2000
+		},
+		"SkillLegendVariableMap":
+		{
+			"Knockback Energy": 3000
+		},
+		"SkillMythicVariableMap":
+		{
+			"Knockback Energy": 4000
+		}
 	}
 ]

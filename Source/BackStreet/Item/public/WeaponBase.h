@@ -98,10 +98,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FWeaponStateStruct GetWeaponState() { return WeaponState; }
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void SetWeaponStat(FWeaponStatStruct NewStat) { WeaponStat = NewStat; }
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void SetWeaponState(FWeaponStateStruct NewState) { WeaponState = NewState; }
 
 	UFUNCTION()
