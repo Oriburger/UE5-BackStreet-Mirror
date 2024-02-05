@@ -28,16 +28,16 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		UStaticMeshComponent* SkillMesh;
 
-	UPROPERTY(BlueprintReadOnly)
-		AActor* Causer;
-
-	UPROPERTY(BlueprintReadWrite)
-		TArray<class ACharacterBase*> TargetList;
-
 //------- Default Property, Action -------------------
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Basic")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
 		int32 SkillID;
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
+		AActor* Causer;
+		
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
+		TArray<class ACharacterBase*> TargetList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TMap<FName, float> SkillGradeVariableMap;
