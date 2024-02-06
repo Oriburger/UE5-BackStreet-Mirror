@@ -53,7 +53,7 @@ bool UDebuffManager::SetDebuffTimer(ECharacterDebuffType DebuffType, ACharacterB
 
 	switch ((ECharacterDebuffType)DebuffType)
 	{
-		//----데미지 디버프-------------------
+	//----데미지 디버프-------------------
 	case ECharacterDebuffType::E_Burn:
 	case ECharacterDebuffType::E_Poison:
 		dotDamageDelegate.BindUFunction(Target, FName("TakeDebuffDamage"), Variable, DebuffType, Causer); \
