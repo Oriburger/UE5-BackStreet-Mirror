@@ -19,18 +19,16 @@
 		}
 	},
 	{
-		"Name": "1111",
-		"SkillID": 1111,
-		"SkillName": "Teleport",
+		"Name": "11100",
+		"SkillID": 11100,
+		"SkillName": "TaserHoop",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_Teleport.BPS_Teleport_C'",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_TaserHoop.BPS_TaserHoop_C'",
 		"SkillCommonVariableMap":
 		{
-			"AttackRange": 2
 		},
 		"SkillRareVariableMap":
 		{
-			"AttackRange": 3
 		},
 		"SkillLegendVariableMap":
 		{
@@ -40,9 +38,9 @@
 		}
 	},
 	{
-		"Name": "1112",
-		"SkillID": 1112,
-		"SkillName": "Dash",
+		"Name": "11101",
+		"SkillID": 11101,
+		"SkillName": "DashAttack",
 		"SkillDescription": "None",
 		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_Dash.BPS_Dash_C'",
 		"SkillCommonVariableMap":
@@ -59,28 +57,9 @@
 		}
 	},
 	{
-		"Name": "1113",
-		"SkillID": 1113,
-		"SkillName": "WeaponTransform",
-		"SkillDescription": "None",
-		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_WeaponTransform.BPS_WeaponTransform_C'",
-		"SkillCommonVariableMap":
-		{
-		},
-		"SkillRareVariableMap":
-		{
-		},
-		"SkillLegendVariableMap":
-		{
-		},
-		"SkillMythicVariableMap":
-		{
-		}
-	},
-	{
-		"Name": "1114",
-		"SkillID": 1114,
-		"SkillName": "Knockback",
+		"Name": "11200",
+		"SkillID": 11200,
+		"SkillName": "KnockBack",
 		"SkillDescription": "None",
 		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_Knockback.BPS_Knockback_C'",
 		"SkillCommonVariableMap":
@@ -98,6 +77,162 @@
 		"SkillMythicVariableMap":
 		{
 			"Knockback Energy": 4000
+		}
+	},
+	{
+		"Name": "11201",
+		"SkillID": 11201,
+		"SkillName": "Deflect",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_Deflect.BPS_Deflect_C'",
+		"SkillCommonVariableMap":
+		{
+			"Deflect Duration": 1
+		},
+		"SkillRareVariableMap":
+		{
+			"Deflect Duration": 2
+		},
+		"SkillLegendVariableMap":
+		{
+			"Deflect Duration": 3
+		},
+		"SkillMythicVariableMap":
+		{
+			"Deflect Duration": 4
+		}
+	},
+	{
+		"Name": "11300",
+		"SkillID": 11300,
+		"SkillName": "ElectricalShort",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_ElectricalShort.BPS_ElectricalShort_C'",
+		"SkillCommonVariableMap":
+		{
+		},
+		"SkillRareVariableMap":
+		{
+		},
+		"SkillLegendVariableMap":
+		{
+		},
+		"SkillMythicVariableMap":
+		{
+		}
+	},
+	{
+		"Name": "11500",
+		"SkillID": 11500,
+		"SkillName": "VangGaurd",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_VangGaurd.BPS_VangGaurd_C'",
+		"SkillCommonVariableMap":
+		{
+		},
+		"SkillRareVariableMap":
+		{
+		},
+		"SkillLegendVariableMap":
+		{
+		},
+		"SkillMythicVariableMap":
+		{
+		}
+	},
+	{
+		"Name": "11501",
+		"SkillID": 11501,
+		"SkillName": "MagneticCube",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_MagneticCube.BPS_MagneticCube_C'",
+		"SkillCommonVariableMap":
+		{
+		},
+		"SkillRareVariableMap":
+		{
+		},
+		"SkillLegendVariableMap":
+		{
+		},
+		"SkillMythicVariableMap":
+		{
+		}
+	},
+	{
+		"Name": "11502",
+		"SkillID": 11502,
+		"SkillName": "KettleBot",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_KettleBot.BPS_KettleBot_C'",
+		"SkillCommonVariableMap":
+		{
+		},
+		"SkillRareVariableMap":
+		{
+		},
+		"SkillLegendVariableMap":
+		{
+		},
+		"SkillMythicVariableMap":
+		{
+		}
+	},
+	{
+		"Name": "11600",
+		"SkillID": 11600,
+		"SkillName": "WeaponTransform",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_WeaponTransform.BPS_WeaponTransform_C'",
+		"SkillCommonVariableMap":
+		{
+		},
+		"SkillRareVariableMap":
+		{
+		},
+		"SkillLegendVariableMap":
+		{
+		},
+		"SkillMythicVariableMap":
+		{
+		}
+	},
+	{
+		"Name": "11700",
+		"SkillID": 11700,
+		"SkillName": "Arlert",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_Arlert.BPS_Arlert_C'",
+		"SkillCommonVariableMap":
+		{
+		},
+		"SkillRareVariableMap":
+		{
+		},
+		"SkillLegendVariableMap":
+		{
+		},
+		"SkillMythicVariableMap":
+		{
+		}
+	},
+	{
+		"Name": "99999",
+		"SkillID": 99999,
+		"SkillName": "Teleport",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_Teleport.BPS_Teleport_C'",
+		"SkillCommonVariableMap":
+		{
+		},
+		"SkillRareVariableMap":
+		{
+		},
+		"SkillLegendVariableMap":
+		{
+		},
+		"SkillMythicVariableMap":
+		{
 		}
 	}
 ]
