@@ -39,12 +39,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Basic")
 		int32 SkillID;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
 		TMap<FName, float> SkillGradeVariableMap;
 
 public:
-	//Reset Skill
-	UFUNCTION()
+	//Reset Skill (can use both c++, BP)
+	UFUNCTION(BlueprintNativeEvent)
 		void InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, int32 NewSkillID, float NewSkillStartTiming);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
@@ -75,11 +75,11 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* SkillAssetInfoTable;
 
-	//Current Asset info
-	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
+	//Current Skill Info
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		FSkillInfoStruct SkillInfo;
 
-	//Current Asset info
+	//Current Skill Asset Info
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
 		FSkillAssetInfoStruct SkillAssetInfo;
 

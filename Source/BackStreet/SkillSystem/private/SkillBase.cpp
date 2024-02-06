@@ -22,9 +22,9 @@ ASkillBase::ASkillBase()
 	SkillMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Skill_MESH"));
 	SkillMesh->SetupAttachment(DefaultSceneRoot);
 	
-	static ConstructorHelpers::FObjectFinder<UDataTable> assetInfoTableFinder(TEXT("/Game/Skill/Data/D_SkillAssetInfo.D_SkillAssetInfo"));
-	checkf(assetInfoTableFinder.Succeeded(), TEXT("AssetInfoTable class discovery failed."));
-	SkillAssetInfoTable = assetInfoTableFinder.Object;
+	static ConstructorHelpers::FObjectFinder<UDataTable> skillAssetInfoTableFinder(TEXT("/Game/Skill/Data/D_SkillAssetInfo.D_SkillAssetInfo"));
+	checkf(skillAssetInfoTableFinder.Succeeded(), TEXT("SkillAssetInfoTable class discovery failed."));
+	SkillAssetInfoTable = skillAssetInfoTableFinder.Object;
 }
 
 // Called when the game starts or when spawned
@@ -34,7 +34,7 @@ void ASkillBase::BeginPlay()
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
-void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, int32 NewSkillID, float NewSkillStartTiming)
+void ASkillBase::InitSkill_Implementation(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, int32 NewSkillID, float NewSkillStartTiming)
 {
 	TargetList.Empty();
 	Causer = NewCauser;
