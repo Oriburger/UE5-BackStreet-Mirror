@@ -112,6 +112,9 @@ struct FSkillGaugeInfo
 public:
 	GENERATED_USTRUCT_BODY()
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool IsSkillAvailable = 0;
+	
 	//skill gauge augmentation per one attack 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float SkillGaugeAug = 0.1;
