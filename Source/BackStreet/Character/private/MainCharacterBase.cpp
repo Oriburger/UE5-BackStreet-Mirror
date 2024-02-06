@@ -2,7 +2,6 @@
 #include "../public/MainCharacterBase.h"
 #include "../public/MainCharacterController.h"
 #include "../public/AbilityManagerBase.h"
-#include "../../Global/public/DebuffManager.h"
 #include "../../Item/public/WeaponBase.h"
 #include "../../Item/public/ThrowWeaponBase.h"
 #include "../../Item/public/WeaponInventoryBase.h"

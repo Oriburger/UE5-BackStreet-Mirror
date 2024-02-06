@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../../Global/public/BackStreet.h"
+#include "../public/CharacterBase.h"
 #include "Components/ActorComponent.h"
 #include "DebuffManagerComponent.generated.h"
 
@@ -21,10 +22,6 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
 //======= User Basic Function =======================
 public:
 	//Set the debuff timer to owner
@@ -33,7 +30,7 @@ public:
 
 	//clear all the debuff timer
 	UFUNCTION(BlueprintCallable)
-		void ClearDebuffManagerTimer();
+		void ClearDebuffManager();
 
 	//clear the resource of specific debuff timer
 	UFUNCTION(BlueprintCallable)
@@ -53,11 +50,11 @@ private:
 
 	//get the reference of debuff timer handle
 	UFUNCTION()
-		FTimerHandle GetResetTimerHandle(ECharacterDebuffType DebuffType);
+		FTimerHandle& GetResetTimerHandle(ECharacterDebuffType DebuffType);
 
 	//get the reference of debuff timer handle
 	UFUNCTION()
-		FTimerHandle GetDotDamageTimerHandle(ECharacterDebuffType DebuffType);
+		FTimerHandle& GetDotDamageTimerHandle(ECharacterDebuffType DebuffType);
 
 	//get the reset value of debuff
 	UFUNCTION()
@@ -69,9 +66,6 @@ private:
 
 //====== Property ===========================
 private:
-	//gamemode ref
-	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
-
 	//owner character ref
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 

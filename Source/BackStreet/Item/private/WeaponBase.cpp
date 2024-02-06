@@ -2,7 +2,6 @@
 
 #include "../public/WeaponBase.h"
 #include "Components/AudioComponent.h"
-#include "../../Global/public/DebuffManager.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../public/WeaponInventoryBase.h"
 #include "Kismet/KismetMathLibrary.h"

@@ -5,7 +5,6 @@
 #include "../public/ProjectileBase.h"
 #include "../public/WeaponBase.h"
 #include "../public/WeaponInventoryBase.h"
-#include "../../Global/public/DebuffManager.h"
 #include "NiagaraFunctionLibrary.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Character/public/MainCharacterBase.h"

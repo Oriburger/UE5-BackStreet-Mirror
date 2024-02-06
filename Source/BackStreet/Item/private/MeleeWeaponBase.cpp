@@ -4,7 +4,6 @@
 #include "../public/MeleeWeaponBase.h"
 #include "../public/WeaponBase.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "../../Global/public/DebuffManager.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define MAX_LINETRACE_POS_COUNT 6
@@ -159,11 +158,8 @@ void AMeleeWeaponBase::MeleeAttack()
 			MeleeLineTraceQueryParams.AddIgnoredActor(target); 
 
 			//Apply Debuff 
-			if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
-			{
-				GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(target)
-					, OwnerCharacterRef.Get(), WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
-			}
+			Cast<ACharacterBase>(target)->TryAddNewDebuff(WeaponStat.MeleeWeaponStat.DebuffType, OwnerCharacterRef.Get()
+												, WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
 
 			//Update Durability
 			UpdateDurabilityState();

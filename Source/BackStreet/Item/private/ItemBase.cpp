@@ -7,7 +7,6 @@
 #include "../../Character/public/CharacterBase.h"
 #include "../../Item/public/WeaponInventoryBase.h"
 #include "../../Character/public/MainCharacterBase.h"
-#include "../../Global/public/DebuffManager.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 #include "GameFramework/ProjectileMovementComponent.h"

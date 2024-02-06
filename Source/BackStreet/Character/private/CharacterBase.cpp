@@ -1,5 +1,5 @@
 #include "../public/CharacterBase.h"
-#include "../../Global/public/DebuffManager.h"
+#include "../public/DebuffManagerComponent.h"
 #include "../../Item/public/WeaponBase.h"
 #include "../../Item/public/RangedWeaponBase.h"
 #include "../../Item/public/WeaponInventoryBase.h"
@@ -35,6 +35,8 @@ ACharacterBase::ACharacterBase()
 	WeaponClassList.Add(meleeWeaponClassFinder.Class);
 	WeaponClassList.Add(throwWeaponClassFinder.Class);
 	WeaponClassList.Add(shootWeaponClassFinder.Class);
+
+	DebuffManagerComponent = CreateDefaultSubobject<UDebuffManagerComponent>(TEXT("DEBUFF_MANAGER"));
 
 	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
 }
@@ -91,17 +93,14 @@ bool ACharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor*
 {
 	if(!GamemodeRef.IsValid()) return false;
 	
-	if (!IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef())) return false;
-
-	bool result = GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(NewDebuffType, this, Causer, TotalTime, Value);
+	bool result = DebuffManagerComponent->SetDebuffTimer(NewDebuffType, Causer, TotalTime, Value);
 	return result; 
 }
 
 bool ACharacterBase::GetDebuffIsActive(ECharacterDebuffType DebuffType)
 {
 	if(!GamemodeRef.IsValid()) return false;
-	if (!IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef())) return false;
-	return	GamemodeRef.Get()->GetGlobalDebuffManagerRef()->GetDebuffIsActive(DebuffType, this);
+	return DebuffManagerComponent->GetDebuffIsActive(DebuffType);
 }
 
 void ACharacterBase::UpdateCharacterStat(FCharacterStatStruct NewStat)
@@ -228,7 +227,7 @@ void ACharacterBase::Die()
 	}
 	//모든 타이머를 제거한다. (타이머 매니저의 것도)
 	ClearAllTimerHandle();
-	GamemodeRef->GetGlobalDebuffManagerRef()->ClearAllDebuffTimer(this);
+	DebuffManagerComponent->ClearDebuffManager();
 
 	//무적 처리를 하고, Movement를 비활성화
 	CharacterStat.bIsInvincibility = true;
