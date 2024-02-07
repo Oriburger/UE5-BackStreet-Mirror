@@ -182,10 +182,6 @@ bool AMeleeWeaponBase::CheckMeleeAttackTarget(FHitResult& hitResult, const TArra
 			bool bHit = GetWorld()->SweepSingleByChannel(hitResult, beginPoint, endPoint, FQuat::Identity, ECollisionChannel::ECC_Camera
 														, FCollisionShape::MakeCapsule(traceRadius, traceHalfHeight), MeleeLineTraceQueryParams);
 
-			//DrawDebugCapsule(GetWorld(), (beginPoint + endPoint) / 2, traceHalfHeight, traceRadius
-			//				, UKismetMathLibrary::FindLookAtRotation(beginPoint, endPoint).Quaternion()
-			//				, FColor::Yellow, false, 2.0f, 0U, 1.0f);
-
 			if (bHit && IsValid(hitResult.GetActor()) //hitResult와 hitActor의 Validity 체크
 				&& OwnerCharacterRef.Get()->Tags.IsValidIndex(1) //hitActor의 Tags 체크(1)
 				&& hitResult.GetActor()->ActorHasTag("Character") //hitActor의 Type 체크

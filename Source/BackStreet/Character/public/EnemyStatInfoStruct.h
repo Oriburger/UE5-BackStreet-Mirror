@@ -14,7 +14,6 @@ struct FEnemyDropInfoStruct
 	GENERATED_BODY()
 
 public:
-
 	//Max item count to spawn after dead event.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem", meta = (UIMin = 0, UIMax = 2))
 		int32 MaxSpawnItemCount;
@@ -66,5 +65,4 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintreadOnly)
 		FSkillSetInfo SkillSetInfo;
-
 };
