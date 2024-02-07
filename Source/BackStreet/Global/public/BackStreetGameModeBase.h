@@ -74,9 +74,6 @@ public:
 	UFUNCTION()
 		void UpdateCharacterStat(class ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat);
 
-	UFUNCTION()
-		class UDebuffManager* GetGlobalDebuffManagerRef() { return DebuffManager; }
-
 	UFUNCTION(BlueprintCallable)
 		class USkillManagerBase* GetGlobalSkillmanagerBaseRef() { return SkillManagerBase; }
 
@@ -108,9 +105,6 @@ public:
 protected:
 	UPROPERTY()
 		class AMainCharacterBase* PlayerCharacterRef;
-
-	UPROPERTY()
-		class UDebuffManager* DebuffManager;
 
 	UPROPERTY()
 		class USkillManagerBase* SkillManagerBase;

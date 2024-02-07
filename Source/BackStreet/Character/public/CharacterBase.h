@@ -30,6 +30,10 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		UChildActorComponent* InventoryComponent;	
 
+protected:
+	UPROPERTY(VisibleAnywhere)
+		class UDebuffManagerComponent* DebuffManagerComponent;
+
 // ------- Character Action ±âº» ------- 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")

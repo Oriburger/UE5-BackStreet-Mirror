@@ -53,6 +53,10 @@ public:
 	UFUNCTION()
 		void UpdateTargetPerception(AActor* Actor, FAIStimulus Stimulus);
 
+private:
+	UFUNCTION()
+		void ResetTargetPerception();
+
 //-- Blackboard ฐüทร ----------------------
 public:
 	UFUNCTION()

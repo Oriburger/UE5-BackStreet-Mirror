@@ -4,7 +4,6 @@
 #include "../public/MeleeWeaponBase.h"
 #include "../public/WeaponBase.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "../../Global/public/DebuffManager.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define MAX_LINETRACE_POS_COUNT 6
@@ -159,11 +158,8 @@ void AMeleeWeaponBase::MeleeAttack()
 			MeleeLineTraceQueryParams.AddIgnoredActor(target); 
 
 			//Apply Debuff 
-			if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
-			{
-				GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(target)
-					, OwnerCharacterRef.Get(), WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
-			}
+			Cast<ACharacterBase>(target)->TryAddNewDebuff(WeaponStat.MeleeWeaponStat.DebuffType, OwnerCharacterRef.Get()
+												, WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
 
 			//Update Durability
 			UpdateDurabilityState();
@@ -205,7 +201,7 @@ bool AMeleeWeaponBase::CheckMeleeAttackTarget(FHitResult& hitResult, const TArra
 void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location)
 {
 	//근접 공격에서의 슬로우 효과를 시도
-	TryActivateSlowHitEffect();
+	ActivateSlowHitEffect();
 
 	//효과 이미터 출력
 	if (IsValid(HitEffectParticle))
@@ -224,23 +220,21 @@ void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location)
 	}
 }
 
-bool AMeleeWeaponBase::TryActivateSlowHitEffect()
+void AMeleeWeaponBase::ActivateSlowHitEffect()
 {
-	//마지막 콤보 슬로우 효과, 추후 MaxComboCnt 프로퍼티 추가 예정
-		//애니메이션 배열 소유는 캐릭터. OwnerCharacter->GetAnimArray(WeaponType).Num() ) 
-		// ㄴ> 이런식으로 하면 될 거 같은데...
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player"))
 	{
 		FTimerHandle attackSlowEffectTimerHandle;
-		const float dilationValue = WeaponState.ComboCount % 5 == 0 ? 0.08 : 0.15; 
+		const float dilationValue = WeaponState.ComboCount % 5 == 0 ? 0.08 : 0.15;
 
 		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), dilationValue);
-		GetWorldTimerManager().SetTimer(attackSlowEffectTimerHandle, FTimerDelegate::CreateLambda([&]() {
-			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
-		}), 0.015f, false);
-		return true;
+		GetWorldTimerManager().SetTimer(attackSlowEffectTimerHandle, this, &AMeleeWeaponBase::DeactivateSlowHitEffect, 0.015f, false);
 	}
-	return false;
+}
+
+void AMeleeWeaponBase::DeactivateSlowHitEffect()
+{
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
 }
 
 TArray<FVector> AMeleeWeaponBase::GetCurrentMeleePointList()

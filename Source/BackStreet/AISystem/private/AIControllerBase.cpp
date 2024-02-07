@@ -83,12 +83,13 @@ void AAIControllerBase::UpdateTargetPerception(AActor* Actor, FAIStimulus Stimul
 	else
 	{
 		GetBlackboardComponent()->SetValueAsBool("HasLineOfSight", false);
-		GetWorldTimerManager().SetTimer(SightLossTimerHandle, FTimerDelegate::CreateLambda([&]()
-		{
-			GetBlackboardComponent()->SetValueAsObject("TargetCharacter", nullptr);
-		}), 1.0f, false, MaxSightAge);
+		GetWorldTimerManager().SetTimer(SightLossTimerHandle, this, &AAIControllerBase::ResetTargetPerception, 1.0f, false, MaxSightAge);
 	}
-	
+}
+
+void AAIControllerBase::ResetTargetPerception()
+{
+	GetBlackboardComponent()->SetValueAsObject("TargetCharacter", nullptr);
 }
 
 void AAIControllerBase::UpdateNewWeapon()
@@ -106,4 +107,5 @@ void AAIControllerBase::UpdateNewWeapon()
 void AAIControllerBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(SightLossTimerHandle);
+	SightLossTimerHandle.Invalidate();
 }
