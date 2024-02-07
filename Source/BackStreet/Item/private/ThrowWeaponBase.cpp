@@ -41,9 +41,9 @@ bool AThrowWeaponBase::TryFireProjectile()
 	return Super::TryFireProjectile();
 }
 
-bool AThrowWeaponBase::TryReload()
+void AThrowWeaponBase::Reload()
 {
-	return Super::TryReload();
+	return Super::Reload();
 }
 
 void AThrowWeaponBase::AddAmmo(int32 Count)

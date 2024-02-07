@@ -42,6 +42,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetDebuffIsActive(ECharacterDebuffType DebuffType);
 
+	UFUNCTION(BlueprintCallable)
+		void PrintAllDebuff();
+
 //======= private fucntions =====================
 private:
 	//init debuff manager 

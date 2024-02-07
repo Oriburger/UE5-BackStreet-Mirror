@@ -169,8 +169,8 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 float ACharacterBase::TakeDebuffDamage(float DamageAmount, ECharacterDebuffType DebuffType, AActor* Causer)
 {
+	if (!IsValid(Causer) && Causer->IsActorBeingDestroyed()) return 0.0f;
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
-	if (!IsValid(Causer)) return 0.0f;
 	TakeDamage(DamageAmount, FDamageEvent(), nullptr, Causer);
 	return DamageAmount;
 }
@@ -227,7 +227,10 @@ void ACharacterBase::Die()
 	}
 	//모든 타이머를 제거한다. (타이머 매니저의 것도)
 	ClearAllTimerHandle();
+	DebuffManagerComponent->PrintAllDebuff();
 	DebuffManagerComponent->ClearDebuffManager();
+	UE_LOG(LogTemp, Warning, TEXT("==============="));
+	DebuffManagerComponent->PrintAllDebuff();
 
 	//무적 처리를 하고, Movement를 비활성화
 	CharacterStat.bIsInvincibility = true;
@@ -321,6 +324,7 @@ void ACharacterBase::TrySkill()
 
 void ACharacterBase::PlaySkillAnimation()
 {
+	SkillAnimPlayTimerCurr += 1;
 	if (SkillAnimPlayTimerCurr >= SkillAnimPlayTimerThreshold)
 	{
 		SkillAnimPlayTimerHandleList.Empty();
@@ -329,11 +333,7 @@ void ACharacterBase::PlaySkillAnimation()
 	
 	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(GetCurrentWeaponRef()->WeaponID)->SkillAnimMontageList;
 	float animPlayTime = PlayAnimMontage(targetAnimList[SkillAnimPlayTimerCurr], GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRateList[SkillAnimPlayTimerCurr]);
-	GetWorld()->GetTimerManager().SetTimer(SkillAnimPlayTimerHandleList[SkillAnimPlayTimerCurr], FTimerDelegate::CreateLambda([&]()
-		{
-			SkillAnimPlayTimerCurr += 1;
-			PlaySkillAnimation();
-		}), animPlayTime, false);
+	GetWorldTimerManager().SetTimer(SkillAnimPlayTimerHandleList[SkillAnimPlayTimerCurr], this, &ACharacterBase::PlaySkillAnimation, animPlayTime, false);
 	return;
 }
 
@@ -370,10 +370,7 @@ void ACharacterBase::TryReload()
 	}
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Reload;
-	GetWorldTimerManager().SetTimer(ReloadTimerHandle, FTimerDelegate::CreateLambda([&](){
-		Cast<ARangedWeaponBase>(GetCurrentWeaponRef())->TryReload();
-		ResetActionState(true);
-	}), 1.0f, false, reloadTime);
+	GetWorldTimerManager().SetTimer(ReloadTimerHandle, Cast<ARangedWeaponBase>(GetCurrentWeaponRef()), &ARangedWeaponBase::Reload, reloadTime, false);
 }
 
 void ACharacterBase::ResetAtkIntervalTimer()
@@ -850,9 +847,13 @@ void ACharacterBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
+	AtkIntervalHandle.Invalidate();
+	ReloadTimerHandle.Invalidate();
+
 	for (int num=0 ; num < SkillAnimPlayTimerHandleList.Num(); num++)
 	{
 		GetWorldTimerManager().ClearTimer(SkillAnimPlayTimerHandleList[num]);
+		SkillAnimPlayTimerHandleList[num].Invalidate();
 	}
 	SkillAnimPlayTimerHandleList.Empty();
 }

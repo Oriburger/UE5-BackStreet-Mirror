@@ -153,9 +153,9 @@ AProjectileBase* ARangedWeaponBase::CreateProjectile()
 	return nullptr;
 }	
 	
-bool ARangedWeaponBase::TryReload()
+void ARangedWeaponBase::Reload()
 {
-	if (!GetCanReload()) return false;
+	if (!GetCanReload()) return;
 
 	int32 addAmmoCnt = FMath::Min(WeaponState.RangedWeaponState.ExtraAmmoCount, WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine);
 	if (addAmmoCnt + WeaponState.RangedWeaponState.CurrentAmmoCount > WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine)
@@ -165,7 +165,8 @@ bool ARangedWeaponBase::TryReload()
 	WeaponState.RangedWeaponState.CurrentAmmoCount += addAmmoCnt;
 	WeaponState.RangedWeaponState.ExtraAmmoCount -= addAmmoCnt;
 
-	return true;
+	if (OwnerCharacterRef.IsValid())
+		OwnerCharacterRef.Get()->ResetActionState(true);
 }	
 	
 bool ARangedWeaponBase::GetCanReload()
@@ -194,9 +195,7 @@ bool ARangedWeaponBase::TryFireProjectile()
 
 		//StopAttack의 ResetActionState로 인해 실행이 되지 않는 현상 방지를 위해
 		//타이머를 통해 일정 시간이 지난 후에 Reload를 시도.
-		GetWorldTimerManager().SetTimer(AutoReloadTimerHandle, FTimerDelegate::CreateLambda([&]() {
-			OwnerCharacterRef->TryReload();
-		}), 1.0f, false, AUTO_RELOAD_DELAY_VALUE);
+		GetWorldTimerManager().SetTimer(AutoReloadTimerHandle, OwnerCharacterRef.Get(), &ACharacterBase::TryReload, 1.0f, false, AUTO_RELOAD_DELAY_VALUE);
 		return false;
 	}
 	const int32 fireProjectileCnt = FMath::Min(WeaponState.RangedWeaponState.CurrentAmmoCount, OwnerCharacterRef.Get()->GetCharacterStat().MaxProjectileCount);

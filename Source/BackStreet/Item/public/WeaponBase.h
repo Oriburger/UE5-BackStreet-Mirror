@@ -130,6 +130,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetCurrentComboCnt() { return WeaponState.ComboCount; }
 
+private:
+	UFUNCTION()
+		void ResetComboCnt() { WeaponState.ComboCount = 0; }
+
 //-------- ±× ¿Ü (Ref, VFX µî)-------------------------------
 public:
 	UFUNCTION(BlueprintCallable)

@@ -96,7 +96,7 @@ public:
 	UFUNCTION()
 		void Roll();
 
-	//구르기 시 대쉬를 시도한다. AnimMontage의 Notify에 의해 호출된다.
+	//Add Impulse to movement when rolling
 	UFUNCTION(BlueprintCallable)
 		void Dash();
 
@@ -154,6 +154,9 @@ public:
 
 	UFUNCTION()
 		TArray<AActor*> GetNearInteractionActorList();
+private:
+	UFUNCTION()
+		void StopDashMovement();
 
 // ------- 어빌리티 / 디버프 ---------------
 public:
@@ -202,12 +205,12 @@ private:
 	UFUNCTION()
 		void DeactivateBuffEffect();
 
-	UFUNCTION()
-		void UpdateWallThroughEffect();
-
 	//캐릭터가 데미지를 입을 시, 빨간 Pulse 효과와 표정 텍스쳐 효과를 적용
 	UFUNCTION()
-		void SetFacialDamageEffect(bool NewState);
+		void SetFacialDamageEffect();
+
+	UFUNCTION()
+		void ResetFacialDamageEffect();
 
 // -------- Asset ----------------
 protected:

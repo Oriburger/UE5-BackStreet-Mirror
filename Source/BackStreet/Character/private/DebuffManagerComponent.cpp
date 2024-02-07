@@ -30,6 +30,7 @@ void UDebuffManagerComponent::BeginPlay()
 bool UDebuffManagerComponent::SetDebuffTimer(ECharacterDebuffType DebuffType, AActor* Causer, float TotalTime, float Variable)
 {
 	if (!OwnerCharacterRef.IsValid()) return false;
+	if (OwnerCharacterRef.Get()->GetIsActionActive(ECharacterActionType::E_Die)) return false;
 
 	UE_LOG(LogTemp, Warning, TEXT("Set Debuff Timer #1"));
 	FTimerDelegate timerDelegate, dotDamageDelegate;
@@ -45,7 +46,10 @@ bool UDebuffManagerComponent::SetDebuffTimer(ECharacterDebuffType DebuffType, AA
 		float remainTime = GetWorld()->GetTimerManager().GetTimerRemaining(timerHandle);
 
 		ResetStatDebuffState(DebuffType, resetValue);
-		ResetValueInfoMap[DebuffType] = 0.0f;
+		if (!ResetValueInfoMap.Contains(DebuffType))
+			ResetValueInfoMap.Add(DebuffType, 0.0f);
+		else
+			ResetValueInfoMap[DebuffType] = 0.0f;
 
 		return SetDebuffTimer(DebuffType, Causer, FMath::Min(TotalTime + remainTime, MAX_DEBUFF_TIME), Variable);
 	}
@@ -61,7 +65,7 @@ bool UDebuffManagerComponent::SetDebuffTimer(ECharacterDebuffType DebuffType, AA
 	//----데미지 디버프-------------------
 	case ECharacterDebuffType::E_Burn:
 	case ECharacterDebuffType::E_Poison:
-		dotDamageDelegate.BindUFunction(OwnerCharacterRef.Get(), FName("TakeDebuffDamage"), Variable, DebuffType, Causer); 
+		dotDamageDelegate.BindUFunction(OwnerCharacterRef.Get(), FName("TakeDebuffDamage"), Variable, DebuffType, OwnerCharacterRef.Get()); 
 		GetWorld()->GetTimerManager().SetTimer(dotDamageHandle, dotDamageDelegate, 1.0f, true);
 		break;
 		//----스탯 조정 디버프-------------------
@@ -115,15 +119,29 @@ void UDebuffManagerComponent::ClearDebuffTimer(ECharacterDebuffType DebuffType)
 
 	GetWorld()->GetTimerManager().ClearTimer(dotDamageHandle);
 	GetWorld()->GetTimerManager().ClearTimer(resetHandle);
+	dotDamageHandle.Invalidate();
+	resetHandle.Invalidate();
 
 	if(ResetValueInfoMap.Contains(DebuffType))
 		ResetValueInfoMap.Remove(DebuffType);
 }
 
+
 bool UDebuffManagerComponent::GetDebuffIsActive(ECharacterDebuffType DebuffType)
 {
 	if (!ResetTimerMap.Contains(DebuffType)) return false;
 	return GetWorld()->GetTimerManager().IsTimerActive(ResetTimerMap[DebuffType]);
+}
+
+void UDebuffManagerComponent::PrintAllDebuff()
+{
+	const uint16 startIdx = 0;
+	const uint16 endIdx = MAX_DEBUFF_IDX;
+
+	for (int idx = startIdx; idx <= endIdx; idx++)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Debuff %d : %d"), idx, (int32)GetDebuffIsActive((ECharacterDebuffType)idx));
+	}
 }
 
 void UDebuffManagerComponent::InitDebuffManager()
@@ -153,6 +171,7 @@ float UDebuffManagerComponent::GetDebuffResetValue(ECharacterDebuffType DebuffTy
 void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffType, float ResetVal)
 {
 	if (!OwnerCharacterRef.IsValid()) return;
+	if (OwnerCharacterRef.Get()->GetIsActionActive(ECharacterActionType::E_Die)) return;
 
 	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
 	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
