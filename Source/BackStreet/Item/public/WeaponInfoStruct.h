@@ -4,7 +4,6 @@
 #include "../../Character/public/CharacterInfoEnum.h"
 #include "../../SkillSystem/public/SkillInfoStruct.h"
 #include "ProjectileInfoStruct.h"
-#include "../../Character/public/CharacterInfoStruct.h"
 #include "WeaponInfoStruct.generated.h"
 
 UENUM(BlueprintType)
@@ -116,6 +115,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		uint8 WeaponWeight = 1;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float WeaponKnobackEnergy = 500.0f;
+
 	//Weapon Skill 게이지 사용량 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FSkillGaugeInfo SkillGaugeInfo;
@@ -123,9 +125,6 @@ public:
 	//Skill ID List
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FSkillSetInfo SkillSetInfo;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FTraceInfo TraceInfo;
 
 	//----- 근거리 Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

@@ -172,16 +172,6 @@ private:
 	//무기 액터를 스폰
 	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
 
-//---- Trace --------------------
-
-public:
-	UFUNCTION(BlueprintCallable)
-		TArray<AActor*> CheckTargetList();
-
-private:
-	UPROPERTY()
-		TArray<AActor*> IgnoreActorList;
-
 // ---- Asset -------------------
 public:
 	// 외부에서 Init하기위해 Call
@@ -205,7 +195,7 @@ protected:
 		void InitMaterialAsset();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FCharacterAssetInfoStruct GetAssetInfoWithID(const int32 GetEnemyID);
+		FCharacterAssetInfoStruct GetAssetInfoWithID(const int32 TargetCharacterID);
 
 protected:
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
