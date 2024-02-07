@@ -6,7 +6,6 @@
 #include "../public/RangedWeaponBase.h"
 #include "../public/WeaponInventoryBase.h"
 #include "../../Character/public/CharacterBase.h"
-#include "../../Global/public/DebuffManager.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -42,9 +41,9 @@ bool AThrowWeaponBase::TryFireProjectile()
 	return Super::TryFireProjectile();
 }
 
-bool AThrowWeaponBase::TryReload()
+void AThrowWeaponBase::Reload()
 {
-	return Super::TryReload();
+	return Super::Reload();
 }
 
 void AThrowWeaponBase::AddAmmo(int32 Count)

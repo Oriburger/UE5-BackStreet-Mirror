@@ -33,7 +33,7 @@ public:
 
 	//장전을 시도. 현재 상태에 따른 성공 여부를 반환
 	UFUNCTION(BlueprintCallable)
-		virtual bool TryReload() override;
+		virtual void Reload() override;
 
 	//탄환의 개수를 더함 (ExtraAmmoCount까지)
 	UFUNCTION(BlueprintCallable)

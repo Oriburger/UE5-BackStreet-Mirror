@@ -4,7 +4,6 @@
 #include "../public/ProjectileBase.h"
 #include "../public/WeaponBase.h"
 #include "../../Character/public/CharacterBase.h"
-#include "../../Global/public/DebuffManager.h"
 #include "NiagaraFunctionLibrary.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -162,11 +161,8 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		if (OtherActor == OwnerCharacterRef.Get() || OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
 
 		//디버프가 있다면?
-		if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
-		{
-			GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(ProjectileStat.DebuffType, Cast<ACharacterBase>(OtherActor), OwnerCharacterRef.Get()
-				, ProjectileStat.DebuffTotalTime, ProjectileStat.DebuffVariable);
-		}
+		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(ProjectileStat.DebuffType, OwnerCharacterRef.Get()
+															, ProjectileStat.DebuffTotalTime, ProjectileStat.DebuffVariable);
 
 		//폭발하는 발사체라면?
 		if (ProjectileStat.bIsExplosive)
