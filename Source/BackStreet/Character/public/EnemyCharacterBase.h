@@ -65,6 +65,9 @@ public:
 	//플레이어를 발견한 직후 취할 Action(Anim), 재생 시간을 반환
 	UFUNCTION(BlueprintCallable)
 		float PlayPreChaseAnimation();
+private:
+	UFUNCTION()
+		void ResetTurnAngle();
 
 // ----- 캐릭터 스탯 및 상태 관련 ---------
 public:
@@ -80,6 +83,9 @@ private:
 
 	UFUNCTION()
 		void SpawnDeathItems();
+	
+	UFUNCTION()
+		void ResetActionStateForTimer();
 
 private:
 	UPROPERTY()

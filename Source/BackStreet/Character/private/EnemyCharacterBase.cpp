@@ -115,10 +115,10 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		TakeKnockBack(DamageCauser, DefaultKnockBackStrength);
 	}
 
-	GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, FTimerDelegate::CreateLambda([&]() {
-		if (CharacterState.CharacterActionState == ECharacterActionType::E_Hit)
-			ResetActionState();
-	}), 1.0f, false, 0.5f);
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Hit)
+	{
+		GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, this, &AEnemyCharacterBase::ResetActionStateForTimer, 1.0f, false, 0.5f);
+	}
 
 	return damageAmount;
 }
@@ -231,6 +231,11 @@ void AEnemyCharacterBase::SpawnDeathItems()
 	}
 }
 
+void AEnemyCharacterBase::ResetActionStateForTimer()
+{
+	ResetActionState(true);
+}
+
 void AEnemyCharacterBase::SetFacialMaterialEffect(bool NewState)
 {
 	if (CurrentDynamicMaterial == nullptr) return;
@@ -257,12 +262,10 @@ void AEnemyCharacterBase::Turn(float Angle)
 	{
 		CharacterState.TurnDirection = (FMath::Sign(Angle) == 1 ? 2 : 1);
 		GetWorldTimerManager().ClearTimer(TurnTimeOutTimerHandle);
-		GetWorldTimerManager().SetTimer(TurnTimeOutTimerHandle, FTimerDelegate::CreateLambda([&]() {
-			CharacterState.TurnDirection = 0;
-		}), 1.0f, false, TURN_TIME_OUT_SEC);
+		GetWorldTimerManager().SetTimer(TurnTimeOutTimerHandle, this, &AEnemyCharacterBase::ResetTurnAngle, 1.0f, false, TURN_TIME_OUT_SEC);
 		return;
 	}
-	CharacterState.TurnDirection = 0;
+	ResetTurnAngle();
 	return;
 }
 
@@ -272,9 +275,16 @@ float AEnemyCharacterBase::PlayPreChaseAnimation()
 	return PlayAnimMontage(PreChaseAnimMontage);
 }
 
+void AEnemyCharacterBase::ResetTurnAngle()
+{
+	CharacterState.TurnDirection = 0;
+}
+
 void AEnemyCharacterBase::ClearAllTimerHandle()
 {
 	Super::ClearAllTimerHandle();
 	GetWorldTimerManager().ClearTimer(TurnTimeOutTimerHandle);
 	GetWorldTimerManager().ClearTimer(HitTimeOutTimerHandle);
+	TurnTimeOutTimerHandle.Invalidate();
+	HitTimeOutTimerHandle.Invalidate();
 }

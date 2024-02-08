@@ -80,11 +80,13 @@ void AAIControllerBase::ProcessSight(AActor* Actor, FAIStimulus Stimulus)
 	else
 	{
 		GetBlackboardComponent()->SetValueAsBool("HasLineOfSight", false);
-		GetWorldTimerManager().SetTimer(SightLossTimerHandle, FTimerDelegate::CreateLambda([&]()
-			{
-				GetBlackboardComponent()->SetValueAsObject("TargetCharacter", nullptr);
-			}), 0.0f, false, 5.5f);
+		GetWorldTimerManager().SetTimer(SightLossTimerHandle, this, &AAIControllerBase::ResetTargetPerception, 1.0f, false, MaxSightAge);
 	}
+}
+
+void AAIControllerBase::ResetTargetPerception()
+{
+	GetBlackboardComponent()->SetValueAsObject("TargetCharacter", nullptr);
 }
 
 void AAIControllerBase::ProcessHearing(AActor* Actor, FAIStimulus Stimulus)
@@ -126,4 +128,5 @@ void AAIControllerBase::UpdateNewWeapon()
 void AAIControllerBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(SightLossTimerHandle);
+	SightLossTimerHandle.Invalidate();
 }

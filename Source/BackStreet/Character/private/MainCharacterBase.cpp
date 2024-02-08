@@ -2,7 +2,6 @@
 #include "../public/MainCharacterBase.h"
 #include "../public/MainCharacterController.h"
 #include "../public/AbilityManagerBase.h"
-#include "../../Global/public/DebuffManager.h"
 #include "../../Item/public/WeaponBase.h"
 #include "../../Item/public/ThrowWeaponBase.h"
 #include "../../Item/public/WeaponInventoryBase.h"
@@ -268,13 +267,8 @@ void AMainCharacterBase::Roll()
 void AMainCharacterBase::Dash()
 {
 	if (IsActorBeingDestroyed()) return;
-	
 	LaunchCharacter(FVector(0.0f, 0.0f, 500.0f), false, false);
-	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, FTimerDelegate::CreateLambda([&]() {
-		const FVector& direction = GetMesh()->GetRightVector();
-		float& speed = GetCharacterMovement()->MaxWalkSpeed;
-		GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
-	}), 0.075f, false);
+	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, this, &AMainCharacterBase::StopDashMovement, 0.075f, false);
 }
 
 void AMainCharacterBase::ZoomIn(float Value)
@@ -341,12 +335,10 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	if (damageAmount > 0.0f && DamageCauser->ActorHasTag("Enemy"))
 	{
-		SetFacialDamageEffect(true);
+		SetFacialDamageEffect();
 
 		GetWorld()->GetTimerManager().ClearTimer(FacialEffectResetTimerHandle);
-		GetWorld()->GetTimerManager().SetTimer(FacialEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
-			SetFacialDamageEffect(false);
-		}), 1.0f, false);
+		GetWorld()->GetTimerManager().SetTimer(FacialEffectResetTimerHandle, this, &AMainCharacterBase::ResetFacialDamageEffect, 1.0f, false);
 	}
 	return damageAmount;
 }
@@ -503,6 +495,13 @@ TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
 	return totalItemList;
 }
 
+void AMainCharacterBase::StopDashMovement()
+{
+	const FVector& direction = GetMesh()->GetRightVector();
+	float& speed = GetCharacterMovement()->MaxWalkSpeed;
+	GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
+}
+
 void AMainCharacterBase::ResetRotationToMovement()
 {
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Roll) return;
@@ -534,6 +533,7 @@ bool AMainCharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AAc
 	//ActivateBuffNiagara(bIsDebuff, BuffDebuffType);
 
 	GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
+	BuffEffectResetTimerHandle.Invalidate();
 	GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
 		DeactivateBuffEffect();
 	}), TotalTime, false);
@@ -597,38 +597,25 @@ void AMainCharacterBase::DeactivateBuffEffect()
 	BuffNiagaraEmitter->Deactivate(); 
 }
 
-void AMainCharacterBase::UpdateWallThroughEffect()
-{/*
-	if (!IsValid(GetWorld())) return;
-	FHitResult hitResult;
-	const FVector& traceBeginPos = FollowingCamera->GetComponentLocation();
-	const FVector& traceEndPos = GetMesh()->GetComponentLocation();
-	
-	GetWorld()->LineTraceSingleByChannel(hitResult, traceBeginPos, traceEndPos, ECollisionChannel::ECC_Camera);
-
-	if (hitResult.bBlockingHit && IsValid(hitResult.GetActor()))
-	{
-		if(!hitResult.GetActor()->ActorHasTag("Player") && !bIsWallThroughEffectActivated)
-		{
-			InitDynamicMeshMaterial(WallThroughMaterial);
-			bIsWallThroughEffectActivated = true;
-		}
-		else if(hitResult.GetActor()->ActorHasTag("Player") && bIsWallThroughEffectActivated)
-		{
-			InitDynamicMeshMaterial(NormalMaterial);
-			bIsWallThroughEffectActivated = false;
-		}
-	}*/
-}
-
-void AMainCharacterBase::SetFacialDamageEffect(bool NewState)
+void AMainCharacterBase::SetFacialDamageEffect()
 {
 	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterial;
 	
 	if (currMaterial != nullptr && EmotionTextureList.Num() >= 3)
 	{
-		currMaterial->SetTextureParameterValue(FName("BaseTexture"), EmotionTextureList[(uint8)(NewState ? EEmotionType::E_Angry : EEmotionType::E_Idle)]);
-		currMaterial->SetScalarParameterValue(FName("bIsDamaged"), (float)NewState);
+		currMaterial->SetTextureParameterValue(FName("BaseTexture"), EmotionTextureList[(uint8)(EEmotionType::E_Angry)]);
+		currMaterial->SetScalarParameterValue(FName("bIsDamaged"), true);
+	}
+}
+
+void AMainCharacterBase::ResetFacialDamageEffect()
+{
+	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterial;
+
+	if (currMaterial != nullptr && EmotionTextureList.Num() >= 3)
+	{
+		currMaterial->SetTextureParameterValue(FName("BaseTexture"), EmotionTextureList[(uint8)(EEmotionType::E_Idle)]);
+		currMaterial->SetScalarParameterValue(FName("bIsDamaged"), false);
 	}
 }
 
@@ -641,4 +628,10 @@ void AMainCharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(RollTimerHandle); 
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
 	GetWorldTimerManager().ClearTimer(DashDelayTimerHandle);
+
+	BuffEffectResetTimerHandle.Invalidate();
+	FacialEffectResetTimerHandle.Invalidate();
+	RollTimerHandle.Invalidate();
+	AttackLoopTimerHandle.Invalidate();
+	DashDelayTimerHandle.Invalidate();
 }

@@ -1,7 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "../public/BackStreetGameModeBase.h"
-#include "../public/DebuffManager.h"
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "../../StageSystem/public/StageData.h"
 #include "../../Item/public/ProjectileBase.h"
@@ -43,10 +42,6 @@ void ABackStreetGameModeBase::InitializeGame()
 
 		//------ Ref 멤버 초기화  ---------------
 		PlayerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-
-		//------ Global Buff/Debuff Manager 초기화 --------
-		DebuffManager = NewObject<UDebuffManager>(this, UDebuffManager::StaticClass(), FName("BuffDebuffManager"));
-		DebuffManager->InitDebuffManager(this);
 
 		//------ Global Skill Manager 초기화 --------
 		SkillManagerBase = NewObject<USkillManagerBase>(this, USkillManagerBase::StaticClass(), FName("SkillManagerBase"));

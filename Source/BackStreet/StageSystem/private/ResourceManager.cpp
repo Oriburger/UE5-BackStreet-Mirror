@@ -2,7 +2,6 @@
 #include "../public/ResourceManager.h"
 #include "../public/StageData.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
-#include "../../Global/public/DebuffManager.h"
 #include "../public/ChapterManagerBase.h"
 #include "../../Character/public/EnemyCharacterBase.h"
 #include "../../Character/public/MainCharacterBase.h"
@@ -285,11 +284,11 @@ void AResourceManager::CleanAllResource()
 			CleanStage(stage);
 		}
 	}
-	ABackStreetGameModeBase* gamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (IsValid(gamemodeRef))
-	{
-		gamemodeRef->GetGlobalDebuffManagerRef()->ClearDebuffManagerTimer();
-	}
+	//ABackStreetGameModeBase* gamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	//if (IsValid(gamemodeRef))
+	//{
+	//	gamemodeRef->GetGlobalDebuffManagerRef()->ClearDebuffManagerTimer();
+	//}
 
 	if(IsValid(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
 		Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->ClearAllTimerHandle();
