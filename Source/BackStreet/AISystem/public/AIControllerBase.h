@@ -35,6 +35,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void UpdateTargetPerception(AActor* Actor, FAIStimulus Stimulus);
 
+protected:
+	UPROPERTY(EditDefaultsOnly)
+		float MaxSightAge = 5.0f;
+
 private:
 	UFUNCTION()
 		void ProcessSight(AActor* Actor, FAIStimulus Stimulus);
