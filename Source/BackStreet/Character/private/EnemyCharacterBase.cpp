@@ -120,6 +120,15 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, this, &AEnemyCharacterBase::ResetActionStateForTimer, 1.0f, false, 0.5f);
 	}
 
+	//Stop AI Logic And Set Reactivation event
+	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(Controller);
+	if (IsValid(aiControllerRef))
+	{
+		aiControllerRef->DeactivateAI();
+		GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
+		GetWorldTimerManager().SetTimer(DamageAIDelayTimer, aiControllerRef, &AAIControllerBase::ActivateAI, 1.0f, false, 1.5f);
+	}
+
 	return damageAmount;
 }
 
@@ -285,6 +294,8 @@ void AEnemyCharacterBase::ClearAllTimerHandle()
 	Super::ClearAllTimerHandle();
 	GetWorldTimerManager().ClearTimer(TurnTimeOutTimerHandle);
 	GetWorldTimerManager().ClearTimer(HitTimeOutTimerHandle);
+	GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
 	TurnTimeOutTimerHandle.Invalidate();
 	HitTimeOutTimerHandle.Invalidate();
+	DamageAIDelayTimer.Invalidate();
 }
