@@ -98,8 +98,6 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 
 	//const float knockBackStrength = 100000.0f;
-
-
 	if (DamageCauser->ActorHasTag("Player"))
 	{
 		if (DamageCauser->ActorHasTag("Attack|Common"))
@@ -128,6 +126,11 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
 		GetWorldTimerManager().SetTimer(DamageAIDelayTimer, aiControllerRef, &AAIControllerBase::ActivateAI, 1.0f, false, 1.5f);
 	}
+
+	//Set Rotation To Causer
+	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), DamageCauser->GetActorLocation());
+	newRotation.Pitch = newRotation.Roll = 0.0f;
+	SetActorRotation(newRotation);
 
 	return damageAmount;
 }
