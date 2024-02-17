@@ -97,7 +97,6 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitImpactSound, GetActorLocation());
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 
-	//const float knockBackStrength = 100000.0f;
 	if (DamageCauser->ActorHasTag("Player"))
 	{
 		if (DamageCauser->ActorHasTag("Attack|Common"))
@@ -107,11 +106,6 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		}
 	}	
 
-	//데미지가 전체 체력의 20% 미만이면 넉백이 출력되지 않는다.
-	if(DamageAmount >= GetCharacterStat().CharacterMaxHP * 0.2f)
-	{
-		TakeKnockBack(DamageCauser, DefaultKnockBackStrength);
-	}
 
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Hit)
 	{

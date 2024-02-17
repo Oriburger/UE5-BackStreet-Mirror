@@ -22,9 +22,9 @@ ASkillBase::ASkillBase()
 	SkillMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Skill_MESH"));
 	SkillMesh->SetupAttachment(DefaultSceneRoot);
 	
-	static ConstructorHelpers::FObjectFinder<UDataTable> assetInfoTableFinder(TEXT("/Game/Skill/Data/D_SkillAssetInfo.D_SkillAssetInfo"));
-	checkf(assetInfoTableFinder.Succeeded(), TEXT("AssetInfoTable class discovery failed."));
-	SkillAssetInfoTable = assetInfoTableFinder.Object;
+	static ConstructorHelpers::FObjectFinder<UDataTable> skillAssetInfoTableFinder(TEXT("/Game/Skill/Data/D_SkillAssetInfo.D_SkillAssetInfo"));
+	checkf(skillAssetInfoTableFinder.Succeeded(), TEXT("SkillAssetInfoTable class discovery failed."));
+	SkillAssetInfoTable = skillAssetInfoTableFinder.Object;
 }
 
 // Called when the game starts or when spawned
@@ -34,7 +34,7 @@ void ASkillBase::BeginPlay()
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
-void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, int32 NewSkillID, float NewSkillStartTiming)
+void ASkillBase::InitSkill_Implementation(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, int32 NewSkillID, float NewSkillStartTiming)
 {
 	TargetList.Empty();
 	Causer = NewCauser;
@@ -51,7 +51,6 @@ void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& New
 				if (!SkillInfo.SkillCommonVariableMap.IsEmpty())
 				{
 					SkillGradeVariableMap = SkillInfo.SkillCommonVariableMap;
-					UE_LOG(LogTemp, Log, TEXT("SkillCommon Variable"));
 				}
 				break;
 
@@ -59,23 +58,20 @@ void ASkillBase::InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& New
 				if (!SkillInfo.SkillRareVariableMap.IsEmpty())
 				{
 					SkillGradeVariableMap = SkillInfo.SkillRareVariableMap;
-					UE_LOG(LogTemp, Log, TEXT("SkillRare Variable"));
 				}
 				break;
 
-			case ESkillGrade::E_Epic:
-				if (!SkillInfo.SkillEpicVariableMap.IsEmpty())
+			case ESkillGrade::E_Legend:
+				if (!SkillInfo.SkillLegendVariableMap.IsEmpty())
 				{
-					SkillGradeVariableMap = SkillInfo.SkillEpicVariableMap;
-					UE_LOG(LogTemp, Log, TEXT("SkillEpic Variable"));
+					SkillGradeVariableMap = SkillInfo.SkillLegendVariableMap;
 				}
 				break;
 
-			case ESkillGrade::E_Regend:
-				if (!SkillInfo.SkillRegendVariableMap.IsEmpty())
+			case ESkillGrade::E_Mythic:
+				if (!SkillInfo.SkillMythicVariableMap.IsEmpty())
 				{
-					SkillGradeVariableMap = SkillInfo.SkillRegendVariableMap;
-					UE_LOG(LogTemp, Log, TEXT("SkillRegend Variable"));
+					SkillGradeVariableMap = SkillInfo.SkillMythicVariableMap;
 				}
 				break;
 			
