@@ -106,7 +106,6 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		}
 	}	
 
-
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Hit)
 	{
 		GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, this, &AEnemyCharacterBase::ResetActionStateForTimer, 1.0f, false, 0.5f);
