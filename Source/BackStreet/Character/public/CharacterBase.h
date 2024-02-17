@@ -271,6 +271,8 @@ protected:
 
 	UFUNCTION()
 		void PlaySkillAnimation();
+	UFUNCTION()
+		void PlayNextSkillAnimation();
 
 	//공격 간 딜레이 핸들
 	UPROPERTY()

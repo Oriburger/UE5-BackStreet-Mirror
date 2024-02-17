@@ -309,6 +309,7 @@ void ACharacterBase::TrySkill()
 	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
 
 	SkillAnimPlayTimerThreshold = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
+	UE_LOG(LogTemp, Log, TEXT("SkillAnim Num : %d"), SkillAnimPlayTimerThreshold);
 	
 	//Total skill animation play time which is using for init skill timing.
 	for (UAnimMontage* skillAnimMontage : AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList) 
@@ -324,17 +325,22 @@ void ACharacterBase::TrySkill()
 
 void ACharacterBase::PlaySkillAnimation()
 {
-	SkillAnimPlayTimerCurr += 1;
 	if (SkillAnimPlayTimerCurr >= SkillAnimPlayTimerThreshold)
 	{
 		SkillAnimPlayTimerHandleList.Empty();
 		return;
 	}
-	
+
 	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(GetCurrentWeaponRef()->WeaponID)->SkillAnimMontageList;
 	float animPlayTime = PlayAnimMontage(targetAnimList[SkillAnimPlayTimerCurr], GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRateList[SkillAnimPlayTimerCurr]);
-	GetWorldTimerManager().SetTimer(SkillAnimPlayTimerHandleList[SkillAnimPlayTimerCurr], this, &ACharacterBase::PlaySkillAnimation, animPlayTime, false);
+	GetWorldTimerManager().SetTimer(SkillAnimPlayTimerHandleList[SkillAnimPlayTimerCurr], this, &ACharacterBase::PlayNextSkillAnimation, animPlayTime, false);
 	return;
+}
+
+void ACharacterBase::PlayNextSkillAnimation()
+{
+	SkillAnimPlayTimerCurr++;
+	PlaySkillAnimation();
 }
 
 void ACharacterBase::Attack()
