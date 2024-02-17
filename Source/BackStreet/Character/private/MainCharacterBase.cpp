@@ -369,11 +369,12 @@ void AMainCharacterBase::TrySkill()
 	check(GetCurrentWeaponRef() != nullptr);
 
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle
+		|| !GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.IsSkillAvailable ) return;
 	 
-	if (GetCurrentWeaponRef()->WeaponID == 0||GetCharacterState().CharacterCurrSkillGauge<GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.SkillCommonReq)
+	if (GetCharacterState().CharacterCurrSkillGauge<GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.SkillCommonReq)
 	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬을 사용할 수 없습니다. ")), FColor::White);
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬 게이지가 부족합니다.")), FColor::White);
 		return;
 	}
 

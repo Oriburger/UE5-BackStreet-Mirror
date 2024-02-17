@@ -31,10 +31,10 @@ public:
 		TMap<FName, float> SkillRareVariableMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<FName, float> SkillEpicVariableMap;
+		TMap<FName, float> SkillLegendVariableMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<FName, float> SkillRegendVariableMap;
+		TMap<FName, float> SkillMythicVariableMap;
 };
 
 USTRUCT(BlueprintType)
@@ -112,25 +112,28 @@ struct FSkillGaugeInfo
 public:
 	GENERATED_USTRUCT_BODY()
 
-	//Combo 게이지 증가 비율
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool IsSkillAvailable = 0;
+	
+	//skill gauge augmentation per one attack 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float SkillGaugeAug = 0.1;
 
-	//Common 스킬 요구 게이지량
+	//common skill gauge requirement
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float SkillCommonReq = 1.0;
 
-	// Rare 스킬 요구 게이지량
+	// rare skill gauge requirement
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float SkillRareReq = 2.0;
 
-	// epic 스킬 요구 게이지량
+	// Legend skill gauge requirement
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float SkillEpicReq = 3.0;
+		float SkillLegendReq = 3.0;
 
-	// Regend 스킬 요구 게이지량
+	// mythic skill gauge requirement
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float SkillRegendReq = 4.0;
+		float SkillMythicReq = 4.0;
 };
 
 USTRUCT(BlueprintType)

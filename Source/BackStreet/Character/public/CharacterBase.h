@@ -78,7 +78,7 @@ public:
 		float TakeDebuffDamage(float DamageAmount, ECharacterDebuffType DebuffType, AActor* Causer);
 
 	UFUNCTION(BlueprintCallable)
-		void TakeKnockBack(AActor* Causer, float Strength);
+		void ApplyKnockBack(AActor* Target, float Strength);
 
 	//공격Action 사이의 Interval을 관리하는 타이머를 해제
 	UFUNCTION()
@@ -271,6 +271,8 @@ protected:
 
 	UFUNCTION()
 		void PlaySkillAnimation();
+	UFUNCTION()
+		void PlayNextSkillAnimation();
 
 	//공격 간 딜레이 핸들
 	UPROPERTY()

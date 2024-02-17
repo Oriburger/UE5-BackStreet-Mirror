@@ -97,7 +97,6 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitImpactSound, GetActorLocation());
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 
-	//const float knockBackStrength = 100000.0f;
 	if (DamageCauser->ActorHasTag("Player"))
 	{
 		if (DamageCauser->ActorHasTag("Attack|Common"))
