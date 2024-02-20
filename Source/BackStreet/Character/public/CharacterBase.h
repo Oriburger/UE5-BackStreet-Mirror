@@ -63,7 +63,7 @@ public:
 
 	//플레이어의 ActionState를 Idle로 전환한다.
 	UFUNCTION(BlueprintCallable)
-			void ResetActionState		(bool bForceReset = false);
+			void ResetActionState(bool bForceReset = false);
 
 	//Set Player's Action State
 	UFUNCTION(BlueprintCallable)
