@@ -176,6 +176,11 @@ private:
 	//무기 액터를 스폰
 	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
 
+// ---- Skill --------------------
+private:
+	UFUNCTION()
+		float GetSkillAnimPlayRate(uint8 SkillAnimIndex);
+
 // ---- Asset -------------------
 public:
 	// 외부에서 Init하기위해 Call

@@ -302,19 +302,18 @@ void ACharacterBase::TrySkill()
 		return;
 	}
 	float totalSkillAnimPlayTime = 0;
-	int skillAnimIndex =0 ;
+	int skillAnimIndex = 0 ;
 	SkillAnimPlayTimerCurr = 0;
 
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
 	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
 
 	SkillAnimPlayTimerThreshold = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
-	UE_LOG(LogTemp, Log, TEXT("SkillAnim Num : %d"), SkillAnimPlayTimerThreshold);
 	
 	//Total skill animation play time which is using for init skill timing.
 	for (UAnimMontage* skillAnimMontage : AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList) 
 	{
-		totalSkillAnimPlayTime += skillAnimMontage->CalculateSequenceLength()/GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRateList[skillAnimIndex];
+		totalSkillAnimPlayTime += skillAnimMontage->CalculateSequenceLength()/GetSkillAnimPlayRate(skillAnimIndex);
 		GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.TotalSkillPlayTime = totalSkillAnimPlayTime;
 		skillAnimIndex++;
 	}
@@ -322,19 +321,45 @@ void ACharacterBase::TrySkill()
 	SkillAnimPlayTimerHandleList.SetNum(SkillAnimPlayTimerThreshold);
 	PlaySkillAnimation();
 }
+float ACharacterBase::GetSkillAnimPlayRate(uint8 SkillAnimIndex)
+{
+	float animPlayRate;
+
+	if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillCommonReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillRareReq, true, false))
+	{
+		animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.CommonSkillAnimRateList[SkillAnimPlayTimerCurr];
+	}
+	else if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillRareReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillLegendReq, true, false))
+	{
+		animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.RareSkillAnimRateList[SkillAnimPlayTimerCurr];
+	}
+	else if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillLegendReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillMythicReq, true, false))
+	{
+		animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.LegendSkillAnimRateList[SkillAnimPlayTimerCurr];
+	}
+	else if (CharacterState.CharacterCurrSkillGauge >= GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillMythicReq)
+	{
+		animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.MythicSkillAnimRateList[SkillAnimPlayTimerCurr];
+	}
+	else
+	{
+		animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.CommonSkillAnimRateList[SkillAnimPlayTimerCurr];
+	}
+	return animPlayRate;
+}
 
 void ACharacterBase::PlaySkillAnimation()
 {
+
 	if (SkillAnimPlayTimerCurr >= SkillAnimPlayTimerThreshold)
 	{
 		SkillAnimPlayTimerHandleList.Empty();
 		return;
 	}
-
+	float animPlayRate = GetSkillAnimPlayRate(SkillAnimPlayTimerCurr);
 	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(GetCurrentWeaponRef()->WeaponID)->SkillAnimMontageList;
-	float animPlayTime = PlayAnimMontage(targetAnimList[SkillAnimPlayTimerCurr], GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.SkillAnimPlayRateList[SkillAnimPlayTimerCurr]);
+	float animPlayTime = PlayAnimMontage(targetAnimList[SkillAnimPlayTimerCurr], animPlayRate);
 	GetWorldTimerManager().SetTimer(SkillAnimPlayTimerHandleList[SkillAnimPlayTimerCurr], this, &ACharacterBase::PlayNextSkillAnimation, animPlayTime, false);
-	return;
 }
 
 void ACharacterBase::PlayNextSkillAnimation()
