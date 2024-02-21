@@ -157,6 +157,8 @@ void AThrowWeaponBase::UpdateProjectilePathSpline(TArray<FVector>& Locations)
 {
 	ClearProjectilePathSpline();
 
+	//AMainCharacter call this function.
+	//use the result of "AThrowWeaponBase::GetProjectilePathPredictResult()"
 	ProjectilePathSpline->SetSplinePoints(Locations, ESplineCoordinateSpace::Local);
 	for (int idx = 1; idx < Locations.Num(); idx++)
 	{
@@ -165,22 +167,24 @@ void AThrowWeaponBase::UpdateProjectilePathSpline(TArray<FVector>& Locations)
 		ProjectilePathSpline->GetLocationAndTangentAtSplinePoint(idx - 1, prevPos, prevTangent, ESplineCoordinateSpace::Local);
 		ProjectilePathSpline->GetLocationAndTangentAtSplinePoint(idx, currPos, currTangent, ESplineCoordinateSpace::Local);
 
+		//spawn spline mesh component
 		USplineMeshComponent* splineMesh = NewObject<USplineMeshComponent>(ProjectilePathSpline, USplineMeshComponent::StaticClass());
 		splineMesh->SetForwardAxis(ESplineMeshAxis::Z);
 		if(SplineMesh) splineMesh->SetStaticMesh(SplineMesh);
 
-		//
+		//init spline mesh's mobility 
 		splineMesh->SetMobility(EComponentMobility::Movable);
 		splineMesh->CreationMethod = EComponentCreationMethod::UserConstructionScript;
 
-		//
+		//register spline mesh component to world
 		splineMesh->RegisterComponentWithWorld(GetWorld());
 
-		//
+		//attach new splineMesh to spline component
 		splineMesh->AttachToComponent(ProjectilePathSpline, FAttachmentTransformRules::KeepWorldTransform);
 		splineMesh->SetStartScale(FVector2D(0.25f));
 		splineMesh->SetEndScale(FVector2D(0.25f));
 
+		//set spline mesh's position and collision
 		splineMesh->SetStartAndEnd(prevPos, prevTangent, currPos, currTangent);
 		splineMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
