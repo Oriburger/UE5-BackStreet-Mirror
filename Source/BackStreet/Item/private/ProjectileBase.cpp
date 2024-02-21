@@ -40,6 +40,7 @@ AProjectileBase::AProjectileBase()
 	ProjectileMovement->bAutoActivate = false;
 
 	InitialLifeSpan = 10.0f;
+	this->Tags.Add("Projectile");
 }
 
 // Called when the game starts or when spawned
@@ -241,6 +242,13 @@ void AProjectileBase::Explode()
 	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 100.0f); //카메라 셰이크 이벤트
 
 	Destroy();
+}
+
+void AProjectileBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
+{
+	if (!IsValid(NewOwnerCharacterRef)) return;
+	OwnerCharacterRef = NewOwnerCharacterRef;
+	SetOwner(OwnerCharacterRef.Get());
 }
 
 void AProjectileBase::ActivateProjectileMovement()
