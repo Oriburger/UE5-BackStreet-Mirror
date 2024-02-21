@@ -7,7 +7,11 @@
 #include "../public/WeaponInventoryBase.h"
 #include "../../Character/public/CharacterBase.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Components/SplineComponent.h"
+#include "Components/SplineMeshComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Materials/MaterialInterface.h"
+#include "Engine/StaticMesh.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
@@ -19,6 +23,22 @@ AThrowWeaponBase::AThrowWeaponBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	this->Tags.Add("Throw");
+
+	ProjectilePathSpline = CreateDefaultSubobject<USplineComponent>(TEXT("Projectile Path"));
+	ProjectilePathSpline->SetupAttachment(RootComponent);
+	ProjectilePathSpline->bHiddenInGame = false; 
+	ProjectilePathSpline->SetVisibility(true);
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> splineMeshFinder(TEXT("/Game/Weapon/StaticMesh/SM_SplineMesh.SM_SplineMesh"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> splineMeshMaterialFinder(TEXT("/Game/Weapon/Material/M_ProjectilePathSpline.M_ProjectilePathSpline"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> pathTargetDecalMaterialFinder(TEXT("/Game/Weapon/Material/M_ProjectileTarget.M_ProjectileTarget"));
+	checkf(splineMeshFinder.Succeeded(), TEXT("spline mesh 클래스 탐색에 실패했습니다."));
+	checkf(splineMeshMaterialFinder.Succeeded(), TEXT("spline mesh material 클래스 탐색에 실패했습니다."));
+	checkf(pathTargetDecalMaterialFinder.Succeeded(), TEXT("path target decal material 클래스 탐색에 실패했습니다."));
+	
+	SplineMesh = splineMeshFinder.Object;
+	SplineMeshMaterial = splineMeshMaterialFinder.Object;
+	PathTargetDecalMaterial = pathTargetDecalMaterialFinder.Object;
 }
 
 void AThrowWeaponBase::Attack()
@@ -55,6 +75,9 @@ void AThrowWeaponBase::Throw()
 {
 	if (!IsValid(GetOwner()) || !GetOwner()->ActorHasTag("Character")) return;
 	if (!GetCanThrow()) return;
+
+	//Erase spline
+	ClearProjectilePathSpline();
 
 	//발사체를 생성하고 투척
 	ACharacterBase* ownerCharacter = Cast<ACharacterBase>(GetOwner());
@@ -110,6 +133,7 @@ void AThrowWeaponBase::CalculateThrowDirection(FVector NewDestination)
 	if (ProjectileStat.ProjectileID == 0)
 	{
 		ProjectileStat = GetProjectileStatInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
+		ThrowSpeed = ProjectileStat.ProjectileSpeed;
 	}
 
 	ACharacterBase* ownerCharacter = Cast<ACharacterBase>(GetOwner());
@@ -120,14 +144,64 @@ void AThrowWeaponBase::CalculateThrowDirection(FVector NewDestination)
 
 	ThrowDirection = FVector(0.0f);
 	const float initialSpeed = FMath::Clamp(ProjectileStat.ProjectileSpeed, 900.0f, 2000.0f);
-	const bool bIsHighArc = UKismetMathLibrary::Vector_Distance(GetActorLocation(), ThrowDestination) >= (MAX_THROW_DISTANCE / 2.0f);
-	const float highArcSpeedMultipiler = bIsHighArc ? 1.2f : 1.0f;
-	ThrowSpeed = initialSpeed * highArcSpeedMultipiler;
+	const bool bIsHighArc = false; // UKismetMathLibrary::Vector_Distance(GetActorLocation(), ThrowDestination) >= (MAX_THROW_DISTANCE);
+	ThrowSpeed = initialSpeed;
 
 	UGameplayStatics::SuggestProjectileVelocity(GetWorld(), ThrowDirection
 			, ownerCharacter->GetMesh()->GetSocketLocation("weapon_r"), ThrowDestination
-			, initialSpeed * highArcSpeedMultipiler, bIsHighArc, 0.25f, 0.0f, ESuggestProjVelocityTraceOption::DoNotTrace
+			, ThrowSpeed, bIsHighArc, 0.25f, 0.0f, ESuggestProjVelocityTraceOption::DoNotTrace
 			, FCollisionResponseParams::DefaultResponseParam, { GetOwner(), this }, false);
+}
+
+void AThrowWeaponBase::UpdateProjectilePathSpline(TArray<FVector>& Locations)
+{
+	ClearProjectilePathSpline();
+
+	//AMainCharacter call this function.
+	//use the result of "AThrowWeaponBase::GetProjectilePathPredictResult()"
+	ProjectilePathSpline->SetSplinePoints(Locations, ESplineCoordinateSpace::Local);
+	for (int idx = 1; idx < Locations.Num(); idx++)
+	{
+		FVector prevPos, prevTangent;
+		FVector currPos, currTangent;
+		ProjectilePathSpline->GetLocationAndTangentAtSplinePoint(idx - 1, prevPos, prevTangent, ESplineCoordinateSpace::Local);
+		ProjectilePathSpline->GetLocationAndTangentAtSplinePoint(idx, currPos, currTangent, ESplineCoordinateSpace::Local);
+
+		//spawn spline mesh component
+		USplineMeshComponent* splineMesh = NewObject<USplineMeshComponent>(ProjectilePathSpline, USplineMeshComponent::StaticClass());
+		splineMesh->SetForwardAxis(ESplineMeshAxis::Z);
+		if(SplineMesh) splineMesh->SetStaticMesh(SplineMesh);
+
+		//init spline mesh's mobility 
+		splineMesh->SetMobility(EComponentMobility::Movable);
+		splineMesh->CreationMethod = EComponentCreationMethod::UserConstructionScript;
+
+		//register spline mesh component to world
+		splineMesh->RegisterComponentWithWorld(GetWorld());
+
+		//attach new splineMesh to spline component
+		splineMesh->AttachToComponent(ProjectilePathSpline, FAttachmentTransformRules::KeepWorldTransform);
+		splineMesh->SetStartScale(FVector2D(0.25f));
+		splineMesh->SetEndScale(FVector2D(0.25f));
+
+		//set spline mesh's position and collision
+		splineMesh->SetStartAndEnd(prevPos, prevTangent, currPos, currTangent);
+		splineMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		if (SplineMeshMaterial) splineMesh->SetMaterial(0, SplineMeshMaterial);
+		SplineMeshComponentList.Add(splineMesh);
+	}
+	//DrawDebugSphere(GetWorld(), Locations[Locations.Num() - 1], 10.0f, 5, FColor::Yellow, false, 1.0f, 1, 0);
+	UGameplayStatics::SpawnDecalAtLocation(GetWorld(), PathTargetDecalMaterial, FVector(20.0f, 100.0f, 100.0f), Locations[Locations.Num() - 1], FRotator(90.0f, 0.0f, 0.0f), 0.01f);
+}
+
+void AThrowWeaponBase::ClearProjectilePathSpline()
+{
+	for (int idx = SplineMeshComponentList.Num() - 1; idx >= 0; idx--)
+	{
+		SplineMeshComponentList[idx]->DestroyComponent();
+	}
+	SplineMeshComponentList.Empty();
 }
 
 float AThrowWeaponBase::GetThrowDelayRemainingTime()
