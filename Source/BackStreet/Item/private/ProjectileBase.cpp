@@ -40,6 +40,7 @@ AProjectileBase::AProjectileBase()
 	ProjectileMovement->bAutoActivate = false;
 
 	InitialLifeSpan = 10.0f;
+	this->Tags.Add("Projectile");
 }
 
 // Called when the game starts or when spawned
@@ -51,7 +52,6 @@ void AProjectileBase::BeginPlay()
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnTargetBeginOverlap);
 	SphereCollision->OnComponentHit.AddDynamic(this, &AProjectileBase::OnProjectileHit);
 
-	SetActorRotation(UKismetMathLibrary::RandomRotator());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
@@ -114,11 +114,13 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectil
 	{
 		OwnerCharacterRef = NewCharacterRef;
 		SpawnInstigator = OwnerCharacterRef->GetController();
-		SetActorRotation(OwnerCharacterRef.Get()->GetActorRotation());
 	}
 	ProjectileID = NewAssetInfo.ProjectileID;
 	UpdateProjectileStat(NewStatInfo);
 	ProjectileAssetInfo = NewAssetInfo;
+
+	if (!ProjectileStat.bIsBullet)
+		SetActorRotation(UKismetMathLibrary::RandomRotator());
 
 	if (ProjectileID != 0)
 	{
@@ -147,6 +149,7 @@ void AProjectileBase::UpdateProjectileStat(FProjectileStatStruct NewStat)
 	ProjectileMovement->ProjectileGravityScale =  ProjectileStat.bIsBullet ? 0.0f : 1.0f;
 	ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
 	ProjectileMovement->MaxSpeed = ProjectileStat.ProjectileSpeed;
+	ProjectileMovement->Velocity = GetActorRotation().Vector().GetSafeNormal() * ProjectileStat.ProjectileSpeed;
 }
 
 void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex
@@ -239,6 +242,13 @@ void AProjectileBase::Explode()
 	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 100.0f); //카메라 셰이크 이벤트
 
 	Destroy();
+}
+
+void AProjectileBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
+{
+	if (!IsValid(NewOwnerCharacterRef)) return;
+	OwnerCharacterRef = NewOwnerCharacterRef;
+	SetOwner(OwnerCharacterRef.Get());
 }
 
 void AProjectileBase::ActivateProjectileMovement()

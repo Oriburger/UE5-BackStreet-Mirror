@@ -28,8 +28,288 @@
 		"SkillIconImage": "None"
 	},
 	{
-		"Name": "1111",
-		"SkillID": 1111,
+		"Name": "11100",
+		"SkillID": 11100,
+		"SkillName": "TaserHoop",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [],
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "11101",
+		"SkillID": 11101,
+		"SkillName": "DashAttack",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [],
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "11200",
+		"SkillID": 11200,
+		"SkillName": "KnockBack",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [],
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "11201",
+		"SkillID": 11201,
+		"SkillName": "Deflect",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [],
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "11300",
+		"SkillID": 11300,
+		"SkillName": "None",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [],
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "11500",
+		"SkillID": 11500,
+		"SkillName": "VangGaurd",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [],
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "11501",
+		"SkillID": 11501,
+		"SkillName": "MagneticCube",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [],
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "11502",
+		"SkillID": 11502,
+		"SkillName": "KettleBot",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [],
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "11600",
+		"SkillID": 11300,
+		"SkillName": "WeaponTransform",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [],
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "11700",
+		"SkillID": 11700,
+		"SkillName": "Arlert",
+		"SkillActorMesh": "None",
+		"InitialLocation":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"InitialRotation":
+		{
+			"Pitch": 0,
+			"Yaw": 0,
+			"Roll": 0
+		},
+		"InitialScale":
+		{
+			"X": 0,
+			"Y": 0,
+			"Z": 0
+		},
+		"EffectParticleList": [],
+		"DestroyEffectParticle": "None",
+		"SkillSoundList": [],
+		"SkillIconImage": "None"
+	},
+	{
+		"Name": "99999",
+		"SkillID": 99999,
 		"SkillName": "Teleport",
 		"SkillActorMesh": "None",
 		"InitialLocation":
@@ -54,36 +334,6 @@
 		"DestroyEffectParticle": "None",
 		"SkillSoundList": [
 			"None"
-		],
-		"SkillIconImage": "None"
-	},
-	{
-		"Name": "1112",
-		"SkillID": 1112,
-		"SkillName": "Dash",
-		"SkillActorMesh": "None",
-		"InitialLocation":
-		{
-			"X": 0,
-			"Y": 0,
-			"Z": 0
-		},
-		"InitialRotation":
-		{
-			"Pitch": 0,
-			"Yaw": 0,
-			"Roll": 0
-		},
-		"InitialScale":
-		{
-			"X": 0,
-			"Y": 0,
-			"Z": 0
-		},
-		"EffectParticleList": [],
-		"DestroyEffectParticle": "None",
-		"SkillSoundList": [
-			"/Game/Asset/StarterContent/Audio/Collapse_Cue.Collapse_Cue"
 		],
 		"SkillIconImage": "None"
 	}

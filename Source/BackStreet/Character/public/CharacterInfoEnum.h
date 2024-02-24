@@ -19,8 +19,8 @@ enum class ESkillGrade : uint8
 	E_None				UMETA(DisplayName = "None"),
 	E_Common			UMETA(DisplayName = "Common"),
 	E_Rare				UMETA(DisplayName = "Rare"),
-	E_Epic					UMETA(DisplayName = "Epic"),
-	E_Regend			UMETA(DisplayName = "Regend")
+	E_Legend			UMETA(DisplayName = "Legend"),
+	E_Mythic				UMETA(DisplayName = "Mythic")
 };
 
 UENUM(BlueprintType)

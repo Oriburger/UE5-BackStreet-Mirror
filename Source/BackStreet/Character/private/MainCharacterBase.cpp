@@ -144,7 +144,6 @@ void AMainCharacterBase::Throw()
 	SetAimingMode(false);
 
 	GetWorldTimerManager().ClearTimer(AimingTimerHandle);
-
 	if (IsValid(GetCurrentWeaponRef()) && GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
 	{
 		Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->Throw();
@@ -167,10 +166,19 @@ void AMainCharacterBase::UpdateAimingState()
 	Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->CalculateThrowDirection(GetThrowDestination());
 
 	FPredictProjectilePathResult predictProjectilePathResult = Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->GetProjectilePathPredictResult();
-	for (FPredictProjectilePathPointData& point : predictProjectilePathResult.PathData)
+	
+	//Draw projectile path with spline
+	TArray<FVector> pathPointList;
+	FVector cursorLocation = PlayerControllerRef.Get()->GetCursorDeprojectionWorldLocation();
+	for (auto& pathData : predictProjectilePathResult.PathData)
 	{
-		//DrawDebugSphere(GetWorld(), point.Location, 3.0f, 2, FColor::Red, false, 0.015f, 0, 3.0f);
+		if (!pathPointList.IsEmpty())
+			pathPointList.Add((pathPointList[pathPointList.Num() - 1] + pathData.Location) / 2);
+		pathPointList.Add(pathData.Location);
+		//UE_LOG(LogTemp, Warning, TEXT("%s, %s"), *cursorLocation.ToString(), *pathData.Location.ToString())
+		if (cursorLocation.Z >= pathData.Location.Z) break;
 	}
+	Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->UpdateProjectilePathSpline(pathPointList);
 }
 
 FVector AMainCharacterBase::GetThrowDestination()
@@ -372,11 +380,12 @@ void AMainCharacterBase::TrySkill()
 	check(GetCurrentWeaponRef() != nullptr);
 
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle
+		|| !GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.IsSkillAvailable ) return;
 	 
-	if (GetCurrentWeaponRef()->WeaponID == 0||GetCharacterState().CharacterCurrSkillGauge<GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.SkillCommonReq)
+	if (GetCharacterState().CharacterCurrSkillGauge<GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.SkillCommonReq)
 	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬을 사용할 수 없습니다. ")), FColor::White);
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬 게이지가 부족합니다.")), FColor::White);
 		return;
 	}
 
@@ -436,7 +445,6 @@ void AMainCharacterBase::RotateToCursor()
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
 	FRotator newRotation = PlayerControllerRef.Get()->GetRotationToCursor();
-	//DrawDebugSphere(GetWorld(), PlayerControllerRef.Get()->GetCursorDeprojectionWorldLocation(), 10.0f, 5, FColor::Yellow, false, 1.0f, 1, 5);
 	if (newRotation != FRotator())
 	{
 		newRotation.Pitch = newRotation.Roll = 0.0f;

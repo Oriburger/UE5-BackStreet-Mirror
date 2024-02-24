@@ -115,4 +115,7 @@ private:
 
 	UPROPERTY()
 		FTimerHandle HitTimeOutTimerHandle;
+
+	UPROPERTY()
+		FTimerHandle DamageAIDelayTimer;
 };

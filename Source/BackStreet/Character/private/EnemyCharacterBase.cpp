@@ -97,9 +97,6 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitImpactSound, GetActorLocation());
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 
-	//const float knockBackStrength = 100000.0f;
-
-
 	if (DamageCauser->ActorHasTag("Player"))
 	{
 		if (DamageCauser->ActorHasTag("Attack|Common"))
@@ -109,16 +106,24 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		}
 	}	
 
-	//데미지가 전체 체력의 20% 미만이면 넉백이 출력되지 않는다.
-	if(DamageAmount >= GetCharacterStat().CharacterMaxHP * 0.2f)
-	{
-		TakeKnockBack(DamageCauser, DefaultKnockBackStrength);
-	}
-
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Hit)
 	{
 		GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, this, &AEnemyCharacterBase::ResetActionStateForTimer, 1.0f, false, 0.5f);
 	}
+
+	//Stop AI Logic And Set Reactivation event
+	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(Controller);
+	if (IsValid(aiControllerRef))
+	{
+		aiControllerRef->DeactivateAI();
+		GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
+		GetWorldTimerManager().SetTimer(DamageAIDelayTimer, aiControllerRef, &AAIControllerBase::ActivateAI, 1.0f, false, 1.5f);
+	}
+
+	//Set Rotation To Causer
+	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), DamageCauser->GetActorLocation());
+	newRotation.Pitch = newRotation.Roll = 0.0f;
+	SetActorRotation(newRotation);
 
 	return damageAmount;
 }
@@ -285,6 +290,8 @@ void AEnemyCharacterBase::ClearAllTimerHandle()
 	Super::ClearAllTimerHandle();
 	GetWorldTimerManager().ClearTimer(TurnTimeOutTimerHandle);
 	GetWorldTimerManager().ClearTimer(HitTimeOutTimerHandle);
+	GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
 	TurnTimeOutTimerHandle.Invalidate();
 	HitTimeOutTimerHandle.Invalidate();
+	DamageAIDelayTimer.Invalidate();
 }
