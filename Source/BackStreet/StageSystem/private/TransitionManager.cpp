@@ -11,13 +11,13 @@
 
 void UTransitionManager::InitTransitionManager()
 {
-	// Delegate 왜 안되지..????
-	/*if (!SpawnRequestDelegate.IsBound())
-	{
-		SpawnRequestDelegate.AddDynamic(this, &AResourceManager::SpawnStageActor);
-	}*/
+
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 	ChapterManager = Cast<AChapterManagerBase>(this->GetOuter());
+	if (!SpawnRequestDelegate.IsBound())
+	{
+		SpawnRequestDelegate.AddDynamic(ChapterManager.Get()->GetResourceManager(), &AResourceManager::SpawnStageActor);
+	}
 	LoadCompleteDelegate.BindUFunction(this, "CompleteLoad");
 	UnloadCompleteDelegate.BindUFunction(this, "SetGate");
 	IsMoveStage = false;
@@ -41,7 +41,7 @@ void UTransitionManager::TryMoveStage(EDirection Dir)
 	AStageData* currentStage = ChapterManager.Get()->GetCurrentStage();
 	if (!IsValid(currentStage)) return;
 
-	GamemodeRef.Get()->FadeOutDelegate.Broadcast();
+	GamemodeRef.Get()->UIAnimationDelegate.Broadcast(FName("FadeOut"));
 
 	IsMoveStage = true;
 	MoveDirection = Dir;
@@ -175,8 +175,6 @@ void UTransitionManager::CompleteLoad()
 	{
 		SetStage(currentStage);
 		currentStage->SetIsVisited(true);
-		// 델리게이트로 변경필요
-		ChapterManager.Get()->GetResourceManager()->SpawnStageActor(currentStage);
 	}
 	else
 	{

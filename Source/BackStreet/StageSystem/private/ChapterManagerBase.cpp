@@ -6,6 +6,7 @@
 #include "../public/TransitionManager.h"
 #include "../public/StageGenerator.h"
 #include "../public/ResourceManager.h"
+#include "../public/WaveManager.h"
 #include "../public/StageData.h"
 #include "../public/GateBase.h"
 
@@ -27,6 +28,30 @@ void AChapterManagerBase::Tick(float DeltaTime)
 
 }
 
+void AChapterManagerBase::InitChapterManager()
+{
+	FActorSpawnParameters spawnParams;
+	FRotator rotator;
+	FVector spawnLocation = FVector::ZeroVector;
+
+	ChapterLV = 0;
+	StatWeight = 0.0f;
+
+	StageGenerator = NewObject<UStageGenerator>(this);
+	TransitionManager = NewObject<UTransitionManager>(this);
+	WaveManager = NewObject<AWaveManager>(this);
+
+	CreateResourceManager();
+	CreateChapter();
+	SetLobbyStage();
+
+	ResourceManager->InitReference(WaveManager);
+	WaveManager->InitReference(this, ResourceManager);
+
+	ResetChapter();
+	WaveManager->InitWaveManager(this);
+}
+
 void AChapterManagerBase::SetLobbyStage()
 {
 	TArray<AActor*> lobbyStages;
@@ -43,20 +68,22 @@ void AChapterManagerBase::SetLobbyStage()
 	}
 }
 
-bool AChapterManagerBase::CheckChapterClear()
+bool AChapterManagerBase::DoChapterClearTaskAfterCheck()
 {
 	if (IsChapterClear())
 	{
 		// 챕터 클리어 관련 로직 실행
-		UE_LOG(LogTemp, Log, TEXT("AChapterManagerBase::CheckChapterClear: Clear Chapter"));
+		UE_LOG(LogTemp, Log, TEXT("AChapterManagerBase::DoChapterClearTaskAfterCheck: Clear Chapter"));
 
 		TArray<AActor*> gates;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGateBase::StaticClass(), gates);
 		for (AActor* gate : gates)
 		{
 			AGateBase* target = Cast<AGateBase>(gate);
-			if(target->ActorHasTag(FName("ChapterGate")))
-				target->ActivateChapterGate();
+			if (target->ActorHasTag(FName("ChapterGate")))
+				target->ActivateChapterGateAfterCheck();
+
+
 		}
 		return true;
 	}
@@ -93,7 +120,7 @@ void AChapterManagerBase::MoveChapter()
 
 		ResourceManager->CleanAllResource();
 		CreateChapter();
-		InitChapterManager();
+		ResetChapter();
 		// UI Update
 		gameModeRef->SetMiniMapUI();
 		gameModeRef->UpdateMiniMapUI();
@@ -102,24 +129,6 @@ void AChapterManagerBase::MoveChapter()
 
 }
 
-void AChapterManagerBase::CreateChapterManager()
-{
-	FActorSpawnParameters spawnParams;
-	FRotator rotator;
-	FVector spawnLocation = FVector::ZeroVector;
-
-	ChapterLV = 0;
-	StatWeight = 0.0f;
-
-	StageGenerator = NewObject<UStageGenerator>(this);
-	TransitionManager = NewObject<UTransitionManager>(this);
-
-
-	CreateResourceManager();
-	CreateChapter();
-	SetLobbyStage();
-	InitChapterManager();
-}
 
 void AChapterManagerBase::CreateResourceManager()
 {
@@ -130,9 +139,8 @@ void AChapterManagerBase::CreateResourceManager()
 	ResourceManager = GetWorld()->SpawnActor<AResourceManager>(ResourceManagerClass,FVector(0,0,0), FRotator(0, 90, 0), actorSpawnParameters);
 }
 
-void AChapterManagerBase::InitChapterManager()
+void AChapterManagerBase::ResetChapter()
 {
-	// Level에 있는 초기화 필요한 Actor 초기화시키기 , 바인딩 , 및 참조 초기화 코드 등
 	TransitionManager->InitTransitionManager();
 	TransitionManager->InitChapter(StageList);
 	CurrentStage = LobbyStage;
@@ -172,12 +180,13 @@ void AChapterManagerBase::InitStageTypeArray()
 		{
 			if (target->StageType == EStageCategoryInfo::E_Normal)
 			{
-				NormalStageTypes.Add(*target);
+				// Temporary) Debug Code Need To Fix
+				//if(target->WaveType==EWaveCategoryInfo::E_TimeLimitWave)
+					NormalStageTypes.Add(*target);
 			}
 			else if (target->StageType == EStageCategoryInfo::E_Boss)
-			{
 				BossStageTypes.Add(*target);
-			}
+			
 		}
 	}
 }
@@ -185,6 +194,7 @@ void AChapterManagerBase::InitStageTypeArray()
 void AChapterManagerBase::UpdateMapUI()
 {
 	Cast<ABackStreetGameModeBase>(GetOwner())->UpdateMiniMapUI();
+	WaveManager->UpdateWaveUI(CurrentStage);
 }
 
 FStageInfoStruct AChapterManagerBase::GetStageTypeInfoWithType(EStageCategoryInfo Type)
