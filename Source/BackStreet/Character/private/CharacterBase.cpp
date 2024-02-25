@@ -325,21 +325,24 @@ float ACharacterBase::GetSkillAnimPlayRate(uint8 SkillAnimIndex)
 {
 	float animPlayRate;
 
-	if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillCommonReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillRareReq, true, false))
+	if (GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.IsAnimPlayRateSyncWithGrade)
 	{
-		animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.CommonSkillAnimRateList[SkillAnimPlayTimerCurr];
-	}
-	else if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillRareReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillLegendReq, true, false))
-	{
-		animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.RareSkillAnimRateList[SkillAnimPlayTimerCurr];
-	}
-	else if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillLegendReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillMythicReq, true, false))
-	{
-		animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.LegendSkillAnimRateList[SkillAnimPlayTimerCurr];
-	}
-	else if (CharacterState.CharacterCurrSkillGauge >= GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillMythicReq)
-	{
-		animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.MythicSkillAnimRateList[SkillAnimPlayTimerCurr];
+		if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillCommonReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillRareReq, true, false))
+		{
+			animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.CommonSkillAnimRateList[SkillAnimPlayTimerCurr];
+		}
+		else if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillRareReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillLegendReq, true, false))
+		{
+			animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.RareSkillAnimRateList[SkillAnimPlayTimerCurr];
+		}
+		else if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillLegendReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillMythicReq, true, false))
+		{
+			animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.LegendSkillAnimRateList[SkillAnimPlayTimerCurr];
+		}
+		else if (CharacterState.CharacterCurrSkillGauge >= GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillMythicReq)
+		{
+			animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.MythicSkillAnimRateList[SkillAnimPlayTimerCurr];
+		}
 	}
 	else
 	{
