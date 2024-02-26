@@ -149,6 +149,7 @@ void AItemBase::OnItemPicked(AActor* Causer)
 	case EItemCategoryInfo::E_Mission:
 		break;
 	}
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), EquipSound, GetActorLocation());
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ItemPickEffect, GetActorLocation());
 	Destroy();
 }
