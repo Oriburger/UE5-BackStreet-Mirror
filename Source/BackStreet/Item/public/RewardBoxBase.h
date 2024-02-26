@@ -82,6 +82,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
 		class USoundCue* TakeAbilitySound;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Sound")
+		class USoundCue* SpawnAbilityBoxSound;
 
 /*------- 프로퍼티 ---------------------------*/
 protected:
