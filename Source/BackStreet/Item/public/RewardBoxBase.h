@@ -81,7 +81,7 @@ protected:
 		class UParticleSystem* DestroyEffectParticle;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* DestroyEffectSound;
+		class USoundCue* TakeAbilitySound;
 
 /*------- 프로퍼티 ---------------------------*/
 protected:
