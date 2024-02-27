@@ -97,7 +97,7 @@ public:
 // ------ Asset ----------------------------------------------
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
-		class USoundCue* PickSound;
+		class USoundCue* EquipSound;
 
 	//아이템 데이터 테이블 (에셋 정보 포함)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
