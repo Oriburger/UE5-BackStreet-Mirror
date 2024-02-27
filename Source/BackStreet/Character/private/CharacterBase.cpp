@@ -57,7 +57,7 @@ void ACharacterBase::BeginPlay()
 	{
 		SubInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		SubInventoryRef->SetOwner(this);
-		SubInventoryRef->InitInventory(4);
+		SubInventoryRef->InitInventory(2);
 	}
 
 	if (IsValid(InventoryRef) && !InventoryRef->IsActorBeingDestroyed())

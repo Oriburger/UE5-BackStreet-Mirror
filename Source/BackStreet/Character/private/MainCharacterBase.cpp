@@ -470,11 +470,12 @@ void AMainCharacterBase::PickSubWeapon()
 	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponC"))) targetIdx = 2;
 	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponD"))) targetIdx = 3;
 
+	//If player press current picked sub weapon, switch to the first main weapon.
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw && GetSubInventoryRef()->GetCurrentIdx() == targetIdx)
 	{
 		GetInventoryRef()->EquipWeaponByIdx(0);
 	}
-	else if (!TrySwitchToSubWeapon(targetIdx))
+	else if(!TrySwitchToSubWeapon(targetIdx))
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
 	}
@@ -577,10 +578,13 @@ bool AMainCharacterBase::PickWeapon(int32 NewWeaponID)
 	if (weaponType == EWeaponType::E_Throw)
 	{
 		result = GetSubInventoryRef()->AddWeapon(NewWeaponID);
+		//Force UI update with manual calling delegate
+		GetInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
 	}
 	else if(weaponType != EWeaponType::E_None)
 	{
 		result = GetInventoryRef()->AddWeapon(NewWeaponID);
+		GetSubInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
 	}
 
 	return result;
