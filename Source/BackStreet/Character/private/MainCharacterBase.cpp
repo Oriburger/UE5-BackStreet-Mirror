@@ -541,6 +541,13 @@ void AMainCharacterBase::ResetRotationToMovement()
 
 void AMainCharacterBase::SwitchToNextWeapon()
 {
+	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
+	{
+		GetInventoryRef()->EquipWeaponByIdx(0);
+		GetSubInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
+		return;
+	}
+
 	Super::SwitchToNextWeapon();
 }
 
@@ -598,12 +605,12 @@ bool AMainCharacterBase::PickWeapon(int32 NewWeaponID)
 	{
 		result = GetSubInventoryRef()->AddWeapon(NewWeaponID);
 		//Force UI update with manual calling delegate
-		GetInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
+		//GetInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
 	}
 	else if(weaponType != EWeaponType::E_None)
 	{
 		result = GetInventoryRef()->AddWeapon(NewWeaponID);
-		GetSubInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
+		//GetSubInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
 	}
 
 	return result;
