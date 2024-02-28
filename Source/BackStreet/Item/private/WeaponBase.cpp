@@ -2,7 +2,6 @@
 
 #include "../public/WeaponBase.h"
 #include "Components/AudioComponent.h"
-#include "../../Global/public/DebuffManager.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../public/WeaponInventoryBase.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -177,9 +176,7 @@ void AWeaponBase::SetResetComboTimer()
 	GetWorldTimerManager().ClearTimer(ComboTimerHandle);
 	const float delayValue = FMath::Clamp((-1.0f * WeaponStat.WeaponAtkSpeedRate) + 2.0f, 0.25f, 10.0f);
 
-	GetWorldTimerManager().SetTimer(ComboTimerHandle, FTimerDelegate::CreateLambda([&]() {
-		WeaponState.ComboCount = 0;
-	}), delayValue, false);
+	GetWorldTimerManager().SetTimer(ComboTimerHandle, this, &AWeaponBase::ResetComboCnt, delayValue, false);
 }
 
 void AWeaponBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
@@ -198,6 +195,7 @@ void AWeaponBase::PlayEffectSound(USoundCue* EffectSound)
 void AWeaponBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(ComboTimerHandle);
+	ComboTimerHandle.Invalidate();
 }
 
 void AWeaponBase::UpdateDurabilityState()

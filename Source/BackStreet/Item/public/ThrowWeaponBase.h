@@ -16,6 +16,11 @@ class BACKSTREET_API AThrowWeaponBase : public ARangedWeaponBase
 
 public:
 	AThrowWeaponBase();
+
+	UPROPERTY(EditInstanceOnly)
+		class USplineComponent* ProjectilePathSpline;
+
+public:
 	//공격 처리
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
@@ -32,7 +37,7 @@ public:
 
 	//장전을 시도. 현재 상태에 따른 성공 여부를 반환
 	UFUNCTION(BlueprintCallable)
-		virtual bool TryReload() override;
+		virtual void Reload();
 
 	//탄환의 개수를 더함 (ExtraAmmoCount까지)
 	UFUNCTION(BlueprintCallable)
@@ -72,6 +77,28 @@ private:
 	//마지막으로 던진 발사체의 스탯 정보
 		FProjectileStatStruct ProjectileStat;
 
+		
+//------ Projectile Path Spline -------------------
+public:
+	UFUNCTION()
+		void UpdateProjectilePathSpline(TArray<FVector>& Locations);
+
+	UFUNCTION()
+		void ClearProjectilePathSpline();
+
+private:
+	UPROPERTY()
+		TArray<class USplineMeshComponent*> SplineMeshComponentList;
+
+	UPROPERTY()
+		class UStaticMesh* SplineMesh;
+
+	UPROPERTY()
+		class UMaterialInterface* SplineMeshMaterial;
+
+	UPROPERTY()
+		class UMaterialInterface* PathTargetDecalMaterial; 
+
 //------- 타이머 관련 -------------------------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -79,9 +106,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)		
 		bool GetCanThrow() { return GetThrowDelayRemainingTime() == 0; }
-
-protected:
-	
 
 private:
 	//투척 딜레이 타이머 핸들

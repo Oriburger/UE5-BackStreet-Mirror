@@ -65,7 +65,7 @@ void AItemBoxBase::OnItemBoxOpened(AActor* Causer)
 		LaunchItem(itemRef);
 	}
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OpenEffectParticle, GetActorLocation(), FRotator(), FVector(1.5f));
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), OpenEffectSound, GetActorLocation());
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), OpenItemBoxSound, GetActorLocation());
 	
 	if(!ActorHasTag("Tutorial")) Destroy();
 }

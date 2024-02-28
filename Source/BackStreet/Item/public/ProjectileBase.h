@@ -80,7 +80,7 @@ public:
 	UFUNCTION()
 		void InitProjectile(class ACharacterBase* NewCharacterRef, FProjectileAssetInfoStruct NewAssetInfo, FProjectileStatStruct NewStatInfo);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void UpdateProjectileStat(FProjectileStatStruct NewStat);
 
 	UFUNCTION()
@@ -104,6 +104,9 @@ public:
 
 	UFUNCTION()
 		void Explode();	
+
+	UFUNCTION(BlueprintCallable)
+		void SetOwnerCharacter(class ACharacterBase* NewOwnerCharacterRef);
 
 //------ private 프로퍼티 ------------------
 private: 

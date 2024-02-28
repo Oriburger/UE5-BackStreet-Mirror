@@ -98,10 +98,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FWeaponStateStruct GetWeaponState() { return WeaponState; }
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void SetWeaponStat(FWeaponStatStruct NewStat) { WeaponStat = NewStat; }
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void SetWeaponState(FWeaponStateStruct NewState) { WeaponState = NewState; }
 
 	UFUNCTION()
@@ -129,6 +129,10 @@ public:
 	//현재 Combo 수를 반환 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetCurrentComboCnt() { return WeaponState.ComboCount; }
+
+private:
+	UFUNCTION()
+		void ResetComboCnt() { WeaponState.ComboCount = 0; }
 
 //-------- 그 외 (Ref, VFX 등)-------------------------------
 public:

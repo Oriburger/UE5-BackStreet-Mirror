@@ -20,6 +20,7 @@ TArray<class AStageData*> UStageGenerator::CreateMaze()
 			FRotator rotator;
 
 			AStageData* target = NewObject<AStageData>(this->GetOuter());
+			target->SetOwner(Cast<AChapterManagerBase>(this->GetOuter()));
 			InitStageData(spawnLocation, y, x, target);
 
 			Stages.Push(target);
@@ -55,12 +56,12 @@ void UStageGenerator::InitStageData(FVector Vector, int32 Ypos, int32 Xpos, clas
 	Target->AddGateInfo(false); // RIGHT
 
 	Target->SetStageCategoryType(EStageCategoryInfo::E_Normal);
+	Target->SetCurrentWaveLevel(0);
+	Target->SetMonsterSpawnPointOrderIdx(0);
 
 	Target->SetIsValid(true);
 	Target->SetIsVisited(false);
 	Target->SetIsClear(false);
-
-	//Target->SetLevelToLoad(Cast<AChapterManagerBase>(this->GetOuter())->GetResourceManager()->GetRandomMap());
 
 }
 
@@ -69,13 +70,9 @@ void UStageGenerator::SetStageType()
 	for (AStageData* stage : Stages)
 	{
 		if (stage->GetStageCategoryType() == EStageCategoryInfo::E_Boss)
-		{
 			stage->SetStageTypeInfo(Cast<AChapterManagerBase>(this->GetOuter())->GetStageTypeInfoWithType(EStageCategoryInfo::E_Boss));
-		}
 		else if (stage->GetStageCategoryType() == EStageCategoryInfo::E_Normal)
-		{
 			stage->SetStageTypeInfo(Cast<AChapterManagerBase>(this->GetOuter())->GetStageTypeInfoWithType(EStageCategoryInfo::E_Normal));
-		}
 	}
 }
 
@@ -97,13 +94,9 @@ void UStageGenerator::RecursiveBacktracking()
 	AStageData* nexttile = GetRandomNeighbourTile(currenttile);
 
 	if (nexttile->GetIsValid())
-	{
 		VisitTile(currenttile, nexttile);
-	}
 	else
-	{
 		Tracks.Pop();
-	}
 
 	RecursiveBacktracking();
 }
@@ -162,9 +155,8 @@ void UStageGenerator::VisitTile(class AStageData* CurrentTilePara, class AStageD
 class AStageData* UStageGenerator::GetTile(int32 XPosition, int32 YPosition)
 {
 	if (XPosition >= 0 && XPosition < MAX_GRID_SIZE && YPosition >= 0 && YPosition < MAX_GRID_SIZE)
-	{
 		return (Stages[(YPosition * MAX_GRID_SIZE) + XPosition]);
-	}
+	
 	return nullptr;
 	
 }

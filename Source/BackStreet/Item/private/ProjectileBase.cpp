@@ -4,7 +4,6 @@
 #include "../public/ProjectileBase.h"
 #include "../public/WeaponBase.h"
 #include "../../Character/public/CharacterBase.h"
-#include "../../Global/public/DebuffManager.h"
 #include "NiagaraFunctionLibrary.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -41,6 +40,7 @@ AProjectileBase::AProjectileBase()
 	ProjectileMovement->bAutoActivate = false;
 
 	InitialLifeSpan = 10.0f;
+	this->Tags.Add("Projectile");
 }
 
 // Called when the game starts or when spawned
@@ -52,7 +52,6 @@ void AProjectileBase::BeginPlay()
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnTargetBeginOverlap);
 	SphereCollision->OnComponentHit.AddDynamic(this, &AProjectileBase::OnProjectileHit);
 
-	SetActorRotation(UKismetMathLibrary::RandomRotator());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
@@ -115,11 +114,13 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectil
 	{
 		OwnerCharacterRef = NewCharacterRef;
 		SpawnInstigator = OwnerCharacterRef->GetController();
-		SetActorRotation(OwnerCharacterRef.Get()->GetActorRotation());
 	}
 	ProjectileID = NewAssetInfo.ProjectileID;
 	UpdateProjectileStat(NewStatInfo);
 	ProjectileAssetInfo = NewAssetInfo;
+
+	if (!ProjectileStat.bIsBullet)
+		SetActorRotation(UKismetMathLibrary::RandomRotator());
 
 	if (ProjectileID != 0)
 	{
@@ -148,6 +149,7 @@ void AProjectileBase::UpdateProjectileStat(FProjectileStatStruct NewStat)
 	ProjectileMovement->ProjectileGravityScale =  ProjectileStat.bIsBullet ? 0.0f : 1.0f;
 	ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
 	ProjectileMovement->MaxSpeed = ProjectileStat.ProjectileSpeed;
+	ProjectileMovement->Velocity = GetActorRotation().Vector().GetSafeNormal() * ProjectileStat.ProjectileSpeed;
 }
 
 void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex
@@ -162,11 +164,8 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		if (OtherActor == OwnerCharacterRef.Get() || OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
 
 		//디버프가 있다면?
-		if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
-		{
-			GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(ProjectileStat.DebuffType, Cast<ACharacterBase>(OtherActor), OwnerCharacterRef.Get()
-				, ProjectileStat.DebuffTotalTime, ProjectileStat.DebuffVariable);
-		}
+		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(ProjectileStat.DebuffType, OwnerCharacterRef.Get()
+															, ProjectileStat.DebuffTotalTime, ProjectileStat.DebuffVariable);
 
 		//폭발하는 발사체라면?
 		if (ProjectileStat.bIsExplosive)
@@ -243,6 +242,13 @@ void AProjectileBase::Explode()
 	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 100.0f); //카메라 셰이크 이벤트
 
 	Destroy();
+}
+
+void AProjectileBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
+{
+	if (!IsValid(NewOwnerCharacterRef)) return;
+	OwnerCharacterRef = NewOwnerCharacterRef;
+	SetOwner(OwnerCharacterRef.Get());
 }
 
 void AProjectileBase::ActivateProjectileMovement()

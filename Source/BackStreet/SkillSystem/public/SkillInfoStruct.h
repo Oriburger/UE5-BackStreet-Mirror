@@ -31,10 +31,10 @@ public:
 		TMap<FName, float> SkillRareVariableMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<FName, float> SkillEpicVariableMap;
+		TMap<FName, float> SkillLegendVariableMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<FName, float> SkillRegendVariableMap;
+		TMap<FName, float> SkillMythicVariableMap;
 };
 
 USTRUCT(BlueprintType)
@@ -89,8 +89,22 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<int32> SkillIDList;
 	
+	//Depending on the SkillGrade, the animation rate varies
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<float> SkillAnimPlayRateList;
+		bool IsAnimPlayRateSyncWithGrade;
+
+	//when IsAnimPlayRateSyncWithGrade == false, CommonSkillAnimRateList gonna be AnimPlayRateList;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<float> CommonSkillAnimRateList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<float> RareSkillAnimRateList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<float> LegendSkillAnimRateList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<float> MythicSkillAnimRateList;
 
 	//Rate value(Criterion is TotalAnimPlayTime) which is used to indicate the interval between each skill
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -112,25 +126,28 @@ struct FSkillGaugeInfo
 public:
 	GENERATED_USTRUCT_BODY()
 
-	//Combo 게이지 증가 비율
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool IsSkillAvailable = 0;
+	
+	//skill gauge augmentation per one attack 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float SkillGaugeAug = 0.1;
 
-	//Common 스킬 요구 게이지량
+	//common skill gauge requirement
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float SkillCommonReq = 1.0;
 
-	// Rare 스킬 요구 게이지량
+	// rare skill gauge requirement
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float SkillRareReq = 2.0;
 
-	// epic 스킬 요구 게이지량
+	// Legend skill gauge requirement
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float SkillEpicReq = 3.0;
+		float SkillLegendReq = 3.0;
 
-	// Regend 스킬 요구 게이지량
+	// mythic skill gauge requirement
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float SkillRegendReq = 4.0;
+		float SkillMythicReq = 4.0;
 };
 
 USTRUCT(BlueprintType)

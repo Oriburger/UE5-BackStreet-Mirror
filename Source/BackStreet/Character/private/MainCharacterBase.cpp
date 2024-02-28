@@ -2,7 +2,6 @@
 #include "../public/MainCharacterBase.h"
 #include "../public/MainCharacterController.h"
 #include "../public/AbilityManagerBase.h"
-#include "../../Global/public/DebuffManager.h"
 #include "../../Item/public/WeaponBase.h"
 #include "../../Item/public/ThrowWeaponBase.h"
 #include "../../Item/public/WeaponInventoryBase.h"
@@ -145,7 +144,6 @@ void AMainCharacterBase::Throw()
 	SetAimingMode(false);
 
 	GetWorldTimerManager().ClearTimer(AimingTimerHandle);
-
 	if (IsValid(GetCurrentWeaponRef()) && GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
 	{
 		Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->Throw();
@@ -168,10 +166,19 @@ void AMainCharacterBase::UpdateAimingState()
 	Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->CalculateThrowDirection(GetThrowDestination());
 
 	FPredictProjectilePathResult predictProjectilePathResult = Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->GetProjectilePathPredictResult();
-	for (FPredictProjectilePathPointData& point : predictProjectilePathResult.PathData)
+	
+	//Draw projectile path with spline
+	TArray<FVector> pathPointList;
+	FVector cursorLocation = PlayerControllerRef.Get()->GetCursorDeprojectionWorldLocation();
+	for (auto& pathData : predictProjectilePathResult.PathData)
 	{
-		//DrawDebugSphere(---);
+		if (!pathPointList.IsEmpty())
+			pathPointList.Add((pathPointList[pathPointList.Num() - 1] + pathData.Location) / 2);
+		pathPointList.Add(pathData.Location);
+		//UE_LOG(LogTemp, Warning, TEXT("%s, %s"), *cursorLocation.ToString(), *pathData.Location.ToString())
+		if (cursorLocation.Z >= pathData.Location.Z) break;
 	}
+	Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->UpdateProjectilePathSpline(pathPointList);
 }
 
 FVector AMainCharacterBase::GetThrowDestination()
@@ -218,7 +225,10 @@ void AMainCharacterBase::MoveRight(float Value)
 
 void AMainCharacterBase::Roll()
 {
+	UE_LOG(LogTemp, Log, TEXT("Roll"));
+
 	if (!GetIsActionActive(ECharacterActionType::E_Idle)) return;
+	UE_LOG(LogTemp, Log, TEXT("Roll if"));
 
 	FVector newDirection(0.0f);
 	FRotator newRotation = FRotator();
@@ -265,13 +275,8 @@ void AMainCharacterBase::Roll()
 void AMainCharacterBase::Dash()
 {
 	if (IsActorBeingDestroyed()) return;
-	
 	LaunchCharacter(FVector(0.0f, 0.0f, 500.0f), false, false);
-	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, FTimerDelegate::CreateLambda([&]() {
-		const FVector& direction = GetMesh()->GetRightVector();
-		float& speed = GetCharacterMovement()->MaxWalkSpeed;
-		GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
-	}), 0.075f, false);
+	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, this, &AMainCharacterBase::StopDashMovement, 0.075f, false);
 }
 
 void AMainCharacterBase::ZoomIn(float Value)
@@ -338,12 +343,10 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	if (damageAmount > 0.0f && DamageCauser->ActorHasTag("Enemy"))
 	{
-		SetFacialDamageEffect(true);
+		SetFacialDamageEffect();
 
 		GetWorld()->GetTimerManager().ClearTimer(FacialEffectResetTimerHandle);
-		GetWorld()->GetTimerManager().SetTimer(FacialEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
-			SetFacialDamageEffect(false);
-		}), 1.0f, false);
+		GetWorld()->GetTimerManager().SetTimer(FacialEffectResetTimerHandle, this, &AMainCharacterBase::ResetFacialDamageEffect, 1.0f, false);
 	}
 	return damageAmount;
 }
@@ -377,11 +380,12 @@ void AMainCharacterBase::TrySkill()
 	check(GetCurrentWeaponRef() != nullptr);
 
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle
+		|| !GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.IsSkillAvailable ) return;
 	 
-	if (GetCurrentWeaponRef()->WeaponID == 0||GetCharacterState().CharacterCurrSkillGauge<GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.SkillCommonReq)
+	if (GetCharacterState().CharacterCurrSkillGauge<GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.SkillCommonReq)
 	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬을 사용할 수 없습니다. ")), FColor::White);
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬 게이지가 부족합니다.")), FColor::White);
 		return;
 	}
 
@@ -466,11 +470,12 @@ void AMainCharacterBase::PickSubWeapon()
 	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponC"))) targetIdx = 2;
 	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponD"))) targetIdx = 3;
 
+	//If player press current picked sub weapon, switch to the first main weapon.
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw && GetSubInventoryRef()->GetCurrentIdx() == targetIdx)
 	{
 		GetInventoryRef()->EquipWeaponByIdx(0);
 	}
-	else if (!TrySwitchToSubWeapon(targetIdx))
+	else if(!TrySwitchToSubWeapon(targetIdx))
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
 	}
@@ -497,6 +502,13 @@ TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
 		}
 	}
 	return totalItemList;
+}
+
+void AMainCharacterBase::StopDashMovement()
+{
+	const FVector& direction = GetMesh()->GetRightVector();
+	float& speed = GetCharacterMovement()->MaxWalkSpeed;
+	GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
 }
 
 void AMainCharacterBase::ResetRotationToMovement()
@@ -530,6 +542,7 @@ bool AMainCharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AAc
 	//ActivateBuffNiagara(bIsDebuff, BuffDebuffType);
 
 	GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
+	BuffEffectResetTimerHandle.Invalidate();
 	GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
 		DeactivateBuffEffect();
 	}), TotalTime, false);
@@ -565,10 +578,13 @@ bool AMainCharacterBase::PickWeapon(int32 NewWeaponID)
 	if (weaponType == EWeaponType::E_Throw)
 	{
 		result = GetSubInventoryRef()->AddWeapon(NewWeaponID);
+		//Force UI update with manual calling delegate
+		GetInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
 	}
 	else if(weaponType != EWeaponType::E_None)
 	{
 		result = GetInventoryRef()->AddWeapon(NewWeaponID);
+		GetSubInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
 	}
 
 	return result;
@@ -593,38 +609,25 @@ void AMainCharacterBase::DeactivateBuffEffect()
 	BuffNiagaraEmitter->Deactivate(); 
 }
 
-void AMainCharacterBase::UpdateWallThroughEffect()
-{/*
-	if (!IsValid(GetWorld())) return;
-	FHitResult hitResult;
-	const FVector& traceBeginPos = FollowingCamera->GetComponentLocation();
-	const FVector& traceEndPos = GetMesh()->GetComponentLocation();
-	
-	GetWorld()->LineTraceSingleByChannel(hitResult, traceBeginPos, traceEndPos, ECollisionChannel::ECC_Camera);
-
-	if (hitResult.bBlockingHit && IsValid(hitResult.GetActor()))
-	{
-		if(!hitResult.GetActor()->ActorHasTag("Player") && !bIsWallThroughEffectActivated)
-		{
-			InitDynamicMeshMaterial(WallThroughMaterial);
-			bIsWallThroughEffectActivated = true;
-		}
-		else if(hitResult.GetActor()->ActorHasTag("Player") && bIsWallThroughEffectActivated)
-		{
-			InitDynamicMeshMaterial(NormalMaterial);
-			bIsWallThroughEffectActivated = false;
-		}
-	}*/
-}
-
-void AMainCharacterBase::SetFacialDamageEffect(bool NewState)
+void AMainCharacterBase::SetFacialDamageEffect()
 {
 	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterial;
 	
 	if (currMaterial != nullptr && EmotionTextureList.Num() >= 3)
 	{
-		currMaterial->SetTextureParameterValue(FName("BaseTexture"), EmotionTextureList[(uint8)(NewState ? EEmotionType::E_Angry : EEmotionType::E_Idle)]);
-		currMaterial->SetScalarParameterValue(FName("bIsDamaged"), (float)NewState);
+		currMaterial->SetTextureParameterValue(FName("BaseTexture"), EmotionTextureList[(uint8)(EEmotionType::E_Angry)]);
+		currMaterial->SetScalarParameterValue(FName("bIsDamaged"), true);
+	}
+}
+
+void AMainCharacterBase::ResetFacialDamageEffect()
+{
+	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterial;
+
+	if (currMaterial != nullptr && EmotionTextureList.Num() >= 3)
+	{
+		currMaterial->SetTextureParameterValue(FName("BaseTexture"), EmotionTextureList[(uint8)(EEmotionType::E_Idle)]);
+		currMaterial->SetScalarParameterValue(FName("bIsDamaged"), false);
 	}
 }
 
@@ -637,4 +640,10 @@ void AMainCharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(RollTimerHandle); 
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
 	GetWorldTimerManager().ClearTimer(DashDelayTimerHandle);
+
+	BuffEffectResetTimerHandle.Invalidate();
+	FacialEffectResetTimerHandle.Invalidate();
+	RollTimerHandle.Invalidate();
+	AttackLoopTimerHandle.Invalidate();
+	DashDelayTimerHandle.Invalidate();
 }

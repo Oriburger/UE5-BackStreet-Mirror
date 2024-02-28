@@ -68,9 +68,11 @@ private:
 	UFUNCTION()
 		void ActivateMeleeHitEffect(const FVector& Location);
 
-	//마지막 콤보에서의 슬로우 타격 효과 활성화를 시도한다.
 	UFUNCTION()
-		bool TryActivateSlowHitEffect();
+		void ActivateSlowHitEffect();
+
+	UFUNCTION()
+		void DeactivateSlowHitEffect();
 
 private:
 	UFUNCTION()

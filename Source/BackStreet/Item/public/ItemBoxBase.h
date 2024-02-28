@@ -108,7 +108,7 @@ protected:
 		class UParticleSystem* OpenEffectParticle;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* OpenEffectSound;
+		class USoundCue* OpenItemBoxSound;
 
 // ----- Ref -----------------------------------
 private:

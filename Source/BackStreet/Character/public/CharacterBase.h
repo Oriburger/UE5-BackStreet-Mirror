@@ -30,6 +30,10 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		UChildActorComponent* InventoryComponent;	
 
+protected:
+	UPROPERTY(VisibleAnywhere)
+		class UDebuffManagerComponent* DebuffManagerComponent;
+
 // ------- Character Action 기본 ------- 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
@@ -59,7 +63,7 @@ public:
 
 	//플레이어의 ActionState를 Idle로 전환한다.
 	UFUNCTION(BlueprintCallable)
-			void ResetActionState		(bool bForceReset = false);
+			void ResetActionState(bool bForceReset = false);
 
 	//Set Player's Action State
 	UFUNCTION(BlueprintCallable)
@@ -74,7 +78,7 @@ public:
 		float TakeDebuffDamage(float DamageAmount, ECharacterDebuffType DebuffType, AActor* Causer);
 
 	UFUNCTION(BlueprintCallable)
-		void TakeKnockBack(AActor* Causer, float Strength);
+		void ApplyKnockBack(AActor* Target, float Strength);
 
 	//공격Action 사이의 Interval을 관리하는 타이머를 해제
 	UFUNCTION()
@@ -172,6 +176,11 @@ private:
 	//무기 액터를 스폰
 	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
 
+// ---- Skill --------------------
+private:
+	UFUNCTION()
+		float GetSkillAnimPlayRate(uint8 SkillAnimIndex);
+
 // ---- Asset -------------------
 public:
 	// 외부에서 Init하기위해 Call
@@ -267,6 +276,8 @@ protected:
 
 	UFUNCTION()
 		void PlaySkillAnimation();
+	UFUNCTION()
+		void PlayNextSkillAnimation();
 
 	//공격 간 딜레이 핸들
 	UPROPERTY()
