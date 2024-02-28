@@ -153,7 +153,7 @@ void AMeleeWeaponBase::MeleeAttack()
 			ActivateMeleeHitEffect(target->GetActorLocation());
 			
 			//Apply Knockback
-			OwnerCharacterRef.Get()->ApplyKnockBack(target, GetWeaponStat().WeaponKnobackEnergy);
+			OwnerCharacterRef.Get()->ApplyKnockBack(target, GetWeaponStat().WeaponKnockBackEnergy);
 			//Apply Damage
 			UGameplayStatics::ApplyDamage(target, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate * OwnerCharacterRef.Get()->GetCharacterStat().CharacterAtkMultiplier
 				, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);

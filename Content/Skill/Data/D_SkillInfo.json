@@ -64,19 +64,19 @@
 		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_Knockback.BPS_Knockback_C'",
 		"SkillCommonVariableMap":
 		{
-			"Knockback Energy": 1000
+			"KnockBack Energy": 1000
 		},
 		"SkillRareVariableMap":
 		{
-			"Knockback Energy": 2000
+			"KnockBack Energy": 2000
 		},
 		"SkillLegendVariableMap":
 		{
-			"Knockback Energy": 3000
+			"KnockBack Energy": 3000
 		},
 		"SkillMythicVariableMap":
 		{
-			"Knockback Energy": 4000
+			"KnockBack Energy": 4000
 		}
 	},
 	{
