@@ -357,6 +357,10 @@ void AMainCharacterBase::TryAttack()
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw) return;
 
+	//IndieGo용 임시 코드----------------------------------------------------------
+	if(GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130) return;
+	//---------------------------------------------------------------------------------
+
 	if (GetCurrentWeaponRef()->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
@@ -378,11 +382,16 @@ void AMainCharacterBase::TryAttack()
 void AMainCharacterBase::TrySkill()
 {
 	check(GetCurrentWeaponRef() != nullptr);
-
+	UE_LOG(LogTemp, Log, TEXT("1"));
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle
 		|| !GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.IsSkillAvailable ) return;
-	 
+	//IndieGo용 임시 코드----------------------------------------------------------
+	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130)
+	{
+		CharacterState.CharacterCurrSkillGauge = 10;
+	}
+	//---------------------------------------------------------------------------------
 	if (GetCharacterState().CharacterCurrSkillGauge<GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.SkillCommonReq)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬 게이지가 부족합니다.")), FColor::White);

@@ -87,19 +87,19 @@
 		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_Deflect.BPS_Deflect_C'",
 		"SkillCommonVariableMap":
 		{
-			"Deflect Duration": 1
+			"Deflect Duration": 3
 		},
 		"SkillRareVariableMap":
 		{
-			"Deflect Duration": 2
+			"Deflect Duration": 4
 		},
 		"SkillLegendVariableMap":
 		{
-			"Deflect Duration": 3
+			"Deflect Duration": 5
 		},
 		"SkillMythicVariableMap":
 		{
-			"Deflect Duration": 4
+			"Deflect Duration": 6
 		}
 	},
 	{
@@ -183,7 +183,7 @@
 		"SkillID": 11600,
 		"SkillName": "WeaponTransform",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_WeaponTransform.BPS_WeaponTransform_C'",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/Skill/Blueprint/SkillBase/BPS_WeaponTransform_IndieGo.BPS_WeaponTransform_IndieGo_C'",
 		"SkillCommonVariableMap":
 		{
 		},
