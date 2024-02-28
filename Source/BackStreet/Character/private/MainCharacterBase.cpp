@@ -474,8 +474,18 @@ void AMainCharacterBase::PickSubWeapon()
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw && GetSubInventoryRef()->GetCurrentIdx() == targetIdx)
 	{
 		GetInventoryRef()->EquipWeaponByIdx(0);
+		GetSubInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
+		return;
 	}
-	else if(!TrySwitchToSubWeapon(targetIdx))
+
+	//Try switch to subweapon
+	bool result = TrySwitchToSubWeapon(targetIdx);
+	if (result)
+	{
+		//Force UI update with manual calling delegate
+		GetInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
+	}
+	else
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
 	}
