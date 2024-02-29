@@ -168,13 +168,13 @@ public:
 	virtual	bool TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer = nullptr, float TotalTime = 0.0f, float Value = 0.0f);
 
 	UFUNCTION(BlueprintCallable)
-		bool TryAddNewAbility(const ECharacterAbilityType NewAbilityType);
+		bool TryAddNewAbility(int32 NewAbilityID);
 
 	UFUNCTION(BlueprintCallable)
-		bool TryRemoveAbility(const ECharacterAbilityType TargetAbilityType);
+		bool TryRemoveAbility(int32 NewAbilityID);
 		
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType);
+		bool GetIsAbilityActive(int32 AbilityID);
 
 // -------- Inventory --------------
 public:
