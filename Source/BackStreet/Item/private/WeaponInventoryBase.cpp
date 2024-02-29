@@ -144,11 +144,20 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 		//원거리 무기라면 탄환 수 추가
 		else
 		{
-			InventoryArray[duplicateIdx].WeaponState.RangedWeaponState.ExtraAmmoCount +=
-				InventoryArray[duplicateIdx].WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine;
+			//Throw weapons don't have magazine
+			if (duplicateWeaponStat.WeaponType == EWeaponType::E_Throw)
+			{
+				InventoryArray[duplicateIdx].WeaponState.RangedWeaponState.CurrentAmmoCount +=
+					InventoryArray[duplicateIdx].WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine;
+			}
+			else
+			{
+				InventoryArray[duplicateIdx].WeaponState.RangedWeaponState.ExtraAmmoCount +=
+					InventoryArray[duplicateIdx].WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine;
 
-			InventoryArray[duplicateIdx].WeaponState.RangedWeaponState.ExtraAmmoCount %=
-				InventoryArray[duplicateIdx].WeaponStat.RangedWeaponStat.MaxTotalAmmo;
+				InventoryArray[duplicateIdx].WeaponState.RangedWeaponState.ExtraAmmoCount %=
+					InventoryArray[duplicateIdx].WeaponStat.RangedWeaponStat.MaxTotalAmmo;
+			}
 
 			if (duplicateIdx == CurrentIdx) SyncCurrentWeaponInfo(false);
 		}
