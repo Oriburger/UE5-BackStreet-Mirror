@@ -12,9 +12,13 @@ struct FAbilityInfoStruct : public FTableRowBase
 public:
 	GENERATED_USTRUCT_BODY()
 
-	//어빌리티의 ID, ECharacterAbilityType와 동일한 값을 지님
+	//어빌리티의 ID
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0, UIMax = 10))
-		uint8 AbilityId;
+		int32 AbilityId;
+
+	//어빌리티의 Type
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0, UIMax = 10))
+		ECharacterAbilityType AbilityType;
 
 	//어빌리티명
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -55,9 +59,7 @@ public:
 		return AbilityId == other.AbilityId;
 	}
 };
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityID, uint8, AbilityID);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityInfo, FAbilityInfoStruct, AbilityInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityInfoList, const TArray<FAbilityInfoStruct>&, AbilityInfoList);
 
 UCLASS()
 class BACKSTREET_API UAbilityManagerBase : public UObject
@@ -67,12 +69,9 @@ class BACKSTREET_API UAbilityManagerBase : public UObject
 public:
 	// Sets default values for this character's properties
 	UAbilityManagerBase();
-
+	
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateAbilityInfo AbilityAddDelegate;
-
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateAbilityID AbilityRemoveDelegate;
+		FDelegateAbilityInfoList AbilityUpdateDelegate;
 
 //--------- Function ----------------------------------------------------
 public:
@@ -90,11 +89,11 @@ public:
 
 	//특정 어빌리티를 추가 (실패 시 false)
 	UFUNCTION()
-		bool TryAddNewAbility(const ECharacterAbilityType NewAbilityType);
+		bool TryAddNewAbility(int32 AbilityID);
 
 	//소유하고 있는 어빌리티를 제거 (실패 시 false)
 	UFUNCTION()
-		bool TryRemoveAbility(ECharacterAbilityType TargetAbilityType);
+		bool TryRemoveAbility(int32 AbilityID);
 
 	//모든 어빌리티 초기화
 	UFUNCTION()
@@ -102,7 +101,7 @@ public:
 
 	//해당 Ability가 Active한지 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType) const;
+		bool GetIsAbilityActive(int32 AbilityID) const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetMaxAbilityCount() const;
@@ -113,7 +112,7 @@ protected:
 
 	//배열로부터 AbilityInfo를 불러들임
 	UFUNCTION()
-		FAbilityInfoStruct GetAbilityInfo(const ECharacterAbilityType AbilityType);
+		FAbilityInfoStruct GetAbilityInfo(int32 AbilityID);
 
 private:
 	UFUNCTION()
