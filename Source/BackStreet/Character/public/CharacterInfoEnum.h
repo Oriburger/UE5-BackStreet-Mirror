@@ -1,5 +1,6 @@
 #pragma once
 
+/* MUST BE EDITED aftere IndieGo */
 UENUM(BlueprintType)
 enum class ECharacterAbilityType : uint8
 {
@@ -7,10 +8,10 @@ enum class ECharacterAbilityType : uint8
 	E_MaxHP				UMETA(DisplayName = "MaxHP"),
 	E_AutoHeal			UMETA(DisplayName = "AutoHeal"),
 	E_AttackUp			UMETA(DisplayName = "AttackUp"),
-	E_DefenseUp		UMETA(DisplayName = "DefenseUp"),
+	E_DefenseUp			UMETA(DisplayName = "DefenseUp"),
 	E_SpeedUp			UMETA(DisplayName = "SpeedUp"),
 	E_DoubleShot		UMETA(DisplayName = "DoubleShot"),
-	E_TripleShot			UMETA(DisplayName = "TripleShot")
+	E_TripleShot		UMETA(DisplayName = "TripleShot")
 };
 
 UENUM(BlueprintType)

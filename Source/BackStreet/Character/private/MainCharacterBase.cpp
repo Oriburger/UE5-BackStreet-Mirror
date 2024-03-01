@@ -541,6 +541,12 @@ void AMainCharacterBase::ResetRotationToMovement()
 
 void AMainCharacterBase::SwitchToNextWeapon()
 {
+	//Block switching weapon in particular actions
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill ||
+		CharacterState.CharacterActionState == ECharacterActionType::E_Attack ||
+		CharacterState.CharacterActionState == ECharacterActionType::E_Throw ||
+		CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return;
+
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
 	{
 		GetInventoryRef()->EquipWeaponByIdx(0);
@@ -576,25 +582,25 @@ bool AMainCharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AAc
 	return true;
 }
 
-bool AMainCharacterBase::TryAddNewAbility(const ECharacterAbilityType NewAbilityType)
+bool AMainCharacterBase::TryAddNewAbility(const int32 NewAbilityID)
 {
 	if(!IsValid(AbilityManagerRef)) return false;
-	return AbilityManagerRef->TryAddNewAbility(NewAbilityType);
+	return AbilityManagerRef->TryAddNewAbility(NewAbilityID);
 }
 
-bool AMainCharacterBase::TryRemoveAbility(const ECharacterAbilityType TargetAbilityType)
+bool AMainCharacterBase::TryRemoveAbility(const int32 NewAbilityID)
 {
 	if (!IsValid(AbilityManagerRef)) return false;
-	return AbilityManagerRef->TryRemoveAbility(TargetAbilityType);
+	return AbilityManagerRef->TryRemoveAbility(NewAbilityID);
 }
 
-bool AMainCharacterBase::GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType)
+bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 {
 	if (!IsValid(AbilityManagerRef)) return false;
-	return AbilityManagerRef->GetIsAbilityActive(TargetAbilityType);
+	return AbilityManagerRef->GetIsAbilityActive(AbilityID);
 }
 
-bool AMainCharacterBase::PickWeapon(int32 NewWeaponID)
+bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
 {
 	if (!IsValid(GetInventoryRef()) || !IsValid(GetSubInventoryRef())) return false;
 	
