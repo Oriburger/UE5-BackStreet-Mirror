@@ -164,6 +164,7 @@ void ARangedWeaponBase::Reload()
 	}
 	WeaponState.RangedWeaponState.CurrentAmmoCount += addAmmoCnt;
 	WeaponState.RangedWeaponState.ExtraAmmoCount -= addAmmoCnt;
+	OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
 
 	if (OwnerCharacterRef.IsValid())
 		OwnerCharacterRef.Get()->ResetActionState(true);
