@@ -556,12 +556,12 @@ void ACharacterBase::SetAsset()
 	//if (AssetInfo.AnimBlueprint.IsNull() || !IsValid(AssetInfo.AnimBlueprint.Get())) return;
 
 	GetCapsuleComponent()->SetWorldRotation(FRotator::ZeroRotator);
-	GetCapsuleComponent()->SetRelativeScale3D(AssetInfo.InitialCapsuleComponentScale);
+	SetActorScale3D(AssetInfo.InitialScale);
 
 	GetMesh()->SetSkeletalMesh(AssetInfo.CharacterMesh.Get());
 	GetMesh()->SetRelativeLocation(AssetInfo.InitialLocation);
 	GetMesh()->SetWorldRotation(FRotator(0.0f, -90.0f, 0.0f));
-	GetMesh()->SetRelativeScale3D(AssetInfo.InitialScale);
+	GetMesh()->SetRelativeScale3D(FVector(1.0f));
 
 	GetMesh()->SetMaterial(0, AssetInfo.CharacterMeshMaterial.Get());
 	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimBlueprint);

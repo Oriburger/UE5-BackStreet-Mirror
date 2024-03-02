@@ -199,6 +199,13 @@ bool ARangedWeaponBase::TryFireProjectile()
 		return false;
 	}
 	const int32 fireProjectileCnt = FMath::Min(WeaponState.RangedWeaponState.CurrentAmmoCount, OwnerCharacterRef.Get()->GetCharacterStat().MaxProjectileCount);
+
+	if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
+	{
+		WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
+		OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
+	}
+
 	for (int idx = 1; idx <= fireProjectileCnt; idx++)
 	{
 		FTimerHandle delayHandle;
@@ -208,11 +215,6 @@ bool ARangedWeaponBase::TryFireProjectile()
 			//스폰한 발사체가 Valid 하다면 발사
 			if (IsValid(newProjectile))
 			{
-				if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
-				{
-					WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
-					OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
-				}
 				newProjectile->ActivateProjectileMovement();
 				SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
 			}

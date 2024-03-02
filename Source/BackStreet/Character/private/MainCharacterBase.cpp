@@ -541,6 +541,12 @@ void AMainCharacterBase::ResetRotationToMovement()
 
 void AMainCharacterBase::SwitchToNextWeapon()
 {
+	//Block switching weapon in particular actions
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill ||
+		CharacterState.CharacterActionState == ECharacterActionType::E_Attack ||
+		CharacterState.CharacterActionState == ECharacterActionType::E_Throw ||
+		CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return;
+
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
 	{
 		GetInventoryRef()->EquipWeaponByIdx(0);

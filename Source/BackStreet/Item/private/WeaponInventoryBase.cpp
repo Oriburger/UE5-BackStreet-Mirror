@@ -113,9 +113,17 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 		//무게가 가득찼다면? 시스템 메시지 호출
 		if (newStat.WeaponWeight + TotalWeight > MaxCapacity)
 		{
-			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기를 추가할 수 없습니다. 인벤토리를 비우세요.")), FColor::White);
-			return false;
+			if (GetOwner()->ActorHasTag("Player"))
+			{
+				GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기를 추가할 수 없습니다. 인벤토리를 비우세요.")), FColor::White);
+				return false;
+			}
+			else
+			{
+				return false;
+			}
 		}
+
 		//그렇지 않다면 인벤토리에 정보를 추가
 		else
 		{
@@ -138,17 +146,33 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 		if (duplicateWeaponStat.WeaponType != EWeaponType::E_Shoot
 			&& duplicateWeaponStat.WeaponType != EWeaponType::E_Throw)
 		{
-			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("동일한 무기가 인벤토리에 있습니다.")), FColor::White);
-			return false;
+			if (GetOwner()->ActorHasTag("Player"))
+			{
+				GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("동일한 무기가 인벤토리에 있습니다.")), FColor::White);
+				return false;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		//원거리 무기라면 탄환 수 추가
 		else
 		{
-			InventoryArray[duplicateIdx].WeaponState.RangedWeaponState.ExtraAmmoCount +=
-				InventoryArray[duplicateIdx].WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine;
+			//Throw weapons don't have magazine
+			if (duplicateWeaponStat.WeaponType == EWeaponType::E_Throw)
+			{
+				InventoryArray[duplicateIdx].WeaponState.RangedWeaponState.CurrentAmmoCount +=
+					InventoryArray[duplicateIdx].WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine;
+			}
+			else
+			{
+				InventoryArray[duplicateIdx].WeaponState.RangedWeaponState.ExtraAmmoCount +=
+					InventoryArray[duplicateIdx].WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine;
 
-			InventoryArray[duplicateIdx].WeaponState.RangedWeaponState.ExtraAmmoCount %=
-				InventoryArray[duplicateIdx].WeaponStat.RangedWeaponStat.MaxTotalAmmo;
+				InventoryArray[duplicateIdx].WeaponState.RangedWeaponState.ExtraAmmoCount %=
+					InventoryArray[duplicateIdx].WeaponStat.RangedWeaponStat.MaxTotalAmmo;
+			}
 
 			if (duplicateIdx == CurrentIdx) SyncCurrentWeaponInfo(false);
 		}

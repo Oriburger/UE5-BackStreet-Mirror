@@ -13,15 +13,15 @@
 		"ItemBoxBPList": [],
 		"RewardBoxBPList": [],
 		"CraftingBoxBPList": [],
-		"MaxSpawnItem": 1,
-		"MinSpawnItem": 6,
-		"WaveType": "E_Hades",
+		"MaxSpawnItem": 6,
+		"MinSpawnItem": 1,
+		"WaveType": "E_NomalWave",
 		"MaxWave": 3,
-		"WaveComposition": [ 1, 2, 1 ],
-		"NormalEnemyIDList": [ 1100, 1001, 1003, 1002 ],
-		"BossEnemyIDList": [],
-		"MaxSpawnEnemy": 1,
-		"MinSpawnEnemy": 5
+		"WaveComposition": [ 2, 1, 3 ],
+		"ClearTimeForEachWave":
+		{
+		},
+		"SpawnInterval": 0
 	},
 	{
 		"Name": "101",
@@ -38,19 +38,43 @@
 		"ItemBoxBPList": [],
 		"RewardBoxBPList": [],
 		"CraftingBoxBPList": [],
-		"MaxSpawnItem": 4,
-		"MinSpawnItem": 7,
-		"WaveType": "E_Hades",
-		"MaxWave": 5,
-		"WaveComposition": [ 1, 2, 1, 1, 2 ],
-		"NormalEnemyIDList": [ 1001, 1003, 1002, 1101, 1102 ],
-		"BossEnemyIDList": [],
-		"MaxSpawnEnemy": 3,
-		"MinSpawnEnemy": 9
+		"MaxSpawnItem": 7,
+		"MinSpawnItem": 4,
+		"WaveType": "E_NomalWave",
+		"MaxWave": 2,
+		"WaveComposition": [ 4, 2 ],
+		"ClearTimeForEachWave":
+		{
+		},
+		"SpawnInterval": 0
 	},
 	{
 		"Name": "200",
 		"StageID": 200,
+		"ChapterLevel": 1,
+		"StageType": "E_Normal",
+		"LevelList": [
+			"TypeA",
+			"TypeF"
+		],
+		"ItemBoxBPList": [],
+		"RewardBoxBPList": [],
+		"CraftingBoxBPList": [],
+		"MaxSpawnItem": 6,
+		"MinSpawnItem": 4,
+		"WaveType": "E_TimeLimitWave",
+		"MaxWave": 2,
+		"WaveComposition": [ 5, 6 ],
+		"ClearTimeForEachWave":
+		{
+			"1": 10,
+			"2": 10
+		},
+		"SpawnInterval": 0.3
+	},
+	{
+		"Name": "300",
+		"StageID": 300,
 		"ChapterLevel": 1,
 		"StageType": "E_Boss",
 		"LevelList": [
@@ -59,14 +83,80 @@
 		"ItemBoxBPList": [],
 		"RewardBoxBPList": [],
 		"CraftingBoxBPList": [],
-		"MaxSpawnItem": 4,
-		"MinSpawnItem": 7,
+		"MaxSpawnItem": 7,
+		"MinSpawnItem": 4,
 		"WaveType": "E_None",
 		"MaxWave": 0,
 		"WaveComposition": [],
-		"NormalEnemyIDList": [],
-		"BossEnemyIDList": [ 1200 ],
-		"MaxSpawnEnemy": 3,
-		"MinSpawnEnemy": 1
+		"ClearTimeForEachWave":
+		{
+		},
+		"SpawnInterval": 0
+	},
+	{
+		"Name": "400",
+		"StageID": 400,
+		"ChapterLevel": 2,
+		"StageType": "E_Normal",
+		"LevelList": [
+			"TypeB"
+		],
+		"ItemBoxBPList": [],
+		"RewardBoxBPList": [],
+		"CraftingBoxBPList": [],
+		"MaxSpawnItem": 10,
+		"MinSpawnItem": 1,
+		"WaveType": "E_NomalWave",
+		"MaxWave": 2,
+		"WaveComposition": [ 2, 1 ],
+		"ClearTimeForEachWave":
+		{
+		},
+		"SpawnInterval": 0
+	},
+	{
+		"Name": "500",
+		"StageID": 500,
+		"ChapterLevel": 2,
+		"StageType": "E_Normal",
+		"LevelList": [
+			"TypeC"
+		],
+		"ItemBoxBPList": [],
+		"RewardBoxBPList": [],
+		"CraftingBoxBPList": [],
+		"MaxSpawnItem": 9,
+		"MinSpawnItem": 4,
+		"WaveType": "E_TimeLimitWave",
+		"MaxWave": 3,
+		"WaveComposition": [ 1, 1, 2 ],
+		"ClearTimeForEachWave":
+		{
+			"1": 10,
+			"2": 5,
+			"3": 10
+		},
+		"SpawnInterval": 2
+	},
+	{
+		"Name": "600",
+		"StageID": 600,
+		"ChapterLevel": 2,
+		"StageType": "E_Boss",
+		"LevelList": [
+			"TypeD"
+		],
+		"ItemBoxBPList": [],
+		"RewardBoxBPList": [],
+		"CraftingBoxBPList": [],
+		"MaxSpawnItem": 6,
+		"MinSpawnItem": 5,
+		"WaveType": "E_None",
+		"MaxWave": 0,
+		"WaveComposition": [],
+		"ClearTimeForEachWave":
+		{
+		},
+		"SpawnInterval": 0
 	}
 ]
