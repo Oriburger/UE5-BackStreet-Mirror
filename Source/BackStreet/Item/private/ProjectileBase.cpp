@@ -96,6 +96,7 @@ void AProjectileBase::DestroyWithEffect(FVector Location)
 	FTransform targetTransform = { FRotator(), Location, {1.0f, 1.0f, 1.0f} };
 	if (HitSound != nullptr)
 	{
+		if(!OwnerCharacterRef.Get()) return;
 		const float soundVolume = OwnerCharacterRef.Get()->ActorHasTag("Player") ? 1.0f : 0.2;
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, GetActorLocation(), soundVolume);
 	}
