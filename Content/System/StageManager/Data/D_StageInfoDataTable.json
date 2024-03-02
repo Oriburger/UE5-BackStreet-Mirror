@@ -64,13 +64,13 @@
 		"MinSpawnItem": 4,
 		"WaveType": "E_TimeLimitWave",
 		"MaxWave": 2,
-		"WaveComposition": [ 1, 2 ],
+		"WaveComposition": [ 5, 6 ],
 		"ClearTimeForEachWave":
 		{
-			"1": 5,
-			"2": 5
+			"1": 10,
+			"2": 10
 		},
-		"SpawnInterval": 1
+		"SpawnInterval": 0.3
 	},
 	{
 		"Name": "300",
