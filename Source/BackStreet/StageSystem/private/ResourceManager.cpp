@@ -7,6 +7,7 @@
 #include "../../Character/public/MainCharacterBase.h"
 #include "../../AISystem/public/AIControllerBase.h"
 #include "../../Item/public/RewardBoxBase.h"
+#include "../../Item/public/WeaponInventoryBase.h"
 #include "../public/WaveManager.h"
 #include "../../Item/public/ItemBoxBase.h"
 #include "../../Item/public/ItemBase.h"
@@ -77,6 +78,7 @@ void AResourceManager::SpawnBossMonster(class AStageData* Target)
 	monster->CharacterID = 1200;
 	monster->InitEnemyCharacter(1200);
 	monster->InitAsset(1200);
+	monster->SwitchToNextWeapon();
 	BindMonsterDelegate(Target, monster);
 }
 
@@ -201,6 +203,7 @@ AEnemyCharacterBase* AResourceManager::CreateMonster(class AStageData* Target, i
 	monster->CharacterID = EnemyID;
 	monster->InitEnemyCharacter(EnemyID);
 	monster->InitAsset(EnemyID);
+	monster->SwitchToNextWeapon();
 	WaveManager->ManageWaveMonsterCount(Target, monster->CharacterID, true);
 
 
