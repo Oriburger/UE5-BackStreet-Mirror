@@ -145,7 +145,7 @@ public:
 			, AController* EventInstigator, AActor* DamageCauser) override;
 
 	//Rotation 조절 방식을 커서 위치로 한다
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void RotateToCursor();
 
 	//1~4번의 키를 눌러 보조무기를 장착한다.
