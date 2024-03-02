@@ -52,7 +52,6 @@ void AEnemyCharacterBase::BeginPlay()
 	SpawnDefaultController();
 
 	InitEnemyCharacter(CharacterID);
-	InitFloatingHpWidget();
 	
 	SetDefaultWeapon();
 	InitDynamicMeshMaterial(GetMesh()->GetMaterial(0));
@@ -63,6 +62,8 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	// Read from dataTable
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
+	AssetInfo.CharacterID = CharacterID = NewCharacterID;
+	
 
 	if (newStat != nullptr)
 	{
@@ -74,6 +75,12 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 
 		//Set default weapon
 		SetDefaultWeapon();
+	}
+
+	InitFloatingHpWidget();
+	if (NewCharacterID == 1200)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Floating Widget 초기화"));
 	}
 }
 
