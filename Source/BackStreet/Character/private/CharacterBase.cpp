@@ -758,6 +758,7 @@ bool ACharacterBase::EquipWeapon(AWeaponBase* TargetWeapon)
 {
 	TargetWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, "Weapon_R");
 	TargetWeapon->SetActorRelativeLocation(FVector(0.0f), false);
+	TargetWeapon->SetActorRelativeRotation(FRotator::ZeroRotator, false);
 	TargetWeapon->SetOwnerCharacter(this);
 	CurrentWeaponRef = TargetWeapon;
 	return true;
