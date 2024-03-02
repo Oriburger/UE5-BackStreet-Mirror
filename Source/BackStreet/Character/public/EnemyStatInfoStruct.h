@@ -24,7 +24,7 @@ public:
 
 	//Item ID list to spawn after dead event.(each item is identified by index)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
-		TArray<uint8> SpawnItemIDList;
+		TArray<int32> SpawnItemIDList;
 
 	//Item spawn percentage list.  (0.0f ~ 1.0f), (each item is identified by index)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")

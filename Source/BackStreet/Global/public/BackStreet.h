@@ -31,7 +31,7 @@
 
 
 #define MAX_CHAPTER_COUNT 1
-#define MAX_ITEM_SPAWN 10
-#define MIN_ITEM_SPAWN 7
+#define MAX_ITEM_SPAWN 7
+#define MIN_ITEM_SPAWN 5
 #define MAX_STAGE_TYPE 5
 #define MAX_GRID_SIZE 3

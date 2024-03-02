@@ -214,7 +214,7 @@ void AEnemyCharacterBase::SpawnDeathItems()
 				|| !dropInfo.ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
 
 			const uint8 itemType = (uint8)dropInfo.SpawnItemTypeList[itemIdx];
-			const uint8 itemID = dropInfo.SpawnItemIDList[itemIdx];
+			const int32 itemID = dropInfo.SpawnItemIDList[itemIdx];
 			const float spawnProbability = dropInfo.ItemSpawnProbabilityList[itemIdx];
 
 			if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
