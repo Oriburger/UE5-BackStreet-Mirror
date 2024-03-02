@@ -65,10 +65,19 @@ void AWaveManager::CheckWaveCategoryByType(class AStageData* Target, AEnemyChara
 		}
 	}
 	else if (Target->GetStageTypeInfo().WaveType == EWaveCategoryInfo::E_TimeLimitWave)
-			ManageWaveMonsterCount(Target, Enemy->CharacterID, false);
+	{
+		ManageWaveMonsterCount(Target, Enemy->CharacterID, false);
+	}
 	else if (Target->GetStageCategoryType() == EStageCategoryInfo::E_Boss)
 	{
-		if (Target->GetMonsterList().IsEmpty())
+		float currHP = 0.0f;
+		if (IsValid(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
+		{
+			ACharacterBase* playerRef = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+			currHP = IsValid(playerRef) ? playerRef->GetCharacterState().CharacterCurrHP : 0.0f;
+		}
+		
+		if (Target->GetMonsterList().IsEmpty() && currHP > 0.0f)
 		{
 			Target->DoStageClearTask();
 			Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()))->UIAnimationDelegate.Broadcast(FName("ChapterClear"));
