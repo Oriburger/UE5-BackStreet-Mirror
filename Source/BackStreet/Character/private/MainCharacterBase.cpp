@@ -610,13 +610,10 @@ bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
 	if (weaponType == EWeaponType::E_Throw)
 	{
 		result = GetSubInventoryRef()->AddWeapon(NewWeaponID);
-		//Force UI update with manual calling delegate
-		//GetInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
 	}
 	else if(weaponType != EWeaponType::E_None)
 	{
 		result = GetInventoryRef()->AddWeapon(NewWeaponID);
-		//GetSubInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
 	}
 
 	return result;
