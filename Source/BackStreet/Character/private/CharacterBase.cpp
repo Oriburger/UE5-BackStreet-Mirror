@@ -873,7 +873,7 @@ void ACharacterBase::InitWeaponActors()
 		WeaponActorList[idx]->SetOwner(this);
 		checkf(IsValid(WeaponActorList[idx]), TEXT("무기 %d 타입 스폰에 실패했습니다."));
 		EquipWeapon(WeaponActorList[idx]);
-	}
+	} 
 	EquipWeapon(WeaponActorList[0]);
 	CurrentWeaponRef = WeaponActorList[0];
 }
