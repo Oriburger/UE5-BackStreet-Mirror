@@ -91,13 +91,6 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 
 	int32 duplicateIdx = CheckWeaponDuplicate(NewWeaponID);
 
-	//무게가 가득찼다면? 시스템 메시지 호출
-	if (GetCurrentCapacity() >= MaxCapacity)
-	{
-		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기를 추가할 수 없습니다. 인벤토리를 비우세요.")), FColor::White);
-		return false;
-	}
-
 	//중복이 되지 않는다면?
 	if (duplicateIdx == -1)
 	{
@@ -116,7 +109,7 @@ bool AWeaponInventoryBase::AddWeapon(int32 NewWeaponID)
 		newState.RangedWeaponState.CurrentAmmoCount = newStat.RangedWeaponStat.MaxAmmoPerMagazine;
 
 		//무게가 가득찼다면? 시스템 메시지 호출
-		if (newStat.WeaponWeight + TotalWeight > MaxCapacity)
+		if (newStat.WeaponWeight + TotalWeight > MaxCapacity || GetCurrentCapacity() >= MaxCapacity)
 		{
 			if (GetOwner()->ActorHasTag("Player"))
 			{
