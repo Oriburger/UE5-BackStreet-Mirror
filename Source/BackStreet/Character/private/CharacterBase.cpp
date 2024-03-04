@@ -563,7 +563,10 @@ void ACharacterBase::SetAsset()
 	GetMesh()->SetWorldRotation(FRotator(0.0f, -90.0f, 0.0f));
 	GetMesh()->SetRelativeScale3D(FVector(1.0f));
 
-	GetMesh()->SetMaterial(0, AssetInfo.CharacterMeshMaterial.Get());
+	for (int matIdx = 0; matIdx < GetMesh()->GetMaterials().Num(); matIdx++)
+	{
+		GetMesh()->SetMaterial(matIdx, AssetInfo.CharacterMeshMaterial.Get());
+	}
 	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimBlueprint);
 	InitAnimAsset();
 	InitSoundAsset();
