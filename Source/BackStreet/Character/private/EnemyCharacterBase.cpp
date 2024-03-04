@@ -52,7 +52,7 @@ void AEnemyCharacterBase::BeginPlay()
 	SpawnDefaultController();
 
 	InitEnemyCharacter(CharacterID);
-	
+
 	SetDefaultWeapon();
 	InitDynamicMeshMaterial(GetMesh()->GetMaterial(0));
 }
@@ -72,8 +72,7 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		//Set CharacterStat with setting default additional stat bInfinite (infinite use of ammo)
 		UpdateCharacterStat(EnemyStat.CharacterStat);
 		CharacterStat.bInfinite = true;
-
-		//Set default weapon
+		CharacterState.CharacterCurrHP = EnemyStat.CharacterStat.CharacterMaxHP;
 		SetDefaultWeapon();
 	}
 
