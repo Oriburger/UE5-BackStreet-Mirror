@@ -114,12 +114,12 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Hit)
 	{
-		GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, this, &AEnemyCharacterBase::ResetActionStateForTimer, 1.0f, false, 0.5f);
+		GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, this, &AEnemyCharacterBase::ResetActionStateForTimer, 1.0f, false, CharacterID == 1200 ? 0.1f : 0.5f);
 	}
 
 	//Stop AI Logic And Set Reactivation event
 	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(Controller);
-	if (IsValid(aiControllerRef))
+	if (IsValid(aiControllerRef) && CharacterID != 1200)
 	{
 		aiControllerRef->DeactivateAI();
 		GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
@@ -165,6 +165,12 @@ void AEnemyCharacterBase::Attack()
 
 	GetWorldTimerManager().SetTimer(AtkIntervalHandle, this, &ACharacterBase::ResetAtkIntervalTimer
 		, 1.0f, false, FMath::Max(0.0f, 1.5f - attackSpeed));
+
+	//Temporary code for indieGo 
+	if (CharacterID == 1200)
+	{
+		BossNearAttack();
+	}
 }
 
 void AEnemyCharacterBase::StopAttack()
