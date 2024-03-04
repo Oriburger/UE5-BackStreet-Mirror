@@ -233,7 +233,10 @@ int32 AWaveManager::SelectEnemyID()
 	TArray<TPair<int32,int32>> existEnemy = stage->GetStageInfo().ExistEnemyList.Array();
 	UE_LOG(LogTemp, Log, TEXT("AWaveManager:: SelectEnemyID WaveLevel %d"), stage->GetCurrentWaveLevel());
 
-	int32 dataTableID = stage->GetStageTypeInfo().WaveComposition[stage->GetCurrentWaveLevel()];
+	int32 currWaveLevel = stage->GetCurrentWaveLevel();
+
+	int32 dataTableID = (stage->GetStageTypeInfo().WaveComposition.IsValidIndex(currWaveLevel) ?
+							stage->GetStageTypeInfo().WaveComposition[currWaveLevel] : 1);
 	UE_LOG(LogTemp, Log, TEXT("AWaveManager:: dataTableID %d"), dataTableID);
 	FString rowName = FString::FromInt(dataTableID);
 	FWaveEnemyStruct* waveComposition = WaveEnemyDataTable->FindRow<FWaveEnemyStruct>(FName(rowName), rowName);

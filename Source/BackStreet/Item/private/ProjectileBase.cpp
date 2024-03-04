@@ -240,7 +240,7 @@ void AProjectileBase::Explode()
 		const float soundVolume = OwnerCharacterRef.Get()->ActorHasTag("Player") ? 1.0f : 0.2f;
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation(), soundVolume);
 	}
-	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 100.0f); //카메라 셰이크 이벤트
+	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 5000.0f); //카메라 셰이크 이벤트
 
 	Destroy();
 }
