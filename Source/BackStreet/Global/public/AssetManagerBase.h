@@ -82,9 +82,19 @@ public:
 	GENERATED_USTRUCT_BODY()
 	
 	//The ID of the target to use the sound asset.
-	//The ID consists of four digits.
-	//* _ _ _ : SoundType (None : 0, BGM : 1, UI : 2, Character : 3, Weapon : 4, Skill : 5, etc : 6)
+	//In SystemSound
+	//* _ _ _ : SoundType (None : 0, BGM : 1, UI : 2, etc : 3)
 	//_ * * * : Identification Number
+
+	//In WeaponSound
+	//* * * * : WeaponID-10000
+
+	//In CharacterSound
+	//* * * * : CharacterID
+
+	//In SkillSound
+	//* * * * : SkillID-10000
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		int32 TargetID;
 	
@@ -139,8 +149,18 @@ public:
 	UFUNCTION()
 		FName GetRandomMap();
 
-	UFUNCTION()
-		TMap<FName, FSoundArrayContainer> GetSoundMapWithID(int32 NewID);
+//----- Sound --------
+	UFUNCTION(BlueprintCallable)
+		TMap<FName, FSoundArrayContainer> GetSystemSoundMapWithID(int32 NewID);
+
+	UFUNCTION(BlueprintCallable)
+		TMap<FName, FSoundArrayContainer> GetWeaponSoundMapWithID(int32 NewID);
+
+	UFUNCTION(BlueprintCallable)
+		TMap<FName, FSoundArrayContainer> GetCharacterSoundMapWithID(int32 NewID);
+
+	UFUNCTION(BlueprintCallable)
+		TMap<FName, FSoundArrayContainer> GetSkillSoundMapWithID(int32 NewID);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -182,7 +202,16 @@ private:
 		class ABackStreetGameModeBase* GameModeRef;
 	
 	UPROPERTY()
-		UDataTable* SoundAssetTable;
+		UDataTable* SystemSoundAssetTable;
+
+	UPROPERTY()
+		UDataTable* WeaponSoundAssetTable;
+
+	UPROPERTY()
+		UDataTable* SkillSoundAssetTable;
+
+	UPROPERTY()
+		UDataTable* CharacterSoundAssetTable;
 
 };
 

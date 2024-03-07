@@ -20,9 +20,20 @@ void AAssetManagerBase::BeginPlay()
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 
 	//------ Sound Datatable Initiation ---------
-	static ConstructorHelpers::FObjectFinder<UDataTable> soundAssetTableFinder(TEXT("/Game/Asset/Data/D_SoundAsset.D_SoundAsset"));
-	checkf(soundAssetTableFinder.Succeeded(), TEXT("SoundAssetTable class discovery failed."));
-	SoundAssetTable = soundAssetTableFinder.Object;
+	static ConstructorHelpers::FObjectFinder<UDataTable> systemSoundAssetTableFinder(TEXT("/Game/Asset/Data/D_SystemSoundAsset.D_SystemSoundAsset"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> weaponSoundAssetTableFinder(TEXT("/Game/Asset/Data/D_WeaponSoundAsset.D_WeaponSoundAsset"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> characterSoundAssetTableFinder(TEXT("/Game/Asset/Data/D_CharacterSoundAsset.D_CharacterSoundAsset"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> skillSoundAssetTableFinder(TEXT("/Game/Asset/Data/D_SkillSoundAsset.D_SkillSoundAsset"));
+	
+	checkf(systemSoundAssetTableFinder.Succeeded(), TEXT("SystemSoundAssetTable class discovery failed."));
+	checkf(weaponSoundAssetTableFinder.Succeeded(), TEXT("WeaponSoundAssetTable class discovery failed."));
+	checkf(characterSoundAssetTableFinder.Succeeded(), TEXT("CharacterSoundAssetTable class discovery failed."));
+	checkf(skillSoundAssetTableFinder.Succeeded(), TEXT("SkillSoundAssetTable class discovery failed."));
+	
+	SystemSoundAssetTable = systemSoundAssetTableFinder.Object;
+	WeaponSoundAssetTable = weaponSoundAssetTableFinder.Object;
+	CharacterSoundAssetTable = characterSoundAssetTableFinder.Object;
+	SkillSoundAssetTable = skillSoundAssetTableFinder.Object;
 	
 }
 
@@ -66,16 +77,51 @@ FName AAssetManagerBase::GetRandomMap()
 	return MapNames[idx];
 }
 
-TMap<FName, FSoundArrayContainer> AAssetManagerBase::GetSoundMapWithID(int32 NewID)
+TMap<FName, FSoundArrayContainer> AAssetManagerBase::GetSystemSoundMapWithID(int32 NewID)
 {	
 	// Read from dataTable
 	FString rowName = FString::FromInt(NewID);
-	FSoundAssetInfoStruct* SoundAsset = SoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
+	FSoundAssetInfoStruct* SoundAsset = SystemSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
 
 	TMap<FName, FSoundArrayContainer> SoundMap = SoundAsset->SoundMap;
 	
 	return SoundMap;	
 }
+
+TMap<FName, FSoundArrayContainer> AAssetManagerBase::GetWeaponSoundMapWithID(int32 NewID)
+{
+	// Read from dataTable
+	FString rowName = FString::FromInt(NewID);
+	FSoundAssetInfoStruct* SoundAsset = WeaponSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
+
+	TMap<FName, FSoundArrayContainer> SoundMap = SoundAsset->SoundMap;
+
+	return SoundMap;
+}
+
+TMap<FName, FSoundArrayContainer> AAssetManagerBase::GetCharacterSoundMapWithID(int32 NewID)
+{
+	// Read from dataTable
+	FString rowName = FString::FromInt(NewID);
+	FSoundAssetInfoStruct* SoundAsset = CharacterSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
+
+	TMap<FName, FSoundArrayContainer> SoundMap = SoundAsset->SoundMap;
+
+	return SoundMap;
+}
+
+TMap<FName, FSoundArrayContainer> AAssetManagerBase::GetSkillSoundMapWithID(int32 NewID)
+{
+	// Read from dataTable
+	FString rowName = FString::FromInt(NewID);
+	FSoundAssetInfoStruct* SoundAsset = SkillSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
+
+	TMap<FName, FSoundArrayContainer> SoundMap = SoundAsset->SoundMap;
+
+	return SoundMap;
+}
+
+
 
 
 
