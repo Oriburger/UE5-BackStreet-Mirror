@@ -18,11 +18,9 @@ class BACKSTREET_API UBTTaskTurnToTargetLocation : public UBTTaskNode
 public:
 	UBTTaskTurnToTargetLocation();
 
+	//Target to rotate. This value can be vector, actor, rotator.
 	UPROPERTY(EditInstanceOnly)
-		FBlackboardKeySelector TargetCharacterBBKey;
-
-	UPROPERTY(EditInstanceOnly)
-		FBlackboardKeySelector TargetLocationBBKey;
+		FBlackboardKeySelector TargetBBKey;
 
 protected:
 	//BT에 블랙보드가 설정이 되어있지 않은 경우를 방지
@@ -31,13 +29,8 @@ protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
 protected:
-	//TargetCharacter이 Valid라면 TargetCharacter의 WorldLocation을 Target로 지정
 	UFUNCTION()
-		void InitTargetLocationFromBBKey();
-	
-	//이번 tick에 돌 Angle을 반환
-	UFUNCTION()
-		double CalculateTurnAngle(const FVector& OwnerLocation, const FVector& OwnerForwardVector);
+		FRotator GetTurnRotation(APawn* ControlledPawn);
 
 	UFUNCTION()
 		void LogMessage(FString str, FVector2D vec);
@@ -48,7 +41,4 @@ private:
 
 	//블랙보드 컴포넌트
 	TWeakObjectPtr<UBlackboardComponent> BlackboardRef;
-
-	UPROPERTY()
-		FVector TargetLocation;
 };

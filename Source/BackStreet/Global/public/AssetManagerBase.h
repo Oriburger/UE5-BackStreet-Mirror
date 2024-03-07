@@ -36,6 +36,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<UAnimMontage*> HitAnimMontageList;
 
+	//스킬 애니메이션 / 무기 ID로 매핑하여 관리
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TMap<int32, FSkillAnimAssetMontageStruct> SkillAnimMontageMap;
+
 	//구르기 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<UAnimMontage*> RollAnimMontageList;
@@ -62,20 +66,20 @@ public:
 };
 
 //캐릭터의 에셋 경로를 저장하는 데이터 테이블 구조체
-USTRUCT(BlueprintType)
-struct FCharacterAssetInfoStruct
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	//캐릭터 애니메이션 에셋 경로 정보
-	UPROPERTY()
-		TMap<int32, FCharacterAnimAssetInfoStruct> AnimAssetInfoMap;
-
-	//캐릭터 VFX 에셋 경로 정보
-	UPROPERTY()
-		TMap<int32, FCharacterVFXAssetInfoStruct> VFXAssetInfoMap;
-};
+//USTRUCT(BlueprintType)
+//struct FCharacterAssetInfoStruct
+//{
+//public:
+//	GENERATED_USTRUCT_BODY()
+//
+//	//캐릭터 애니메이션 에셋 경로 정보
+//	UPROPERTY()
+//		TMap<int32, FCharacterAnimAssetInfoStruct> AnimAssetInfoMap;
+//
+//	//캐릭터 VFX 에셋 경로 정보
+//	UPROPERTY()
+//		TMap<int32, FCharacterVFXAssetInfoStruct> VFXAssetInfoMap;
+//};
 
 UCLASS()
 class BACKSTREET_API AAssetManagerBase : public AActor

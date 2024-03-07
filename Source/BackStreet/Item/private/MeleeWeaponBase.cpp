@@ -4,7 +4,6 @@
 #include "../public/MeleeWeaponBase.h"
 #include "../public/WeaponBase.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "../../Global/public/DebuffManager.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define MAX_LINETRACE_POS_COUNT 6
@@ -13,13 +12,18 @@
 AMeleeWeaponBase::AMeleeWeaponBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
+
+	this->Tags.Add("Melee");
+
+	MeleeTrailParticle = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ITEM_NIAGARA_COMPONENT"));
+	MeleeTrailParticle->SetupAttachment(WeaponMesh);
+	MeleeTrailParticle->bAutoActivate = false;
 }
 
 void AMeleeWeaponBase::Attack()
 {
+	if (WeaponID == 0) return;
 	Super::Attack();
-
-	this->Tags.Add("Melee");
 	
 	PlayEffectSound(AttackSound);
 	GetWorldTimerManager().SetTimer(MeleeAtkTimerHandle, this, &AMeleeWeaponBase::MeleeAttack, 0.01f, true);
@@ -38,6 +42,7 @@ void AMeleeWeaponBase::StopAttack()
 	GetWorldTimerManager().ClearTimer(MeleeAtkTimerHandle);
 	MeleePrevTracePointList.Empty();
 	MeleeLineTraceQueryParams.ClearIgnoredActors();
+	IgnoreActorList.Empty();
 	MeleeTrailParticle->Deactivate();
 }
 
@@ -59,7 +64,75 @@ void AMeleeWeaponBase::ClearAllTimerHandle()
 void AMeleeWeaponBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
 	Super::UpdateWeaponStat(NewStat);
-	// State 초기화
+}
+
+void AMeleeWeaponBase::InitWeaponAsset()
+{
+	Super::InitWeaponAsset();
+
+	FMeleeWeaponAssetInfoStruct& MeleeWeaponAssetInfo = WeaponAssetInfo.MeleeWeaponAssetInfo;
+
+	if (MeleeWeaponAssetInfo.MeleeTrailParticle.IsValid())
+	{	
+		MeleeTrailParticle->SetAsset(MeleeWeaponAssetInfo.MeleeTrailParticle.Get());
+		MeleeTrailParticleColor = MeleeWeaponAssetInfo.MeleeTrailParticleColor;
+		MeleeTrailParticle->SetColorParameter(FName("Color"), MeleeTrailParticleColor);
+
+		FVector startLocation = WeaponMesh->GetSocketLocation("Mid");
+		FVector endLocation = WeaponMesh->GetSocketLocation("End");
+		FVector socketLocalLocation = UKismetMathLibrary::MakeRelativeTransform(WeaponMesh->GetSocketTransform(FName("End"))
+																				, WeaponMesh->GetComponentTransform()).GetLocation();
+
+		MeleeTrailParticle->SetVectorParameter(FName("Start"), startLocation);
+		MeleeTrailParticle->SetVectorParameter(FName("End"), endLocation);
+		MeleeTrailParticle->SetRelativeLocation(socketLocalLocation);
+	}
+
+	if (MeleeWeaponAssetInfo.HitEffectParticle.IsValid())
+		HitEffectParticle = MeleeWeaponAssetInfo.HitEffectParticle.Get();
+		
+	if (MeleeWeaponAssetInfo.HitImpactSound.IsValid())
+		HitImpactSound = MeleeWeaponAssetInfo.HitImpactSound.Get();
+}
+
+TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
+{
+	if (!OwnerCharacterRef.IsValid()) return TArray<AActor*>(); 
+
+	FVector traceStartPos = (WeaponMesh->GetSocketLocation("GrabPoint")
+							+ WeaponMesh->GetSocketLocation("End")) / 2;
+	float traceRadius = UKismetMathLibrary::Vector_Distance(WeaponMesh->GetSocketLocation("GrabPoint")
+						, WeaponMesh->GetSocketLocation("End")) + 10.0f;
+	
+	TEnumAsByte<EObjectTypeQuery> pawnTypeQuery = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
+	TArray<AActor*> overlapResultList, meleeDamageTargetList;
+	
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), traceStartPos, traceRadius, { pawnTypeQuery }
+											 , ACharacterBase::StaticClass(), IgnoreActorList, overlapResultList);
+	
+	//Find target to apply damage in overlap result array
+	//Character - Check if there's any obstacle between causer and target.
+	FCollisionQueryParams collisionQueryParam;
+	collisionQueryParam.AddIgnoredActor(OwnerCharacterRef.Get());
+	collisionQueryParam.AddIgnoredActor(this);
+	for (auto& target : overlapResultList)
+	{
+		if (!IsValid(target)) continue;
+		if (!target->ActorHasTag("Character")) continue;
+		if (target->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) continue; 
+		if (Cast<ACharacterBase>(target)->GetIsActionActive(ECharacterActionType::E_Die)) continue;
+
+		FHitResult hitResult;
+		GetWorld()->LineTraceSingleByChannel(hitResult, OwnerCharacterRef->GetActorLocation()
+			, target->GetActorLocation(), ECollisionChannel::ECC_Camera, collisionQueryParam);
+
+		if (hitResult.bBlockingHit && hitResult.GetActor() == target)
+		{
+			IgnoreActorList.Add(target);
+			meleeDamageTargetList.Add(target);
+		}
+	}
+	return meleeDamageTargetList;
 }
 
 void AMeleeWeaponBase::MeleeAttack()
@@ -68,31 +141,31 @@ void AMeleeWeaponBase::MeleeAttack()
 	bool bIsMeleeTraceSucceed = false;
 
 	TArray<FVector> currTracePositionList = GetCurrentMeleePointList();
-	bIsMeleeTraceSucceed = CheckMeleeAttackTarget(hitResult, currTracePositionList);
+	TArray<AActor*> targetList = CheckMeleeAttackTargetWithSphereTrace(); 
 	MeleePrevTracePointList = currTracePositionList;
 
-	//hitResult가 Valid하다면 아래 조건문에서 데미지를 가함
-	if (bIsMeleeTraceSucceed)
+	for (auto& target : targetList)
 	{
-		//효과를 출력
-		ActivateMeleeHitEffect(hitResult.Location);
-
-		//데미지를 주고, 중복 체크를 해준다.
-		UGameplayStatics::ApplyDamage(hitResult.GetActor(), WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate
-			, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
-		MeleeLineTraceQueryParams.AddIgnoredActor(hitResult.GetActor());
-
-		//디버프도 부여
-		if (IsValid(GamemodeRef.Get()->GetGlobalDebuffManagerRef()))
+		//if target is valid, apply damage
+		if (IsValid(target))
 		{
-			GamemodeRef.Get()->GetGlobalDebuffManagerRef()->SetDebuffTimer(WeaponStat.MeleeWeaponStat.DebuffType, Cast<ACharacterBase>(hitResult.GetActor())
-				, OwnerCharacterRef.Get(), WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
-		}
-		//커스텀 이벤트 
-		OnMeleeAttackSuccess(hitResult, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage);
+			//Activate Melee Hit Effect
+			ActivateMeleeHitEffect(target->GetActorLocation());
+			
+			//Apply Knockback
+			OwnerCharacterRef.Get()->ApplyKnockBack(target, GetWeaponStat().WeaponKnockBackEnergy);
+			//Apply Damage
+			UGameplayStatics::ApplyDamage(target, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate * OwnerCharacterRef.Get()->GetCharacterStat().CharacterAtkMultiplier
+				, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
+			MeleeLineTraceQueryParams.AddIgnoredActor(target); 
 
-		//내구도를 업데이트
-		UpdateDurabilityState();
+			//Apply Debuff 
+			Cast<ACharacterBase>(target)->TryAddNewDebuff(WeaponStat.MeleeWeaponStat.DebuffType, OwnerCharacterRef.Get()
+												, WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
+
+			//Update Durability
+			UpdateDurabilityState();
+		}
 	}
 }
 
@@ -111,10 +184,6 @@ bool AMeleeWeaponBase::CheckMeleeAttackTarget(FHitResult& hitResult, const TArra
 			bool bHit = GetWorld()->SweepSingleByChannel(hitResult, beginPoint, endPoint, FQuat::Identity, ECollisionChannel::ECC_Camera
 														, FCollisionShape::MakeCapsule(traceRadius, traceHalfHeight), MeleeLineTraceQueryParams);
 
-			//DrawDebugCapsule(GetWorld(), (beginPoint + endPoint) / 2, traceHalfHeight, traceRadius
-			//				, UKismetMathLibrary::FindLookAtRotation(beginPoint, endPoint).Quaternion()
-			//				, FColor::Yellow, false, 2.0f, 0U, 1.0f);
-
 			if (bHit && IsValid(hitResult.GetActor()) //hitResult와 hitActor의 Validity 체크
 				&& OwnerCharacterRef.Get()->Tags.IsValidIndex(1) //hitActor의 Tags 체크(1)
 				&& hitResult.GetActor()->ActorHasTag("Character") //hitActor의 Type 체크
@@ -130,7 +199,7 @@ bool AMeleeWeaponBase::CheckMeleeAttackTarget(FHitResult& hitResult, const TArra
 void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location)
 {
 	//근접 공격에서의 슬로우 효과를 시도
-	TryActivateSlowHitEffect();
+	ActivateSlowHitEffect();
 
 	//효과 이미터 출력
 	if (IsValid(HitEffectParticle))
@@ -149,23 +218,21 @@ void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location)
 	}
 }
 
-bool AMeleeWeaponBase::TryActivateSlowHitEffect()
+void AMeleeWeaponBase::ActivateSlowHitEffect()
 {
-	//마지막 콤보 슬로우 효과, 추후 MaxComboCnt 프로퍼티 추가 예정
-		//애니메이션 배열 소유는 캐릭터. OwnerCharacter->GetAnimArray(WeaponType).Num() ) 
-		// ㄴ> 이런식으로 하면 될 거 같은데...
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player"))
 	{
 		FTimerHandle attackSlowEffectTimerHandle;
-		const float dilationValue = WeaponState.ComboCount % 5 == 0 ? 0.08 : 0.15; 
+		const float dilationValue = WeaponState.ComboCount % 5 == 0 ? 0.08 : 0.15;
 
 		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), dilationValue);
-		GetWorldTimerManager().SetTimer(attackSlowEffectTimerHandle, FTimerDelegate::CreateLambda([&]() {
-			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
-		}), 0.015f, false);
-		return true;
+		GetWorldTimerManager().SetTimer(attackSlowEffectTimerHandle, this, &AMeleeWeaponBase::DeactivateSlowHitEffect, 0.015f, false);
 	}
-	return false;
+}
+
+void AMeleeWeaponBase::DeactivateSlowHitEffect()
+{
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
 }
 
 TArray<FVector> AMeleeWeaponBase::GetCurrentMeleePointList()

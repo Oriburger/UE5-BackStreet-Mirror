@@ -47,6 +47,10 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+		void OnCapsuleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp
+						, FVector NormalImpulse, const FHitResult& Hit);
+
 // ------- 컴포넌트 ----------
 public:
 	//플레이어 메인 카메라 붐
@@ -56,6 +60,29 @@ public:
 	//플레이어의 메인 카메라
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		UCameraComponent* FollowingCamera;
+
+// ------- Throw Test -----------
+
+	UFUNCTION()
+		void ReadyToThrow();
+
+	UFUNCTION()
+		void Throw();
+
+	UFUNCTION()
+		void SetAimingMode(bool bNewState);
+
+	UFUNCTION()
+		void UpdateAimingState();
+
+	UFUNCTION()
+		FVector GetThrowDestination();
+
+	UPROPERTY()
+		FTimerHandle AimingTimerHandle;
+
+	UPROPERTY()
+		bool bIsAiming = false;
 
 // ------- Character Action ------- 
 public:
@@ -69,7 +96,7 @@ public:
 	UFUNCTION()
 		void Roll();
 
-	//구르기 시 대쉬를 시도한다. AnimMontage의 Notify에 의해 호출된다.
+	//Add Impulse to movement when rolling
 	UFUNCTION(BlueprintCallable)
 		void Dash();
 
@@ -90,6 +117,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		virtual void TryAttack() override;
+
+	UFUNCTION(BlueprintCallable)
+		virtual void TrySkill() override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
@@ -115,11 +145,18 @@ public:
 			, AController* EventInstigator, AActor* DamageCauser) override;
 
 	//Rotation 조절 방식을 커서 위치로 한다
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void RotateToCursor();
+
+	//1~4번의 키를 눌러 보조무기를 장착한다.
+	UFUNCTION()
+		void PickSubWeapon();
 
 	UFUNCTION()
 		TArray<AActor*> GetNearInteractionActorList();
+private:
+	UFUNCTION()
+		void StopDashMovement();
 
 // ------- 어빌리티 / 디버프 ---------------
 public:
@@ -131,33 +168,32 @@ public:
 	virtual	bool TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer = nullptr, float TotalTime = 0.0f, float Value = 0.0f);
 
 	UFUNCTION(BlueprintCallable)
-		bool TryAddNewAbility(const ECharacterAbilityType NewAbilityType);
+		bool TryAddNewAbility(int32 NewAbilityID);
 
 	UFUNCTION(BlueprintCallable)
-		bool TryRemoveAbility(const ECharacterAbilityType TargetAbilityType);
+		bool TryRemoveAbility(int32 NewAbilityID);
 		
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType);
+		bool GetIsAbilityActive(int32 AbilityID);
 
-// -------- VFX -----------
+// -------- Inventory --------------
+public:
+	UFUNCTION(BlueprintCallable)
+		virtual bool PickWeapon(int32 NewWeaponID) override;
+
+//-------- Skill ---------------------
+public:
+	//Add Skill Gauge when attacking(E_Attack) Enemy.
+	UFUNCTION(BlueprintCallable)
+		void AddSkillGauge();
+
+// -------- VFX --------------------
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UNiagaraComponent* BuffNiagaraEmitter;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UNiagaraComponent* DirectionNiagaraEmitter;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		TArray<class UNiagaraSystem*> DebuffNiagaraEffectList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
-		class UMaterialInterface* NormalMaterial;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
-		class UMaterialInterface* WallThroughMaterial;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
-		TArray<class UTexture*> EmotionTextureList;
 
 private:
 	UPROPERTY()
@@ -169,32 +205,18 @@ private:
 	UFUNCTION()
 		void DeactivateBuffEffect();
 
-	UFUNCTION()
-		void UpdateWallThroughEffect();
-
 	//캐릭터가 데미지를 입을 시, 빨간 Pulse 효과와 표정 텍스쳐 효과를 적용
 	UFUNCTION()
-		void SetFacialDamageEffect(bool NewState);
+		void SetFacialDamageEffect();
+
+	UFUNCTION()
+		void ResetFacialDamageEffect();
 
 // -------- Asset ----------------
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
 		class UAudioComponent* AudioComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* RollSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* ErrorSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* BuffSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* DebuffSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Animation")
-		class UAnimMontage* InvestigateAnimation;
 
 // ------- 그 외 -----------
 public:

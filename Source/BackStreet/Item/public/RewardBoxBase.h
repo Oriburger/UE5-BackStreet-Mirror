@@ -81,13 +81,16 @@ protected:
 		class UParticleSystem* DestroyEffectParticle;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* DestroyEffectSound;
+		class USoundCue* TakeAbilitySound;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Sound")
+		class USoundCue* SpawnAbilityBoxSound;
 
 /*------- 프로퍼티 ---------------------------*/
 protected:
 	//현재의 보상 타입
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
-		ECharacterAbilityType AbilityType = ECharacterAbilityType::E_None;
+		int32 AbilityID;
 private:
 	//위젯을 띄운 다음에 true로 바뀌어 상호작용(어빌리티 추가)이 가능
 	UPROPERTY()

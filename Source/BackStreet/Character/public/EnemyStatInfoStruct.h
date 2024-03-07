@@ -2,7 +2,34 @@
 
 #pragma once
 #include "Engine/DataTable.h"
+#include "../../Item/public/ItemInfoStruct.h"
+#include "CharacterInfoStruct.h"
+#include "../../SkillSystem/public/SkillInfoStruct.h"
 #include "EnemyStatInfoStruct.generated.h"
+
+
+USTRUCT(BlueprintType)
+struct FEnemyDropInfoStruct
+{
+	GENERATED_BODY()
+
+public:
+	//Max item count to spawn after dead event.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem", meta = (UIMin = 0, UIMax = 2))
+		int32 MaxSpawnItemCount;
+
+	//Item type list to spawn after dead event. (each item is identified by index)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
+		TArray<EItemCategoryInfo> SpawnItemTypeList;
+
+	//Item ID list to spawn after dead event.(each item is identified by index)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
+		TArray<int32> SpawnItemIDList;
+
+	//Item spawn percentage list.  (0.0f ~ 1.0f), (each item is identified by index)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
+		TArray<float> ItemSpawnProbabilityList;
+};
 
 USTRUCT(BlueprintType)
 struct FEnemyStatStruct : public FTableRowBase
@@ -16,19 +43,26 @@ public:
 	UPROPERTY(EditAnywhere)
 		FName EnemyName;
 
-	// 이것도 재사용 가능 할 듯 싶음 Character뭐시기 struct로 바꾸는게 좋을 것 같음
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.5f, UIMax = 10.0f))
-		float CharacterMaxHP;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FCharacterStatStruct CharacterStat;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.0f, UIMax = 2.0f))
-		float CharacterDefense = 1.0f;
+	//Enemy's Default Weapon ID
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		int32 DefaultWeaponID = 0;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.1f, UIMax = 10.0f))
-		float CharacterAtkMultiplier;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 100.0f, UIMax = 1000.0f))
-		float CharacterMoveSpeed;
+	//Info data of dropping item when enemy dies
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FEnemyDropInfoStruct DropInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
 		float CharacterAtkSpeed;	
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<int32> EnemySkillList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<float> EnemySkillIntervalList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintreadOnly)
+		FSkillSetInfo SkillSetInfo;
 };

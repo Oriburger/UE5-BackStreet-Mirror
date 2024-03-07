@@ -6,6 +6,7 @@
 #include "StageData.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateAIContorl);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateGate);
 
 UCLASS()
 class BACKSTREET_API AStageData : public AActor
@@ -21,6 +22,13 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateAIContorl AIOffDelegate;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateGate GateOnDelegate;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateGate GateOffDelegate;
+
 
 public:
 	AStageData();
@@ -44,16 +52,31 @@ public:
 		void SetStageLocation(FVector Vector) { StageInfo.StageLocation = Vector; }
 
 	UFUNCTION(BlueprintCallable)
-		EStageCategoryInfo GetStageType() { return StageInfo.Type; }
+		EStageCategoryInfo GetStageCategoryType() { return StageInfo.StageCategoryType; }
 
 	UFUNCTION()
-		void SetStageType(EStageCategoryInfo StageType) { StageInfo.Type = StageType; }
+		FStageInfoStruct GetStageTypeInfo() { return StageInfo.StageType; }
+
+	UFUNCTION()
+		void SetStageCategoryType(EStageCategoryInfo Type) { StageInfo.StageCategoryType = Type; }
+
+	UFUNCTION()
+		void SetStageTypeInfo(FStageInfoStruct Type) { StageInfo.StageType = Type; }
 
 	UFUNCTION()
 		FName GetLevelToLoad() { return StageInfo.LevelToLoad; }
 
 	UFUNCTION()
+		int32 GetCurrentWaveLevel() { return StageInfo.CurrentWaveLevel; }
+
+	UFUNCTION()
 		void SetLevelToLoad(FName Level) { StageInfo.LevelToLoad = Level; }
+
+	UFUNCTION()
+		void SetCurrentWaveLevel(int32 CurrentWaveLevel) { StageInfo.CurrentWaveLevel = CurrentWaveLevel; }
+
+	UFUNCTION()
+		void SetMonsterSpawnPointOrderIdx(int32 MonsterSpawnPointOrderIdx) { StageInfo.MonsterSpawnPointOrderIdx = MonsterSpawnPointOrderIdx; }
 
 	UFUNCTION()
 		bool GetIsClear() { return StageInfo.bIsClear; }
@@ -178,7 +201,41 @@ public:
 	UFUNCTION()
 		void SetLevelRef(ULevelStreaming* Target) { StageInfo.LevelRef = Target; }
 
+	// юс╫ц
+	UFUNCTION(BlueprintCallable)
+		FStageDataStruct GetStageInfo() { return StageInfo; }
+
+	UFUNCTION()
+		FStageDataStruct SetStageInfo(FStageDataStruct StageData) { StageInfo = StageData; return StageInfo; }
+
+	// Open All Gate in the Stage ( Chapter Gate is Open After Checking )
+	UFUNCTION(BlueprintCallable)
+		void OpenAllGate();
+
+	// Close All Gate in the Stage
+	UFUNCTION(BlueprintCallable)
+		void CloseAllGate();
+
+	// Return DefenseWaveSpawnTimerHandle
+	UFUNCTION(BlueprintCallable)
+		FTimerHandle& GetDefenseWaveSpawnTimerHandle() { return DefenseWaveSpawnTimerHandle; }
+
+	// Return DefenseWaveClearTimeTimerHandle
+	UFUNCTION(BlueprintCallable)
+		FTimerHandle& GetDefenseWaveClearTimeTimerHandle() { return DefenseWaveClearTimeTimerHandle; }
+
+	// Do Task Related Stage Clear
+	UFUNCTION()
+		void DoStageClearTask();
+
 private:
 	UPROPERTY()
 		FStageDataStruct StageInfo;
+
+	UPROPERTY()
+		FTimerHandle DefenseWaveSpawnTimerHandle;
+
+	UPROPERTY()
+		FTimerHandle DefenseWaveClearTimeTimerHandle;
+
 };

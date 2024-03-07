@@ -5,9 +5,6 @@
 #include "../../Global/public/BackStreet.h"
 #include "GameFramework/Actor.h"
 #include "ChapterManagerBase.generated.h"
-// Chapter 갯수
-
-
 
 UCLASS()
 class BACKSTREET_API AChapterManagerBase : public AActor
@@ -26,16 +23,16 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable)
-		void SetLobbyStage();
+		void InitChapterManager();
 
 	UFUNCTION(BlueprintCallable)
-		void CreateChapterManager();
+		void SetLobbyStage();
 
 	UFUNCTION()
 		void CreateResourceManager();
 
 	UFUNCTION()
-		bool CheckChapterClear();
+		bool DoChapterClearTaskAfterCheck();
 
 	UFUNCTION()
 		void MoveChapter();
@@ -62,6 +59,9 @@ public:
 		AResourceManager* GetResourceManager() { return ResourceManager; }
 
 	UFUNCTION(BlueprintCallable)
+		AWaveManager* GetWaveeManager() { return WaveManager; }
+
+	UFUNCTION(BlueprintCallable)
 		int32 GetChapterLV() { return ChapterLV; }
 
 	UFUNCTION(BlueprintCallable)
@@ -72,17 +72,24 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		TArray<class AStageData*> GetStages() { return StageList; }
+
+	UFUNCTION(BlueprintCallable)
+		FStageInfoStruct GetStageTypeInfoWithType(EStageCategoryInfo Type);
+
 	
 private:
 
 	UFUNCTION()
-		void InitChapterManager();
+		void ResetChapter();
 
 	UFUNCTION()
 		void CreateChapter();
 
 	UFUNCTION()
 		void InitStartGate();
+
+	UFUNCTION()
+		void InitStageTypeArray();
 
 private:
 	UPROPERTY()
@@ -111,10 +118,22 @@ private:
 	UPROPERTY()
 		class AResourceManager* ResourceManager;
 
+	UPROPERTY()
+		class AWaveManager* WaveManager;
+
 	//SoftObjRef로 대체 예정
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|ResourceManager")
 		TSubclassOf<class AResourceManager> ResourceManagerClass;
 
+	// --------Data Table-------
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		UDataTable* StageTypeTable;
 
+	UPROPERTY()
+		TArray<FStageInfoStruct> NormalStageTypes;
+
+	UPROPERTY()
+		TArray<FStageInfoStruct> BossStageTypes;
 
 };

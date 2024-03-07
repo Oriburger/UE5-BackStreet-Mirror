@@ -9,6 +9,8 @@ class BACKSTREET_API ACharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
+	friend class AWeaponInventoryBase;
+
 //----- Global / Component ----------
 public:
 	// Sets default values for this character's properties
@@ -28,10 +30,20 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		UChildActorComponent* InventoryComponent;	
 
+protected:
+	UPROPERTY(VisibleAnywhere)
+		class UDebuffManagerComponent* DebuffManagerComponent;
+
 // ------- Character Action 기본 ------- 
 public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		int32 CharacterID;
+
 	//Input에 Binding 되어 공격을 시도 (AnimMontage를 호출)
 	virtual void TryAttack();
+
+	///Input에 Binding 되어 스킬공격을 시도 (AnimMontage를 호출)
+	virtual void TrySkill();
 
 	//AnimNotify에 Binding 되어 실제 공격을 수행
 	virtual void Attack();
@@ -51,7 +63,11 @@ public:
 
 	//플레이어의 ActionState를 Idle로 전환한다.
 	UFUNCTION(BlueprintCallable)
-		void ResetActionState(bool bForceReset = false);
+			void ResetActionState(bool bForceReset = false);
+
+	//Set Player's Action State
+	UFUNCTION(BlueprintCallable)
+		void SetActionState(ECharacterActionType Type);
 
 	//플레이어가 체력을 회복함 (일회성)
 	UFUNCTION()
@@ -62,7 +78,11 @@ public:
 		float TakeDebuffDamage(float DamageAmount, ECharacterDebuffType DebuffType, AActor* Causer);
 
 	UFUNCTION(BlueprintCallable)
-		void TakeKnockBack(AActor* Causer, float Strength);
+		void ApplyKnockBack(AActor* Target, float Strength);
+
+	//공격Action 사이의 Interval을 관리하는 타이머를 해제
+	UFUNCTION()
+		void ResetAtkIntervalTimer();
 
 // ------- Character Stat/State ------------------------------
 public:
@@ -100,8 +120,7 @@ public:
 		bool EquipWeapon(class AWeaponBase* TargetWeapon);
 
 	//무기를 집는다. 인벤토리가 꽉 찼다면 false를 반환
-	UFUNCTION(BlueprintCallable)
-		bool PickWeapon(int32 NewWeaponID);
+	virtual bool PickWeapon(int32 NewWeaponID);
 
 	//다음 무기로 전환한다. 전환에 실패하면 false를 반환
 	virtual void SwitchToNextWeapon();
@@ -109,33 +128,133 @@ public:
 	//무기를 Drop한다. (월드에서 아예 사라진다.)
 	virtual void DropWeapon();
 
+	UFUNCTION()
+		bool TrySwitchToSubWeapon(int32 SubWeaponIdx);
+
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class AWeaponInventoryBase* GetInventoryRef();
 
-	UFUNCTION()
-		void SetWeaponActorRef(class AWeaponBase* NewWeapon);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class AWeaponInventoryBase* GetSubInventoryRef();
 
 	//무기 Ref를 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class AWeaponBase* GetWeaponActorRef();
+		class AWeaponBase* GetCurrentWeaponRef();
 
-	//공격Action 사이의 Interval을 관리하는 타이머를 해제
+protected:
+	UPROPERTY()
+		TSubclassOf<class AWeaponInventoryBase> WeaponInventoryClass;
+
 	UFUNCTION()
-		void ResetAtkIntervalTimer();
+		void SwitchWeaponActor(EWeaponType TargetWeaponType);
 
-// ----- 애니메이션 관련 -------------------
+private:
+	UPROPERTY()
+		class AWeaponInventoryBase* InventoryRef;
+
+	UPROPERTY()
+		class AWeaponInventoryBase* SubInventoryRef;
+
+	//0번째 : 들고 있는 무기 / 1번째, 숨겨져 있는 다른 타임의무기
+	UPROPERTY()
+		TArray<class AWeaponBase*> WeaponActorList;
+
+protected:
+	UPROPERTY()
+		TWeakObjectPtr<class AWeaponBase> CurrentWeaponRef;
+
+	//0번째 : 근접 무기 / 1번째 : 원거리 무기
+	//하나의 WeaponBase로 통일을 한다면 이렇게 하지 않아도 될텐데..
+
+private:
+	UPROPERTY()
+		TArray<TSubclassOf<class AWeaponBase>> WeaponClassList; 
+
+	//초기 무기 액터들을 스폰하고 초기화 한다.
+	void InitWeaponActors();
+
+	//무기 액터를 스폰
+	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
+
+// ---- Skill --------------------
+private:
+	UFUNCTION()
+		float GetSkillAnimPlayRate(uint8 SkillAnimIndex);
+
+// ---- Asset -------------------
+public:
+	// 외부에서 Init하기위해 Call
+	UFUNCTION(BlueprintCallable)
+		void InitAsset(int32 NewEnemyID);
+
+protected:
+	UFUNCTION()
+		void SetAsset();
+
+	UFUNCTION()
+		bool InitAnimAsset();
+
+	UFUNCTION()
+		void InitSoundAsset();
+
+	UFUNCTION()
+		void InitVFXAsset();
+
+	UFUNCTION()
+		void InitMaterialAsset();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FCharacterAssetInfoStruct GetAssetInfoWithID(const int32 TargetCharacterID);
+
+protected:
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
+		FCharacterAssetInfoStruct AssetInfo;
+
+	//적 데이터 테이블 (에셋 정보 포함)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
+		UDataTable* AssetDataInfoTable;
+
 protected:
 	//애니메이션, VFX, 사운드큐 등 저장
 	UPROPERTY()
 		struct FCharacterAnimAssetInfoStruct AnimAssetData;
 
-// ----- VFX ------------------- -> 위 애니메이션 처럼 변경 예정
-protected:
-	UFUNCTION()
-		void InitDynamicMeshMaterial(UMaterialInterface* NewMaterial);
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+		class UAnimMontage* PreChaseAnimMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+		class UAnimMontage* InvestigateAnimation;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		class USoundCue* RollSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		class USoundCue* BuffSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		class USoundCue* DebuffSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		USoundCue* HitImpactSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		TArray<class UNiagaraSystem*> DebuffNiagaraEffectList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
+		class UMaterialInterface* NormalMaterial;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
+		class UMaterialInterface* WallThroughMaterial;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
+		TArray<class UTexture*> EmotionTextureList;
 
 	UPROPERTY()
 		class UMaterialInstanceDynamic* CurrentDynamicMaterial;
+
+protected:
+	UFUNCTION()
+		void InitDynamicMeshMaterial(UMaterialInterface* NewMaterial);
 
 // ------ 그 외 캐릭터 프로퍼티  ---------------
 protected:
@@ -147,12 +266,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
 		FCharacterStateStruct CharacterState;
 
-	UPROPERTY()
-		class AWeaponInventoryBase* InventoryRef;
-
-	UPROPERTY()
-		class AWeaponBase* WeaponRef;
-
 	//Gamemode 약 참조
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
@@ -161,10 +274,28 @@ protected:
 	UFUNCTION()
 		virtual void ClearAllTimerHandle();
 
+	UFUNCTION()
+		void PlaySkillAnimation();
+	UFUNCTION()
+		void PlayNextSkillAnimation();
+
 	//공격 간 딜레이 핸들
 	UPROPERTY()
 		FTimerHandle AtkIntervalHandle;
 
 	UPROPERTY()
 		FTimerHandle ReloadTimerHandle;
+
+	UPROPERTY()
+		TArray<FTimerHandle> SkillAnimPlayTimerHandleList;
+
+private:
+	//Current number of multiple SkillAnimPlayTimers
+	UPROPERTY()
+		int SkillAnimPlayTimerCurr;
+
+	//Threshold number of multiple SkillAnimPlayTimer
+	UPROPERTY()
+		int SkillAnimPlayTimerThreshold;
+
 };

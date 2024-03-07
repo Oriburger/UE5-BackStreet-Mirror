@@ -10,8 +10,10 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateClearResource);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSingleParam, bool, bGameIsOver);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateSystemMessage, FName, Message, FColor, TextColor);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateStageClear);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateMissionClear);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateUIAnimation, FName, AnimationName);
+
+
+
 
 UCLASS()
 class BACKSTREET_API ABackStreetGameModeBase : public AGameModeBase
@@ -27,19 +29,12 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateClearResource ClearResourceDelegate;
-	
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateClearResource ChapterClearResourceDelegate;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateSystemMessage PrintSystemMessageDelegate;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateStageClear StageClearDelegate;
-
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateStageClear FadeOutDelegate;
-
+		FDelegateUIAnimation UIAnimationDelegate;
 
 public:
 	ABackStreetGameModeBase();
@@ -66,7 +61,7 @@ public:
 		void PlayCameraShakeEffect(ECameraShakeType EffectType, FVector Location, float Radius = 100.0f);
 
 	UFUNCTION()
-		AItemBase* SpawnItemToWorld(uint8 ItemType, int32 ItemID, FVector SpawnLocation);
+		AItemBase* SpawnItemToWorld(int32 ItemID, FVector SpawnLocation);
 
 	UFUNCTION(BlueprintCallable)
 		bool IsLobbyStage();
@@ -74,32 +69,11 @@ public:
 	UFUNCTION()
 		void UpdateCharacterStat(class ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat);
 
-	UFUNCTION()
-		void UpdateCharacterStatWithID(class ACharacterBase* TargetCharacter, const uint32 CharacterID);
-
-	UFUNCTION()
-		void UpdateWeaponStat(class AWeaponBase* TargetWeapon, FWeaponStatStruct NewStat);
-
-	UFUNCTION()
-		void UpdateWeaponStatWithID(class AWeaponBase* TargetWeapon, const int32 WeaponID);
-
-	UFUNCTION()
-		void UpdateProjectileStatWithID(class AProjectileBase* TargetProjectile, const int32 ProjectileID);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FWeaponStatStruct GetWeaponStatInfoWithID(const int32 WeaponID);
-
-	UFUNCTION()
-		FStageEnemyTypeStruct GetStageTypeInfoWithRow(uint16 rowName);
-
-	UFUNCTION()
-		class UDebuffManager* GetGlobalDebuffManagerRef() { return DebuffManager; }
+	UFUNCTION(BlueprintCallable)
+		class USkillManagerBase* GetGlobalSkillmanagerBaseRef() { return SkillManagerBase; }
 
 	UFUNCTION(BlueprintCallable)
 		class AChapterManagerBase* GetChapterManagerRef() { return ChapterManager; }
-
-	UFUNCTION(BlueprintImplementableEvent)
-		void FadeOut();
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void UpdateMiniMapUI();
@@ -108,53 +82,19 @@ public:
 		void SetMiniMapUI();
 
 	UFUNCTION(BlueprintImplementableEvent)
-		void PopUpClearUI();
+		void UpdateWaveInfoUI(int32 CurrWave,int32 EndWave);
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void PlayUIAnimation(FName AnimationName);
 
-	// ------ Asset Info ----------------------------
-public:
-	//캐릭터의 애니메이션 에셋 데이터를 읽어들임
-	UFUNCTION()
-		FCharacterAnimAssetInfoStruct GetCharacterAnimAssetInfoData(const int32 CharacterID);
-
-protected:
-	//애니메이션 에셋 경로 저장 데이터 테이블
-	UPROPERTY(EditDefaultsOnly, Category = "Asset|Data")
-		UDataTable* AnimAssetInfoTable;
-
-	//VFX 에셋 경로 저장 데이터 테이블
-	UPROPERTY(EditDefaultsOnly, Category = "Asset|Data")
-		UDataTable* VFXssetInfoTable;
-
-private:
-	//추후 따로 뺄 예정
-	UPROPERTY()
-		FCharacterAssetInfoStruct CachedCharacterAssetInfoData;
-
-// ------ Data Table -----------------------------
-protected:
-	//적의 스탯 테이블
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* EnemyStatTable;
-	
-	//무기 스탯 테이블
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* WeaponStatTable;
-
-	//발사체 스탯 테이블
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* ProjectileStatTable;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* StageTypeTable;
 
 // ----- Class Info ------------------------------------ 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
 		TArray<TSubclassOf<UCameraShakeBase> > CameraShakeEffectList;
 	
-	//EItemCategoryInfo의 값이 Idx
+	//스폰할 아이템 클래스 (초기화를 위한 데이터테이블이 포함된 BP를 지정해야함)
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Item")
-		TMap<int32, TSubclassOf<class AItemBase> > ItemClassMap;
+		TSubclassOf<class AItemBase> ItemClass;
 
 //------ 그 외 프로퍼티 ---------------
 protected:
@@ -162,7 +102,7 @@ protected:
 		class AMainCharacterBase* PlayerCharacterRef;
 
 	UPROPERTY()
-		class UDebuffManager* DebuffManager;
+		class USkillManagerBase* SkillManagerBase;
 
 	UPROPERTY(BlueprintReadWrite)
 		class AChapterManagerBase* ChapterManager;
