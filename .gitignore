@@ -75,6 +75,8 @@ DerivedDataCache/*
 
 # 에셋 주요 파일
 Content/Asset/*
+Content/Asset/Data/*
+Content/Asset/Sound/*
 Content/Art/*
 
 # 빌드 데이터 파일
