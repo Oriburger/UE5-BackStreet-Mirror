@@ -65,6 +65,37 @@ public:
 		TArray<class UNiagaraSystem*> DebuffNiagaraEffectLis;
 };
 
+USTRUCT(BlueprintType)
+struct FSoundArrayContainer : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		TArray<USoundCue*> SoundList;
+};
+
+USTRUCT(BlueprintType)
+struct FSoundAssetInfoStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	
+	//The ID of the target to use the sound asset.
+	//The ID consists of four digits.
+	//* _ _ _ : SoundType (None : 0, BGM : 1, UI : 2, Character : 3, Weapon : 4, Skill : 5, etc : 6)
+	//_ * * * : Identification Number
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		int32 TargetID;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FName SoundTarget;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TMap<FName, FSoundArrayContainer> SoundMap;
+
+};
+
 //캐릭터의 에셋 경로를 저장하는 데이터 테이블 구조체
 //USTRUCT(BlueprintType)
 //struct FCharacterAssetInfoStruct
@@ -108,6 +139,9 @@ public:
 	UFUNCTION()
 		FName GetRandomMap();
 
+	UFUNCTION()
+		TMap<FName, FSoundArrayContainer> GetSoundMapWithID(int32 NewID);
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<TSubclassOf<class AEnemyCharacterBase>> EnemyAssets;
@@ -146,6 +180,9 @@ public:
 private:
 	UPROPERTY()
 		class ABackStreetGameModeBase* GameModeRef;
+	
+	UPROPERTY()
+		UDataTable* SoundAssetTable;
 
 };
 

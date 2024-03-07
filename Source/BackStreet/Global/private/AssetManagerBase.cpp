@@ -18,6 +18,11 @@ void AAssetManagerBase::BeginPlay()
 {
 	Super::BeginPlay();
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+
+	//------ Sound Datatable Initiation ---------
+	static ConstructorHelpers::FObjectFinder<UDataTable> soundAssetTableFinder(TEXT("/Game/Asset/Data/D_SoundAsset.D_SoundAsset"));
+	checkf(soundAssetTableFinder.Succeeded(), TEXT("SoundAssetTable class discovery failed."));
+	SoundAssetTable = soundAssetTableFinder.Object;
 	
 }
 
@@ -60,6 +65,18 @@ FName AAssetManagerBase::GetRandomMap()
 	uint8 idx = FMath::RandRange(0, MapNames.Num() - 1);
 	return MapNames[idx];
 }
+
+TMap<FName, FSoundArrayContainer> AAssetManagerBase::GetSoundMapWithID(int32 NewID)
+{	
+	// Read from dataTable
+	FString rowName = FString::FromInt(NewID);
+	FSoundAssetInfoStruct* SoundAsset = SoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
+
+	TMap<FName, FSoundArrayContainer> SoundMap = SoundAsset->SoundMap;
+	
+	return SoundMap;	
+}
+
 
 
 
