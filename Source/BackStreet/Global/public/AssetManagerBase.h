@@ -122,6 +122,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		TArray<USoundCue*> GetSoundList(ESoundAssetType NewType, int32 NewID, FName NewName);
 
+	UFUNCTION(BlueprintCallable)
+		TMap<FName, FSoundArrayContainer>GetSoundAssetInfo(ESoundAssetType NewType, int32 NewID);
 private:
 	UFUNCTION()
 		TMap<FName, FSoundArrayContainer> GetSystemSoundMapWithID(int32 NewID);

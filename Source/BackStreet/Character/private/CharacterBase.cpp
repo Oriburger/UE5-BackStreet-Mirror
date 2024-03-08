@@ -52,6 +52,12 @@ void ACharacterBase::BeginPlay()
 	InventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	SubInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	
+	if (GamemodeRef.IsValid())
+	{
+		TWeakObjectPtr<class UAssetManagerBase> assetManagerBase = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
+		SoundAssetMap = assetManagerBase.Get()->GetSoundAssetInfo(ESoundAssetType::E_Character,0);
+	}
 
 	if (IsValid(SubInventoryRef) && !SubInventoryRef->IsActorBeingDestroyed())
 	{
@@ -513,13 +519,6 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 			}
 		}
 
-		// Sound
-
-		AssetToStream.AddUnique(AssetInfo.RollSound.ToSoftObjectPath());
-		AssetToStream.AddUnique(AssetInfo.BuffSound.ToSoftObjectPath());
-		AssetToStream.AddUnique(AssetInfo.DebuffSound.ToSoftObjectPath());
-		AssetToStream.AddUnique(AssetInfo.HitImpactSound.ToSoftObjectPath());
-
 
 		// VFX
 		if (!AssetInfo.DebuffNiagaraEffectList.IsEmpty())
@@ -678,24 +677,44 @@ bool ACharacterBase::InitAnimAsset()
 
 void ACharacterBase::InitSoundAsset()
 {
-	if (AssetInfo.RollSound.IsValid())
+	if (SoundAssetMap.Contains("FootStep"))
 	{
-		RollSound = AssetInfo.RollSound.Get();
+		if (SoundAssetMap.Find("FootStep")->SoundList.IsValidIndex(0))
+		{
+			FootStepSoundList = SoundAssetMap.Find("FootStep")->SoundList;
+		}
 	}
 
-	if (AssetInfo.BuffSound.IsValid())
+	if (SoundAssetMap.Contains("Roll"))
 	{
-		BuffSound = AssetInfo.BuffSound.Get();
+		if (SoundAssetMap.Find("Roll")->SoundList.IsValidIndex(0))
+		{
+			RollSound = SoundAssetMap.Find("Roll")->SoundList[0];
+		}
 	}
 
-	if (AssetInfo.HitImpactSound.IsValid())
+	if (SoundAssetMap.Contains("Buff"))
 	{
-		HitImpactSound = AssetInfo.HitImpactSound.Get();
+		if (SoundAssetMap.Find("Buff")->SoundList.IsValidIndex(0))
+		{
+			BuffSound = SoundAssetMap.Find("Buff")->SoundList[0];
+		}
 	}
 
-	if (AssetInfo.DebuffSound.IsValid())
+	if (SoundAssetMap.Contains("Debuff"))
 	{
-		DebuffSound = AssetInfo.DebuffSound.Get();
+		if (SoundAssetMap.Find("Debuff")->SoundList.IsValidIndex(0))
+		{
+			DebuffSound = SoundAssetMap.Find("Debuff")->SoundList[0];
+		}
+	}
+
+	if (SoundAssetMap.Contains("HitImpactSound"))
+	{
+		if (SoundAssetMap.Find("HitImpactSound")->SoundList.IsValidIndex(0))
+		{
+			HitImpactSound = SoundAssetMap.Find("HitImpactSound")->SoundList[0];
+		}
 	}
 }
 

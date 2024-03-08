@@ -27,11 +27,9 @@ void UAssetManagerBase::InitAssetManager(ABackStreetGameModeBase* NewGamemodeRef
 	if (!IsValid(NewGamemodeRef)) return;
 	GamemodeRef = NewGamemodeRef;
 }
-
-TArray<USoundCue*> UAssetManagerBase::GetSoundList(ESoundAssetType NewType, int32 NewID, FName NewName)
+TMap<FName, FSoundArrayContainer>UAssetManagerBase::GetSoundAssetInfo(ESoundAssetType NewType, int32 NewID)
 {
 	TMap<FName, FSoundArrayContainer> soundMap;
-	TArray<USoundCue*> soundList;
 
 	switch (NewType)
 	{
@@ -50,8 +48,13 @@ TArray<USoundCue*> UAssetManagerBase::GetSoundList(ESoundAssetType NewType, int3
 		soundMap = GetSkillSoundMapWithID(NewID);
 		break;
 	}
-	soundList = soundMap.Find(NewName)->SoundList;
-	
+	return soundMap;
+}
+
+TArray<USoundCue*> UAssetManagerBase::GetSoundList(ESoundAssetType NewType, int32 NewID, FName NewName)
+{
+	TArray<USoundCue*> soundList;
+	soundList = GetSoundAssetInfo(NewType, NewID).Find(NewName)->SoundList;
 	return soundList;
 }
 
