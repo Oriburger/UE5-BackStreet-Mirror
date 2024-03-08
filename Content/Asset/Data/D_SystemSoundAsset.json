@@ -1,6 +1,7 @@
 [
 	{
 		"Name": "0",
+		"SoundType": "E_System",
 		"TargetID": 0,
 		"SoundTarget": "None",
 		"SoundMap":
@@ -9,6 +10,7 @@
 	},
 	{
 		"Name": "1000",
+		"SoundType": "E_System",
 		"TargetID": 1000,
 		"SoundTarget": "BGM",
 		"SoundMap":
@@ -35,6 +37,7 @@
 	},
 	{
 		"Name": "2000",
+		"SoundType": "E_System",
 		"TargetID": 2000,
 		"SoundTarget": "UI",
 		"SoundMap":
@@ -73,6 +76,7 @@
 	},
 	{
 		"Name": "3000",
+		"SoundType": "E_System",
 		"TargetID": 3000,
 		"SoundTarget": "AbilityBox",
 		"SoundMap":
@@ -93,6 +97,7 @@
 	},
 	{
 		"Name": "3001",
+		"SoundType": "E_System",
 		"TargetID": 3001,
 		"SoundTarget": "ItemBox",
 		"SoundMap":
@@ -108,6 +113,7 @@
 	},
 	{
 		"Name": "3002",
+		"SoundType": "E_System",
 		"TargetID": 3002,
 		"SoundTarget": "Gate",
 		"SoundMap":

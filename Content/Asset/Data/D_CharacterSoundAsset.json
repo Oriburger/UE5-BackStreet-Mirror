@@ -1,6 +1,7 @@
 [
 	{
 		"Name": "0",
+		"SoundType": "E_Character",
 		"TargetID": 0,
 		"SoundTarget": "MainCharacter",
 		"SoundMap":
