@@ -120,22 +120,22 @@ public:
 //----- Sound --------
 public:
 	UFUNCTION(BlueprintCallable)
-		TArray<USoundCue*> GetSoundList(ESoundAssetType NewType, int32 NewID, FName NewName);
+		TArray<USoundCue*> GetSoundList(ESoundAssetType SoundType, int32 TargetID, FName SoundName);
 
 	UFUNCTION(BlueprintCallable)
-		TMap<FName, FSoundArrayContainer>GetSoundAssetInfo(ESoundAssetType NewType, int32 NewID);
+		TMap<FName, FSoundArrayContainer>GetSoundAssetInfo(ESoundAssetType SoundType, int32 TargetID);
 private:
 	UFUNCTION()
-		TMap<FName, FSoundArrayContainer> GetSystemSoundMapWithID(int32 NewID);
+		TMap<FName, FSoundArrayContainer> GetSystemSoundMapWithID(int32 TargetID);
 
 	UFUNCTION()
-		TMap<FName, FSoundArrayContainer> GetWeaponSoundMapWithID(int32 NewID);
+		TMap<FName, FSoundArrayContainer> GetWeaponSoundMapWithID(int32 TargetID);
 
 	UFUNCTION()
-		TMap<FName, FSoundArrayContainer> GetCharacterSoundMapWithID(int32 NewID);
+		TMap<FName, FSoundArrayContainer> GetCharacterSoundMapWithID(int32 TargetID);
 
 	UFUNCTION()
-		TMap<FName, FSoundArrayContainer> GetSkillSoundMapWithID(int32 NewID);
+		TMap<FName, FSoundArrayContainer> GetSkillSoundMapWithID(int32 TargetID);
 
 private:
 	UPROPERTY()

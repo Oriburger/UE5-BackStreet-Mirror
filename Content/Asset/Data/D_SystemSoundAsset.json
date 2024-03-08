@@ -73,57 +73,5 @@
 				]
 			}
 		}
-	},
-	{
-		"Name": "3000",
-		"SoundType": "E_System",
-		"TargetID": 3000,
-		"SoundTarget": "AbilityBox",
-		"SoundMap":
-		{
-			"OpenAbilityBox":
-			{
-				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_TakeAbility.SC_TakeAbility'"
-				]
-			},
-			"SpawnAbilityBox":
-			{
-				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_SpawnAbilityBox.SC_SpawnAbilityBox'"
-				]
-			}
-		}
-	},
-	{
-		"Name": "3001",
-		"SoundType": "E_System",
-		"TargetID": 3001,
-		"SoundTarget": "ItemBox",
-		"SoundMap":
-		{
-			"OpenItemBox":
-			{
-				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_OpenItemBox1.SC_OpenItemBox1'",
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_OpenItemBox2.SC_OpenItemBox2'"
-				]
-			}
-		}
-	},
-	{
-		"Name": "3002",
-		"SoundType": "E_System",
-		"TargetID": 3002,
-		"SoundTarget": "Gate",
-		"SoundMap":
-		{
-			"EnterGate":
-			{
-				"SoundList": [
-					"None"
-				]
-			}
-		}
 	}
 ]

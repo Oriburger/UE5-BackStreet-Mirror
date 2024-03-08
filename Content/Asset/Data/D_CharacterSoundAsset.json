@@ -30,6 +30,19 @@
 				"SoundList": [
 					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/SC_Debuff.SC_Debuff'"
 				]
+			},
+			"InvestigateItemBox":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_OpenItemBox1.SC_OpenItemBox1'",
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_OpenItemBox2.SC_OpenItemBox2'"
+				]
+			},
+			"InvestigateAbilityBox":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_TakeAbility.SC_TakeAbility'"
+				]
 			}
 		}
 	}

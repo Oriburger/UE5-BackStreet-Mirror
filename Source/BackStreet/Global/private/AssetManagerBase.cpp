@@ -27,41 +27,41 @@ void UAssetManagerBase::InitAssetManager(ABackStreetGameModeBase* NewGamemodeRef
 	if (!IsValid(NewGamemodeRef)) return;
 	GamemodeRef = NewGamemodeRef;
 }
-TMap<FName, FSoundArrayContainer>UAssetManagerBase::GetSoundAssetInfo(ESoundAssetType NewType, int32 NewID)
+TMap<FName, FSoundArrayContainer>UAssetManagerBase::GetSoundAssetInfo(ESoundAssetType SoundType, int32 TargetID)
 {
 	TMap<FName, FSoundArrayContainer> soundMap;
 
-	switch (NewType)
+	switch (SoundType)
 	{
 	case ESoundAssetType::E_None:
 		break;
 	case ESoundAssetType::E_System:
-		soundMap = GetSystemSoundMapWithID(NewID);
+		soundMap = GetSystemSoundMapWithID(TargetID);
 		break;
 	case ESoundAssetType::E_Weapon:
-		soundMap = GetWeaponSoundMapWithID(NewID);
+		soundMap = GetWeaponSoundMapWithID(TargetID);
 		break;
 	case ESoundAssetType::E_Character:
-		soundMap = GetCharacterSoundMapWithID(NewID);
+		soundMap = GetCharacterSoundMapWithID(TargetID);
 		break;
 	case ESoundAssetType::E_Skill:
-		soundMap = GetSkillSoundMapWithID(NewID);
+		soundMap = GetSkillSoundMapWithID(TargetID);
 		break;
 	}
 	return soundMap;
 }
 
-TArray<USoundCue*> UAssetManagerBase::GetSoundList(ESoundAssetType NewType, int32 NewID, FName NewName)
+TArray<USoundCue*> UAssetManagerBase::GetSoundList(ESoundAssetType SoundType, int32 TargetID, FName SoundName)
 {
 	TArray<USoundCue*> soundList;
-	soundList = GetSoundAssetInfo(NewType, NewID).Find(NewName)->SoundList;
+	soundList = GetSoundAssetInfo(SoundType, TargetID).Find(SoundName)->SoundList;
 	return soundList;
 }
 
-TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetSystemSoundMapWithID(int32 NewID)
+TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetSystemSoundMapWithID(int32 TargetID)
 {	
 	// Read from dataTable
-	FString rowName = FString::FromInt(NewID);
+	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAsset = SystemSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
 
 	TMap<FName, FSoundArrayContainer> soundMap = soundAsset->SoundMap;
@@ -69,10 +69,10 @@ TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetSystemSoundMapWithID(int
 	return soundMap;	
 }
 
-TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetWeaponSoundMapWithID(int32 NewID)
+TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetWeaponSoundMapWithID(int32 TargetID)
 {
 	// Read from dataTable
-	FString rowName = FString::FromInt(NewID);
+	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAsset = WeaponSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
 
 	TMap<FName, FSoundArrayContainer> soundMap = soundAsset->SoundMap;
@@ -80,10 +80,10 @@ TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetWeaponSoundMapWithID(int
 	return soundMap;
 }
 
-TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetCharacterSoundMapWithID(int32 NewID)
+TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetCharacterSoundMapWithID(int32 TargetID)
 {
 	// Read from dataTable
-	FString rowName = FString::FromInt(NewID);
+	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAsset = CharacterSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
 
 	TMap<FName, FSoundArrayContainer> soundMap = soundAsset->SoundMap;
@@ -91,10 +91,10 @@ TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetCharacterSoundMapWithID(
 	return soundMap;
 }
 
-TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetSkillSoundMapWithID(int32 NewID)
+TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetSkillSoundMapWithID(int32 TargetID)
 {
 	// Read from dataTable
-	FString rowName = FString::FromInt(NewID);
+	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAsset = SkillSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
 
 	TMap<FName, FSoundArrayContainer> soundMap = soundAsset->SoundMap;

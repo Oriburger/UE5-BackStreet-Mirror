@@ -679,7 +679,7 @@ void ACharacterBase::InitSoundAsset()
 {
 	if (SoundAssetMap.Contains("FootStep"))
 	{
-		if (SoundAssetMap.Find("FootStep")->SoundList.IsValidIndex(0))
+		if (!SoundAssetMap.Find("FootStep")->SoundList.IsEmpty())
 		{
 			FootStepSoundList = SoundAssetMap.Find("FootStep")->SoundList;
 		}
@@ -687,7 +687,7 @@ void ACharacterBase::InitSoundAsset()
 
 	if (SoundAssetMap.Contains("Roll"))
 	{
-		if (SoundAssetMap.Find("Roll")->SoundList.IsValidIndex(0))
+		if (!SoundAssetMap.Find("Roll")->SoundList.IsEmpty())
 		{
 			RollSound = SoundAssetMap.Find("Roll")->SoundList[0];
 		}
@@ -695,7 +695,7 @@ void ACharacterBase::InitSoundAsset()
 
 	if (SoundAssetMap.Contains("Buff"))
 	{
-		if (SoundAssetMap.Find("Buff")->SoundList.IsValidIndex(0))
+		if (!SoundAssetMap.Find("Buff")->SoundList.IsEmpty())
 		{
 			BuffSound = SoundAssetMap.Find("Buff")->SoundList[0];
 		}
@@ -703,7 +703,7 @@ void ACharacterBase::InitSoundAsset()
 
 	if (SoundAssetMap.Contains("Debuff"))
 	{
-		if (SoundAssetMap.Find("Debuff")->SoundList.IsValidIndex(0))
+		if (!SoundAssetMap.Find("Debuff")->SoundList.IsEmpty())
 		{
 			DebuffSound = SoundAssetMap.Find("Debuff")->SoundList[0];
 		}
@@ -711,7 +711,7 @@ void ACharacterBase::InitSoundAsset()
 
 	if (SoundAssetMap.Contains("HitImpactSound"))
 	{
-		if (SoundAssetMap.Find("HitImpactSound")->SoundList.IsValidIndex(0))
+		if (!SoundAssetMap.Find("HitImpactSound")->SoundList.IsEmpty())
 		{
 			HitImpactSound = SoundAssetMap.Find("HitImpactSound")->SoundList[0];
 		}

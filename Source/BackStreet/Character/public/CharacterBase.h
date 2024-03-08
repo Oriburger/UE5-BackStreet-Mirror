@@ -194,8 +194,7 @@ protected:
 	UFUNCTION()
 		bool InitAnimAsset();
 
-	UFUNCTION()
-		void InitSoundAsset();
+	virtual void InitSoundAsset();
 
 	UFUNCTION()
 		void InitVFXAsset();
