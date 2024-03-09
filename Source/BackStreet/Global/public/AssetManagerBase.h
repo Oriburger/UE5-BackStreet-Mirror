@@ -71,6 +71,9 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		TArray<USoundCue*> SoundList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data", meta = (UIMin = 0.0f, UIMax = 10.0f))
+		TArray<float> SoundVolumeList;
 };
 
 USTRUCT(BlueprintType)
@@ -104,6 +107,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TMap<FName, FSoundArrayContainer> SoundMap;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FName SoundAssetDescription;
 };
 
 UCLASS()

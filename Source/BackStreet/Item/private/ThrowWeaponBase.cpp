@@ -96,6 +96,11 @@ void AThrowWeaponBase::Throw()
 		OwnerCharacterRef.Get()->GetSubInventoryRef()->SyncCurrentWeaponInfo(true);
 	}
 
+	if (IsValid(ShootSound))
+	{
+		PlaySingleSound(ShootSound, "Shoot");
+	}
+
 	//탄환이 다 되었다면? 자동으로 제거
 	if (WeaponState.RangedWeaponState.CurrentAmmoCount == 0 && WeaponState.RangedWeaponState.ExtraAmmoCount == 0)
 	{
