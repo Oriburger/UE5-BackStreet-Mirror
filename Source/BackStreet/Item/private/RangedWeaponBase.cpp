@@ -30,7 +30,12 @@ void ARangedWeaponBase::Attack()
 	Super::Attack();
 
 	bool result = TryFireProjectile();
-	PlayEffectSound(result ? AttackSound : AttackFailSound);
+
+	if (IsValid(ShootSound) && IsValid(ShootFailSound))
+	{
+		PlaySingleSound(result ? ShootSound : ShootFailSound, result ? "Shoot" : "ShootFail");
+	}
+
 	if (result)	UpdateDurabilityState();
 }
 
@@ -112,6 +117,33 @@ void ARangedWeaponBase::InitWeaponAsset()
 		ProjectileAssetInfo = GetProjectileAssetInfo(rangedWeaponAssetInfo.ProjectileID);
 		ProjectileStatInfo = GetProjectileStatInfo(rangedWeaponAssetInfo.ProjectileID);
 	}
+
+	if (WeaponSoundAssetMap.Contains("Shoot"))
+	{
+		FSoundArrayContainer* shootSoundInfo = WeaponSoundAssetMap.Find("Shoot");
+		if (!shootSoundInfo->SoundList.IsEmpty())
+		{
+			ShootSound = shootSoundInfo->SoundList[0];
+		}
+	}
+
+	if (WeaponSoundAssetMap.Contains("ShootFail"))
+	{
+		FSoundArrayContainer* shootFailSoundInfo = WeaponSoundAssetMap.Find("ShootFail");
+		if (!shootFailSoundInfo->SoundList.IsEmpty())
+		{
+			ShootFailSound = shootFailSoundInfo->SoundList[0];
+		}
+	}
+
+	if (WeaponSoundAssetMap.Contains("Reload"))
+	{
+		FSoundArrayContainer* reloadSoundInfo = WeaponSoundAssetMap.Find("Reload");
+		if (!reloadSoundInfo->SoundList.IsEmpty())
+		{
+			ReloadSound = reloadSoundInfo->SoundList[0];
+		}
+	}
 }
 
 void ARangedWeaponBase::SpawnShootNiagaraEffect()
@@ -168,6 +200,11 @@ void ARangedWeaponBase::Reload()
 
 	if (OwnerCharacterRef.IsValid())
 		OwnerCharacterRef.Get()->ResetActionState(true);
+
+	if (IsValid(ReloadSound))
+	{
+		PlaySingleSound(ReloadSound, "Reload");
+	}
 }	
 	
 bool ARangedWeaponBase::GetCanReload()

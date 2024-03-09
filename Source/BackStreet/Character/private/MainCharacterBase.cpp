@@ -318,10 +318,12 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 	else if (TargetActor->ActorHasTag("ItemBox"))
 	{
 		Cast<AItemBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), InvestigateItemBoxSoundList[0], TargetActor->GetActorLocation());
 	}
 	else if (TargetActor->ActorHasTag("RewardBox"))
 	{
 		Cast<ARewardBoxBase>(TargetActor)->OnPlayerBeginInteract.Broadcast(this);
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), InvestigateAbilityBoxSoundList[0], TargetActor->GetActorLocation());
 	}
 	else if (TargetActor->ActorHasTag("CraftingBox"))
 	{
@@ -657,6 +659,27 @@ void AMainCharacterBase::ResetFacialDamageEffect()
 	{
 		currMaterial->SetTextureParameterValue(FName("BaseTexture"), EmotionTextureList[(uint8)(EEmotionType::E_Idle)]);
 		currMaterial->SetScalarParameterValue(FName("bIsDamaged"), false);
+	}
+}
+
+void AMainCharacterBase::InitSoundAsset()
+{
+	Super::InitSoundAsset();
+	
+	if (SoundAssetMap.Contains("InvestigateItemBox"))
+	{
+		if (!SoundAssetMap.Find("InvestigateItemBox")->SoundList.IsEmpty())
+		{
+			InvestigateItemBoxSoundList = SoundAssetMap.Find("InvestigateItemBox")->SoundList;
+		}
+	}
+
+	if (SoundAssetMap.Contains("InvestigateAbilityBox"))
+	{
+		if (!SoundAssetMap.Find("InvestigateAbilityBox")->SoundList.IsEmpty())
+		{
+			InvestigateAbilityBoxSoundList = SoundAssetMap.Find("InvestigateAbilityBox")->SoundList;
+		}
 	}
 }
 

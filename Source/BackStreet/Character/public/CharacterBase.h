@@ -194,8 +194,7 @@ protected:
 	UFUNCTION()
 		bool InitAnimAsset();
 
-	UFUNCTION()
-		void InitSoundAsset();
+	virtual void InitSoundAsset();
 
 	UFUNCTION()
 		void InitVFXAsset();
@@ -214,10 +213,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
 		UDataTable* AssetDataInfoTable;
 
+public:
+	UPROPERTY(BlueprintReadOnly)
+		TArray<USoundCue*> FootStepSoundList;
+
 protected:
 	//애니메이션, VFX, 사운드큐 등 저장
 	UPROPERTY()
 		struct FCharacterAnimAssetInfoStruct AnimAssetData;
+
+	UPROPERTY()
+		TMap<FName, struct FSoundArrayContainer> SoundAssetMap;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 		class UAnimMontage* PreChaseAnimMontage;
@@ -235,7 +241,7 @@ protected:
 		class USoundCue* DebuffSound;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-		USoundCue* HitImpactSound;
+		class USoundCue* HitImpactSound;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		TArray<class UNiagaraSystem*> DebuffNiagaraEffectList;
@@ -267,7 +273,7 @@ protected:
 		FCharacterStateStruct CharacterState;
 
 	//Gamemode 약 참조
-	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
 // ----- 타이머 관련 ---------------------------------
 protected:

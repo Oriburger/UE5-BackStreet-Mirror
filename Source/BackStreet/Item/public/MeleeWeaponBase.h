@@ -48,6 +48,9 @@ protected:
 		class UParticleSystem* HitEffectParticle;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
+		class USoundCue* WieldSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
 		class USoundCue* HitImpactSound;
 
 //-------- Melee ฐüทร ---------------------------

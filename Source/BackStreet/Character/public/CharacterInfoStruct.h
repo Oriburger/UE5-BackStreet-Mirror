@@ -169,19 +169,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> PointMontageList;
 
-	// Sound
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
-		TSoftObjectPtr<USoundCue> RollSound;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
-		TSoftObjectPtr<USoundCue> BuffSound;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
-		TSoftObjectPtr<USoundCue> DebuffSound;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
-		TSoftObjectPtr<USoundCue> HitImpactSound;
-
 	// VFX
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TArray<TSoftObjectPtr<UNiagaraSystem>> DebuffNiagaraEffectList;
