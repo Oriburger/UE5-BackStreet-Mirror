@@ -48,9 +48,15 @@ protected:
 	UFUNCTION()
 		void DestroyWithEffect(FVector Location = FVector(0.0f));
 
+	UFUNCTION()
+		void PlaySingleSound(USoundCue* EffectSound, FName SoundName);
+
 	//현재 무기의 에셋 정보
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
 		FProjectileAssetInfoStruct ProjectileAssetInfo;
+
+	UPROPERTY()
+		TMap<FName, struct FSoundArrayContainer> ProjectileSoundAssetMap;
 //------- 기본 프로퍼티 -------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
@@ -58,7 +64,7 @@ public:
 
 protected:
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Sound")
-		USoundCue* HitSound;
+		USoundCue* HitImpactSound;
 
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Sound")
 		USoundCue* ExplosionSound;
@@ -124,4 +130,7 @@ private:
 
 	UPROPERTY()
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+	UPROPERTY()
+		TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
 };

@@ -116,7 +116,7 @@ public:
 		uint8 WeaponWeight = 1;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		float WeaponKnobackEnergy = 500.0f;
+		float WeaponKnockBackEnergy = 500.0f;
 
 	//Weapon Skill 게이지 사용량 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

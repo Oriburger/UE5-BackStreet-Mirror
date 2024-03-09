@@ -52,12 +52,18 @@ void ACharacterBase::BeginPlay()
 	InventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	SubInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	
+	if (GamemodeRef.IsValid())
+	{
+		TWeakObjectPtr<class UAssetManagerBase> assetManagerBase = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
+		SoundAssetMap = assetManagerBase.Get()->GetSoundAssetInfo(ESoundAssetType::E_Character,0);
+	}
 
 	if (IsValid(SubInventoryRef) && !SubInventoryRef->IsActorBeingDestroyed())
 	{
 		SubInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		SubInventoryRef->SetOwner(this);
-		SubInventoryRef->InitInventory(4);
+		SubInventoryRef->InitInventory(2);
 	}
 
 	if (IsValid(InventoryRef) && !InventoryRef->IsActorBeingDestroyed())
@@ -513,13 +519,6 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 			}
 		}
 
-		// Sound
-
-		AssetToStream.AddUnique(AssetInfo.RollSound.ToSoftObjectPath());
-		AssetToStream.AddUnique(AssetInfo.BuffSound.ToSoftObjectPath());
-		AssetToStream.AddUnique(AssetInfo.DebuffSound.ToSoftObjectPath());
-		AssetToStream.AddUnique(AssetInfo.HitImpactSound.ToSoftObjectPath());
-
 
 		// VFX
 		if (!AssetInfo.DebuffNiagaraEffectList.IsEmpty())
@@ -556,14 +555,17 @@ void ACharacterBase::SetAsset()
 	//if (AssetInfo.AnimBlueprint.IsNull() || !IsValid(AssetInfo.AnimBlueprint.Get())) return;
 
 	GetCapsuleComponent()->SetWorldRotation(FRotator::ZeroRotator);
-	GetCapsuleComponent()->SetRelativeScale3D(AssetInfo.InitialCapsuleComponentScale);
+	SetActorScale3D(AssetInfo.InitialScale);
 
 	GetMesh()->SetSkeletalMesh(AssetInfo.CharacterMesh.Get());
 	GetMesh()->SetRelativeLocation(AssetInfo.InitialLocation);
 	GetMesh()->SetWorldRotation(FRotator(0.0f, -90.0f, 0.0f));
-	GetMesh()->SetRelativeScale3D(AssetInfo.InitialScale);
+	GetMesh()->SetRelativeScale3D(FVector(1.0f));
 
-	GetMesh()->SetMaterial(0, AssetInfo.CharacterMeshMaterial.Get());
+	for (int matIdx = 0; matIdx < GetMesh()->GetMaterials().Num(); matIdx++)
+	{
+		GetMesh()->SetMaterial(matIdx, AssetInfo.CharacterMeshMaterial.Get());
+	}
 	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimBlueprint);
 	InitAnimAsset();
 	InitSoundAsset();
@@ -675,24 +677,44 @@ bool ACharacterBase::InitAnimAsset()
 
 void ACharacterBase::InitSoundAsset()
 {
-	if (AssetInfo.RollSound.IsValid())
+	if (SoundAssetMap.Contains("FootStep"))
 	{
-		RollSound = AssetInfo.RollSound.Get();
+		if (!SoundAssetMap.Find("FootStep")->SoundList.IsEmpty())
+		{
+			FootStepSoundList = SoundAssetMap.Find("FootStep")->SoundList;
+		}
 	}
 
-	if (AssetInfo.BuffSound.IsValid())
+	if (SoundAssetMap.Contains("Roll"))
 	{
-		BuffSound = AssetInfo.BuffSound.Get();
+		if (!SoundAssetMap.Find("Roll")->SoundList.IsEmpty())
+		{
+			RollSound = SoundAssetMap.Find("Roll")->SoundList[0];
+		}
 	}
 
-	if (AssetInfo.HitImpactSound.IsValid())
+	if (SoundAssetMap.Contains("Buff"))
 	{
-		HitImpactSound = AssetInfo.HitImpactSound.Get();
+		if (!SoundAssetMap.Find("Buff")->SoundList.IsEmpty())
+		{
+			BuffSound = SoundAssetMap.Find("Buff")->SoundList[0];
+		}
 	}
 
-	if (AssetInfo.DebuffSound.IsValid())
+	if (SoundAssetMap.Contains("Debuff"))
 	{
-		DebuffSound = AssetInfo.DebuffSound.Get();
+		if (!SoundAssetMap.Find("Debuff")->SoundList.IsEmpty())
+		{
+			DebuffSound = SoundAssetMap.Find("Debuff")->SoundList[0];
+		}
+	}
+
+	if (SoundAssetMap.Contains("HitImpactSound"))
+	{
+		if (!SoundAssetMap.Find("HitImpactSound")->SoundList.IsEmpty())
+		{
+			HitImpactSound = SoundAssetMap.Find("HitImpactSound")->SoundList[0];
+		}
 	}
 }
 
@@ -758,6 +780,7 @@ bool ACharacterBase::EquipWeapon(AWeaponBase* TargetWeapon)
 {
 	TargetWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, "Weapon_R");
 	TargetWeapon->SetActorRelativeLocation(FVector(0.0f), false);
+	TargetWeapon->SetActorRelativeRotation(FRotator::ZeroRotator, false);
 	TargetWeapon->SetOwnerCharacter(this);
 	CurrentWeaponRef = TargetWeapon;
 	return true;
@@ -872,7 +895,7 @@ void ACharacterBase::InitWeaponActors()
 		WeaponActorList[idx]->SetOwner(this);
 		checkf(IsValid(WeaponActorList[idx]), TEXT("무기 %d 타입 스폰에 실패했습니다."));
 		EquipWeapon(WeaponActorList[idx]);
-	}
+	} 
 	EquipWeapon(WeaponActorList[0]);
 	CurrentWeaponRef = WeaponActorList[0];
 }
