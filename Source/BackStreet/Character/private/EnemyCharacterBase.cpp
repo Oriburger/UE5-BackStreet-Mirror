@@ -100,7 +100,12 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f) return 0.0f;
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitImpactSound, GetActorLocation());
+	
+	if (AssetManagerBaseRef.IsValid())
+	{
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, CharacterSoundAssetMap, "HitImpact");
+	}
+	
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 
 	if (DamageCauser->ActorHasTag("Player"))

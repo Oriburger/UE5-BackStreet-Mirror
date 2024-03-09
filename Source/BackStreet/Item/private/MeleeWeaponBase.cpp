@@ -25,9 +25,9 @@ void AMeleeWeaponBase::Attack()
 	if (WeaponID == 0) return;
 	Super::Attack();
 
-	if (IsValid(WieldSound))
+	if (AssetManagerBaseRef.IsValid())
 	{
-		PlaySingleSound(WieldSound, "Wield");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, WeaponSoundAssetMap, "Wield");
 	}
 
 	GetWorldTimerManager().SetTimer(MeleeAtkTimerHandle, this, &AMeleeWeaponBase::MeleeAttack, 0.01f, true);
@@ -95,31 +95,6 @@ void AMeleeWeaponBase::InitWeaponAsset()
 	if (MeleeWeaponAssetInfo.HitEffectParticle.IsValid())
 		HitEffectParticle = MeleeWeaponAssetInfo.HitEffectParticle.Get();
 	
-	if (WeaponSoundAssetMap.Contains("Wield"))
-	{
-		FSoundArrayContainer* wieldSoundInfo = WeaponSoundAssetMap.Find("Wield");
-		if (!wieldSoundInfo->SoundList.IsEmpty())
-		{
-			WieldSound = wieldSoundInfo->SoundList[0];
-		}
-		else
-		{
-			UE_LOG(LogTemp, Log, TEXT("IsEmpty"));
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("NotContained"));
-	}
-
-	if (WeaponSoundAssetMap.Contains("HitImpact"))
-	{
-		FSoundArrayContainer* hitImpactSoundInfo = WeaponSoundAssetMap.Find("HitImpact");
-		if (!hitImpactSoundInfo->SoundList.IsEmpty())
-		{
-			HitImpactSound = hitImpactSoundInfo->SoundList[0];
-		}
-	}
 }
 
 TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
@@ -239,9 +214,9 @@ void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location)
 	GamemodeRef.Get()->PlayCameraShakeEffect(OwnerCharacterRef.Get()->ActorHasTag("Player") ? ECameraShakeType::E_Attack : ECameraShakeType::E_Hit, Location);
 
 	// »ç¿îµå
-	if (IsValid(HitImpactSound))
+	if (AssetManagerBaseRef.IsValid())
 	{
-		PlaySingleSound(HitImpactSound, "HitImpact");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, WeaponSoundAssetMap, "HitImpact");
 	}
 }
 

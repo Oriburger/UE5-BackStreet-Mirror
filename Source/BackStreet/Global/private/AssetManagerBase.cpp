@@ -6,10 +6,10 @@
 UAssetManagerBase::UAssetManagerBase()
 {
 	//------ Sound Datatable Initiation ---------
-	static ConstructorHelpers::FObjectFinder<UDataTable> systemSoundAssetTableFinder(TEXT("/Game/Asset/Data/D_SystemSoundAsset.D_SystemSoundAsset"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> weaponSoundAssetTableFinder(TEXT("/Game/Asset/Data/D_WeaponSoundAsset.D_WeaponSoundAsset"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> characterSoundAssetTableFinder(TEXT("/Game/Asset/Data/D_CharacterSoundAsset.D_CharacterSoundAsset"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> skillSoundAssetTableFinder(TEXT("/Game/Asset/Data/D_SkillSoundAsset.D_SkillSoundAsset"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> systemSoundAssetTableFinder(TEXT("/Game/Asset/Data/Sound/D_SystemSoundAsset.D_SystemSoundAsset"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> weaponSoundAssetTableFinder(TEXT("/Game/Asset/Data/Sound/D_WeaponSoundAsset.D_WeaponSoundAsset"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> characterSoundAssetTableFinder(TEXT("/Game/Asset/Data/Sound/D_CharacterSoundAsset.D_CharacterSoundAsset"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> skillSoundAssetTableFinder(TEXT("/Game/Asset/Data/Sound/D_SkillSoundAsset.D_SkillSoundAsset"));
 
 	checkf(systemSoundAssetTableFinder.Succeeded(), TEXT("SystemSoundAssetTable class discovery failed."));
 	checkf(weaponSoundAssetTableFinder.Succeeded(), TEXT("WeaponSoundAssetTable class discovery failed."));
@@ -100,6 +100,26 @@ TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetSkillSoundMapWithID(int3
 	TMap<FName, FSoundArrayContainer> soundMap = soundAsset->SoundMap;
 
 	return soundMap;
+}
+
+void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, TMap<FName, FSoundArrayContainer> SoundAssetMap, FName SoundName)
+{
+	if (!SoundAssetMap.Contains(SoundName)) return;
+	TArray<USoundCue*> soundList = SoundAssetMap.Find(SoundName)->SoundList;
+	TArray<float> volumeList = SoundAssetMap.Find(SoundName)->SoundVolumeList;
+	if (!soundList.IsValidIndex(0) || !volumeList.IsValidIndex(0)) return;
+
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[0], TargetActor->GetActorLocation(), volumeList[0]);
+}
+
+void UAssetManagerBase::PlayRandomSound(AActor* TargetActor, TMap<FName, FSoundArrayContainer> SoundAssetMap, FName SoundName)
+{
+	if (!SoundAssetMap.Contains(SoundName)) return;
+	TArray<USoundCue*> soundList = SoundAssetMap.Find(SoundName)->SoundList;
+	TArray<float> volumeList = SoundAssetMap.Find(SoundName)->SoundVolumeList;
+	if (!soundList.IsValidIndex(0) || !volumeList.IsValidIndex(0)) return;
+
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[0], TargetActor->GetActorLocation(), volumeList[0]);
 }
 
 

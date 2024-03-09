@@ -129,6 +129,15 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		TMap<FName, FSoundArrayContainer>GetSoundAssetInfo(ESoundAssetType SoundType, int32 TargetID);
+	
+	//Play Single Sound
+	UFUNCTION(BlueprintCallable)
+		void PlaySingleSound(AActor* TargetActor, TMap<FName, FSoundArrayContainer> SoundAssetMap, FName SoundName);
+
+	//Choose Sound and Play Randomly
+	UFUNCTION(BlueprintCallable)
+		void PlayRandomSound(AActor* TargetActor, TMap<FName, FSoundArrayContainer> SoundAssetMap, FName SoundName);
+
 private:
 	UFUNCTION()
 		TMap<FName, FSoundArrayContainer> GetSystemSoundMapWithID(int32 TargetID);

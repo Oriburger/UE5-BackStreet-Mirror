@@ -183,15 +183,6 @@ void AWeaponBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
 	SetOwner(OwnerCharacterRef.Get());
 }
 
-void AWeaponBase::PlaySingleSound(USoundCue* EffectSound, FName SoundName)
-{
-	if(!WeaponSoundAssetMap.Contains(SoundName)) return;
-	TArray<float> volumeList = WeaponSoundAssetMap.Find(SoundName)->SoundVolumeList;
-	if (!IsValid(EffectSound) || !volumeList.IsValidIndex(0)) return;
-	
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), EffectSound, GetActorLocation(), volumeList[0]);
-}
-
 void AWeaponBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(ComboTimerHandle);

@@ -66,15 +66,6 @@ protected:
 	UFUNCTION()
 		void SpawnShootNiagaraEffect();
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* ShootSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* ShootFailSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* ReloadSound;
-
 protected:
 	//발사체의 에셋 테이블
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Weapon|Projectile")
