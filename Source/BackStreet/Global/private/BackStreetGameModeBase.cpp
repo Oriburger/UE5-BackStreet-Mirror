@@ -21,6 +21,10 @@ ABackStreetGameModeBase::ABackStreetGameModeBase()
 void ABackStreetGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//----- Asset Manager √ ±‚»≠ -------
+	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
+	AssetManagerBase->InitAssetManager(this);
 }
 
 void ABackStreetGameModeBase::InitializeGame()

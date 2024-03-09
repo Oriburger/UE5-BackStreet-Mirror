@@ -107,9 +107,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
 		class UParticleSystem* OpenEffectParticle;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* OpenItemBoxSound;
-
 // ----- Ref -----------------------------------
 private:
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;

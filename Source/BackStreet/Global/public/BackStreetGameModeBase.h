@@ -70,7 +70,10 @@ public:
 		void UpdateCharacterStat(class ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat);
 
 	UFUNCTION(BlueprintCallable)
-		class USkillManagerBase* GetGlobalSkillmanagerBaseRef() { return SkillManagerBase; }
+		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }
+
+	UFUNCTION(BlueprintCallable)
+		class USkillManagerBase* GetGlobalSkillManagerBaseRef() { return SkillManagerBase; }
 
 	UFUNCTION(BlueprintCallable)
 		class AChapterManagerBase* GetChapterManagerRef() { return ChapterManager; }
@@ -100,6 +103,9 @@ public:
 protected:
 	UPROPERTY()
 		class AMainCharacterBase* PlayerCharacterRef;
+
+	UPROPERTY()
+		class UAssetManagerBase* AssetManagerBase;
 
 	UPROPERTY()
 		class USkillManagerBase* SkillManagerBase;
