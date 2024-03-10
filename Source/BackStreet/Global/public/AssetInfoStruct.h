@@ -74,7 +74,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 	TArray<USoundCue*> SoundList;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data", meta = (UIMin = 0.0f, UIMax = 10.0f))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data", meta = (UIMin = 0.001f, UIMax = 10.0f))
 	TArray<float> SoundVolumeList;
 };
 
@@ -83,22 +83,24 @@ struct FSoundAssetInfoStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
+	/******************************************************	
+	The ID of the target to use the sound asset.
+	In SystemSound
+	* _ _ _ : SoundType (None : 0, BGM : 1, UI : 2, etc : 3)
+	_ * * * : Identification Number
 
-	//The ID of the target to use the sound asset.
-		//In SystemSound
-		//* _ _ _ : SoundType (None : 0, BGM : 1, UI : 2, etc : 3)
-		//_ * * * : Identification Number
+	In WeaponSound
+	* * * * : WeaponID
 
-		//In WeaponSound
-		//* * * * : WeaponID
+	In CharacterSound
+	* * * * : CharacterID
 
-		//In CharacterSound
-		//* * * * : CharacterID
+	In SkillSound
+	* * * * : SkillID
+	*******************************************************/
 
-		//In SkillSound
-		//* * * * : SkillID
-		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		ESoundAssetType SoundType;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	ESoundAssetType SoundType;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int32 TargetID;
