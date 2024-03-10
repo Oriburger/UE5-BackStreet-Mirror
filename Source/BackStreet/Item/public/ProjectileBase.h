@@ -53,7 +53,7 @@ protected:
 		FProjectileAssetInfoStruct ProjectileAssetInfo;
 
 	UPROPERTY()
-		TMap<FName, struct FSoundArrayContainer> ProjectileSoundAssetMap;
+		FSoundAssetInfoStruct SoundAssetInfo;
 //------- 기본 프로퍼티 -------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")

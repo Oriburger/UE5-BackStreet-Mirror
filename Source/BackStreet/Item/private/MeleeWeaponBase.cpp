@@ -27,7 +27,7 @@ void AMeleeWeaponBase::Attack()
 
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, WeaponSoundAssetMap, "Wield");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "Wield");
 	}
 
 	GetWorldTimerManager().SetTimer(MeleeAtkTimerHandle, this, &AMeleeWeaponBase::MeleeAttack, 0.01f, true);
@@ -216,7 +216,7 @@ void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location)
 	// »ç¿îµå
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, WeaponSoundAssetMap, "HitImpact");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "HitImpact");
 	}
 }
 

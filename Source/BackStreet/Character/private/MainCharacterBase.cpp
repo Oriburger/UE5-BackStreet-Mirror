@@ -257,7 +257,7 @@ void AMainCharacterBase::Roll()
 	// 사운드
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, CharacterSoundAssetMap, "Roll");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "Roll");
 	}
 
 	//애니메이션 
@@ -320,7 +320,7 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 		Cast<AItemBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
 		if (AssetManagerBaseRef.IsValid())
 		{
-			AssetManagerBaseRef.Get()->PlaySingleSound(this, CharacterSoundAssetMap, "InvestigateItemBox");
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "InvestigateItemBox");
 		}
 	}
 	else if (TargetActor->ActorHasTag("RewardBox"))
@@ -328,7 +328,7 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 		Cast<ARewardBoxBase>(TargetActor)->OnPlayerBeginInteract.Broadcast(this);
 		if (AssetManagerBaseRef.IsValid())
 		{
-			AssetManagerBaseRef.Get()->PlaySingleSound(this, CharacterSoundAssetMap, "InvestigateAbilityBox");
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "InvestigateAbilityBox");
 		}
 	}
 	else if (TargetActor->ActorHasTag("CraftingBox"))
@@ -576,7 +576,7 @@ bool AMainCharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AAc
 
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, CharacterSoundAssetMap, "Debuff");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "Debuff");
 	}
 	//230621 임시 제거
 	//ActivateBuffNiagara(bIsDebuff, BuffDebuffType);

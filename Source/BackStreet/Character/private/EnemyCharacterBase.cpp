@@ -103,7 +103,7 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, CharacterSoundAssetMap, "HitImpact");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "HitImpact");
 	}
 	
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);

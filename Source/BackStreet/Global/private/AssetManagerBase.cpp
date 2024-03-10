@@ -27,96 +27,95 @@ void UAssetManagerBase::InitAssetManager(ABackStreetGameModeBase* NewGamemodeRef
 	if (!IsValid(NewGamemodeRef)) return;
 	GamemodeRef = NewGamemodeRef;
 }
-TMap<FName, FSoundArrayContainer>UAssetManagerBase::GetSoundAssetInfo(ESoundAssetType SoundType, int32 TargetID)
+FSoundAssetInfoStruct UAssetManagerBase::GetSoundAssetInfo(ESoundAssetType SoundType, int32 TargetID)
 {
-	TMap<FName, FSoundArrayContainer> soundMap;
+	FSoundAssetInfoStruct soundAssetInfo;
 
 	switch (SoundType)
 	{
 	case ESoundAssetType::E_None:
 		break;
 	case ESoundAssetType::E_System:
-		soundMap = GetSystemSoundMapWithID(TargetID);
+		soundAssetInfo = GetSystemSoundMapWithID(TargetID);
 		break;
 	case ESoundAssetType::E_Weapon:
-		soundMap = GetWeaponSoundMapWithID(TargetID);
+		soundAssetInfo = GetWeaponSoundMapWithID(TargetID);
 		break;
 	case ESoundAssetType::E_Character:
-		soundMap = GetCharacterSoundMapWithID(TargetID);
+		soundAssetInfo = GetCharacterSoundMapWithID(TargetID);
 		break;
 	case ESoundAssetType::E_Skill:
-		soundMap = GetSkillSoundMapWithID(TargetID);
+		soundAssetInfo = GetSkillSoundMapWithID(TargetID);
 		break;
 	}
-	return soundMap;
+	return soundAssetInfo;
 }
 
 TArray<USoundCue*> UAssetManagerBase::GetSoundList(ESoundAssetType SoundType, int32 TargetID, FName SoundName)
 {
+	// Read from dataTable
 	TArray<USoundCue*> soundList;
-	soundList = GetSoundAssetInfo(SoundType, TargetID).Find(SoundName)->SoundList;
+	soundList = GetSoundAssetInfo(SoundType, TargetID).SoundMap.Find(SoundName)->SoundList;
 	return soundList;
 }
 
-TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetSystemSoundMapWithID(int32 TargetID)
+FSoundAssetInfoStruct UAssetManagerBase::GetSystemSoundMapWithID(int32 TargetID)
 {	
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
-	FSoundAssetInfoStruct* soundAsset = SystemSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
-
-	TMap<FName, FSoundArrayContainer> soundMap = soundAsset->SoundMap;
+	FSoundAssetInfoStruct* soundAssetInfo = SystemSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
 	
-	return soundMap;	
+	return *soundAssetInfo;
 }
 
-TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetWeaponSoundMapWithID(int32 TargetID)
+FSoundAssetInfoStruct UAssetManagerBase::GetWeaponSoundMapWithID(int32 TargetID)
 {
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
-	FSoundAssetInfoStruct* soundAsset = WeaponSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
+	FSoundAssetInfoStruct* soundAssetInfo = WeaponSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
 
-	TMap<FName, FSoundArrayContainer> soundMap = soundAsset->SoundMap;
-
-	return soundMap;
+	return *soundAssetInfo;
 }
 
-TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetCharacterSoundMapWithID(int32 TargetID)
+FSoundAssetInfoStruct UAssetManagerBase::GetCharacterSoundMapWithID(int32 TargetID)
 {
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
-	FSoundAssetInfoStruct* soundAsset = CharacterSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
+	FSoundAssetInfoStruct* soundAssetInfo = CharacterSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
 
-	TMap<FName, FSoundArrayContainer> soundMap = soundAsset->SoundMap;
-
-	return soundMap;
+	return *soundAssetInfo;
 }
 
-TMap<FName, FSoundArrayContainer> UAssetManagerBase::GetSkillSoundMapWithID(int32 TargetID)
+FSoundAssetInfoStruct UAssetManagerBase::GetSkillSoundMapWithID(int32 TargetID)
 {
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
-	FSoundAssetInfoStruct* soundAsset = SkillSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
-
-	TMap<FName, FSoundArrayContainer> soundMap = soundAsset->SoundMap;
-
-	return soundMap;
+	FSoundAssetInfoStruct* soundAssetInfo = SkillSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
+	
+	return *soundAssetInfo;
 }
 
-void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, TMap<FName, FSoundArrayContainer> SoundAssetMap, FName SoundName)
+void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, FSoundAssetInfoStruct SoundAssetInfo, FName SoundName)
 {
-	if (!SoundAssetMap.Contains(SoundName)) return;
-	TArray<USoundCue*> soundList = SoundAssetMap.Find(SoundName)->SoundList;
-	TArray<float> volumeList = SoundAssetMap.Find(SoundName)->SoundVolumeList;
+	if (!SoundAssetInfo.SoundMap.Contains(SoundName)) return; 
+	TArray<USoundCue*> soundList = SoundAssetInfo.SoundMap.Find(SoundName)->SoundList;
+	TArray<float> volumeList = SoundAssetInfo.SoundMap.Find(SoundName)->SoundVolumeList;
 	if (!soundList.IsValidIndex(0) || !volumeList.IsValidIndex(0)) return;
-
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[0], TargetActor->GetActorLocation(), volumeList[0]);
+	if (TargetActor == nullptr)
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), soundList[0], volumeList[0]);
+	}
+	else
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[0], TargetActor->GetActorLocation(), volumeList[0]);
+	}
 }
 
-void UAssetManagerBase::PlayRandomSound(AActor* TargetActor, TMap<FName, FSoundArrayContainer> SoundAssetMap, FName SoundName)
+void UAssetManagerBase::PlayRandomSound(AActor* TargetActor, FSoundAssetInfoStruct SoundAssetInfo, FName SoundName)
 {
-	if (!SoundAssetMap.Contains(SoundName)) return;
-	TArray<USoundCue*> soundList = SoundAssetMap.Find(SoundName)->SoundList;
-	TArray<float> volumeList = SoundAssetMap.Find(SoundName)->SoundVolumeList;
+	if (!SoundAssetInfo.SoundMap.Contains(SoundName)) return;
+	TArray<USoundCue*> soundList = SoundAssetInfo.SoundMap.Find(SoundName)->SoundList;
+	TArray<float> volumeList = SoundAssetInfo.SoundMap.Find(SoundName)->SoundVolumeList;
 	if (!soundList.IsValidIndex(0) || !volumeList.IsValidIndex(0)) return;
 
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[0], TargetActor->GetActorLocation(), volumeList[0]);

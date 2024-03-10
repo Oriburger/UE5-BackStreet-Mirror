@@ -33,7 +33,7 @@ void ARangedWeaponBase::Attack()
 
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, WeaponSoundAssetMap, result ? "Shoot" : "ShootFail");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, result ? "Shoot" : "ShootFail");
 	}
 
 	if (result)	UpdateDurabilityState();
@@ -176,7 +176,7 @@ void ARangedWeaponBase::Reload()
 
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, WeaponSoundAssetMap, "Reload");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "Reload");
 	}
 }	
 	

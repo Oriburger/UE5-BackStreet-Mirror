@@ -98,7 +98,7 @@ void AThrowWeaponBase::Throw()
 
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, WeaponSoundAssetMap, "Shoot");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "Shoot");
 	}
 
 	//탄환이 다 되었다면? 자동으로 제거

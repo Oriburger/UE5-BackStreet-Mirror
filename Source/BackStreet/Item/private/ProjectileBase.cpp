@@ -91,7 +91,7 @@ void AProjectileBase::DestroyWithEffect(FVector Location)
 	
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, ProjectileSoundAssetMap, "HitImpact");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "HitImpact");
 	}
 
 	if (HitParticle != nullptr)
@@ -114,7 +114,7 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectil
 	UpdateProjectileStat(NewStatInfo);
 
 	AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
-	ProjectileSoundAssetMap = AssetManagerBaseRef.Get()->GetSoundAssetInfo(ESoundAssetType::E_Weapon, ProjectileID - 1);
+	SoundAssetInfo = AssetManagerBaseRef.Get()->GetSoundAssetInfo(ESoundAssetType::E_Weapon, ProjectileID - 1);
 
 	ProjectileAssetInfo = NewAssetInfo;
 
@@ -234,7 +234,7 @@ void AProjectileBase::Explode()
 	
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, ProjectileSoundAssetMap, "Explosion");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "Explosion");
 	}
 
 	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 5000.0f); //카메라 셰이크 이벤트

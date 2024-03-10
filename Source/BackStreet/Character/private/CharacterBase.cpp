@@ -56,7 +56,7 @@ void ACharacterBase::BeginPlay()
 	if (GamemodeRef.IsValid())
 	{
 		AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
-		CharacterSoundAssetMap = AssetManagerBaseRef.Get()->GetSoundAssetInfo(ESoundAssetType::E_Character,0);
+		SoundAssetInfo = AssetManagerBaseRef.Get()->GetSoundAssetInfo(ESoundAssetType::E_Character,0);
 	}
 
 	if (IsValid(SubInventoryRef) && !SubInventoryRef->IsActorBeingDestroyed())

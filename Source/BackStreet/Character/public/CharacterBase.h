@@ -221,7 +221,7 @@ protected:
 		struct FCharacterAnimAssetInfoStruct AnimAssetData;
 
 	UPROPERTY()
-		TMap<FName, struct FSoundArrayContainer> CharacterSoundAssetMap;
+		FSoundAssetInfoStruct SoundAssetInfo;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 		class UAnimMontage* PreChaseAnimMontage;
