@@ -1,1 +1,122 @@
-[]
+[
+	{
+		"Name": "0",
+		"SoundType": "E_None",
+		"TargetID": 0,
+		"SoundTarget": "None",
+		"SoundMap":
+		{
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "11100",
+		"SoundType": "E_None",
+		"TargetID": 0,
+		"SoundTarget": "None",
+		"SoundMap":
+		{
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "11101",
+		"SoundType": "E_None",
+		"TargetID": 0,
+		"SoundTarget": "None",
+		"SoundMap":
+		{
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "11200",
+		"SoundType": "E_None",
+		"TargetID": 0,
+		"SoundTarget": "None",
+		"SoundMap":
+		{
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "11201",
+		"SoundType": "E_None",
+		"TargetID": 0,
+		"SoundTarget": "None",
+		"SoundMap":
+		{
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "11300",
+		"SoundType": "E_None",
+		"TargetID": 0,
+		"SoundTarget": "None",
+		"SoundMap":
+		{
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "11500",
+		"SoundType": "E_None",
+		"TargetID": 0,
+		"SoundTarget": "None",
+		"SoundMap":
+		{
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "11501",
+		"SoundType": "E_None",
+		"TargetID": 0,
+		"SoundTarget": "None",
+		"SoundMap":
+		{
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "11502",
+		"SoundType": "E_None",
+		"TargetID": 0,
+		"SoundTarget": "None",
+		"SoundMap":
+		{
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "11600",
+		"SoundType": "E_None",
+		"TargetID": 0,
+		"SoundTarget": "None",
+		"SoundMap":
+		{
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "11700",
+		"SoundType": "E_None",
+		"TargetID": 0,
+		"SoundTarget": "None",
+		"SoundMap":
+		{
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "99999",
+		"SoundType": "E_None",
+		"TargetID": 0,
+		"SoundTarget": "None",
+		"SoundMap":
+		{
+		},
+		"SoundAssetDescription": "None"
+	}
+]
