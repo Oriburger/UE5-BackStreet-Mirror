@@ -27,6 +27,7 @@
 #include "../../Item/public/WeaponInfoStruct.h"
 #include "../../Item/public/ProjectileInfoStruct.h"
 #include "../../Global/public/AssetManagerBase.h"
+#include "../../Global/public/AssetInfoStruct.h"
 #include "../../SkillSystem/public/SkillInfoStruct.h"
 
 

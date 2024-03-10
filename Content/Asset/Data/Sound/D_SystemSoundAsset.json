@@ -6,7 +6,8 @@
 		"SoundTarget": "None",
 		"SoundMap":
 		{
-		}
+		},
+		"SoundAssetDescription": "None"
 	},
 	{
 		"Name": "1000",
@@ -19,21 +20,25 @@
 			{
 				"SoundList": [
 					"/Script/Engine.SoundCue'/Game/Asset/Sound/BGM/SC_MainMenuTypeA_BGM.SC_MainMenuTypeA_BGM'"
-				]
+				],
+				"SoundVolumeList": []
 			},
 			"MainMenuBGM_TypeB":
 			{
 				"SoundList": [
 					"/Script/Engine.SoundCue'/Game/Asset/Sound/BGM/SC_MainMenuTypeB_BGM.SC_MainMenuTypeB_BGM'"
-				]
+				],
+				"SoundVolumeList": []
 			},
 			"InGameBGM":
 			{
 				"SoundList": [
 					"/Script/Engine.SoundCue'/Game/Asset/Sound/BGM/SC_InGameBGM.SC_InGameBGM'"
-				]
+				],
+				"SoundVolumeList": []
 			}
-		}
+		},
+		"SoundAssetDescription": "None"
 	},
 	{
 		"Name": "2000",
@@ -46,32 +51,55 @@
 			{
 				"SoundList": [
 					"/Script/Engine.SoundCue'/Game/Asset/Sound/UI/SC_Button.SC_Button'"
-				]
+				],
+				"SoundVolumeList": []
 			},
 			"Lose":
 			{
 				"SoundList": [
 					"/Script/Engine.SoundCue'/Game/Asset/Sound/UI/SC_Lose.SC_Lose'"
-				]
+				],
+				"SoundVolumeList": []
 			},
 			"Win":
 			{
 				"SoundList": [
 					"/Script/Engine.SoundCue'/Game/Asset/Sound/UI/SC_Win.SC_Win'"
-				]
+				],
+				"SoundVolumeList": []
 			},
 			"Clear":
 			{
 				"SoundList": [
 					"/Script/Engine.SoundCue'/Game/Asset/Sound/UI/Legacy/SC_Clear.SC_Clear'"
-				]
+				],
+				"SoundVolumeList": []
 			},
 			"Error":
 			{
 				"SoundList": [
 					"/Script/Engine.SoundCue'/Game/Asset/Sound/UI/SC_Error.SC_Error'"
-				]
+				],
+				"SoundVolumeList": []
 			}
-		}
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "3000",
+		"SoundType": "E_System",
+		"TargetID": 3000,
+		"SoundTarget": "ETC",
+		"SoundMap":
+		{
+			"Gate":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_Gate.SC_Gate'"
+				],
+				"SoundVolumeList": [ 0.75 ]
+			}
+		},
+		"SoundAssetDescription": "None"
 	}
 ]

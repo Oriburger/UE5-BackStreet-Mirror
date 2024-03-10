@@ -138,12 +138,9 @@ private:
 public:
 	UFUNCTION(BlueprintCallable)
 		void SetOwnerCharacter(class ACharacterBase* NewOwnerCharacterRef);
-
-protected:
-		virtual void PlaySingleSound(USoundCue* EffectSound, FName SoundName);
 	
 	UPROPERTY()
-		TMap<FName, struct FSoundArrayContainer> WeaponSoundAssetMap;
+		FSoundAssetInfoStruct SoundAssetInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UParticleSystem* DestroyEffectParticle;

@@ -96,9 +96,6 @@ public:
 
 // ------ Asset ----------------------------------------------
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
-		class USoundCue* EquipSound;
-
 	//아이템 데이터 테이블 (에셋 정보 포함)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
 		UDataTable* ItemDataInfoTable;
@@ -109,4 +106,7 @@ protected:
 // ------ 참조 프로퍼티 ---------------------------------------------
 private:
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+protected:
+	TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
 };

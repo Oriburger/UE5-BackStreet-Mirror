@@ -255,9 +255,9 @@ void AMainCharacterBase::Roll()
 	GetMesh()->SetWorldRotation(newRotation);
 
 	// 사운드
-	if (RollSound->IsValidLowLevelFast())
+	if (AssetManagerBaseRef.IsValid())
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, RollSound, GetActorLocation());
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "Roll");
 	}
 
 	//애니메이션 
@@ -318,12 +318,18 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 	else if (TargetActor->ActorHasTag("ItemBox"))
 	{
 		Cast<AItemBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), InvestigateItemBoxSoundList[0], TargetActor->GetActorLocation());
+		if (AssetManagerBaseRef.IsValid())
+		{
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "InvestigateItemBox");
+		}
 	}
 	else if (TargetActor->ActorHasTag("RewardBox"))
 	{
 		Cast<ARewardBoxBase>(TargetActor)->OnPlayerBeginInteract.Broadcast(this);
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), InvestigateAbilityBoxSoundList[0], TargetActor->GetActorLocation());
+		if (AssetManagerBaseRef.IsValid())
+		{
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "InvestigateAbilityBox");
+		}
 	}
 	else if (TargetActor->ActorHasTag("CraftingBox"))
 	{
@@ -568,9 +574,9 @@ bool AMainCharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AAc
 {
 	if (!Super::TryAddNewDebuff(NewDebuffType, Causer, TotalTime, Value)) return false;
 
-	if (DebuffSound && BuffSound)
+	if (AssetManagerBaseRef.IsValid())
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, DebuffSound, GetActorLocation());
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "Debuff");
 	}
 	//230621 임시 제거
 	//ActivateBuffNiagara(bIsDebuff, BuffDebuffType);
@@ -659,27 +665,6 @@ void AMainCharacterBase::ResetFacialDamageEffect()
 	{
 		currMaterial->SetTextureParameterValue(FName("BaseTexture"), EmotionTextureList[(uint8)(EEmotionType::E_Idle)]);
 		currMaterial->SetScalarParameterValue(FName("bIsDamaged"), false);
-	}
-}
-
-void AMainCharacterBase::InitSoundAsset()
-{
-	Super::InitSoundAsset();
-	
-	if (SoundAssetMap.Contains("InvestigateItemBox"))
-	{
-		if (!SoundAssetMap.Find("InvestigateItemBox")->SoundList.IsEmpty())
-		{
-			InvestigateItemBoxSoundList = SoundAssetMap.Find("InvestigateItemBox")->SoundList;
-		}
-	}
-
-	if (SoundAssetMap.Contains("InvestigateAbilityBox"))
-	{
-		if (!SoundAssetMap.Find("InvestigateAbilityBox")->SoundList.IsEmpty())
-		{
-			InvestigateAbilityBoxSoundList = SoundAssetMap.Find("InvestigateAbilityBox")->SoundList;
-		}
 	}
 }
 

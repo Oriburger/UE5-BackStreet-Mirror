@@ -48,27 +48,18 @@ protected:
 	UFUNCTION()
 		void DestroyWithEffect(FVector Location = FVector(0.0f));
 
-	UFUNCTION()
-		void PlaySingleSound(USoundCue* EffectSound, FName SoundName);
-
 	//현재 무기의 에셋 정보
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
 		FProjectileAssetInfoStruct ProjectileAssetInfo;
 
 	UPROPERTY()
-		TMap<FName, struct FSoundArrayContainer> ProjectileSoundAssetMap;
+		FSoundAssetInfoStruct SoundAssetInfo;
 //------- 기본 프로퍼티 -------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
 		int32 ProjectileID;
 
 protected:
-	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Sound")
-		USoundCue* HitImpactSound;
-
-	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Sound")
-		USoundCue* ExplosionSound;
-
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|VFX")
 		UParticleSystem* HitParticle;
 
