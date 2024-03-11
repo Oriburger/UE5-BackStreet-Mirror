@@ -9,46 +9,53 @@
 			"FootStep":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/Legacy/SC_Footstep_A.SC_Footstep_A'",
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/Legacy/SC_FootstepB.SC_FootstepB'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/MainCharacter/SC_FootstepA.SC_FootstepA'",
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/MainCharacter/SC_FootstepB.SC_FootstepB'"
 				],
-				"SoundVolumeList": []
+				"SoundVolumeList": [ 0.75 ]
 			},
 			"Roll":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/Legacy/SC_Roll.SC_Roll'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/MainCharacter/SC_Roll.SC_Roll'"
 				],
-				"SoundVolumeList": []
+				"SoundVolumeList": [ 0.75 ]
 			},
 			"Buff":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/Legacy/SC_Buff.SC_Buff'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/MainCharacter/SC_Debuff.SC_Debuff'"
 				],
-				"SoundVolumeList": []
+				"SoundVolumeList": [ 0.75 ]
 			},
 			"DeBuff":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/SC_Debuff.SC_Debuff'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/MainCharacter/SC_Debuff.SC_Debuff'"
 				],
-				"SoundVolumeList": []
+				"SoundVolumeList": [ 0.75 ]
 			},
-			"InvestigateItemBox":
+			"OpenAbilityBox":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_OpenItemBox1.SC_OpenItemBox1'",
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_OpenItemBox2.SC_OpenItemBox2'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/MainCharacter/SC_OpenAbilityBox.SC_OpenAbilityBox'"
 				],
-				"SoundVolumeList": [ 1, 1 ]
+				"SoundVolumeList": [ 0.75 ]
 			},
-			"InvestigateAbilityBox":
+			"OpenItemBox":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_TakeAbility.SC_TakeAbility'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/MainCharacter/SC_OpenItemBox_1.SC_OpenItemBox_1'",
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/MainCharacter/SC_OpenItemBox_2.SC_OpenItemBox_2'"
 				],
-				"SoundVolumeList": [ 1 ]
+				"SoundVolumeList": [ 0.75, 0.75 ]
+			},
+			"GetItem":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/MainCharacter/SC_GetItem.SC_GetItem'"
+				],
+				"SoundVolumeList": [ 0.75 ]
 			}
 		},
 		"SoundAssetDescription": "None"

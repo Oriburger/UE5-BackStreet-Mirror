@@ -19,23 +19,23 @@
 			"MainMenuBGM_TypeA":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/BGM/SC_MainMenuTypeA_BGM.SC_MainMenuTypeA_BGM'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/System/BGM/SC_MainMenuTypeA_BGM.SC_MainMenuTypeA_BGM'"
 				],
-				"SoundVolumeList": []
+				"SoundVolumeList": [ 0.75 ]
 			},
 			"MainMenuBGM_TypeB":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/BGM/SC_MainMenuTypeB_BGM.SC_MainMenuTypeB_BGM'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/System/BGM/SC_MainMenuTypeB_BGM.SC_MainMenuTypeB_BGM'"
 				],
-				"SoundVolumeList": []
+				"SoundVolumeList": [ 0.75 ]
 			},
 			"InGameBGM":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/BGM/SC_InGameBGM.SC_InGameBGM'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/System/BGM/SC_InGameBGM.SC_InGameBGM'"
 				],
-				"SoundVolumeList": []
+				"SoundVolumeList": [ 0.75 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -50,37 +50,37 @@
 			"Button":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/UI/SC_Button.SC_Button'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/System/UI/SC_Button.SC_Button'"
 				],
-				"SoundVolumeList": []
+				"SoundVolumeList": [ 0.75 ]
 			},
 			"Lose":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/UI/SC_Lose.SC_Lose'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/System/UI/SC_Lose.SC_Lose'"
 				],
-				"SoundVolumeList": []
+				"SoundVolumeList": [ 0.75 ]
 			},
 			"Win":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/UI/SC_Win.SC_Win'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/System/UI/SC_Win.SC_Win'"
 				],
-				"SoundVolumeList": []
+				"SoundVolumeList": [ 0.75 ]
 			},
 			"Clear":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/UI/Legacy/SC_Clear.SC_Clear'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/System/UI/SC_Clear.SC_Clear'"
 				],
-				"SoundVolumeList": []
+				"SoundVolumeList": [ 0.75 ]
 			},
 			"Error":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/UI/SC_Error.SC_Error'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/System/UI/SC_Error.SC_Error'"
 				],
-				"SoundVolumeList": []
+				"SoundVolumeList": [ 0.75 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -95,7 +95,7 @@
 			"Gate":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_Gate.SC_Gate'"
+					"/Script/Engine.SoundCue'/Game/System/StageManager/Sound/Legacy/SC_Gate.SC_Gate'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			}
