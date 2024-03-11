@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
@@ -91,7 +92,7 @@ void AProjectileBase::DestroyWithEffect(FVector Location)
 	
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "HitImpact");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, floor(ProjectileID/10.0)*10, "HitImpact");
 	}
 
 	if (HitParticle != nullptr)
@@ -114,7 +115,6 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectil
 	UpdateProjectileStat(NewStatInfo);
 
 	AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
-	SoundAssetInfo = AssetManagerBaseRef.Get()->GetSoundAssetInfo(ESoundAssetType::E_Weapon, ProjectileID - 1);
 
 	ProjectileAssetInfo = NewAssetInfo;
 
@@ -234,7 +234,7 @@ void AProjectileBase::Explode()
 	
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "Explosion");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, floor(ProjectileID / 10.0) * 10, "Explosion");
 	}
 
 	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 5000.0f); //카메라 셰이크 이벤트

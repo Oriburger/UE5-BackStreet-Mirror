@@ -5,6 +5,7 @@
 #include "../public/WeaponBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "../../Character/public/CharacterBase.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define MAX_LINETRACE_POS_COUNT 6
 #define DEFAULT_MELEE_ATK_RANGE 150.0f
@@ -27,7 +28,7 @@ void AMeleeWeaponBase::Attack()
 
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "Wield");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, "Wield");
 	}
 
 	GetWorldTimerManager().SetTimer(MeleeAtkTimerHandle, this, &AMeleeWeaponBase::MeleeAttack, 0.01f, true);
@@ -216,7 +217,7 @@ void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location)
 	// »ç¿îµå
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "HitImpact");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, "HitImpact");
 	}
 }
 

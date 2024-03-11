@@ -42,7 +42,6 @@ void ASkillBase::InitSkill_Implementation(AActor* NewCauser, TArray<class AChara
 	SkillID = NewSkillID;
 
 	AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
-	SoundAssetInfo = AssetManagerBaseRef.Get()->GetSoundAssetInfo(ESoundAssetType::E_Skill, SkillID);
 
 	//Reset Asset
 	InitAsset(SkillID);
@@ -186,7 +185,7 @@ void ASkillBase::PlaySingleSound(FName SoundName)
 {
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, SoundName);
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Skill, SkillID, SoundName);
 	}
 }
 

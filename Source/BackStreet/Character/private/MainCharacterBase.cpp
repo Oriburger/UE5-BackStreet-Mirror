@@ -18,6 +18,7 @@
 #include "../../Item/public/RewardBoxBase.h"
 #include "../../CraftingSystem/public/CraftBoxBase.h"
 #include "Animation/AnimMontage.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../../Global/public/SkillManagerBase.h"
 #define MAX_CAMERA_BOOM_LENGTH 1450.0f
 #define MIN_CAMERA_BOOM_LENGTH 250.0f
@@ -257,7 +258,7 @@ void AMainCharacterBase::Roll()
 	// 사운드
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "Roll");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "Roll");
 	}
 
 	//애니메이션 
@@ -320,7 +321,7 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 		Cast<AItemBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
 		if (AssetManagerBaseRef.IsValid())
 		{
-			AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "InvestigateItemBox");
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "OpenItemBox");
 		}
 	}
 	else if (TargetActor->ActorHasTag("RewardBox"))
@@ -328,7 +329,7 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 		Cast<ARewardBoxBase>(TargetActor)->OnPlayerBeginInteract.Broadcast(this);
 		if (AssetManagerBaseRef.IsValid())
 		{
-			AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "InvestigateAbilityBox");
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "OpenAbilityBox");
 		}
 	}
 	else if (TargetActor->ActorHasTag("CraftingBox"))
@@ -576,7 +577,7 @@ bool AMainCharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AAc
 
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "Debuff");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "Debuff");
 	}
 	//230621 임시 제거
 	//ActivateBuffNiagara(bIsDebuff, BuffDebuffType);

@@ -1,6 +1,4 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "../public/EnemyCharacterBase.h"
 #include "../../AISystem/public/AIControllerBase.h"
 #include "../public/CharacterInfoStruct.h"
@@ -13,6 +11,7 @@
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../public/MainCharacterBase.h"
 
 #define TURN_TIME_OUT_SEC 1.0f
@@ -103,7 +102,9 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "HitImpact");
+		ACharacterBase* damageCauser = Cast<ACharacterBase>(DamageCauser);
+
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, damageCauser->GetCurrentWeaponRef()->GetWeaponStat().WeaponID, "HitImpact");
 	}
 	
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);

@@ -106,9 +106,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Image")
 		class UTexture2D* SkillIconImage;
-	
-	UPROPERTY()
-		FSoundAssetInfoStruct SoundAssetInfo;
 
 //-------- ETC. (Ref)-------------------------------
 protected:
