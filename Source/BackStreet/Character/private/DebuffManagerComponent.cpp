@@ -75,14 +75,14 @@ bool UDebuffManagerComponent::SetDebuffTimer(ECharacterDebuffType DebuffType, AA
 		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 		break;
 	case ECharacterDebuffType::E_Slow:
-		characterStat.CharacterMoveSpeed *= Variable;
-		characterStat.CharacterAtkSpeed *= Variable;
+		characterStat.DefaultMoveSpeed *= Variable;
+		characterStat.DefaultAttackSpeed *= Variable;
 		break;
 	case ECharacterDebuffType::E_AttackDown:
-		characterStat.CharacterAtkMultiplier *= Variable;
+		characterStat.DefaultAttack *= Variable;
 		break;
 	case ECharacterDebuffType::E_DefenseDown:
-		characterStat.CharacterDefense *= Variable;
+		characterStat.DefaultDefense *= Variable;
 		break;
 	}
 	if(!ResetValueInfoMap.Contains(DebuffType))
@@ -190,8 +190,8 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 	case ECharacterDebuffType::E_Poison:
 		break;
 	case ECharacterDebuffType::E_Slow:
-		characterStat.CharacterMoveSpeed /= ResetVal;
-		characterStat.CharacterAtkSpeed /= ResetVal;
+		characterStat.DefaultMoveSpeed /= ResetVal;
+		characterStat.DefaultAttackSpeed /= ResetVal;
 		break;
 	case ECharacterDebuffType::E_Stun:
 		characterState.CharacterActionState = ECharacterActionType::E_Idle;
@@ -199,10 +199,10 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 		break;
 	case ECharacterDebuffType::E_AttackDown:
-		characterStat.CharacterAtkMultiplier /= ResetVal;
+		characterStat.DefaultAttack /= ResetVal;
 		break;
 	case ECharacterDebuffType::E_DefenseDown:
-		characterStat.CharacterDefense /= ResetVal;
+		characterStat.DefaultDefense /= ResetVal;
 		break;
 	}
 	OwnerCharacterRef.Get()->UpdateCharacterStat(characterStat);

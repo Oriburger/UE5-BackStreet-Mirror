@@ -34,24 +34,29 @@ public:
 		bool bInfinite = false;
 
 	//PlayerMaxHP는 1.0f
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.5f, UIMax = 10.0f))
-		float CharacterMaxHP = 1.0f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1.0f, UIMax = 1000.0f))
+		float DefaultHP = 100.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.1f, UIMax = 10.0f))
-		float CharacterAtkMultiplier = 1.0f;
+	//Additional HP / Ability
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1.0f, UIMax = 100.0f))
+		float AbilityHP;
+	
+	//Additional HP / Skill
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1.0f, UIMax = 100.0f))
+		float SkillHP;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.2f, UIMax = 2.0f))
-		float CharacterAtkSpeed = 1.0f;
+		float DefaultAttackSpeed = 1.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 100.0f, UIMax = 1000.0f))
-		float CharacterMoveSpeed = 400.0f;
+		float DefaultMoveSpeed = 400.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 2.0f))
-		float CharacterDefense = 0.0f;
+		float DefaultDefense = 0.0f;
 
 	//한번에 발사할 발사체 개수
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1, UIMax = 1))
-		int32 MaxProjectileCount = 1;
+		int32 ThrowProjectileCount = 1;
 };
 
 USTRUCT(BlueprintType)
@@ -60,6 +65,7 @@ struct FCharacterStateStruct
 public:
 	GENERATED_USTRUCT_BODY()
 
+//====== Character State ===============
 	//캐릭터의 디버프 상태 (Bit-Field로 표현)
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		int32 CharacterDebuffState = (1 << 10);
@@ -76,11 +82,29 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		ECharacterActionType CharacterActionState;
 
+//====== Current Stat ===================
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float TotalHP;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float TotalAttack;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float TotalDefense;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float TotalMoveSpeed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float TotalAkSpeed;
+
 	//PlayerMaxHP는 1.0f
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float CharacterCurrHP;
 
-	//Player Combo게이지
+//====== Skill =========================
+	
+	//Player Skill Gauge
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float CharacterCurrSkillGauge;
 };

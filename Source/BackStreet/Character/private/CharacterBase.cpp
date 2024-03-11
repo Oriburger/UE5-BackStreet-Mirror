@@ -89,8 +89,8 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ACharacterBase::InitCharacterState()
 {
-	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.CharacterMoveSpeed;
-	CharacterState.CharacterCurrHP = CharacterStat.CharacterMaxHP;
+	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.DefaultMoveSpeed;
+	CharacterState.CharacterCurrHP = CharacterStat.DefaultHP;
 	CharacterState.bCanAttack = true;
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
 }
@@ -112,7 +112,7 @@ bool ACharacterBase::GetDebuffIsActive(ECharacterDebuffType DebuffType)
 void ACharacterBase::UpdateCharacterStat(FCharacterStatStruct NewStat)
 {
 	CharacterStat = NewStat;
-	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.CharacterMoveSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.DefaultMoveSpeed;
 }
 
 void ACharacterBase::UpdateCharacterState(FCharacterStateStruct NewState)
@@ -154,7 +154,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	const float maxDefenseValue = 2.0f; 
-	DamageAmount = FMath::Max(DamageAmount - DamageAmount * (CharacterStat.CharacterDefense / maxDefenseValue), 0.01f);
+	DamageAmount = FMath::Max(DamageAmount - DamageAmount * (CharacterStat.DefaultDefense / maxDefenseValue), 0.01f);
 	if (DamageAmount <= 0.0f || !IsValid(DamageCauser)) return 0.0f;
 	if (CharacterStat.bIsInvincibility) return 0.0f;
 
@@ -189,8 +189,8 @@ void ACharacterBase::SetActionState(ECharacterActionType Type)
 
 void ACharacterBase::TakeHeal(float HealAmountRate, bool bIsTimerEvent, uint8 BuffDebuffType)
 {
-	CharacterState.CharacterCurrHP += CharacterStat.CharacterMaxHP * HealAmountRate;
-	CharacterState.CharacterCurrHP = FMath::Min(CharacterStat.CharacterMaxHP, CharacterState.CharacterCurrHP);
+	CharacterState.CharacterCurrHP += CharacterStat.DefaultHP * HealAmountRate;
+	CharacterState.CharacterCurrHP = FMath::Min(CharacterStat.DefaultHP, CharacterState.CharacterCurrHP);
 	return;
 }
 
@@ -263,7 +263,7 @@ void ACharacterBase::TryAttack()
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
 
 	int32 nextAnimIdx = 0;
-	const float attackSpeed = FMath::Clamp(CharacterStat.CharacterAtkSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
+	const float attackSpeed = FMath::Clamp(CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
 	TArray<UAnimMontage*> targetAnimList;
 	switch (GetCurrentWeaponRef()->GetWeaponStat().WeaponType)
@@ -381,7 +381,7 @@ void ACharacterBase::Attack()
 {
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 	
-	const float attackSpeed = FMath::Min(1.5f, CharacterStat.CharacterAtkSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
+	const float attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
 
 	GetCurrentWeaponRef()->Attack();
 }

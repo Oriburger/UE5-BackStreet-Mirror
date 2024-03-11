@@ -182,7 +182,7 @@ void AMeleeWeaponBase::MeleeAttack()
 			//Apply Knockback
 			OwnerCharacterRef.Get()->ApplyKnockBack(target, GetWeaponStat().WeaponKnockBackEnergy);
 			//Apply Damage
-			UGameplayStatics::ApplyDamage(target, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate * OwnerCharacterRef.Get()->GetCharacterStat().CharacterAtkMultiplier
+			UGameplayStatics::ApplyDamage(target, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate * OwnerCharacterRef.Get()->GetCharacterStat().DefaultAttack
 				, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
 			MeleeLineTraceQueryParams.AddIgnoredActor(target); 
 

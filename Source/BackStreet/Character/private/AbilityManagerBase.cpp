@@ -94,23 +94,23 @@ bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct Target
 
 		/*------ MUST BE EDITED after IndieGo -------*/
 		/*------ Erase targetStatName, use ECharacterAbilityType instead. -------*/
-		if (targetStatName == FName("MaxHP"))
+		if (targetStatName == FName("AbilityHP"))
 		{
-			characterStat.CharacterMaxHP *= targetVariable;
-			characterState.CharacterCurrHP = FMath::Min(characterStat.CharacterMaxHP, characterState.CharacterCurrHP);
+			characterStat.AbilityHP += targetVariable;
+			characterState.CharacterCurrHP += characterStat.AbilityHP;
 		}
 		//else if (targetStatName == FName("CurrHP"))
-		//	characterState.CharacterCurrHP = characterStat.CharacterMaxHP;
+		//	characterState.CharacterCurrHP = characterStat.DefaultHP;
 		else if (targetStatName == FName("Attack"))
-			characterStat.CharacterAtkMultiplier *= targetVariable;
+			characterStat.DefaultAttack *= targetVariable;
 		else if (targetStatName == FName("Defense"))
-			characterStat.CharacterDefense *= targetVariable;
+			characterStat.DefaultDefense *= targetVariable;
 		else if (targetStatName == FName("MoveSpeed"))
-			characterStat.CharacterMoveSpeed *= targetVariable;
+			characterStat.DefaultMoveSpeed *= targetVariable;
 		else if (targetStatName == FName("AttackSpeed"))
-			characterStat.CharacterAtkSpeed *= targetVariable;
-		else if (targetStatName == FName("MaxProjectileCount"))
-			characterStat.MaxProjectileCount *= targetVariable;
+			characterStat.DefaultAttackSpeed *= targetVariable;
+		else if (targetStatName == FName("ThrowProjectileCount"))
+			characterStat.ThrowProjectileCount *= targetVariable;
 	}
 	OwnerCharacterRef.Get()->UpdateCharacterStat(characterStat);
 	OwnerCharacterRef.Get()->UpdateCharacterState(characterState);

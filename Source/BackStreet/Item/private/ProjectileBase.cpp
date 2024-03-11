@@ -193,7 +193,7 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		}
 		else
 		{
-			const float totalDamage = ProjectileStat.ProjectileDamage * OwnerCharacterRef.Get()->GetCharacterStat().CharacterAtkMultiplier;
+			const float totalDamage = ProjectileStat.ProjectileDamage * OwnerCharacterRef.Get()->GetCharacterStat().DefaultAttack;
 			UGameplayStatics::ApplyDamage(OtherActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
 			DestroyWithEffect(SweepResult.Location);
 		}

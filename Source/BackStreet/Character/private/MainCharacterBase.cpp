@@ -265,7 +265,7 @@ void AMainCharacterBase::Roll()
 	if (AnimAssetData.RollAnimMontageList.Num() > 0
 		&& IsValid(AnimAssetData.RollAnimMontageList[0]))
 	{
-		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.CharacterMoveSpeed / 500.0f));
+		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.DefaultMoveSpeed / 500.0f));
 	}
 
 	if (OnRoll.IsBound())

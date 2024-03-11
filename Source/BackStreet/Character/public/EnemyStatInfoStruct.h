@@ -55,7 +55,7 @@ public:
 		FEnemyDropInfoStruct DropInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
-		float CharacterAtkSpeed;	
+		float DefaultAttackSpeed;	
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<int32> EnemySkillList;

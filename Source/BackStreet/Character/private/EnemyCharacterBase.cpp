@@ -72,7 +72,7 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		//Set CharacterStat with setting default additional stat bInfinite (infinite use of ammo)
 		UpdateCharacterStat(EnemyStat.CharacterStat);
 		CharacterStat.bInfinite = true;
-		CharacterState.CharacterCurrHP = EnemyStat.CharacterStat.CharacterMaxHP;
+		CharacterState.CharacterCurrHP = EnemyStat.CharacterStat.DefaultHP;
 		SetDefaultWeapon();
 	}
 
@@ -161,7 +161,7 @@ void AEnemyCharacterBase::Attack()
 
 	float attackSpeed = 0.5f;
 	if(IsValid(GetCurrentWeaponRef()))
-		attackSpeed = FMath::Min(1.5f, CharacterStat.CharacterAtkSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
+		attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
 
 	GetWorldTimerManager().SetTimer(AtkIntervalHandle, this, &ACharacterBase::ResetAtkIntervalTimer
 		, 1.0f, false, FMath::Max(0.0f, 1.5f - attackSpeed));
