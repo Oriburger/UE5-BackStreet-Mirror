@@ -90,7 +90,7 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 void ACharacterBase::InitCharacterState()
 {
 	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.DefaultMoveSpeed;
-	CharacterState.CharacterCurrHP = CharacterStat.DefaultHP;
+	CharacterState.CurrentHP = CharacterStat.DefaultHP;
 	CharacterState.bCanAttack = true;
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
 }
@@ -109,15 +109,34 @@ bool ACharacterBase::GetDebuffIsActive(ECharacterDebuffType DebuffType)
 	return DebuffManagerComponent->GetDebuffIsActive(DebuffType);
 }
 
+void ACharacterBase::UpdateCharacterStatAndState(FCharacterStatStruct NewStat, FCharacterStateStruct NewState)
+{
+	UpdateCharacterStat(NewStat);
+	UpdateCharacterState(NewState);
+}
+
 void ACharacterBase::UpdateCharacterStat(FCharacterStatStruct NewStat)
 {
 	CharacterStat = NewStat;
-	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.DefaultMoveSpeed;
+
+	//Update Character State's total property 
+	CharacterState.TotalHP = CharacterStat.DefaultHP + CharacterStat.SkillHP
+							+ CharacterStat.AbilityHP;
+	CharacterState.TotalAttack = CharacterStat.DefaultAttack + CharacterStat.SkillAttack
+							+ CharacterStat.AbilityAttack;
+	CharacterState.TotalDefense = CharacterStat.DefaultDefense + CharacterStat.SkillDefense
+							+ CharacterStat.AbilityDefense;
+	CharacterState.TotalMoveSpeed = CharacterStat.DefaultMoveSpeed + CharacterStat.SkillMoveSpeed
+							+ CharacterStat.AbilityMoveSpeed;
+	CharacterState.TotalAttackSpeed = CharacterStat.DefaultAttackSpeed + CharacterStat.SkillAttackSpeed
+							+ CharacterStat.AbilityAttackSpeed;
+
+	//Update movement speed
+	GetCharacterMovement()->MaxWalkSpeed = CharacterState.TotalMoveSpeed;
 }
 
 void ACharacterBase::UpdateCharacterState(FCharacterStateStruct NewState)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("Debuff State : %d"), NewState.CharacterDebuffState);
 	CharacterState = NewState;
 }
 
@@ -158,9 +177,9 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	if (DamageAmount <= 0.0f || !IsValid(DamageCauser)) return 0.0f;
 	if (CharacterStat.bIsInvincibility) return 0.0f;
 
-	CharacterState.CharacterCurrHP = CharacterState.CharacterCurrHP - DamageAmount;
-	CharacterState.CharacterCurrHP = FMath::Max(0.0f, CharacterState.CharacterCurrHP);
-	if (CharacterState.CharacterCurrHP == 0.0f)
+	CharacterState.CurrentHP = CharacterState.CurrentHP - DamageAmount;
+	CharacterState.CurrentHP = FMath::Max(0.0f, CharacterState.CurrentHP);
+	if (CharacterState.CurrentHP == 0.0f)
 	{
 		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
 		Die();
@@ -189,8 +208,8 @@ void ACharacterBase::SetActionState(ECharacterActionType Type)
 
 void ACharacterBase::TakeHeal(float HealAmountRate, bool bIsTimerEvent, uint8 BuffDebuffType)
 {
-	CharacterState.CharacterCurrHP += CharacterStat.DefaultHP * HealAmountRate;
-	CharacterState.CharacterCurrHP = FMath::Min(CharacterStat.DefaultHP, CharacterState.CharacterCurrHP);
+	CharacterState.CurrentHP += CharacterStat.DefaultHP * HealAmountRate;
+	CharacterState.CurrentHP = FMath::Min(CharacterStat.DefaultHP, CharacterState.CurrentHP);
 	return;
 }
 

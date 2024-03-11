@@ -98,6 +98,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetDebuffIsActive(ECharacterDebuffType DebuffType);
 
+	//Update Character's stat and state
+	UFUNCTION(BlueprintCallable)
+		void UpdateCharacterStatAndState(FCharacterStatStruct NewStat, FCharacterStateStruct NewState);
+
 	//캐릭터의 스탯을 업데이트
 	UFUNCTION(BlueprintCallable)
 		void UpdateCharacterStat(FCharacterStatStruct NewStat);

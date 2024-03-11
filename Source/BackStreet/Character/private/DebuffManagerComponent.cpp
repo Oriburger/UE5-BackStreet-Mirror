@@ -75,22 +75,21 @@ bool UDebuffManagerComponent::SetDebuffTimer(ECharacterDebuffType DebuffType, AA
 		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 		break;
 	case ECharacterDebuffType::E_Slow:
-		characterStat.DefaultMoveSpeed *= Variable;
-		characterStat.DefaultAttackSpeed *= Variable;
+		characterStat.DefaultMoveSpeed -= Variable;
+		characterStat.DefaultAttackSpeed -= Variable;
 		break;
 	case ECharacterDebuffType::E_AttackDown:
-		characterStat.DefaultAttack *= Variable;
+		characterStat.DefaultAttack -= Variable;
 		break;
 	case ECharacterDebuffType::E_DefenseDown:
-		characterStat.DefaultDefense *= Variable;
+		characterStat.DefaultDefense -= Variable;
 		break;
 	}
 	if(!ResetValueInfoMap.Contains(DebuffType))
 		ResetValueInfoMap.Add(DebuffType, 0.0f);
 	ResetValueInfoMap[DebuffType] = Variable;
 
-	OwnerCharacterRef.Get()->UpdateCharacterStat(characterStat);
-	OwnerCharacterRef.Get()->UpdateCharacterState(characterState);
+	OwnerCharacterRef.Get()->UpdateCharacterStatAndState(characterStat, characterState);
 
 	timerDelegate.BindUFunction(this, FName("ResetStatDebuffState"), DebuffType, Variable);
 	GetWorld()->GetTimerManager().SetTimer(timerHandle, timerDelegate, 0.1f, false, TotalTime);
@@ -190,8 +189,8 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 	case ECharacterDebuffType::E_Poison:
 		break;
 	case ECharacterDebuffType::E_Slow:
-		characterStat.DefaultMoveSpeed /= ResetVal;
-		characterStat.DefaultAttackSpeed /= ResetVal;
+		characterStat.DefaultMoveSpeed += ResetVal;
+		characterStat.DefaultAttackSpeed += ResetVal;
 		break;
 	case ECharacterDebuffType::E_Stun:
 		characterState.CharacterActionState = ECharacterActionType::E_Idle;
@@ -199,14 +198,13 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 		break;
 	case ECharacterDebuffType::E_AttackDown:
-		characterStat.DefaultAttack /= ResetVal;
+		characterStat.DefaultAttack += ResetVal;
 		break;
 	case ECharacterDebuffType::E_DefenseDown:
-		characterStat.DefaultDefense /= ResetVal;
+		characterStat.DefaultDefense += ResetVal;
 		break;
 	}
-	OwnerCharacterRef.Get()->UpdateCharacterStat(characterStat);
-	OwnerCharacterRef.Get()->UpdateCharacterState(characterState);
+	OwnerCharacterRef.Get()->UpdateCharacterStatAndState(characterStat, characterState);
 	ClearDebuffTimer(DebuffType);
 }
 

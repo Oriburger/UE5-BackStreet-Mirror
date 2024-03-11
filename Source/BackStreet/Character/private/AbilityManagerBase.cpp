@@ -86,34 +86,39 @@ bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct Target
 	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
 	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
 
-	for (int statIdx = 0; statIdx < TargetAbilityInfo.TargetStatName.Num(); statIdx++)
+	for (int statIdx = 0; statIdx < TargetAbilityInfo.AbilityTypeList.Num(); statIdx++)
 	{
-		FName targetStatName = TargetAbilityInfo.TargetStatName[statIdx];
+		ECharacterAbilityType targetType = TargetAbilityInfo.AbilityTypeList[FMath::Min(TargetAbilityInfo.AbilityTypeList.Num() - 1, statIdx)];
 		float targetVariable = TargetAbilityInfo.Variable[FMath::Min(TargetAbilityInfo.Variable.Num() - 1, statIdx)];
-		if (bIsReset) targetVariable = 1/targetVariable; //초기화 시 1보다 낮은 값으로 곱함 1.25 vs 0.25
+		if (bIsReset) targetVariable = -1 * targetVariable; //if remove ability, substract the original value
 
-		/*------ MUST BE EDITED after IndieGo -------*/
-		/*------ Erase targetStatName, use ECharacterAbilityType instead. -------*/
-		if (targetStatName == FName("AbilityHP"))
+		switch (targetType)
 		{
+		case ECharacterAbilityType::E_None:
+		case ECharacterAbilityType::E_AutoHeal:
+			break;
+		case ECharacterAbilityType::E_DefaultHP:
 			characterStat.AbilityHP += targetVariable;
-			characterState.CharacterCurrHP += characterStat.AbilityHP;
-		}
-		//else if (targetStatName == FName("CurrHP"))
-		//	characterState.CharacterCurrHP = characterStat.DefaultHP;
-		else if (targetStatName == FName("Attack"))
-			characterStat.DefaultAttack *= targetVariable;
-		else if (targetStatName == FName("Defense"))
-			characterStat.DefaultDefense *= targetVariable;
-		else if (targetStatName == FName("MoveSpeed"))
-			characterStat.DefaultMoveSpeed *= targetVariable;
-		else if (targetStatName == FName("AttackSpeed"))
-			characterStat.DefaultAttackSpeed *= targetVariable;
-		else if (targetStatName == FName("ThrowProjectileCount"))
-			characterStat.ThrowProjectileCount *= targetVariable;
+			characterState.CurrentHP += targetVariable;
+			break;
+		case ECharacterAbilityType::E_AttackUp:
+			characterStat.AbilityAttack += targetVariable;
+			break;
+		case ECharacterAbilityType::E_DefenseUp:
+			characterStat.DefaultDefense += targetVariable;
+			break;
+		case ECharacterAbilityType::E_MoveSpeedUp:
+			characterStat.DefaultMoveSpeed += targetVariable;
+			break;
+		case ECharacterAbilityType::E_AtkSpeedUp:
+			characterStat.DefaultAttackSpeed += targetVariable;
+			break;
+		case ECharacterAbilityType::E_MultipleShot:
+			characterStat.ProjectileCountPerAttack += targetVariable;
+			break;
+		}	
 	}
-	OwnerCharacterRef.Get()->UpdateCharacterStat(characterStat);
-	OwnerCharacterRef.Get()->UpdateCharacterState(characterState);
+	OwnerCharacterRef.Get()->UpdateCharacterStatAndState(characterStat, characterState);
 
 	return true;
 }

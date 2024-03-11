@@ -33,30 +33,56 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		bool bInfinite = false;
 
-	//PlayerMaxHP는 1.0f
+	//Projectile Count Per Attack
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1, UIMax = 1))
+		int32 ProjectileCountPerAttack = 1;
+
+//======= Default Stat ======================
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1.0f, UIMax = 1000.0f))
 		float DefaultHP = 100.0f;
 
-	//Additional HP / Ability
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1.0f, UIMax = 100.0f))
-		float AbilityHP;
-	
-	//Additional HP / Skill
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1.0f, UIMax = 100.0f))
-		float SkillHP;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 500.0f))
+		float DefaultAttack = 50.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.2f, UIMax = 2.0f))
-		float DefaultAttackSpeed = 1.0f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f))
+		float DefaultAttackSpeed = 10.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 100.0f, UIMax = 1000.0f))
 		float DefaultMoveSpeed = 400.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 2.0f))
-		float DefaultDefense = 0.0f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f))
+		float DefaultDefense = 10.0f;
 
-	//한번에 발사할 발사체 개수
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1, UIMax = 1))
-		int32 ThrowProjectileCount = 1;
+//======= Additional Stat , Uneditable ======================
+	UPROPERTY(BlueprintReadWrite)
+		float AbilityHP;
+
+	UPROPERTY(BlueprintReadWrite)
+		float AbilityAttack;
+
+	UPROPERTY(BlueprintReadWrite)
+		float AbilityAttackSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		float AbilityMoveSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		float AbilityDefense;
+
+	UPROPERTY(BlueprintReadWrite)
+		float SkillHP;
+	
+	UPROPERTY(BlueprintReadWrite)
+		float SkillAttack;
+
+	UPROPERTY(BlueprintReadWrite)
+		float SkillAttackSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		float SkillMoveSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		float SkillDefense;
 };
 
 USTRUCT(BlueprintType)
@@ -83,24 +109,24 @@ public:
 		ECharacterActionType CharacterActionState;
 
 //====== Current Stat ===================
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float TotalHP;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float TotalAttack;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float TotalDefense;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float TotalMoveSpeed;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		float TotalAkSpeed;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float TotalAttackSpeed;
 
 	//PlayerMaxHP는 1.0f
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float CharacterCurrHP;
+		float CurrentHP;
 
 //====== Skill =========================
 	
