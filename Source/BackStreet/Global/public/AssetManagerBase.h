@@ -18,7 +18,7 @@ public:
 
 //----- Sound --------
 public:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<USoundCue*> GetSoundList(ESoundAssetType SoundType, int32 TargetID, FName SoundName);
 	
 	//Play Single Sound
