@@ -95,7 +95,14 @@
 			"Gate":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/System/StageManager/Sound/Legacy/SC_Gate.SC_Gate'"
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/System/ETC/SC_Gate.SC_Gate'"
+				],
+				"SoundVolumeList": [ 0.75 ]
+			},
+			"SpawnAbilityBox":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/System/ETC/SC_SpawnAbilityBox.SC_SpawnAbilityBox'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			}

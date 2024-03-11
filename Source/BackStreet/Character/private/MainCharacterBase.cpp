@@ -315,6 +315,10 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 	if (TargetActor->ActorHasTag("Item"))
 	{
 		Cast<AItemBase>(TargetActor)->OnPlayerBeginPickUp.ExecuteIfBound(this);
+		if (AssetManagerBaseRef.IsValid())
+		{
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "EquipWeapon");
+		}
 	}
 	else if (TargetActor->ActorHasTag("ItemBox"))
 	{
