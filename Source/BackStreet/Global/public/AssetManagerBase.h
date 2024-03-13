@@ -25,9 +25,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void PlaySingleSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName);
 
-	//Choose Sound and Play Randomly
+	//Play Random Sound
 	UFUNCTION(BlueprintCallable)
 		void PlayRandomSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName);
+
+	//Which is for Spawning and Stopping the sound
+	UFUNCTION(BlueprintCallable)
+		UAudioComponent* SpawnSound2D(ESoundAssetType SoundType, int32 TargetID, FName SoundName);
 
 private:
 	FSoundAssetInfoStruct* GetSoundAssetInfo(ESoundAssetType SoundType, int32 TargetID);

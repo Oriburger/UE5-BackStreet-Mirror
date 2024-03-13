@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "../public/AssetManagerBase.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "../public/BackStreetGameModeBase.h"
 
 UAssetManagerBase::UAssetManagerBase()
@@ -122,6 +123,36 @@ void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, ESoundAssetType Sou
 
 void UAssetManagerBase::PlayRandomSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName)
 {
+	FSoundAssetInfoStruct* soundAssetInfo = GetSoundAssetInfo(SoundType, TargetID);
+	if (!soundAssetInfo->SoundMap.Contains(SoundName)) return;
+
+	TArray<USoundCue*> soundList = soundAssetInfo->SoundMap.Find(SoundName)->SoundList;
+	TArray<float> volumeList = soundAssetInfo->SoundMap.Find(SoundName)->SoundVolumeList;
+	if (!soundList.IsValidIndex(0) || !volumeList.IsValidIndex(0)) return;
+
+	int8 randIdx;
+	randIdx = UKismetMathLibrary::RandomIntegerInRange(0, soundList.Num()-1);
+
+	if (TargetActor == nullptr)
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), soundList[randIdx], volumeList[randIdx]);
+	}
+	else
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[randIdx], TargetActor->GetActorLocation(), volumeList[randIdx]);
+	}
+}
+
+UAudioComponent* UAssetManagerBase::SpawnSound2D(ESoundAssetType SoundType, int32 TargetID, FName SoundName)
+{
+	FSoundAssetInfoStruct* soundAssetInfo = GetSoundAssetInfo(SoundType, TargetID);
+	if (!soundAssetInfo->SoundMap.Contains(SoundName)) return nullptr;
+
+	TArray<USoundCue*> soundList = soundAssetInfo->SoundMap.Find(SoundName)->SoundList;
+	TArray<float> volumeList = soundAssetInfo->SoundMap.Find(SoundName)->SoundVolumeList;
+	if (!soundList.IsValidIndex(0) || !volumeList.IsValidIndex(0)) return nullptr;
+
+	return UGameplayStatics::SpawnSound2D(GetWorld(), soundList[0], volumeList[0]);
 }
 
 
