@@ -14,6 +14,7 @@
 #include "Engine/StaticMesh.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "../../Character/public/CharacterBase.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define AUTO_RELOAD_DELAY_VALUE 0.1
 #define MAX_THROW_DISTANCE 1200.0f //AMainCharacterBase와 통일 (추후 하나의 파일로 통합 예정)	
@@ -96,9 +97,9 @@ void AThrowWeaponBase::Throw()
 		OwnerCharacterRef.Get()->GetSubInventoryRef()->SyncCurrentWeaponInfo(true);
 	}
 
-	if (IsValid(ShootSound))
+	if (AssetManagerBaseRef.IsValid())
 	{
-		PlaySingleSound(ShootSound, "Shoot");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, "Shoot");
 	}
 
 	//탄환이 다 되었다면? 자동으로 제거

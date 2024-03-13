@@ -214,18 +214,8 @@ private:
 
 // -------- Asset ----------------
 protected:
-	virtual void InitSoundAsset() override;
-
-protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
 		class UAudioComponent* AudioComponent;
-
-	UPROPERTY()
-		TArray<USoundCue*> InvestigateItemBoxSoundList;
-
-	UPROPERTY()
-		TArray<USoundCue*> InvestigateAbilityBoxSoundList;
-
 
 // ------- ±× ¿Ü -----------
 public:

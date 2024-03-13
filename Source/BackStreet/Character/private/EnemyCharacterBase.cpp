@@ -1,6 +1,4 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "../public/EnemyCharacterBase.h"
 #include "../../AISystem/public/AIControllerBase.h"
 #include "../public/CharacterInfoStruct.h"
@@ -13,6 +11,7 @@
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../public/MainCharacterBase.h"
 
 #define TURN_TIME_OUT_SEC 1.0f
@@ -100,7 +99,14 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f) return 0.0f;
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitImpactSound, GetActorLocation());
+	
+	if (AssetManagerBaseRef.IsValid())
+	{
+		ACharacterBase* damageCauser = Cast<ACharacterBase>(DamageCauser);
+
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, damageCauser->GetCurrentWeaponRef()->GetWeaponStat().WeaponID, "HitImpact");
+	}
+	
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 
 	if (DamageCauser->ActorHasTag("Player"))

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "../../SkillSystem/public/SkillInfoStruct.h"
+#include "../../Global/public/AssetInfoStruct.h"
 #include "SkillBase.generated.h"
 
 UCLASS()
@@ -50,6 +51,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void StartSkill();
 
+	UFUNCTION()
+		void TrySkill();
+
 	UFUNCTION(BlueprintCallable)
 		void HideSkill();
 
@@ -89,11 +93,11 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FSkillInfoStruct GetSkillInfoWithID(int32 TargetSkillID);
+	
+	UFUNCTION(BlueprintCallable)
+		void PlaySingleSound(FName SoundName);
 
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|SFX")
-		TArray<USoundCue*> SkillSoundList;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		TArray<class UNiagaraSystem*> SkillEffectParticleList;
 
@@ -111,11 +115,11 @@ protected:
 	//Owner Character Soft Ref
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 
-	//SkillManager Weak Pointer
+	//SkillManager Soft Ref
 	TWeakObjectPtr<class USkillManagerBase> SkillManagerRef;
 
-	UFUNCTION(BlueprintCallable)
-		void PlayEffectSound(USoundCue* EffectSound);
+	//AssetManager Soft Ref
+	TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
 
 //-------- Timer --------------------------------------------
 public:

@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
@@ -79,29 +80,8 @@ void AProjectileBase::InitProjectileAsset()
 	if (ProjectileAssetInfo.HitEffectParticleLegacy.IsValid())
 		HitParticle = ProjectileAssetInfo.HitEffectParticleLegacy.Get();
 
-	if (ProjectileSoundAssetMap.Contains("HitImpact"))
-	{
-		FSoundArrayContainer* hitImpactSoundInfo = ProjectileSoundAssetMap.Find("HitImpact");
-		if (!hitImpactSoundInfo->SoundList.IsEmpty())
-		{
-			HitImpactSound = hitImpactSoundInfo->SoundList[0];
-		}
-	}
-
-	if (ProjectileSoundAssetMap.Contains("Explosion"))
-	{
-		FSoundArrayContainer* explosionSoundInfo = ProjectileSoundAssetMap.Find("Explosion");
-		if (!explosionSoundInfo->SoundList.IsEmpty())
-		{
-			ExplosionSound = explosionSoundInfo->SoundList[0];
-		}
-	}
-
 	if (ProjectileAssetInfo.ExplosionParticle.IsValid())
 		ExplosionParticle = ProjectileAssetInfo.ExplosionParticle.Get();
-
-	if (ProjectileAssetInfo.ExplosionSound.IsValid())
-		ExplosionSound = ProjectileAssetInfo.ExplosionSound.Get();
 }
 
 void AProjectileBase::DestroyWithEffect(FVector Location)
@@ -110,9 +90,9 @@ void AProjectileBase::DestroyWithEffect(FVector Location)
 
 	FTransform targetTransform = { FRotator(), Location, {1.0f, 1.0f, 1.0f} };
 	
-	if (IsValid(HitImpactSound))
+	if (AssetManagerBaseRef.IsValid())
 	{
-		PlaySingleSound(HitImpactSound, "HitImpact");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, floor(ProjectileID/10.0)*10, "HitImpact");
 	}
 
 	if (HitParticle != nullptr)
@@ -135,7 +115,6 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectil
 	UpdateProjectileStat(NewStatInfo);
 
 	AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
-	ProjectileSoundAssetMap = AssetManagerBaseRef.Get()->GetSoundAssetInfo(ESoundAssetType::E_Weapon, ProjectileID - 1);
 
 	ProjectileAssetInfo = NewAssetInfo;
 
@@ -253,23 +232,14 @@ void AProjectileBase::Explode()
 	if (ExplosionParticle != nullptr)
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionParticle, GetActorLocation(), GetActorRotation());
 	
-	if (IsValid(ExplosionSound))
+	if (AssetManagerBaseRef.IsValid())
 	{
-		PlaySingleSound(ExplosionSound, "Explosion");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, floor(ProjectileID / 10.0) * 10, "Explosion");
 	}
 
 	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 5000.0f); //카메라 셰이크 이벤트
 
 	Destroy();
-}
-
-void AProjectileBase::PlaySingleSound(USoundCue* EffectSound, FName SoundName)
-{
-	if (!ProjectileSoundAssetMap.Contains(SoundName)) return;
-	TArray<float> volumeList = ProjectileSoundAssetMap.Find(SoundName)->SoundVolumeList;
-	if (!IsValid(EffectSound) || !volumeList.IsValidIndex(0)) return;
-
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), EffectSound, GetActorLocation(), volumeList[0]);
 }
 
 void AProjectileBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)

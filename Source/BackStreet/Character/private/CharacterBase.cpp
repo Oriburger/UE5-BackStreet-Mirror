@@ -55,8 +55,7 @@ void ACharacterBase::BeginPlay()
 	
 	if (GamemodeRef.IsValid())
 	{
-		TWeakObjectPtr<class UAssetManagerBase> assetManagerBase = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
-		SoundAssetMap = assetManagerBase.Get()->GetSoundAssetInfo(ESoundAssetType::E_Character,0);
+		AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
 	}
 
 	if (IsValid(SubInventoryRef) && !SubInventoryRef->IsActorBeingDestroyed())
@@ -675,49 +674,6 @@ bool ACharacterBase::InitAnimAsset()
 	return true;
 }
 
-void ACharacterBase::InitSoundAsset()
-{
-	if (SoundAssetMap.Contains("FootStep"))
-	{
-		if (!SoundAssetMap.Find("FootStep")->SoundList.IsEmpty())
-		{
-			FootStepSoundList = SoundAssetMap.Find("FootStep")->SoundList;
-		}
-	}
-
-	if (SoundAssetMap.Contains("Roll"))
-	{
-		if (!SoundAssetMap.Find("Roll")->SoundList.IsEmpty())
-		{
-			RollSound = SoundAssetMap.Find("Roll")->SoundList[0];
-		}
-	}
-
-	if (SoundAssetMap.Contains("Buff"))
-	{
-		if (!SoundAssetMap.Find("Buff")->SoundList.IsEmpty())
-		{
-			BuffSound = SoundAssetMap.Find("Buff")->SoundList[0];
-		}
-	}
-
-	if (SoundAssetMap.Contains("Debuff"))
-	{
-		if (!SoundAssetMap.Find("Debuff")->SoundList.IsEmpty())
-		{
-			DebuffSound = SoundAssetMap.Find("Debuff")->SoundList[0];
-		}
-	}
-
-	if (SoundAssetMap.Contains("HitImpactSound"))
-	{
-		if (!SoundAssetMap.Find("HitImpactSound")->SoundList.IsEmpty())
-		{
-			HitImpactSound = SoundAssetMap.Find("HitImpactSound")->SoundList[0];
-		}
-	}
-}
-
 void ACharacterBase::InitVFXAsset()
 {
 	if (!AssetInfo.DebuffNiagaraEffectList.IsEmpty())
@@ -728,6 +684,15 @@ void ACharacterBase::InitVFXAsset()
 				DebuffNiagaraEffectList.AddUnique(vfx.Get());
 		}
 	}
+}
+
+void ACharacterBase::InitSoundAsset()
+{
+//	TArray<USoundCue*> soundList = SoundAssetInfo.SoundMap.Find("FootStep")->SoundList;
+//	if (!soundList.IsEmpty())
+//	{
+//		FootStepSoundList = soundList;
+//	}	
 }
 
 void ACharacterBase::InitMaterialAsset()

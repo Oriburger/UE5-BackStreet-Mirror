@@ -18,6 +18,7 @@
 #include "../../Item/public/RewardBoxBase.h"
 #include "../../CraftingSystem/public/CraftBoxBase.h"
 #include "Animation/AnimMontage.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../../Global/public/SkillManagerBase.h"
 #define MAX_CAMERA_BOOM_LENGTH 1450.0f
 #define MIN_CAMERA_BOOM_LENGTH 250.0f
@@ -255,9 +256,9 @@ void AMainCharacterBase::Roll()
 	GetMesh()->SetWorldRotation(newRotation);
 
 	// 사운드
-	if (RollSound->IsValidLowLevelFast())
+	if (AssetManagerBaseRef.IsValid())
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, RollSound, GetActorLocation());
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "Roll");
 	}
 
 	//애니메이션 
@@ -314,16 +315,26 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 	if (TargetActor->ActorHasTag("Item"))
 	{
 		Cast<AItemBase>(TargetActor)->OnPlayerBeginPickUp.ExecuteIfBound(this);
+		if (AssetManagerBaseRef.IsValid())
+		{
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "EquipWeapon");
+		}
 	}
 	else if (TargetActor->ActorHasTag("ItemBox"))
 	{
 		Cast<AItemBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), InvestigateItemBoxSoundList[0], TargetActor->GetActorLocation());
+		if (AssetManagerBaseRef.IsValid())
+		{
+			AssetManagerBaseRef.Get()->PlayRandomSound(this, ESoundAssetType::E_Character, 0, "OpenItemBox");
+		}
 	}
 	else if (TargetActor->ActorHasTag("RewardBox"))
 	{
 		Cast<ARewardBoxBase>(TargetActor)->OnPlayerBeginInteract.Broadcast(this);
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), InvestigateAbilityBoxSoundList[0], TargetActor->GetActorLocation());
+		if (AssetManagerBaseRef.IsValid())
+		{
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "OpenAbilityBox");
+		}
 	}
 	else if (TargetActor->ActorHasTag("CraftingBox"))
 	{
@@ -568,9 +579,9 @@ bool AMainCharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AAc
 {
 	if (!Super::TryAddNewDebuff(NewDebuffType, Causer, TotalTime, Value)) return false;
 
-	if (DebuffSound && BuffSound)
+	if (AssetManagerBaseRef.IsValid())
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, DebuffSound, GetActorLocation());
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "Debuff");
 	}
 	//230621 임시 제거
 	//ActivateBuffNiagara(bIsDebuff, BuffDebuffType);
@@ -659,27 +670,6 @@ void AMainCharacterBase::ResetFacialDamageEffect()
 	{
 		currMaterial->SetTextureParameterValue(FName("BaseTexture"), EmotionTextureList[(uint8)(EEmotionType::E_Idle)]);
 		currMaterial->SetScalarParameterValue(FName("bIsDamaged"), false);
-	}
-}
-
-void AMainCharacterBase::InitSoundAsset()
-{
-	Super::InitSoundAsset();
-	
-	if (SoundAssetMap.Contains("InvestigateItemBox"))
-	{
-		if (!SoundAssetMap.Find("InvestigateItemBox")->SoundList.IsEmpty())
-		{
-			InvestigateItemBoxSoundList = SoundAssetMap.Find("InvestigateItemBox")->SoundList;
-		}
-	}
-
-	if (SoundAssetMap.Contains("InvestigateAbilityBox"))
-	{
-		if (!SoundAssetMap.Find("InvestigateAbilityBox")->SoundList.IsEmpty())
-		{
-			InvestigateAbilityBoxSoundList = SoundAssetMap.Find("InvestigateAbilityBox")->SoundList;
-		}
 	}
 }
 

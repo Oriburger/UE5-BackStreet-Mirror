@@ -7,6 +7,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 
 
@@ -132,8 +133,6 @@ FWeaponStatStruct AWeaponBase::GetWeaponStatInfoWithID(int32 TargetWeaponID)
 
 FWeaponAssetInfoStruct AWeaponBase::GetWeaponAssetInfoWithID(int32 TargetWeaponID)
 {
-	WeaponSoundAssetMap = AssetManagerBaseRef.Get()->GetSoundAssetInfo(ESoundAssetType::E_Weapon, WeaponID);
-
 	if (WeaponAssetInfoTable != nullptr && TargetWeaponID != 0)
 	{
 		FWeaponAssetInfoStruct* newInfo = nullptr;
@@ -181,15 +180,6 @@ void AWeaponBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
 	if (!IsValid(NewOwnerCharacterRef)) return;
 	OwnerCharacterRef = NewOwnerCharacterRef;
 	SetOwner(OwnerCharacterRef.Get());
-}
-
-void AWeaponBase::PlaySingleSound(USoundCue* EffectSound, FName SoundName)
-{
-	if(!WeaponSoundAssetMap.Contains(SoundName)) return;
-	TArray<float> volumeList = WeaponSoundAssetMap.Find(SoundName)->SoundVolumeList;
-	if (!IsValid(EffectSound) || !volumeList.IsValidIndex(0)) return;
-	
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), EffectSound, GetActorLocation(), volumeList[0]);
 }
 
 void AWeaponBase::ClearAllTimerHandle()
