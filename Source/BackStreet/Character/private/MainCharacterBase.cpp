@@ -325,7 +325,7 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 		Cast<AItemBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
 		if (AssetManagerBaseRef.IsValid())
 		{
-			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "OpenItemBox");
+			AssetManagerBaseRef.Get()->PlayRandomSound(this, ESoundAssetType::E_Character, 0, "OpenItemBox");
 		}
 	}
 	else if (TargetActor->ActorHasTag("RewardBox"))
