@@ -18,32 +18,33 @@ public:
 
 //----- Sound --------
 public:
-	UFUNCTION(BlueprintCallable)
+	
+	//GetSoundList From SoundAssetTable
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<USoundCue*> GetSoundList(ESoundAssetType SoundType, int32 TargetID, FName SoundName);
-
-	UFUNCTION(BlueprintCallable)
-		FSoundAssetInfoStruct GetSoundAssetInfo(ESoundAssetType SoundType, int32 TargetID);
 	
 	//Play Single Sound
 	UFUNCTION(BlueprintCallable)
-		void PlaySingleSound(AActor* TargetActor, FSoundAssetInfoStruct SoundAssetInfo, FName SoundName);
+		void PlaySingleSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName);
 
-	//Choose Sound and Play Randomly
+	//Play Random Sound
 	UFUNCTION(BlueprintCallable)
-		void PlayRandomSound(AActor* TargetActor, FSoundAssetInfoStruct SoundAssetInfo, FName SoundName);
+		void PlayRandomSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName);
+
+	//Which is for Spawning and Stopping the sound
+	UFUNCTION(BlueprintCallable)
+		UAudioComponent* SpawnSound2D(ESoundAssetType SoundType, int32 TargetID, FName SoundName);
 
 private:
-	UFUNCTION()
-		FSoundAssetInfoStruct GetSystemSoundMapWithID(int32 TargetID);
+	FSoundAssetInfoStruct* GetSoundAssetInfo(ESoundAssetType SoundType, int32 TargetID);
 
-	UFUNCTION()
-		FSoundAssetInfoStruct GetWeaponSoundMapWithID(int32 TargetID);
+	FSoundAssetInfoStruct* GetSystemSoundMapWithID(int32 TargetID);
 
-	UFUNCTION()
-		FSoundAssetInfoStruct GetCharacterSoundMapWithID(int32 TargetID);
+	FSoundAssetInfoStruct* GetWeaponSoundMapWithID(int32 TargetID);
 
-	UFUNCTION()
-		FSoundAssetInfoStruct GetSkillSoundMapWithID(int32 TargetID);
+	FSoundAssetInfoStruct* GetCharacterSoundMapWithID(int32 TargetID);
+
+	FSoundAssetInfoStruct* GetSkillSoundMapWithID(int32 TargetID);
 
 private:
 	UPROPERTY()

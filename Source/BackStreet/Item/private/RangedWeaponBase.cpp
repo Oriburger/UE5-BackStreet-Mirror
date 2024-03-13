@@ -8,6 +8,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Character/public/MainCharacterBase.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define AUTO_RELOAD_DELAY_VALUE 0.1
 
@@ -33,7 +34,7 @@ void ARangedWeaponBase::Attack()
 
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, result ? "Shoot" : "ShootFail");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, result ? "Shoot" : "ShootFail");
 	}
 
 	if (result)	UpdateDurabilityState();
@@ -176,7 +177,7 @@ void ARangedWeaponBase::Reload()
 
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, SoundAssetInfo, "Reload");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, "Reload");
 	}
 }	
 	

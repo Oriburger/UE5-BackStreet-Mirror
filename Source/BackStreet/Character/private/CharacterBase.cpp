@@ -56,7 +56,6 @@ void ACharacterBase::BeginPlay()
 	if (GamemodeRef.IsValid())
 	{
 		AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
-		SoundAssetInfo = AssetManagerBaseRef.Get()->GetSoundAssetInfo(ESoundAssetType::E_Character,0);
 	}
 
 	if (IsValid(SubInventoryRef) && !SubInventoryRef->IsActorBeingDestroyed())
@@ -568,6 +567,7 @@ void ACharacterBase::SetAsset()
 	}
 	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimBlueprint);
 	InitAnimAsset();
+	InitSoundAsset();
 	InitVFXAsset();
 	InitMaterialAsset();
 }
@@ -684,6 +684,15 @@ void ACharacterBase::InitVFXAsset()
 				DebuffNiagaraEffectList.AddUnique(vfx.Get());
 		}
 	}
+}
+
+void ACharacterBase::InitSoundAsset()
+{
+//	TArray<USoundCue*> soundList = SoundAssetInfo.SoundMap.Find("FootStep")->SoundList;
+//	if (!soundList.IsEmpty())
+//	{
+//		FootStepSoundList = soundList;
+//	}	
 }
 
 void ACharacterBase::InitMaterialAsset()

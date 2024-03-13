@@ -7,6 +7,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 
 
@@ -132,8 +133,6 @@ FWeaponStatStruct AWeaponBase::GetWeaponStatInfoWithID(int32 TargetWeaponID)
 
 FWeaponAssetInfoStruct AWeaponBase::GetWeaponAssetInfoWithID(int32 TargetWeaponID)
 {
-	SoundAssetInfo = AssetManagerBaseRef.Get()->GetSoundAssetInfo(ESoundAssetType::E_Weapon, WeaponID);
-
 	if (WeaponAssetInfoTable != nullptr && TargetWeaponID != 0)
 	{
 		FWeaponAssetInfoStruct* newInfo = nullptr;

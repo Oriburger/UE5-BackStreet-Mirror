@@ -138,9 +138,6 @@ private:
 public:
 	UFUNCTION(BlueprintCallable)
 		void SetOwnerCharacter(class ACharacterBase* NewOwnerCharacterRef);
-	
-	UPROPERTY()
-		FSoundAssetInfoStruct SoundAssetInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UParticleSystem* DestroyEffectParticle;

@@ -195,6 +195,9 @@ protected:
 		bool InitAnimAsset();
 
 	UFUNCTION()
+		void InitSoundAsset();
+
+	UFUNCTION()
 		void InitVFXAsset();
 
 	UFUNCTION()
@@ -219,9 +222,6 @@ protected:
 	//애니메이션, VFX, 사운드큐 등 저장
 	UPROPERTY()
 		struct FCharacterAnimAssetInfoStruct AnimAssetData;
-
-	UPROPERTY()
-		FSoundAssetInfoStruct SoundAssetInfo;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 		class UAnimMontage* PreChaseAnimMontage;

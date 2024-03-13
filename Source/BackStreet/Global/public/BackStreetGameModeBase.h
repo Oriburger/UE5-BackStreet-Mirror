@@ -69,7 +69,7 @@ public:
 	UFUNCTION()
 		void UpdateCharacterStat(class ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }
 
 	UFUNCTION(BlueprintCallable)
