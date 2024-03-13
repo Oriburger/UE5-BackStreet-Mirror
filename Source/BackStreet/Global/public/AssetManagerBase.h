@@ -18,6 +18,8 @@ public:
 
 //----- Sound --------
 public:
+	
+	//GetSoundList From SoundAssetTable
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<USoundCue*> GetSoundList(ESoundAssetType SoundType, int32 TargetID, FName SoundName);
 	
