@@ -44,15 +44,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsHoming = false;
 
-	//발사체는 각 하나의 디버프만 가짐
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		ECharacterDebuffType DebuffType;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float DebuffTotalTime;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float DebuffVariable;
+		FDebuffInfoStruct ProjectileDebuffInfo;
 };
 
 USTRUCT(BlueprintType)

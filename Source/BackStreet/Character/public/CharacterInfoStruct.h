@@ -17,6 +17,19 @@ enum class EEmotionType : uint8
 };
 
 USTRUCT(BlueprintType)
+struct FStatInfoStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadOnly)
+		float PercentValue;
+
+	UPROPERTY(BlueprintReadOnly)
+		float FixedValue;
+};
+
+USTRUCT(BlueprintType)
 struct FCharacterStatStruct : public FTableRowBase
 {
 public:
@@ -41,48 +54,19 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1.0f, UIMax = 1000.0f))
 		float DefaultHP = 100.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 500.0f))
-		float DefaultAttack = 50.0f;
+	//Multipiler Value
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f))
+		float DefaultAttack = 1.0f;
+
+	//Multipiler Value
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f))
+		float DefaultDefense = 1.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f))
 		float DefaultAttackSpeed = 10.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 100.0f, UIMax = 1000.0f))
 		float DefaultMoveSpeed = 400.0f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f))
-		float DefaultDefense = 10.0f;
-
-//======= Additional Stat , Uneditable ======================
-	UPROPERTY(BlueprintReadWrite)
-		float AbilityHP;
-
-	UPROPERTY(BlueprintReadWrite)
-		float AbilityAttack;
-
-	UPROPERTY(BlueprintReadWrite)
-		float AbilityAttackSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-		float AbilityMoveSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-		float AbilityDefense;
-
-	UPROPERTY(BlueprintReadWrite)
-		float SkillHP;
-	
-	UPROPERTY(BlueprintReadWrite)
-		float SkillAttack;
-
-	UPROPERTY(BlueprintReadWrite)
-		float SkillAttackSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-		float SkillMoveSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-		float SkillDefense;
 };
 
 USTRUCT(BlueprintType)
@@ -127,6 +111,52 @@ public:
 	//PlayerMaxHP´Â 1.0f
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float CurrentHP;
+
+//======= Additional Stat , Uneditable ======================
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct AbilityHP;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct AbilityAttack;
+		
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct AbilityAttackSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct AbilityMoveSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct AbilityDefense;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct SkillHP;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct SkillAttack;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct SkillAttackSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct SkillMoveSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct SkillDefense;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct DebuffHP;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct DebuffAttack;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct DebuffAttackSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct DebuffMoveSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct DebuffDefense;
 
 //====== Skill =========================
 	

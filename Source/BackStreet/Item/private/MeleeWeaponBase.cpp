@@ -166,6 +166,8 @@ void AMeleeWeaponBase::MeleeAttack()
 {
 	FHitResult hitResult;
 	bool bIsMeleeTraceSucceed = false;
+	float totalDamage = WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate
+						* OwnerCharacterRef.Get()->GetCharacterState().TotalAttack;
 
 	TArray<FVector> currTracePositionList = GetCurrentMeleePointList();
 	TArray<AActor*> targetList = CheckMeleeAttackTargetWithSphereTrace(); 
@@ -181,14 +183,13 @@ void AMeleeWeaponBase::MeleeAttack()
 			
 			//Apply Knockback
 			OwnerCharacterRef.Get()->ApplyKnockBack(target, GetWeaponStat().WeaponKnockBackEnergy);
+
 			//Apply Damage
-			UGameplayStatics::ApplyDamage(target, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate * OwnerCharacterRef.Get()->GetCharacterStat().DefaultAttack
-				, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
+			UGameplayStatics::ApplyDamage(target, totalDamage, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
 			MeleeLineTraceQueryParams.AddIgnoredActor(target); 
 
 			//Apply Debuff 
-			Cast<ACharacterBase>(target)->TryAddNewDebuff(WeaponStat.MeleeWeaponStat.DebuffType, OwnerCharacterRef.Get()
-												, WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
+			Cast<ACharacterBase>(target)->TryAddNewDebuff(WeaponStat.MeleeWeaponStat.MeleeDebuffInfo, OwnerCharacterRef.Get());
 
 			//Update Durability
 			UpdateDurabilityState();

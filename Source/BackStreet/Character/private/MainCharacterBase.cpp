@@ -561,9 +561,9 @@ void AMainCharacterBase::DropWeapon()
 	Super::DropWeapon();
 }
 
-bool AMainCharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer, float TotalTime, float Value)
+bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)
 {
-	if (!Super::TryAddNewDebuff(NewDebuffType, Causer, TotalTime, Value)) return false;
+	if (!Super::TryAddNewDebuff(DebuffInfo, Causer)) return false;
 
 	if (DebuffSound && BuffSound)
 	{
@@ -574,9 +574,9 @@ bool AMainCharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AAc
 
 	GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
 	BuffEffectResetTimerHandle.Invalidate();
-	GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
-		DeactivateBuffEffect();
-	}), TotalTime, false);
+	//GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
+	//	DeactivateBuffEffect();
+	//}), DebuffInfo.TotalTime, false);
 
 	return true;
 }

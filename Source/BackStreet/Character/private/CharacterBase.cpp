@@ -89,17 +89,17 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ACharacterBase::InitCharacterState()
 {
-	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.DefaultMoveSpeed;
 	CharacterState.CurrentHP = CharacterStat.DefaultHP;
 	CharacterState.bCanAttack = true;
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
+	UpdateCharacterStat(CharacterStat);
 }
 
-bool ACharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer, float TotalTime, float Value)
+bool ACharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)
 {
 	if(!GamemodeRef.IsValid()) return false;
 	
-	bool result = DebuffManagerComponent->SetDebuffTimer(NewDebuffType, Causer, TotalTime, Value);
+	bool result = DebuffManagerComponent->SetDebuffTimer(DebuffInfo, Causer);
 	return result; 
 }
 
@@ -111,8 +111,8 @@ bool ACharacterBase::GetDebuffIsActive(ECharacterDebuffType DebuffType)
 
 void ACharacterBase::UpdateCharacterStatAndState(FCharacterStatStruct NewStat, FCharacterStateStruct NewState)
 {
-	UpdateCharacterStat(NewStat);
 	UpdateCharacterState(NewState);
+	UpdateCharacterStat(NewStat);
 }
 
 void ACharacterBase::UpdateCharacterStat(FCharacterStatStruct NewStat)
@@ -120,16 +120,16 @@ void ACharacterBase::UpdateCharacterStat(FCharacterStatStruct NewStat)
 	CharacterStat = NewStat;
 
 	//Update Character State's total property 
-	CharacterState.TotalHP = CharacterStat.DefaultHP + CharacterStat.SkillHP
-							+ CharacterStat.AbilityHP;
-	CharacterState.TotalAttack = CharacterStat.DefaultAttack + CharacterStat.SkillAttack
-							+ CharacterStat.AbilityAttack;
-	CharacterState.TotalDefense = CharacterStat.DefaultDefense + CharacterStat.SkillDefense
-							+ CharacterStat.AbilityDefense;
-	CharacterState.TotalMoveSpeed = CharacterStat.DefaultMoveSpeed + CharacterStat.SkillMoveSpeed
-							+ CharacterStat.AbilityMoveSpeed;
-	CharacterState.TotalAttackSpeed = CharacterStat.DefaultAttackSpeed + CharacterStat.SkillAttackSpeed
-							+ CharacterStat.AbilityAttackSpeed;
+	UE_LOG(LogTemp, Warning, TEXT("============ HP ==============="));
+	CharacterState.TotalHP = GetTotalStatValue(CharacterStat.DefaultHP, CharacterState.AbilityHP, CharacterState.SkillHP, CharacterState.DebuffHP);
+	UE_LOG(LogTemp, Warning, TEXT("============ Atk ==============="));
+	CharacterState.TotalAttack = GetTotalStatValue(CharacterStat.DefaultAttack, CharacterState.AbilityAttack, CharacterState.SkillAttack, CharacterState.DebuffAttack);
+	UE_LOG(LogTemp, Warning, TEXT("============ Def ==============="));
+	CharacterState.TotalDefense = GetTotalStatValue(CharacterStat.DefaultDefense, CharacterState.AbilityDefense, CharacterState.SkillDefense, CharacterState.DebuffDefense);
+	UE_LOG(LogTemp, Warning, TEXT("============ MoveSpeed ==============="));
+	CharacterState.TotalMoveSpeed = GetTotalStatValue(CharacterStat.DefaultMoveSpeed, CharacterState.AbilityMoveSpeed, CharacterState.SkillMoveSpeed, CharacterState.DebuffMoveSpeed);
+	UE_LOG(LogTemp, Warning, TEXT("============ AtkSpeed ==============="));
+	CharacterState.TotalAttackSpeed = GetTotalStatValue(CharacterStat.DefaultAttackSpeed, CharacterState.AbilityAttackSpeed, CharacterState.SkillAttackSpeed, CharacterState.DebuffAttackSpeed);
 
 	//Update movement speed
 	GetCharacterMovement()->MaxWalkSpeed = CharacterState.TotalMoveSpeed;
@@ -254,7 +254,6 @@ void ACharacterBase::Die()
 	ClearAllTimerHandle();
 	DebuffManagerComponent->PrintAllDebuff();
 	DebuffManagerComponent->ClearDebuffManager();
-	UE_LOG(LogTemp, Warning, TEXT("==============="));
 	DebuffManagerComponent->PrintAllDebuff();
 
 	//무적 처리를 하고, Movement를 비활성화
@@ -793,6 +792,19 @@ void ACharacterBase::InitDynamicMeshMaterial(UMaterialInterface* NewMaterial)
 	{
 		CurrentDynamicMaterial = GetMesh()->CreateDynamicMaterialInstance(matIdx, NewMaterial);
 	}
+}
+
+float ACharacterBase::GetTotalStatValue(float& DefaultValue, FStatInfoStruct& AbilityInfo, FStatInfoStruct& SkillInfo, FStatInfoStruct& DebuffInfo)
+{
+	float result = DefaultValue 
+			+ DefaultValue * (AbilityInfo.PercentValue + SkillInfo.PercentValue - DebuffInfo.PercentValue)
+			+ (AbilityInfo.FixedValue + SkillInfo.FixedValue - DebuffInfo.FixedValue);
+	
+	UE_LOG(LogTemp, Warning, TEXT("Total -> %.2lf  /  Default : %.2lf / Ability : (%.2lf, %.2lf)  / Skill : (%.2lf, %.2lf) / Debuff : (%.2lf, %.2lf)")
+		, result, DefaultValue, AbilityInfo.PercentValue, AbilityInfo.FixedValue, SkillInfo.PercentValue, SkillInfo.FixedValue
+		, DebuffInfo.PercentValue, DebuffInfo.FixedValue);
+
+	return result; 
 }
 
 bool ACharacterBase::EquipWeapon(AWeaponBase* TargetWeapon)

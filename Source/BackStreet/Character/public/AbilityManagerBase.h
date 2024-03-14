@@ -7,6 +7,19 @@
 #include "AbilityManagerBase.generated.h"
 
 USTRUCT(BlueprintType)
+struct FAbilityValueInfoStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float Variable;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool bIsPercentage;
+};
+
+USTRUCT(BlueprintType)
 struct FAbilityInfoStruct : public FTableRowBase
 {
 public:
@@ -40,10 +53,9 @@ public:
 	//Callback 함수명
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		FName FuncName; 
-
-	//어빌리티에 사용할 변수 (증가량)
+		
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<float> Variable;
+		TArray<FAbilityValueInfoStruct> VariableInfo;	
 
 	//Repetitive 연산을 위한 TimerHandle
 	UPROPERTY()

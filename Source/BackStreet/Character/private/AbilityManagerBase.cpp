@@ -30,12 +30,14 @@ bool UAbilityManagerBase::TryAddNewAbility(int32 AbilityID)
 	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
 	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
 
+	UE_LOG(LogTemp, Warning, TEXT("Ability ID : %d"), AbilityID);
+
 	if (GetIsAbilityActive(AbilityID)) return false;
 	if (ActiveAbilityInfoList.Num() >= MaxAbilityCount) return false;
 	FAbilityInfoStruct newAbilityInfo = GetAbilityInfo(AbilityID);
 	if (newAbilityInfo.bIsRepetitive)
 	{
-		const float variable = newAbilityInfo.Variable.Num() > 0 ? newAbilityInfo.Variable[0] : 1.0f;
+		const float variable = newAbilityInfo.VariableInfo.Num() > 0 ? newAbilityInfo.VariableInfo[0].Variable : 1.0f;
 		newAbilityInfo.TimerDelegate.BindUFunction(OwnerCharacterRef.Get(), newAbilityInfo.FuncName, variable, true, AbilityID);
 		OwnerCharacterRef.Get()->GetWorldTimerManager().SetTimer(newAbilityInfo.TimerHandle, newAbilityInfo.TimerDelegate, 1.0f, true);
 	}
@@ -89,29 +91,70 @@ bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct Target
 	for (int statIdx = 0; statIdx < TargetAbilityInfo.AbilityTypeList.Num(); statIdx++)
 	{
 		ECharacterAbilityType targetType = TargetAbilityInfo.AbilityTypeList[FMath::Min(TargetAbilityInfo.AbilityTypeList.Num() - 1, statIdx)];
-		float targetVariable = TargetAbilityInfo.Variable[FMath::Min(TargetAbilityInfo.Variable.Num() - 1, statIdx)];
+		FAbilityValueInfoStruct targetVariableInfo = TargetAbilityInfo.VariableInfo[FMath::Min(TargetAbilityInfo.VariableInfo.Num() - 1, statIdx)];
+		
+		float targetVariable = targetVariableInfo.Variable;
+		bool bIsPercentage = targetVariableInfo.bIsPercentage;
+
 		if (bIsReset) targetVariable = -1 * targetVariable; //if remove ability, substract the original value
+
+		UE_LOG(LogTemp, Warning, TEXT("Try Update Stat : %d / bIsReset : %d / Variable : %.2lf / Percent : %d")
+				, (int32)targetType, (int32)bIsReset, targetVariable, (int32)bIsPercentage);
 
 		switch (targetType)
 		{
 		case ECharacterAbilityType::E_None:
 		case ECharacterAbilityType::E_AutoHeal:
 			break;
-		case ECharacterAbilityType::E_DefaultHP:
-			characterStat.AbilityHP += targetVariable;
-			characterState.CurrentHP += targetVariable;
+		case ECharacterAbilityType::E_MaxHP:
+			if (bIsPercentage)
+			{
+				characterState.AbilityHP.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityHP.FixedValue += targetVariable;
+			}
 			break;
 		case ECharacterAbilityType::E_AttackUp:
-			characterStat.AbilityAttack += targetVariable;
+			if (bIsPercentage)
+			{
+				characterState.AbilityAttack.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityAttack.FixedValue += targetVariable;
+			}
 			break;
 		case ECharacterAbilityType::E_DefenseUp:
-			characterStat.DefaultDefense += targetVariable;
+			if (bIsPercentage)
+			{
+				characterState.AbilityDefense.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityDefense.FixedValue += targetVariable;
+			}
 			break;
 		case ECharacterAbilityType::E_MoveSpeedUp:
-			characterStat.DefaultMoveSpeed += targetVariable;
+			if (bIsPercentage)
+			{
+				characterState.AbilityMoveSpeed.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityMoveSpeed.FixedValue += targetVariable;
+			}
 			break;
 		case ECharacterAbilityType::E_AtkSpeedUp:
-			characterStat.DefaultAttackSpeed += targetVariable;
+			if (bIsPercentage)
+			{
+				characterState.AbilityAttackSpeed.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityAttackSpeed.FixedValue += targetVariable;
+			}
 			break;
 		case ECharacterAbilityType::E_MultipleShot:
 			characterStat.ProjectileCountPerAttack += targetVariable;
@@ -158,6 +201,7 @@ bool UAbilityManagerBase::InitAbilityInfoListFromTable(const UDataTable* Ability
 		FAbilityInfoStruct* abilityInfo = AbilityInfoTable->FindRow<FAbilityInfoStruct>(rowName, "");
 		if (abilityInfo != nullptr)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("InitAbility %d / %.2lf /%d"), abilityInfo->AbilityId, abilityInfo->VariableInfo[0].Variable, (int32)abilityInfo->VariableInfo[0].bIsPercentage)
 			AbilityInfoList.Add(*abilityInfo);
 		}
 	}

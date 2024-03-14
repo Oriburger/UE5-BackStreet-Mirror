@@ -3,7 +3,6 @@
 #include "Engine/DataTable.h"
 #include "../../Character/public/CharacterInfoEnum.h"
 #include "../../SkillSystem/public/SkillInfoStruct.h"
-#include "ProjectileInfoStruct.h"
 #include "WeaponInfoStruct.generated.h"
 
 UENUM(BlueprintType)
@@ -26,6 +25,25 @@ enum class EWeaponType : uint8
 };
 
 USTRUCT(BlueprintType)
+struct FDebuffInfoStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		ECharacterDebuffType Type;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float TotalTime;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float Variable;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool bIsPercentage;
+};
+
+USTRUCT(BlueprintType)
 struct FMeleeWeaponStatStruct : public FTableRowBase
 {
 public:
@@ -35,15 +53,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float WeaponMeleeDamage = 0.2f;
 
-	//무기는 각 하나의 디버프만 가짐 (임시)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		ECharacterDebuffType DebuffType;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float DebuffTotalTime;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float DebuffVariable;
+		FDebuffInfoStruct MeleeDebuffInfo;
 };
 
 USTRUCT(BlueprintType)
