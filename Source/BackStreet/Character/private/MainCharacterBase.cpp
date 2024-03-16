@@ -225,12 +225,9 @@ void AMainCharacterBase::MoveRight(float Value)
 }
 
 void AMainCharacterBase::Roll()
-{
-	UE_LOG(LogTemp, Log, TEXT("Roll"));
-
+{	
 	if (!GetIsActionActive(ECharacterActionType::E_Idle)) return;
-	UE_LOG(LogTemp, Log, TEXT("Roll if"));
-
+	
 	FVector newDirection(0.0f);
 	FRotator newRotation = FRotator();
 	newDirection.X = GetInputAxisValue(FName("MoveForward"));
@@ -266,7 +263,7 @@ void AMainCharacterBase::Roll()
 	if (AnimAssetData.RollAnimMontageList.Num() > 0
 		&& IsValid(AnimAssetData.RollAnimMontageList[0]))
 	{
-		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.CharacterMoveSpeed / 500.0f));
+		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.DefaultMoveSpeed / 500.0f));
 	}
 
 	if (OnRoll.IsBound())
@@ -395,7 +392,6 @@ void AMainCharacterBase::TryAttack()
 void AMainCharacterBase::TrySkill()
 {
 	check(GetCurrentWeaponRef() != nullptr);
-	UE_LOG(LogTemp, Log, TEXT("1"));
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle
 		|| !GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.IsSkillAvailable ) return;
@@ -575,9 +571,9 @@ void AMainCharacterBase::DropWeapon()
 	Super::DropWeapon();
 }
 
-bool AMainCharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer, float TotalTime, float Value)
+bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)
 {
-	if (!Super::TryAddNewDebuff(NewDebuffType, Causer, TotalTime, Value)) return false;
+	if (!Super::TryAddNewDebuff(DebuffInfo, Causer)) return false;
 
 	if (AssetManagerBaseRef.IsValid())
 	{
@@ -586,11 +582,11 @@ bool AMainCharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AAc
 	//230621 임시 제거
 	//ActivateBuffNiagara(bIsDebuff, BuffDebuffType);
 
-	GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
-	BuffEffectResetTimerHandle.Invalidate();
-	GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
-		DeactivateBuffEffect();
-	}), TotalTime, false);
+	//GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
+	//BuffEffectResetTimerHandle.Invalidate();
+	//GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
+	//	DeactivateBuffEffect();
+	//}), DebuffInfo.TotalTime, false);
 
 	return true;
 }

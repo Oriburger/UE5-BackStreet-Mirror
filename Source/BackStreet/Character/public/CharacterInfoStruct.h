@@ -17,6 +17,19 @@ enum class EEmotionType : uint8
 };
 
 USTRUCT(BlueprintType)
+struct FStatInfoStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadOnly)
+		float PercentValue;
+
+	UPROPERTY(BlueprintReadOnly)
+		float FixedValue;
+};
+
+USTRUCT(BlueprintType)
 struct FCharacterStatStruct : public FTableRowBase
 {
 public:
@@ -33,25 +46,27 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		bool bInfinite = false;
 
-	//PlayerMaxHP는 1.0f
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.5f, UIMax = 10.0f))
-		float CharacterMaxHP = 1.0f;
+	//Projectile Count Per Attack
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1, UIMax = 1))
+		int32 ProjectileCountPerAttack = 1;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.1f, UIMax = 10.0f))
-		float CharacterAtkMultiplier = 1.0f;
+//======= Default Stat ======================
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1.0f, UIMax = 1000.0f))
+		float DefaultHP = 100.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.2f, UIMax = 2.0f))
-		float CharacterAtkSpeed = 1.0f;
+	//Multipiler Value
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f))
+		float DefaultAttack = 1.0f;
+
+	//Multipiler Value
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f))
+		float DefaultDefense = 1.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f))
+		float DefaultAttackSpeed = 10.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 100.0f, UIMax = 1000.0f))
-		float CharacterMoveSpeed = 400.0f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 2.0f))
-		float CharacterDefense = 0.0f;
-
-	//한번에 발사할 발사체 개수
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1, UIMax = 1))
-		int32 MaxProjectileCount = 1;
+		float DefaultMoveSpeed = 400.0f;
 };
 
 USTRUCT(BlueprintType)
@@ -60,6 +75,7 @@ struct FCharacterStateStruct
 public:
 	GENERATED_USTRUCT_BODY()
 
+//====== Character State ===============
 	//캐릭터의 디버프 상태 (Bit-Field로 표현)
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		int32 CharacterDebuffState = (1 << 10);
@@ -76,11 +92,75 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		ECharacterActionType CharacterActionState;
 
+//====== Current Stat ===================
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float TotalHP;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float TotalAttack;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float TotalDefense;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float TotalMoveSpeed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float TotalAttackSpeed;
+
 	//PlayerMaxHP는 1.0f
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float CharacterCurrHP;
+		float CurrentHP;
 
-	//Player Combo게이지
+//======= Additional Stat , Uneditable ======================
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct AbilityHP;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct AbilityAttack;
+		
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct AbilityAttackSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct AbilityMoveSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct AbilityDefense;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct SkillHP;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct SkillAttack;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct SkillAttackSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct SkillMoveSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct SkillDefense;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct DebuffHP;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct DebuffAttack;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct DebuffAttackSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct DebuffMoveSpeed;
+
+	UPROPERTY(BlueprintReadWrite)
+		FStatInfoStruct DebuffDefense;
+
+//====== Skill =========================
+	
+	//Player Skill Gauge
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float CharacterCurrSkillGauge;
 };

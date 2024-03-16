@@ -165,7 +165,7 @@ public:
 
 public: 
 	//디버프 상태를 지정
-	virtual	bool TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer = nullptr, float TotalTime = 0.0f, float Value = 0.0f);
+	virtual	bool TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer);
 
 	UFUNCTION(BlueprintCallable)
 		bool TryAddNewAbility(int32 NewAbilityID);

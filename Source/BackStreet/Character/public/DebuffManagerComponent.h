@@ -3,11 +3,10 @@
 #pragma once
 
 #include "../../Global/public/BackStreet.h"
-#include "../public/CharacterBase.h"
 #include "Components/ActorComponent.h"
 #include "DebuffManagerComponent.generated.h"
 
-DECLARE_DELEGATE_OneParam(FDeleDebuffClear, ACharacterBase*);
+DECLARE_DELEGATE_OneParam(FDeleDebuffClear, class ACharacterBase*);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API UDebuffManagerComponent : public UActorComponent
@@ -26,7 +25,7 @@ protected:
 public:
 	//Set the debuff timer to owner
 	UFUNCTION(BlueprintCallable)
-		bool SetDebuffTimer(ECharacterDebuffType DebuffType, AActor* Causer, float TotalTime = 1.0f, float Variable = 0.0f);
+		bool SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActor* Causer);
 
 	//clear all the debuff timer
 	UFUNCTION(BlueprintCallable)
@@ -51,6 +50,10 @@ private:
 	UFUNCTION()
 		void InitDebuffManager();
 
+	//apply dot damage
+	UFUNCTION()
+		void ApplyDotDamage(ECharacterDebuffType DebuffType, float DamageAmount, AActor* Causer);
+
 	//get the reference of debuff timer handle
 	UFUNCTION()
 		FTimerHandle& GetResetTimerHandle(ECharacterDebuffType DebuffType);
@@ -61,11 +64,11 @@ private:
 
 	//get the reset value of debuff
 	UFUNCTION()
-		float GetDebuffResetValue(ECharacterDebuffType DebuffType);
+		FDebuffInfoStruct GetDebuffResetValue(ECharacterDebuffType DebuffType);
 
 	//reset te state of the debuff
 	UFUNCTION()
-		void ResetStatDebuffState(ECharacterDebuffType DebuffType, float ResetVal);
+		void ResetStatDebuffState(ECharacterDebuffType DebuffType, FDebuffInfoStruct DebuffInfo);
 
 //====== Property ===========================
 private:
@@ -79,7 +82,7 @@ private:
 	UPROPERTY()
 		TMap<ECharacterDebuffType, FTimerHandle> DotDamageTimerMap;
 
-	//Resetvalue map for resetting debuff
+	//Reset value map for resetting debuff
 	UPROPERTY()
-		TMap<ECharacterDebuffType, float> ResetValueInfoMap;
+		TMap<ECharacterDebuffType, FDebuffInfoStruct> ResetValueInfoMap;
 };

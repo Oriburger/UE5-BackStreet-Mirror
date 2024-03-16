@@ -143,6 +143,8 @@ void AMeleeWeaponBase::MeleeAttack()
 	FHitResult hitResult;
 	bool bIsMeleeTraceSucceed = false;
 
+	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
+
 	TArray<FVector> currTracePositionList = GetCurrentMeleePointList();
 	TArray<AActor*> targetList = CheckMeleeAttackTargetWithSphereTrace(); 
 	MeleePrevTracePointList = currTracePositionList;
@@ -152,19 +154,21 @@ void AMeleeWeaponBase::MeleeAttack()
 		//if target is valid, apply damage
 		if (IsValid(target))
 		{
+			FCharacterStateStruct targetState = Cast<ACharacterBase>(target)->GetCharacterState();
+			float totalDamage = CalculateTotalDamage(targetState);
+
 			//Activate Melee Hit Effect
 			ActivateMeleeHitEffect(target->GetActorLocation());
 			
 			//Apply Knockback
 			OwnerCharacterRef.Get()->ApplyKnockBack(target, GetWeaponStat().WeaponKnockBackEnergy);
+
 			//Apply Damage
-			UGameplayStatics::ApplyDamage(target, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate * OwnerCharacterRef.Get()->GetCharacterStat().CharacterAtkMultiplier
-				, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
+			UGameplayStatics::ApplyDamage(target, totalDamage, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
 			MeleeLineTraceQueryParams.AddIgnoredActor(target); 
 
 			//Apply Debuff 
-			Cast<ACharacterBase>(target)->TryAddNewDebuff(WeaponStat.MeleeWeaponStat.DebuffType, OwnerCharacterRef.Get()
-												, WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
+			Cast<ACharacterBase>(target)->TryAddNewDebuff(WeaponStat.DebuffInfo, OwnerCharacterRef.Get());
 
 			//Update Durability
 			UpdateDurabilityState();

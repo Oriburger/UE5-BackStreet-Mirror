@@ -7,6 +7,19 @@
 #include "AbilityManagerBase.generated.h"
 
 USTRUCT(BlueprintType)
+struct FAbilityValueInfoStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float Variable;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool bIsPercentage;
+};
+
+USTRUCT(BlueprintType)
 struct FAbilityInfoStruct : public FTableRowBase
 {
 public:
@@ -16,9 +29,10 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0, UIMax = 10))
 		int32 AbilityId;
 
-	//어빌리티의 Type
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0, UIMax = 10))
-		ECharacterAbilityType AbilityType;
+	//Ability Type (Multiple Type / this value is for updating stat)
+	//ex)  {E_AttackUp, E_DefenseUp}  ->  update character's attack stat var and def stat
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TArray<ECharacterAbilityType> AbilityTypeList;
 
 	//어빌리티명
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -39,14 +53,9 @@ public:
 	//Callback 함수명
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		FName FuncName; 
-
-	//반영할 Stat의 이름
+		
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<FName> TargetStatName;
-
-	//어빌리티에 사용할 변수 (증가량)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<float> Variable;
+		TArray<FAbilityValueInfoStruct> VariableInfo;	
 
 	//Repetitive 연산을 위한 TimerHandle
 	UPROPERTY()

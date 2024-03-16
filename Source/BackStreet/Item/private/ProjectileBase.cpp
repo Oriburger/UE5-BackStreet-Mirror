@@ -161,8 +161,7 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		if (OtherActor == OwnerCharacterRef.Get() || OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
 
 		//디버프가 있다면?
-		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(ProjectileStat.DebuffType, OwnerCharacterRef.Get()
-															, ProjectileStat.DebuffTotalTime, ProjectileStat.DebuffVariable);
+		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(Cast<AWeaponBase>(GetOwner())->GetWeaponStat().DebuffInfo, OwnerCharacterRef.Get());
 
 		//폭발하는 발사체라면?
 		if (ProjectileStat.bIsExplosive)
@@ -172,7 +171,7 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		}
 		else
 		{
-			const float totalDamage = ProjectileStat.ProjectileDamage * OwnerCharacterRef.Get()->GetCharacterStat().CharacterAtkMultiplier;
+			const float totalDamage = Cast<AWeaponBase>(GetOwner())->CalculateTotalDamage(Cast<ACharacterBase>(OtherActor)->GetCharacterState());
 			UGameplayStatics::ApplyDamage(OtherActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
 			DestroyWithEffect(SweepResult.Location);
 		}

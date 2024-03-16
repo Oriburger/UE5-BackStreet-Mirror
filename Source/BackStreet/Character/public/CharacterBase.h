@@ -63,7 +63,7 @@ public:
 
 	//플레이어의 ActionState를 Idle로 전환한다.
 	UFUNCTION(BlueprintCallable)
-			void ResetActionState(bool bForceReset = false);
+		void ResetActionState(bool bForceReset = false);
 
 	//Set Player's Action State
 	UFUNCTION(BlueprintCallable)
@@ -71,11 +71,11 @@ public:
 
 	//플레이어가 체력을 회복함 (일회성)
 	UFUNCTION()
-		void TakeHeal(float HealAmountRate, bool bIsTimerEvent = false, uint8 BuffDebuffType = 0);
+		void TakeHeal(float HealAmount, bool bIsTimerEvent = false, uint8 BuffDebuffType = 0);
 
 	//디버프 데미지를 입힘 (일회성)
 	UFUNCTION(BlueprintCallable)
-		float TakeDebuffDamage(float DamageAmount, ECharacterDebuffType DebuffType, AActor* Causer);
+		float TakeDebuffDamage(ECharacterDebuffType DebuffType, float DamageAmount, AActor* Causer);
 
 	UFUNCTION(BlueprintCallable)
 		void ApplyKnockBack(AActor* Target, float Strength);
@@ -92,11 +92,15 @@ public:
 
 	//캐릭터의 디버프 정보를 업데이트
 	UFUNCTION(BlueprintCallable)
-		virtual	bool TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer = nullptr, float TotalTime = 0.0f, float Value = 0.0f);
+		virtual	bool TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer);
 
 	//디버프가 활성화 되어있는지 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetDebuffIsActive(ECharacterDebuffType DebuffType);
+
+	//Update Character's stat and state
+	UFUNCTION(BlueprintCallable)
+		void UpdateCharacterStatAndState(FCharacterStatStruct NewStat, FCharacterStateStruct NewState);
 
 	//캐릭터의 스탯을 업데이트
 	UFUNCTION(BlueprintCallable)
@@ -113,6 +117,11 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FCharacterStateStruct GetCharacterState() { return CharacterState; }
+
+private:
+	//Calculate Total Stat Value
+	UFUNCTION()
+		float GetTotalStatValue(float& DefaultValue, FStatInfoStruct& AbilityInfo, FStatInfoStruct& SkillInfo, FStatInfoStruct& DebuffInfo);
 
 // ------ 무기 관련 -------------------------------------------
 public:
