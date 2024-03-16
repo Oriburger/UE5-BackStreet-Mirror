@@ -63,7 +63,7 @@ public:
 
 	//플레이어의 ActionState를 Idle로 전환한다.
 	UFUNCTION(BlueprintCallable)
-			void ResetActionState(bool bForceReset = false);
+		void ResetActionState(bool bForceReset = false);
 
 	//Set Player's Action State
 	UFUNCTION(BlueprintCallable)
@@ -75,7 +75,7 @@ public:
 
 	//디버프 데미지를 입힘 (일회성)
 	UFUNCTION(BlueprintCallable)
-		float TakeDebuffDamage(float DamageAmount, ECharacterDebuffType DebuffType, AActor* Causer);
+		float TakeDebuffDamage(ECharacterDebuffType DebuffType, float DamageAmount, AActor* Causer);
 
 	UFUNCTION(BlueprintCallable)
 		void ApplyKnockBack(AActor* Target, float Strength);
@@ -92,11 +92,15 @@ public:
 
 	//캐릭터의 디버프 정보를 업데이트
 	UFUNCTION(BlueprintCallable)
-		virtual	bool TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer = nullptr, float TotalTime = 0.0f, float Value = 0.0f);
+		virtual	bool TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer);
 
 	//디버프가 활성화 되어있는지 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetDebuffIsActive(ECharacterDebuffType DebuffType);
+
+	//Update Character's stat and state
+	UFUNCTION(BlueprintCallable)
+		void UpdateCharacterStatAndState(FCharacterStatStruct NewStat, FCharacterStateStruct NewState);
 
 	//캐릭터의 스탯을 업데이트
 	UFUNCTION(BlueprintCallable)
@@ -113,6 +117,11 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FCharacterStateStruct GetCharacterState() { return CharacterState; }
+
+private:
+	//Calculate Total Stat Value
+	UFUNCTION()
+		float GetTotalStatValue(float& DefaultValue, FStatInfoStruct& AbilityInfo, FStatInfoStruct& SkillInfo, FStatInfoStruct& DebuffInfo);
 
 // ------ 무기 관련 -------------------------------------------
 public:
@@ -176,6 +185,11 @@ private:
 	//무기 액터를 스폰
 	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
 
+// ---- Skill --------------------
+private:
+	UFUNCTION()
+		float GetSkillAnimPlayRate(uint8 SkillAnimIndex);
+
 // ---- Asset -------------------
 public:
 	// 외부에서 Init하기위해 Call
@@ -189,8 +203,7 @@ protected:
 	UFUNCTION()
 		bool InitAnimAsset();
 
-	UFUNCTION()
-		void InitSoundAsset();
+	virtual void InitSoundAsset();
 
 	UFUNCTION()
 		void InitVFXAsset();
@@ -209,10 +222,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
 		UDataTable* AssetDataInfoTable;
 
+public:
+	UPROPERTY(BlueprintReadOnly)
+		TArray<USoundCue*> FootStepSoundList;
+
 protected:
 	//애니메이션, VFX, 사운드큐 등 저장
 	UPROPERTY()
 		struct FCharacterAnimAssetInfoStruct AnimAssetData;
+
+	UPROPERTY()
+		TMap<FName, struct FSoundArrayContainer> SoundAssetMap;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 		class UAnimMontage* PreChaseAnimMontage;
@@ -230,7 +250,7 @@ protected:
 		class USoundCue* DebuffSound;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-		USoundCue* HitImpactSound;
+		class USoundCue* HitImpactSound;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		TArray<class UNiagaraSystem*> DebuffNiagaraEffectList;
@@ -262,7 +282,7 @@ protected:
 		FCharacterStateStruct CharacterState;
 
 	//Gamemode 약 참조
-	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
 // ----- 타이머 관련 ---------------------------------
 protected:

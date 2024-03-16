@@ -36,6 +36,7 @@ void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
 }
 
 void AWeaponBase::InitWeapon(int32 NewWeaponID)
@@ -114,12 +115,6 @@ void AWeaponBase::InitWeaponAsset()
 
 	if (WeaponAssetInfo.DestroyEffectParticle.IsValid())
 		DestroyEffectParticle = WeaponAssetInfo.DestroyEffectParticle.Get();
-
-	if (WeaponAssetInfo.AttackSound.IsValid())
-		AttackSound = WeaponAssetInfo.AttackSound.Get();
-
-	if (WeaponAssetInfo.AttackFailSound.IsValid())
-		AttackFailSound = WeaponAssetInfo.AttackFailSound.Get();
 }
 
 FWeaponStatStruct AWeaponBase::GetWeaponStatInfoWithID(int32 TargetWeaponID)
@@ -137,6 +132,8 @@ FWeaponStatStruct AWeaponBase::GetWeaponStatInfoWithID(int32 TargetWeaponID)
 
 FWeaponAssetInfoStruct AWeaponBase::GetWeaponAssetInfoWithID(int32 TargetWeaponID)
 {
+	WeaponSoundAssetMap = AssetManagerBaseRef.Get()->GetSoundAssetInfo(ESoundAssetType::E_Weapon, WeaponID);
+
 	if (WeaponAssetInfoTable != nullptr && TargetWeaponID != 0)
 	{
 		FWeaponAssetInfoStruct* newInfo = nullptr;
@@ -165,6 +162,15 @@ void AWeaponBase::Attack() {}
 
 void AWeaponBase::StopAttack() { }
 
+float AWeaponBase::CalculateTotalDamage(FCharacterStateStruct TargetState)
+{
+	if (!OwnerCharacterRef.IsValid()) return 0.0f;
+	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
+	return WeaponStat.WeaponDamage * (1 + FMath::Max(-1, ownerState.TotalAttack - TargetState.TotalDefense))
+			* (1 + WeaponStat.bCriticalApply * WeaponStat.CriticalDamageRate)
+			* (!WeaponStat.bFixDamageApply ? 0.0f : WeaponStat.FixedDamageAmount);
+}
+
 void AWeaponBase::UpdateComboState()
 {
 	WeaponState.ComboCount = (WeaponState.ComboCount + 1); 
@@ -186,10 +192,13 @@ void AWeaponBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
 	SetOwner(OwnerCharacterRef.Get());
 }
 
-void AWeaponBase::PlayEffectSound(USoundCue* EffectSound)
+void AWeaponBase::PlaySingleSound(USoundCue* EffectSound, FName SoundName)
 {
-	if (EffectSound == nullptr || !OwnerCharacterRef.IsValid() || !OwnerCharacterRef.Get()->ActorHasTag("Player")) return;
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), EffectSound, GetActorLocation());
+	if(!WeaponSoundAssetMap.Contains(SoundName)) return;
+	TArray<float> volumeList = WeaponSoundAssetMap.Find(SoundName)->SoundVolumeList;
+	if (!IsValid(EffectSound) || !volumeList.IsValidIndex(0)) return;
+	
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), EffectSound, GetActorLocation(), volumeList[0]);
 }
 
 void AWeaponBase::ClearAllTimerHandle()

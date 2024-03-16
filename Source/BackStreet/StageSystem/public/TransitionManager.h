@@ -47,6 +47,7 @@ public:
 		UFUNCTION()
 			void SetSpawnPoint(AStageData* Target);
 
+		// Stage Level Unload가 끝내면 실행되어, 새로 생성된 스테이지의 Gate들을 초기화함
 		UFUNCTION()
 			void SetGate();
 
@@ -56,6 +57,7 @@ public:
 		UFUNCTION()
 			void TeleportCharacter();
 
+		// Stage Level Load가 완료되며 실행되어, 스테이지 방문여부에 따라 스테이지 세팅을 진행하며 이전 Stage Level의 UnLoadStage 호출한다.
 		UFUNCTION()
 			void CompleteLoad();
 

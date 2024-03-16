@@ -89,8 +89,22 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<int32> SkillIDList;
 	
+	//Depending on the SkillGrade, the animation rate varies
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<float> SkillAnimPlayRateList;
+		bool IsAnimPlayRateSyncWithGrade;
+
+	//when IsAnimPlayRateSyncWithGrade == false, CommonSkillAnimRateList gonna be AnimPlayRateList;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<float> CommonSkillAnimRateList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<float> RareSkillAnimRateList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<float> LegendSkillAnimRateList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<float> MythicSkillAnimRateList;
 
 	//Rate value(Criterion is TotalAnimPlayTime) which is used to indicate the interval between each skill
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

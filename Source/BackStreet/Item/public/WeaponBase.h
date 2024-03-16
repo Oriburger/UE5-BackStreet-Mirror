@@ -107,6 +107,10 @@ public:
 	UFUNCTION()
 		EWeaponType GetWeaponType();
 
+	//Calculate total damage to target character
+	UFUNCTION()
+		float CalculateTotalDamage(FCharacterStateStruct TargetState);
+
 protected:
 	//Weapon의 종합 Stat
 	UPROPERTY(EditInstanceOnly, Category = "Gameplay|Stat")
@@ -140,17 +144,13 @@ public:
 		void SetOwnerCharacter(class ACharacterBase* NewOwnerCharacterRef);
 
 protected:
-	UFUNCTION()
-		void PlayEffectSound(class USoundCue* EffectSound);
+		virtual void PlaySingleSound(USoundCue* EffectSound, FName SoundName);
+	
+	UPROPERTY()
+		TMap<FName, struct FSoundArrayContainer> WeaponSoundAssetMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UParticleSystem* DestroyEffectParticle;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* AttackSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* AttackFailSound;
 
 protected:
 	//모든 타이머를 해제
@@ -166,4 +166,6 @@ protected:
 
 	//소유자 캐릭터 약 참조
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
+
+	TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
 };

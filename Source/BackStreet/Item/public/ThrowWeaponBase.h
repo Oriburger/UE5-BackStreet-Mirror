@@ -76,7 +76,6 @@ private:
 
 	//마지막으로 던진 발사체의 스탯 정보
 		FProjectileStatStruct ProjectileStat;
-
 		
 //------ Projectile Path Spline -------------------
 public:

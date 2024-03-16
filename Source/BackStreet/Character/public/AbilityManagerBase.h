@@ -7,14 +7,32 @@
 #include "AbilityManagerBase.generated.h"
 
 USTRUCT(BlueprintType)
+struct FAbilityValueInfoStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float Variable;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool bIsPercentage;
+};
+
+USTRUCT(BlueprintType)
 struct FAbilityInfoStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
 
-	//어빌리티의 ID, ECharacterAbilityType와 동일한 값을 지님
+	//어빌리티의 ID
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0, UIMax = 10))
-		uint8 AbilityId;
+		int32 AbilityId;
+
+	//Ability Type (Multiple Type / this value is for updating stat)
+	//ex)  {E_AttackUp, E_DefenseUp}  ->  update character's attack stat var and def stat
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TArray<ECharacterAbilityType> AbilityTypeList;
 
 	//어빌리티명
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -35,14 +53,9 @@ public:
 	//Callback 함수명
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		FName FuncName; 
-
-	//반영할 Stat의 이름
+		
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<FName> TargetStatName;
-
-	//어빌리티에 사용할 변수 (증가량)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<float> Variable;
+		TArray<FAbilityValueInfoStruct> VariableInfo;	
 
 	//Repetitive 연산을 위한 TimerHandle
 	UPROPERTY()
@@ -55,9 +68,7 @@ public:
 		return AbilityId == other.AbilityId;
 	}
 };
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityID, uint8, AbilityID);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityInfo, FAbilityInfoStruct, AbilityInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityInfoList, const TArray<FAbilityInfoStruct>&, AbilityInfoList);
 
 UCLASS()
 class BACKSTREET_API UAbilityManagerBase : public UObject
@@ -67,12 +78,9 @@ class BACKSTREET_API UAbilityManagerBase : public UObject
 public:
 	// Sets default values for this character's properties
 	UAbilityManagerBase();
-
+	
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateAbilityInfo AbilityAddDelegate;
-
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateAbilityID AbilityRemoveDelegate;
+		FDelegateAbilityInfoList AbilityUpdateDelegate;
 
 //--------- Function ----------------------------------------------------
 public:
@@ -90,11 +98,11 @@ public:
 
 	//특정 어빌리티를 추가 (실패 시 false)
 	UFUNCTION()
-		bool TryAddNewAbility(const ECharacterAbilityType NewAbilityType);
+		bool TryAddNewAbility(int32 AbilityID);
 
 	//소유하고 있는 어빌리티를 제거 (실패 시 false)
 	UFUNCTION()
-		bool TryRemoveAbility(ECharacterAbilityType TargetAbilityType);
+		bool TryRemoveAbility(int32 AbilityID);
 
 	//모든 어빌리티 초기화
 	UFUNCTION()
@@ -102,7 +110,7 @@ public:
 
 	//해당 Ability가 Active한지 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType) const;
+		bool GetIsAbilityActive(int32 AbilityID) const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetMaxAbilityCount() const;
@@ -113,7 +121,7 @@ protected:
 
 	//배열로부터 AbilityInfo를 불러들임
 	UFUNCTION()
-		FAbilityInfoStruct GetAbilityInfo(const ECharacterAbilityType AbilityType);
+		FAbilityInfoStruct GetAbilityInfo(int32 AbilityID);
 
 private:
 	UFUNCTION()

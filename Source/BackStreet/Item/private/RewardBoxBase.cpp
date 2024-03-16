@@ -72,13 +72,12 @@ void ARewardBoxBase::AddAbilityToPlayer(AMainCharacterBase* PlayerCharacterRef)
 {
 	if (!IsValid(PlayerCharacterRef)) return;
 
-	const bool result = PlayerCharacterRef->TryAddNewAbility(AbilityType);
+	const bool result = PlayerCharacterRef->TryAddNewAbility(AbilityID);
 	if (result)
 	{
-		if (DestroyEffectParticle && DestroyEffectSound)
+		if (DestroyEffectParticle)
 		{
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyEffectParticle, GetActorLocation());
-			UGameplayStatics::PlaySoundAtLocation(GetWorld(), DestroyEffectSound, GetActorLocation());
 		}
 		if (OnAddAbility.IsBound())
 			OnAddAbility.Broadcast();
@@ -95,5 +94,5 @@ void ARewardBoxBase::SelectRandomAbilityIdx()
 {
 	//임시코드!!!!!!! 반드시 변경 필요 - @ljh
 	UE_LOG(LogTemp, Log, TEXT("Call ARewardBoxBase::SelectRandomAbilityIdx()"));
-	AbilityType = (ECharacterAbilityType)((uint8)FMath::RandRange(1.0f, 16.0f));
+	AbilityID = ((int32)FMath::RandRange(1.0f, 16.0f));
 }

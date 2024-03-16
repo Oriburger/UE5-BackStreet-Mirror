@@ -21,6 +21,10 @@ ABackStreetGameModeBase::ABackStreetGameModeBase()
 void ABackStreetGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//----- Asset Manager 초기화 -------
+	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
+	AssetManagerBase->InitAssetManager(this);
 }
 
 void ABackStreetGameModeBase::InitializeGame()
@@ -38,8 +42,7 @@ void ABackStreetGameModeBase::InitializeGame()
 
 		//------ 델리게이트 바인딩 ---------------
 		FinishChapterDelegate.AddDynamic(this, &ABackStreetGameModeBase::FinishChapter);
-		FadeOutDelegate.AddDynamic(this, &ABackStreetGameModeBase::FadeOut);
-
+		UIAnimationDelegate.AddDynamic(this, &ABackStreetGameModeBase::PlayUIAnimation);
 
 		//------ Ref 멤버 초기화  ---------------
 		PlayerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));

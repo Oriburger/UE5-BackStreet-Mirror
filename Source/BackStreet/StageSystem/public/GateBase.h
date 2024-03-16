@@ -37,41 +37,55 @@ public:
 
 //----------- 핵심 로직 ---------------
 public:
-
+	// Initialize Gate
 	UFUNCTION()
 		void InitGate();
-
+	// Bind Delegate Related to Gate
+	UFUNCTION()
+		void BindGateDelegate();
+	// Add Gate to Stage Gate Reference List
 	UFUNCTION(BlueprintCallable)
 		void AddGate();
-
+	// Check Gate Is Active and RequsetMoveStage
 	UFUNCTION(BlueprintCallable)
 		void EnterGate();
-
+	// BroadCast MoveRequest to TransitionManager
 	UFUNCTION()
 		void RequestMoveStage();
-
+	// Activate Gate
 	UFUNCTION(BlueprintCallable)
-		void ActivateChapterGate();
-
-	UFUNCTION(BlueprintCallable)
-		void ActivateNormalGate();
-
+		void ActivateGate();
+	// Deactivate Gate
 	UFUNCTION(BlueprintCallable)
 		void DeactivateGate();
-	
+	// Activate Chapter Gate (Guarantee ChpaterClear)
 	UFUNCTION(BlueprintCallable)
-		void CheckHaveToActive();
+		void ActivateChapterGateAfterCheck();
+	// Set ActivateChpaterGateMaterial
+	UFUNCTION()
+		void ActivateChapterGateMaterial();
+	// Set ActivateNormalGateMaterial
+	UFUNCTION()
+		void ActivateNormalGateMaterial();
+	// Set DeactivateGateMaterial
+	UFUNCTION()
+		void DeactivateGateMaterial();
+	// Check If Gate Is Needed
+	UFUNCTION(BlueprintCallable)
+		void CheckHaveToNeed();
+	// Deactivate Gate If stage Type is TimeLimitWave
+	UFUNCTION(BlueprintCallable)
+		void SetTimeLimitWaveGate();
 
-
+private:
+	UPROPERTY()
+		bool bIsGateActive;
 
 //-------- 그 외-----------------------
 public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
 		TArray<class UMaterialInterface*> GateMaterialList;
-
-	UPROPERTY(VisibleAnywhere)
-		FTimerHandle FadeOutEffectHandle;
 
 private:
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;

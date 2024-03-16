@@ -52,8 +52,7 @@ void AEnemyCharacterBase::BeginPlay()
 	SpawnDefaultController();
 
 	InitEnemyCharacter(CharacterID);
-	InitFloatingHpWidget();
-	
+
 	SetDefaultWeapon();
 	InitDynamicMeshMaterial(GetMesh()->GetMaterial(0));
 }
@@ -63,6 +62,8 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	// Read from dataTable
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
+	AssetInfo.CharacterID = CharacterID = NewCharacterID;
+	
 
 	if (newStat != nullptr)
 	{
@@ -71,9 +72,14 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		//Set CharacterStat with setting default additional stat bInfinite (infinite use of ammo)
 		UpdateCharacterStat(EnemyStat.CharacterStat);
 		CharacterStat.bInfinite = true;
-
-		//Set default weapon
+		CharacterState.CurrentHP = EnemyStat.CharacterStat.DefaultHP;
 		SetDefaultWeapon();
+	}
+
+	InitFloatingHpWidget();
+	if (NewCharacterID == 1200)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Floating Widget 초기화"));
 	}
 }
 
@@ -108,12 +114,12 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Hit)
 	{
-		GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, this, &AEnemyCharacterBase::ResetActionStateForTimer, 1.0f, false, 0.5f);
+		GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, this, &AEnemyCharacterBase::ResetActionStateForTimer, 1.0f, false, CharacterID == 1200 ? 0.1f : 0.5f);
 	}
 
 	//Stop AI Logic And Set Reactivation event
 	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(Controller);
-	if (IsValid(aiControllerRef))
+	if (IsValid(aiControllerRef) && CharacterID != 1200)
 	{
 		aiControllerRef->DeactivateAI();
 		GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
@@ -155,10 +161,16 @@ void AEnemyCharacterBase::Attack()
 
 	float attackSpeed = 0.5f;
 	if(IsValid(GetCurrentWeaponRef()))
-		attackSpeed = FMath::Min(1.5f, CharacterStat.CharacterAtkSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
+		attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
 
 	GetWorldTimerManager().SetTimer(AtkIntervalHandle, this, &ACharacterBase::ResetAtkIntervalTimer
 		, 1.0f, false, FMath::Max(0.0f, 1.5f - attackSpeed));
+
+	//Temporary code for indieGo 
+	if (CharacterID == 1200)
+	{
+		BossNearAttack();
+	}
 }
 
 void AEnemyCharacterBase::StopAttack()
@@ -214,7 +226,7 @@ void AEnemyCharacterBase::SpawnDeathItems()
 				|| !dropInfo.ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
 
 			const uint8 itemType = (uint8)dropInfo.SpawnItemTypeList[itemIdx];
-			const uint8 itemID = dropInfo.SpawnItemIDList[itemIdx];
+			const int32 itemID = dropInfo.SpawnItemIDList[itemIdx];
 			const float spawnProbability = dropInfo.ItemSpawnProbabilityList[itemIdx];
 
 			if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)

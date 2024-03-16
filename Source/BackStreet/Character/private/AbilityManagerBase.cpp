@@ -24,45 +24,43 @@ void UAbilityManagerBase::InitAbilityManager(ACharacterBase* NewCharacter)
 	}
 }
 
-bool UAbilityManagerBase::TryAddNewAbility(const ECharacterAbilityType NewAbilityType)
+bool UAbilityManagerBase::TryAddNewAbility(int32 AbilityID)
 {
 	if (!OwnerCharacterRef.IsValid()) return false;
 	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
 	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
 
-	if (GetIsAbilityActive(NewAbilityType)) return false;
+	UE_LOG(LogTemp, Warning, TEXT("Ability ID : %d"), AbilityID);
+
+	if (GetIsAbilityActive(AbilityID)) return false;
 	if (ActiveAbilityInfoList.Num() >= MaxAbilityCount) return false;
-
-	FAbilityInfoStruct newAbilityInfo = GetAbilityInfo(NewAbilityType);
-	if (newAbilityInfo.AbilityId == -1) return false;
-
+	FAbilityInfoStruct newAbilityInfo = GetAbilityInfo(AbilityID);
 	if (newAbilityInfo.bIsRepetitive)
 	{
-		const float variable = newAbilityInfo.Variable.Num() > 0 ? newAbilityInfo.Variable[0] : 1.0f;
-		newAbilityInfo.TimerDelegate.BindUFunction(OwnerCharacterRef.Get(), newAbilityInfo.FuncName, variable, true, (uint8)NewAbilityType);
+		const float variable = newAbilityInfo.VariableInfo.Num() > 0 ? newAbilityInfo.VariableInfo[0].Variable : 1.0f;
+		newAbilityInfo.TimerDelegate.BindUFunction(OwnerCharacterRef.Get(), newAbilityInfo.FuncName, variable, true, AbilityID);
 		OwnerCharacterRef.Get()->GetWorldTimerManager().SetTimer(newAbilityInfo.TimerHandle, newAbilityInfo.TimerDelegate, 1.0f, true);
 	}
 	TryUpdateCharacterStat(newAbilityInfo, false);
 	ActiveAbilityInfoList.Add(newAbilityInfo);
-	AbilityAddDelegate.Broadcast(newAbilityInfo);
+	AbilityUpdateDelegate.Broadcast(ActiveAbilityInfoList);
 
 	return true;
 }
 
-bool UAbilityManagerBase::TryRemoveAbility(ECharacterAbilityType TargetAbilityType)
+bool UAbilityManagerBase::TryRemoveAbility(int32 AbilityID)
 {
 	if (!OwnerCharacterRef.IsValid()) return false;
-	if (!GetIsAbilityActive(TargetAbilityType)) return false;
+	if (!GetIsAbilityActive(AbilityID)) return false;
 	if (ActiveAbilityInfoList.Num() == 0) return false;
 
-	FAbilityInfoStruct targetAbilityInfo = GetAbilityInfo(TargetAbilityType);
-	targetAbilityInfo.AbilityId = (uint8)TargetAbilityType;
-	if (targetAbilityInfo.AbilityId == -1) return false;
+	FAbilityInfoStruct targetAbilityInfo = GetAbilityInfo(AbilityID);
+	if (targetAbilityInfo.AbilityId <= 0) return false;
 	
 	for (int idx = 0; idx < ActiveAbilityInfoList.Num(); idx++)
 	{
 		FAbilityInfoStruct& abilityInfo = ActiveAbilityInfoList[idx];
-		if (abilityInfo.AbilityId == (uint8)TargetAbilityType)
+		if (abilityInfo.AbilityId == targetAbilityInfo.AbilityId)
 		{
 			TryUpdateCharacterStat(abilityInfo, true);
 			ActiveAbilityInfoList.RemoveAt(idx);
@@ -70,7 +68,7 @@ bool UAbilityManagerBase::TryRemoveAbility(ECharacterAbilityType TargetAbilityTy
 			{
 				OwnerCharacterRef.Get()->GetWorldTimerManager().ClearTimer(abilityInfo.TimerHandle);
 			}
-			AbilityRemoveDelegate.Broadcast((uint8)TargetAbilityType);
+			AbilityUpdateDelegate.Broadcast(ActiveAbilityInfoList);
 			return true;
 		}
 	}
@@ -85,46 +83,94 @@ void UAbilityManagerBase::ClearAllAbility()
 bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct TargetAbilityInfo, bool bIsReset)
 {
 	//Validity 체크 (꺼져있는데 제거를 시도하거나, 켜져있는데 추가를 시도한다면?)
-	if (GetIsAbilityActive((ECharacterAbilityType)TargetAbilityInfo.AbilityId) != bIsReset) return false;
+	if (GetIsAbilityActive(TargetAbilityInfo.AbilityId) != bIsReset) return false;
 	
 	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
 	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
 
-	for (int statIdx = 0; statIdx < TargetAbilityInfo.TargetStatName.Num(); statIdx++)
+	for (int statIdx = 0; statIdx < TargetAbilityInfo.AbilityTypeList.Num(); statIdx++)
 	{
-		FName targetStatName = TargetAbilityInfo.TargetStatName[statIdx];
-		float targetVariable = TargetAbilityInfo.Variable[FMath::Min(TargetAbilityInfo.Variable.Num() - 1, statIdx)];
-		if (bIsReset) targetVariable = 1/targetVariable; //초기화 시 1보다 낮은 값으로 곱함 1.25 vs 0.25
+		ECharacterAbilityType targetType = TargetAbilityInfo.AbilityTypeList[FMath::Min(TargetAbilityInfo.AbilityTypeList.Num() - 1, statIdx)];
+		FAbilityValueInfoStruct targetVariableInfo = TargetAbilityInfo.VariableInfo[FMath::Min(TargetAbilityInfo.VariableInfo.Num() - 1, statIdx)];
+		
+		float targetVariable = targetVariableInfo.Variable;
+		bool bIsPercentage = targetVariableInfo.bIsPercentage;
 
-		if (targetStatName == FName("MaxHP"))
+		if (bIsReset) targetVariable = -1 * targetVariable; //if remove ability, substract the original value
+
+		UE_LOG(LogTemp, Warning, TEXT("Try Update Stat : %d / bIsReset : %d / Variable : %.2lf / Percent : %d")
+				, (int32)targetType, (int32)bIsReset, targetVariable, (int32)bIsPercentage);
+
+		switch (targetType)
 		{
-			characterStat.CharacterMaxHP *= targetVariable;
-			characterState.CharacterCurrHP = FMath::Min(characterStat.CharacterMaxHP, characterState.CharacterCurrHP);
-		}
-		//else if (targetStatName == FName("CurrHP"))
-		//	characterState.CharacterCurrHP = characterStat.CharacterMaxHP;
-		else if (targetStatName == FName("Attack"))
-			characterStat.CharacterAtkMultiplier *= targetVariable;
-		else if (targetStatName == FName("Defense"))
-			characterStat.CharacterDefense *= targetVariable;
-		else if (targetStatName == FName("MoveSpeed"))
-			characterStat.CharacterMoveSpeed *= targetVariable;
-		else if (targetStatName == FName("AttackSpeed"))
-			characterStat.CharacterAtkSpeed *= targetVariable;
-		else if (targetStatName == FName("MaxProjectileCount"))
-			characterStat.MaxProjectileCount *= targetVariable;
+		case ECharacterAbilityType::E_None:
+		case ECharacterAbilityType::E_AutoHeal:
+			break;
+		case ECharacterAbilityType::E_MaxHP:
+			if (bIsPercentage)
+			{
+				characterState.AbilityHP.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityHP.FixedValue += targetVariable;
+			}
+			break;
+		case ECharacterAbilityType::E_AttackUp:
+			if (bIsPercentage)
+			{
+				characterState.AbilityAttack.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityAttack.FixedValue += targetVariable;
+			}
+			break;
+		case ECharacterAbilityType::E_DefenseUp:
+			if (bIsPercentage)
+			{
+				characterState.AbilityDefense.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityDefense.FixedValue += targetVariable;
+			}
+			break;
+		case ECharacterAbilityType::E_MoveSpeedUp:
+			if (bIsPercentage)
+			{
+				characterState.AbilityMoveSpeed.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityMoveSpeed.FixedValue += targetVariable;
+			}
+			break;
+		case ECharacterAbilityType::E_AtkSpeedUp:
+			if (bIsPercentage)
+			{
+				characterState.AbilityAttackSpeed.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityAttackSpeed.FixedValue += targetVariable;
+			}
+			break;
+		case ECharacterAbilityType::E_MultipleShot:
+			characterStat.ProjectileCountPerAttack += targetVariable;
+			break;
+		}	
 	}
-	OwnerCharacterRef.Get()->UpdateCharacterStat(characterStat);
-	OwnerCharacterRef.Get()->UpdateCharacterState(characterState);
+	OwnerCharacterRef.Get()->UpdateCharacterStatAndState(characterStat, characterState);
 
 	return true;
 }
 
-bool UAbilityManagerBase::GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType) const
+bool UAbilityManagerBase::GetIsAbilityActive(int32 AbilityID) const
 {
 	for (const FAbilityInfoStruct& abilityInfo : ActiveAbilityInfoList)
 	{
-		if (abilityInfo.AbilityId == (uint8)TargetAbilityType)
+		if (abilityInfo.AbilityId == AbilityID)
 		{
 			return true;
 		}
@@ -137,10 +183,10 @@ int32 UAbilityManagerBase::GetMaxAbilityCount() const
 	return MaxAbilityCount; 
 }
 
-FAbilityInfoStruct UAbilityManagerBase::GetAbilityInfo(const ECharacterAbilityType AbilityType)
+FAbilityInfoStruct UAbilityManagerBase::GetAbilityInfo(int32 AbilityID)
 {
-	if(!AbilityInfoList.IsValidIndex((uint8)AbilityType)) return FAbilityInfoStruct();
-	return AbilityInfoList[(uint8)AbilityType];
+	if(!AbilityInfoList.IsValidIndex(AbilityID)) return FAbilityInfoStruct();
+	return AbilityInfoList[AbilityID];
 }
 
 bool UAbilityManagerBase::InitAbilityInfoListFromTable(const UDataTable* AbilityInfoTable)
@@ -155,6 +201,7 @@ bool UAbilityManagerBase::InitAbilityInfoListFromTable(const UDataTable* Ability
 		FAbilityInfoStruct* abilityInfo = AbilityInfoTable->FindRow<FAbilityInfoStruct>(rowName, "");
 		if (abilityInfo != nullptr)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("InitAbility %d / %.2lf /%d"), abilityInfo->AbilityId, abilityInfo->VariableInfo[0].Variable, (int32)abilityInfo->VariableInfo[0].bIsPercentage)
 			AbilityInfoList.Add(*abilityInfo);
 		}
 	}

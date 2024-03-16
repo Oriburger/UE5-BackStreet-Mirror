@@ -10,8 +10,10 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateClearResource);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSingleParam, bool, bGameIsOver);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateSystemMessage, FName, Message, FColor, TextColor);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateStageClear);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateMissionClear);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateUIAnimation, FName, AnimationName);
+
+
+
 
 UCLASS()
 class BACKSTREET_API ABackStreetGameModeBase : public AGameModeBase
@@ -27,19 +29,12 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateClearResource ClearResourceDelegate;
-	
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateClearResource ChapterClearResourceDelegate;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateSystemMessage PrintSystemMessageDelegate;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateStageClear StageClearDelegate;
-
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateStageClear FadeOutDelegate;
-
+		FDelegateUIAnimation UIAnimationDelegate;
 
 public:
 	ABackStreetGameModeBase();
@@ -75,13 +70,13 @@ public:
 		void UpdateCharacterStat(class ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat);
 
 	UFUNCTION(BlueprintCallable)
-		class USkillManagerBase* GetGlobalSkillmanagerBaseRef() { return SkillManagerBase; }
+		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }
+
+	UFUNCTION(BlueprintCallable)
+		class USkillManagerBase* GetGlobalSkillManagerBaseRef() { return SkillManagerBase; }
 
 	UFUNCTION(BlueprintCallable)
 		class AChapterManagerBase* GetChapterManagerRef() { return ChapterManager; }
-
-	UFUNCTION(BlueprintImplementableEvent)
-		void FadeOut();
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void UpdateMiniMapUI();
@@ -90,7 +85,10 @@ public:
 		void SetMiniMapUI();
 
 	UFUNCTION(BlueprintImplementableEvent)
-		void PopUpClearUI();
+		void UpdateWaveInfoUI(int32 CurrWave,int32 EndWave);
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void PlayUIAnimation(FName AnimationName);
 
 
 // ----- Class Info ------------------------------------ 
@@ -105,6 +103,9 @@ public:
 protected:
 	UPROPERTY()
 		class AMainCharacterBase* PlayerCharacterRef;
+
+	UPROPERTY()
+		class UAssetManagerBase* AssetManagerBase;
 
 	UPROPERTY()
 		class USkillManagerBase* SkillManagerBase;

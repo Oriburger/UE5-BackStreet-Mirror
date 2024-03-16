@@ -24,7 +24,7 @@ public:
 
 	//Item ID list to spawn after dead event.(each item is identified by index)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
-		TArray<uint8> SpawnItemIDList;
+		TArray<int32> SpawnItemIDList;
 
 	//Item spawn percentage list.  (0.0f ~ 1.0f), (each item is identified by index)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
@@ -48,14 +48,14 @@ public:
 
 	//Enemy's Default Weapon ID
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		int32 DefaultWeaponID = 11100;
+		int32 DefaultWeaponID = 0;
 
 	//Info data of dropping item when enemy dies
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FEnemyDropInfoStruct DropInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
-		float CharacterAtkSpeed;	
+		float DefaultAttackSpeed;	
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<int32> EnemySkillList;

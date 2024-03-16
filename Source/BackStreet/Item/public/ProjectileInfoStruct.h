@@ -32,8 +32,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float ProjectileSpeed = 2000.0f;
 
-	//발사체의 데미지
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	//Damage of projectile, inherited by parent (ranged weapon)
+	UPROPERTY(BlueprintReadOnly)
 		float ProjectileDamage = 0.2f;
 
 	//중력 스케일
@@ -43,16 +43,6 @@ public:
 	//유도가 되는지?
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsHoming = false;
-
-	//발사체는 각 하나의 디버프만 가짐
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		ECharacterDebuffType DebuffType;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float DebuffTotalTime;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float DebuffVariable;
 };
 
 USTRUCT(BlueprintType)

@@ -30,7 +30,12 @@ void ARangedWeaponBase::Attack()
 	Super::Attack();
 
 	bool result = TryFireProjectile();
-	PlayEffectSound(result ? AttackSound : AttackFailSound);
+
+	if (IsValid(ShootSound) && IsValid(ShootFailSound))
+	{
+		PlaySingleSound(result ? ShootSound : ShootFailSound, result ? "Shoot" : "ShootFail");
+	}
+
 	if (result)	UpdateDurabilityState();
 }
 
@@ -112,6 +117,33 @@ void ARangedWeaponBase::InitWeaponAsset()
 		ProjectileAssetInfo = GetProjectileAssetInfo(rangedWeaponAssetInfo.ProjectileID);
 		ProjectileStatInfo = GetProjectileStatInfo(rangedWeaponAssetInfo.ProjectileID);
 	}
+
+	if (WeaponSoundAssetMap.Contains("Shoot"))
+	{
+		FSoundArrayContainer* shootSoundInfo = WeaponSoundAssetMap.Find("Shoot");
+		if (!shootSoundInfo->SoundList.IsEmpty())
+		{
+			ShootSound = shootSoundInfo->SoundList[0];
+		}
+	}
+
+	if (WeaponSoundAssetMap.Contains("ShootFail"))
+	{
+		FSoundArrayContainer* shootFailSoundInfo = WeaponSoundAssetMap.Find("ShootFail");
+		if (!shootFailSoundInfo->SoundList.IsEmpty())
+		{
+			ShootFailSound = shootFailSoundInfo->SoundList[0];
+		}
+	}
+
+	if (WeaponSoundAssetMap.Contains("Reload"))
+	{
+		FSoundArrayContainer* reloadSoundInfo = WeaponSoundAssetMap.Find("Reload");
+		if (!reloadSoundInfo->SoundList.IsEmpty())
+		{
+			ReloadSound = reloadSoundInfo->SoundList[0];
+		}
+	}
 }
 
 void ARangedWeaponBase::SpawnShootNiagaraEffect()
@@ -147,7 +179,7 @@ AProjectileBase* ARangedWeaponBase::CreateProjectile()
 	{
 		newProjectile->SetOwner(this);
 		newProjectile->InitProjectile(OwnerCharacterRef.Get(), ProjectileAssetInfo, ProjectileStatInfo);
-		newProjectile->ProjectileStat.ProjectileDamage *= WeaponStat.WeaponDamageRate; //버프/디버프로 인해 강화/너프된 값을 반영
+		newProjectile->ProjectileStat.ProjectileDamage = WeaponStat.WeaponDamage;
 		return newProjectile;
 	}
 	return nullptr;
@@ -164,9 +196,15 @@ void ARangedWeaponBase::Reload()
 	}
 	WeaponState.RangedWeaponState.CurrentAmmoCount += addAmmoCnt;
 	WeaponState.RangedWeaponState.ExtraAmmoCount -= addAmmoCnt;
+	OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
 
 	if (OwnerCharacterRef.IsValid())
 		OwnerCharacterRef.Get()->ResetActionState(true);
+
+	if (IsValid(ReloadSound))
+	{
+		PlaySingleSound(ReloadSound, "Reload");
+	}
 }	
 	
 bool ARangedWeaponBase::GetCanReload()
@@ -198,7 +236,14 @@ bool ARangedWeaponBase::TryFireProjectile()
 		GetWorldTimerManager().SetTimer(AutoReloadTimerHandle, OwnerCharacterRef.Get(), &ACharacterBase::TryReload, 1.0f, false, AUTO_RELOAD_DELAY_VALUE);
 		return false;
 	}
-	const int32 fireProjectileCnt = FMath::Min(WeaponState.RangedWeaponState.CurrentAmmoCount, OwnerCharacterRef.Get()->GetCharacterStat().MaxProjectileCount);
+	const int32 fireProjectileCnt = FMath::Min(WeaponState.RangedWeaponState.CurrentAmmoCount, OwnerCharacterRef.Get()->GetCharacterStat().ProjectileCountPerAttack);
+
+	if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
+	{
+		WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
+		OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
+	}
+
 	for (int idx = 1; idx <= fireProjectileCnt; idx++)
 	{
 		FTimerHandle delayHandle;
@@ -208,11 +253,6 @@ bool ARangedWeaponBase::TryFireProjectile()
 			//스폰한 발사체가 Valid 하다면 발사
 			if (IsValid(newProjectile))
 			{
-				if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
-				{
-					WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
-					OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
-				}
 				newProjectile->ActivateProjectileMovement();
 				SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
 			}

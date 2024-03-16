@@ -1,0 +1,49 @@
+[
+	{
+		"Name": "0",
+		"SoundType": "E_Character",
+		"TargetID": 0,
+		"SoundTarget": "MainCharacter",
+		"SoundMap":
+		{
+			"FootStep":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/Legacy/SC_Footstep_A.SC_Footstep_A'",
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/Legacy/SC_FootstepB.SC_FootstepB'"
+				]
+			},
+			"Roll":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/Legacy/SC_Roll.SC_Roll'"
+				]
+			},
+			"Buff":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/Legacy/SC_Buff.SC_Buff'"
+				]
+			},
+			"DeBuff":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/Character/SC_Debuff.SC_Debuff'"
+				]
+			},
+			"InvestigateItemBox":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_OpenItemBox1.SC_OpenItemBox1'",
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_OpenItemBox2.SC_OpenItemBox2'"
+				]
+			},
+			"InvestigateAbilityBox":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Asset/Sound/ETC/SC_TakeAbility.SC_TakeAbility'"
+				]
+			}
+		}
+	}
+]

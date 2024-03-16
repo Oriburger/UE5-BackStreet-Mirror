@@ -224,9 +224,9 @@ void AMainCharacterBase::MoveRight(float Value)
 }
 
 void AMainCharacterBase::Roll()
-{
+{	
 	if (!GetIsActionActive(ECharacterActionType::E_Idle)) return;
-
+	
 	FVector newDirection(0.0f);
 	FRotator newRotation = FRotator();
 	newDirection.X = GetInputAxisValue(FName("MoveForward"));
@@ -262,7 +262,7 @@ void AMainCharacterBase::Roll()
 	if (AnimAssetData.RollAnimMontageList.Num() > 0
 		&& IsValid(AnimAssetData.RollAnimMontageList[0]))
 	{
-		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.CharacterMoveSpeed / 500.0f));
+		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.DefaultMoveSpeed / 500.0f));
 	}
 
 	if (OnRoll.IsBound())
@@ -315,10 +315,12 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 	else if (TargetActor->ActorHasTag("ItemBox"))
 	{
 		Cast<AItemBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), InvestigateItemBoxSoundList[0], TargetActor->GetActorLocation());
 	}
 	else if (TargetActor->ActorHasTag("RewardBox"))
 	{
 		Cast<ARewardBoxBase>(TargetActor)->OnPlayerBeginInteract.Broadcast(this);
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), InvestigateAbilityBoxSoundList[0], TargetActor->GetActorLocation());
 	}
 	else if (TargetActor->ActorHasTag("CraftingBox"))
 	{
@@ -354,6 +356,10 @@ void AMainCharacterBase::TryAttack()
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw) return;
 
+	//IndieGo용 임시 코드----------------------------------------------------------
+	if(GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130) return;
+	//---------------------------------------------------------------------------------
+
 	if (GetCurrentWeaponRef()->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
@@ -375,11 +381,15 @@ void AMainCharacterBase::TryAttack()
 void AMainCharacterBase::TrySkill()
 {
 	check(GetCurrentWeaponRef() != nullptr);
-
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle
 		|| !GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.IsSkillAvailable ) return;
-	 
+	//IndieGo용 임시 코드----------------------------------------------------------
+	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130)
+	{
+		CharacterState.CharacterCurrSkillGauge = 10;
+	}
+	//---------------------------------------------------------------------------------
 	if (GetCharacterState().CharacterCurrSkillGauge<GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.SkillCommonReq)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬 게이지가 부족합니다.")), FColor::White);
@@ -467,11 +477,22 @@ void AMainCharacterBase::PickSubWeapon()
 	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponC"))) targetIdx = 2;
 	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponD"))) targetIdx = 3;
 
+	//If player press current picked sub weapon, switch to the first main weapon.
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw && GetSubInventoryRef()->GetCurrentIdx() == targetIdx)
 	{
 		GetInventoryRef()->EquipWeaponByIdx(0);
+		GetSubInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
+		return;
 	}
-	else if (!TrySwitchToSubWeapon(targetIdx))
+
+	//Try switch to subweapon
+	bool result = TrySwitchToSubWeapon(targetIdx);
+	if (result)
+	{
+		//Force UI update with manual calling delegate
+		GetInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
+	}
+	else
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
 	}
@@ -518,6 +539,19 @@ void AMainCharacterBase::ResetRotationToMovement()
 
 void AMainCharacterBase::SwitchToNextWeapon()
 {
+	//Block switching weapon in particular actions
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill ||
+		CharacterState.CharacterActionState == ECharacterActionType::E_Attack ||
+		CharacterState.CharacterActionState == ECharacterActionType::E_Throw ||
+		CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return;
+
+	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
+	{
+		GetInventoryRef()->EquipWeaponByIdx(0);
+		GetSubInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
+		return;
+	}
+
 	Super::SwitchToNextWeapon();
 }
 
@@ -526,9 +560,9 @@ void AMainCharacterBase::DropWeapon()
 	Super::DropWeapon();
 }
 
-bool AMainCharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer, float TotalTime, float Value)
+bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)
 {
-	if (!Super::TryAddNewDebuff(NewDebuffType, Causer, TotalTime, Value)) return false;
+	if (!Super::TryAddNewDebuff(DebuffInfo, Causer)) return false;
 
 	if (DebuffSound && BuffSound)
 	{
@@ -537,34 +571,34 @@ bool AMainCharacterBase::TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AAc
 	//230621 임시 제거
 	//ActivateBuffNiagara(bIsDebuff, BuffDebuffType);
 
-	GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
-	BuffEffectResetTimerHandle.Invalidate();
-	GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
-		DeactivateBuffEffect();
-	}), TotalTime, false);
+	//GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
+	//BuffEffectResetTimerHandle.Invalidate();
+	//GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
+	//	DeactivateBuffEffect();
+	//}), DebuffInfo.TotalTime, false);
 
 	return true;
 }
 
-bool AMainCharacterBase::TryAddNewAbility(const ECharacterAbilityType NewAbilityType)
+bool AMainCharacterBase::TryAddNewAbility(const int32 NewAbilityID)
 {
 	if(!IsValid(AbilityManagerRef)) return false;
-	return AbilityManagerRef->TryAddNewAbility(NewAbilityType);
+	return AbilityManagerRef->TryAddNewAbility(NewAbilityID);
 }
 
-bool AMainCharacterBase::TryRemoveAbility(const ECharacterAbilityType TargetAbilityType)
+bool AMainCharacterBase::TryRemoveAbility(const int32 NewAbilityID)
 {
 	if (!IsValid(AbilityManagerRef)) return false;
-	return AbilityManagerRef->TryRemoveAbility(TargetAbilityType);
+	return AbilityManagerRef->TryRemoveAbility(NewAbilityID);
 }
 
-bool AMainCharacterBase::GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType)
+bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 {
 	if (!IsValid(AbilityManagerRef)) return false;
-	return AbilityManagerRef->GetIsAbilityActive(TargetAbilityType);
+	return AbilityManagerRef->GetIsAbilityActive(AbilityID);
 }
 
-bool AMainCharacterBase::PickWeapon(int32 NewWeaponID)
+bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
 {
 	if (!IsValid(GetInventoryRef()) || !IsValid(GetSubInventoryRef())) return false;
 	
@@ -621,6 +655,27 @@ void AMainCharacterBase::ResetFacialDamageEffect()
 	{
 		currMaterial->SetTextureParameterValue(FName("BaseTexture"), EmotionTextureList[(uint8)(EEmotionType::E_Idle)]);
 		currMaterial->SetScalarParameterValue(FName("bIsDamaged"), false);
+	}
+}
+
+void AMainCharacterBase::InitSoundAsset()
+{
+	Super::InitSoundAsset();
+	
+	if (SoundAssetMap.Contains("InvestigateItemBox"))
+	{
+		if (!SoundAssetMap.Find("InvestigateItemBox")->SoundList.IsEmpty())
+		{
+			InvestigateItemBoxSoundList = SoundAssetMap.Find("InvestigateItemBox")->SoundList;
+		}
+	}
+
+	if (SoundAssetMap.Contains("InvestigateAbilityBox"))
+	{
+		if (!SoundAssetMap.Find("InvestigateAbilityBox")->SoundList.IsEmpty())
+		{
+			InvestigateAbilityBoxSoundList = SoundAssetMap.Find("InvestigateAbilityBox")->SoundList;
+		}
 	}
 }
 

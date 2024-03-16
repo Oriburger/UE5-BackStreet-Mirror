@@ -40,6 +40,7 @@ AProjectileBase::AProjectileBase()
 	ProjectileMovement->bAutoActivate = false;
 
 	InitialLifeSpan = 10.0f;
+	this->Tags.Add("Projectile");
 }
 
 // Called when the game starts or when spawned
@@ -78,8 +79,23 @@ void AProjectileBase::InitProjectileAsset()
 	if (ProjectileAssetInfo.HitEffectParticleLegacy.IsValid())
 		HitParticle = ProjectileAssetInfo.HitEffectParticleLegacy.Get();
 
-	if (ProjectileAssetInfo.HitSound.IsValid())
-		HitSound = ProjectileAssetInfo.HitSound.Get();
+	if (ProjectileSoundAssetMap.Contains("HitImpact"))
+	{
+		FSoundArrayContainer* hitImpactSoundInfo = ProjectileSoundAssetMap.Find("HitImpact");
+		if (!hitImpactSoundInfo->SoundList.IsEmpty())
+		{
+			HitImpactSound = hitImpactSoundInfo->SoundList[0];
+		}
+	}
+
+	if (ProjectileSoundAssetMap.Contains("Explosion"))
+	{
+		FSoundArrayContainer* explosionSoundInfo = ProjectileSoundAssetMap.Find("Explosion");
+		if (!explosionSoundInfo->SoundList.IsEmpty())
+		{
+			ExplosionSound = explosionSoundInfo->SoundList[0];
+		}
+	}
 
 	if (ProjectileAssetInfo.ExplosionParticle.IsValid())
 		ExplosionParticle = ProjectileAssetInfo.ExplosionParticle.Get();
@@ -93,11 +109,12 @@ void AProjectileBase::DestroyWithEffect(FVector Location)
 	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Hit, Location, 100.0f);
 
 	FTransform targetTransform = { FRotator(), Location, {1.0f, 1.0f, 1.0f} };
-	if (HitSound != nullptr)
+	
+	if (IsValid(HitImpactSound))
 	{
-		const float soundVolume = OwnerCharacterRef.Get()->ActorHasTag("Player") ? 1.0f : 0.2;
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, GetActorLocation(), soundVolume);
+		PlaySingleSound(HitImpactSound, "HitImpact");
 	}
+
 	if (HitParticle != nullptr)
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, targetTransform);
 
@@ -116,6 +133,10 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectil
 	}
 	ProjectileID = NewAssetInfo.ProjectileID;
 	UpdateProjectileStat(NewStatInfo);
+
+	AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
+	ProjectileSoundAssetMap = AssetManagerBaseRef.Get()->GetSoundAssetInfo(ESoundAssetType::E_Weapon, ProjectileID - 1);
+
 	ProjectileAssetInfo = NewAssetInfo;
 
 	if (!ProjectileStat.bIsBullet)
@@ -127,8 +148,6 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectil
 		tempStream.AddUnique(ProjectileAssetInfo.ProjectileMesh.ToSoftObjectPath());
 		tempStream.AddUnique(ProjectileAssetInfo.HitEffectParticle.ToSoftObjectPath());
 		tempStream.AddUnique(ProjectileAssetInfo.HitEffectParticleLegacy.ToSoftObjectPath());
-		tempStream.AddUnique(ProjectileAssetInfo.HitSound.ToSoftObjectPath());
-		tempStream.AddUnique(ProjectileAssetInfo.ExplosionSound.ToSoftObjectPath());
 			
 		for (auto& assetPath : tempStream)
 		{
@@ -163,8 +182,7 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		if (OtherActor == OwnerCharacterRef.Get() || OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
 
 		//디버프가 있다면?
-		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(ProjectileStat.DebuffType, OwnerCharacterRef.Get()
-															, ProjectileStat.DebuffTotalTime, ProjectileStat.DebuffVariable);
+		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(Cast<AWeaponBase>(GetOwner())->GetWeaponStat().DebuffInfo, OwnerCharacterRef.Get());
 
 		//폭발하는 발사체라면?
 		if (ProjectileStat.bIsExplosive)
@@ -174,7 +192,7 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		}
 		else
 		{
-			const float totalDamage = ProjectileStat.ProjectileDamage * OwnerCharacterRef.Get()->GetCharacterStat().CharacterAtkMultiplier;
+			const float totalDamage = Cast<AWeaponBase>(GetOwner())->CalculateTotalDamage(Cast<ACharacterBase>(OtherActor)->GetCharacterState());
 			UGameplayStatics::ApplyDamage(OtherActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
 			DestroyWithEffect(SweepResult.Location);
 		}
@@ -233,14 +251,31 @@ void AProjectileBase::Explode()
 	//--- 이펙트 출력 --------------
 	if (ExplosionParticle != nullptr)
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionParticle, GetActorLocation(), GetActorRotation());
-	if (ExplosionSound != nullptr)
+	
+	if (IsValid(ExplosionSound))
 	{
-		const float soundVolume = OwnerCharacterRef.Get()->ActorHasTag("Player") ? 1.0f : 0.2f;
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation(), soundVolume);
+		PlaySingleSound(ExplosionSound, "Explosion");
 	}
-	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 100.0f); //카메라 셰이크 이벤트
+
+	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 5000.0f); //카메라 셰이크 이벤트
 
 	Destroy();
+}
+
+void AProjectileBase::PlaySingleSound(USoundCue* EffectSound, FName SoundName)
+{
+	if (!ProjectileSoundAssetMap.Contains(SoundName)) return;
+	TArray<float> volumeList = ProjectileSoundAssetMap.Find(SoundName)->SoundVolumeList;
+	if (!IsValid(EffectSound) || !volumeList.IsValidIndex(0)) return;
+
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), EffectSound, GetActorLocation(), volumeList[0]);
+}
+
+void AProjectileBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
+{
+	if (!IsValid(NewOwnerCharacterRef)) return;
+	OwnerCharacterRef = NewOwnerCharacterRef;
+	SetOwner(OwnerCharacterRef.Get());
 }
 
 void AProjectileBase::ActivateProjectileMovement()

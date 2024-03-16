@@ -145,7 +145,7 @@ public:
 			, AController* EventInstigator, AActor* DamageCauser) override;
 
 	//Rotation 조절 방식을 커서 위치로 한다
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void RotateToCursor();
 
 	//1~4번의 키를 눌러 보조무기를 장착한다.
@@ -165,16 +165,16 @@ public:
 
 public: 
 	//디버프 상태를 지정
-	virtual	bool TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer = nullptr, float TotalTime = 0.0f, float Value = 0.0f);
+	virtual	bool TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer);
 
 	UFUNCTION(BlueprintCallable)
-		bool TryAddNewAbility(const ECharacterAbilityType NewAbilityType);
+		bool TryAddNewAbility(int32 NewAbilityID);
 
 	UFUNCTION(BlueprintCallable)
-		bool TryRemoveAbility(const ECharacterAbilityType TargetAbilityType);
+		bool TryRemoveAbility(int32 NewAbilityID);
 		
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsAbilityActive(const ECharacterAbilityType TargetAbilityType);
+		bool GetIsAbilityActive(int32 AbilityID);
 
 // -------- Inventory --------------
 public:
@@ -214,8 +214,17 @@ private:
 
 // -------- Asset ----------------
 protected:
+	virtual void InitSoundAsset() override;
+
+protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
 		class UAudioComponent* AudioComponent;
+
+	UPROPERTY()
+		TArray<USoundCue*> InvestigateItemBoxSoundList;
+
+	UPROPERTY()
+		TArray<USoundCue*> InvestigateAbilityBoxSoundList;
 
 
 // ------- 그 외 -----------
