@@ -65,9 +65,10 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 		//----데미지 디버프-------------------
 	case ECharacterDebuffType::E_Burn:
 	case ECharacterDebuffType::E_Poison:
-		dotDamageDelegate.BindUFunction(OwnerCharacterRef.Get(), FName("TakeDebuffDamage")
-										, DebuffInfo.bIsPercentage ? characterState.TotalHP * DebuffInfo.Variable : DebuffInfo.Variable
-										, DebuffInfo.Type, OwnerCharacterRef.Get());
+		dotDamageDelegate.BindUFunction(this, FName("ApplyDotDamage")
+										, DebuffInfo.Type
+										,	(float)(DebuffInfo.bIsPercentage ? characterState.TotalHP * DebuffInfo.Variable : DebuffInfo.Variable)
+										,	OwnerCharacterRef.Get());
 		GetWorld()->GetTimerManager().SetTimer(dotDamageHandle, dotDamageDelegate, 1.0f, true);
 		break;
 		//----스탯 조정 디버프-------------------
@@ -171,6 +172,12 @@ void UDebuffManagerComponent::InitDebuffManager()
 {
 	//Initialize the owner character ref
 	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
+}
+
+void UDebuffManagerComponent::ApplyDotDamage(ECharacterDebuffType DebuffType, float DamageAmount, AActor* Causer)
+{
+	if (!OwnerCharacterRef.IsValid()) return; 
+	OwnerCharacterRef.Get()->TakeDebuffDamage(DebuffType, DamageAmount, Causer);
 }
 
 FTimerHandle& UDebuffManagerComponent::GetResetTimerHandle(ECharacterDebuffType DebuffType)

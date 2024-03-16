@@ -162,6 +162,15 @@ void AWeaponBase::Attack() {}
 
 void AWeaponBase::StopAttack() { }
 
+float AWeaponBase::CalculateTotalDamage(FCharacterStateStruct TargetState)
+{
+	if (!OwnerCharacterRef.IsValid()) return 0.0f;
+	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
+	return WeaponStat.WeaponDamage * (1 + FMath::Max(-1, ownerState.TotalAttack - TargetState.TotalDefense))
+			* (1 + WeaponStat.bCriticalApply * WeaponStat.CriticalDamageRate)
+			* (!WeaponStat.bFixDamageApply ? 0.0f : WeaponStat.FixedDamageAmount);
+}
+
 void AWeaponBase::UpdateComboState()
 {
 	WeaponState.ComboCount = (WeaponState.ComboCount + 1); 

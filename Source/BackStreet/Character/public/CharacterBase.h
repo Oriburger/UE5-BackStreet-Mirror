@@ -75,7 +75,7 @@ public:
 
 	//디버프 데미지를 입힘 (일회성)
 	UFUNCTION(BlueprintCallable)
-		float TakeDebuffDamage(float DamageAmount, ECharacterDebuffType DebuffType, AActor* Causer);
+		float TakeDebuffDamage(ECharacterDebuffType DebuffType, float DamageAmount, AActor* Causer);
 
 	UFUNCTION(BlueprintCallable)
 		void ApplyKnockBack(AActor* Target, float Strength);

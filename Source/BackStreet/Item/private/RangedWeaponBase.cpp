@@ -179,7 +179,7 @@ AProjectileBase* ARangedWeaponBase::CreateProjectile()
 	{
 		newProjectile->SetOwner(this);
 		newProjectile->InitProjectile(OwnerCharacterRef.Get(), ProjectileAssetInfo, ProjectileStatInfo);
-		newProjectile->ProjectileStat.ProjectileDamage *= WeaponStat.WeaponDamageRate; //버프/디버프로 인해 강화/너프된 값을 반영
+		newProjectile->ProjectileStat.ProjectileDamage = WeaponStat.WeaponDamage;
 		return newProjectile;
 	}
 	return nullptr;

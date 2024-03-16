@@ -381,7 +381,6 @@ void AMainCharacterBase::TryAttack()
 void AMainCharacterBase::TrySkill()
 {
 	check(GetCurrentWeaponRef() != nullptr);
-	UE_LOG(LogTemp, Log, TEXT("1"));
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle
 		|| !GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.IsSkillAvailable ) return;
@@ -572,8 +571,8 @@ bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* C
 	//230621 임시 제거
 	//ActivateBuffNiagara(bIsDebuff, BuffDebuffType);
 
-	GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
-	BuffEffectResetTimerHandle.Invalidate();
+	//GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
+	//BuffEffectResetTimerHandle.Invalidate();
 	//GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
 	//	DeactivateBuffEffect();
 	//}), DebuffInfo.TotalTime, false);

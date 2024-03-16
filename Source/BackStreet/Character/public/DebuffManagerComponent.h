@@ -50,6 +50,10 @@ private:
 	UFUNCTION()
 		void InitDebuffManager();
 
+	//apply dot damage
+	UFUNCTION()
+		void ApplyDotDamage(ECharacterDebuffType DebuffType, float DamageAmount, AActor* Causer);
+
 	//get the reference of debuff timer handle
 	UFUNCTION()
 		FTimerHandle& GetResetTimerHandle(ECharacterDebuffType DebuffType);

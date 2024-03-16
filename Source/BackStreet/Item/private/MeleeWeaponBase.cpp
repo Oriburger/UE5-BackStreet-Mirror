@@ -166,8 +166,8 @@ void AMeleeWeaponBase::MeleeAttack()
 {
 	FHitResult hitResult;
 	bool bIsMeleeTraceSucceed = false;
-	float totalDamage = WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate
-						* OwnerCharacterRef.Get()->GetCharacterState().TotalAttack;
+
+	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
 
 	TArray<FVector> currTracePositionList = GetCurrentMeleePointList();
 	TArray<AActor*> targetList = CheckMeleeAttackTargetWithSphereTrace(); 
@@ -178,6 +178,9 @@ void AMeleeWeaponBase::MeleeAttack()
 		//if target is valid, apply damage
 		if (IsValid(target))
 		{
+			FCharacterStateStruct targetState = Cast<ACharacterBase>(target)->GetCharacterState();
+			float totalDamage = CalculateTotalDamage(targetState);
+
 			//Activate Melee Hit Effect
 			ActivateMeleeHitEffect(target->GetActorLocation());
 			
@@ -189,7 +192,7 @@ void AMeleeWeaponBase::MeleeAttack()
 			MeleeLineTraceQueryParams.AddIgnoredActor(target); 
 
 			//Apply Debuff 
-			Cast<ACharacterBase>(target)->TryAddNewDebuff(WeaponStat.MeleeWeaponStat.MeleeDebuffInfo, OwnerCharacterRef.Get());
+			Cast<ACharacterBase>(target)->TryAddNewDebuff(WeaponStat.DebuffInfo, OwnerCharacterRef.Get());
 
 			//Update Durability
 			UpdateDurabilityState();

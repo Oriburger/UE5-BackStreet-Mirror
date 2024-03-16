@@ -44,20 +44,6 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FMeleeWeaponStatStruct : public FTableRowBase
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	//----- 근접 관련 Property --------------------
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float WeaponMeleeDamage = 0.2f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FDebuffInfoStruct MeleeDebuffInfo;
-};
-
-USTRUCT(BlueprintType)
 struct FRangedWeaponStatStruct : public FTableRowBase
 {
 public:
@@ -106,14 +92,29 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		UTexture2D* WeaponImage;
 
-	//----- 공통 Stat -------
-	//공격 속도 Rate
+//----- 공통 Stat -------
+	//Weapon Attack Speed Rate
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float WeaponAtkSpeedRate = 1.0f;
 
-	//무기 데미지
+	//Default Weapon Damage
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.0f, UIMax = 500.0f))
+		float WeaponDamage = 10.0f;
+
+	//Critical Damage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float WeaponDamageRate = 1.0f;
+		bool bCriticalApply = false; 
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.0f, UIMax = 2.0f))
+		float CriticalDamageRate = 0.5f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool bFixDamageApply = false; 
+
+	//Fixed Damage Amount
+	//This value is able to be used in skillsystem with editing dynamically
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f))
+		bool FixedDamageAmount = 0.0f;
 
 	// 내구도 PROPERTY 추가
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -137,11 +138,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FSkillSetInfo SkillSetInfo;
 
-	//----- 근거리 Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FMeleeWeaponStatStruct MeleeWeaponStat;
+		FDebuffInfoStruct DebuffInfo;
 
-	//----- 원거리 Stat ------
+//----- 원거리 Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FRangedWeaponStatStruct RangedWeaponStat;
 };

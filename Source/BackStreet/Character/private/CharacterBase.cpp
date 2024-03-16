@@ -120,15 +120,12 @@ void ACharacterBase::UpdateCharacterStat(FCharacterStatStruct NewStat)
 	CharacterStat = NewStat;
 
 	//Update Character State's total property 
-	UE_LOG(LogTemp, Warning, TEXT("============ HP ==============="));
+	const float hpRate = CharacterState.CurrentHP / CharacterState.TotalHP;
 	CharacterState.TotalHP = GetTotalStatValue(CharacterStat.DefaultHP, CharacterState.AbilityHP, CharacterState.SkillHP, CharacterState.DebuffHP);
-	UE_LOG(LogTemp, Warning, TEXT("============ Atk ==============="));
+	CharacterState.CurrentHP = CharacterState.TotalHP * hpRate;
 	CharacterState.TotalAttack = GetTotalStatValue(CharacterStat.DefaultAttack, CharacterState.AbilityAttack, CharacterState.SkillAttack, CharacterState.DebuffAttack);
-	UE_LOG(LogTemp, Warning, TEXT("============ Def ==============="));
 	CharacterState.TotalDefense = GetTotalStatValue(CharacterStat.DefaultDefense, CharacterState.AbilityDefense, CharacterState.SkillDefense, CharacterState.DebuffDefense);
-	UE_LOG(LogTemp, Warning, TEXT("============ MoveSpeed ==============="));
 	CharacterState.TotalMoveSpeed = GetTotalStatValue(CharacterStat.DefaultMoveSpeed, CharacterState.AbilityMoveSpeed, CharacterState.SkillMoveSpeed, CharacterState.DebuffMoveSpeed);
-	UE_LOG(LogTemp, Warning, TEXT("============ AtkSpeed ==============="));
 	CharacterState.TotalAttackSpeed = GetTotalStatValue(CharacterStat.DefaultAttackSpeed, CharacterState.AbilityAttackSpeed, CharacterState.SkillAttackSpeed, CharacterState.DebuffAttackSpeed);
 
 	//Update movement speed
@@ -164,16 +161,13 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 	}
 }
 
-float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator
-								, AActor* DamageCauser)
+float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	if (!IsValid(DamageCauser)) return 0.0f; 
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
 
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	const float maxDefenseValue = 2.0f; 
-	DamageAmount = FMath::Max(DamageAmount - DamageAmount * (CharacterStat.DefaultDefense / maxDefenseValue), 0.01f);
 	if (DamageAmount <= 0.0f || !IsValid(DamageCauser)) return 0.0f;
 	if (CharacterStat.bIsInvincibility) return 0.0f;
 
@@ -184,7 +178,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
 		Die();
 	}
-	else if (AnimAssetData.HitAnimMontageList.Num() > 0&&this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
+	else if (AnimAssetData.HitAnimMontageList.Num() > 0 && this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
 	{
 		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AnimAssetData.HitAnimMontageList.Num() - 1);
 		PlayAnimMontage(AnimAssetData.HitAnimMontageList[randomIdx]);
@@ -192,9 +186,9 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	return DamageAmount;
 }
 
-float ACharacterBase::TakeDebuffDamage(float DamageAmount, ECharacterDebuffType DebuffType, AActor* Causer)
+float ACharacterBase::TakeDebuffDamage(ECharacterDebuffType DebuffType, float DamageAmount, AActor* Causer)
 {
-	if (!IsValid(Causer) && Causer->IsActorBeingDestroyed()) return 0.0f;
+	if (!IsValid(Causer) || Causer->IsActorBeingDestroyed()) return 0.0f;
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
 	TakeDamage(DamageAmount, FDamageEvent(), nullptr, Causer);
 	return DamageAmount;
@@ -796,15 +790,9 @@ void ACharacterBase::InitDynamicMeshMaterial(UMaterialInterface* NewMaterial)
 
 float ACharacterBase::GetTotalStatValue(float& DefaultValue, FStatInfoStruct& AbilityInfo, FStatInfoStruct& SkillInfo, FStatInfoStruct& DebuffInfo)
 {
-	float result = DefaultValue 
+	return DefaultValue 
 			+ DefaultValue * (AbilityInfo.PercentValue + SkillInfo.PercentValue - DebuffInfo.PercentValue)
-			+ (AbilityInfo.FixedValue + SkillInfo.FixedValue - DebuffInfo.FixedValue);
-	
-	UE_LOG(LogTemp, Warning, TEXT("Total -> %.2lf  /  Default : %.2lf / Ability : (%.2lf, %.2lf)  / Skill : (%.2lf, %.2lf) / Debuff : (%.2lf, %.2lf)")
-		, result, DefaultValue, AbilityInfo.PercentValue, AbilityInfo.FixedValue, SkillInfo.PercentValue, SkillInfo.FixedValue
-		, DebuffInfo.PercentValue, DebuffInfo.FixedValue);
-
-	return result; 
+			+ (AbilityInfo.FixedValue + SkillInfo.FixedValue - DebuffInfo.FixedValue); 
 }
 
 bool ACharacterBase::EquipWeapon(AWeaponBase* TargetWeapon)

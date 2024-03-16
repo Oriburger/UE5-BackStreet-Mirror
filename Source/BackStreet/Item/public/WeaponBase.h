@@ -107,6 +107,10 @@ public:
 	UFUNCTION()
 		EWeaponType GetWeaponType();
 
+	//Calculate total damage to target character
+	UFUNCTION()
+		float CalculateTotalDamage(FCharacterStateStruct TargetState);
+
 protected:
 	//Weapon¿« ¡æ«’ Stat
 	UPROPERTY(EditInstanceOnly, Category = "Gameplay|Stat")
