@@ -114,7 +114,7 @@ public:
 	//Fixed Damage Amount
 	//This value is able to be used in skillsystem with editing dynamically
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f))
-		bool FixedDamageAmount = 0.0f;
+		float FixedDamageAmount = 0.0f;
 
 	// 내구도 PROPERTY 추가
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

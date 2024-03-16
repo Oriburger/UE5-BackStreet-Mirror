@@ -167,7 +167,7 @@ float AWeaponBase::CalculateTotalDamage(FCharacterStateStruct TargetState)
 	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
 	return WeaponStat.WeaponDamage * (1 + FMath::Max(-1, ownerState.TotalAttack - TargetState.TotalDefense))
 			* (1 + WeaponStat.bCriticalApply * WeaponStat.CriticalDamageRate)
-			* (!WeaponStat.bFixDamageApply ? 0.0f : WeaponStat.FixedDamageAmount);
+			+ (!WeaponStat.bFixDamageApply ? 0.0f : WeaponStat.FixedDamageAmount);
 }
 
 void AWeaponBase::UpdateComboState()

@@ -120,8 +120,12 @@ void ACharacterBase::UpdateCharacterStat(FCharacterStatStruct NewStat)
 
 	//Update Character State's total property 
 	const float hpRate = CharacterState.CurrentHP / CharacterState.TotalHP;
+	const float oldTotalHP = CharacterState.TotalHP;
+	const float oldCurrentHP = CharacterState.CurrentHP;
 	CharacterState.TotalHP = GetTotalStatValue(CharacterStat.DefaultHP, CharacterState.AbilityHP, CharacterState.SkillHP, CharacterState.DebuffHP);
-	CharacterState.CurrentHP = CharacterState.TotalHP * hpRate;
+	UE_LOG(LogTemp, Warning, TEXT("Total HP : %.2lf -> %.2lf,  hpRate : %.2lf, CurrentHP : %.2lf -> %.2lf")
+			, oldTotalHP, CharacterState.TotalHP, hpRate, oldCurrentHP, CharacterState.CurrentHP);
+	CharacterState.CurrentHP = hpRate > 1.0f ? CharacterState.CurrentHP : CharacterState.TotalHP * hpRate;
 	CharacterState.TotalAttack = GetTotalStatValue(CharacterStat.DefaultAttack, CharacterState.AbilityAttack, CharacterState.SkillAttack, CharacterState.DebuffAttack);
 	CharacterState.TotalDefense = GetTotalStatValue(CharacterStat.DefaultDefense, CharacterState.AbilityDefense, CharacterState.SkillDefense, CharacterState.DebuffDefense);
 	CharacterState.TotalMoveSpeed = GetTotalStatValue(CharacterStat.DefaultMoveSpeed, CharacterState.AbilityMoveSpeed, CharacterState.SkillMoveSpeed, CharacterState.DebuffMoveSpeed);
@@ -162,10 +166,17 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 
 float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Damage #1"));
+
 	if (!IsValid(DamageCauser)) return 0.0f; 
+
+	UE_LOG(LogTemp, Warning, TEXT("Damage #2"));
+
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
 
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	UE_LOG(LogTemp, Warning, TEXT("Damage : %.2lf / HP : (%.2lf / %.2lf)"), DamageAmount, CharacterState.TotalHP, CharacterState.CurrentHP);
 
 	if (DamageAmount <= 0.0f || !IsValid(DamageCauser)) return 0.0f;
 	if (CharacterStat.bIsInvincibility) return 0.0f;
@@ -199,9 +210,9 @@ void ACharacterBase::SetActionState(ECharacterActionType Type)
 	return;
 }
 
-void ACharacterBase::TakeHeal(float HealAmountRate, bool bIsTimerEvent, uint8 BuffDebuffType)
+void ACharacterBase::TakeHeal(float HealAmount, bool bIsTimerEvent, uint8 BuffDebuffType)
 {
-	CharacterState.CurrentHP += CharacterStat.DefaultHP * HealAmountRate;
+	CharacterState.CurrentHP += HealAmount;
 	CharacterState.CurrentHP = FMath::Min(CharacterStat.DefaultHP, CharacterState.CurrentHP);
 	return;
 }

@@ -30,14 +30,12 @@ bool UAbilityManagerBase::TryAddNewAbility(int32 AbilityID)
 	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
 	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
 
-	UE_LOG(LogTemp, Warning, TEXT("Ability ID : %d"), AbilityID);
-
 	if (GetIsAbilityActive(AbilityID)) return false;
 	if (ActiveAbilityInfoList.Num() >= MaxAbilityCount) return false;
 	FAbilityInfoStruct newAbilityInfo = GetAbilityInfo(AbilityID);
 	if (newAbilityInfo.bIsRepetitive)
-	{
-		const float variable = newAbilityInfo.VariableInfo.Num() > 0 ? newAbilityInfo.VariableInfo[0].Variable : 1.0f;
+	{	
+		float variable = newAbilityInfo.VariableInfo.Num() > 0 ? newAbilityInfo.VariableInfo[0].Variable : 1.0f;
 		newAbilityInfo.TimerDelegate.BindUFunction(OwnerCharacterRef.Get(), newAbilityInfo.FuncName, variable, true, AbilityID);
 		OwnerCharacterRef.Get()->GetWorldTimerManager().SetTimer(newAbilityInfo.TimerHandle, newAbilityInfo.TimerDelegate, 1.0f, true);
 	}
@@ -97,9 +95,6 @@ bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct Target
 		bool bIsPercentage = targetVariableInfo.bIsPercentage;
 
 		if (bIsReset) targetVariable = -1 * targetVariable; //if remove ability, substract the original value
-
-		UE_LOG(LogTemp, Warning, TEXT("Try Update Stat : %d / bIsReset : %d / Variable : %.2lf / Percent : %d")
-				, (int32)targetType, (int32)bIsReset, targetVariable, (int32)bIsPercentage);
 
 		switch (targetType)
 		{
