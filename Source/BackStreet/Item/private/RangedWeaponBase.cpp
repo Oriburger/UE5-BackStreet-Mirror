@@ -8,6 +8,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Character/public/MainCharacterBase.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define AUTO_RELOAD_DELAY_VALUE 0.1
 
@@ -31,9 +32,9 @@ void ARangedWeaponBase::Attack()
 
 	bool result = TryFireProjectile();
 
-	if (IsValid(ShootSound) && IsValid(ShootFailSound))
+	if (AssetManagerBaseRef.IsValid())
 	{
-		PlaySingleSound(result ? ShootSound : ShootFailSound, result ? "Shoot" : "ShootFail");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, result ? "Shoot" : "ShootFail");
 	}
 
 	if (result)	UpdateDurabilityState();
@@ -117,33 +118,6 @@ void ARangedWeaponBase::InitWeaponAsset()
 		ProjectileAssetInfo = GetProjectileAssetInfo(rangedWeaponAssetInfo.ProjectileID);
 		ProjectileStatInfo = GetProjectileStatInfo(rangedWeaponAssetInfo.ProjectileID);
 	}
-
-	if (WeaponSoundAssetMap.Contains("Shoot"))
-	{
-		FSoundArrayContainer* shootSoundInfo = WeaponSoundAssetMap.Find("Shoot");
-		if (!shootSoundInfo->SoundList.IsEmpty())
-		{
-			ShootSound = shootSoundInfo->SoundList[0];
-		}
-	}
-
-	if (WeaponSoundAssetMap.Contains("ShootFail"))
-	{
-		FSoundArrayContainer* shootFailSoundInfo = WeaponSoundAssetMap.Find("ShootFail");
-		if (!shootFailSoundInfo->SoundList.IsEmpty())
-		{
-			ShootFailSound = shootFailSoundInfo->SoundList[0];
-		}
-	}
-
-	if (WeaponSoundAssetMap.Contains("Reload"))
-	{
-		FSoundArrayContainer* reloadSoundInfo = WeaponSoundAssetMap.Find("Reload");
-		if (!reloadSoundInfo->SoundList.IsEmpty())
-		{
-			ReloadSound = reloadSoundInfo->SoundList[0];
-		}
-	}
 }
 
 void ARangedWeaponBase::SpawnShootNiagaraEffect()
@@ -201,9 +175,9 @@ void ARangedWeaponBase::Reload()
 	if (OwnerCharacterRef.IsValid())
 		OwnerCharacterRef.Get()->ResetActionState(true);
 
-	if (IsValid(ReloadSound))
+	if (AssetManagerBaseRef.IsValid())
 	{
-		PlaySingleSound(ReloadSound, "Reload");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, "Reload");
 	}
 }	
 	

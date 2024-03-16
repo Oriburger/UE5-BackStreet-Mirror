@@ -5,6 +5,7 @@
 #include "../public/WeaponBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "../../Character/public/CharacterBase.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define MAX_LINETRACE_POS_COUNT 6
 #define DEFAULT_MELEE_ATK_RANGE 150.0f
@@ -25,9 +26,9 @@ void AMeleeWeaponBase::Attack()
 	if (WeaponID == 0) return;
 	Super::Attack();
 
-	if (IsValid(WieldSound))
+	if (AssetManagerBaseRef.IsValid())
 	{
-		PlaySingleSound(WieldSound, "Wield");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, "Wield");
 	}
 
 	GetWorldTimerManager().SetTimer(MeleeAtkTimerHandle, this, &AMeleeWeaponBase::MeleeAttack, 0.01f, true);
@@ -95,31 +96,6 @@ void AMeleeWeaponBase::InitWeaponAsset()
 	if (MeleeWeaponAssetInfo.HitEffectParticle.IsValid())
 		HitEffectParticle = MeleeWeaponAssetInfo.HitEffectParticle.Get();
 	
-	if (WeaponSoundAssetMap.Contains("Wield"))
-	{
-		FSoundArrayContainer* wieldSoundInfo = WeaponSoundAssetMap.Find("Wield");
-		if (!wieldSoundInfo->SoundList.IsEmpty())
-		{
-			WieldSound = wieldSoundInfo->SoundList[0];
-		}
-		else
-		{
-			UE_LOG(LogTemp, Log, TEXT("IsEmpty"));
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("NotContained"));
-	}
-
-	if (WeaponSoundAssetMap.Contains("HitImpact"))
-	{
-		FSoundArrayContainer* hitImpactSoundInfo = WeaponSoundAssetMap.Find("HitImpact");
-		if (!hitImpactSoundInfo->SoundList.IsEmpty())
-		{
-			HitImpactSound = hitImpactSoundInfo->SoundList[0];
-		}
-	}
 }
 
 TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
@@ -243,9 +219,9 @@ void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location)
 	GamemodeRef.Get()->PlayCameraShakeEffect(OwnerCharacterRef.Get()->ActorHasTag("Player") ? ECameraShakeType::E_Attack : ECameraShakeType::E_Hit, Location);
 
 	// »ç¿îµå
-	if (IsValid(HitImpactSound))
+	if (AssetManagerBaseRef.IsValid())
 	{
-		PlaySingleSound(HitImpactSound, "HitImpact");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, "HitImpact");
 	}
 }
 

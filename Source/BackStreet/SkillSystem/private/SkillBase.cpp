@@ -41,6 +41,8 @@ void ASkillBase::InitSkill_Implementation(AActor* NewCauser, TArray<class AChara
 	TargetList = NewTargetList;
 	SkillID = NewSkillID;
 
+	AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
+
 	//Reset Asset
 	InitAsset(SkillID);
 
@@ -78,13 +80,14 @@ void ASkillBase::InitSkill_Implementation(AActor* NewCauser, TArray<class AChara
 			default:
 				break;
 	}
+	GetWorld()->GetTimerManager().SetTimer(SkillStartTimingTimerHandle, this, &ASkillBase::TrySkill, NewSkillStartTiming, false);
+}
 
-	GetWorld()->GetTimerManager().SetTimer(SkillStartTimingTimerHandle, FTimerDelegate::CreateLambda([&]()
-		{
-			this->SetActorHiddenInGame(false);
-			StartSkill();
-			GetWorldTimerManager().ClearTimer(SkillStartTimingTimerHandle);
-		}), NewSkillStartTiming, false);
+void ASkillBase::TrySkill()
+{
+	this->SetActorHiddenInGame(false);
+	StartSkill();
+	GetWorldTimerManager().ClearTimer(SkillStartTimingTimerHandle);
 }
 
 void ASkillBase::InitAsset(int32 NewSkillID) 
@@ -95,19 +98,10 @@ void ASkillBase::InitAsset(int32 NewSkillID)
 	// Mesh
 	AssetToStream.AddUnique(SkillAssetInfo.SkillActorMesh.ToSoftObjectPath());
 
-	//SFX
-	if (!SkillAssetInfo.SkillSoundList.IsEmpty())
-	{
-		for (int32 i = 0; i < SkillAssetInfo.SkillSoundList.Num(); i++)
-		{
-			AssetToStream.AddUnique(SkillAssetInfo.SkillSoundList[i].ToSoftObjectPath());
-		}
-	}
-
 	//VFX
 	if (!SkillAssetInfo.EffectParticleList.IsEmpty())
 	{
-		for (int32 i = 0; i < SkillAssetInfo.SkillSoundList.Num(); i++)
+		for (int32 i = 0; i < SkillAssetInfo.EffectParticleList.Num(); i++)
 		{
 			AssetToStream.AddUnique(SkillAssetInfo.EffectParticleList[i].ToSoftObjectPath());
 		}
@@ -124,17 +118,6 @@ void ASkillBase::InitAsset(int32 NewSkillID)
 
 void ASkillBase::SetAsset()
 {
-	//SFX
-	if (!SkillAssetInfo.SkillSoundList.IsEmpty())
-	{
-		for (TSoftObjectPtr<USoundCue> sound : SkillAssetInfo.SkillSoundList)
-		{
-			if (sound.IsValid())
-				SkillSoundList.AddUnique(sound.Get());
-
-		}
-	}
-	
 	//VFX
 	if (!SkillAssetInfo.EffectParticleList.IsEmpty())
 	{
@@ -198,10 +181,12 @@ FSkillAssetInfoStruct ASkillBase::GetSkillAssetInfoWithID(int32 TargetSkillID)
 	return FSkillAssetInfoStruct();
 }
 
-void ASkillBase::PlayEffectSound(USoundCue* EffectSound)
+void ASkillBase::PlaySingleSound(FName SoundName)
 {
-	if (EffectSound == nullptr) return;
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), EffectSound, GetActorLocation());
+	if (AssetManagerBaseRef.IsValid())
+	{
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Skill, SkillID, SoundName);
+	}
 }
 
 void ASkillBase::ClearAllTimerHandle()
