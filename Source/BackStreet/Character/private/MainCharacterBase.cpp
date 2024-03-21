@@ -391,7 +391,8 @@ void AMainCharacterBase::TryAttack()
 
 void AMainCharacterBase::TrySkill()
 {
-	check(GetCurrentWeaponRef() != nullptr);
+	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
+	
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle
 		|| !GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.IsSkillAvailable ) return;
@@ -415,7 +416,7 @@ void AMainCharacterBase::TrySkill()
 
 void AMainCharacterBase::AddSkillGauge()
 {
-	check(GetCurrentWeaponRef() != nullptr);
+	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
 	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeInfo.SkillGaugeAug;
