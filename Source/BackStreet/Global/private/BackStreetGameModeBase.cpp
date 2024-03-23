@@ -12,6 +12,7 @@
 #include "../../Character/public/MainCharacterBase.h"
 #include "../public/AssetManagerBase.h"
 #include "../public/SkillManagerBase.h"
+#include "../public/CraftingManagerBase.h"
 
 ABackStreetGameModeBase::ABackStreetGameModeBase()
 {
@@ -25,6 +26,9 @@ void ABackStreetGameModeBase::BeginPlay()
 	//----- Asset Manager √ ±‚»≠ -------
 	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
 	AssetManagerBase->InitAssetManager(this);
+
+	CraftingManagerBase = NewObject<UCraftingManagerBase>(this, UCraftingManagerBase::StaticClass(), FName("CraftingManagerBase"));
+	CraftingManagerBase->InitCraftingManager(this);
 }
 
 void ABackStreetGameModeBase::InitializeGame()
