@@ -1,0 +1,37 @@
+[
+	{
+		"Name": "0",
+		"ResualtWeaponID": 0,
+		"IngredientWeaponID": []
+	},
+	{
+		"Name": "12100",
+		"ResualtWeaponID": 12100,
+		"IngredientWeaponID": [ 11100, 11110 ]
+	},
+	{
+		"Name": "12110",
+		"ResualtWeaponID": 12110,
+		"IngredientWeaponID": [ 11100, 11120 ]
+	},
+	{
+		"Name": "12120",
+		"ResualtWeaponID": 12120,
+		"IngredientWeaponID": [ 11110, 11120 ]
+	},
+	{
+		"Name": "12130",
+		"ResualtWeaponID": 12130,
+		"IngredientWeaponID": [ 11100, 11130 ]
+	},
+	{
+		"Name": "12300",
+		"ResualtWeaponID": 12300,
+		"IngredientWeaponID": [ 11110, 11130 ]
+	},
+	{
+		"Name": "12310",
+		"ResualtWeaponID": 12310,
+		"IngredientWeaponID": [ 11120, 11130 ]
+	}
+]
