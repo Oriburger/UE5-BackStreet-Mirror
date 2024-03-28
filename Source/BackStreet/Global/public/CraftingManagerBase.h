@@ -2,11 +2,11 @@
 
 #pragma once
 
-#include "BackStreet.h"
+#include "../public/BackStreet.h"
 #include "../../Item/public/WeaponInventoryBase.h"
 #include "CraftingManagerBase.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class BACKSTREET_API UCraftingManagerBase : public UObject
 {
 	GENERATED_BODY()
@@ -20,7 +20,7 @@ public:
 
 	// ------ 기본 로직 -----------------------------
 public:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void UpdateCurrentInventoryRef();
 
 

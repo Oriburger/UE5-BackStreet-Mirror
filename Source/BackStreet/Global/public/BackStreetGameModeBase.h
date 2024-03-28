@@ -78,7 +78,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		class AChapterManagerBase* GetChapterManagerRef() { return ChapterManager; }
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UCraftingManagerBase* GetCraftingManagerRef() { return CraftingManagerBase; }
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
