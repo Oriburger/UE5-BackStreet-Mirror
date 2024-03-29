@@ -43,12 +43,19 @@ TArray<FCraftingRecipeStruct> UCraftingManagerBase::MakeDisplayingRecipeList(EWe
 {
 	uint8 chapterLevel = (uint8)GetCurrentChapterLevel();
 	TArray<FCraftingRecipeStruct*> craftingRecipeList;
+
+	TArray<FCraftingRecipeStruct> craftableRecipeList;
+	TArray<FCraftingRecipeStruct> uncraftableRecipeList;
+	TArray<FCraftingRecipeStruct> unidentifiedRecipeList;
+
 	TArray<FCraftingRecipeStruct> displayingRecipeList;
+
 	TArray<FName> craftingKeyList = CraftingRecipeTable->GetRowNames();
 	for (FName key : craftingKeyList)
 	{
 		craftingRecipeList.Add(CraftingRecipeTable->FindRow<FCraftingRecipeStruct>(key, key.ToString()));
 	}
+
 	for (int i = 0; i < craftingRecipeList.Num(); ++i)
 	{
 		//check Chapter Level by WeaponID
@@ -60,8 +67,10 @@ TArray<FCraftingRecipeStruct> UCraftingManagerBase::MakeDisplayingRecipeList(EWe
 		//If user selected 'All' tab, SelectedType is E_None 
 		if (SelectedType == EWeaponType::E_None)
 		{
-			displayingRecipeList.Add(*craftingRecipeList[i]);
-			UE_LOG(LogTemp, Log, TEXT("DisplayingRecipe ID : %d is added To All"), craftingRecipeList[i]->ResultWeaponID);
+			craftingRecipeList[i]->CraftingSlotVisual = SetRecipeVisual(*craftingRecipeList[i]);
+			if(craftingRecipeList[i]->CraftingSlotVisual == ECraftingSlotVisual::E_Craftable) craftableRecipeList.Add(*craftingRecipeList[i]);
+			else if (craftingRecipeList[i]->CraftingSlotVisual == ECraftingSlotVisual::E_Uncraftable) uncraftableRecipeList.Add(*craftingRecipeList[i]);
+			else if (craftingRecipeList[i]->CraftingSlotVisual == ECraftingSlotVisual::E_Unidentified) unidentifiedRecipeList.Add(*craftingRecipeList[i]);
 		}
 		//displayingRecipeList must consist of applicable weaponType
 		else
@@ -69,11 +78,69 @@ TArray<FCraftingRecipeStruct> UCraftingManagerBase::MakeDisplayingRecipeList(EWe
 			//CheckWeaponType from WeaponID
 			if (SelectedType == craftingRecipeList[i]->CraftingType)
 			{
-				displayingRecipeList.Add(*craftingRecipeList[i]);
-				UE_LOG(LogTemp, Log, TEXT("DisplayingRecipe ID : %d is added"), craftingRecipeList[i]->ResultWeaponID);
+				craftingRecipeList[i]->CraftingSlotVisual = SetRecipeVisual(*craftingRecipeList[i]);
+				if (craftingRecipeList[i]->CraftingSlotVisual == ECraftingSlotVisual::E_Craftable) craftableRecipeList.Add(*craftingRecipeList[i]);
+				else if (craftingRecipeList[i]->CraftingSlotVisual == ECraftingSlotVisual::E_Uncraftable) uncraftableRecipeList.Add(*craftingRecipeList[i]);
+				else if (craftingRecipeList[i]->CraftingSlotVisual == ECraftingSlotVisual::E_Unidentified) unidentifiedRecipeList.Add(*craftingRecipeList[i]);
 			}
 		}
 	}
+	displayingRecipeList.Append(craftableRecipeList);
+	displayingRecipeList.Append(uncraftableRecipeList);
+	displayingRecipeList.Append(unidentifiedRecipeList);
+
 	return displayingRecipeList;
 }
+
+ECraftingSlotVisual UCraftingManagerBase::SetRecipeVisual(FCraftingRecipeStruct Recipe)
+{	
+	ACharacterBase* mainCharacter = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	uint8 playerCraftingLevel = *mainCharacter->GetCharacterState().CraftingLevelMap.Find(GetCurrentChapterLevel());
+	uint8 IngredientIdx = Recipe.IngredientWeaponID.Num();
+
+	//Check recipe adapt for current chapter
+	if(!Recipe.AvailableChapterList.Contains((uint8)GetCurrentChapterLevel())) return ECraftingSlotVisual::E_Hide;
+	
+	//Check recipe adapt for playerCraftingLevel
+	if(Recipe.CraftingLevel > playerCraftingLevel) return ECraftingSlotVisual::E_Unidentified;
+	
+	//Check player has ingredient weapon
+	for (int32 RecipeWeaponID : Recipe.IngredientWeaponID)
+	{
+		if(IsIngredientWeaponValid(RecipeWeaponID)) IngredientIdx--;
+	}
+	if(IngredientIdx == 0) return ECraftingSlotVisual::E_Craftable;
+	else return ECraftingSlotVisual::E_Uncraftable;
+}
+
+
+
+bool UCraftingManagerBase::IsIngredientWeaponValid(int32 IngredientID)
+{
+	if (IsValid(InventoryRef))
+	{
+		for (FInventoryItemInfoStruct InventoryWeapon : InventoryRef->GetInventoryArray())
+		{
+			if (InventoryWeapon.WeaponID == IngredientID)
+			{
+				return 1;
+			}
+		}
+	}
+	if (IsValid(SubInventoryRef))
+	{
+		for (FInventoryItemInfoStruct SubInventoryWeapon : SubInventoryRef->GetInventoryArray())
+		{
+			if (SubInventoryWeapon.WeaponID == IngredientID)
+			{
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+
+
+
 

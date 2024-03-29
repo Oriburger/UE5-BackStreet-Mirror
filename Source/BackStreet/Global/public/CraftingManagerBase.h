@@ -29,6 +29,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		TArray<FCraftingRecipeStruct> MakeDisplayingRecipeList(EWeaponType SelectedType);
 
+	UFUNCTION(BlueprintCallable)
+		ECraftingSlotVisual SetRecipeVisual(FCraftingRecipeStruct Recipe);
+
+	UFUNCTION(BlueprintCallable)
+		bool IsIngredientWeaponValid(int32 IngredientWeaponID);
+
 
 //-------- ETC. (Ref)-------------------------------
 public:
@@ -38,10 +44,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		UDataTable* CraftingRecipeTable;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 		AWeaponInventoryBase* InventoryRef;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 		AWeaponInventoryBase* SubInventoryRef;
 
 };
