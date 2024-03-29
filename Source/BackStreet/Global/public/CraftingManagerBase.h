@@ -11,21 +11,31 @@ class BACKSTREET_API UCraftingManagerBase : public UObject
 {
 	GENERATED_BODY()
 
-	// ----- Global, Component ------------------
+// ----- Global, Component ------------------
 public:
 	UCraftingManagerBase();
 
 	UFUNCTION()
 		void InitCraftingManager(ABackStreetGameModeBase* NewGamemodeRef);
 
-	// ------ 기본 로직 -----------------------------
+	UFUNCTION(BlueprintCallable)
+		EChapterLevel GetCurrentChapterLevel();
+
+// ------ Default Logic -----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
 		void UpdateCurrentInventoryRef();
 
+	UFUNCTION(BlueprintCallable)
+		TArray<FCraftingRecipeStruct> MakeDisplayingRecipeList(EWeaponType SelectedType);
 
+
+//-------- ETC. (Ref)-------------------------------
 public:
 	UPROPERTY()
+		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		UDataTable* CraftingRecipeTable;
 
 	UPROPERTY()
