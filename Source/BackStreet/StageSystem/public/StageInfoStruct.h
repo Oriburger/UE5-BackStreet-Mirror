@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Engine/DataTable.h"
-#include "../../Character/public/EnemyStatInfoStruct.h"
 #include "StageInfoStruct.generated.h"
+
+
 
 UENUM(BlueprintType)
 enum class EStageCategoryInfo : uint8
@@ -23,6 +24,15 @@ enum class EWaveCategoryInfo : uint8
 	E_TimeLimitWave			  	UMETA(DisplayName = "E_TimeLimitWave"),
 };
 
+UENUM(BlueprintType)
+enum class EChapterLevel : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_Chapter1			UMETA(DisplayName = "Chapter1"),
+	E_Chapter2			UMETA(DisplayName = "Chapter2"),
+	E_Chapter3			UMETA(DisplayName = "Chapter3"),
+	E_Chapter4			UMETA(DisplayName = "Chapter4")
+};
 
 USTRUCT(BlueprintType)
 struct FWaveEnemyStruct : public FTableRowBase

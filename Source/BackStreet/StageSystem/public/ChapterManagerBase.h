@@ -6,16 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "ChapterManagerBase.generated.h"
 
-UENUM(BlueprintType)
-enum class EChapterLevel : uint8
-{
-	E_None				UMETA(DisplayName = "None"),
-	E_Chapter1				UMETA(DisplayName = "Chapter1"),
-	E_Chapter2			UMETA(DisplayName = "Chapter2"),
-	E_Chapter3			UMETA(DisplayName = "Chapter3"),
-	E_Chaptre4			UMETA(DisplayName = "Chapter4")
-};
-
 UCLASS()
 class BACKSTREET_API AChapterManagerBase : public AActor
 {

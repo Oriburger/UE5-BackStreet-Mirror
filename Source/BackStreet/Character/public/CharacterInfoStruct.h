@@ -4,8 +4,9 @@
 #include "Materials/MaterialInstanceConstant.h"
 #include "Sound/SoundCue.h"
 #include "NiagaraSystem.h"
-#include "CharacterInfoEnum.h"
-#include "../../SkillSystem/public/SkillInfoStruct.h"
+#include "../../Item/public/ItemInfoStruct.h"
+#include "../../SkillSystem/public/SkillInfoStruct.h" 
+#include "../../StageSystem/public/StageInfoStruct.h"
 #include "CharacterInfoStruct.generated.h"
 
 UENUM(BlueprintType)
@@ -28,6 +29,10 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		float FixedValue;
 };
+
+//===============================================
+//====== Character Common Info  ========================
+//===============================================
 
 USTRUCT(BlueprintType)
 struct FCharacterStatStruct : public FTableRowBase
@@ -158,11 +163,14 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		FStatInfoStruct DebuffDefense;
 
-//====== Skill =========================
+	//====== Player ====================================
 	
 	//Player Skill Gauge
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float CharacterCurrSkillGauge;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		TMap<EChapterLevel, uint8> CraftingLevelMap;
 };
 
 USTRUCT(BlueprintType)
@@ -263,4 +271,68 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
 		TArray<TSoftObjectPtr<UTexture>> EmotionTextureList;
 
+};
+
+
+//===============================================
+//====== Enemy CharacterInfo  ==========================
+//===============================================
+
+USTRUCT(BlueprintType)
+struct FEnemyDropInfoStruct
+{
+	GENERATED_BODY()
+
+	public:
+	//Max item count to spawn after dead event.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem", meta = (UIMin = 0, UIMax = 2))
+	int32 MaxSpawnItemCount;
+
+	//Item type list to spawn after dead event. (each item is identified by index)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
+	TArray<EItemCategoryInfo> SpawnItemTypeList;
+
+	//Item ID list to spawn after dead event.(each item is identified by index)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
+	TArray<int32> SpawnItemIDList;
+
+	//Item spawn percentage list.  (0.0f ~ 1.0f), (each item is identified by index)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
+	TArray<float> ItemSpawnProbabilityList;
+};
+
+USTRUCT(BlueprintType)
+struct FEnemyStatStruct : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	public:
+	UPROPERTY(EditAnywhere)
+	int32 EnemyID;
+
+	UPROPERTY(EditAnywhere)
+	FName EnemyName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+	FCharacterStatStruct CharacterStat;
+
+	//Enemy's Default Weapon ID
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+	int32 DefaultWeaponID = 0;
+
+	//Info data of dropping item when enemy dies
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+	FEnemyDropInfoStruct DropInfo;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
+	float DefaultAttackSpeed;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TArray<int32> EnemySkillList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TArray<float> EnemySkillIntervalList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintreadOnly)
+	FSkillSetInfo SkillSetInfo;
 };

@@ -20,7 +20,6 @@
 
 /* ----- ±¸Á¶Ã¼/Enum ------------ */
 #include "../../Character/public/CharacterInfoStruct.h"
-#include "../../Character/public/EnemyStatInfoStruct.h"
 #include "../../StageSystem/public/DirectionEnumInfo.h"
 #include "../../StageSystem/public/StageInfoStruct.h"
 #include "../../Item/public/ItemInfoStruct.h"
