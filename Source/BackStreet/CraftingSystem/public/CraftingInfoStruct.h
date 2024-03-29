@@ -5,13 +5,13 @@
 #include "CraftingInfoStruct.generated.h"
 
 UENUM(BlueprintType)
-enum class ECraftingType : uint8
+enum class ECraftingSlotVisual : uint8
 {
 	E_None				UMETA(DisplayName = "None"),
-	E_All				UMETA(DisplayName = "All"),
-	E_Melee			UMETA(DisplayName = "Melee"),
-	E_Shoot				UMETA(DisplayName = "Shoot"),
-	E_Throw		UMETA(DisplayName = "Throw"),
+	E_Craftable			UMETA(DisplayName = "Craftable"),
+	E_Uncraftable		UMETA(DisplayName = "Uncraftable"),
+	E_Unidentified		UMETA(DisplayName = "UnIdentified"),
+	E_Hide				UMETA(DisplayName = "Hide"),
 };
 
 USTRUCT(BlueprintType)
@@ -35,4 +35,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		uint8 CraftingLevel;
+
+	UPROPERTY(BlueprintReadWrite)
+		ECraftingSlotVisual CraftingSlotVisual = ECraftingSlotVisual::E_Craftable;
 };

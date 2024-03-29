@@ -91,6 +91,11 @@ void ACharacterBase::InitCharacterState()
 	CharacterState.CurrentHP = CharacterStat.DefaultHP;
 	CharacterState.bCanAttack = true;
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
+	CharacterState.CraftingLevelMap.Add(EChapterLevel::E_Chapter1, 4);
+	CharacterState.CraftingLevelMap.Add(EChapterLevel::E_Chapter2, 0);
+	CharacterState.CraftingLevelMap.Add(EChapterLevel::E_Chapter3, 0);
+	CharacterState.CraftingLevelMap.Add(EChapterLevel::E_Chapter4, 0);
+
 	UpdateCharacterStat(CharacterStat);
 }
 
