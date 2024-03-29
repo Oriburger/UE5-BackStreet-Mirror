@@ -6,6 +6,16 @@
 #include "GameFramework/Actor.h"
 #include "ChapterManagerBase.generated.h"
 
+UENUM(BlueprintType)
+enum class EChapterLevel : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_Chapter1				UMETA(DisplayName = "Chapter1"),
+	E_Chapter2			UMETA(DisplayName = "Chapter2"),
+	E_Chapter3			UMETA(DisplayName = "Chapter3"),
+	E_Chaptre4			UMETA(DisplayName = "Chapter4")
+};
+
 UCLASS()
 class BACKSTREET_API AChapterManagerBase : public AActor
 {
@@ -44,10 +54,10 @@ public:
 		bool IsChapterClear();
 
 	UFUNCTION()
-		bool IsGameClear() { return (ChapterLV >= MAX_CHAPTER_COUNT) ? true : false; }
+		bool IsGameClear() { return ((uint8)ChapterLevel >= MAX_CHAPTER_COUNT) ? true : false; }
 
 	UFUNCTION(BlueprintCallable)
-		void SetCurrentStage(class AStageData* Target) { CurrentStage = Target; };
+		void SetCurrentStage(class AStageData* Target) { CurrentStage = Target; }
 
 	UFUNCTION(BlueprintCallable)
 		UStageGenerator* GetStageGenerator() { return StageGenerator; }
@@ -62,7 +72,7 @@ public:
 		AWaveManager* GetWaveeManager() { return WaveManager; }
 
 	UFUNCTION(BlueprintCallable)
-		int32 GetChapterLV() { return ChapterLV; }
+		EChapterLevel GetChapterLevel() { return ChapterLevel; }
 
 	UFUNCTION(BlueprintCallable)
 		AStageData* GetCurrentStage() { return CurrentStage; }
@@ -75,7 +85,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		FStageInfoStruct GetStageTypeInfoWithType(EStageCategoryInfo Type);
-
 	
 private:
 
@@ -93,7 +102,7 @@ private:
 
 private:
 	UPROPERTY()
-		int32 ChapterLV;
+		EChapterLevel ChapterLevel;
 
 	UPROPERTY()
 		float StatWeight;
