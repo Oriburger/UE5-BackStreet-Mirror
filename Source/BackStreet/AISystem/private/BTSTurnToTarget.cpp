@@ -55,7 +55,7 @@ FRotator UBTSTurnToTarget::GetTurnRotation(APawn* ControlledPawn)
 		FRotator targetRotation = BlackboardRef->GetValueAsRotator(TargetBBKey.SelectedKeyName);
 		if (UKismetMathLibrary::EqualEqual_RotatorRotator(pawnRotation, targetRotation, 2.0f))
 			return targetRotation;
-		return UKismetMathLibrary::RInterpTo(pawnRotation, targetRotation, GetWorld()->GetDeltaSeconds(), 2.0f);
+		return UKismetMathLibrary::RInterpTo(pawnRotation, targetRotation, GetWorld()->GetDeltaSeconds(), 10.0f);
 	}
 
 	FVector targetLocation;
@@ -78,5 +78,5 @@ FRotator UBTSTurnToTarget::GetTurnRotation(APawn* ControlledPawn)
 	FRotator pawnRotation = ControlledPawn->GetActorRotation();
 	FRotator targetRotation = UKismetMathLibrary::MakeRotFromX(directionToTarget);
 
-	return UKismetMathLibrary::RInterpTo(pawnRotation, targetRotation, GetWorld()->GetDeltaSeconds(), 2.0f);
+	return UKismetMathLibrary::RInterpTo(pawnRotation, targetRotation, GetWorld()->GetDeltaSeconds(), 10.0f);
 }
