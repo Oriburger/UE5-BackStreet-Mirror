@@ -250,6 +250,10 @@ void ACharacterBase::Die()
 			InventoryRef->Destroy();
 		}
 	}
+	//Disable Collision
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+
 	if (IsValid(GetCurrentWeaponRef()) && !GetCurrentWeaponRef()->IsActorBeingDestroyed())
 	{
 		GetCurrentWeaponRef()->ClearAllTimerHandle();
