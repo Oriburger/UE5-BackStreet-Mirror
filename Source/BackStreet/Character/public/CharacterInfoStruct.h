@@ -183,9 +183,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
 		TSoftObjectPtr<USkeletalMesh> CharacterMesh;
 
-	//스폰할 적 머티리얼 정보 저장
+	//Character's Mesh Materials
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
-		TSoftObjectPtr<UMaterialInstanceConstant> CharacterMeshMaterial;
+		TArray<TSoftObjectPtr<UMaterialInstanceConstant> > CharacterMeshMaterialList;
 
 	//메시의 초기 위치 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
