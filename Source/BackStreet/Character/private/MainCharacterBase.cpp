@@ -580,14 +580,14 @@ bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* C
 	{
 		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "Debuff");
 	}
-	//230621 임시 제거
-	//ActivateBuffNiagara(bIsDebuff, BuffDebuffType);
+	
+	ActivateDebuffNiagara((uint8)DebuffInfo.Type);
 
-	//GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
-	//BuffEffectResetTimerHandle.Invalidate();
-	//GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
-	//	DeactivateBuffEffect();
-	//}), DebuffInfo.TotalTime, false);
+	GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
+	BuffEffectResetTimerHandle.Invalidate();
+	GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
+		DeactivateBuffEffect();
+	}), DebuffInfo.TotalTime, false);
 
 	return true;
 }
