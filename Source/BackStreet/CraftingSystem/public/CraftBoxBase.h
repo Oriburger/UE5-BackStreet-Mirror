@@ -31,11 +31,17 @@ public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* Mesh;
 
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UTextRenderComponent* TextRenderComp;
 
 // ------ 기본 로직 -----------------------------
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void EnterUI(AActor* Causer);
+
+	UFUNCTION(BlueprintCallable)
+		void VisibleGuideTextRender(AActor* Causer);
+
+	UFUNCTION(BlueprintCallable)
+		void InVisibleGuideTextRender(AActor* Causer);
 };

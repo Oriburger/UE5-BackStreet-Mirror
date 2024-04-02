@@ -20,7 +20,6 @@
 
 /* ----- ±¸Á¶Ã¼/Enum ------------ */
 #include "../../Character/public/CharacterInfoStruct.h"
-#include "../../Character/public/EnemyStatInfoStruct.h"
 #include "../../StageSystem/public/DirectionEnumInfo.h"
 #include "../../StageSystem/public/StageInfoStruct.h"
 #include "../../Item/public/ItemInfoStruct.h"
@@ -28,6 +27,7 @@
 #include "../../Item/public/ProjectileInfoStruct.h"
 #include "../../Global/public/AssetInfoStruct.h"
 #include "../../SkillSystem/public/SkillInfoStruct.h"
+#include "../../CraftingSystem/public/CraftingInfoStruct.h"
 
 
 #define MAX_CHAPTER_COUNT 1
