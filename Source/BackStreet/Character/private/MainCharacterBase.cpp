@@ -202,7 +202,7 @@ FVector AMainCharacterBase::GetThrowDestination()
 
 void AMainCharacterBase::MoveForward(float Value)
 {
-	FVector Direction = FVector(1.0f, 0.0f, 0.0f);
+	FVector Direction = FollowingCamera->GetForwardVector();
 	AddMovementInput(Direction, Value);
 
 	if (Value != 0)
@@ -214,7 +214,7 @@ void AMainCharacterBase::MoveForward(float Value)
 
 void AMainCharacterBase::MoveRight(float Value)
 {
-	FVector Direction = FVector(0.0f, 1.0f, 0.0f);
+	FVector Direction = FollowingCamera->GetRightVector();
 	AddMovementInput(Direction, Value);
 
 	if (Value != 0)
@@ -229,7 +229,8 @@ void AMainCharacterBase::Roll()
 	if (!GetIsActionActive(ECharacterActionType::E_Idle)) return;
 	
 	FVector newDirection(0.0f);
-	FRotator newRotation = FRotator();
+	FRotator newRotation = GetControlRotation();
+	newRotation.Pitch = newRotation.Roll = 0.0f;
 	newDirection.X = GetInputAxisValue(FName("MoveForward"));
 	newDirection.Y = GetInputAxisValue(FName("MoveRight"));
 
@@ -242,15 +243,20 @@ void AMainCharacterBase::Roll()
 	}
 	else //아니라면, 입력 방향으로 구르기
 	{
-		newRotation = { 0, FMath::Atan2(newDirection.Y, newDirection.X) * 180.0f / 3.141592, 0.0f };
-		newRotation.Yaw += 270.0f;
+		float targetYawValue = FMath::Atan2(newDirection.Y, newDirection.X) * 180.0f / 3.141592;
+		UE_LOG(LogTemp, Warning, TEXT("controlValue : %.2lf,  current yaw : %.2lf"), targetYawValue, newRotation.Yaw);
+		targetYawValue += 270.0f;
+		newRotation.Yaw = FMath::Fmod(newRotation.Yaw + targetYawValue, 360.0f);
+		UE_LOG(LogTemp, Warning, TEXT("new Yaw value : %.2lf"), newRotation.Yaw);
 	}
 	
+	// 시점 전환을 위해 제거
 	//Rotation 리셋 로직
 	GetWorldTimerManager().ClearTimer(RotationResetTimerHandle);
-	ResetRotationToMovement();
+	//ResetRotationToMovement();
 	SetActorRotation(newRotation + FRotator(0.0f, 90.0f, 0.0f));
 	GetMesh()->SetWorldRotation(newRotation);
+	
 
 	// 사운드
 	if (AssetManagerBaseRef.IsValid())
@@ -411,7 +417,7 @@ void AMainCharacterBase::TrySkill()
 	Super::TrySkill();
 
 	//Try Skill and adjust rotation to cursor position
-	RotateToCursor();
+	//RotateToCursor();
 }
 
 void AMainCharacterBase::AddSkillGauge()
@@ -463,13 +469,19 @@ void AMainCharacterBase::RotateToCursor()
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	FRotator newRotation = GetControlRotation();
+	newRotation.Pitch = newRotation.Roll = 0.0f;
+	SetActorRotation(newRotation);
+	return;
+
+	/* 시점 전환을 위해 제거
 	FRotator newRotation = PlayerControllerRef.Get()->GetRotationToCursor();
 	if (newRotation != FRotator())
 	{
 		newRotation.Pitch = newRotation.Roll = 0.0f;
 		GetMesh()->SetWorldRotation(newRotation);
 	}
-	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetMesh()->SetWorldRotation(newRotation.Quaternion());
 
 	GetWorld()->GetTimerManager().ClearTimer(RotationResetTimerHandle);
@@ -478,7 +490,7 @@ void AMainCharacterBase::RotateToCursor()
 		FRotator newRotation = PlayerControllerRef.Get()->GetLastRotationToCursor();
 		newRotation.Yaw = FMath::Fmod((newRotation.Yaw + 90.0f), 360.0f);
 		SetActorRotation(newRotation.Quaternion(), ETeleportType::ResetPhysics);
-	}), 1.0f, false);
+	}), 1.0f, false);*/
 }
 
 void AMainCharacterBase::PickSubWeapon()
@@ -542,11 +554,12 @@ void AMainCharacterBase::StopDashMovement()
 
 void AMainCharacterBase::ResetRotationToMovement()
 {
+	/* 시점 전환을 위해 제거
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Roll) return;
 	FRotator newRotation = GetCapsuleComponent()->GetComponentRotation();
 	newRotation.Yaw += 270.0f;
 	GetMesh()->SetWorldRotation(newRotation);
-	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->bOrientRotationToMovement = true;*/
 }
 
 void AMainCharacterBase::SwitchToNextWeapon()
