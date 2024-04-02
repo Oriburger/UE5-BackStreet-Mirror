@@ -20,8 +20,8 @@ enum class EWeaponType : uint8
 {
 	E_None				UMETA(DisplayName = "None"),
 	E_Melee				UMETA(DisplayName = "Melee"),
-	E_Shoot				UMETA(DisplayName = "Shoot"),
-	E_Throw				UMETA(DisplayName = "Throw")
+	E_Throw				UMETA(DisplayName = "Throw"),
+	E_Shoot				UMETA(DisplayName = "Shoot")
 
 };
 
