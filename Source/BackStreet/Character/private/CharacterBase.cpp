@@ -234,7 +234,6 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 
 	//GetCharacterMovement()->AddImpulse(knockBackDirection);
 	Cast<ACharacterBase>(Target)->LaunchCharacter(knockBackDirection, true, false);
-	Cast<ACharacterBase>(Target)->CharacterState.CharacterActionState = ECharacterActionType::E_Hit;
 }
 
 void ACharacterBase::Die()
@@ -255,6 +254,10 @@ void ACharacterBase::Die()
 			InventoryRef->Destroy();
 		}
 	}
+	//Disable Collision
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+
 	if (IsValid(GetCurrentWeaponRef()) && !GetCurrentWeaponRef()->IsActorBeingDestroyed())
 	{
 		GetCurrentWeaponRef()->ClearAllTimerHandle();
@@ -451,13 +454,21 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 	AssetInfo = GetAssetInfoWithID(NewEnemyID);
 	//SetCharacterAnimAssetInfoData(CharacterID);
 
-	if (!AssetInfo.CharacterMesh.IsNull() && !AssetInfo.CharacterMeshMaterial.IsNull()/* && !AssetInfo.AnimBlueprint.IsNull()*/)
+	if (!AssetInfo.CharacterMesh.IsNull() && AssetInfo.CharacterMeshMaterialList.Num() != 0)
 	{
 		TArray<FSoftObjectPath> AssetToStream;
 
 		// Mesh 관련
 		AssetToStream.AddUnique(AssetInfo.CharacterMesh.ToSoftObjectPath());
-		AssetToStream.AddUnique(AssetInfo.CharacterMeshMaterial.ToSoftObjectPath());
+		for (int32 idx = 0; idx < AssetInfo.CharacterMeshMaterialList.Num(); idx++)
+		{
+			if (AssetInfo.CharacterMeshMaterialList.IsValidIndex(idx))
+			{
+				AssetToStream.AddUnique(AssetInfo.CharacterMeshMaterialList[idx].ToSoftObjectPath());
+			}
+		}
+			
+
 
 		// Animation 관련
 		//AssetToStream.AddUnique(AssetInfo.AnimBlueprint.ToSoftObjectPath());
@@ -578,7 +589,7 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 void ACharacterBase::SetAsset()
 {
 	if (AssetInfo.CharacterMesh.IsNull() || !IsValid(AssetInfo.CharacterMesh.Get())) return;
-	if (AssetInfo.CharacterMeshMaterial.IsNull() || !IsValid(AssetInfo.CharacterMeshMaterial.Get())) return;
+	if (AssetInfo.CharacterMeshMaterialList.Num() == 0) return;
 	//if (AssetInfo.AnimBlueprint.IsNull() || !IsValid(AssetInfo.AnimBlueprint.Get())) return;
 
 	GetCapsuleComponent()->SetWorldRotation(FRotator::ZeroRotator);
@@ -589,9 +600,11 @@ void ACharacterBase::SetAsset()
 	GetMesh()->SetWorldRotation(FRotator(0.0f, -90.0f, 0.0f));
 	GetMesh()->SetRelativeScale3D(FVector(1.0f));
 
+	const int32 meshMatCount = AssetInfo.CharacterMeshMaterialList.Num();
 	for (int matIdx = 0; matIdx < GetMesh()->GetMaterials().Num(); matIdx++)
 	{
-		GetMesh()->SetMaterial(matIdx, AssetInfo.CharacterMeshMaterial.Get());
+		UMaterialInterface* targetMat = AssetInfo.CharacterMeshMaterialList[matIdx % meshMatCount].Get();
+		GetMesh()->SetMaterial(matIdx, targetMat);
 	}
 	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimBlueprint);
 	InitAnimAsset();

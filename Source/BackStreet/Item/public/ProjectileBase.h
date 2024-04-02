@@ -37,6 +37,9 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
 		UStaticMeshComponent* Mesh;
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+		UNiagaraComponent* TrailParticle;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UProjectileMovementComponent* ProjectileMovement;
 

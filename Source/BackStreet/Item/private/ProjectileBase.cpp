@@ -40,6 +40,11 @@ AProjectileBase::AProjectileBase()
 	ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
 	ProjectileMovement->bAutoActivate = false;
 
+	TrailParticle = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TRAIL_PARTICLE"));
+	TrailParticle->SetupAttachment(Mesh);
+	TrailParticle->SetRelativeLocation(FVector(0.0f));
+	TrailParticle->bAutoActivate = false;
+
 	InitialLifeSpan = 10.0f;
 	this->Tags.Add("Projectile");
 }
@@ -82,6 +87,9 @@ void AProjectileBase::InitProjectileAsset()
 
 	if (ProjectileAssetInfo.ExplosionParticle.IsValid())
 		ExplosionParticle = ProjectileAssetInfo.ExplosionParticle.Get();
+
+	if (ProjectileAssetInfo.TrailParticle.IsValid())
+		TrailParticle->SetAsset(ProjectileAssetInfo.TrailParticle.Get());
 }
 
 void AProjectileBase::DestroyWithEffect(FVector Location)
@@ -125,6 +133,7 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectil
 	{
 		TArray<FSoftObjectPath> tempStream, assetToStream;
 		tempStream.AddUnique(ProjectileAssetInfo.ProjectileMesh.ToSoftObjectPath());
+		tempStream.AddUnique(ProjectileAssetInfo.TrailParticle.ToSoftObjectPath());
 		tempStream.AddUnique(ProjectileAssetInfo.HitEffectParticle.ToSoftObjectPath());
 		tempStream.AddUnique(ProjectileAssetInfo.HitEffectParticleLegacy.ToSoftObjectPath());
 			
@@ -251,5 +260,9 @@ void AProjectileBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
 void AProjectileBase::ActivateProjectileMovement()
 {
 	ProjectileMovement->Activate();
+	if (IsValid(TrailParticle))
+	{
+		TrailParticle->bAutoActivate = true;
+	}
 	bIsActivated = true; 
 }
