@@ -120,6 +120,9 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Move);
 
+		//Look 
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Look);
+
 		//Rolling
 		EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Roll);
 
@@ -129,8 +132,12 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//Reload
 		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryReload);
 
+		//Sprint
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Sprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StopSprint);
+
 		//Zoom
-		EnhancedInputComponent->BindAction(ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
+		//EnhancedInputComponent->BindAction(ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
 
 		//Throw
 		EnhancedInputComponent->BindAction(ThrowReadyAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ReadyToThrow);
@@ -226,11 +233,16 @@ FVector AMainCharacterBase::GetThrowDestination()
 void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
-	FVector2D MovementVector = Value.Get<FVector2D>();
+	FVector2D movementVector = Value.Get<FVector2D>();
 	if (Controller != nullptr)
 	{
-		AddMovementInput({ 1.0f, 0.0f, 0.0f }, MovementVector.Y);
-		AddMovementInput({ 0.0f, 1.0f, 0.0f }, MovementVector.X);
+		AddMovementInput(FollowingCamera->GetForwardVector(), movementVector.Y);
+		AddMovementInput(FollowingCamera->GetRightVector(), movementVector.X);
+
+		if (movementVector.Length() > 0 && OnMove.IsBound())
+		{
+			OnMove.Broadcast();
+		}
 	}
 }
 
@@ -261,7 +273,7 @@ void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 	if (!CharacterState.bIsSprinting) return;
 
 	CharacterState.bIsSprinting = false;
-	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.DefaultMoveSpeed / 2.0f;
+	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.DefaultMoveSpeed * 0.75f;
 }
 
 void AMainCharacterBase::Roll()
