@@ -158,6 +158,12 @@ private:
 	UFUNCTION()
 		void StopDashMovement();
 
+// ------- CharacterInStance ---------------
+protected:
+	//CharacterInstance
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FCharacterInstance CharacterInstance;
+
 // ------- 어빌리티 / 디버프 ---------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)

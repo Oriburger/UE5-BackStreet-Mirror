@@ -17,6 +17,18 @@ enum class EEmotionType : uint8
 	E_Death				UMETA(DisplayName = "Death")
 };
 
+USTRUCT(BlueprintType) 
+struct FCharacterInstance
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 CharacterDefaultHP;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		TMap<EChapterLevel, uint8> CraftingLevelMap;
+};
+
 USTRUCT(BlueprintType)
 struct FStatInfoStruct
 {
@@ -168,9 +180,6 @@ public:
 	//Player Skill Gauge
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float CharacterCurrSkillGauge;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TMap<EChapterLevel, uint8> CraftingLevelMap;
 };
 
 USTRUCT(BlueprintType)

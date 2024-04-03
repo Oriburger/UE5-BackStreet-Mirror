@@ -2,7 +2,7 @@
 
 
 #include "../public/CraftingManagerBase.h"
-#include "../../Character/public/CharacterBase.h"
+#include "../../Character/public/MainCharacterBase.h"
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "../public/BackStreetGameModeBase.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -94,8 +94,8 @@ TArray<FCraftingRecipeStruct> UCraftingManagerBase::MakeDisplayingRecipeList(EWe
 
 ECraftingSlotVisual UCraftingManagerBase::SetRecipeVisual(FCraftingRecipeStruct Recipe)
 {	
-	ACharacterBase* mainCharacter = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	uint8 playerCraftingLevel = *mainCharacter->GetCharacterState().CraftingLevelMap.Find(GetCurrentChapterLevel());
+	AMainCharacterBase* mainCharacter = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	uint8 playerCraftingLevel = 0;//*mainCharacter->GetCharacterInstance()->CraftingLevelMap.Find(GetCurrentChapterLevel());
 	uint8 IngredientIdx = Recipe.IngredientWeaponID.Num();
 
 	//Check recipe adapt for current chapter
