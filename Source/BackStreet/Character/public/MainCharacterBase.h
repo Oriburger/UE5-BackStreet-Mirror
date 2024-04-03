@@ -103,6 +103,9 @@ public:
 		class UInputAction* ReloadAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* ZoomAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 		class UInputAction* ThrowReadyAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -161,7 +164,7 @@ public:
 
 	//카메라 Boom의 길이를 늘이거나 줄인다.
 	UFUNCTION()
-		void ZoomIn(float Value);
+		void ZoomIn(const FInputActionValue& Value);
 
 	//주변에 상호작용 가능한 액터를 조사한다.
 	UFUNCTION()

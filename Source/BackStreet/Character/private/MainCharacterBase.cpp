@@ -129,6 +129,8 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//Reload
 		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryReload);
 
+		//Zoom
+		EnhancedInputComponent->BindAction(ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
 
 		//Throw
 		EnhancedInputComponent->BindAction(ThrowReadyAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ReadyToThrow);
@@ -315,11 +317,12 @@ void AMainCharacterBase::Dash()
 	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, this, &AMainCharacterBase::StopDashMovement, 0.075f, false);
 }
 
-void AMainCharacterBase::ZoomIn(float Value)
+void AMainCharacterBase::ZoomIn(const FInputActionValue& Value)
 {
-	if (Value == 0.0f) return;
+	float value = Value.Get<float>();
+	if (value == 0.0f) return;
 	float newLength = CameraBoom->TargetArmLength;
-	newLength = newLength + Value * 25.0f;
+	newLength = newLength + value * 75.0f;
 	newLength = newLength < MIN_CAMERA_BOOM_LENGTH ? MIN_CAMERA_BOOM_LENGTH : newLength;
 	newLength = newLength > MAX_CAMERA_BOOM_LENGTH ? MAX_CAMERA_BOOM_LENGTH : newLength;
 	CameraBoom->TargetArmLength = newLength;
