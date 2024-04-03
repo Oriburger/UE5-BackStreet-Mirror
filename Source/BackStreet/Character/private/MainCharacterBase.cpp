@@ -1,6 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "../public/MainCharacterBase.h"
 #include "../public/MainCharacterController.h"
+#include "../../Global/public/BackStreetGameInstance.h"
 #include "../public/AbilityManagerBase.h"
 #include "../../Item/public/WeaponBase.h"
 #include "../../Item/public/ThrowWeaponBase.h"
@@ -72,7 +73,13 @@ void AMainCharacterBase::BeginPlay()
 	Super::BeginPlay();
 	
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	
+	UBackStreetGameInstance* GameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
+
+	UE_LOG(LogTemp, Log, TEXT("GetSaveData : %d"), GameInstance->GetCurrentSaveData().CharacterInstanceData.CharacterDefaultHP);
+	CharacterInstance = GameInstance->GetCurrentSaveData().CharacterInstanceData;
+
+	UE_LOG(LogTemp, Log, TEXT("GetSaveData From Instance : %d"), CharacterInstance.CharacterDefaultHP);
+
 	InitDynamicMeshMaterial(NormalMaterial);
 
 	AbilityManagerRef = NewObject<UAbilityManagerBase>(this, UAbilityManagerBase::StaticClass(), FName("AbilityfManager"));
@@ -376,6 +383,11 @@ void AMainCharacterBase::TryAttack()
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
 		return;
 	}
+	UBackStreetGameInstance* GameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
+	CharacterInstance.CharacterDefaultHP = UKismetMathLibrary::RandomInteger(32);
+	UE_LOG(LogTemp, Log, TEXT("MainCharacter Instance : %d"), CharacterInstance.CharacterDefaultHP);
+	GameInstance->SetCharacterInstance(CharacterInstance);
+	UE_LOG(LogTemp, Log, TEXT("Set Instance from MainCharacter : %d"), GameInstance->CharacterInstanceData.CharacterDefaultHP);
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	this->Tags.Add("Attack|Common");
