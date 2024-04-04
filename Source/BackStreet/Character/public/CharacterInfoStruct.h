@@ -30,6 +30,60 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FPlayerInputActionInfo
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	// Move Input Action
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* MoveAction;
+
+	// Roll Input Action
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* RollAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* AttackAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* ReloadAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* ThrowReadyAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* ThrowAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* InvestigateAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* SwitchWeaponAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* DropWeaponAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* PickSubWeaponAction;
+
+	// Jump Input Action
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* JumpAction;
+
+	// Look Input Action
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* LookAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* SprintAction;
+
+	// Crouch Input Action
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		//	class UInputAction* CrouchAction;
+};
+
+USTRUCT(BlueprintType)
 struct FCharacterStatStruct : public FTableRowBase
 {
 public:

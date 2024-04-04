@@ -118,40 +118,40 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		//Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Move);
+		EnhancedInputComponent->BindAction(InputActionInfo.MoveAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Move);
 
 		//Look 
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Look);
+		EnhancedInputComponent->BindAction(InputActionInfo.LookAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Look);
 
 		//Rolling
-		EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Roll);
+		EnhancedInputComponent->BindAction(InputActionInfo.RollAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Roll);
 
 		//Attack
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryAttack);
+		EnhancedInputComponent->BindAction(InputActionInfo.AttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryAttack);
 
 		//Reload
-		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryReload);
+		EnhancedInputComponent->BindAction(InputActionInfo.ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryReload);
 
 		//Sprint
-		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Sprint);
-		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StopSprint);
+		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Sprint);
+		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StopSprint);
 
 		//Zoom
-		//EnhancedInputComponent->BindAction(ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
+		//EnhancedInputComponent->BindAction(InputActionInfo.ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
 
 		//Throw
-		EnhancedInputComponent->BindAction(ThrowReadyAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ReadyToThrow);
-		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Throw);
+		EnhancedInputComponent->BindAction(InputActionInfo.ThrowReadyAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ReadyToThrow);
+		EnhancedInputComponent->BindAction(InputActionInfo.ThrowAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Throw);
 
 		//Interaction
-		EnhancedInputComponent->BindAction(InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
+		EnhancedInputComponent->BindAction(InputActionInfo.InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
 
 		//Inventory
-		EnhancedInputComponent->BindAction(SwitchWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::SwitchToNextWeapon);
-		EnhancedInputComponent->BindAction(DropWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::DropWeapon);
+		EnhancedInputComponent->BindAction(InputActionInfo.SwitchWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::SwitchToNextWeapon);
+		EnhancedInputComponent->BindAction(InputActionInfo.DropWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::DropWeapon);
 
 		//SubWeapon
-		EnhancedInputComponent->BindAction(PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::PickSubWeapon);
+		EnhancedInputComponent->BindAction(InputActionInfo.PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::PickSubWeapon);
 	}
 }
 
@@ -254,18 +254,20 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 	if (Controller != nullptr)
 	{
 		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
+		AddControllerYawInput(LookAxisVector.X/2.0f);
+		AddControllerPitchInput(LookAxisVector.Y/2.0f);
 	}
 }
 
 void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 {
 	if (CharacterState.bIsSprinting) return;
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero()) return;
 
 	CharacterState.bIsSprinting = true;
-	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.DefaultMoveSpeed;
+	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed, 0.75f);
+	SetFieldOfViewWithInterp(110.0f, 0.75f);
 }
 
 void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
@@ -273,7 +275,8 @@ void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 	if (!CharacterState.bIsSprinting) return;
 
 	CharacterState.bIsSprinting = false;
-	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.DefaultMoveSpeed * 0.75f;
+	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed * 0.5f, 0.4f);
+	SetFieldOfViewWithInterp(90.0f, 0.5f);
 }
 
 void AMainCharacterBase::Roll()
@@ -487,7 +490,7 @@ void AMainCharacterBase::Attack()
 	Super::Attack();
 	// 공격 델리게이트 호출
 	if (OnAttack.IsBound())
-		OnAttack.Broadcast();
+		OnAttack.Broadcast();	
 }
 
 
@@ -633,6 +636,60 @@ void AMainCharacterBase::SwitchToNextWeapon()
 void AMainCharacterBase::DropWeapon()
 {
 	Super::DropWeapon();
+}
+
+void AMainCharacterBase::SetWalkSpeedWithInterp(float NewValue, const float InterpSpeed, const bool bAutoReset)
+{
+	FTimerDelegate updateFunctionDelegate;
+	
+	//Binding the function with specific values
+	updateFunctionDelegate.BindUFunction(this, FName("UpdateWalkSpeed"), NewValue, InterpSpeed, bAutoReset);
+	
+	//Calling MyUsefulFunction after 5 seconds without looping
+	GetWorld()->GetTimerManager().ClearTimer(WalkSpeedInterpTimerHandle);
+	GetWorld()->GetTimerManager().SetTimer(WalkSpeedInterpTimerHandle, updateFunctionDelegate, 0.01f, true);
+}
+
+void AMainCharacterBase::UpdateWalkSpeed(const float TargetValue, const float InterpSpeed, const bool bAutoReset)
+{
+	float currentSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	if (FMath::IsNearlyEqual(currentSpeed, TargetValue, 0.1))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(WalkSpeedInterpTimerHandle);
+		if (bAutoReset)
+		{
+			SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed * 0.5f, InterpSpeed * 1.5f, false);
+		}
+	}
+	currentSpeed = FMath::FInterpTo(currentSpeed, TargetValue, 0.1f, InterpSpeed);
+	GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
+}
+
+void AMainCharacterBase::SetFieldOfViewWithInterp(float NewValue, float InterpSpeed, const bool bAutoReset)
+{
+	FTimerDelegate updateFunctionDelegate;
+
+	//Binding the function with specific values
+	updateFunctionDelegate.BindUFunction(this, FName("UpdateFieldOfView"), NewValue, InterpSpeed, bAutoReset);
+
+	//Calling MyUsefulFunction after 5 seconds without looping
+	GetWorld()->GetTimerManager().ClearTimer(FOVInterpHandle);
+	GetWorld()->GetTimerManager().SetTimer(FOVInterpHandle, updateFunctionDelegate, 0.01f, true);
+}
+
+void AMainCharacterBase::UpdateFieldOfView(const float TargetValue, float InterpSpeed, const bool bAutoReset)
+{
+	float currentFieldOfView = FollowingCamera->FieldOfView;
+	if (FMath::IsNearlyEqual(currentFieldOfView, TargetValue, 0.1))
+	{
+		GetWorldTimerManager().ClearTimer(FOVInterpHandle);
+		if (bAutoReset)
+		{
+			SetFieldOfViewWithInterp(90.0f, InterpSpeed * 1.5f, false);
+		}
+	}
+	currentFieldOfView = FMath::FInterpTo(currentFieldOfView, TargetValue, 0.1f, 1.0f);
+	FollowingCamera->SetFieldOfView(currentFieldOfView);
 }
 
 bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)
