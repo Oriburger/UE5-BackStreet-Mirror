@@ -28,6 +28,7 @@
 #include "../../Global/public/AssetInfoStruct.h"
 #include "../../SkillSystem/public/SkillInfoStruct.h"
 #include "../../CraftingSystem/public/CraftingInfoStruct.h"
+#include "../../Global/public/BackStreetSaveGame.h" //юс╫ц ©о
 
 
 #define MAX_CHAPTER_COUNT 1

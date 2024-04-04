@@ -22,34 +22,13 @@ public:
 	virtual void Init() override;
 
 public:
+	UFUNCTION(BlueprintCallable)
+		void SaveGameData(FSaveData NewSaveData);
 
 	UFUNCTION(BlueprintCallable)
-		void TryMakeSaveFile();
+		bool LoadGameSaveData(FSaveData& Result);
 
 public:
-	UFUNCTION(BlueprintCallable)
-		void SaveGameData();
-
-	UFUNCTION(BlueprintCallable)
-		void LoadGameSaveData();
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-			FSaveData GetCurrentSaveData();
-
-	UFUNCTION(BlueprintCallable)
-		void SetCharacterInstance(FCharacterInstance NewCharacterInstance) { CharacterInstanceData = NewCharacterInstance; }
-
-	
-public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SaveData")
-		UBackStreetSaveGame* SaveGame;
-
-	UPROPERTY(BlueprintReadWrite)
-		FCharacterInstance CharacterInstanceData;
-
-	UPROPERTY(BlueprintReadWrite)
-		int32 count;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SaveData")
 		FString SaveSlotName = "BackStreetSavedData";
 };

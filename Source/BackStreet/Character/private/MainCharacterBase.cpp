@@ -73,17 +73,28 @@ void AMainCharacterBase::BeginPlay()
 	Super::BeginPlay();
 	
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	UBackStreetGameInstance* GameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
-
-	UE_LOG(LogTemp, Log, TEXT("GetSaveData : %d"), GameInstance->GetCurrentSaveData().CharacterInstanceData.CharacterDefaultHP);
-	CharacterInstance = GameInstance->GetCurrentSaveData().CharacterInstanceData;
-
-	UE_LOG(LogTemp, Log, TEXT("GetSaveData From Instance : %d"), CharacterInstance.CharacterDefaultHP);
-
 	InitDynamicMeshMaterial(NormalMaterial);
 
 	AbilityManagerRef = NewObject<UAbilityManagerBase>(this, UAbilityManagerBase::StaticClass(), FName("AbilityfManager"));
 	AbilityManagerRef->InitAbilityManager(this);
+
+	UBackStreetGameInstance* GameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
+	FSaveData savedData; 
+	if (GameInstance->LoadGameSaveData(savedData))
+	{
+		GameProgressInfo = savedData.GameProgressInfo;
+		//stat
+		//skin
+		//~
+		if (savedData.GameProgressInfo.CraftingLevelMap.Contains(EChapterLevel::E_Chapter1))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("LoadDatd : %d"), savedData.GameProgressInfo.CraftingLevelMap[EChapterLevel::E_Chapter1]);
+		}
+	}
+	else
+	{
+		GameInstance->SaveGameData(FSaveData());
+	}
 }
 
 // Called every frame
@@ -383,11 +394,14 @@ void AMainCharacterBase::TryAttack()
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
 		return;
 	}
+
+	//=============
 	UBackStreetGameInstance* GameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
-	CharacterInstance.CharacterDefaultHP = UKismetMathLibrary::RandomInteger(32);
-	UE_LOG(LogTemp, Log, TEXT("MainCharacter Instance : %d"), CharacterInstance.CharacterDefaultHP);
-	GameInstance->SetCharacterInstance(CharacterInstance);
-	UE_LOG(LogTemp, Log, TEXT("Set Instance from MainCharacter : %d"), GameInstance->CharacterInstanceData.CharacterDefaultHP);
+	int32 val = UKismetMathLibrary::RandomIntegerInRange(0, 32);
+	GameProgressInfo.CraftingLevelMap.Add(EChapterLevel::E_Chapter1, val);
+	GameInstance->SaveGameData({GameProgressInfo, val});
+	UE_LOG(LogTemp, Warning, TEXT("Datd Saved : %d"), val);
+	//=============
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	this->Tags.Add("Attack|Common");

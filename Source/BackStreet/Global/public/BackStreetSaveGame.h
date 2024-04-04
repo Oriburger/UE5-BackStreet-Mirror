@@ -3,10 +3,18 @@
 #pragma once
 
 #include "BackStreet.h"
-#include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
 #include "BackStreetSaveGame.generated.h"
 
+USTRUCT(BlueprintType)
+struct FGameProgressInfo
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		TMap<EChapterLevel, uint8> CraftingLevelMap;
+};
 
 USTRUCT(BlueprintType)
 struct FSaveData
@@ -14,8 +22,8 @@ struct FSaveData
 public:
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(BlueprintReadWrite)
-		FCharacterInstance CharacterInstanceData;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		FGameProgressInfo GameProgressInfo;
 
 	UPROPERTY(BlueprintReadWrite)
 		int32 count = 0;

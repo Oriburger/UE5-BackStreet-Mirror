@@ -14,48 +14,31 @@ UBackStreetGameInstance::UBackStreetGameInstance(const FObjectInitializer& Objec
 void UBackStreetGameInstance::Init()
 {
 	Super::Init();
-
-	TryMakeSaveFile();
 }
 
-//단한번만 
-void UBackStreetGameInstance::TryMakeSaveFile()
+
+void UBackStreetGameInstance::SaveGameData(FSaveData NewSaveData)
 {
-	if (SaveGame == nullptr)
-	{
-		SaveGame = Cast<UBackStreetSaveGame>(UGameplayStatics::CreateSaveGameObject(UBackStreetSaveGame::StaticClass()));
-		CharacterInstanceData = SaveGame->SaveData.CharacterInstanceData;
-	}	
-	else
-	{
-		LoadGameSaveData();
-		CharacterInstanceData = SaveGame->SaveData.CharacterInstanceData;
-	}
+	UBackStreetSaveGame* saveGame = NewObject<UBackStreetSaveGame>();
+	
+	if (saveGame == nullptr) return;
+	saveGame->SaveData = NewSaveData;
+
+	UGameplayStatics::SaveGameToSlot(saveGame, SaveSlotName, 0);
 }
 
-void UBackStreetGameInstance::SaveGameData()
-{
-	SaveGame->SaveData.CharacterInstanceData = CharacterInstanceData;
-
-	UGameplayStatics::SaveGameToSlot(SaveGame, SaveSlotName, 0);
-	UE_LOG(LogTemp, Log, TEXT("AfterSave : %d"), SaveGame->SaveData.CharacterInstanceData.CharacterDefaultHP);
-}
-
-void UBackStreetGameInstance::LoadGameSaveData()
+bool UBackStreetGameInstance::LoadGameSaveData(FSaveData& Result)
 {
 	if (UGameplayStatics::DoesSaveGameExist(SaveSlotName, 0))
 	{
-		SaveGame = Cast<UBackStreetSaveGame>(UGameplayStatics::LoadGameFromSlot(SaveSlotName, 0));
-		UE_LOG(LogTemp, Log, TEXT("AfterLoad : %d"), SaveGame->SaveData.CharacterInstanceData.CharacterDefaultHP);
+		UBackStreetSaveGame* saveGame = Cast<UBackStreetSaveGame>(UGameplayStatics::LoadGameFromSlot(SaveSlotName, 0));
+		if (saveGame != nullptr)
+		{
+			Result = saveGame->SaveData;
+			return true;
+		}
 	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("Slot is empty"));
-	}
+	UE_LOG(LogTemp, Log, TEXT("Slot is empty"));
+	Result = FSaveData();
+	return false;
 }
-
-FSaveData UBackStreetGameInstance::GetCurrentSaveData()
-{
-	return SaveGame == nullptr ? SaveGame->SaveData : FSaveData();
-}
-
