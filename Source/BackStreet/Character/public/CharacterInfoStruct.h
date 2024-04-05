@@ -89,6 +89,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bCanAttack = false;
 
+	//Is character sprinting?
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		bool bIsSprinting = false;
+
 	//0 : Idle,  1 : Left Turn,  2 : Right Turn
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		uint8 TurnDirection = 0;

@@ -165,17 +165,10 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 
 float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Damage #1"));
-
 	if (!IsValid(DamageCauser)) return 0.0f; 
-
-	UE_LOG(LogTemp, Warning, TEXT("Damage #2"));
-
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
 
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
-	UE_LOG(LogTemp, Warning, TEXT("Damage : %.2lf / HP : (%.2lf / %.2lf)"), DamageAmount, CharacterState.TotalHP, CharacterState.CurrentHP);
 
 	if (DamageAmount <= 0.0f || !IsValid(DamageCauser)) return 0.0f;
 	if (CharacterStat.bIsInvincibility) return 0.0f;
