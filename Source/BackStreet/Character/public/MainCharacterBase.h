@@ -160,9 +160,12 @@ private:
 
 // ------- SaveData 관련 --------------------
 protected:
-	//CharacterInstance
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		FGameProgressInfo GameProgressInfo;
+	UFUNCTION()
+		void SetCharacterStatFromSaveData();
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "SaveData")
+		FSaveData SavedData;
 
 // ------- 어빌리티 / 디버프 ---------------
 public:

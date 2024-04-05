@@ -79,22 +79,16 @@ void AMainCharacterBase::BeginPlay()
 	AbilityManagerRef->InitAbilityManager(this);
 
 	UBackStreetGameInstance* GameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
-	FSaveData savedData; 
-	if (GameInstance->LoadGameSaveData(savedData))
-	{
-		GameProgressInfo = savedData.GameProgressInfo;
-		//stat
-		//skin
-		//~
-		if (savedData.GameProgressInfo.CraftingLevelMap.Contains(EChapterLevel::E_Chapter1))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("LoadDatd : %d"), savedData.GameProgressInfo.CraftingLevelMap[EChapterLevel::E_Chapter1]);
-		}
-	}
+
+	//Load SaveData
+	if (GameInstance->LoadGameSaveData(SavedData)) return;
 	else
 	{
 		GameInstance->SaveGameData(FSaveData());
 	}
+	SetCharacterStatFromSaveData();
+	InitCharacterState();
+
 }
 
 // Called every frame
@@ -396,12 +390,6 @@ void AMainCharacterBase::TryAttack()
 	}
 
 	//=============
-	UBackStreetGameInstance* GameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
-	int32 val = UKismetMathLibrary::RandomIntegerInRange(0, 32);
-	GameProgressInfo.CraftingLevelMap.Add(EChapterLevel::E_Chapter1, val);
-	GameInstance->SaveGameData({GameProgressInfo, val});
-	UE_LOG(LogTemp, Warning, TEXT("Datd Saved : %d"), val);
-	//=============
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	this->Tags.Add("Attack|Common");
@@ -564,6 +552,15 @@ void AMainCharacterBase::StopDashMovement()
 	const FVector& direction = GetMesh()->GetRightVector();
 	float& speed = GetCharacterMovement()->MaxWalkSpeed;
 	GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
+}
+
+void AMainCharacterBase::SetCharacterStatFromSaveData()
+{
+	CharacterStat.DefaultHP = SavedData.PlayerSaveGameData.DefaultHP;
+	CharacterStat.DefaultAttack = SavedData.PlayerSaveGameData.DefaultAttack;
+	CharacterStat.DefaultDefense = SavedData.PlayerSaveGameData.DefaultDefense;
+	CharacterStat.DefaultAttackSpeed = SavedData.PlayerSaveGameData.DefaultAttackSpeed;
+	CharacterStat.DefaultMoveSpeed = SavedData.PlayerSaveGameData.DefaultMoveSpeed;
 }
 
 void AMainCharacterBase::ResetRotationToMovement()
