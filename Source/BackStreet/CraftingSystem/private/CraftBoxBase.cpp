@@ -3,6 +3,7 @@
 
 #include "../public/CraftBoxBase.h"
 #include "Components/SphereComponent.h"
+#include "Components/TextRenderComponent.h"
 #include "../../Character/public/MainCharacterBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 
@@ -22,6 +23,13 @@ ACraftBoxBase::ACraftBoxBase()
     Mesh->SetupAttachment(RootComponent);
     Mesh->SetCollisionProfileName("Item", false);
     Mesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+
+    TextRenderComp = CreateDefaultSubobject<UTextRenderComponent>(TEXT("GuideTextRender"));
+    TextRenderComp->SetupAttachment(Mesh);
+    TextRenderComp->SetText(FText::FromString(TEXT("Press 'E' To Craft")));
+    TextRenderComp->SetRelativeLocation(FVector(-70, 0, 240));
+    TextRenderComp->SetRelativeRotation(FQuat::MakeFromEuler(FVector(0,0,90)));
+    TextRenderComp->SetVisibility(false);
 }
 
     // Called when the game starts or when spawned
@@ -29,4 +37,22 @@ void ACraftBoxBase::BeginPlay()
 {
     Super::BeginPlay();
     OnPlayerOpenBegin.AddDynamic(this, &ACraftBoxBase::EnterUI);
+}
+
+void ACraftBoxBase::VisibleGuideTextRender(AActor* Causer)
+{
+    if(!IsValid(Causer)) return;
+    if (Causer->ActorHasTag("Player"))
+    {
+        TextRenderComp->SetVisibility(true);
+    }
+}
+
+void ACraftBoxBase::InVisibleGuideTextRender(AActor* Causer)
+{
+    if (!IsValid(Causer)) return;
+    if (Causer->ActorHasTag("Player"))
+    {
+        TextRenderComp->SetVisibility(false);
+    }
 }
