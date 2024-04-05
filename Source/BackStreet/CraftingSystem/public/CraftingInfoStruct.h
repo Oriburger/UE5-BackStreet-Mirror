@@ -27,15 +27,20 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		TArray<int32> IngredientWeaponID;
 
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TArray<uint8> AvailableChapterList;
+		TArray<uint8> CraftableChapterList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		EWeaponType CraftingType;
+		EWeaponType ResultWeaponType;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		uint8 CraftingLevel;
+		uint8 CraftableLevel;
 
+	//Craftable State for widget visual
+	//UnIdentified and Uncraftable: E_UnIdentified
+	//Identified but Uncraftable : E_Uncraftable
+	//Identified and Craftable : E_Craftable
 	UPROPERTY(BlueprintReadWrite)
 		ECraftingSlotVisual CraftingSlotVisual = ECraftingSlotVisual::E_Craftable;
 };
