@@ -29,6 +29,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		TArray<FCraftingRecipeStruct> MakeDisplayingRecipeList(EWeaponType SelectedType);
 
+private:
 	UFUNCTION(BlueprintCallable)
 		ECraftingSlotVisual SetRecipeVisual(FCraftingRecipeStruct Recipe);
 
