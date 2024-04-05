@@ -47,20 +47,22 @@ TArray<FCraftingRecipeStruct> UCraftingManagerBase::MakeDisplayingRecipeList(EWe
 	TArray<FCraftingRecipeStruct> craftableRecipeList;
 	TArray<FCraftingRecipeStruct> uncraftableRecipeList;
 	TArray<FCraftingRecipeStruct> unidentifiedRecipeList;
-
 	TArray<FCraftingRecipeStruct> displayingRecipeList;
 
 	TArray<FName> craftingKeyList = CraftingRecipeTable->GetRowNames();
 	for (FName key : craftingKeyList)
 	{
-		craftingRecipeList.Add(CraftingRecipeTable->FindRow<FCraftingRecipeStruct>(key, key.ToString()));
+		FCraftingRecipeStruct* craftingRecipe = CraftingRecipeTable->FindRow<FCraftingRecipeStruct>(key, key.ToString());
+		check(craftingRecipe!=nullptr);
+
+		craftingRecipeList.Add(craftingRecipe);
 	}
 
 	for (int i = 0; i < craftingRecipeList.Num(); ++i)
 	{
 		//check Chapter Level by WeaponID
-		if (!craftingRecipeList[i]->AvailableChapterList.Contains(chapterLevel)
-			|| craftingRecipeList[i]->CraftingType == EWeaponType::E_None)
+		if (!craftingRecipeList[i]->CraftableChapterList.Contains(chapterLevel)
+			|| craftingRecipeList[i]->ResultWeaponType == EWeaponType::E_None)
 		{
 			continue;
 		}
@@ -76,7 +78,7 @@ TArray<FCraftingRecipeStruct> UCraftingManagerBase::MakeDisplayingRecipeList(EWe
 		else
 		{
 			//CheckWeaponType from WeaponID
-			if (SelectedType == craftingRecipeList[i]->CraftingType)
+			if (SelectedType == craftingRecipeList[i]->ResultWeaponType)
 			{
 				craftingRecipeList[i]->CraftingSlotVisual = SetRecipeVisual(*craftingRecipeList[i]);
 				if (craftingRecipeList[i]->CraftingSlotVisual == ECraftingSlotVisual::E_Craftable) craftableRecipeList.Add(*craftingRecipeList[i]);
@@ -99,10 +101,10 @@ ECraftingSlotVisual UCraftingManagerBase::SetRecipeVisual(FCraftingRecipeStruct 
 	uint8 IngredientIdx = Recipe.IngredientWeaponID.Num();
 
 	//Check recipe adapt for current chapter
-	if(!Recipe.AvailableChapterList.Contains((uint8)GetCurrentChapterLevel())) return ECraftingSlotVisual::E_Hide;
+	if(!Recipe.CraftableChapterList.Contains((uint8)GetCurrentChapterLevel())) return ECraftingSlotVisual::E_Hide;
 	
 	//Check recipe adapt for playerCraftingLevel
-	if(Recipe.CraftingLevel > playerCraftingLevel) return ECraftingSlotVisual::E_Unidentified;
+	if(Recipe.CraftableLevel > playerCraftingLevel) return ECraftingSlotVisual::E_Unidentified;
 	
 	//Check player has ingredient weapon
 	for (int32 RecipeWeaponID : Recipe.IngredientWeaponID)
