@@ -6,30 +6,6 @@
 #include "GameFramework/SaveGame.h"
 #include "BackStreetSaveGame.generated.h"
 
-USTRUCT(BlueprintType)
-struct FGameProgressInfo
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TMap<EChapterLevel, uint8> CraftingLevelMap;
-};
-
-USTRUCT(BlueprintType)
-struct FSaveData
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		FGameProgressInfo GameProgressInfo;
-
-	UPROPERTY(BlueprintReadWrite)
-		int32 count = 0;
-
-};
-
 UCLASS()
 class BACKSTREET_API UBackStreetSaveGame : public USaveGame
 {
@@ -37,6 +13,7 @@ class BACKSTREET_API UBackStreetSaveGame : public USaveGame
 	
 //------- init ---------------------------------------	
 public:
+	//Constructor
 	UBackStreetSaveGame(const FObjectInitializer& ObjectInitializer);
 
 public:

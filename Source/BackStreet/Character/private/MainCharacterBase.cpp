@@ -79,18 +79,9 @@ void AMainCharacterBase::BeginPlay()
 	AbilityManagerRef->InitAbilityManager(this);
 
 	UBackStreetGameInstance* GameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
-	FSaveData savedData; 
-	if (GameInstance->LoadGameSaveData(savedData))
-	{
-		GameProgressInfo = savedData.GameProgressInfo;
-		//stat
-		//skin
-		//~
-		if (savedData.GameProgressInfo.CraftingLevelMap.Contains(EChapterLevel::E_Chapter1))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("LoadDatd : %d"), savedData.GameProgressInfo.CraftingLevelMap[EChapterLevel::E_Chapter1]);
-		}
-	}
+
+	//Load SaveData
+	if (GameInstance->LoadGameSaveData(SavedData)) return;
 	else
 	{
 		GameInstance->SaveGameData(FSaveData());
@@ -395,12 +386,6 @@ void AMainCharacterBase::TryAttack()
 		return;
 	}
 
-	//=============
-	UBackStreetGameInstance* GameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
-	int32 val = UKismetMathLibrary::RandomIntegerInRange(0, 32);
-	GameProgressInfo.CraftingLevelMap.Add(EChapterLevel::E_Chapter1, val);
-	GameInstance->SaveGameData({GameProgressInfo, val});
-	UE_LOG(LogTemp, Warning, TEXT("Datd Saved : %d"), val);
 	//=============
 
 	//공격을 하고, 커서 위치로 Rotation을 조정

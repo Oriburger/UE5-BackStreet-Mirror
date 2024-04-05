@@ -10,7 +10,6 @@ UBackStreetGameInstance::UBackStreetGameInstance(const FObjectInitializer& Objec
 	// Constructor implementation
 }
 
-//최초 실행 -> SaveGame 오브젝트 초기화 (없다면 생성, 있다면 불러오고 바로 Load)
 void UBackStreetGameInstance::Init()
 {
 	Super::Init();
