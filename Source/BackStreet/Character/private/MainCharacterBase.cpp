@@ -86,6 +86,9 @@ void AMainCharacterBase::BeginPlay()
 	{
 		GameInstance->SaveGameData(FSaveData());
 	}
+	SetCharacterStatFromSaveData();
+	InitCharacterState();
+
 }
 
 // Called every frame
@@ -549,6 +552,15 @@ void AMainCharacterBase::StopDashMovement()
 	const FVector& direction = GetMesh()->GetRightVector();
 	float& speed = GetCharacterMovement()->MaxWalkSpeed;
 	GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
+}
+
+void AMainCharacterBase::SetCharacterStatFromSaveData()
+{
+	CharacterStat.DefaultHP = SavedData.PlayerSaveGameData.DefaultHP;
+	CharacterStat.DefaultAttack = SavedData.PlayerSaveGameData.DefaultAttack;
+	CharacterStat.DefaultDefense = SavedData.PlayerSaveGameData.DefaultDefense;
+	CharacterStat.DefaultAttackSpeed = SavedData.PlayerSaveGameData.DefaultAttackSpeed;
+	CharacterStat.DefaultMoveSpeed = SavedData.PlayerSaveGameData.DefaultMoveSpeed;
 }
 
 void AMainCharacterBase::ResetRotationToMovement()

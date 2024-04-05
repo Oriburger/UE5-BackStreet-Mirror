@@ -15,21 +15,21 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	//======= SaveData of Character Default Stat ======================
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite)
 		float DefaultHP = 100.0f;
 
 	//Multipiler Value
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite)
 		float DefaultAttack = 1.0f;
 
 	//Multipiler Value
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite)
 		float DefaultDefense = 1.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite)
 		float DefaultAttackSpeed = 10.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite)
 		float DefaultMoveSpeed = 400.0f;
 
 	//======= SaveData of Character Skin(Costume) =====================
@@ -44,7 +44,7 @@ public:
 	
 	//======= SaveData of CraftingSystem===========================
 	//Crafting levels by chapter
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite)
 	TMap<EChapterLevel, uint8> CraftingLevelMap = {{EChapterLevel::E_Chapter1,1}, {EChapterLevel::E_Chapter2,1}, 
 																		{EChapterLevel::E_Chapter3,1}, {EChapterLevel::E_Chapter4,1}};
 };
@@ -65,15 +65,15 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	//Game progress information data that needs to be stored
-		UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite)
 		FProgressSaveGameData ProgressSaveGameData;
 
 	//Player information data that needs to be stored
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	FPlayerSaveGameData PlayerSaveGameData;
+	UPROPERTY(BlueprintReadWrite)
+		FPlayerSaveGameData PlayerSaveGameData;
 
 	//PlayStaticsData that needs to be stored
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	FPlayStaticsSaveGameData PlayStaticsSaveGameData;
+	UPROPERTY(BlueprintReadWrite)
+		FPlayStaticsSaveGameData PlayStaticsSaveGameData;
 };
 
