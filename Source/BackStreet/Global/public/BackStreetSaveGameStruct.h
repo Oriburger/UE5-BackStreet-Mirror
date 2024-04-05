@@ -6,8 +6,6 @@
 #include "NiagaraSystem.h"
 #include "BackStreetSaveGameStruct.generated.h"
 
-
-//캐릭터의 애니메이션 에셋 경로를 저장하는 데이터 테이블 구조체
 USTRUCT(BlueprintType)
 struct FPlayerSaveGameData 
 {
@@ -16,21 +14,7 @@ public:
 
 	//======= SaveData of Character Default Stat ======================
 	UPROPERTY(BlueprintReadWrite)
-		float DefaultHP = 100.0f;
-
-	//Multipiler Value
-	UPROPERTY(BlueprintReadWrite)
-		float DefaultAttack = 1.0f;
-
-	//Multipiler Value
-	UPROPERTY(BlueprintReadWrite)
-		float DefaultDefense = 1.0f;
-
-	UPROPERTY(BlueprintReadWrite)
-		float DefaultAttackSpeed = 10.0f;
-
-	UPROPERTY(BlueprintReadWrite)
-		float DefaultMoveSpeed = 400.0f;
+		FCharacterStatStruct PlayerStat;
 
 	//======= SaveData of Character Skin(Costume) =====================
 

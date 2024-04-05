@@ -594,11 +594,7 @@ void AMainCharacterBase::StopDashMovement()
 
 void AMainCharacterBase::SetCharacterStatFromSaveData()
 {
-	CharacterStat.DefaultHP = SavedData.PlayerSaveGameData.DefaultHP;
-	CharacterStat.DefaultAttack = SavedData.PlayerSaveGameData.DefaultAttack;
-	CharacterStat.DefaultDefense = SavedData.PlayerSaveGameData.DefaultDefense;
-	CharacterStat.DefaultAttackSpeed = SavedData.PlayerSaveGameData.DefaultAttackSpeed;
-	CharacterStat.DefaultMoveSpeed = SavedData.PlayerSaveGameData.DefaultMoveSpeed;
+	CharacterStat = SavedData.PlayerSaveGameData.PlayerStat;
 }
 
 void AMainCharacterBase::ResetRotationToMovement()
