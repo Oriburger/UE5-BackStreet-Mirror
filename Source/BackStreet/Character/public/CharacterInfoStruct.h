@@ -287,19 +287,19 @@ struct FEnemyDropInfoStruct
 	public:
 	//Max item count to spawn after dead event.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem", meta = (UIMin = 0, UIMax = 2))
-	int32 MaxSpawnItemCount;
+		int32 MaxSpawnItemCount;
 
 	//Item type list to spawn after dead event. (each item is identified by index)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
-	TArray<EItemCategoryInfo> SpawnItemTypeList;
+		TArray<EItemCategoryInfo> SpawnItemTypeList;
 
 	//Item ID list to spawn after dead event.(each item is identified by index)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
-	TArray<int32> SpawnItemIDList;
+		TArray<int32> SpawnItemIDList;
 
 	//Item spawn percentage list.  (0.0f ~ 1.0f), (each item is identified by index)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
-	TArray<float> ItemSpawnProbabilityList;
+		TArray<float> ItemSpawnProbabilityList;
 };
 
 USTRUCT(BlueprintType)
@@ -309,31 +309,31 @@ struct FEnemyStatStruct : public FTableRowBase
 
 	public:
 	UPROPERTY(EditAnywhere)
-	int32 EnemyID;
+		int32 EnemyID;
 
 	UPROPERTY(EditAnywhere)
-	FName EnemyName;
+		FName EnemyName;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
-	FCharacterStatStruct CharacterStat;
+		FCharacterStatStruct CharacterStat;
 
 	//Enemy's Default Weapon ID
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-	int32 DefaultWeaponID = 0;
+		int32 DefaultWeaponID = 0;
 
 	//Info data of dropping item when enemy dies
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-	FEnemyDropInfoStruct DropInfo;
+		FEnemyDropInfoStruct DropInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
-	float DefaultAttackSpeed;
+		float DefaultAttackSpeed;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<int32> EnemySkillList;
+		TArray<int32> EnemySkillList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<float> EnemySkillIntervalList;
+		TArray<float> EnemySkillIntervalList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintreadOnly)
-	FSkillSetInfo SkillSetInfo;
+		FSkillSetInfo SkillSetInfo;
 };
