@@ -15,6 +15,8 @@
 #include "Components/AudioComponent.h"
 #include "Animation/AnimInstance.h"
 #include "TimerManager.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
 #include "../../Item/public/RewardBoxBase.h"
 #include "../../CraftingSystem/public/CraftBoxBase.h"
 #include "Animation/AnimMontage.h"
@@ -71,6 +73,15 @@ void AMainCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//Add Input Mapping Context
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(DefaultMappingContext, 0);
+		}
+	}
+
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	
 	InitDynamicMeshMaterial(NormalMaterial);
@@ -103,26 +114,45 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	//Set up "movement" bindings.
-	PlayerInputComponent->BindAxis("MoveForward", this, &AMainCharacterBase::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &AMainCharacterBase::MoveRight);
-	PlayerInputComponent->BindAxis("ZoomIn", this, &AMainCharacterBase::ZoomIn);
-	
-	PlayerInputComponent->BindAction("Roll", IE_Pressed, this, &AMainCharacterBase::Roll);
-	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AMainCharacterBase::TryAttack);
-	PlayerInputComponent->BindAction("Throw", IE_Pressed, this, &AMainCharacterBase::ReadyToThrow);
-	PlayerInputComponent->BindAction("Throw", IE_Released, this, &AMainCharacterBase::Throw);
-	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMainCharacterBase::TryReload);
+	// Set up action bindings
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		//Moving
+		EnhancedInputComponent->BindAction(InputActionInfo.MoveAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Move);
 
-	PlayerInputComponent->BindAction("SwitchWeapon", IE_Pressed, this, &AMainCharacterBase::SwitchToNextWeapon);
-	PlayerInputComponent->BindAction("PickItem", IE_Pressed, this, &AMainCharacterBase::TryInvestigate);
-	PlayerInputComponent->BindAction("DropWeapon", IE_Pressed, this, &AMainCharacterBase::DropWeapon);
+		//Look 
+		EnhancedInputComponent->BindAction(InputActionInfo.LookAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Look);
 
-	
-	PlayerInputComponent->BindAction("SelectSubWeaponA", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
-	PlayerInputComponent->BindAction("SelectSubWeaponB", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
-	PlayerInputComponent->BindAction("SelectSubWeaponC", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
-	PlayerInputComponent->BindAction("SelectSubWeaponD", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
+		//Rolling
+		EnhancedInputComponent->BindAction(InputActionInfo.RollAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Roll);
+
+		//Attack
+		EnhancedInputComponent->BindAction(InputActionInfo.AttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryAttack);
+
+		//Reload
+		EnhancedInputComponent->BindAction(InputActionInfo.ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryReload);
+
+		//Sprint
+		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Sprint);
+		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StopSprint);
+
+		//Zoom
+		//EnhancedInputComponent->BindAction(InputActionInfo.ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
+
+		//Throw
+		EnhancedInputComponent->BindAction(InputActionInfo.ThrowReadyAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ReadyToThrow);
+		EnhancedInputComponent->BindAction(InputActionInfo.ThrowAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Throw);
+
+		//Interaction
+		EnhancedInputComponent->BindAction(InputActionInfo.InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
+
+		//Inventory
+		EnhancedInputComponent->BindAction(InputActionInfo.SwitchWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::SwitchToNextWeapon);
+		EnhancedInputComponent->BindAction(InputActionInfo.DropWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::DropWeapon);
+
+		//SubWeapon
+		EnhancedInputComponent->BindAction(InputActionInfo.PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::PickSubWeapon);
+	}
 }
 
 void AMainCharacterBase::ReadyToThrow()
@@ -200,28 +230,53 @@ FVector AMainCharacterBase::GetThrowDestination()
 	return startLocation;
 }
 
-void AMainCharacterBase::MoveForward(float Value)
+void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
-	FVector Direction = FVector(1.0f, 0.0f, 0.0f);
-	AddMovementInput(Direction, Value);
-
-	if (Value != 0)
+	// input is a Vector2D
+	FVector2D movementVector = Value.Get<FVector2D>();
+	if (Controller != nullptr)
 	{
-		if (OnMove.IsBound())
+		AddMovementInput(FollowingCamera->GetForwardVector(), movementVector.Y);
+		AddMovementInput(FollowingCamera->GetRightVector(), movementVector.X);
+
+		if (movementVector.Length() > 0 && OnMove.IsBound())
+		{
 			OnMove.Broadcast();
+		}
 	}
 }
 
-void AMainCharacterBase::MoveRight(float Value)
+void AMainCharacterBase::Look(const FInputActionValue& Value)
 {
-	FVector Direction = FVector(0.0f, 1.0f, 0.0f);
-	AddMovementInput(Direction, Value);
+	// input is a Vector2D
+	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-	if (Value != 0)
+	if (Controller != nullptr)
 	{
-		if (OnMove.IsBound())
-			OnMove.Broadcast();
+		// add yaw and pitch input to controller
+		AddControllerYawInput(LookAxisVector.X/2.0f);
+		AddControllerPitchInput(LookAxisVector.Y/2.0f);
 	}
+}
+
+void AMainCharacterBase::Sprint(const FInputActionValue& Value)
+{
+	if (CharacterState.bIsSprinting) return;
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero()) return;
+
+	CharacterState.bIsSprinting = true;
+	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed, 0.75f);
+	SetFieldOfViewWithInterp(110.0f, 0.75f);
+}
+
+void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
+{
+	if (!CharacterState.bIsSprinting) return;
+
+	CharacterState.bIsSprinting = false;
+	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed * 0.5f, 0.4f);
+	SetFieldOfViewWithInterp(90.0f, 0.5f);
 }
 
 void AMainCharacterBase::Roll()
@@ -229,7 +284,8 @@ void AMainCharacterBase::Roll()
 	if (!GetIsActionActive(ECharacterActionType::E_Idle)) return;
 	
 	FVector newDirection(0.0f);
-	FRotator newRotation = FRotator();
+	FRotator newRotation = GetControlRotation();
+	newRotation.Pitch = newRotation.Roll = 0.0f;
 	newDirection.X = GetInputAxisValue(FName("MoveForward"));
 	newDirection.Y = GetInputAxisValue(FName("MoveRight"));
 
@@ -242,15 +298,20 @@ void AMainCharacterBase::Roll()
 	}
 	else //아니라면, 입력 방향으로 구르기
 	{
-		newRotation = { 0, FMath::Atan2(newDirection.Y, newDirection.X) * 180.0f / 3.141592, 0.0f };
-		newRotation.Yaw += 270.0f;
+		float targetYawValue = FMath::Atan2(newDirection.Y, newDirection.X) * 180.0f / 3.141592;
+		UE_LOG(LogTemp, Warning, TEXT("controlValue : %.2lf,  current yaw : %.2lf"), targetYawValue, newRotation.Yaw);
+		targetYawValue += 270.0f;
+		newRotation.Yaw = FMath::Fmod(newRotation.Yaw + targetYawValue, 360.0f);
+		UE_LOG(LogTemp, Warning, TEXT("new Yaw value : %.2lf"), newRotation.Yaw);
 	}
 	
+	// 시점 전환을 위해 제거
 	//Rotation 리셋 로직
 	GetWorldTimerManager().ClearTimer(RotationResetTimerHandle);
-	ResetRotationToMovement();
+	//ResetRotationToMovement();
 	SetActorRotation(newRotation + FRotator(0.0f, 90.0f, 0.0f));
 	GetMesh()->SetWorldRotation(newRotation);
+	
 
 	// 사운드
 	if (AssetManagerBaseRef.IsValid())
@@ -277,11 +338,12 @@ void AMainCharacterBase::Dash()
 	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, this, &AMainCharacterBase::StopDashMovement, 0.075f, false);
 }
 
-void AMainCharacterBase::ZoomIn(float Value)
+void AMainCharacterBase::ZoomIn(const FInputActionValue& Value)
 {
-	if (Value == 0.0f) return;
+	float value = Value.Get<float>();
+	if (value == 0.0f) return;
 	float newLength = CameraBoom->TargetArmLength;
-	newLength = newLength + Value * 25.0f;
+	newLength = newLength + value * 75.0f;
 	newLength = newLength < MIN_CAMERA_BOOM_LENGTH ? MIN_CAMERA_BOOM_LENGTH : newLength;
 	newLength = newLength > MAX_CAMERA_BOOM_LENGTH ? MAX_CAMERA_BOOM_LENGTH : newLength;
 	CameraBoom->TargetArmLength = newLength;
@@ -379,7 +441,7 @@ void AMainCharacterBase::TryAttack()
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	this->Tags.Add("Attack|Common");
-	RotateToCursor();
+	//RotateToCursor();
 	Super::TryAttack();
 
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
@@ -411,7 +473,7 @@ void AMainCharacterBase::TrySkill()
 	Super::TrySkill();
 
 	//Try Skill and adjust rotation to cursor position
-	RotateToCursor();
+	//RotateToCursor();
 }
 
 void AMainCharacterBase::AddSkillGauge()
@@ -428,7 +490,7 @@ void AMainCharacterBase::Attack()
 	Super::Attack();
 	// 공격 델리게이트 호출
 	if (OnAttack.IsBound())
-		OnAttack.Broadcast();
+		OnAttack.Broadcast();	
 }
 
 
@@ -463,13 +525,19 @@ void AMainCharacterBase::RotateToCursor()
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	FRotator newRotation = GetControlRotation();
+	newRotation.Pitch = newRotation.Roll = 0.0f;
+	SetActorRotation(newRotation);
+	return;
+
+	/* 시점 전환을 위해 제거
 	FRotator newRotation = PlayerControllerRef.Get()->GetRotationToCursor();
 	if (newRotation != FRotator())
 	{
 		newRotation.Pitch = newRotation.Roll = 0.0f;
 		GetMesh()->SetWorldRotation(newRotation);
 	}
-	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetMesh()->SetWorldRotation(newRotation.Quaternion());
 
 	GetWorld()->GetTimerManager().ClearTimer(RotationResetTimerHandle);
@@ -478,16 +546,13 @@ void AMainCharacterBase::RotateToCursor()
 		FRotator newRotation = PlayerControllerRef.Get()->GetLastRotationToCursor();
 		newRotation.Yaw = FMath::Fmod((newRotation.Yaw + 90.0f), 360.0f);
 		SetActorRotation(newRotation.Quaternion(), ETeleportType::ResetPhysics);
-	}), 1.0f, false);
+	}), 1.0f, false);*/
 }
 
-void AMainCharacterBase::PickSubWeapon()
+void AMainCharacterBase::PickSubWeapon(const FInputActionValue& Value)
 {
-	int32 targetIdx = -1;
-	if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponA"))) targetIdx = 0;
-	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponB"))) targetIdx = 1;
-	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponC"))) targetIdx = 2;
-	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponD"))) targetIdx = 3;
+	FVector typeVector = Value.Get<FVector>();
+	int32 targetIdx = typeVector.X - 1;
 
 	//If player press current picked sub weapon, switch to the first main weapon.
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw && GetSubInventoryRef()->GetCurrentIdx() == targetIdx)
@@ -542,11 +607,12 @@ void AMainCharacterBase::StopDashMovement()
 
 void AMainCharacterBase::ResetRotationToMovement()
 {
+	/* 시점 전환을 위해 제거
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Roll) return;
 	FRotator newRotation = GetCapsuleComponent()->GetComponentRotation();
 	newRotation.Yaw += 270.0f;
 	GetMesh()->SetWorldRotation(newRotation);
-	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->bOrientRotationToMovement = true;*/
 }
 
 void AMainCharacterBase::SwitchToNextWeapon()
@@ -572,6 +638,60 @@ void AMainCharacterBase::DropWeapon()
 	Super::DropWeapon();
 }
 
+void AMainCharacterBase::SetWalkSpeedWithInterp(float NewValue, const float InterpSpeed, const bool bAutoReset)
+{
+	FTimerDelegate updateFunctionDelegate;
+	
+	//Binding the function with specific values
+	updateFunctionDelegate.BindUFunction(this, FName("UpdateWalkSpeed"), NewValue, InterpSpeed, bAutoReset);
+	
+	//Calling MyUsefulFunction after 5 seconds without looping
+	GetWorld()->GetTimerManager().ClearTimer(WalkSpeedInterpTimerHandle);
+	GetWorld()->GetTimerManager().SetTimer(WalkSpeedInterpTimerHandle, updateFunctionDelegate, 0.01f, true);
+}
+
+void AMainCharacterBase::UpdateWalkSpeed(const float TargetValue, const float InterpSpeed, const bool bAutoReset)
+{
+	float currentSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	if (FMath::IsNearlyEqual(currentSpeed, TargetValue, 0.1))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(WalkSpeedInterpTimerHandle);
+		if (bAutoReset)
+		{
+			SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed * 0.5f, InterpSpeed * 1.5f, false);
+		}
+	}
+	currentSpeed = FMath::FInterpTo(currentSpeed, TargetValue, 0.1f, InterpSpeed);
+	GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
+}
+
+void AMainCharacterBase::SetFieldOfViewWithInterp(float NewValue, float InterpSpeed, const bool bAutoReset)
+{
+	FTimerDelegate updateFunctionDelegate;
+
+	//Binding the function with specific values
+	updateFunctionDelegate.BindUFunction(this, FName("UpdateFieldOfView"), NewValue, InterpSpeed, bAutoReset);
+
+	//Calling MyUsefulFunction after 5 seconds without looping
+	GetWorld()->GetTimerManager().ClearTimer(FOVInterpHandle);
+	GetWorld()->GetTimerManager().SetTimer(FOVInterpHandle, updateFunctionDelegate, 0.01f, true);
+}
+
+void AMainCharacterBase::UpdateFieldOfView(const float TargetValue, float InterpSpeed, const bool bAutoReset)
+{
+	float currentFieldOfView = FollowingCamera->FieldOfView;
+	if (FMath::IsNearlyEqual(currentFieldOfView, TargetValue, 0.1))
+	{
+		GetWorldTimerManager().ClearTimer(FOVInterpHandle);
+		if (bAutoReset)
+		{
+			SetFieldOfViewWithInterp(90.0f, InterpSpeed * 1.5f, false);
+		}
+	}
+	currentFieldOfView = FMath::FInterpTo(currentFieldOfView, TargetValue, 0.1f, 1.0f);
+	FollowingCamera->SetFieldOfView(currentFieldOfView);
+}
+
 bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)
 {
 	if (!Super::TryAddNewDebuff(DebuffInfo, Causer)) return false;
@@ -580,14 +700,14 @@ bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* C
 	{
 		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "Debuff");
 	}
-	//230621 임시 제거
-	//ActivateBuffNiagara(bIsDebuff, BuffDebuffType);
+	
+	ActivateDebuffNiagara((uint8)DebuffInfo.Type);
 
-	//GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
-	//BuffEffectResetTimerHandle.Invalidate();
-	//GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
-	//	DeactivateBuffEffect();
-	//}), DebuffInfo.TotalTime, false);
+	GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
+	BuffEffectResetTimerHandle.Invalidate();
+	GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
+		DeactivateBuffEffect();
+	}), DebuffInfo.TotalTime, false);
 
 	return true;
 }

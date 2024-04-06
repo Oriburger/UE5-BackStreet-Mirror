@@ -4,18 +4,16 @@
 
 #include "../../Global/public/BackStreet.h"
 #include "CharacterBase.h"
+#include "InputActionValue.h"
 #include "GameFramework/Character.h"
 #include "MainCharacterBase.generated.h"
 
+class UInputComponent;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialAttack);
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialMove);
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialZoom);
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialRoll);
-
-
 
 UCLASS()
 class BACKSTREET_API AMainCharacterBase : public ACharacterBase
@@ -84,13 +82,31 @@ public:
 	UPROPERTY()
 		bool bIsAiming = false;
 
+// ------- Character Input Action ------- 
+public:
+	// MappingContext
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+		class UInputMappingContext* DefaultMappingContext;
+
+	//Input Action Infos
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+		FPlayerInputActionInfo InputActionInfo;
+
 // ------- Character Action ------- 
 public:
 	UFUNCTION()
-		void MoveForward(float Value);
+		void Move(const FInputActionValue& Value);
+
+	// Called for looking input
+	UFUNCTION()
+		void Look(const FInputActionValue& Value);
+
+	// Called for sprinting input
+	UFUNCTION()
+		void Sprint(const FInputActionValue& Value);
 
 	UFUNCTION()
-		void MoveRight(float Value);
+		void StopSprint(const FInputActionValue& Value);
 
 	//구르기를 시도한다.
 	UFUNCTION()
@@ -102,7 +118,7 @@ public:
 
 	//카메라 Boom의 길이를 늘이거나 줄인다.
 	UFUNCTION()
-		void ZoomIn(float Value);
+		void ZoomIn(const FInputActionValue& Value);
 
 	//주변에 상호작용 가능한 액터를 조사한다.
 	UFUNCTION()
@@ -150,13 +166,34 @@ public:
 
 	//1~4번의 키를 눌러 보조무기를 장착한다.
 	UFUNCTION()
-		void PickSubWeapon();
+		void PickSubWeapon(const FInputActionValue& Value);
 
 	UFUNCTION()
 		TArray<AActor*> GetNearInteractionActorList();
+
 private:
 	UFUNCTION()
 		void StopDashMovement();
+
+//------- Movement Interpolation Event---------
+public:
+	UFUNCTION()
+		void SetWalkSpeedWithInterp(float NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+	UFUNCTION()
+		void SetFieldOfViewWithInterp(float NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+private:
+	//interp function
+	//it must not be called alone.
+	//if you set the value of bAutoReset false, you have to call this function to reset to original value
+	UFUNCTION()
+		void UpdateWalkSpeed(const float TargetValue, const float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+	//interp function
+	//it must not be called alone.
+	UFUNCTION()
+		void UpdateFieldOfView(const float TargetValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
 
 // ------- 어빌리티 / 디버프 ---------------
 public:
@@ -223,6 +260,9 @@ public:
 
 private:
 	UPROPERTY()
+		float TargetFieldOfView = 0.0f;
+
+	UPROPERTY()
 		class UAbilityManagerBase* AbilityManagerRef;
 
 	//플레이어 컨트롤러 약 참조
@@ -240,6 +280,14 @@ private:
 	//구르기 딜레이 타이머
 	UPROPERTY()
 		FTimerHandle RollTimerHandle;
+
+	//달리기 속도 보간 타이머
+	UPROPERTY()
+		FTimerHandle WalkSpeedInterpTimerHandle;
+
+	//FOV 보간 타이머
+	UPROPERTY()
+		FTimerHandle FOVInterpHandle;
 
 	//구르기 내 대쉬 딜레이 핸들
 	UPROPERTY()
