@@ -1,0 +1,43 @@
+[
+	{
+		"Name": "0",
+		"SkillID": 0,
+		"SkillName": "None",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "None",
+		"bSkillBlocked": true,
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": false,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 2,
+			"LegendGaugeReq": 3,
+			"MythicGaugeReq": 4
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	}
+]
