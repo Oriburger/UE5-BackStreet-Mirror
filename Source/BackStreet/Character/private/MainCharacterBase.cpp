@@ -1,6 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "../public/MainCharacterBase.h"
 #include "../public/MainCharacterController.h"
+#include "../../Global/public/BackStreetGameInstance.h"
 #include "../public/AbilityManagerBase.h"
 #include "../../Item/public/WeaponBase.h"
 #include "../../Item/public/ThrowWeaponBase.h"
@@ -83,11 +84,22 @@ void AMainCharacterBase::BeginPlay()
 	}
 
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	
 	InitDynamicMeshMaterial(NormalMaterial);
 
 	AbilityManagerRef = NewObject<UAbilityManagerBase>(this, UAbilityManagerBase::StaticClass(), FName("AbilityfManager"));
 	AbilityManagerRef->InitAbilityManager(this);
+
+	UBackStreetGameInstance* GameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
+
+	//Load SaveData
+	if (GameInstance->LoadGameSaveData(SavedData)) return;
+	else
+	{
+		GameInstance->SaveGameData(FSaveData());
+	}
+	SetCharacterStatFromSaveData();
+	InitCharacterState();
+
 }
 
 // Called every frame
@@ -135,6 +147,9 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//Sprint
 		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Sprint);
 		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StopSprint);
+
+		//Jump
+		EnhancedInputComponent->BindAction(InputActionInfo.JumpAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StartJump);
 
 		//Zoom
 		//EnhancedInputComponent->BindAction(InputActionInfo.ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
@@ -257,6 +272,13 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X/2.0f);
 		AddControllerPitchInput(LookAxisVector.Y/2.0f);
 	}
+}
+
+void AMainCharacterBase::StartJump(const FInputActionValue& Value)
+{
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	CharacterState.CharacterActionState = ECharacterActionType::E_Jump;
+	Jump();
 }
 
 void AMainCharacterBase::Sprint(const FInputActionValue& Value)
@@ -439,6 +461,8 @@ void AMainCharacterBase::TryAttack()
 		return;
 	}
 
+	//=============
+
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	this->Tags.Add("Attack|Common");
 	//RotateToCursor();
@@ -603,6 +627,11 @@ void AMainCharacterBase::StopDashMovement()
 	const FVector& direction = GetMesh()->GetRightVector();
 	float& speed = GetCharacterMovement()->MaxWalkSpeed;
 	GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
+}
+
+void AMainCharacterBase::SetCharacterStatFromSaveData()
+{
+	CharacterStat = SavedData.PlayerSaveGameData.PlayerStat;
 }
 
 void AMainCharacterBase::ResetRotationToMovement()

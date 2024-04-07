@@ -101,6 +101,9 @@ public:
 	UFUNCTION()
 		void Look(const FInputActionValue& Value);
 
+	UFUNCTION()
+		void StartJump(const FInputActionValue& Value);
+
 	// Called for sprinting input
 	UFUNCTION()
 		void Sprint(const FInputActionValue& Value);
@@ -194,6 +197,15 @@ private:
 	//it must not be called alone.
 	UFUNCTION()
 		void UpdateFieldOfView(const float TargetValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+// ------- SaveData 관련 --------------------
+protected:
+	UFUNCTION()
+		void SetCharacterStatFromSaveData();
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "SaveData")
+		FSaveData SavedData;
 
 // ------- 어빌리티 / 디버프 ---------------
 public:

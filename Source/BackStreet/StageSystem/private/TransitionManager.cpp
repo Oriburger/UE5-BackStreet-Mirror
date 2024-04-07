@@ -123,7 +123,7 @@ void UTransitionManager::LoadStage()
 	{
 		UE_LOG(LogTemp, Log, TEXT("Instance is not exist , Create Level Instance"));
 
-		FString name = FString::FromInt(ChapterManager.Get()->GetChapterLV());
+		FString name = FString::FromInt((uint8)ChapterManager.Get()->GetChapterLevel());
 		FVector location = currentStage->GetStageLocation();
 
 		name += FString(TEXT("Stage"));
