@@ -444,26 +444,21 @@ void AMainCharacterBase::TryAttack()
 	}), 0.1f, false);
 }
 
-void AMainCharacterBase::TrySkill()
+void AMainCharacterBase::TrySkill(int32 SkillID)
 {
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 	
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle
-		|| !GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.IsSkillAvailable ) return;
+		|| !GetCurrentWeaponRef()->GetWeaponStat().bSkillVaild) return;
 	//IndieGo용 임시 코드----------------------------------------------------------
 	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130)
 	{
 		CharacterState.CharacterCurrSkillGauge = 10;
 	}
 	//---------------------------------------------------------------------------------
-	if (GetCharacterState().CharacterCurrSkillGauge<GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.SkillCommonReq)
-	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬 게이지가 부족합니다.")), FColor::White);
-		return;
-	}
 
-	Super::TrySkill();
+	Super::TrySkill(SkillID);
 
 	//Try Skill and adjust rotation to cursor position
 	RotateToCursor();
@@ -474,7 +469,7 @@ void AMainCharacterBase::AddSkillGauge()
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
-	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeInfo.SkillGaugeAug;
+	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeAug;
 }
 
 

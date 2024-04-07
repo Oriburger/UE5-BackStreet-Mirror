@@ -5,6 +5,7 @@
 #include "../../Item/public/WeaponInventoryBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "../../Global/public/AssetManagerBase.h"
+#include "../../Global/public/SkillManagerBase.h"
 #include "../../SkillSystem/public/SkillBase.h"
 #include "Engine/DamageEvents.h"
 #include "UObject/ConstructorHelpers.h"
@@ -153,7 +154,6 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
 	FWeaponStatStruct currWeaponStat = this->GetCurrentWeaponRef()->GetWeaponStat();
-	currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
 	this->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
 	StopAttack();
 
@@ -230,13 +230,6 @@ void ACharacterBase::Die()
 		//캐릭터가 죽으면 3가지 타입의 무기 액터를 순차적으로 반환
 		for (int weaponIdx = 2; weaponIdx >= 0; weaponIdx--)
 		{
-			for (TPair<int32, ASkillBase*>& skillIdx : WeaponActorList[weaponIdx]->GetWeaponStat().SkillSetInfo.SkillRefMap)
-			{
-				ASkillBase* skill = skillIdx.Value;
-				skill->ClearAllTimerHandle();
-				skill->Destroy();
-			}
-			WeaponActorList[weaponIdx]->GetWeaponStat().SkillSetInfo.SkillRefMap.Empty();
 			WeaponActorList[weaponIdx]->Destroy();
 			InventoryRef->Destroy();
 		}
@@ -259,6 +252,8 @@ void ACharacterBase::Die()
 	CharacterStat.bIsInvincibility = true;
 	GetCharacterMovement()->Deactivate();
 	bUseControllerRotationYaw = false;
+
+	OnCharacterDied.Broadcast();
 
 	if (AnimAssetData.DieAnimMontageList.Num() > 0)
 	{
@@ -315,83 +310,20 @@ void ACharacterBase::TryAttack()
 	}
 }
 
-void ACharacterBase::TrySkill()
+void ACharacterBase::TrySkill(int32 SkillID)
 {
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
-	if (weaponRef->GetWeaponStat().SkillSetInfo.SkillIDList.IsEmpty())
+	if (!weaponRef->GetWeaponStat().bSkillVaild)
 	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Skill is not binded to this Weapon")), FColor::White);
+		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("This weapon is not capable of using skills")), FColor::White);
 		return;
 	}
-	float totalSkillAnimPlayTime = 0;
-	int skillAnimIndex = 0 ;
-	SkillAnimPlayTimerCurr = 0;
 
-	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
-	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
+	CharacterState.bCanAttack = false; 
 
-	SkillAnimPlayTimerThreshold = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
-	
-	//Total skill animation play time which is using for init skill timing.
-	for (UAnimMontage* skillAnimMontage : AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList) 
-	{
-		totalSkillAnimPlayTime += skillAnimMontage->CalculateSequenceLength()/GetSkillAnimPlayRate(skillAnimIndex);
-		GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.TotalSkillPlayTime = totalSkillAnimPlayTime;
-		skillAnimIndex++;
-	}
-
-	SkillAnimPlayTimerHandleList.SetNum(SkillAnimPlayTimerThreshold);
-	PlaySkillAnimation();
-}
-float ACharacterBase::GetSkillAnimPlayRate(uint8 SkillAnimIndex)
-{
-	float animPlayRate;
-
-	if (GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.IsAnimPlayRateSyncWithGrade)
-	{
-		if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillCommonReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillRareReq, true, false))
-		{
-			animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.CommonSkillAnimRateList[SkillAnimPlayTimerCurr];
-		}
-		else if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillRareReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillLegendReq, true, false))
-		{
-			animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.RareSkillAnimRateList[SkillAnimPlayTimerCurr];
-		}
-		else if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillLegendReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillMythicReq, true, false))
-		{
-			animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.LegendSkillAnimRateList[SkillAnimPlayTimerCurr];
-		}
-		else if (CharacterState.CharacterCurrSkillGauge >= GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillMythicReq)
-		{
-			animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.MythicSkillAnimRateList[SkillAnimPlayTimerCurr];
-		}
-	}
-	else
-	{
-		animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.CommonSkillAnimRateList[SkillAnimPlayTimerCurr];
-	}
-	return animPlayRate;
-}
-
-void ACharacterBase::PlaySkillAnimation()
-{
-
-	if (SkillAnimPlayTimerCurr >= SkillAnimPlayTimerThreshold)
-	{
-		SkillAnimPlayTimerHandleList.Empty();
-		return;
-	}
-	float animPlayRate = GetSkillAnimPlayRate(SkillAnimPlayTimerCurr);
-	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(GetCurrentWeaponRef()->WeaponID)->SkillAnimMontageList;
-	float animPlayTime = PlayAnimMontage(targetAnimList[SkillAnimPlayTimerCurr], animPlayRate);
-	GetWorldTimerManager().SetTimer(SkillAnimPlayTimerHandleList[SkillAnimPlayTimerCurr], this, &ACharacterBase::PlayNextSkillAnimation, animPlayTime, false);
-}
-
-void ACharacterBase::PlayNextSkillAnimation()
-{
-	SkillAnimPlayTimerCurr++;
-	PlaySkillAnimation();
+	checkf(IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()), TEXT("Failed to get SkillmanagerBase"));
+	GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, SkillID);
 }
 
 void ACharacterBase::Attack()
@@ -497,18 +429,6 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 			for (int32 i = 0; i < AssetInfo.HitAnimMontageList.Num(); i++)
 			{
 				AssetToStream.AddUnique(AssetInfo.HitAnimMontageList[i].ToSoftObjectPath());
-			}
-		}
-
-		for (auto index = AssetInfo.SkillAnimMontageMap.CreateConstIterator(); index; ++index)
-		{
-			TArray<TSoftObjectPtr<UAnimMontage>> skillAnimMontageList = index.Value().SkillAnimMontageList;
-			for (auto& anim : skillAnimMontageList)
-			{
-				if (!skillAnimMontageList.IsEmpty())
-				{
-					AssetToStream.AddUnique(anim.ToSoftObjectPath());
-				}
 			}
 		}
 
@@ -647,18 +567,6 @@ bool ACharacterBase::InitAnimAsset()
 		{
 			if (anim.IsValid())
 				animAssetList.HitAnimMontageList.AddUnique(anim.Get());
-		}
-	}
-	for (auto index = AssetInfo.SkillAnimMontageMap.CreateConstIterator(); index; ++index)
-	{
-		if (!index.Value().SkillAnimMontageList.IsEmpty())
-		{	
-			animAssetList.SkillAnimMontageMap.Add(index.Key());
-			for (TSoftObjectPtr<UAnimMontage> anim : index.Value().SkillAnimMontageList)
-			{
-				if (anim.IsValid())
-					animAssetList.SkillAnimMontageMap.Find(index.Key())->SkillAnimMontageList.AddUnique(anim.Get());
-			}
 		}
 	}
 
@@ -906,11 +814,4 @@ void ACharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
 	AtkIntervalHandle.Invalidate();
 	ReloadTimerHandle.Invalidate();
-
-	for (int num=0 ; num < SkillAnimPlayTimerHandleList.Num(); num++)
-	{
-		GetWorldTimerManager().ClearTimer(SkillAnimPlayTimerHandleList[num]);
-		SkillAnimPlayTimerHandleList[num].Invalidate();
-	}
-	SkillAnimPlayTimerHandleList.Empty();
 }

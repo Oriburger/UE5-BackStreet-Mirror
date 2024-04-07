@@ -5,7 +5,6 @@
 #include "Sound/SoundCue.h"
 #include "NiagaraSystem.h"
 #include "../../Item/public/ItemInfoStruct.h"
-#include "../../SkillSystem/public/SkillInfoStruct.h" 
 #include "../../StageSystem/public/StageInfoStruct.h"
 #include "CharacterInfoStruct.generated.h"
 
@@ -238,10 +237,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> HitAnimMontageList;
 
-	//무기 ID, 스킬 애니메이션/ Map으로 관리
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TMap<int32, FSkillAnimMontageStruct> SkillAnimMontageMap;
-
 	//구르기 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> RollAnimMontageList;
@@ -333,7 +328,4 @@ struct FEnemyStatStruct : public FTableRowBase
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<float> EnemySkillIntervalList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintreadOnly)
-		FSkillSetInfo SkillSetInfo;
 };

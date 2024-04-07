@@ -131,13 +131,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		float WeaponKnockBackEnergy = 500.0f;
 
-	//Weapon Skill 게이지 사용량 정보
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FSkillGaugeInfo SkillGaugeInfo;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool bSkillVaild = false;
 
-	//Skill ID List
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FSkillSetInfo SkillSetInfo;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		int32 SkillID = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float SkillGaugeAug = 0.1;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FDebuffInfoStruct DebuffInfo;

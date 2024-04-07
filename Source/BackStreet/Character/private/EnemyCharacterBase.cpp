@@ -145,7 +145,7 @@ void AEnemyCharacterBase::TryAttack()
 	Super::TryAttack();
 }
 
-void AEnemyCharacterBase::TrySkill()
+void AEnemyCharacterBase::TrySkill(int32 SkillID)
 {
 	check(GetCurrentWeaponRef() != nullptr);
 
@@ -158,7 +158,7 @@ void AEnemyCharacterBase::TrySkill()
 		return;
 	}
 
-	Super::TrySkill();
+	Super::TrySkill(SkillID);
 }
 
 void AEnemyCharacterBase::Attack()
