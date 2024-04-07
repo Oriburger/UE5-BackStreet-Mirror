@@ -2,10 +2,9 @@
 
 #pragma once
 
+#include "../../Global/public/BackStreet.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "../../SkillSystem/public/SkillInfoStruct.h"
-#include "../../Global/public/AssetInfoStruct.h"
 #include "SkillBase.generated.h"
 
 UCLASS()
@@ -26,94 +25,54 @@ public:
 	UPROPERTY(VisibleDefaultsOnly)
 		USceneComponent* DefaultSceneRoot;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		UStaticMeshComponent* SkillMesh;
+//======= User Basic Function =======================
+public:	
+	UFUNCTION()
+		void InitSkill(FSkillInfoStruct NewSkillInfo);
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
-		AActor* Causer;
-
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
-		TArray<class ACharacterBase*> TargetList;
-
-//------- Default Property, Action -------------------
-public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Basic")
-		int32 SkillID;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
-		TMap<FName, float> SkillGradeVariableMap;
-
-public:
-	//Reset Skill (can use both c++, BP)
+	//Must link with parent function in Blueprint
 	UFUNCTION(BlueprintNativeEvent)
-		void InitSkill(AActor* NewCauser, TArray<class ACharacterBase*>& NewTargetList, int32 NewSkillID, float NewSkillStartTiming);
+		void ActivateSkill();
 
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-		void StartSkill();
-
-	UFUNCTION()
-		void TrySkill();
-
+	//Just hide skillBase (for reusing)
 	UFUNCTION(BlueprintCallable)
-		void HideSkill();
+		void DeactivateSkill();
 
+	//Destroy the skill
 	UFUNCTION()
-		void SetSkillManagerRef(class USkillManagerBase* NewSkillManager);
+		void DestroySkill();
 
+	//CheckSkillGauge when skill grade is avilable
 	UFUNCTION()
-		ESkillGrade GetSkillGrade();
+		bool CheckSkillGauge();
 
 //--------- DataTable, Asset ----------------------
 protected:
-	UFUNCTION()
-		void InitAsset(int32 NewSkillID);
-	
-	UFUNCTION()
-		void SetAsset();
-
-	//Skill Info Table
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* SkillInfoTable;
-
-	//Skill Asset Info Table
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* SkillAssetInfoTable;
-
-	//Current Skill Info
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		FSkillInfoStruct SkillInfo;
-
-	//Current Skill Asset Info
-	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
-		FSkillAssetInfoStruct SkillAssetInfo;
-
-public:
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillAssetInfoStruct GetSkillAssetInfoWithID(int32 TargetSkillID);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillInfoStruct GetSkillInfoWithID(int32 TargetSkillID);
-	
 	UFUNCTION(BlueprintCallable)
 		void PlaySingleSound(FName SoundName);
 
-protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		TArray<class UNiagaraSystem*> SkillEffectParticleList;
+	UFUNCTION(BlueprintCallable)
+		float PlayAnimMontage(ACharacter* Target, FName AnimName);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class UNiagaraSystem* SkillDestroyEffectParticle;
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		UNiagaraSystem* GetNiagaraEffect(FName EffectName);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Image")
-		class UTexture2D* SkillIconImage;
+public:	
+	//Skill Info
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		FSkillInfoStruct SkillInfo;
+	
+	//MainCharacter's available Skill Grade
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		ESkillGrade SkillGrade;
 
+	//Skill grade VariableMap when current SkillGrade
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		TMap<FName, float> VariableMap;
 //-------- ETC. (Ref)-------------------------------
 protected:
 	//GameMode Soft Ref
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
-
-	//Owner Character Soft Ref
-	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 
 	//SkillManager Soft Ref
 	TWeakObjectPtr<class USkillManagerBase> SkillManagerRef;
@@ -122,11 +81,5 @@ protected:
 	TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
 
 //-------- Timer --------------------------------------------
-public:
-	UFUNCTION()
-		void ClearAllTimerHandle();
-	
-protected:
-	UPROPERTY()
-		FTimerHandle SkillStartTimingTimerHandle;
+
 };

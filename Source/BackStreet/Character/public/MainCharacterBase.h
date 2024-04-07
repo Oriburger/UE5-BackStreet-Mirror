@@ -181,7 +181,7 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void TrySkill() override;
+		virtual void TrySkill(int32 SkillID) override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
