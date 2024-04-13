@@ -475,9 +475,14 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 		}
 
 		// material
+		if (!AssetInfo.DynamicMaterialList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetInfo.DynamicMaterialList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.DynamicMaterialList[i].ToSoftObjectPath());
+			}
+		}
 
-		AssetToStream.AddUnique(AssetInfo.NormalMaterial.ToSoftObjectPath());
-		AssetToStream.AddUnique(AssetInfo.WallThroughMaterial.ToSoftObjectPath());
 		if (!AssetInfo.EmotionTextureList.IsEmpty())
 		{
 			for (int32 i = 0; i < AssetInfo.EmotionTextureList.Num(); i++)
@@ -513,11 +518,16 @@ void ACharacterBase::SetAsset()
 		UMaterialInterface* targetMat = AssetInfo.CharacterMeshMaterialList[matIdx % meshMatCount].Get();
 		GetMesh()->SetMaterial(matIdx, targetMat);
 	}
+	InitMaterialAsset();
+	InitDynamicMaterialList(DynamicMaterialList);
+	for (int8 matIdx = 0; matIdx < CurrentDynamicMaterialList.Num(); matIdx++)
+	{
+		GetMesh()->SetMaterial(matIdx, CurrentDynamicMaterialList[matIdx]);
+	}
 	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimBlueprint);
 	InitAnimAsset();
 	InitSoundAsset();
 	InitVFXAsset();
-	InitMaterialAsset();
 }
 
 bool ACharacterBase::InitAnimAsset()
@@ -633,15 +643,15 @@ void ACharacterBase::InitSoundAsset()
 
 void ACharacterBase::InitMaterialAsset()
 {
-	if (AssetInfo.NormalMaterial.IsValid())
+	if (!AssetInfo.DynamicMaterialList.IsEmpty())
 	{
-		NormalMaterial = AssetInfo.NormalMaterial.Get();
+		for (TSoftObjectPtr<UMaterialInterface>material : AssetInfo.DynamicMaterialList)
+		{
+			if (material.IsValid())
+				DynamicMaterialList.AddUnique(material.Get());
+		}
 	}
-
-	if (AssetInfo.WallThroughMaterial.IsValid())
-	{
-		WallThroughMaterial = AssetInfo.WallThroughMaterial.Get();
-	}
+	/*
 
 	if (!AssetInfo.EmotionTextureList.IsEmpty())
 	{
@@ -650,7 +660,7 @@ void ACharacterBase::InitMaterialAsset()
 			if (tex.IsValid())
 				EmotionTextureList.AddUnique(tex.Get());
 		}
-	}
+	}*/
 }
 
 FCharacterAssetInfoStruct ACharacterBase::GetAssetInfoWithID(const int32 TargetCharacterID)
@@ -667,13 +677,13 @@ FCharacterAssetInfoStruct ACharacterBase::GetAssetInfoWithID(const int32 TargetC
 	return FCharacterAssetInfoStruct();
 }
 
-void ACharacterBase::InitDynamicMeshMaterial(UMaterialInterface* NewMaterial)
+void ACharacterBase::InitDynamicMaterialList(TArray<UMaterialInterface*> NewMaterialList)
 {
-	if (NewMaterial == nullptr) return;
+	if (NewMaterialList.IsEmpty()) return;
 
-	for (int8 matIdx = 0; matIdx < GetMesh()->GetNumMaterials(); matIdx += 1)
+	for (int8 matIdx = 0; matIdx < NewMaterialList.Num(); matIdx ++)
 	{
-		CurrentDynamicMaterial = GetMesh()->CreateDynamicMaterialInstance(matIdx, NewMaterial);
+		CurrentDynamicMaterialList.Add(GetMesh()->CreateDynamicMaterialInstance(matIdx, NewMaterialList[matIdx]));
 	}
 }
 

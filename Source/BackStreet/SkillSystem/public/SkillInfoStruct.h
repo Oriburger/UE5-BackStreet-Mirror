@@ -28,6 +28,16 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FSkillMaterialInfoStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
+	TArray<UMaterialInterface*> MaterialList;
+};
+
+USTRUCT(BlueprintType)
 struct FSkillGradeStruct : public FTableRowBase
 {
 public:
@@ -86,6 +96,10 @@ public:
 	//All animation maps to be used in the skill. Can find animation by Find(FName).
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TMap<FName, FSkillAnimInfoStruct> AnimInfoMap;
+
+	//All material maps to be used in the skill. Can find material by Find(FName).
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TMap<FName, FSkillMaterialInfoStruct> MaterialInfoMap;
 		
 };
 

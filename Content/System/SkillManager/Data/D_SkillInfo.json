@@ -36,6 +36,528 @@
 			},
 			"AnimInfoMap":
 			{
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
+		"Name": "11100",
+		"SkillID": 11100,
+		"SkillName": "TaserHoop",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "None",
+		"bSkillBlocked": true,
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": false,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 2,
+			"LegendGaugeReq": 3,
+			"MythicGaugeReq": 4
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
+		"Name": "11101",
+		"SkillID": 11101,
+		"SkillName": "DashAttack",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "None",
+		"bSkillBlocked": true,
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": false,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 2,
+			"LegendGaugeReq": 3,
+			"MythicGaugeReq": 4
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
+		"Name": "11200",
+		"SkillID": 11200,
+		"SkillName": "Knockback",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/WeaponSkill/BPS_Knockback.BPS_Knockback_C'",
+		"bSkillBlocked": false,
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": true,
+			"CommonVariableMap":
+			{
+				"KnockbackEnergy": 1000
+			},
+			"RareVariableMap":
+			{
+				"KnockbackEnergy": 1500
+			},
+			"LegendVariableMap":
+			{
+				"KnockbackEnergy": 2000
+			},
+			"MythicVariableMap":
+			{
+				"KnockbackEnergy": 10000
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 2,
+			"LegendGaugeReq": 3,
+			"MythicGaugeReq": 4
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+				"Knockback":
+				{
+					"Effect": "/Script/Niagara.NiagaraSystem'/Game/Asset/VFX/sA_Megapack_v1/sA_SkillSet_1/Fx/NiagaraSystems/NS_Aoe.NS_Aoe'"
+				}
+			},
+			"AnimInfoMap":
+			{
+				"Knockback_MainCharacter":
+				{
+					"AnimMontage": "/Script/Engine.AnimMontage'/Game/System/SkillManager/Animation/MainCharacter/AM_KnockBack.AM_KnockBack'",
+					"AnimPlayRate": 1
+				}
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
+		"Name": "11201",
+		"SkillID": 11201,
+		"SkillName": "Deflect",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/WeaponSkill/BPS_Deflect.BPS_Deflect_C'",
+		"bSkillBlocked": false,
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": false,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 1,
+			"LegendGaugeReq": 1,
+			"MythicGaugeReq": 1
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+				"Deflect_MainCharacter":
+				{
+					"AnimMontage": "/Script/Engine.AnimMontage'/Game/System/SkillManager/Animation/MainCharacter/AM_Deflect.AM_Deflect'",
+					"AnimPlayRate": 1
+				}
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
+		"Name": "11300",
+		"SkillID": 11300,
+		"SkillName": "ElectricalShort",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "None",
+		"bSkillBlocked": true,
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": false,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 2,
+			"LegendGaugeReq": 3,
+			"MythicGaugeReq": 4
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
+		"Name": "11500",
+		"SkillID": 11500,
+		"SkillName": "VangGaurd",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "None",
+		"bSkillBlocked": true,
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": false,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 2,
+			"LegendGaugeReq": 3,
+			"MythicGaugeReq": 4
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
+		"Name": "11501",
+		"SkillID": 11501,
+		"SkillName": "MagneticCube",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "None",
+		"bSkillBlocked": true,
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": false,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 2,
+			"LegendGaugeReq": 3,
+			"MythicGaugeReq": 4
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
+		"Name": "11502",
+		"SkillID": 11502,
+		"SkillName": "KettleBot",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "None",
+		"bSkillBlocked": true,
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": false,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 2,
+			"LegendGaugeReq": 3,
+			"MythicGaugeReq": 4
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
+		"Name": "11600",
+		"SkillID": 11600,
+		"SkillName": "WeaponTransform",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/WeaponSkill/BPS_WeaponTransform.BPS_WeaponTransform_C'",
+		"bSkillBlocked": false,
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": true,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 1,
+			"LegendGaugeReq": 1,
+			"MythicGaugeReq": 1
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+				"WeaponTransform_MainCharacter":
+				{
+					"AnimMontage": "/Script/Engine.AnimMontage'/Game/System/SkillManager/Animation/MainCharacter/AM_WeaponTransform.AM_WeaponTransform'",
+					"AnimPlayRate": 1
+				}
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
+		"Name": "11700",
+		"SkillID": 11700,
+		"SkillName": "Arlert",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "None",
+		"bSkillBlocked": true,
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": false,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 2,
+			"LegendGaugeReq": 3,
+			"MythicGaugeReq": 4
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
+		"Name": "99999",
+		"SkillID": 99999,
+		"SkillName": "Teleport",
+		"SkillDescription": "None",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/WeaponSkill/BPS_Teleport.BPS_Teleport_C'",
+		"bSkillBlocked": false,
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": false,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 2,
+			"LegendGaugeReq": 3,
+			"MythicGaugeReq": 4
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+				"Teleport_MainCharacter":
+				{
+					"AnimMontage": "/Script/Engine.AnimMontage'/Game/System/SkillManager/Animation/MainCharacter/AM_Teleport.AM_Teleport'",
+					"AnimPlayRate": 1
+				}
+			},
+			"MaterialInfoMap":
+			{
+				"0":
+				{
+					"MaterialList": [
+						"/Script/Engine.MaterialInstanceConstant'/Game/Art/Character/NewBoxMan/Material/M_Boxman_Inst.M_Boxman_Inst'",
+						"/Script/Engine.MaterialInstanceConstant'/Game/Art/Character/NewBoxMan/Material/M_Boxman_Face_Inst.M_Boxman_Face_Inst'"
+					]
+				}
 			}
 		},
 		"Causer": "None"

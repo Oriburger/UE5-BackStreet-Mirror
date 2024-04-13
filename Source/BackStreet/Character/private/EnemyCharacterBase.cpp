@@ -53,7 +53,6 @@ void AEnemyCharacterBase::BeginPlay()
 	InitEnemyCharacter(CharacterID);
 
 	SetDefaultWeapon();
-	InitDynamicMeshMaterial(GetMesh()->GetMaterial(0));
 }
 
 void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
@@ -261,11 +260,11 @@ void AEnemyCharacterBase::ResetActionStateForTimer()
 
 void AEnemyCharacterBase::SetFacialMaterialEffect(bool NewState)
 {
-	if (CurrentDynamicMaterial == nullptr) return;
-
-	CurrentDynamicMaterial->SetScalarParameterValue(FName("EyeBrightness"), NewState ? 5.0f : 35.0f);
-	CurrentDynamicMaterial->SetVectorParameterValue(FName("EyeColor"), NewState ? FColor::Red : FColor::Yellow);
-	InitDynamicMeshMaterial(CurrentDynamicMaterial);
+	if (CurrentDynamicMaterialList.IsEmpty()) return;
+	//HardCoding
+	CurrentDynamicMaterialList[0]->SetScalarParameterValue(FName("EyeBrightness"), NewState ? 5.0f : 35.0f);
+	CurrentDynamicMaterialList[0]->SetVectorParameterValue(FName("EyeColor"), NewState ? FColor::Red : FColor::Yellow);
+	InitDynamicMaterialList(DynamicMaterialList);
 }
 
 void AEnemyCharacterBase::Turn(float Angle)

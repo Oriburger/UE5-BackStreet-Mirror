@@ -259,14 +259,10 @@ public:
 
 	// Material
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
-		TSoftObjectPtr<UMaterialInterface> NormalMaterial;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
-		TSoftObjectPtr<UMaterialInterface> WallThroughMaterial;
+		TArray<TSoftObjectPtr<UMaterialInterface>> DynamicMaterialList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
 		TArray<TSoftObjectPtr<UTexture>> EmotionTextureList;
-
 };
 
 
