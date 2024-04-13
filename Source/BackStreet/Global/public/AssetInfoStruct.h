@@ -30,39 +30,45 @@ public:
 
 	//근접 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> MeleeAttackAnimMontageList;
+		TArray<UAnimMontage*> MeleeAttackAnimMontageList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		UAnimMontage* UpperAttackAminMontage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<UAnimMontage*> AirAttackAnimMontageList;
 
 	//사격 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> ShootAnimMontageList;
+		TArray<UAnimMontage*> ShootAnimMontageList;
 
 	//투척 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> ThrowAnimMontageList;
+		TArray<UAnimMontage*> ThrowAnimMontageList;
 
 	//재장전 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> ReloadAnimMontageList;
+		TArray<UAnimMontage*> ReloadAnimMontageList;
 
 	//타격 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> HitAnimMontageList;
+		TArray<UAnimMontage*> HitAnimMontageList;
 
 	//스킬 애니메이션 / 무기 ID로 매핑하여 관리
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TMap<int32, FSkillAnimAssetMontageStruct> SkillAnimMontageMap;
+		TMap<int32, FSkillAnimAssetMontageStruct> SkillAnimMontageMap;
 
 	//구르기 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> RollAnimMontageList;
+		TArray<UAnimMontage*> RollAnimMontageList;
 
 	//상호작용 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> InvestigateAnimMontageList;
+		TArray<UAnimMontage*> InvestigateAnimMontageList;
 
 	//사망 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> DieAnimMontageList;
+		TArray<UAnimMontage*> DieAnimMontageList;
 };
 
 USTRUCT(BlueprintType)

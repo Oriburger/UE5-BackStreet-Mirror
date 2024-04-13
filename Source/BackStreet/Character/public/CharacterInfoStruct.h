@@ -55,6 +55,9 @@ public:
 		class UInputAction* ReloadAction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* UpperAttackAction;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class UInputAction* ThrowReadyAction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -221,11 +224,21 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		FStatInfoStruct DebuffDefense;
 
-	//====== Player ====================================
-	
+//====== Player ====================================	
 	//Player Skill Gauge
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float CharacterCurrSkillGauge;
+
+	//Upper Atk Movement
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool bIsUpperAttacking = false;	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool bIsAirAttacking = false;
+
+	//Hit Counter For Knockback Event
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 HitCounter = 0;
 };
 
 USTRUCT(BlueprintType)
@@ -272,25 +285,30 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		UAnimBlueprintGeneratedClass* AnimBlueprint;
 	
-	//근접 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> MeleeAttackAnimMontageList;
 
-	//사격 애니메이션 / List로 관리 -> 랜덤하게 출력
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TSoftObjectPtr<UAnimMontage> UpperAttackAminMontage;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> AirAttackAnimMontageList;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> ShootAnimMontageList;
 
-	//투척 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> ThrowAnimMontageList;
 
-	//재장전 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> ReloadAnimMontageList;
 
-	//타격 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> HitAnimMontageList;
+
+	//knock down animation
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> KnockDownAnimMontageList;
 
 	//무기 ID, 스킬 애니메이션/ Map으로 관리
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")

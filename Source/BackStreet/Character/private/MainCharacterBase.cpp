@@ -45,7 +45,7 @@ AMainCharacterBase::AMainCharacterBase()
 
 	FollowingCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FOLLOWING_CAMERA"));
 	FollowingCamera->SetupAttachment(CameraBoom);
-	FollowingCamera->bAutoActivate = false;
+	FollowingCamera->bAutoActivate = true;
 
 	BuffNiagaraEmitter = CreateDefaultSubobject<UNiagaraComponent>(TEXT("BUFF_EFFECT"));
 	BuffNiagaraEmitter->SetupAttachment(GetMesh());
@@ -140,6 +140,9 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		//Attack
 		EnhancedInputComponent->BindAction(InputActionInfo.AttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryAttack);
+
+		//Upper Attack
+		EnhancedInputComponent->BindAction(InputActionInfo.UpperAttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryUpperAttack);
 
 		//Reload
 		EnhancedInputComponent->BindAction(InputActionInfo.ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryReload);
@@ -277,7 +280,7 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 {
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	CharacterState.CharacterActionState = ECharacterActionType::E_Jump;
+	//CharacterState.CharacterActionState = ECharacterActionType::E_Jump;
 	Jump();
 }
 
@@ -286,7 +289,10 @@ void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 	if (CharacterState.bIsSprinting) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero()) return;
-
+	if (IsValid(GetCurrentWeaponRef()))
+	{
+		GetCurrentWeaponRef()->SetResetComboTimer();
+	}
 	CharacterState.bIsSprinting = true;
 	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed, 0.75f);
 	SetFieldOfViewWithInterp(110.0f, 0.75f);
@@ -299,6 +305,17 @@ void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 	CharacterState.bIsSprinting = false;
 	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed * 0.5f, 0.4f);
 	SetFieldOfViewWithInterp(90.0f, 0.5f);
+}
+
+void AMainCharacterBase::TryUpperAttack(const FInputActionValue& Value)
+{
+	if (GetCharacterMovement()->IsFalling()) return;
+	if (CharacterState.bIsUpperAttacking) return;
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (CharacterState.bIsSprinting) SetFieldOfViewWithInterp(90.0f, 0.75f);
+
+	CharacterState.bIsUpperAttacking = true;
+	PlayAnimMontage(AnimAssetData.UpperAttackAminMontage);
 }
 
 void AMainCharacterBase::Roll()
@@ -346,7 +363,7 @@ void AMainCharacterBase::Roll()
 	if (AnimAssetData.RollAnimMontageList.Num() > 0
 		&& IsValid(AnimAssetData.RollAnimMontageList[0]))
 	{
-		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.DefaultMoveSpeed / 500.0f));
+		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], 1.0f);
 	}
 
 	if (OnRoll.IsBound())

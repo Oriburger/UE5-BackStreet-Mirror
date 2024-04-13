@@ -30,6 +30,9 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		UChildActorComponent* InventoryComponent;	
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		USceneComponent* HitSceneComponent;
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 		class UDebuffManagerComponent* DebuffManagerComponent;
@@ -84,6 +87,23 @@ public:
 	UFUNCTION()
 		void ResetAtkIntervalTimer();
 
+	UFUNCTION()
+		void SetLocationWithInterp(FVector NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+private:
+	//interp function
+	//it must not be called alone.
+	//if you set the value of bAutoReset false, you have to call this function to reset to original value
+	UFUNCTION()
+		void UpdateLocation(const FVector TargetValue, const float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+	//Set distance from ground for air attack
+	UFUNCTION()
+		void SetAirAttackLocation();
+
+	UFUNCTION()
+		void OnPlayerLanded(const FHitResult& Hit);
+	
 // ------- Character Stat/State ------------------------------
 public:
 	//캐릭터의 상태 정보를 초기화
@@ -292,6 +312,10 @@ protected:
 
 	UPROPERTY()
 		TArray<FTimerHandle> SkillAnimPlayTimerHandleList;
+
+	//Player Location Interpolate timer
+	UPROPERTY()
+		FTimerHandle LocationInterpHandle;
 
 private:
 	//Current number of multiple SkillAnimPlayTimers

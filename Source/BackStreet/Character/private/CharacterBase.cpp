@@ -21,6 +21,11 @@ ACharacterBase::ACharacterBase()
 	PrimaryActorTick.bCanEverTick = true;
 	this->Tags.Add("Character");
 
+	HitSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("HIT_SCENE"));
+	HitSceneComponent->SetupAttachment(GetMesh());
+	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 200.0f, 160.0f));
+
+
 	static ConstructorHelpers::FClassFinder<AWeaponInventoryBase> weaponInventoryClassFinder(TEXT("/Game/Weapon/Blueprint/BP_WeaponInventory"));
 	static ConstructorHelpers::FClassFinder<AWeaponBase> meleeWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_MeleeWeaponBase"));
 	static ConstructorHelpers::FClassFinder<AWeaponBase> throwWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_ThrowWeaponBase"));
@@ -72,6 +77,8 @@ void ACharacterBase::BeginPlay()
 		InventoryRef->InitInventory();
 		InitWeaponActors();
 	}
+
+	LandedDelegate.AddDynamic(this, &ACharacterBase::OnPlayerLanded);
 }
 
 // Called every frame
@@ -84,6 +91,71 @@ void ACharacterBase::Tick(float DeltaTime)
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void ACharacterBase::ResetAtkIntervalTimer()
+{
+	CharacterState.bCanAttack = true;
+	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
+}
+
+void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, const bool bAutoReset)
+{
+	FTimerDelegate updateFunctionDelegate;
+
+	//Binding the function with specific values
+	updateFunctionDelegate.BindUFunction(this, FName("UpdateLocation"), NewValue, InterpSpeed, bAutoReset);
+
+	//Calling MyUsefulFunction after 5 seconds without looping
+	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
+	GetWorld()->GetTimerManager().SetTimer(LocationInterpHandle, updateFunctionDelegate, 0.01f, true);
+}
+
+void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset)
+{
+	FVector currentLocation = GetActorLocation();
+	if (currentLocation.Equals(TargetValue, 50.0f))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
+		if (bAutoReset)
+		{
+			//SetLocationWithInterp(GetActorLocation() , InterpSpeed * 1.5f, false);
+		}
+	}
+	currentLocation = FMath::VInterpTo(currentLocation, TargetValue, 0.1f, InterpSpeed);
+	SetActorLocation(currentLocation, false, nullptr, ETeleportType::TeleportPhysics);
+}
+
+void ACharacterBase::SetAirAttackLocation()
+{
+	if (!GetCharacterMovement()->IsFalling()) return;
+
+	//Set collision query params
+	FCollisionQueryParams collisionQueryParam;
+	collisionQueryParam.AddIgnoredActor(this);
+
+	//execute linetrace
+	FHitResult hitResult;
+
+	TArray<TEnumAsByte<EObjectTypeQuery>> objectTypes;
+	TEnumAsByte<EObjectTypeQuery> worldStatic = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldStatic);
+	TEnumAsByte<EObjectTypeQuery> worldDynamic = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldDynamic);
+	objectTypes.Add(worldStatic);
+	objectTypes.Add(worldDynamic);
+
+	UKismetSystemLibrary::LineTraceSingleForObjects(GetWorld(), GetActorLocation()
+				, GetActorLocation() - FVector(0.0f, 0.0f, 300.0f), objectTypes, false, { this }
+				, EDrawDebugTrace::ForDuration, hitResult, true);
+
+	if (hitResult.bBlockingHit)
+	{
+		LaunchCharacter({ 0.0f, 0.0f, 200.0f }, true, true);
+	}
+}
+
+void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
+{
+	CharacterState.bIsUpperAttacking = false;
 }
 
 void ACharacterBase::InitCharacterState()
@@ -150,7 +222,7 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die) return;
 	if(!bForceReset && (CharacterState.CharacterActionState == ECharacterActionType::E_Stun
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;
-
+	
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
 	FWeaponStatStruct currWeaponStat = this->GetCurrentWeaponRef()->GetWeaponStat();
 	currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
@@ -173,6 +245,19 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	if (DamageAmount <= 0.0f || !IsValid(DamageCauser)) return 0.0f;
 	if (CharacterStat.bIsInvincibility) return 0.0f;
 
+	//move to enemy's Hit scene locaiton 
+	if (Cast<ACharacterBase>(DamageCauser)->GetCharacterState().bIsUpperAttacking
+		&& Cast<ACharacterBase>(DamageCauser)->GetCharacterMovement()->IsFalling())
+	{
+		float amount = GetCharacterMovement()->IsFalling() ? 300.0f : 1200.0f;
+		LaunchCharacter({ 0.0f, 0.0f, amount }, true, true);
+		FVector location = Cast<ACharacterBase>(DamageCauser)->HitSceneComponent->GetComponentLocation();
+		SetLocationWithInterp(location, 10.0f, false);
+		DrawDebugSphere(GetWorld(), location, 5.0f, 20, FColor::Yellow, false, 100.0f, 0u, 10.0f);
+		UE_LOG(LogTemp, Warning, TEXT("%s currentLocation"), *location.ToString());
+	}
+	
+	//Damage & Die event
 	CharacterState.CurrentHP = CharacterState.CurrentHP - DamageAmount;
 	CharacterState.CurrentHP = FMath::Max(0.0f, CharacterState.CurrentHP);
 	if (CharacterState.CurrentHP == 0.0f)
@@ -212,6 +297,7 @@ void ACharacterBase::TakeHeal(float HealAmount, bool bIsTimerEvent, uint8 BuffDe
 void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 {
 	if (!IsValid(Target) || Target->IsActorBeingDestroyed()) return;
+	if (Cast<ACharacterBase>(Target)->GetCharacterMovement()->IsFalling()) return;
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return;
 
 	FVector knockBackDirection = Target->GetActorLocation() - GetActorLocation();
@@ -273,24 +359,35 @@ void ACharacterBase::Die()
 void ACharacterBase::TryAttack()
 {
 	if (!IsValid(GetCurrentWeaponRef())) return;
+	
+	SetAirAttackLocation();
+	
 	if (GetWorldTimerManager().IsTimerActive(AtkIntervalHandle)) return;
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 	
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
+	
 
 	int32 nextAnimIdx = 0;
 	const float attackSpeed = FMath::Clamp(CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
+	//Choose animation which fit battle situation
 	TArray<UAnimMontage*> targetAnimList;
 	switch (GetCurrentWeaponRef()->GetWeaponStat().WeaponType)
 	{
 	case EWeaponType::E_Melee:
-		if (AnimAssetData.MeleeAttackAnimMontageList.Num() > 0)
+		//check melee anim type
+		if (!AnimAssetData.AirAttackAnimMontageList.IsEmpty() && GetCharacterMovement()->IsFalling())
 		{
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AnimAssetData.AirAttackAnimMontageList.Num();
+			targetAnimList = AnimAssetData.AirAttackAnimMontageList;
+		}
+		else if (AnimAssetData.MeleeAttackAnimMontageList.Num() > 0)
+		{
+			targetAnimList = AnimAssetData.MeleeAttackAnimMontageList;
 			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AnimAssetData.MeleeAttackAnimMontageList.Num();
 		}
-		targetAnimList = AnimAssetData.MeleeAttackAnimMontageList;
 		break;
 	case EWeaponType::E_Shoot:
 		if (AnimAssetData.ShootAnimMontageList.Num() > 0)
@@ -308,6 +405,7 @@ void ACharacterBase::TryAttack()
 		break;
 	}
 
+	//Play Animation
 	if (targetAnimList.Num() > 0
 		&& IsValid(targetAnimList[nextAnimIdx]))
 	{
@@ -430,12 +528,6 @@ void ACharacterBase::TryReload()
 	GetWorldTimerManager().SetTimer(ReloadTimerHandle, Cast<ARangedWeaponBase>(GetCurrentWeaponRef()), &ARangedWeaponBase::Reload, reloadTime, false);
 }
 
-void ACharacterBase::ResetAtkIntervalTimer()
-{
-	CharacterState.bCanAttack = true;
-	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
-}
-
 void ACharacterBase::InitAsset(int32 NewEnemyID)
 {
 	AssetInfo = GetAssetInfoWithID(NewEnemyID);
@@ -454,8 +546,6 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 				AssetToStream.AddUnique(AssetInfo.CharacterMeshMaterialList[idx].ToSoftObjectPath());
 			}
 		}
-			
-
 
 		// Animation 관련
 		//AssetToStream.AddUnique(AssetInfo.AnimBlueprint.ToSoftObjectPath());
@@ -467,6 +557,16 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 				AssetToStream.AddUnique(AssetInfo.MeleeAttackAnimMontageList[i].ToSoftObjectPath());
 			}
 		}
+
+		AssetToStream.AddUnique(AssetInfo.UpperAttackAminMontage.ToSoftObjectPath());
+		if (!AssetInfo.AirAttackAnimMontageList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetInfo.AirAttackAnimMontageList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.AirAttackAnimMontageList[i].ToSoftObjectPath());
+			}
+		}
+
 
 		if (!AssetInfo.ShootAnimMontageList.IsEmpty())
 		{
@@ -613,6 +713,20 @@ bool ACharacterBase::InitAnimAsset()
 		}
 
 	}
+	
+	if (AssetInfo.UpperAttackAminMontage.IsValid())
+	{
+		animAssetList.UpperAttackAminMontage = AssetInfo.UpperAttackAminMontage.Get();
+	}
+
+	if (!AssetInfo.AirAttackAnimMontageList.IsEmpty())
+	{
+		for (TSoftObjectPtr<UAnimMontage> anim : AssetInfo.AirAttackAnimMontageList)
+		{
+			if (anim.IsValid())
+				animAssetList.AirAttackAnimMontageList.AddUnique(anim.Get());
+		}
+	}
 
 	if (!AssetInfo.ShootAnimMontageList.IsEmpty())
 	{
@@ -661,7 +775,6 @@ bool ACharacterBase::InitAnimAsset()
 			}
 		}
 	}
-
 	if (!AssetInfo.RollAnimMontageList.IsEmpty())
 	{
 		for (TSoftObjectPtr<UAnimMontage> anim : AssetInfo.RollAnimMontageList)

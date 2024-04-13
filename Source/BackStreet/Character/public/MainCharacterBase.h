@@ -111,6 +111,10 @@ public:
 	UFUNCTION()
 		void StopSprint(const FInputActionValue& Value);
 
+	//Try Upper Attack
+	UFUNCTION()
+		void TryUpperAttack(const FInputActionValue& Value);
+
 	//구르기를 시도한다.
 	UFUNCTION()
 		void Roll();
@@ -293,11 +297,11 @@ private:
 	UPROPERTY()
 		FTimerHandle RollTimerHandle;
 
-	//달리기 속도 보간 타이머
+	//WalkSpeed Interpolate timer
 	UPROPERTY()
 		FTimerHandle WalkSpeedInterpTimerHandle;
 
-	//FOV 보간 타이머
+	//Field Of View Interpolate timer
 	UPROPERTY()
 		FTimerHandle FOVInterpHandle;
 
