@@ -103,6 +103,12 @@ private:
 
 	UFUNCTION()
 		void OnPlayerLanded(const FHitResult& Hit);
+
+	UFUNCTION()
+		void ResetHitCounter();	
+
+	//Knock down with 
+	virtual void KnockDown();
 	
 // ------- Character Stat/State ------------------------------
 public:
@@ -312,6 +318,12 @@ protected:
 
 	UPROPERTY()
 		TArray<FTimerHandle> SkillAnimPlayTimerHandleList;
+
+	UPROPERTY()
+		FTimerHandle KnockDownDelayTimerHandle;	
+
+	UPROPERTY()
+		FTimerHandle HitCounterResetTimerHandle;
 
 	//Player Location Interpolate timer
 	UPROPERTY()

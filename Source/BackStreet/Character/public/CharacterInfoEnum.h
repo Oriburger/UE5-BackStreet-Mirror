@@ -63,4 +63,5 @@ enum class ECharacterActionType : uint8
 	E_Stun				UMETA(DisplayName = "Stun"),
 	E_Die				UMETA(DisplayName = "Die"),
 	E_Throw				UMETA(DisplayName = "Throw"),
+	E_KnockedDown		UMETA(DisplayName = "KnockDown"),
 };

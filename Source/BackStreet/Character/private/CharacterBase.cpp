@@ -158,6 +158,24 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 	CharacterState.bIsUpperAttacking = false;
 }
 
+void ACharacterBase::ResetHitCounter()
+{
+	CharacterState.HitCounter = 0;
+}
+
+void ACharacterBase::KnockDown()
+{
+	ResetHitCounter();
+	//AssetInfo.KnockDownAnimMontageList[0]
+	//CharacterState.CharacterActionState = ECharacterActionType::E_KnockedDown;
+	
+	
+	//if (AnimAssetData.KnockDownAnimMontageList.IsValidIndex(0))
+	//{
+	//	PlayAnimMontage(AnimAssetData.KnockDownAnimMontageList[0]);
+	//}
+}
+
 void ACharacterBase::InitCharacterState()
 {
 	CharacterState.CurrentHP = CharacterStat.DefaultHP;
@@ -245,19 +263,42 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	if (DamageAmount <= 0.0f || !IsValid(DamageCauser)) return 0.0f;
 	if (CharacterStat.bIsInvincibility) return 0.0f;
 
-	//move to enemy's Hit scene locaiton 
+	// ====== move to enemy's Hit scene location ===================================
 	if (Cast<ACharacterBase>(DamageCauser)->GetCharacterState().bIsUpperAttacking
 		&& Cast<ACharacterBase>(DamageCauser)->GetCharacterMovement()->IsFalling())
 	{
 		float amount = GetCharacterMovement()->IsFalling() ? 300.0f : 1200.0f;
 		LaunchCharacter({ 0.0f, 0.0f, amount }, true, true);
-		FVector location = Cast<ACharacterBase>(DamageCauser)->HitSceneComponent->GetComponentLocation();
-		SetLocationWithInterp(location, 10.0f, false);
-		DrawDebugSphere(GetWorld(), location, 5.0f, 20, FColor::Yellow, false, 100.0f, 0u, 10.0f);
-		UE_LOG(LogTemp, Warning, TEXT("%s currentLocation"), *location.ToString());
+	}
+	else 
+	{
+		FVector location = HitSceneComponent->GetComponentLocation();
+		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(DamageCauser->GetActorLocation(), GetActorLocation());
+		newRotation.Pitch = newRotation.Roll = 0.0f;
+		//if (IsValid(Cast<ACharacterBase>(DamageCauser)->GetCharacterState().TargetedEnemy))
+		{
+			Cast<ACharacterBase>(DamageCauser)->SetLocationWithInterp(location, 1.0f, false);
+			Cast<ACharacterBase>(DamageCauser)->SetActorRotation(newRotation);
+		}
+	}
+
+	// ====== Hit Counter & Knock Down Check ===========================
+	CharacterState.HitCounter += 1;
+
+	// Set hit counter reset event using retriggable timer
+	GetWorldTimerManager().ClearTimer(HitCounterResetTimerHandle);
+	HitCounterResetTimerHandle.Invalidate();
+	GetWorldTimerManager().SetTimer(HitCounterResetTimerHandle, this, &ACharacterBase::ResetHitCounter, 3.0f, false);
+
+	// Check knock down condition and set knock down event using retriggable timer
+	if (CharacterState.HitCounter >= 3)
+	{
+		GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
+		KnockDownDelayTimerHandle.Invalidate();
+		GetWorldTimerManager().SetTimer(KnockDownDelayTimerHandle, this, &ACharacterBase::KnockDown, 3.0f, false);
 	}
 	
-	//Damage & Die event
+	// ======= Damage & Die event ===============================
 	CharacterState.CurrentHP = CharacterState.CurrentHP - DamageAmount;
 	CharacterState.CurrentHP = FMath::Max(0.0f, CharacterState.CurrentHP);
 	if (CharacterState.CurrentHP == 0.0f)
@@ -644,6 +685,13 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 			}
 		}
 
+		if (!AssetInfo.KnockDownAnimMontageList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetInfo.PointMontageList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.KnockDownAnimMontageList[i].ToSoftObjectPath());
+			}
+		}
 
 		// VFX
 		if (!AssetInfo.DebuffNiagaraEffectList.IsEmpty())
@@ -808,6 +856,15 @@ bool ACharacterBase::InitAnimAsset()
 		{
 			if (anim.IsValid())
 				PreChaseAnimMontage = anim.Get();
+		}
+	}
+
+	if (!AssetInfo.KnockDownAnimMontageList.IsEmpty())
+	{
+		for (TSoftObjectPtr<UAnimMontage> anim : AssetInfo.KnockDownAnimMontageList)
+		{
+			if (anim.IsValid())
+				animAssetList.KnockDownAnimMontageList.AddUnique(anim.Get());
 		}
 	}
 

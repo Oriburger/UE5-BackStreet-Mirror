@@ -69,6 +69,9 @@ public:
 	//사망 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<UAnimMontage*> DieAnimMontageList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<UAnimMontage*> KnockDownAnimMontageList;
 };
 
 USTRUCT(BlueprintType)
@@ -106,17 +109,17 @@ public:
 	*******************************************************/
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	ESoundAssetType SoundType;
+		ESoundAssetType SoundType;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	int32 TargetID;
+		int32 TargetID;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FName SoundTarget;
+		FName SoundTarget;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TMap<FName, FSoundArrayContainer> SoundMap;
+		TMap<FName, FSoundArrayContainer> SoundMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FName SoundAssetDescription;
+		FName SoundAssetDescription;
 };

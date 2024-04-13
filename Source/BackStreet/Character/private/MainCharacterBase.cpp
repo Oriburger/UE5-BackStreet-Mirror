@@ -170,6 +170,8 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		//SubWeapon
 		EnhancedInputComponent->BindAction(InputActionInfo.PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::PickSubWeapon);
+
+		EnhancedInputComponent->BindAction(LockToTargetAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::LockToTarget);
 	}
 }
 
@@ -338,10 +340,8 @@ void AMainCharacterBase::Roll()
 	else //아니라면, 입력 방향으로 구르기
 	{
 		float targetYawValue = FMath::Atan2(newDirection.Y, newDirection.X) * 180.0f / 3.141592;
-		UE_LOG(LogTemp, Warning, TEXT("controlValue : %.2lf,  current yaw : %.2lf"), targetYawValue, newRotation.Yaw);
 		targetYawValue += 270.0f;
 		newRotation.Yaw = FMath::Fmod(newRotation.Yaw + targetYawValue, 360.0f);
-		UE_LOG(LogTemp, Warning, TEXT("new Yaw value : %.2lf"), newRotation.Yaw);
 	}
 	
 	// 시점 전환을 위해 제거

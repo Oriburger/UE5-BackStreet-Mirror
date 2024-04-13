@@ -92,6 +92,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 		FPlayerInputActionInfo InputActionInfo;
 
+	//Targeting system
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+		class UInputAction* LockToTargetAction;
+
+
 // ------- Character Action ------- 
 public:
 	UFUNCTION()
@@ -162,6 +167,10 @@ public:
 
 	UFUNCTION()
 		virtual void DropWeapon() override;
+
+	//Targeting system
+	UFUNCTION(BlueprintImplementableEvent)
+		void LockToTarget(const FInputActionValue& Value);
 
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
