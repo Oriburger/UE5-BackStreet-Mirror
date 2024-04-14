@@ -72,6 +72,14 @@ private:
 	UFUNCTION()
 		void ResetTurnAngle();
 
+//-------- Inventory -------------
+public:
+	UFUNCTION(BlueprintCallable)
+		virtual bool PickWeapon(int32 NewWeaponID) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SwitchToNextWeapon() override;
+
 // ----- 캐릭터 스탯 및 상태 관련 ---------
 public:
 	//Initialize EnemyCharacter except asset info.
