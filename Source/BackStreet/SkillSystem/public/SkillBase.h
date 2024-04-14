@@ -42,9 +42,13 @@ public:
 	UFUNCTION()
 		void DestroySkill();
 
-	//CheckSkillGauge when skill grade is avilable
+	//Check skillgauge when skill grade is avilable
 	UFUNCTION()
 		bool CheckSkillGauge();
+
+	//Use skillgauge when skill grade is avilable
+	UFUNCTION()
+		void UseSkillGauge();
 
 //--------- DataTable, Asset ----------------------
 protected:

@@ -46,6 +46,7 @@ void ASkillBase::InitSkill(FSkillInfoStruct NewSkillInfo)
 void ASkillBase::ActivateSkill_Implementation()
 {
 	SetActorHiddenInGame(false);
+	UseSkillGauge();
 }
 
 void ASkillBase::DeactivateSkill()
@@ -98,9 +99,37 @@ bool ASkillBase::CheckSkillGauge()
 	{
 		SkillGrade = ESkillGrade::E_None;
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬 게이지가 부족합니다.")), FColor::White);
+		SkillInfo.Causer->ResetActionState();
 		return false;
 	}
 	return true;
+}
+
+void ASkillBase::UseSkillGauge()
+{
+	if (SkillInfo.SkillGradeStruct.bIsGradeValid)
+	{
+		FCharacterStateStruct newState = SkillInfo.Causer->GetCharacterState();
+
+		switch (SkillGrade)
+		{
+		case ESkillGrade::E_None:
+			return;
+		case ESkillGrade::E_Common:
+			newState.CharacterCurrSkillGauge -= SkillInfo.SkillGradeStruct.CommonGaugeReq;
+			break;
+		case ESkillGrade::E_Rare:
+			newState.CharacterCurrSkillGauge -= SkillInfo.SkillGradeStruct.RareGaugeReq;
+			break;
+		case ESkillGrade::E_Legend:
+			newState.CharacterCurrSkillGauge -= SkillInfo.SkillGradeStruct.LegendGaugeReq;
+			break;
+		case ESkillGrade::E_Mythic:
+			newState.CharacterCurrSkillGauge -= SkillInfo.SkillGradeStruct.MythicGaugeReq;
+			break;
+		}
+		SkillInfo.Causer->UpdateCharacterState(newState);
+	}
 }
 
 void ASkillBase::PlaySingleSound(FName SoundName)
