@@ -161,16 +161,17 @@ void AProjectileBase::UpdateProjectileStat(FProjectileStatStruct NewStat)
 void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex
 	, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!ProjectileMovement->IsActive() || (IsValid(GetOwner()) && OtherActor == GetOwner())) return;
+	if (!ProjectileMovement->IsActive()) return;
 	if (!OwnerCharacterRef.IsValid() || !GamemodeRef.IsValid()) return;
 	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Item")) return;
 
 	if (OtherActor->ActorHasTag("Character"))
 	{
-		if (OtherActor == OwnerCharacterRef.Get() || OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
+		//It would be change later
+		if(!ProjectileState.bCanAttackCauser&& (OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1]))) return;
 
 		//디버프가 있다면?
-		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(Cast<AWeaponBase>(GetOwner())->GetWeaponStat().DebuffInfo, OwnerCharacterRef.Get());
+		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(ProjectileStat.DebuffInfo, OwnerCharacterRef.Get());
 
 		//폭발하는 발사체라면?
 		if (ProjectileStat.bIsExplosive)

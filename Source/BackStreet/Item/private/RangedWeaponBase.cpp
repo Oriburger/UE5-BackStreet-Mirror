@@ -153,6 +153,7 @@ AProjectileBase* ARangedWeaponBase::CreateProjectile()
 	{
 		newProjectile->SetOwner(this);
 		newProjectile->InitProjectile(OwnerCharacterRef.Get(), ProjectileAssetInfo, ProjectileStatInfo);
+		newProjectile->ProjectileStat.DebuffInfo = WeaponStat.DebuffInfo;
 		newProjectile->ProjectileStat.ProjectileDamage = WeaponStat.WeaponDamage;
 		return newProjectile;
 	}

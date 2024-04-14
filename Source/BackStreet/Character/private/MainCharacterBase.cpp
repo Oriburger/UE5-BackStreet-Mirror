@@ -84,7 +84,6 @@ void AMainCharacterBase::BeginPlay()
 	}
 
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	InitDynamicMeshMaterial(NormalMaterial);
 
 	AbilityManagerRef = NewObject<UAbilityManagerBase>(this, UAbilityManagerBase::StaticClass(), FName("AbilityfManager"));
 	AbilityManagerRef->InitAbilityManager(this);
@@ -404,13 +403,13 @@ void AMainCharacterBase::TryReload()
 float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	if (damageAmount > 0.0f && DamageCauser->ActorHasTag("Enemy"))
+	//Disable this Logic until Facial Material Logic usable
+	/*if (damageAmount > 0.0f && DamageCauser->ActorHasTag("Enemy"))
 	{
 		SetFacialDamageEffect();
-
 		GetWorld()->GetTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 		GetWorld()->GetTimerManager().SetTimer(FacialEffectResetTimerHandle, this, &AMainCharacterBase::ResetFacialDamageEffect, 1.0f, false);
-	}
+	}*/
 	return damageAmount;
 }
 
@@ -444,26 +443,20 @@ void AMainCharacterBase::TryAttack()
 	}), 0.1f, false);
 }
 
-void AMainCharacterBase::TrySkill()
+void AMainCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 	
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle
-		|| !GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.IsSkillAvailable ) return;
+		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	//IndieGo용 임시 코드----------------------------------------------------------
 	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130)
 	{
 		CharacterState.CharacterCurrSkillGauge = 10;
 	}
 	//---------------------------------------------------------------------------------
-	if (GetCharacterState().CharacterCurrSkillGauge<GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.SkillCommonReq)
-	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬 게이지가 부족합니다.")), FColor::White);
-		return;
-	}
 
-	Super::TrySkill();
+	Super::TrySkill(SkillType, SkillID);
 
 	//Try Skill and adjust rotation to cursor position
 	RotateToCursor();
@@ -474,7 +467,7 @@ void AMainCharacterBase::AddSkillGauge()
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
-	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeInfo.SkillGaugeAug;
+	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeAug;
 }
 
 
@@ -707,7 +700,7 @@ void AMainCharacterBase::DeactivateBuffEffect()
 
 void AMainCharacterBase::SetFacialDamageEffect()
 {
-	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterial;
+	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterialList[1];
 	
 	if (currMaterial != nullptr && EmotionTextureList.Num() >= 3)
 	{
@@ -718,7 +711,7 @@ void AMainCharacterBase::SetFacialDamageEffect()
 
 void AMainCharacterBase::ResetFacialDamageEffect()
 {
-	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterial;
+	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterialList[1];
 
 	if (currMaterial != nullptr && EmotionTextureList.Num() >= 3)
 	{

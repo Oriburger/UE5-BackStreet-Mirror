@@ -5,7 +5,6 @@
 #include "Sound/SoundCue.h"
 #include "NiagaraSystem.h"
 #include "../../Item/public/ItemInfoStruct.h"
-#include "../../SkillSystem/public/SkillInfoStruct.h" 
 #include "../../StageSystem/public/StageInfoStruct.h"
 #include "CharacterInfoStruct.generated.h"
 
@@ -212,6 +211,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
 		FVector InitialCapsuleComponentScale;
 
+	//Skill
+	//CharacterSkillList
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		TMap<int32, FOwnerSkillInfoStruct> CharacterSkillInfoMap;
+
 	// Animation 관련
 	
 	//스폰할 적 스켈레탈 메시 정보 저장
@@ -238,10 +242,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> HitAnimMontageList;
 
-	//무기 ID, 스킬 애니메이션/ Map으로 관리
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TMap<int32, FSkillAnimMontageStruct> SkillAnimMontageMap;
-
 	//구르기 애니메이션 / List로 관리 -> 랜덤하게 출력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> RollAnimMontageList;
@@ -264,14 +264,10 @@ public:
 
 	// Material
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
-		TSoftObjectPtr<UMaterialInterface> NormalMaterial;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
-		TSoftObjectPtr<UMaterialInterface> WallThroughMaterial;
+		TArray<TSoftObjectPtr<UMaterialInterface>> DynamicMaterialList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
 		TArray<TSoftObjectPtr<UTexture>> EmotionTextureList;
-
 };
 
 
@@ -333,7 +329,4 @@ struct FEnemyStatStruct : public FTableRowBase
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<float> EnemySkillIntervalList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintreadOnly)
-		FSkillSetInfo SkillSetInfo;
 };
