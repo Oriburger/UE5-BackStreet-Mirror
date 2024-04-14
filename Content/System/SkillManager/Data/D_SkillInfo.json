@@ -4,8 +4,6 @@
 		"SkillID": 0,
 		"SkillName": "None",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "None",
-		"bSkillBlocked": true,
 		"bHidenInGame": true,
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
@@ -48,8 +46,6 @@
 		"SkillID": 11100,
 		"SkillName": "TaserHoop",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "None",
-		"bSkillBlocked": true,
 		"bHidenInGame": true,
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
@@ -92,8 +88,6 @@
 		"SkillID": 11101,
 		"SkillName": "DashAttack",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "None",
-		"bSkillBlocked": true,
 		"bHidenInGame": true,
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
@@ -136,8 +130,6 @@
 		"SkillID": 11200,
 		"SkillName": "Knockback",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/WeaponSkill/BPS_Knockback.BPS_Knockback_C'",
-		"bSkillBlocked": false,
 		"bHidenInGame": true,
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
@@ -193,8 +185,6 @@
 		"SkillID": 11201,
 		"SkillName": "Deflect",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/WeaponSkill/BPS_Deflect.BPS_Deflect_C'",
-		"bSkillBlocked": false,
 		"bHidenInGame": true,
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
@@ -242,8 +232,6 @@
 		"SkillID": 11300,
 		"SkillName": "ElectricalShort",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "None",
-		"bSkillBlocked": true,
 		"bHidenInGame": true,
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
@@ -286,8 +274,6 @@
 		"SkillID": 11500,
 		"SkillName": "VangGaurd",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "None",
-		"bSkillBlocked": true,
 		"bHidenInGame": true,
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
@@ -330,8 +316,6 @@
 		"SkillID": 11501,
 		"SkillName": "MagneticCube",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "None",
-		"bSkillBlocked": true,
 		"bHidenInGame": true,
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
@@ -374,8 +358,6 @@
 		"SkillID": 11502,
 		"SkillName": "KettleBot",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "None",
-		"bSkillBlocked": true,
 		"bHidenInGame": true,
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
@@ -418,8 +400,6 @@
 		"SkillID": 11600,
 		"SkillName": "WeaponTransform",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/WeaponSkill/BPS_WeaponTransform.BPS_WeaponTransform_C'",
-		"bSkillBlocked": false,
 		"bHidenInGame": true,
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
@@ -467,8 +447,6 @@
 		"SkillID": 11700,
 		"SkillName": "Arlert",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "None",
-		"bSkillBlocked": true,
 		"bHidenInGame": true,
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
@@ -511,8 +489,6 @@
 		"SkillID": 99999,
 		"SkillName": "Teleport",
 		"SkillDescription": "None",
-		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/WeaponSkill/BPS_Teleport.BPS_Teleport_C'",
-		"bSkillBlocked": false,
 		"bHidenInGame": true,
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
