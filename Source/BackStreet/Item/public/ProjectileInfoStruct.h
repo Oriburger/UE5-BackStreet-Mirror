@@ -4,6 +4,14 @@
 #include "../../Character/public/CharacterInfoEnum.h"
 #include "ProjectileInfoStruct.generated.h"
 
+USTRUCT(BlueprintType)
+struct FProjectileStateStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	
+	bool bCanAttackCauser = false;
+};
 
 USTRUCT(BlueprintType)
 struct FProjectileStatStruct : public FTableRowBase
@@ -43,6 +51,9 @@ public:
 	//유도가 되는지?
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsHoming = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FDebuffInfoStruct DebuffInfo;
 };
 
 USTRUCT(BlueprintType)
