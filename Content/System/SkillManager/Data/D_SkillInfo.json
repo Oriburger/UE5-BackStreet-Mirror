@@ -189,7 +189,7 @@
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
 		{
-			"bIsGradeValid": false,
+			"bIsGradeValid": true,
 			"CommonVariableMap":
 			{
 			},
@@ -217,7 +217,7 @@
 			{
 				"Deflect_MainCharacter":
 				{
-					"AnimMontage": "/Script/Engine.AnimMontage'/Game/System/SkillManager/Animation/MainCharacter/AM_Deflect.AM_Deflect'",
+					"AnimMontage": "/Script/Engine.AnimMontage'/Game/System/SkillManager/Animation/MainCharacter/AS_Deflect_Montage.AS_Deflect_Montage'",
 					"AnimPlayRate": 1
 				}
 			},
