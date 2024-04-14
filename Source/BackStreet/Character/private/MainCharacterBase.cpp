@@ -443,13 +443,12 @@ void AMainCharacterBase::TryAttack()
 	}), 0.1f, false);
 }
 
-void AMainCharacterBase::TrySkill(int32 SkillID)
+void AMainCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 	
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle
-		|| !GetCurrentWeaponRef()->GetWeaponStat().bSkillVaild) return;
+		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	//IndieGo용 임시 코드----------------------------------------------------------
 	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130)
 	{
@@ -457,7 +456,7 @@ void AMainCharacterBase::TrySkill(int32 SkillID)
 	}
 	//---------------------------------------------------------------------------------
 
-	Super::TrySkill(SkillID);
+	Super::TrySkill(SkillType, SkillID);
 
 	//Try Skill and adjust rotation to cursor position
 	RotateToCursor();

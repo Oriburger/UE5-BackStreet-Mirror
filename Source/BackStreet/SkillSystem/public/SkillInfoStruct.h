@@ -4,6 +4,14 @@
 #include "NiagaraSystem.h"
 #include "SkillInfoStruct.generated.h"
 
+UENUM(BlueprintType)
+enum class ESkillType : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_Character			UMETA(DisplayName = "Character"),
+	E_Weapon			UMETA(DisplayName = "Weapon")
+};
+
 USTRUCT(BlueprintType)
 struct FSkillEffectInfoStruct : public FTableRowBase
 {
@@ -104,6 +112,22 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FOwnerSkillInfoStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		int32 SkillID = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TSubclassOf<class ASkillBase> SkillBaseClassRef;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool bSkillBlocked = true;
+};
+
+
+USTRUCT(BlueprintType)
 struct FSkillInfoStruct : public FTableRowBase
 {
 public:
@@ -117,12 +141,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FName SkillDescription;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TSubclassOf<class ASkillBase> SkillBaseClassRef;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		bool bSkillBlocked = true;
 
 	UPROPERTY(BlueprintReadWrite)
 		bool bHidenInGame = true;

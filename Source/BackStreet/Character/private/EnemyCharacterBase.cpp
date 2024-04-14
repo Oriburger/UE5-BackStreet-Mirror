@@ -144,7 +144,7 @@ void AEnemyCharacterBase::TryAttack()
 	Super::TryAttack();
 }
 
-void AEnemyCharacterBase::TrySkill(int32 SkillID)
+void AEnemyCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	check(GetCurrentWeaponRef() != nullptr);
 
@@ -157,7 +157,7 @@ void AEnemyCharacterBase::TrySkill(int32 SkillID)
 		return;
 	}
 
-	Super::TrySkill(SkillID);
+	Super::TrySkill(SkillType, SkillID);
 }
 
 void AEnemyCharacterBase::Attack()
@@ -260,11 +260,11 @@ void AEnemyCharacterBase::ResetActionStateForTimer()
 
 void AEnemyCharacterBase::SetFacialMaterialEffect(bool NewState)
 {
-	if (CurrentDynamicMaterialList.IsEmpty()) return;
+	//if (CurrentDynamicMaterialList.IsEmpty()) return;
 	//HardCoding
-	CurrentDynamicMaterialList[0]->SetScalarParameterValue(FName("EyeBrightness"), NewState ? 5.0f : 35.0f);
-	CurrentDynamicMaterialList[0]->SetVectorParameterValue(FName("EyeColor"), NewState ? FColor::Red : FColor::Yellow);
-	InitDynamicMaterialList(DynamicMaterialList);
+	//CurrentDynamicMaterialList[0]->SetScalarParameterValue(FName("EyeBrightness"), NewState ? 5.0f : 35.0f);
+	//CurrentDynamicMaterialList[0]->SetVectorParameterValue(FName("EyeColor"), NewState ? FColor::Red : FColor::Yellow);
+	//InitDynamicMaterialList(DynamicMaterialList);
 }
 
 void AEnemyCharacterBase::Turn(float Angle)

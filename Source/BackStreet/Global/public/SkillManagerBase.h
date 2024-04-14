@@ -35,14 +35,11 @@ public:
 
 //------- Default Property, Action -------------------
 public:
-	UFUNCTION()
-		void TrySkill(ACharacterBase* NewCauser, int32 NewSkillID);
+		void TrySkill(ACharacterBase* NewCauser, FOwnerSkillInfoStruct* SkillInfo);
 
-	UFUNCTION()
-		ASkillBase* SpawnSkillBase(ACharacterBase* NewCauser, int32 NewSkillID);
+		ASkillBase* SpawnSkillBase(ACharacterBase* NewCauser, FOwnerSkillInfoStruct* SkillInfo);
 
-	UFUNCTION()
-		ASkillBase* GetSkillFromSkillBaseMap(ACharacterBase* NewCauser, int32 NewSkillID);
+		ASkillBase* GetSkillFromSkillBaseMap(ACharacterBase* NewCauser, FOwnerSkillInfoStruct* SkillInfo);
 
 	UFUNCTION()
 		void RemoveSkillInSkillBaseMap(ACharacterBase* NewCauser);
@@ -50,7 +47,7 @@ public:
 
 //--------- DataTable ----------------------
 public:
-	FSkillInfoStruct* GetSkillInfoStructBySkillID(int32 NewSkillID);
+	FSkillInfoStruct* GetSkillInfoStructBySkillID(FOwnerSkillInfoStruct* OwnerSkillInfo);
 
 protected:
 	//Skill Info Table

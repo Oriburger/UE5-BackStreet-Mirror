@@ -310,20 +310,55 @@ void ACharacterBase::TryAttack()
 	}
 }
 
-void ACharacterBase::TrySkill(int32 SkillID)
+void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
-	AWeaponBase* weaponRef = GetCurrentWeaponRef();
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
-	if (!weaponRef->GetWeaponStat().bSkillVaild)
-	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("This weapon is not capable of using skills")), FColor::White);
-		return;
-	}
+	checkf(IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()), TEXT("Failed to get SkillmanagerBase"));
 
 	CharacterState.bCanAttack = false; 
 
-	checkf(IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()), TEXT("Failed to get SkillmanagerBase"));
-	GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, SkillID);
+	switch (SkillType)
+	{
+	case ESkillType::E_None:
+			return;
+		break;
+	case ESkillType::E_Character:
+		if (!AssetInfo.CharacterSkillInfoMap.Contains(SkillID))
+		{
+			GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Character does't have skill")), FColor::White);
+			return;
+		}
+		if (AssetInfo.CharacterSkillInfoMap.Find(SkillID)->bSkillBlocked)
+		{
+			GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Skill is blocked")), FColor::White);
+			return;
+		}
+		else
+		{
+			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &AssetInfo.CharacterSkillInfoMap[SkillID]);
+			return;
+		}
+		break;
+	case ESkillType::E_Weapon:
+		if (!IsValid(GetCurrentWeaponRef()))
+		{
+			GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Does't have any weapon")), FColor::White);
+			return;
+		}
+		if(!SkillID == GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.SkillID) return;
+
+		if (GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.bSkillBlocked)
+		{
+			GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("This Skill Is Blocked")), FColor::White);
+			return;
+		}
+		else
+		{
+			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo);
+			return;
+		}
+		break;
+	}
 }
 
 void ACharacterBase::Attack()
@@ -368,9 +403,9 @@ void ACharacterBase::ResetAtkIntervalTimer()
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 }
 
-void ACharacterBase::InitAsset(int32 NewEnemyID)
+void ACharacterBase::InitAsset(int32 NewCharacterID)
 {
-	AssetInfo = GetAssetInfoWithID(NewEnemyID);
+	AssetInfo = GetAssetInfoWithID(NewCharacterID);
 	//SetCharacterAnimAssetInfoData(CharacterID);
 
 	if (!AssetInfo.CharacterMesh.IsNull() && AssetInfo.CharacterMeshMaterialList.Num() != 0)
@@ -524,6 +559,7 @@ void ACharacterBase::SetAsset()
 	{
 		GetMesh()->SetMaterial(matIdx, CurrentDynamicMaterialList[matIdx]);
 	}
+
 	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimBlueprint);
 	InitAnimAsset();
 	InitSoundAsset();

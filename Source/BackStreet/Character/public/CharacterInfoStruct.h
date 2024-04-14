@@ -211,6 +211,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
 		FVector InitialCapsuleComponentScale;
 
+	//Skill
+	//CharacterSkillList
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		TMap<int32, FOwnerSkillInfoStruct> CharacterSkillInfoMap;
+
 	// Animation 관련
 	
 	//스폰할 적 스켈레탈 메시 정보 저장

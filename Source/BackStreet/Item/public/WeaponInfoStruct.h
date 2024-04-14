@@ -132,12 +132,6 @@ public:
 		float WeaponKnockBackEnergy = 500.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		bool bSkillVaild = false;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		int32 SkillID = 0;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		float SkillGaugeAug = 0.1;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -242,6 +236,10 @@ public:
 	//메시의 초기 크기 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		FVector InitialScale;
+
+	//WeaponSkill Info
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FOwnerSkillInfoStruct WeaponSkillInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UParticleSystem> DestroyEffectParticle;

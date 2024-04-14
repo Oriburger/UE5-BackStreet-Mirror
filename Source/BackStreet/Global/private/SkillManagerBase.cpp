@@ -23,9 +23,9 @@ void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemod
 	GamemodeRef = NewGamemodeRef;
 }
 
-void USkillManagerBase::TrySkill(ACharacterBase* NewCauser, int32 NewSkillID)
+void USkillManagerBase::TrySkill(ACharacterBase* NewCauser, FOwnerSkillInfoStruct* OwnerSkillInfo)
 {
-	ASkillBase* skillBase = SpawnSkillBase(NewCauser, NewSkillID);
+	ASkillBase* skillBase = SpawnSkillBase(NewCauser, OwnerSkillInfo);
 	if(!IsValid(skillBase)) return;
 	if (skillBase->SkillInfo.SkillGradeStruct.bIsGradeValid)
 	{
@@ -35,36 +35,35 @@ void USkillManagerBase::TrySkill(ACharacterBase* NewCauser, int32 NewSkillID)
 	skillBase->ActivateSkill();
 }
 
-ASkillBase* USkillManagerBase::SpawnSkillBase(ACharacterBase* NewCauser, int32 NewSkillID)
+ASkillBase* USkillManagerBase::SpawnSkillBase(ACharacterBase* NewCauser, FOwnerSkillInfoStruct* OwnerSkillInfo)
 {
 	checkf(IsValid(NewCauser), TEXT("Failed to get skill causer"));
 
-	ASkillBase* skillBase = GetSkillFromSkillBaseMap(NewCauser, NewSkillID);
+	ASkillBase* skillBase = GetSkillFromSkillBaseMap(NewCauser, OwnerSkillInfo);
 	if (IsValid(skillBase)) return skillBase;
 	else
 	{
 		checkf(IsValid(SkillInfoTable), TEXT("Failed to get SkillInfoDataTable"));
 		
-		FSkillInfoStruct* skillInfo = GetSkillInfoStructBySkillID(NewSkillID);
+		FSkillInfoStruct* skillInfo = GetSkillInfoStructBySkillID(OwnerSkillInfo);
 		skillInfo->Causer = NewCauser;
 
 		if (skillInfo == nullptr) { UE_LOG(LogTemp, Log, TEXT("Failed to get SkillInfoStruct")); return nullptr; }
-		if (skillInfo->bSkillBlocked) { UE_LOG(LogTemp, Log, TEXT("Skill blocked in D_SkillInfo")); return nullptr; }
 
-		checkf(IsValid(skillInfo->SkillBaseClassRef), TEXT("Failed to get SkillBase class"));
-		skillBase = Cast<ASkillBase>(GetWorld()->SpawnActor(skillInfo->SkillBaseClassRef));
+		checkf(IsValid(OwnerSkillInfo->SkillBaseClassRef), TEXT("Failed to get SkillBase class"));
+		skillBase = Cast<ASkillBase>(GetWorld()->SpawnActor(OwnerSkillInfo->SkillBaseClassRef));
 		skillBase->InitSkill(*skillInfo);
 		return skillBase;
 	}
 }
 
-ASkillBase* USkillManagerBase::GetSkillFromSkillBaseMap(ACharacterBase* NewCauser, int32 NewSkillID)
+ASkillBase* USkillManagerBase::GetSkillFromSkillBaseMap(ACharacterBase* NewCauser, FOwnerSkillInfoStruct* OwnerSkillInfo)
 {
 	if(SkillBaseMap.IsEmpty()) return nullptr;
 	if(SkillBaseMap.Find(NewCauser)->SkillBaseList.IsEmpty()) return nullptr;
 	for (ASkillBase* skillBase : SkillBaseMap.Find(NewCauser)->SkillBaseList)
 	{
-		if(!(skillBase->SkillInfo.SkillID == NewSkillID)) continue;
+		if(!(skillBase->SkillInfo.SkillID == OwnerSkillInfo->SkillID)) continue;
 		else return skillBase;
 	}
 	return nullptr;
@@ -79,11 +78,11 @@ void USkillManagerBase::RemoveSkillInSkillBaseMap(ACharacterBase* NewCauser)
 	}
 }
 
-FSkillInfoStruct* USkillManagerBase::GetSkillInfoStructBySkillID(int32 NewSkillID)
+FSkillInfoStruct* USkillManagerBase::GetSkillInfoStructBySkillID(FOwnerSkillInfoStruct* OwnerSkillInfo)
 {
 	if (!IsValid(SkillInfoTable)) { UE_LOG(LogTemp, Log, TEXT("There's no SkillInfoTable")); return nullptr; }
 
-	FString rowName = FString::FromInt(NewSkillID);
+	FString rowName = FString::FromInt(OwnerSkillInfo->SkillID);
 	return SkillInfoTable->FindRow<FSkillInfoStruct>(FName(rowName), rowName);
 }
 
