@@ -315,8 +315,6 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 	checkf(IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()), TEXT("Failed to get SkillmanagerBase"));
 
-	CharacterState.bCanAttack = false; 
-
 	switch (SkillType)
 	{
 	case ESkillType::E_None:
@@ -325,16 +323,17 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	case ESkillType::E_Character:
 		if (!AssetInfo.CharacterSkillInfoMap.Contains(SkillID))
 		{
-			GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Character does't have skill")), FColor::White);
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Character does't have skill")), FColor::White);
 			return;
 		}
 		if (AssetInfo.CharacterSkillInfoMap.Find(SkillID)->bSkillBlocked)
 		{
-			GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Skill is blocked")), FColor::White);
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("This skill is blocked")), FColor::White);
 			return;
 		}
 		else
 		{
+			CharacterState.bCanAttack = false;
 			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &AssetInfo.CharacterSkillInfoMap[SkillID]);
 			return;
 		}
@@ -342,18 +341,19 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	case ESkillType::E_Weapon:
 		if (!IsValid(GetCurrentWeaponRef()))
 		{
-			GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Does't have any weapon")), FColor::White);
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Does't have any weapon")), FColor::White);
 			return;
 		}
-		if(!SkillID == GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.SkillID) return;
+		if(SkillID != GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.SkillID) return;
 
 		if (GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.bSkillBlocked)
 		{
-			GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("This Skill Is Blocked")), FColor::White);
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("This skill is blocked")), FColor::White);
 			return;
 		}
 		else
 		{
+			CharacterState.bCanAttack = false;
 			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo);
 			return;
 		}
