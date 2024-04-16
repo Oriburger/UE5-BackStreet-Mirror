@@ -217,7 +217,7 @@
 			{
 				"Deflect_MainCharacter":
 				{
-					"AnimMontage": "/Script/Engine.AnimMontage'/Game/System/SkillManager/Animation/MainCharacter/AS_Deflect_Montage.AS_Deflect_Montage'",
+					"AnimMontage": "/Script/Engine.AnimMontage'/Game/System/SkillManager/Animation/MainCharacter/AM_Deflect.AM_Deflect'",
 					"AnimPlayRate": 1
 				}
 			},
@@ -487,7 +487,7 @@
 	{
 		"Name": "99999",
 		"SkillID": 99999,
-		"SkillName": "Teleport",
+		"SkillName": "Teleport_Boss",
 		"SkillDescription": "None",
 		"bHidenInGame": true,
 		"bSkillLifeSpanWithCauser": true,
@@ -527,7 +527,7 @@
 			},
 			"MaterialInfoMap":
 			{
-				"0":
+				"Teleport_Boss":
 				{
 					"MaterialList": [
 						"/Script/Engine.MaterialInstanceConstant'/Game/Art/Character/NewBoxMan/Material/M_Boxman_Inst.M_Boxman_Inst'",
