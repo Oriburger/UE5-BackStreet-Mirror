@@ -19,6 +19,7 @@ USkillManagerBase::USkillManagerBase()
 
 void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemodeRef)
 {
+	checkf(IsValid(NewGamemodeRef), TEXT("Failed to get GameMode reference"));
 	if (!IsValid(NewGamemodeRef)) return;
 	GamemodeRef = NewGamemodeRef;
 }
@@ -29,7 +30,7 @@ void USkillManagerBase::TrySkill(ACharacterBase* NewCauser, FOwnerSkillInfoStruc
 	if(!IsValid(skillBase)) return;
 	if (skillBase->SkillInfo.SkillGradeStruct.bIsGradeValid)
 	{
-		if (!skillBase->CheckSkillGauge()) { UE_LOG(LogTemp, Log, TEXT("Need More SkillGauge")); return; }
+		if (!skillBase->CheckSkillGauge()) return;
 	}
 	NewCauser->SetActionState(ECharacterActionType::E_Skill);
 	skillBase->ActivateSkill();
