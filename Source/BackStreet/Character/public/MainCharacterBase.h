@@ -92,6 +92,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 		FPlayerInputActionInfo InputActionInfo;
 
+	//Targeting system
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+		class UInputAction* LockToTargetAction;
+
+
 // ------- Character Action ------- 
 public:
 	UFUNCTION()
@@ -101,12 +106,19 @@ public:
 	UFUNCTION()
 		void Look(const FInputActionValue& Value);
 
+	UFUNCTION()
+		void StartJump(const FInputActionValue& Value);
+
 	// Called for sprinting input
 	UFUNCTION()
 		void Sprint(const FInputActionValue& Value);
 
 	UFUNCTION()
 		void StopSprint(const FInputActionValue& Value);
+
+	//Try Upper Attack
+	UFUNCTION()
+		void TryUpperAttack(const FInputActionValue& Value);
 
 	//구르기를 시도한다.
 	UFUNCTION()
@@ -156,6 +168,10 @@ public:
 	UFUNCTION()
 		virtual void DropWeapon() override;
 
+	//Targeting system
+	UFUNCTION(BlueprintImplementableEvent)
+		void LockToTarget(const FInputActionValue& Value);
+
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 			, AController* EventInstigator, AActor* DamageCauser) override;
@@ -194,6 +210,15 @@ private:
 	//it must not be called alone.
 	UFUNCTION()
 		void UpdateFieldOfView(const float TargetValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+// ------- SaveData 관련 --------------------
+protected:
+	UFUNCTION()
+		void SetCharacterStatFromSaveData();
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "SaveData")
+		FSaveData SavedData;
 
 // ------- 어빌리티 / 디버프 ---------------
 public:
@@ -281,11 +306,11 @@ private:
 	UPROPERTY()
 		FTimerHandle RollTimerHandle;
 
-	//달리기 속도 보간 타이머
+	//WalkSpeed Interpolate timer
 	UPROPERTY()
 		FTimerHandle WalkSpeedInterpTimerHandle;
 
-	//FOV 보간 타이머
+	//Field Of View Interpolate timer
 	UPROPERTY()
 		FTimerHandle FOVInterpHandle;
 

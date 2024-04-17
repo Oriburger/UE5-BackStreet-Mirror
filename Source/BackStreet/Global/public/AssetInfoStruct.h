@@ -16,53 +16,54 @@ enum class ESoundAssetType : uint8
 	E_Skill					UMETA(DisplayName = "Skill"),
 };
 
-
-//캐릭터의 애니메이션 에셋 경로를 저장하는 데이터 테이블 구조체
 USTRUCT(BlueprintType)
-struct FCharacterAnimAssetInfoStruct : public FTableRowBase
+struct FAnimAssetInfoStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
 
-	//캐릭터의 ID
-		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 CharacterID;
+		// Animation 관련
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		UAnimBlueprintGeneratedClass* AnimBlueprint;
 
-	//근접 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> MeleeAttackAnimMontageList;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> MeleeAttackAnimMontageList;
 
-	//사격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> ShootAnimMontageList;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TSoftObjectPtr<UAnimMontage> UpperAttackAminMontage;
 
-	//투척 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> ThrowAnimMontageList;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> AirAttackAnimMontageList;
 
-	//재장전 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> ReloadAnimMontageList;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> ShootAnimMontageList;
 
-	//타격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> HitAnimMontageList;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> ThrowAnimMontageList;
 
-	//스킬 애니메이션 / 무기 ID로 매핑하여 관리
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TMap<int32, FSkillAnimAssetMontageStruct> SkillAnimMontageMap;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> ReloadAnimMontageList;
 
-	//구르기 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> RollAnimMontageList;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> HitAnimMontageList;
 
-	//상호작용 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> InvestigateAnimMontageList;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> KnockdownAnimMontageList;
 
-	//사망 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> DieAnimMontageList;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TMap<int32, FSkillAnimMontageStruct> SkillAnimMontageMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> RollAnimMontageList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> InvestigateAnimMontageList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> DieAnimMontageList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> PointMontageList;
 };
 
 USTRUCT(BlueprintType)
@@ -72,10 +73,10 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-	TArray<USoundCue*> SoundList;
+		TArray<USoundCue*> SoundList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data", meta = (UIMin = 0.001f, UIMax = 10.0f))
-	TArray<float> SoundVolumeList;
+		TArray<float> SoundVolumeList;
 };
 
 USTRUCT(BlueprintType)
@@ -100,17 +101,75 @@ public:
 	*******************************************************/
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	ESoundAssetType SoundType;
+		ESoundAssetType SoundType;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	int32 TargetID;
+		int32 TargetID;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FName SoundTarget;
+		FName SoundTarget;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TMap<FName, FSoundArrayContainer> SoundMap;
+		TMap<FName, FSoundArrayContainer> SoundMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FName SoundAssetDescription;
+		FName SoundAssetDescription;
+};
+
+
+USTRUCT(BlueprintType)
+struct FCharacterAssetInfoStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	//적 ID
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		int32 CharacterID;
+
+	//적 이름
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FName CharacterName;
+
+	//스폰할 적 스켈레탈 메시 정보 저장
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
+		TSoftObjectPtr<USkeletalMesh> CharacterMesh;
+
+	//Character's Mesh Materials
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
+		TArray<TSoftObjectPtr<UMaterialInstanceConstant> > CharacterMeshMaterialList;
+
+	//메시의 초기 위치 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
+		FVector InitialLocation;
+
+	//메시의 초기 회전 정보
+	//현재 미사용, -90도로 고정
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
+		FRotator InitialRotation;
+
+	//메시의 초기 크기 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
+		FVector InitialScale;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
+		FVector InitialCapsuleComponentScale;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		FAnimAssetInfoStruct AnimationAsset;
+
+	// VFX
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TArray<TSoftObjectPtr<UNiagaraSystem>> DebuffNiagaraEffectList;
+
+	// Material
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
+		TSoftObjectPtr<UMaterialInterface> NormalMaterial;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
+		TSoftObjectPtr<UMaterialInterface> WallThroughMaterial;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
+		TArray<TSoftObjectPtr<UTexture>> EmotionTextureList;
+
 };

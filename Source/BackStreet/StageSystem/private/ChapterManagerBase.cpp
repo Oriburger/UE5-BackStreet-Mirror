@@ -34,7 +34,7 @@ void AChapterManagerBase::InitChapterManager()
 	FRotator rotator;
 	FVector spawnLocation = FVector::ZeroVector;
 
-	ChapterLV = 0;
+	ChapterLevel = EChapterLevel::E_None;
 	StatWeight = 0.0f;
 
 	StageGenerator = NewObject<UStageGenerator>(this);
@@ -148,7 +148,8 @@ void AChapterManagerBase::ResetChapter()
 
 void AChapterManagerBase::CreateChapter()
 {
-	ChapterLV++;
+	//HardCoding : When more chapter added it must be changed;
+	ChapterLevel = EChapterLevel::E_Chapter1; 
 	InitStageTypeArray();
 	StageList=StageGenerator->CreateMaze();
 	CurrentStage = nullptr;
@@ -176,7 +177,7 @@ void AChapterManagerBase::InitStageTypeArray()
 
 	for (FStageInfoStruct* target : allStageInfo)
 	{
-		if (target->ChapterLevel == ChapterLV)
+		if (target->ChapterLevel == (uint8)ChapterLevel)
 		{
 			if (target->StageType == EStageCategoryInfo::E_Normal)
 			{

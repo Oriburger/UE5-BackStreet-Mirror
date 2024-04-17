@@ -4,8 +4,9 @@
 #include "Materials/MaterialInstanceConstant.h"
 #include "Sound/SoundCue.h"
 #include "NiagaraSystem.h"
-#include "CharacterInfoEnum.h"
-#include "../../SkillSystem/public/SkillInfoStruct.h"
+#include "../../Item/public/ItemInfoStruct.h"
+#include "../../SkillSystem/public/SkillInfoStruct.h" 
+#include "../../StageSystem/public/StageInfoStruct.h"
 #include "CharacterInfoStruct.generated.h"
 
 UENUM(BlueprintType)
@@ -29,6 +30,10 @@ public:
 		float FixedValue;
 };
 
+//===============================================
+//====== Character Common Info  ========================
+//===============================================
+
 USTRUCT(BlueprintType)
 struct FPlayerInputActionInfo
 {
@@ -49,6 +54,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class UInputAction* ReloadAction;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* UpperAttackAction;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class UInputAction* ThrowReadyAction;
 
@@ -105,21 +113,21 @@ public:
 		int32 ProjectileCountPerAttack = 1;
 
 //======= Default Stat ======================
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1.0f, UIMax = 1000.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 1.0f, UIMax = 1000.0f))
 		float DefaultHP = 100.0f;
 
 	//Multipiler Value
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f))
 		float DefaultAttack = 1.0f;
 
 	//Multipiler Value
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f))
 		float DefaultDefense = 1.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f))
 		float DefaultAttackSpeed = 10.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 100.0f, UIMax = 1000.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 100.0f, UIMax = 1000.0f))
 		float DefaultMoveSpeed = 400.0f;
 };
 
@@ -216,109 +224,87 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		FStatInfoStruct DebuffDefense;
 
-//====== Skill =========================
-	
+//====== Player ====================================	
 	//Player Skill Gauge
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float CharacterCurrSkillGauge;
+
+	//Upper Atk Movement
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool bIsUpperAttacking = false;	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool bIsAirAttacking = false;
+
+	//Hit Counter For Knockback Event
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 HitCounter = 0;
+
+	//
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		class AActor* TargetedEnemy;
+};
+
+
+//===============================================
+//====== Enemy CharacterInfo  ==========================
+//===============================================
+
+USTRUCT(BlueprintType)
+struct FEnemyDropInfoStruct
+{
+	GENERATED_BODY()
+
+	public:
+	//Max item count to spawn after dead event.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem", meta = (UIMin = 0, UIMax = 2))
+		int32 MaxSpawnItemCount;
+
+	//Item type list to spawn after dead event. (each item is identified by index)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
+		TArray<EItemCategoryInfo> SpawnItemTypeList;
+
+	//Item ID list to spawn after dead event.(each item is identified by index)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
+		TArray<int32> SpawnItemIDList;
+
+	//Item spawn percentage list.  (0.0f ~ 1.0f), (each item is identified by index)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
+		TArray<float> ItemSpawnProbabilityList;
 };
 
 USTRUCT(BlueprintType)
-struct FCharacterAssetInfoStruct : public FTableRowBase
+struct FEnemyStatStruct : public FTableRowBase
 {
-public:
-	GENERATED_USTRUCT_BODY()
+	GENERATED_BODY()
 
-	//적 ID
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		int32 CharacterID;
+	public:
+	UPROPERTY(EditAnywhere)
+		int32 EnemyID;
 
-	//적 이름
+	UPROPERTY(EditAnywhere)
+		FName EnemyName;
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
+		FCharacterStatStruct CharacterStat;
+
+	//Enemy's Default Weapon ID
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		FName CharacterName;
+		int32 DefaultWeaponID = 0;
 
-	//스폰할 적 스켈레탈 메시 정보 저장
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
-		TSoftObjectPtr<USkeletalMesh> CharacterMesh;
+	//Info data of dropping item when enemy dies
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FEnemyDropInfoStruct DropInfo;
 
-	//Character's Mesh Materials
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
-		TArray<TSoftObjectPtr<UMaterialInstanceConstant> > CharacterMeshMaterialList;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
+		float DefaultAttackSpeed;
 
-	//메시의 초기 위치 정보
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
-		FVector InitialLocation;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<int32> EnemySkillList;
 
-	//메시의 초기 회전 정보
-	//현재 미사용, -90도로 고정
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
-		FRotator InitialRotation;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<float> EnemySkillIntervalList;
 
-	//메시의 초기 크기 정보
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
-		FVector InitialScale;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
-		FVector InitialCapsuleComponentScale;
-
-	// Animation 관련
-	
-	//스폰할 적 스켈레탈 메시 정보 저장
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		UAnimBlueprintGeneratedClass* AnimBlueprint;
-	
-	//근접 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> MeleeAttackAnimMontageList;
-
-	//사격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> ShootAnimMontageList;
-
-	//투척 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> ThrowAnimMontageList;
-
-	//재장전 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> ReloadAnimMontageList;
-
-	//타격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> HitAnimMontageList;
-
-	//무기 ID, 스킬 애니메이션/ Map으로 관리
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TMap<int32, FSkillAnimMontageStruct> SkillAnimMontageMap;
-
-	//구르기 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> RollAnimMontageList;
-
-	//상호작용 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> InvestigateAnimMontageList;
-
-	//사망 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> DieAnimMontageList;
-
-	//조우 애니메이션 / List로 관리 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> PointMontageList;
-
-	// VFX
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
-		TArray<TSoftObjectPtr<UNiagaraSystem>> DebuffNiagaraEffectList;
-
-	// Material
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
-		TSoftObjectPtr<UMaterialInterface> NormalMaterial;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
-		TSoftObjectPtr<UMaterialInterface> WallThroughMaterial;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
-		TArray<TSoftObjectPtr<UTexture>> EmotionTextureList;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintreadOnly)
+		FSkillSetInfo SkillSetInfo;
 };

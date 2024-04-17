@@ -1,6 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "../public/MainCharacterBase.h"
 #include "../public/MainCharacterController.h"
+#include "../../Global/public/BackStreetGameInstance.h"
 #include "../public/AbilityManagerBase.h"
 #include "../../Item/public/WeaponBase.h"
 #include "../../Item/public/ThrowWeaponBase.h"
@@ -44,7 +45,7 @@ AMainCharacterBase::AMainCharacterBase()
 
 	FollowingCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FOLLOWING_CAMERA"));
 	FollowingCamera->SetupAttachment(CameraBoom);
-	FollowingCamera->bAutoActivate = false;
+	FollowingCamera->bAutoActivate = true;
 
 	BuffNiagaraEmitter = CreateDefaultSubobject<UNiagaraComponent>(TEXT("BUFF_EFFECT"));
 	BuffNiagaraEmitter->SetupAttachment(GetMesh());
@@ -83,11 +84,22 @@ void AMainCharacterBase::BeginPlay()
 	}
 
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	
 	InitDynamicMeshMaterial(NormalMaterial);
 
 	AbilityManagerRef = NewObject<UAbilityManagerBase>(this, UAbilityManagerBase::StaticClass(), FName("AbilityfManager"));
 	AbilityManagerRef->InitAbilityManager(this);
+
+	UBackStreetGameInstance* GameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
+
+	//Load SaveData
+	if (GameInstance->LoadGameSaveData(SavedData)) return;
+	else
+	{
+		GameInstance->SaveGameData(FSaveData());
+	}
+	SetCharacterStatFromSaveData();
+	InitCharacterState();
+
 }
 
 // Called every frame
@@ -129,12 +141,18 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//Attack
 		EnhancedInputComponent->BindAction(InputActionInfo.AttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryAttack);
 
+		//Upper Attack
+		EnhancedInputComponent->BindAction(InputActionInfo.UpperAttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryUpperAttack);
+
 		//Reload
 		EnhancedInputComponent->BindAction(InputActionInfo.ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryReload);
 
 		//Sprint
 		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Sprint);
 		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StopSprint);
+
+		//Jump
+		EnhancedInputComponent->BindAction(InputActionInfo.JumpAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StartJump);
 
 		//Zoom
 		//EnhancedInputComponent->BindAction(InputActionInfo.ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
@@ -152,6 +170,8 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		//SubWeapon
 		EnhancedInputComponent->BindAction(InputActionInfo.PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::PickSubWeapon);
+
+		EnhancedInputComponent->BindAction(LockToTargetAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::LockToTarget);
 	}
 }
 
@@ -259,12 +279,22 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 	}
 }
 
+void AMainCharacterBase::StartJump(const FInputActionValue& Value)
+{
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	//CharacterState.CharacterActionState = ECharacterActionType::E_Jump;
+	Jump();
+}
+
 void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 {
 	if (CharacterState.bIsSprinting) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero()) return;
-
+	if (IsValid(GetCurrentWeaponRef()))
+	{
+		GetCurrentWeaponRef()->SetResetComboTimer();
+	}
 	CharacterState.bIsSprinting = true;
 	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed, 0.75f);
 	SetFieldOfViewWithInterp(110.0f, 0.75f);
@@ -277,6 +307,21 @@ void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 	CharacterState.bIsSprinting = false;
 	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed * 0.5f, 0.4f);
 	SetFieldOfViewWithInterp(90.0f, 0.5f);
+}
+
+void AMainCharacterBase::TryUpperAttack(const FInputActionValue& Value)
+{
+	if (GetCharacterMovement()->IsFalling()) return;
+	if (CharacterState.bIsUpperAttacking) return;
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (CharacterState.bIsSprinting) SetFieldOfViewWithInterp(90.0f, 0.75f);
+
+	CharacterState.bIsUpperAttacking = true;
+	if (AssetInfo.AnimationAsset.UpperAttackAminMontage.IsValid())
+	{
+		PlayAnimMontage(AssetInfo.AnimationAsset.UpperAttackAminMontage.Get());
+	}
+	
 }
 
 void AMainCharacterBase::Roll()
@@ -299,10 +344,8 @@ void AMainCharacterBase::Roll()
 	else //아니라면, 입력 방향으로 구르기
 	{
 		float targetYawValue = FMath::Atan2(newDirection.Y, newDirection.X) * 180.0f / 3.141592;
-		UE_LOG(LogTemp, Warning, TEXT("controlValue : %.2lf,  current yaw : %.2lf"), targetYawValue, newRotation.Yaw);
 		targetYawValue += 270.0f;
 		newRotation.Yaw = FMath::Fmod(newRotation.Yaw + targetYawValue, 360.0f);
-		UE_LOG(LogTemp, Warning, TEXT("new Yaw value : %.2lf"), newRotation.Yaw);
 	}
 	
 	// 시점 전환을 위해 제거
@@ -321,10 +364,10 @@ void AMainCharacterBase::Roll()
 
 	//애니메이션 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Roll;
-	if (AnimAssetData.RollAnimMontageList.Num() > 0
-		&& IsValid(AnimAssetData.RollAnimMontageList[0]))
+	if (AssetInfo.AnimationAsset.RollAnimMontageList.Num() > 0
+		&& AssetInfo.AnimationAsset.RollAnimMontageList[0].IsValid())
 	{
-		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.DefaultMoveSpeed / 500.0f));
+		PlayAnimMontage(AssetInfo.AnimationAsset.RollAnimMontageList[0].Get(), 1.0f);
 	}
 
 	if (OnRoll.IsBound())
@@ -357,10 +400,10 @@ void AMainCharacterBase::TryInvestigate()
 
 	if (nearActorList.Num())
 	{
-		if (AnimAssetData.InvestigateAnimMontageList.Num() > 0
-			&& IsValid(AnimAssetData.InvestigateAnimMontageList[0]))
+		if (AssetInfo.AnimationAsset.InvestigateAnimMontageList.Num() > 0
+			&& AssetInfo.AnimationAsset.InvestigateAnimMontageList[0].IsValid())
 		{
-			PlayAnimMontage(AnimAssetData.InvestigateAnimMontageList[0]);
+			PlayAnimMontage(AssetInfo.AnimationAsset.InvestigateAnimMontageList[0].Get());
 		}
 		Investigate(nearActorList[0]);
 		ResetActionState();
@@ -438,6 +481,8 @@ void AMainCharacterBase::TryAttack()
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
 		return;
 	}
+
+	//=============
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	this->Tags.Add("Attack|Common");
@@ -603,6 +648,11 @@ void AMainCharacterBase::StopDashMovement()
 	const FVector& direction = GetMesh()->GetRightVector();
 	float& speed = GetCharacterMovement()->MaxWalkSpeed;
 	GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
+}
+
+void AMainCharacterBase::SetCharacterStatFromSaveData()
+{
+	CharacterStat = SavedData.PlayerSaveGameData.PlayerStat;
 }
 
 void AMainCharacterBase::ResetRotationToMovement()

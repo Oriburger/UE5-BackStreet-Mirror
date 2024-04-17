@@ -30,6 +30,9 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		UChildActorComponent* InventoryComponent;	
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		USceneComponent* HitSceneComponent;
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 		class UDebuffManagerComponent* DebuffManagerComponent;
@@ -84,6 +87,29 @@ public:
 	UFUNCTION()
 		void ResetAtkIntervalTimer();
 
+	UFUNCTION()
+		void SetLocationWithInterp(FVector NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+private:
+	//interp function
+	//it must not be called alone.
+	//if you set the value of bAutoReset false, you have to call this function to reset to original value
+	UFUNCTION()
+		void UpdateLocation(const FVector TargetValue, const float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+	//Set distance from ground for air attack
+	UFUNCTION()
+		void SetAirAttackLocation();
+
+	UFUNCTION()
+		void OnPlayerLanded(const FHitResult& Hit);
+
+	UFUNCTION()
+		void ResetHitCounter();	
+
+	//Knock down with 
+	virtual void KnockDown();
+	
 // ------- Character Stat/State ------------------------------
 public:
 	//캐릭터의 상태 정보를 초기화
@@ -228,16 +254,6 @@ public:
 		TArray<USoundCue*> FootStepSoundList;
 
 protected:
-	//애니메이션, VFX, 사운드큐 등 저장
-	UPROPERTY()
-		struct FCharacterAnimAssetInfoStruct AnimAssetData;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Animation")
-		class UAnimMontage* PreChaseAnimMontage;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Animation")
-		class UAnimMontage* InvestigateAnimation;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		TArray<class UNiagaraSystem*> DebuffNiagaraEffectList;
 
@@ -260,11 +276,11 @@ protected:
 // ------ 그 외 캐릭터 프로퍼티  ---------------
 protected:
 	//캐릭터의 스탯
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
 		FCharacterStatStruct CharacterStat;
 
 	//캐릭터의 현재 상태
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
 		FCharacterStateStruct CharacterState;
 
 	//Gamemode 약 참조
@@ -292,6 +308,16 @@ protected:
 
 	UPROPERTY()
 		TArray<FTimerHandle> SkillAnimPlayTimerHandleList;
+
+	UPROPERTY()
+		FTimerHandle KnockDownDelayTimerHandle;	
+
+	UPROPERTY()
+		FTimerHandle HitCounterResetTimerHandle;
+
+	//Player Location Interpolate timer
+	UPROPERTY()
+		FTimerHandle LocationInterpHandle;
 
 private:
 	//Current number of multiple SkillAnimPlayTimers

@@ -196,7 +196,6 @@ bool UAbilityManagerBase::InitAbilityInfoListFromTable(const UDataTable* Ability
 		FAbilityInfoStruct* abilityInfo = AbilityInfoTable->FindRow<FAbilityInfoStruct>(rowName, "");
 		if (abilityInfo != nullptr)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("InitAbility %d / %.2lf /%d"), abilityInfo->AbilityId, abilityInfo->VariableInfo[0].Variable, (int32)abilityInfo->VariableInfo[0].bIsPercentage)
 			AbilityInfoList.Add(*abilityInfo);
 		}
 	}
