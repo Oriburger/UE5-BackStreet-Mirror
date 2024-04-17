@@ -304,10 +304,6 @@ private:
 	UPROPERTY()
 		FTimerHandle RotationResetTimerHandle;
 
-	//공격 반복 작업 타이머
-	UPROPERTY()
-		FTimerHandle AttackLoopTimerHandle;
-
 	//구르기 딜레이 타이머
 	UPROPERTY()
 		FTimerHandle RollTimerHandle;

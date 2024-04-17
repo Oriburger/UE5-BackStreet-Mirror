@@ -433,14 +433,8 @@ void AMainCharacterBase::TryAttack()
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	this->Tags.Add("Attack|Common");
-	//RotateToCursor();
+	RotateToCursor();
 	Super::TryAttack();
-
-	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
-	GetWorld()->GetTimerManager().SetTimer(AttackLoopTimerHandle, FTimerDelegate::CreateLambda([&]() {
-		if (!IsActorBeingDestroyed() && PlayerControllerRef.Get()->GetActionKeyIsDown("Attack"))
-			TryAttack(); //0.1초 뒤에 체크해서 계속 눌려있는 상태라면, Attack을 반복한다. 
-	}), 0.1f, false);
 }
 
 void AMainCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
@@ -727,12 +721,10 @@ void AMainCharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(BuffEffectResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(RollTimerHandle); 
-	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
 	GetWorldTimerManager().ClearTimer(DashDelayTimerHandle);
 
 	BuffEffectResetTimerHandle.Invalidate();
 	FacialEffectResetTimerHandle.Invalidate();
 	RollTimerHandle.Invalidate();
-	AttackLoopTimerHandle.Invalidate();
 	DashDelayTimerHandle.Invalidate();
 }
