@@ -317,7 +317,11 @@ void AMainCharacterBase::TryUpperAttack(const FInputActionValue& Value)
 	if (CharacterState.bIsSprinting) SetFieldOfViewWithInterp(90.0f, 0.75f);
 
 	CharacterState.bIsUpperAttacking = true;
-	PlayAnimMontage(AnimAssetData.UpperAttackAminMontage);
+	if (AssetInfo.AnimationAsset.UpperAttackAminMontage.IsValid())
+	{
+		PlayAnimMontage(AssetInfo.AnimationAsset.UpperAttackAminMontage.Get());
+	}
+	
 }
 
 void AMainCharacterBase::Roll()
@@ -360,10 +364,10 @@ void AMainCharacterBase::Roll()
 
 	//애니메이션 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Roll;
-	if (AnimAssetData.RollAnimMontageList.Num() > 0
-		&& IsValid(AnimAssetData.RollAnimMontageList[0]))
+	if (AssetInfo.AnimationAsset.RollAnimMontageList.Num() > 0
+		&& AssetInfo.AnimationAsset.RollAnimMontageList[0].IsValid())
 	{
-		PlayAnimMontage(AnimAssetData.RollAnimMontageList[0], 1.0f);
+		PlayAnimMontage(AssetInfo.AnimationAsset.RollAnimMontageList[0].Get(), 1.0f);
 	}
 
 	if (OnRoll.IsBound())
@@ -396,10 +400,10 @@ void AMainCharacterBase::TryInvestigate()
 
 	if (nearActorList.Num())
 	{
-		if (AnimAssetData.InvestigateAnimMontageList.Num() > 0
-			&& IsValid(AnimAssetData.InvestigateAnimMontageList[0]))
+		if (AssetInfo.AnimationAsset.InvestigateAnimMontageList.Num() > 0
+			&& AssetInfo.AnimationAsset.InvestigateAnimMontageList[0].IsValid())
 		{
-			PlayAnimMontage(AnimAssetData.InvestigateAnimMontageList[0]);
+			PlayAnimMontage(AssetInfo.AnimationAsset.InvestigateAnimMontageList[0].Get());
 		}
 		Investigate(nearActorList[0]);
 		ResetActionState();

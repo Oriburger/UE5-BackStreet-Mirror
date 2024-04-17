@@ -168,12 +168,13 @@ void ACharacterBase::KnockDown()
 	ResetHitCounter();
 	//AssetInfo.KnockDownAnimMontageList[0]
 	//CharacterState.CharacterActionState = ECharacterActionType::E_KnockedDown;
-	
-	
-	//if (AnimAssetData.KnockDownAnimMontageList.IsValidIndex(0))
-	//{
-	//	PlayAnimMontage(AnimAssetData.KnockDownAnimMontageList[0]);
-	//}
+
+
+	if (AssetInfo.AnimationAsset.KnockdownAnimMontageList.IsValidIndex(0)
+		&& AssetInfo.AnimationAsset.KnockdownAnimMontageList[0].IsValid())
+	{
+		PlayAnimMontage(AssetInfo.AnimationAsset.KnockdownAnimMontageList[0].Get());
+	}
 }
 
 void ACharacterBase::InitCharacterState()
@@ -306,10 +307,13 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
 		Die();
 	}
-	else if (AnimAssetData.HitAnimMontageList.Num() > 0 && this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
+	else if (AssetInfo.AnimationAsset.HitAnimMontageList.Num() > 0 && this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
 	{
-		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AnimAssetData.HitAnimMontageList.Num() - 1);
-		PlayAnimMontage(AnimAssetData.HitAnimMontageList[randomIdx]);
+		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AssetInfo.AnimationAsset.HitAnimMontageList.Num() - 1);
+		if (AssetInfo.AnimationAsset.HitAnimMontageList[randomIdx].IsValid())
+		{
+			PlayAnimMontage(AssetInfo.AnimationAsset.HitAnimMontageList[randomIdx].Get());
+		}
 	}
 	return DamageAmount;
 }
@@ -387,9 +391,10 @@ void ACharacterBase::Die()
 	GetCharacterMovement()->Deactivate();
 	bUseControllerRotationYaw = false;
 
-	if (AnimAssetData.DieAnimMontageList.Num() > 0)
+	if (AssetInfo.AnimationAsset.DieAnimMontageList.Num() > 0
+		&& AssetInfo.AnimationAsset.DieAnimMontageList[0].IsValid())
 	{
-		PlayAnimMontage(AnimAssetData.DieAnimMontageList[0]);
+		PlayAnimMontage(AssetInfo.AnimationAsset.DieAnimMontageList[0].Get());
 	}
 	else
 	{
@@ -414,43 +419,43 @@ void ACharacterBase::TryAttack()
 	const float attackSpeed = FMath::Clamp(CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
 	//Choose animation which fit battle situation
-	TArray<UAnimMontage*> targetAnimList;
+	TArray<TSoftObjectPtr<UAnimMontage>> targetAnimList;
 	switch (GetCurrentWeaponRef()->GetWeaponStat().WeaponType)
 	{
 	case EWeaponType::E_Melee:
 		//check melee anim type
-		if (!AnimAssetData.AirAttackAnimMontageList.IsEmpty() && GetCharacterMovement()->IsFalling())
+		if (!AssetInfo.AnimationAsset.AirAttackAnimMontageList.IsEmpty() && GetCharacterMovement()->IsFalling())
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AnimAssetData.AirAttackAnimMontageList.Num();
-			targetAnimList = AnimAssetData.AirAttackAnimMontageList;
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetInfo.AnimationAsset.AirAttackAnimMontageList.Num();
+			targetAnimList = AssetInfo.AnimationAsset.AirAttackAnimMontageList;
 		}
-		else if (AnimAssetData.MeleeAttackAnimMontageList.Num() > 0)
+		else if (AssetInfo.AnimationAsset.MeleeAttackAnimMontageList.Num() > 0)
 		{
-			targetAnimList = AnimAssetData.MeleeAttackAnimMontageList;
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AnimAssetData.MeleeAttackAnimMontageList.Num();
+			targetAnimList = AssetInfo.AnimationAsset.MeleeAttackAnimMontageList;
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetInfo.AnimationAsset.MeleeAttackAnimMontageList.Num();
 		}
 		break;
 	case EWeaponType::E_Shoot:
-		if (AnimAssetData.ShootAnimMontageList.Num() > 0)
+		if (AssetInfo.AnimationAsset.ShootAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AnimAssetData.ShootAnimMontageList.Num();
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetInfo.AnimationAsset.ShootAnimMontageList.Num();
 		}
-		targetAnimList = AnimAssetData.ShootAnimMontageList;
+		targetAnimList = AssetInfo.AnimationAsset.ShootAnimMontageList;
 		break;
 	case EWeaponType::E_Throw:
-		if (AnimAssetData.ThrowAnimMontageList.Num() > 0)
+		if (AssetInfo.AnimationAsset.ThrowAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AnimAssetData.ThrowAnimMontageList.Num();
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetInfo.AnimationAsset.ThrowAnimMontageList.Num();
 		}
-		targetAnimList = AnimAssetData.ThrowAnimMontageList;
+		targetAnimList = AssetInfo.AnimationAsset.ThrowAnimMontageList;
 		break;
 	}
 
 	//Play Animation
 	if (targetAnimList.Num() > 0
-		&& IsValid(targetAnimList[nextAnimIdx]))
+		&& targetAnimList[nextAnimIdx].IsValid())
 	{
-		PlayAnimMontage(targetAnimList[nextAnimIdx], attackSpeed + 0.25f);
+		PlayAnimMontage(targetAnimList[nextAnimIdx].Get(), attackSpeed + 0.25f);
 	}
 }
 
@@ -470,10 +475,10 @@ void ACharacterBase::TrySkill()
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
 	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
 
-	SkillAnimPlayTimerThreshold = AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
+	SkillAnimPlayTimerThreshold = AssetInfo.AnimationAsset.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
 	
 	//Total skill animation play time which is using for init skill timing.
-	for (UAnimMontage* skillAnimMontage : AnimAssetData.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList) 
+	for (auto& skillAnimMontage : AssetInfo.AnimationAsset.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList) 
 	{
 		totalSkillAnimPlayTime += skillAnimMontage->CalculateSequenceLength()/GetSkillAnimPlayRate(skillAnimIndex);
 		GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.TotalSkillPlayTime = totalSkillAnimPlayTime;
@@ -485,7 +490,7 @@ void ACharacterBase::TrySkill()
 }
 float ACharacterBase::GetSkillAnimPlayRate(uint8 SkillAnimIndex)
 {
-	float animPlayRate;
+	float animPlayRate = 0.0f;
 
 	if (GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.IsAnimPlayRateSyncWithGrade)
 	{
@@ -522,9 +527,13 @@ void ACharacterBase::PlaySkillAnimation()
 		return;
 	}
 	float animPlayRate = GetSkillAnimPlayRate(SkillAnimPlayTimerCurr);
-	TArray<UAnimMontage*> targetAnimList = AnimAssetData.SkillAnimMontageMap.Find(GetCurrentWeaponRef()->WeaponID)->SkillAnimMontageList;
-	float animPlayTime = PlayAnimMontage(targetAnimList[SkillAnimPlayTimerCurr], animPlayRate);
-	GetWorldTimerManager().SetTimer(SkillAnimPlayTimerHandleList[SkillAnimPlayTimerCurr], this, &ACharacterBase::PlayNextSkillAnimation, animPlayTime, false);
+	TArray<TSoftObjectPtr<UAnimMontage>> targetAnimList = AssetInfo.AnimationAsset.SkillAnimMontageMap.Find(GetCurrentWeaponRef()->WeaponID)->SkillAnimMontageList;
+	
+	if (targetAnimList[SkillAnimPlayTimerCurr].IsValid())
+	{
+		float animPlayTime = PlayAnimMontage(targetAnimList[SkillAnimPlayTimerCurr].Get(), animPlayRate);
+		GetWorldTimerManager().SetTimer(SkillAnimPlayTimerHandleList[SkillAnimPlayTimerCurr], this, &ACharacterBase::PlayNextSkillAnimation, animPlayTime, false);
+	}
 }
 
 void ACharacterBase::PlayNextSkillAnimation()
@@ -558,9 +567,10 @@ void ACharacterBase::TryReload()
 	if (!Cast<ARangedWeaponBase>(GetCurrentWeaponRef())->GetCanReload()) return;
 
 	float reloadTime = GetCurrentWeaponRef()->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
-	if (AnimAssetData.ReloadAnimMontageList.Num() > 0)
+	if (AssetInfo.AnimationAsset.ReloadAnimMontageList.Num() > 0
+		&& AssetInfo.AnimationAsset.ReloadAnimMontageList[0].IsValid())
 	{
-		UAnimMontage* reloadAnim = AnimAssetData.ReloadAnimMontageList[0];
+		UAnimMontage* reloadAnim = AssetInfo.AnimationAsset.ReloadAnimMontageList[0].Get();
 		if (IsValid(reloadAnim))
 			PlayAnimMontage(reloadAnim);
 	}
@@ -589,59 +599,59 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 		}
 
 		// Animation 관련
-		//AssetToStream.AddUnique(AssetInfo.AnimBlueprint.ToSoftObjectPath());
+		//AssetToStream.AddUnique(AssetInfo.AnimationAsset.AnimBlueprint.ToSoftObjectPath());
 
-		if (!AssetInfo.MeleeAttackAnimMontageList.IsEmpty())
+		if (!AssetInfo.AnimationAsset.MeleeAttackAnimMontageList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.MeleeAttackAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetInfo.AnimationAsset.MeleeAttackAnimMontageList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.MeleeAttackAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetInfo.AnimationAsset.MeleeAttackAnimMontageList[i].ToSoftObjectPath());
 			}
 		}
 
-		AssetToStream.AddUnique(AssetInfo.UpperAttackAminMontage.ToSoftObjectPath());
-		if (!AssetInfo.AirAttackAnimMontageList.IsEmpty())
+		AssetToStream.AddUnique(AssetInfo.AnimationAsset.UpperAttackAminMontage.ToSoftObjectPath());
+		if (!AssetInfo.AnimationAsset.AirAttackAnimMontageList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.AirAttackAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetInfo.AnimationAsset.AirAttackAnimMontageList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.AirAttackAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetInfo.AnimationAsset.AirAttackAnimMontageList[i].ToSoftObjectPath());
 			}
 		}
 
 
-		if (!AssetInfo.ShootAnimMontageList.IsEmpty())
+		if (!AssetInfo.AnimationAsset.ShootAnimMontageList.IsEmpty())
 		{
-			for(int32 i=0;i< AssetInfo.ShootAnimMontageList.Num();i++)
+			for(int32 i=0;i< AssetInfo.AnimationAsset.ShootAnimMontageList.Num();i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.ShootAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetInfo.AnimationAsset.ShootAnimMontageList[i].ToSoftObjectPath());
 			}
 		}
 	
-		if (!AssetInfo.ThrowAnimMontageList.IsEmpty())
+		if (!AssetInfo.AnimationAsset.ThrowAnimMontageList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.ThrowAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetInfo.AnimationAsset.ThrowAnimMontageList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.ThrowAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetInfo.AnimationAsset.ThrowAnimMontageList[i].ToSoftObjectPath());
 			}	
 		}
 
-		if (!AssetInfo.ReloadAnimMontageList.IsEmpty())
+		if (!AssetInfo.AnimationAsset.ReloadAnimMontageList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.ReloadAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetInfo.AnimationAsset.ReloadAnimMontageList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.ReloadAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetInfo.AnimationAsset.ReloadAnimMontageList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetInfo.HitAnimMontageList.IsEmpty())
+		if (!AssetInfo.AnimationAsset.HitAnimMontageList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.HitAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetInfo.AnimationAsset.HitAnimMontageList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.HitAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetInfo.AnimationAsset.HitAnimMontageList[i].ToSoftObjectPath());
 			}
 		}
 
-		for (auto index = AssetInfo.SkillAnimMontageMap.CreateConstIterator(); index; ++index)
+		for (auto index = AssetInfo.AnimationAsset.SkillAnimMontageMap.CreateConstIterator(); index; ++index)
 		{
 			TArray<TSoftObjectPtr<UAnimMontage>> skillAnimMontageList = index.Value().SkillAnimMontageList;
 			for (auto& anim : skillAnimMontageList)
@@ -653,43 +663,43 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 			}
 		}
 
-		if (!AssetInfo.RollAnimMontageList.IsEmpty())
+		if (!AssetInfo.AnimationAsset.RollAnimMontageList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.RollAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetInfo.AnimationAsset.RollAnimMontageList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.RollAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetInfo.AnimationAsset.RollAnimMontageList[i].ToSoftObjectPath());
 			}
 		}
 	
-		if (!AssetInfo.InvestigateAnimMontageList.IsEmpty())
+		if (!AssetInfo.AnimationAsset.InvestigateAnimMontageList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.InvestigateAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetInfo.AnimationAsset.InvestigateAnimMontageList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.InvestigateAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetInfo.AnimationAsset.InvestigateAnimMontageList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetInfo.DieAnimMontageList.IsEmpty())
+		if (!AssetInfo.AnimationAsset.DieAnimMontageList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.DieAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetInfo.AnimationAsset.DieAnimMontageList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.DieAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetInfo.AnimationAsset.DieAnimMontageList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetInfo.PointMontageList.IsEmpty())
+		if (!AssetInfo.AnimationAsset.PointMontageList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.PointMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetInfo.AnimationAsset.PointMontageList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.PointMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetInfo.AnimationAsset.PointMontageList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetInfo.KnockDownAnimMontageList.IsEmpty())
+		if (!AssetInfo.AnimationAsset.KnockdownAnimMontageList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.PointMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetInfo.AnimationAsset.KnockdownAnimMontageList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.KnockDownAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetInfo.AnimationAsset.KnockdownAnimMontageList[i].ToSoftObjectPath());
 			}
 		}
 
@@ -703,7 +713,6 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 		}
 
 		// material
-
 		AssetToStream.AddUnique(AssetInfo.NormalMaterial.ToSoftObjectPath());
 		AssetToStream.AddUnique(AssetInfo.WallThroughMaterial.ToSoftObjectPath());
 		if (!AssetInfo.EmotionTextureList.IsEmpty())
@@ -741,7 +750,7 @@ void ACharacterBase::SetAsset()
 		UMaterialInterface* targetMat = AssetInfo.CharacterMeshMaterialList[matIdx % meshMatCount].Get();
 		GetMesh()->SetMaterial(matIdx, targetMat);
 	}
-	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimBlueprint);
+	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimationAsset.AnimBlueprint);
 	InitAnimAsset();
 	InitSoundAsset();
 	InitVFXAsset();
@@ -750,125 +759,7 @@ void ACharacterBase::SetAsset()
 
 bool ACharacterBase::InitAnimAsset()
 {
-	FCharacterAnimAssetInfoStruct animAssetList;
 
-	if (!AssetInfo.MeleeAttackAnimMontageList.IsEmpty())
-	{
-		for (TSoftObjectPtr<UAnimMontage> anim : AssetInfo.MeleeAttackAnimMontageList)
-		{
-			if (anim.IsValid())
-				animAssetList.MeleeAttackAnimMontageList.AddUnique(anim.Get());
-		}
-
-	}
-	
-	if (AssetInfo.UpperAttackAminMontage.IsValid())
-	{
-		animAssetList.UpperAttackAminMontage = AssetInfo.UpperAttackAminMontage.Get();
-	}
-
-	if (!AssetInfo.AirAttackAnimMontageList.IsEmpty())
-	{
-		for (TSoftObjectPtr<UAnimMontage> anim : AssetInfo.AirAttackAnimMontageList)
-		{
-			if (anim.IsValid())
-				animAssetList.AirAttackAnimMontageList.AddUnique(anim.Get());
-		}
-	}
-
-	if (!AssetInfo.ShootAnimMontageList.IsEmpty())
-	{
-		for (TSoftObjectPtr<UAnimMontage> anim : AssetInfo.ShootAnimMontageList)
-		{
-			if (anim.IsValid())
-				animAssetList.ShootAnimMontageList.AddUnique(anim.Get());
-		}
-	}
-
-	if (!AssetInfo.ThrowAnimMontageList.IsEmpty())
-	{
-		for (TSoftObjectPtr<UAnimMontage> anim : AssetInfo.ThrowAnimMontageList)
-		{
-			if (anim.IsValid())
-				animAssetList.ThrowAnimMontageList.AddUnique(anim.Get());
-		}
-	}
-
-	if (!AssetInfo.ReloadAnimMontageList.IsEmpty())
-	{
-		for (TSoftObjectPtr<UAnimMontage> anim : AssetInfo.ReloadAnimMontageList)
-		{
-			if (anim.IsValid())
-				animAssetList.ReloadAnimMontageList.AddUnique(anim.Get());
-		}
-	}
-
-	if (!AssetInfo.HitAnimMontageList.IsEmpty())
-	{
-		for (TSoftObjectPtr<UAnimMontage> anim : AssetInfo.HitAnimMontageList)
-		{
-			if (anim.IsValid())
-				animAssetList.HitAnimMontageList.AddUnique(anim.Get());
-		}
-	}
-	for (auto index = AssetInfo.SkillAnimMontageMap.CreateConstIterator(); index; ++index)
-	{
-		if (!index.Value().SkillAnimMontageList.IsEmpty())
-		{	
-			animAssetList.SkillAnimMontageMap.Add(index.Key());
-			for (TSoftObjectPtr<UAnimMontage> anim : index.Value().SkillAnimMontageList)
-			{
-				if (anim.IsValid())
-					animAssetList.SkillAnimMontageMap.Find(index.Key())->SkillAnimMontageList.AddUnique(anim.Get());
-			}
-		}
-	}
-	if (!AssetInfo.RollAnimMontageList.IsEmpty())
-	{
-		for (TSoftObjectPtr<UAnimMontage> anim : AssetInfo.RollAnimMontageList)
-		{
-			if (anim.IsValid())
-				animAssetList.RollAnimMontageList.AddUnique(anim.Get());
-		}
-	}
-
-	if (!AssetInfo.InvestigateAnimMontageList.IsEmpty())
-	{
-		for (TSoftObjectPtr<UAnimMontage> anim : AssetInfo.InvestigateAnimMontageList)
-		{
-			if (anim.IsValid())
-				animAssetList.InvestigateAnimMontageList.AddUnique(anim.Get());
-		}
-	}
-
-	if (!AssetInfo.DieAnimMontageList.IsEmpty())
-	{
-		for (TSoftObjectPtr<UAnimMontage> anim : AssetInfo.DieAnimMontageList)
-		{
-			if (anim.IsValid())
-				animAssetList.DieAnimMontageList.AddUnique(anim.Get());
-		}
-	}
-
-	if (!AssetInfo.DieAnimMontageList.IsEmpty())
-	{
-		for (TSoftObjectPtr<UAnimMontage> anim : AssetInfo.PointMontageList)
-		{
-			if (anim.IsValid())
-				PreChaseAnimMontage = anim.Get();
-		}
-	}
-
-	if (!AssetInfo.KnockDownAnimMontageList.IsEmpty())
-	{
-		for (TSoftObjectPtr<UAnimMontage> anim : AssetInfo.KnockDownAnimMontageList)
-		{
-			if (anim.IsValid())
-				animAssetList.KnockDownAnimMontageList.AddUnique(anim.Get());
-		}
-	}
-
-	AnimAssetData = animAssetList;
 	return true;
 }
 
