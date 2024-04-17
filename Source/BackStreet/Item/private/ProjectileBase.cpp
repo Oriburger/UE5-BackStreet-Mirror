@@ -40,6 +40,11 @@ AProjectileBase::AProjectileBase()
 	ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
 	ProjectileMovement->bAutoActivate = false;
 
+	TrailParticle = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TRAIL_PARTICLE"));
+	TrailParticle->SetupAttachment(Mesh);
+	TrailParticle->SetRelativeLocation(FVector(0.0f));
+	TrailParticle->bAutoActivate = false;
+
 	InitialLifeSpan = 10.0f;
 	this->Tags.Add("Projectile");
 }
@@ -82,6 +87,9 @@ void AProjectileBase::InitProjectileAsset()
 
 	if (ProjectileAssetInfo.ExplosionParticle.IsValid())
 		ExplosionParticle = ProjectileAssetInfo.ExplosionParticle.Get();
+
+	if (ProjectileAssetInfo.TrailParticle.IsValid())
+		TrailParticle->SetAsset(ProjectileAssetInfo.TrailParticle.Get());
 }
 
 void AProjectileBase::DestroyWithEffect(FVector Location)
@@ -125,6 +133,7 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectil
 	{
 		TArray<FSoftObjectPath> tempStream, assetToStream;
 		tempStream.AddUnique(ProjectileAssetInfo.ProjectileMesh.ToSoftObjectPath());
+		tempStream.AddUnique(ProjectileAssetInfo.TrailParticle.ToSoftObjectPath());
 		tempStream.AddUnique(ProjectileAssetInfo.HitEffectParticle.ToSoftObjectPath());
 		tempStream.AddUnique(ProjectileAssetInfo.HitEffectParticleLegacy.ToSoftObjectPath());
 			
@@ -152,16 +161,17 @@ void AProjectileBase::UpdateProjectileStat(FProjectileStatStruct NewStat)
 void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex
 	, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!ProjectileMovement->IsActive() || (IsValid(GetOwner()) && OtherActor == GetOwner())) return;
+	if (!ProjectileMovement->IsActive()) return;
 	if (!OwnerCharacterRef.IsValid() || !GamemodeRef.IsValid()) return;
 	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Item")) return;
 
 	if (OtherActor->ActorHasTag("Character"))
 	{
-		if (OtherActor == OwnerCharacterRef.Get() || OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
+		//It would be change later
+		if(!ProjectileState.bCanAttackCauser&& (OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1]))) return;
 
 		//디버프가 있다면?
-		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(Cast<AWeaponBase>(GetOwner())->GetWeaponStat().DebuffInfo, OwnerCharacterRef.Get());
+		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(ProjectileStat.DebuffInfo, OwnerCharacterRef.Get());
 
 		//폭발하는 발사체라면?
 		if (ProjectileStat.bIsExplosive)
@@ -251,5 +261,9 @@ void AProjectileBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
 void AProjectileBase::ActivateProjectileMovement()
 {
 	ProjectileMovement->Activate();
+	if (IsValid(TrailParticle))
+	{
+		TrailParticle->bAutoActivate = true;
+	}
 	bIsActivated = true; 
 }

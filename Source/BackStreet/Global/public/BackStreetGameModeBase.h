@@ -78,6 +78,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		class AChapterManagerBase* GetChapterManagerRef() { return ChapterManager; }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class UCraftingManagerBase* GetCraftingManagerRef() { return CraftingManagerBase; }
+
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void UpdateMiniMapUI();
 
@@ -109,6 +112,9 @@ protected:
 
 	UPROPERTY()
 		class USkillManagerBase* SkillManagerBase;
+
+	UPROPERTY()
+		class UCraftingManagerBase* CraftingManagerBase;
 
 	UPROPERTY(BlueprintReadWrite)
 		class AChapterManagerBase* ChapterManager;

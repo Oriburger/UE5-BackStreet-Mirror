@@ -4,6 +4,8 @@
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCharacterDied);
+
 UCLASS()
 class BACKSTREET_API ACharacterBase : public ACharacter
 {
@@ -18,6 +20,10 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	//Weapon이 파괴되었을때 호출할 이벤트
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FOnCharacterDied OnCharacterDied;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -43,7 +49,7 @@ public:
 	virtual void TryAttack();
 
 	///Input에 Binding 되어 스킬공격을 시도 (AnimMontage를 호출)
-	virtual void TrySkill();
+	virtual void TrySkill(ESkillType SkillType, int32 SkillID);
 
 	//AnimNotify에 Binding 되어 실제 공격을 수행
 	virtual void Attack();
@@ -185,11 +191,6 @@ private:
 	//무기 액터를 스폰
 	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
 
-// ---- Skill --------------------
-private:
-	UFUNCTION()
-		float GetSkillAnimPlayRate(uint8 SkillAnimIndex);
-
 // ---- Asset -------------------
 public:
 	// 외부에서 Init하기위해 Call
@@ -242,29 +243,26 @@ protected:
 		TArray<class UNiagaraSystem*> DebuffNiagaraEffectList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
-		class UMaterialInterface* NormalMaterial;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
-		class UMaterialInterface* WallThroughMaterial;
+		TArray<class UMaterialInterface*> DynamicMaterialList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
 		TArray<class UTexture*> EmotionTextureList;
 
-	UPROPERTY()
-		class UMaterialInstanceDynamic* CurrentDynamicMaterial;
+	UPROPERTY(BlueprintReadOnly, Category = "Gameplay|Material")
+		TArray<class UMaterialInstanceDynamic*> CurrentDynamicMaterialList;
 
 protected:
 	UFUNCTION()
-		void InitDynamicMeshMaterial(UMaterialInterface* NewMaterial);
+		void InitDynamicMaterialList(TArray<UMaterialInterface*> NewMaterialList);
 
 // ------ 그 외 캐릭터 프로퍼티  ---------------
 protected:
 	//캐릭터의 스탯
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
 		FCharacterStatStruct CharacterStat;
 
 	//캐릭터의 현재 상태
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
 		FCharacterStateStruct CharacterState;
 
 	//Gamemode 약 참조
@@ -278,28 +276,11 @@ protected:
 	UFUNCTION()
 		virtual void ClearAllTimerHandle();
 
-	UFUNCTION()
-		void PlaySkillAnimation();
-	UFUNCTION()
-		void PlayNextSkillAnimation();
-
 	//공격 간 딜레이 핸들
 	UPROPERTY()
 		FTimerHandle AtkIntervalHandle;
 
 	UPROPERTY()
 		FTimerHandle ReloadTimerHandle;
-
-	UPROPERTY()
-		TArray<FTimerHandle> SkillAnimPlayTimerHandleList;
-
-private:
-	//Current number of multiple SkillAnimPlayTimers
-	UPROPERTY()
-		int SkillAnimPlayTimerCurr;
-
-	//Threshold number of multiple SkillAnimPlayTimer
-	UPROPERTY()
-		int SkillAnimPlayTimerThreshold;
 
 };

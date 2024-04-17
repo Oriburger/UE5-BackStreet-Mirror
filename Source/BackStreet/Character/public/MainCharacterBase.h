@@ -4,18 +4,16 @@
 
 #include "../../Global/public/BackStreet.h"
 #include "CharacterBase.h"
+#include "InputActionValue.h"
 #include "GameFramework/Character.h"
 #include "MainCharacterBase.generated.h"
 
+class UInputComponent;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialAttack);
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialMove);
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialZoom);
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialRoll);
-
-
 
 UCLASS()
 class BACKSTREET_API AMainCharacterBase : public ACharacterBase
@@ -84,13 +82,77 @@ public:
 	UPROPERTY()
 		bool bIsAiming = false;
 
-// ------- Character Action ------- 
+// ------- Character Input Action ------- 
+public:
+	// MappingContext
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputMappingContext* DefaultMappingContext;
+
+	// Move Input Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* MoveAction;
+
+	// Roll Input Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* RollAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* AttackAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* ReloadAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* ZoomAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* ThrowReadyAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* ThrowAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* InvestigateAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* SwitchWeaponAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* DropWeaponAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* PickSubWeaponAction;
+
+	// Jump Input Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* JumpAction;
+
+	// Look Input Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* LookAction;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* SprintAction;
+
+	// Crouch Input Action
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	//	class UInputAction* CrouchAction;
+
 public:
 	UFUNCTION()
-		void MoveForward(float Value);
+		void Move(const FInputActionValue& Value);
+
+	// Called for looking input
+	UFUNCTION()
+		void Look(const FInputActionValue& Value);
+
+	// Called for sprinting input
+	UFUNCTION()
+		void Sprint(const FInputActionValue& Value);
 
 	UFUNCTION()
-		void MoveRight(float Value);
+		void StopSprint(const FInputActionValue& Value);
 
 	//구르기를 시도한다.
 	UFUNCTION()
@@ -102,7 +164,7 @@ public:
 
 	//카메라 Boom의 길이를 늘이거나 줄인다.
 	UFUNCTION()
-		void ZoomIn(float Value);
+		void ZoomIn(const FInputActionValue& Value);
 
 	//주변에 상호작용 가능한 액터를 조사한다.
 	UFUNCTION()
@@ -119,7 +181,7 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void TrySkill() override;
+		virtual void TrySkill(ESkillType SkillType, int32 SkillID) override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
@@ -150,13 +212,22 @@ public:
 
 	//1~4번의 키를 눌러 보조무기를 장착한다.
 	UFUNCTION()
-		void PickSubWeapon();
+		void PickSubWeapon(const FInputActionValue& Value);
 
 	UFUNCTION()
 		TArray<AActor*> GetNearInteractionActorList();
 private:
 	UFUNCTION()
 		void StopDashMovement();
+
+// ------- SaveData 관련 --------------------
+protected:
+	UFUNCTION()
+		void SetCharacterStatFromSaveData();
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "SaveData")
+		FSaveData SavedData;
 
 // ------- 어빌리티 / 디버프 ---------------
 public:

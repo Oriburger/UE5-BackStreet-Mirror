@@ -22,6 +22,7 @@ enum class EWeaponType : uint8
 	E_Melee				UMETA(DisplayName = "Melee"),
 	E_Throw				UMETA(DisplayName = "Throw"),
 	E_Shoot				UMETA(DisplayName = "Shoot")
+
 };
 
 USTRUCT(BlueprintType)
@@ -130,13 +131,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		float WeaponKnockBackEnergy = 500.0f;
 
-	//Weapon Skill 게이지 사용량 정보
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FSkillGaugeInfo SkillGaugeInfo;
-
-	//Skill ID List
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FSkillSetInfo SkillSetInfo;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float SkillGaugeAug = 0.1;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FDebuffInfoStruct DebuffInfo;
@@ -240,6 +236,10 @@ public:
 	//메시의 초기 크기 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		FVector InitialScale;
+
+	//WeaponSkill Info
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FOwnerSkillInfoStruct WeaponSkillInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UParticleSystem> DestroyEffectParticle;

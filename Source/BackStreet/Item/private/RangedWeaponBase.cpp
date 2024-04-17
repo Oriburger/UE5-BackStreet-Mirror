@@ -125,7 +125,7 @@ void ARangedWeaponBase::SpawnShootNiagaraEffect()
 	if (!OwnerCharacterRef.IsValid()) return;
 
 	FVector spawnLocation = OwnerCharacterRef.Get()->GetActorLocation() + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 50.0f;
-	FRotator spawnRotation = OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation() + FRotator(0.0f, 90.0f, 0.0f);
+	FRotator spawnRotation = OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation() + FRotator(0.0f, 0.0f, 0.0f);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShootNiagaraEmitter, spawnLocation, spawnRotation);
 }
 
@@ -153,6 +153,7 @@ AProjectileBase* ARangedWeaponBase::CreateProjectile()
 	{
 		newProjectile->SetOwner(this);
 		newProjectile->InitProjectile(OwnerCharacterRef.Get(), ProjectileAssetInfo, ProjectileStatInfo);
+		newProjectile->ProjectileStat.DebuffInfo = WeaponStat.DebuffInfo;
 		newProjectile->ProjectileStat.ProjectileDamage = WeaponStat.WeaponDamage;
 		return newProjectile;
 	}

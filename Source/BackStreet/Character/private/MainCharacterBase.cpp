@@ -1,6 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "../public/MainCharacterBase.h"
 #include "../public/MainCharacterController.h"
+#include "../../Global/public/BackStreetGameInstance.h"
 #include "../public/AbilityManagerBase.h"
 #include "../../Item/public/WeaponBase.h"
 #include "../../Item/public/ThrowWeaponBase.h"
@@ -15,6 +16,8 @@
 #include "Components/AudioComponent.h"
 #include "Animation/AnimInstance.h"
 #include "TimerManager.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
 #include "../../Item/public/RewardBoxBase.h"
 #include "../../CraftingSystem/public/CraftBoxBase.h"
 #include "Animation/AnimMontage.h"
@@ -71,12 +74,31 @@ void AMainCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//Add Input Mapping Context
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(DefaultMappingContext, 0);
+		}
+	}
+
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	
-	InitDynamicMeshMaterial(NormalMaterial);
 
 	AbilityManagerRef = NewObject<UAbilityManagerBase>(this, UAbilityManagerBase::StaticClass(), FName("AbilityfManager"));
 	AbilityManagerRef->InitAbilityManager(this);
+
+	UBackStreetGameInstance* GameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
+
+	//Load SaveData
+	if (GameInstance->LoadGameSaveData(SavedData)) return;
+	else
+	{
+		GameInstance->SaveGameData(FSaveData());
+	}
+	SetCharacterStatFromSaveData();
+	InitCharacterState();
+
 }
 
 // Called every frame
@@ -103,26 +125,38 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	//Set up "movement" bindings.
-	PlayerInputComponent->BindAxis("MoveForward", this, &AMainCharacterBase::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &AMainCharacterBase::MoveRight);
-	PlayerInputComponent->BindAxis("ZoomIn", this, &AMainCharacterBase::ZoomIn);
-	
-	PlayerInputComponent->BindAction("Roll", IE_Pressed, this, &AMainCharacterBase::Roll);
-	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AMainCharacterBase::TryAttack);
-	PlayerInputComponent->BindAction("Throw", IE_Pressed, this, &AMainCharacterBase::ReadyToThrow);
-	PlayerInputComponent->BindAction("Throw", IE_Released, this, &AMainCharacterBase::Throw);
-	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMainCharacterBase::TryReload);
+	// Set up action bindings
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		//Moving
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Move);
 
-	PlayerInputComponent->BindAction("SwitchWeapon", IE_Pressed, this, &AMainCharacterBase::SwitchToNextWeapon);
-	PlayerInputComponent->BindAction("PickItem", IE_Pressed, this, &AMainCharacterBase::TryInvestigate);
-	PlayerInputComponent->BindAction("DropWeapon", IE_Pressed, this, &AMainCharacterBase::DropWeapon);
+		//Rolling
+		EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Roll);
 
-	
-	PlayerInputComponent->BindAction("SelectSubWeaponA", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
-	PlayerInputComponent->BindAction("SelectSubWeaponB", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
-	PlayerInputComponent->BindAction("SelectSubWeaponC", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
-	PlayerInputComponent->BindAction("SelectSubWeaponD", IE_Pressed, this, &AMainCharacterBase::PickSubWeapon);
+		//Attack
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryAttack);
+
+		//Reload
+		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryReload);
+
+		//Zoom
+		EnhancedInputComponent->BindAction(ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
+
+		//Throw
+		EnhancedInputComponent->BindAction(ThrowReadyAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ReadyToThrow);
+		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Throw);
+
+		//Interaction
+		EnhancedInputComponent->BindAction(InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
+
+		//Inventory
+		EnhancedInputComponent->BindAction(SwitchWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::SwitchToNextWeapon);
+		EnhancedInputComponent->BindAction(DropWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::DropWeapon);
+
+		//SubWeapon
+		EnhancedInputComponent->BindAction(PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::PickSubWeapon);
+	}
 }
 
 void AMainCharacterBase::ReadyToThrow()
@@ -200,28 +234,45 @@ FVector AMainCharacterBase::GetThrowDestination()
 	return startLocation;
 }
 
-void AMainCharacterBase::MoveForward(float Value)
+void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
-	FVector Direction = FVector(1.0f, 0.0f, 0.0f);
-	AddMovementInput(Direction, Value);
-
-	if (Value != 0)
+	// input is a Vector2D
+	FVector2D MovementVector = Value.Get<FVector2D>();
+	if (Controller != nullptr)
 	{
-		if (OnMove.IsBound())
-			OnMove.Broadcast();
+		AddMovementInput({ 1.0f, 0.0f, 0.0f }, MovementVector.Y);
+		AddMovementInput({ 0.0f, 1.0f, 0.0f }, MovementVector.X);
 	}
 }
 
-void AMainCharacterBase::MoveRight(float Value)
+void AMainCharacterBase::Look(const FInputActionValue& Value)
 {
-	FVector Direction = FVector(0.0f, 1.0f, 0.0f);
-	AddMovementInput(Direction, Value);
+	// input is a Vector2D
+	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-	if (Value != 0)
+	if (Controller != nullptr)
 	{
-		if (OnMove.IsBound())
-			OnMove.Broadcast();
+		// add yaw and pitch input to controller
+		AddControllerYawInput(LookAxisVector.X);
+		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AMainCharacterBase::Sprint(const FInputActionValue& Value)
+{
+	if (CharacterState.bIsSprinting) return;
+	if (GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero()) return;
+
+	CharacterState.bIsSprinting = true;
+	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.DefaultMoveSpeed;
+}
+
+void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
+{
+	if (!CharacterState.bIsSprinting) return;
+
+	CharacterState.bIsSprinting = false;
+	GetCharacterMovement()->MaxWalkSpeed = CharacterStat.DefaultMoveSpeed / 2.0f;
 }
 
 void AMainCharacterBase::Roll()
@@ -277,11 +328,12 @@ void AMainCharacterBase::Dash()
 	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, this, &AMainCharacterBase::StopDashMovement, 0.075f, false);
 }
 
-void AMainCharacterBase::ZoomIn(float Value)
+void AMainCharacterBase::ZoomIn(const FInputActionValue& Value)
 {
-	if (Value == 0.0f) return;
+	float value = Value.Get<float>();
+	if (value == 0.0f) return;
 	float newLength = CameraBoom->TargetArmLength;
-	newLength = newLength + Value * 25.0f;
+	newLength = newLength + value * 75.0f;
 	newLength = newLength < MIN_CAMERA_BOOM_LENGTH ? MIN_CAMERA_BOOM_LENGTH : newLength;
 	newLength = newLength > MAX_CAMERA_BOOM_LENGTH ? MAX_CAMERA_BOOM_LENGTH : newLength;
 	CameraBoom->TargetArmLength = newLength;
@@ -351,13 +403,13 @@ void AMainCharacterBase::TryReload()
 float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	if (damageAmount > 0.0f && DamageCauser->ActorHasTag("Enemy"))
+	//Disable this Logic until Facial Material Logic usable
+	/*if (damageAmount > 0.0f && DamageCauser->ActorHasTag("Enemy"))
 	{
 		SetFacialDamageEffect();
-
 		GetWorld()->GetTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 		GetWorld()->GetTimerManager().SetTimer(FacialEffectResetTimerHandle, this, &AMainCharacterBase::ResetFacialDamageEffect, 1.0f, false);
-	}
+	}*/
 	return damageAmount;
 }
 
@@ -377,9 +429,11 @@ void AMainCharacterBase::TryAttack()
 		return;
 	}
 
+	//=============
+
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	this->Tags.Add("Attack|Common");
-	RotateToCursor();
+	//RotateToCursor();
 	Super::TryAttack();
 
 	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
@@ -389,26 +443,20 @@ void AMainCharacterBase::TryAttack()
 	}), 0.1f, false);
 }
 
-void AMainCharacterBase::TrySkill()
+void AMainCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 	
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle
-		|| !GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.IsSkillAvailable ) return;
+		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	//IndieGo용 임시 코드----------------------------------------------------------
 	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130)
 	{
 		CharacterState.CharacterCurrSkillGauge = 10;
 	}
 	//---------------------------------------------------------------------------------
-	if (GetCharacterState().CharacterCurrSkillGauge<GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.SkillCommonReq)
-	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬 게이지가 부족합니다.")), FColor::White);
-		return;
-	}
 
-	Super::TrySkill();
+	Super::TrySkill(SkillType, SkillID);
 
 	//Try Skill and adjust rotation to cursor position
 	RotateToCursor();
@@ -419,7 +467,7 @@ void AMainCharacterBase::AddSkillGauge()
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
-	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeInfo.SkillGaugeAug;
+	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeAug;
 }
 
 
@@ -481,13 +529,10 @@ void AMainCharacterBase::RotateToCursor()
 	}), 1.0f, false);
 }
 
-void AMainCharacterBase::PickSubWeapon()
+void AMainCharacterBase::PickSubWeapon(const FInputActionValue& Value)
 {
-	int32 targetIdx = -1;
-	if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponA"))) targetIdx = 0;
-	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponB"))) targetIdx = 1;
-	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponC"))) targetIdx = 2;
-	else if (PlayerControllerRef->GetActionKeyIsDown(FName("SelectSubWeaponD"))) targetIdx = 3;
+	FVector typeVector = Value.Get<FVector>();
+	int32 targetIdx = typeVector.X - 1;
 
 	//If player press current picked sub weapon, switch to the first main weapon.
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw && GetSubInventoryRef()->GetCurrentIdx() == targetIdx)
@@ -538,6 +583,11 @@ void AMainCharacterBase::StopDashMovement()
 	const FVector& direction = GetMesh()->GetRightVector();
 	float& speed = GetCharacterMovement()->MaxWalkSpeed;
 	GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
+}
+
+void AMainCharacterBase::SetCharacterStatFromSaveData()
+{
+	CharacterStat = SavedData.PlayerSaveGameData.PlayerStat;
 }
 
 void AMainCharacterBase::ResetRotationToMovement()
@@ -650,7 +700,7 @@ void AMainCharacterBase::DeactivateBuffEffect()
 
 void AMainCharacterBase::SetFacialDamageEffect()
 {
-	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterial;
+	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterialList[1];
 	
 	if (currMaterial != nullptr && EmotionTextureList.Num() >= 3)
 	{
@@ -661,7 +711,7 @@ void AMainCharacterBase::SetFacialDamageEffect()
 
 void AMainCharacterBase::ResetFacialDamageEffect()
 {
-	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterial;
+	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterialList[1];
 
 	if (currMaterial != nullptr && EmotionTextureList.Num() >= 3)
 	{
