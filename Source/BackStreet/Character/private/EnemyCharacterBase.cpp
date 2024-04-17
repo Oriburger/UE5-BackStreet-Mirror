@@ -312,3 +312,13 @@ void AEnemyCharacterBase::ClearAllTimerHandle()
 	HitTimeOutTimerHandle.Invalidate();
 	DamageAIDelayTimer.Invalidate();
 }
+
+bool AEnemyCharacterBase::PickWeapon(int32 NewWeaponID)
+{
+	return Super::PickWeapon(NewWeaponID);
+}
+
+void AEnemyCharacterBase::SwitchToNextWeapon()
+{
+	return Super::SwitchToNextWeapon();
+}
