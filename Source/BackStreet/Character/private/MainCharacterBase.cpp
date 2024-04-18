@@ -237,11 +237,11 @@ FVector AMainCharacterBase::GetThrowDestination()
 void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
-	FVector2D MovementVector = Value.Get<FVector2D>();
+	MovementInputValue = Value.Get<FVector2D>();
 	if (Controller != nullptr)
 	{
-		AddMovementInput({ 1.0f, 0.0f, 0.0f }, MovementVector.Y);
-		AddMovementInput({ 0.0f, 1.0f, 0.0f }, MovementVector.X);
+		AddMovementInput({ 1.0f, 0.0f, 0.0f }, MovementInputValue.Y);
+		AddMovementInput({ 0.0f, 1.0f, 0.0f }, MovementInputValue.X);
 	}
 }
 
@@ -277,12 +277,18 @@ void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 
 void AMainCharacterBase::Roll()
 {	
-	if (!GetIsActionActive(ECharacterActionType::E_Idle)) return;
+	if (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Attack)) return;
+
+	if (GetIsActionActive(ECharacterActionType::E_Attack))
+	{
+		StopAttack(); 
+		ResetActionState();
+	}
 	
 	FVector newDirection(0.0f);
 	FRotator newRotation = FRotator();
-	newDirection.X = GetInputAxisValue(FName("MoveForward"));
-	newDirection.Y = GetInputAxisValue(FName("MoveRight"));
+	newDirection.X = MovementInputValue.Y;
+	newDirection.Y = MovementInputValue.X;
 
 	//아무런 방향 입력이 없다면? 
 	if (newDirection.Y + newDirection.X == 0)
