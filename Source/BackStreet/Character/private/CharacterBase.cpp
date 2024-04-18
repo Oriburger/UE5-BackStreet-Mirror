@@ -165,7 +165,7 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 
 float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	if (!IsValid(DamageCauser)) return 0.0f; 
+	if (!IsValid(DamageCauser) || CharacterStat.bIsInvincibility) return 0.0f; 
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
 
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);

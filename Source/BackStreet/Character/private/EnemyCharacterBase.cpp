@@ -97,12 +97,11 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f) return 0.0f;
+	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterStat.bIsInvincibility) return 0.0f;
 	
 	if (AssetManagerBaseRef.IsValid())
 	{
 		ACharacterBase* damageCauser = Cast<ACharacterBase>(DamageCauser);
-
 		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, damageCauser->GetCurrentWeaponRef()->GetWeaponStat().WeaponID, "HitImpact");
 	}
 	
