@@ -147,7 +147,7 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void TrySkill() override;
+		virtual void TrySkill(ESkillType SkillType, int32 SkillID) override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
@@ -297,10 +297,6 @@ private:
 	//초기화 시에는 다시 movement 방향으로 캐릭터의 Rotation Set 
 	UPROPERTY()
 		FTimerHandle RotationResetTimerHandle;
-
-	//공격 반복 작업 타이머
-	UPROPERTY()
-		FTimerHandle AttackLoopTimerHandle;
 
 	//구르기 딜레이 타이머
 	UPROPERTY()

@@ -5,6 +5,7 @@
 #include "../../Item/public/WeaponInventoryBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #include "../../Global/public/AssetManagerBase.h"
+#include "../../Global/public/SkillManagerBase.h"
 #include "../../SkillSystem/public/SkillBase.h"
 #include "Engine/DamageEvents.h"
 #include "UObject/ConstructorHelpers.h"
@@ -244,7 +245,6 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 	
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
 	FWeaponStatStruct currWeaponStat = this->GetCurrentWeaponRef()->GetWeaponStat();
-	currWeaponStat.SkillSetInfo.SkillGrade = ESkillGrade::E_None;
 	this->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
 	StopAttack();
 
@@ -276,7 +276,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		FVector location = HitSceneComponent->GetComponentLocation();
 		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(DamageCauser->GetActorLocation(), GetActorLocation());
 		newRotation.Pitch = newRotation.Roll = 0.0f;
-		//if (IsValid(Cast<ACharacterBase>(DamageCauser)->GetCharacterState().TargetedEnemy))
+		if (IsValid(Cast<ACharacterBase>(DamageCauser)->GetCharacterState().TargetedEnemy))
 		{
 			Cast<ACharacterBase>(DamageCauser)->SetLocationWithInterp(location, 1.0f, false);
 			Cast<ACharacterBase>(DamageCauser)->SetActorRotation(newRotation);
@@ -361,13 +361,6 @@ void ACharacterBase::Die()
 		//캐릭터가 죽으면 3가지 타입의 무기 액터를 순차적으로 반환
 		for (int weaponIdx = 2; weaponIdx >= 0; weaponIdx--)
 		{
-			for (TPair<int32, ASkillBase*>& skillIdx : WeaponActorList[weaponIdx]->GetWeaponStat().SkillSetInfo.SkillRefMap)
-			{
-				ASkillBase* skill = skillIdx.Value;
-				skill->ClearAllTimerHandle();
-				skill->Destroy();
-			}
-			WeaponActorList[weaponIdx]->GetWeaponStat().SkillSetInfo.SkillRefMap.Empty();
 			WeaponActorList[weaponIdx]->Destroy();
 			InventoryRef->Destroy();
 		}
@@ -390,6 +383,8 @@ void ACharacterBase::Die()
 	CharacterStat.bIsInvincibility = true;
 	GetCharacterMovement()->Deactivate();
 	bUseControllerRotationYaw = false;
+
+	OnCharacterDied.Broadcast();
 
 	if (AssetInfo.AnimationAsset.DieAnimMontageList.Num() > 0
 		&& AssetInfo.AnimationAsset.DieAnimMontageList[0].IsValid())
@@ -459,87 +454,55 @@ void ACharacterBase::TryAttack()
 	}
 }
 
-void ACharacterBase::TrySkill()
+void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
-	AWeaponBase* weaponRef = GetCurrentWeaponRef();
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
-	if (weaponRef->GetWeaponStat().SkillSetInfo.SkillIDList.IsEmpty())
+	checkf(IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()), TEXT("Failed to get SkillmanagerBase"));
+
+	switch (SkillType)
 	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Skill is not binded to this Weapon")), FColor::White);
-		return;
-	}
-	float totalSkillAnimPlayTime = 0;
-	int skillAnimIndex = 0 ;
-	SkillAnimPlayTimerCurr = 0;
-
-	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
-	CharacterState.CharacterActionState = ECharacterActionType::E_Skill;
-
-	SkillAnimPlayTimerThreshold = AssetInfo.AnimationAsset.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList.Num();
-	
-	//Total skill animation play time which is using for init skill timing.
-	for (auto& skillAnimMontage : AssetInfo.AnimationAsset.SkillAnimMontageMap.Find(weaponRef->WeaponID)->SkillAnimMontageList) 
-	{
-		totalSkillAnimPlayTime += skillAnimMontage->CalculateSequenceLength()/GetSkillAnimPlayRate(skillAnimIndex);
-		GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.TotalSkillPlayTime = totalSkillAnimPlayTime;
-		skillAnimIndex++;
-	}
-
-	SkillAnimPlayTimerHandleList.SetNum(SkillAnimPlayTimerThreshold);
-	PlaySkillAnimation();
-}
-float ACharacterBase::GetSkillAnimPlayRate(uint8 SkillAnimIndex)
-{
-	float animPlayRate = 0.0f;
-
-	if (GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.IsAnimPlayRateSyncWithGrade)
-	{
-		if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillCommonReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillRareReq, true, false))
+	case ESkillType::E_None:
+			return;
+		break;
+	case ESkillType::E_Character:
+		if (!AssetInfo.CharacterSkillInfoMap.Contains(SkillID))
 		{
-			animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.CommonSkillAnimRateList[SkillAnimPlayTimerCurr];
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Character does't have skill")), FColor::White);
+			return;
 		}
-		else if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillRareReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillLegendReq, true, false))
+		if (AssetInfo.CharacterSkillInfoMap.Find(SkillID)->bSkillBlocked)
 		{
-			animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.RareSkillAnimRateList[SkillAnimPlayTimerCurr];
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("This skill is blocked")), FColor::White);
+			return;
 		}
-		else if (UKismetMathLibrary::InRange_FloatFloat(CharacterState.CharacterCurrSkillGauge, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillLegendReq, GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillMythicReq, true, false))
+		else
 		{
-			animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.LegendSkillAnimRateList[SkillAnimPlayTimerCurr];
+			CharacterState.bCanAttack = false;
+			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &AssetInfo.CharacterSkillInfoMap[SkillID]);
+			return;
 		}
-		else if (CharacterState.CharacterCurrSkillGauge >= GetCurrentWeaponRef()->WeaponStat.SkillGaugeInfo.SkillMythicReq)
+		break;
+	case ESkillType::E_Weapon:
+		if (!IsValid(GetCurrentWeaponRef()))
 		{
-			animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.MythicSkillAnimRateList[SkillAnimPlayTimerCurr];
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Does't have any weapon")), FColor::White);
+			return;
 		}
-	}
-	else
-	{
-		animPlayRate = GetCurrentWeaponRef()->WeaponStat.SkillSetInfo.CommonSkillAnimRateList[SkillAnimPlayTimerCurr];
-	}
-	return animPlayRate;
-}
+		if(SkillID != GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.SkillID) return;
 
-void ACharacterBase::PlaySkillAnimation()
-{
-
-	if (SkillAnimPlayTimerCurr >= SkillAnimPlayTimerThreshold)
-	{
-		SkillAnimPlayTimerHandleList.Empty();
-		return;
+		if (GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.bSkillBlocked)
+		{
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("This skill is blocked")), FColor::White);
+			return;
+		}
+		else
+		{
+			CharacterState.bCanAttack = false;
+			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo);
+			return;
+		}
+		break;
 	}
-	float animPlayRate = GetSkillAnimPlayRate(SkillAnimPlayTimerCurr);
-	TArray<TSoftObjectPtr<UAnimMontage>> targetAnimList = AssetInfo.AnimationAsset.SkillAnimMontageMap.Find(GetCurrentWeaponRef()->WeaponID)->SkillAnimMontageList;
-	
-	if (targetAnimList[SkillAnimPlayTimerCurr].IsValid())
-	{
-		float animPlayTime = PlayAnimMontage(targetAnimList[SkillAnimPlayTimerCurr].Get(), animPlayRate);
-		GetWorldTimerManager().SetTimer(SkillAnimPlayTimerHandleList[SkillAnimPlayTimerCurr], this, &ACharacterBase::PlayNextSkillAnimation, animPlayTime, false);
-	}
-}
-
-void ACharacterBase::PlayNextSkillAnimation()
-{
-	SkillAnimPlayTimerCurr++;
-	PlaySkillAnimation();
 }
 
 void ACharacterBase::Attack()
@@ -567,7 +530,7 @@ void ACharacterBase::TryReload()
 	if (!Cast<ARangedWeaponBase>(GetCurrentWeaponRef())->GetCanReload()) return;
 
 	float reloadTime = GetCurrentWeaponRef()->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
-	if (AssetInfo.AnimationAsset.ReloadAnimMontageList.Num() > 0
+	if (AssetInfo.AnimationAsset.ReloadAnimMontageList.Num() > 0 
 		&& AssetInfo.AnimationAsset.ReloadAnimMontageList[0].IsValid())
 	{
 		UAnimMontage* reloadAnim = AssetInfo.AnimationAsset.ReloadAnimMontageList[0].Get();
@@ -579,9 +542,9 @@ void ACharacterBase::TryReload()
 	GetWorldTimerManager().SetTimer(ReloadTimerHandle, Cast<ARangedWeaponBase>(GetCurrentWeaponRef()), &ARangedWeaponBase::Reload, reloadTime, false);
 }
 
-void ACharacterBase::InitAsset(int32 NewEnemyID)
+void ACharacterBase::InitAsset(int32 NewCharacterID)
 {
-	AssetInfo = GetAssetInfoWithID(NewEnemyID);
+	AssetInfo = GetAssetInfoWithID(NewCharacterID);
 	//SetCharacterAnimAssetInfoData(CharacterID);
 
 	if (!AssetInfo.CharacterMesh.IsNull() && AssetInfo.CharacterMeshMaterialList.Num() != 0)
@@ -597,7 +560,7 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 				AssetToStream.AddUnique(AssetInfo.CharacterMeshMaterialList[idx].ToSoftObjectPath());
 			}
 		}
-
+			
 		// Animation 관련
 		//AssetToStream.AddUnique(AssetInfo.AnimationAsset.AnimBlueprint.ToSoftObjectPath());
 
@@ -651,18 +614,6 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 			}
 		}
 
-		for (auto index = AssetInfo.AnimationAsset.SkillAnimMontageMap.CreateConstIterator(); index; ++index)
-		{
-			TArray<TSoftObjectPtr<UAnimMontage>> skillAnimMontageList = index.Value().SkillAnimMontageList;
-			for (auto& anim : skillAnimMontageList)
-			{
-				if (!skillAnimMontageList.IsEmpty())
-				{
-					AssetToStream.AddUnique(anim.ToSoftObjectPath());
-				}
-			}
-		}
-
 		if (!AssetInfo.AnimationAsset.RollAnimMontageList.IsEmpty())
 		{
 			for (int32 i = 0; i < AssetInfo.AnimationAsset.RollAnimMontageList.Num(); i++)
@@ -713,8 +664,14 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 		}
 
 		// material
-		AssetToStream.AddUnique(AssetInfo.NormalMaterial.ToSoftObjectPath());
-		AssetToStream.AddUnique(AssetInfo.WallThroughMaterial.ToSoftObjectPath());
+		if (!AssetInfo.DynamicMaterialList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetInfo.DynamicMaterialList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetInfo.DynamicMaterialList[i].ToSoftObjectPath());
+			}
+		}
+
 		if (!AssetInfo.EmotionTextureList.IsEmpty())
 		{
 			for (int32 i = 0; i < AssetInfo.EmotionTextureList.Num(); i++)
@@ -725,7 +682,6 @@ void ACharacterBase::InitAsset(int32 NewEnemyID)
 
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &ACharacterBase::SetAsset));
-
 	}
 }
 
@@ -745,21 +701,20 @@ void ACharacterBase::SetAsset()
 	GetMesh()->SetRelativeScale3D(FVector(1.0f));
 
 	const int32 meshMatCount = AssetInfo.CharacterMeshMaterialList.Num();
-	for (int matIdx = 0; matIdx < GetMesh()->GetMaterials().Num(); matIdx++)
-	{
-		UMaterialInterface* targetMat = AssetInfo.CharacterMeshMaterialList[matIdx % meshMatCount].Get();
-		GetMesh()->SetMaterial(matIdx, targetMat);
-	}
+	
+	GetMesh()->OverrideMaterials.Empty();
+	
+	InitMaterialAsset();	
+
 	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimationAsset.AnimBlueprint);
 	InitAnimAsset();
 	InitSoundAsset();
 	InitVFXAsset();
-	InitMaterialAsset();
 }
 
 bool ACharacterBase::InitAnimAsset()
 {
-
+	//Legacy
 	return true;
 }
 
@@ -767,7 +722,7 @@ void ACharacterBase::InitVFXAsset()
 {
 	if (!AssetInfo.DebuffNiagaraEffectList.IsEmpty())
 	{
-		for (TSoftObjectPtr<UNiagaraSystem> vfx : AssetInfo.DebuffNiagaraEffectList)
+		for (TSoftObjectPtr<UNiagaraSystem>& vfx : AssetInfo.DebuffNiagaraEffectList)
 		{
 			if (vfx.IsValid())
 				DebuffNiagaraEffectList.AddUnique(vfx.Get());
@@ -786,15 +741,14 @@ void ACharacterBase::InitSoundAsset()
 
 void ACharacterBase::InitMaterialAsset()
 {
-	if (AssetInfo.NormalMaterial.IsValid())
+	for (int8 matIdx = 0; matIdx < AssetInfo.DynamicMaterialList.Num(); matIdx++)
 	{
-		NormalMaterial = AssetInfo.NormalMaterial.Get();
+		if (AssetInfo.DynamicMaterialList[matIdx].IsValid())
+		{
+			GetMesh()->SetMaterial(matIdx, GetMesh()->CreateDynamicMaterialInstance(matIdx, AssetInfo.DynamicMaterialList[matIdx].Get()));
+		}
 	}
-
-	if (AssetInfo.WallThroughMaterial.IsValid())
-	{
-		WallThroughMaterial = AssetInfo.WallThroughMaterial.Get();
-	}
+	/*
 
 	if (!AssetInfo.EmotionTextureList.IsEmpty())
 	{
@@ -803,7 +757,7 @@ void ACharacterBase::InitMaterialAsset()
 			if (tex.IsValid())
 				EmotionTextureList.AddUnique(tex.Get());
 		}
-	}
+	}*/
 }
 
 FCharacterAssetInfoStruct ACharacterBase::GetAssetInfoWithID(const int32 TargetCharacterID)
@@ -818,16 +772,6 @@ FCharacterAssetInfoStruct ACharacterBase::GetAssetInfoWithID(const int32 TargetC
 		if (newInfo != nullptr) return *newInfo;
 	}
 	return FCharacterAssetInfoStruct();
-}
-
-void ACharacterBase::InitDynamicMeshMaterial(UMaterialInterface* NewMaterial)
-{
-	if (NewMaterial == nullptr) return;
-
-	for (int8 matIdx = 0; matIdx < GetMesh()->GetNumMaterials(); matIdx += 1)
-	{
-		CurrentDynamicMaterial = GetMesh()->CreateDynamicMaterialInstance(matIdx, NewMaterial);
-	}
 }
 
 float ACharacterBase::GetTotalStatValue(float& DefaultValue, FStatInfoStruct& AbilityInfo, FStatInfoStruct& SkillInfo, FStatInfoStruct& DebuffInfo)
@@ -967,11 +911,4 @@ void ACharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
 	AtkIntervalHandle.Invalidate();
 	ReloadTimerHandle.Invalidate();
-
-	for (int num=0 ; num < SkillAnimPlayTimerHandleList.Num(); num++)
-	{
-		GetWorldTimerManager().ClearTimer(SkillAnimPlayTimerHandleList[num]);
-		SkillAnimPlayTimerHandleList[num].Invalidate();
-	}
-	SkillAnimPlayTimerHandleList.Empty();
 }

@@ -84,7 +84,6 @@ void AMainCharacterBase::BeginPlay()
 	}
 
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	InitDynamicMeshMaterial(NormalMaterial);
 
 	AbilityManagerRef = NewObject<UAbilityManagerBase>(this, UAbilityManagerBase::StaticClass(), FName("AbilityfManager"));
 	AbilityManagerRef->InitAbilityManager(this);
@@ -456,13 +455,13 @@ void AMainCharacterBase::TryReload()
 float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	if (damageAmount > 0.0f && DamageCauser->ActorHasTag("Enemy"))
+	//Disable this Logic until Facial Material Logic usable
+	/*if (damageAmount > 0.0f && DamageCauser->ActorHasTag("Enemy"))
 	{
 		SetFacialDamageEffect();
-
 		GetWorld()->GetTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 		GetWorld()->GetTimerManager().SetTimer(FacialEffectResetTimerHandle, this, &AMainCharacterBase::ResetFacialDamageEffect, 1.0f, false);
-	}
+	}*/
 	return damageAmount;
 }
 
@@ -486,36 +485,24 @@ void AMainCharacterBase::TryAttack()
 
 	//공격을 하고, 커서 위치로 Rotation을 조정
 	this->Tags.Add("Attack|Common");
-	//RotateToCursor();
+	//RotateToCursor(); //백뷰에서는 미사용
 	Super::TryAttack();
-
-	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
-	GetWorld()->GetTimerManager().SetTimer(AttackLoopTimerHandle, FTimerDelegate::CreateLambda([&]() {
-		if (!IsActorBeingDestroyed() && PlayerControllerRef.Get()->GetActionKeyIsDown("Attack"))
-			TryAttack(); //0.1초 뒤에 체크해서 계속 눌려있는 상태라면, Attack을 반복한다. 
-	}), 0.1f, false);
 }
 
-void AMainCharacterBase::TrySkill()
+void AMainCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 	
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle
-		|| !GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.IsSkillAvailable ) return;
+		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	//IndieGo용 임시 코드----------------------------------------------------------
 	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130)
 	{
 		CharacterState.CharacterCurrSkillGauge = 10;
 	}
 	//---------------------------------------------------------------------------------
-	if (GetCharacterState().CharacterCurrSkillGauge<GetCurrentWeaponRef()->GetWeaponStat().SkillGaugeInfo.SkillCommonReq)
-	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("스킬 게이지가 부족합니다.")), FColor::White);
-		return;
-	}
 
-	Super::TrySkill();
+	Super::TrySkill(SkillType, SkillID);
 
 	//Try Skill and adjust rotation to cursor position
 	//RotateToCursor();
@@ -526,7 +513,7 @@ void AMainCharacterBase::AddSkillGauge()
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
 
 	AWeaponBase* weaponRef = GetCurrentWeaponRef();
-	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeInfo.SkillGaugeAug;
+	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeAug;
 }
 
 
@@ -820,24 +807,24 @@ void AMainCharacterBase::DeactivateBuffEffect()
 
 void AMainCharacterBase::SetFacialDamageEffect()
 {
-	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterial;
+	/*UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterialList[1];
 	
 	if (currMaterial != nullptr && EmotionTextureList.Num() >= 3)
 	{
 		currMaterial->SetTextureParameterValue(FName("BaseTexture"), EmotionTextureList[(uint8)(EEmotionType::E_Angry)]);
 		currMaterial->SetScalarParameterValue(FName("bIsDamaged"), true);
-	}
+	}*/
 }
 
 void AMainCharacterBase::ResetFacialDamageEffect()
 {
-	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterial;
+	/*UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterialList[1];
 
 	if (currMaterial != nullptr && EmotionTextureList.Num() >= 3)
 	{
 		currMaterial->SetTextureParameterValue(FName("BaseTexture"), EmotionTextureList[(uint8)(EEmotionType::E_Idle)]);
 		currMaterial->SetScalarParameterValue(FName("bIsDamaged"), false);
-	}
+	}*/
 }
 
 void AMainCharacterBase::ClearAllTimerHandle()
@@ -847,12 +834,10 @@ void AMainCharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(BuffEffectResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(RollTimerHandle); 
-	GetWorldTimerManager().ClearTimer(AttackLoopTimerHandle);
 	GetWorldTimerManager().ClearTimer(DashDelayTimerHandle);
 
 	BuffEffectResetTimerHandle.Invalidate();
 	FacialEffectResetTimerHandle.Invalidate();
 	RollTimerHandle.Invalidate();
-	AttackLoopTimerHandle.Invalidate();
 	DashDelayTimerHandle.Invalidate();
 }

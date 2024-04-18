@@ -53,7 +53,6 @@ void AEnemyCharacterBase::BeginPlay()
 	InitEnemyCharacter(CharacterID);
 
 	SetDefaultWeapon();
-	InitDynamicMeshMaterial(GetMesh()->GetMaterial(0));
 }
 
 void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
@@ -148,7 +147,7 @@ void AEnemyCharacterBase::TryAttack()
 	Super::TryAttack();
 }
 
-void AEnemyCharacterBase::TrySkill()
+void AEnemyCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	check(GetCurrentWeaponRef() != nullptr);
 
@@ -161,7 +160,7 @@ void AEnemyCharacterBase::TrySkill()
 		return;
 	}
 
-	Super::TrySkill();
+	Super::TrySkill(SkillType, SkillID);
 }
 
 void AEnemyCharacterBase::Attack()
@@ -264,11 +263,11 @@ void AEnemyCharacterBase::ResetActionStateForTimer()
 
 void AEnemyCharacterBase::SetFacialMaterialEffect(bool NewState)
 {
-	if (CurrentDynamicMaterial == nullptr) return;
-
-	CurrentDynamicMaterial->SetScalarParameterValue(FName("EyeBrightness"), NewState ? 5.0f : 35.0f);
-	CurrentDynamicMaterial->SetVectorParameterValue(FName("EyeColor"), NewState ? FColor::Red : FColor::Yellow);
-	InitDynamicMeshMaterial(CurrentDynamicMaterial);
+	//if (CurrentDynamicMaterialList.IsEmpty()) return;
+	//HardCoding
+	//CurrentDynamicMaterialList[0]->SetScalarParameterValue(FName("EyeBrightness"), NewState ? 5.0f : 35.0f);
+	//CurrentDynamicMaterialList[0]->SetVectorParameterValue(FName("EyeColor"), NewState ? FColor::Red : FColor::Yellow);
+	//InitDynamicMaterialList(DynamicMaterialList);
 }
 
 void AEnemyCharacterBase::Turn(float Angle)
@@ -297,8 +296,8 @@ void AEnemyCharacterBase::Turn(float Angle)
 
 float AEnemyCharacterBase::PlayPreChaseAnimation()
 {
-	if (AssetInfo.AnimationAsset.PointMontageList.Num() <= 0) return 0.0f;
-	if (!AssetInfo.AnimationAsset.PointMontageList[0].IsValid()) return 0.0f;
+	if (AssetInfo.AnimationAsset.PointMontageList.Num() <= 0
+		&& AssetInfo.AnimationAsset.PointMontageList[0].IsValid()) return 0.0f;
 	return PlayAnimMontage(AssetInfo.AnimationAsset.PointMontageList[0].Get());
 }
 
@@ -316,4 +315,14 @@ void AEnemyCharacterBase::ClearAllTimerHandle()
 	TurnTimeOutTimerHandle.Invalidate();
 	HitTimeOutTimerHandle.Invalidate();
 	DamageAIDelayTimer.Invalidate();
+}
+
+bool AEnemyCharacterBase::PickWeapon(int32 NewWeaponID)
+{
+	return Super::PickWeapon(NewWeaponID);
+}
+
+void AEnemyCharacterBase::SwitchToNextWeapon()
+{
+	return Super::SwitchToNextWeapon();
 }

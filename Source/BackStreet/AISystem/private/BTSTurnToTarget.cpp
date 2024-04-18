@@ -42,7 +42,11 @@ void UBTSTurnToTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 	if (!OwnerCharacterRef.IsValid()) return;
 
 	BlackboardRef = OwnerComp.GetBlackboardComponent();
-	OwnerCharacterRef->SetActorRotation(GetTurnRotation(OwnerCharacterRef.Get()));
+	if (OwnerCharacterRef.Get()->GetIsActionActive(ECharacterActionType::E_Idle)
+		|| OwnerCharacterRef.Get()->GetIsActionActive(ECharacterActionType::E_Skill))
+	{
+		OwnerCharacterRef->SetActorRotation(GetTurnRotation(OwnerCharacterRef.Get()));
+	}
 }
 
 FRotator UBTSTurnToTarget::GetTurnRotation(APawn* ControlledPawn)

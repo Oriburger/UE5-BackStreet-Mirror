@@ -5,7 +5,6 @@
 #include "Sound/SoundCue.h"
 #include "NiagaraSystem.h"
 #include "../../Item/public/ItemInfoStruct.h"
-#include "../../SkillSystem/public/SkillInfoStruct.h" 
 #include "../../StageSystem/public/StageInfoStruct.h"
 #include "CharacterInfoStruct.generated.h"
 
@@ -298,13 +297,4 @@ struct FEnemyStatStruct : public FTableRowBase
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
 		float DefaultAttackSpeed;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<int32> EnemySkillList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<float> EnemySkillIntervalList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintreadOnly)
-		FSkillSetInfo SkillSetInfo;
 };

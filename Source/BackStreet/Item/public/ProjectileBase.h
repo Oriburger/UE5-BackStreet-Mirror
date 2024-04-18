@@ -75,6 +75,9 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
 		struct FProjectileStatStruct ProjectileStat;
 
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
+		struct FProjectileStateStruct ProjectileState;
+
 //------ 기본 함수  ------------------
 public:
 	UFUNCTION()
@@ -107,6 +110,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void SetOwnerCharacter(class ACharacterBase* NewOwnerCharacterRef);
+
+	UFUNCTION(BlueprintCallable)
+		void SetCauserSelfAttackValidity(bool bCanAttackCauser) {ProjectileState.bCanAttackCauser = bCanAttackCauser;}
 
 //------ private 프로퍼티 ------------------
 private: 

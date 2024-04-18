@@ -16,13 +16,14 @@ enum class ESoundAssetType : uint8
 	E_Skill					UMETA(DisplayName = "Skill"),
 };
 
+
 USTRUCT(BlueprintType)
 struct FAnimAssetInfoStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
 
-		// Animation 관련
+	// Animation 관련
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		UAnimBlueprintGeneratedClass* AnimBlueprint;
 
@@ -49,9 +50,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> KnockdownAnimMontageList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TMap<int32, FSkillAnimMontageStruct> SkillAnimMontageMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> RollAnimMontageList;
@@ -105,7 +103,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		int32 TargetID;
-
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FName SoundTarget;
 
@@ -115,7 +113,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FName SoundAssetDescription;
 };
-
 
 USTRUCT(BlueprintType)
 struct FCharacterAssetInfoStruct : public FTableRowBase
@@ -155,6 +152,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
 		FVector InitialCapsuleComponentScale;
 
+	//CharacterSkillList
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		TMap<int32, FOwnerSkillInfoStruct> CharacterSkillInfoMap;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		FAnimAssetInfoStruct AnimationAsset;
 
@@ -164,12 +165,8 @@ public:
 
 	// Material
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
-		TSoftObjectPtr<UMaterialInterface> NormalMaterial;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
-		TSoftObjectPtr<UMaterialInterface> WallThroughMaterial;
+		TArray<TSoftObjectPtr<UMaterialInterface>> DynamicMaterialList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
 		TArray<TSoftObjectPtr<UTexture>> EmotionTextureList;
-
 };
