@@ -294,7 +294,7 @@ void AEnemyCharacterBase::Turn(float Angle)
 float AEnemyCharacterBase::PlayPreChaseAnimation()
 {
 	if (AssetInfo.AnimationAsset.PointMontageList.Num() <= 0
-		&& AssetInfo.AnimationAsset.PointMontageList[0].IsValid()) return 0.0f;
+		|| !AssetInfo.AnimationAsset.PointMontageList[0].IsValid()) return 0.0f;
 	return PlayAnimMontage(AssetInfo.AnimationAsset.PointMontageList[0].Get());
 }
 
