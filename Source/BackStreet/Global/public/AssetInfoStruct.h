@@ -132,10 +132,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
 		TSoftObjectPtr<USkeletalMesh> CharacterMesh;
 
-	//Character's Mesh Materials
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
-		TArray<TSoftObjectPtr<UMaterialInstanceConstant> > CharacterMeshMaterialList;
-
 	//메시의 초기 위치 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
 		FVector InitialLocation;

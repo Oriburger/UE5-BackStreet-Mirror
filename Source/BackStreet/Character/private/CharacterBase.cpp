@@ -165,7 +165,7 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 
 float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	if (!IsValid(DamageCauser)) return 0.0f; 
+	if (!IsValid(DamageCauser) || CharacterStat.bIsInvincibility) return 0.0f; 
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
 
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -413,19 +413,12 @@ void ACharacterBase::InitAsset(int32 NewCharacterID)
 	AssetInfo = GetAssetInfoWithID(NewCharacterID);
 	//SetCharacterAnimAssetInfoData(CharacterID);
 
-	if (!AssetInfo.CharacterMesh.IsNull() && AssetInfo.CharacterMeshMaterialList.Num() != 0)
+	if (!AssetInfo.CharacterMesh.IsNull())
 	{
 		TArray<FSoftObjectPath> AssetToStream;
 
 		// Mesh 관련
 		AssetToStream.AddUnique(AssetInfo.CharacterMesh.ToSoftObjectPath());
-		for (int32 idx = 0; idx < AssetInfo.CharacterMeshMaterialList.Num(); idx++)
-		{
-			if (AssetInfo.CharacterMeshMaterialList.IsValidIndex(idx))
-			{
-				AssetToStream.AddUnique(AssetInfo.CharacterMeshMaterialList[idx].ToSoftObjectPath());
-			}
-		}
 			
 		// Animation 관련
 		//AssetToStream.AddUnique(AssetInfo.AnimBlueprint.ToSoftObjectPath());
@@ -538,7 +531,6 @@ void ACharacterBase::InitAsset(int32 NewCharacterID)
 void ACharacterBase::SetAsset()
 {
 	if (AssetInfo.CharacterMesh.IsNull() || !IsValid(AssetInfo.CharacterMesh.Get())) return;
-	if (AssetInfo.CharacterMeshMaterialList.Num() == 0) return;
 	//if (AssetInfo.AnimBlueprint.IsNull() || !IsValid(AssetInfo.AnimBlueprint.Get())) return;
 
 	GetCapsuleComponent()->SetWorldRotation(FRotator::ZeroRotator);
@@ -548,8 +540,6 @@ void ACharacterBase::SetAsset()
 	GetMesh()->SetRelativeLocation(AssetInfo.InitialLocation);
 	GetMesh()->SetWorldRotation(FRotator(0.0f, -90.0f, 0.0f));
 	GetMesh()->SetRelativeScale3D(FVector(1.0f));
-
-	const int32 meshMatCount = AssetInfo.CharacterMeshMaterialList.Num();
 	
 	GetMesh()->OverrideMaterials.Empty();
 	
