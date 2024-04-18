@@ -694,24 +694,24 @@ void AMainCharacterBase::DeactivateBuffEffect()
 
 void AMainCharacterBase::SetFacialDamageEffect()
 {
-	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterialList[1];
+	/*UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterialList[1];
 	
 	if (currMaterial != nullptr && EmotionTextureList.Num() >= 3)
 	{
 		currMaterial->SetTextureParameterValue(FName("BaseTexture"), EmotionTextureList[(uint8)(EEmotionType::E_Angry)]);
 		currMaterial->SetScalarParameterValue(FName("bIsDamaged"), true);
-	}
+	}*/
 }
 
 void AMainCharacterBase::ResetFacialDamageEffect()
 {
-	UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterialList[1];
+	/*UMaterialInstanceDynamic* currMaterial = CurrentDynamicMaterialList[1];
 
 	if (currMaterial != nullptr && EmotionTextureList.Num() >= 3)
 	{
 		currMaterial->SetTextureParameterValue(FName("BaseTexture"), EmotionTextureList[(uint8)(EEmotionType::E_Idle)]);
 		currMaterial->SetScalarParameterValue(FName("bIsDamaged"), false);
-	}
+	}*/
 }
 
 void AMainCharacterBase::ClearAllTimerHandle()

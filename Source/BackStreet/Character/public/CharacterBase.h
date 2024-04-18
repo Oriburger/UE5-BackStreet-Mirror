@@ -233,17 +233,7 @@ protected:
 		TArray<class UNiagaraSystem*> DebuffNiagaraEffectList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
-		TArray<class UMaterialInterface*> DynamicMaterialList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
 		TArray<class UTexture*> EmotionTextureList;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Gameplay|Material")
-		TArray<class UMaterialInstanceDynamic*> CurrentDynamicMaterialList;
-
-protected:
-	UFUNCTION()
-		void InitDynamicMaterialList(TArray<UMaterialInterface*> NewMaterialList);
 
 // ------ 그 외 캐릭터 프로퍼티  ---------------
 protected:

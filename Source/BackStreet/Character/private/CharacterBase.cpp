@@ -531,7 +531,6 @@ void ACharacterBase::InitAsset(int32 NewCharacterID)
 
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &ACharacterBase::SetAsset));
-
 	}
 }
 
@@ -551,17 +550,10 @@ void ACharacterBase::SetAsset()
 	GetMesh()->SetRelativeScale3D(FVector(1.0f));
 
 	const int32 meshMatCount = AssetInfo.CharacterMeshMaterialList.Num();
-	for (int matIdx = 0; matIdx < GetMesh()->GetMaterials().Num(); matIdx++)
-	{
-		UMaterialInterface* targetMat = AssetInfo.CharacterMeshMaterialList[matIdx % meshMatCount].Get();
-		GetMesh()->SetMaterial(matIdx, targetMat);
-	}
-	InitMaterialAsset();
-	InitDynamicMaterialList(DynamicMaterialList);
-	for (int8 matIdx = 0; matIdx < CurrentDynamicMaterialList.Num(); matIdx++)
-	{
-		GetMesh()->SetMaterial(matIdx, CurrentDynamicMaterialList[matIdx]);
-	}
+	
+	GetMesh()->OverrideMaterials.Empty();
+	
+	InitMaterialAsset();	
 
 	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimationAsset.AnimBlueprint);
 	InitAnimAsset();
@@ -579,7 +571,7 @@ void ACharacterBase::InitVFXAsset()
 {
 	if (!AssetInfo.DebuffNiagaraEffectList.IsEmpty())
 	{
-		for (TSoftObjectPtr<UNiagaraSystem> vfx : AssetInfo.DebuffNiagaraEffectList)
+		for (TSoftObjectPtr<UNiagaraSystem>& vfx : AssetInfo.DebuffNiagaraEffectList)
 		{
 			if (vfx.IsValid())
 				DebuffNiagaraEffectList.AddUnique(vfx.Get());
@@ -598,12 +590,11 @@ void ACharacterBase::InitSoundAsset()
 
 void ACharacterBase::InitMaterialAsset()
 {
-	if (!AssetInfo.DynamicMaterialList.IsEmpty())
+	for (int8 matIdx = 0; matIdx < AssetInfo.DynamicMaterialList.Num(); matIdx++)
 	{
-		for (TSoftObjectPtr<UMaterialInterface>material : AssetInfo.DynamicMaterialList)
+		if (AssetInfo.DynamicMaterialList[matIdx].IsValid())
 		{
-			if (material.IsValid())
-				DynamicMaterialList.AddUnique(material.Get());
+			GetMesh()->SetMaterial(matIdx, GetMesh()->CreateDynamicMaterialInstance(matIdx, AssetInfo.DynamicMaterialList[matIdx].Get()));
 		}
 	}
 	/*
@@ -630,16 +621,6 @@ FCharacterAssetInfoStruct ACharacterBase::GetAssetInfoWithID(const int32 TargetC
 		if (newInfo != nullptr) return *newInfo;
 	}
 	return FCharacterAssetInfoStruct();
-}
-
-void ACharacterBase::InitDynamicMaterialList(TArray<UMaterialInterface*> NewMaterialList)
-{
-	if (NewMaterialList.IsEmpty()) return;
-
-	for (int8 matIdx = 0; matIdx < NewMaterialList.Num(); matIdx ++)
-	{
-		CurrentDynamicMaterialList.Add(GetMesh()->CreateDynamicMaterialInstance(matIdx, NewMaterialList[matIdx]));
-	}
 }
 
 float ACharacterBase::GetTotalStatValue(float& DefaultValue, FStatInfoStruct& AbilityInfo, FStatInfoStruct& SkillInfo, FStatInfoStruct& DebuffInfo)
