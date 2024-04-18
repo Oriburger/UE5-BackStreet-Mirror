@@ -229,16 +229,6 @@ public:
 		TArray<USoundCue*> FootStepSoundList;
 
 protected:
-	//애니메이션, VFX, 사운드큐 등 저장
-	UPROPERTY()
-		struct FCharacterAnimAssetInfoStruct AnimAssetData;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Animation")
-		class UAnimMontage* PreChaseAnimMontage;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Animation")
-		class UAnimMontage* InvestigateAnimation;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		TArray<class UNiagaraSystem*> DebuffNiagaraEffectList;
 

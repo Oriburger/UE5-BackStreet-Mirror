@@ -173,104 +173,6 @@ public:
 		float CharacterCurrSkillGauge;
 };
 
-USTRUCT(BlueprintType)
-struct FCharacterAssetInfoStruct : public FTableRowBase
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	//적 ID
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		int32 CharacterID;
-
-	//적 이름
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		FName CharacterName;
-
-	//스폰할 적 스켈레탈 메시 정보 저장
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
-		TSoftObjectPtr<USkeletalMesh> CharacterMesh;
-
-	//Character's Mesh Materials
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
-		TArray<TSoftObjectPtr<UMaterialInstanceConstant> > CharacterMeshMaterialList;
-
-	//메시의 초기 위치 정보
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
-		FVector InitialLocation;
-
-	//메시의 초기 회전 정보
-	//현재 미사용, -90도로 고정
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
-		FRotator InitialRotation;
-
-	//메시의 초기 크기 정보
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
-		FVector InitialScale;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
-		FVector InitialCapsuleComponentScale;
-
-	//Skill
-	//CharacterSkillList
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		TMap<int32, FOwnerSkillInfoStruct> CharacterSkillInfoMap;
-
-	// Animation 관련
-	
-	//스폰할 적 스켈레탈 메시 정보 저장
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		UAnimBlueprintGeneratedClass* AnimBlueprint;
-	
-	//근접 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> MeleeAttackAnimMontageList;
-
-	//사격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> ShootAnimMontageList;
-
-	//투척 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> ThrowAnimMontageList;
-
-	//재장전 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> ReloadAnimMontageList;
-
-	//타격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> HitAnimMontageList;
-
-	//구르기 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> RollAnimMontageList;
-
-	//상호작용 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> InvestigateAnimMontageList;
-
-	//사망 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> DieAnimMontageList;
-
-	//조우 애니메이션 / List로 관리 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> PointMontageList;
-
-	// VFX
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
-		TArray<TSoftObjectPtr<UNiagaraSystem>> DebuffNiagaraEffectList;
-
-	// Material
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
-		TArray<TSoftObjectPtr<UMaterialInterface>> DynamicMaterialList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
-		TArray<TSoftObjectPtr<UTexture>> EmotionTextureList;
-};
-
-
 //===============================================
 //====== Enemy CharacterInfo  ==========================
 //===============================================
@@ -323,10 +225,4 @@ struct FEnemyStatStruct : public FTableRowBase
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
 		float DefaultAttackSpeed;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<int32> EnemySkillList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<float> EnemySkillIntervalList;
 };
