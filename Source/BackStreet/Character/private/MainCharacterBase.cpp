@@ -317,10 +317,10 @@ void AMainCharacterBase::Roll()
 
 	//애니메이션 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Roll;
-	if (AssetInfo.AnimationAsset.RollAnimMontageList.Num() > 0
-		&& AssetInfo.AnimationAsset.RollAnimMontageList[0].IsValid())
+	if (AssetHardPtrInfo.AnimAssetHardPtrInfo.RollAnimMontageList.Num() > 0
+		&& IsValid(AssetHardPtrInfo.AnimAssetHardPtrInfo.RollAnimMontageList[0]))
 	{
-		PlayAnimMontage(AssetInfo.AnimationAsset.RollAnimMontageList[0].Get(), FMath::Max(1.0f, CharacterStat.DefaultMoveSpeed / 500.0f));
+		PlayAnimMontage(AssetHardPtrInfo.AnimAssetHardPtrInfo.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.DefaultMoveSpeed / 500.0f));
 	}
 
 	if (OnRoll.IsBound())
@@ -353,10 +353,10 @@ void AMainCharacterBase::TryInvestigate()
 
 	if (nearActorList.Num())
 	{
-		if (AssetInfo.AnimationAsset.InvestigateAnimMontageList.Num() > 0
-			&& AssetInfo.AnimationAsset.InvestigateAnimMontageList[0].IsValid())
+		if (AssetHardPtrInfo.AnimAssetHardPtrInfo.InvestigateAnimMontageList.Num() > 0
+			&& IsValid(AssetHardPtrInfo.AnimAssetHardPtrInfo.InvestigateAnimMontageList[0]))
 		{
-			PlayAnimMontage(AssetInfo.AnimationAsset.InvestigateAnimMontageList[0].Get());
+			PlayAnimMontage(AssetHardPtrInfo.AnimAssetHardPtrInfo.InvestigateAnimMontageList[0]);
 		}
 		Investigate(nearActorList[0]);
 		ResetActionState();
@@ -681,13 +681,13 @@ bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
 
 void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)
 {
-	TArray<UNiagaraSystem*>* targetEmitterList = &DebuffNiagaraEffectList;
+	TArray<UNiagaraSystem*>& targetEmitterList = AssetHardPtrInfo.DebuffNiagaraEffectList;
 
-	if (targetEmitterList->IsValidIndex(DebuffType) && (*targetEmitterList)[DebuffType] != nullptr)
+	if (targetEmitterList.IsValidIndex(DebuffType) && targetEmitterList[DebuffType] != nullptr)
 	{
 		BuffNiagaraEmitter->SetRelativeLocation(FVector(0.0f, 0.0f, 125.0f));
 		BuffNiagaraEmitter->Deactivate();
-		BuffNiagaraEmitter->SetAsset((*targetEmitterList)[DebuffType], false);
+		BuffNiagaraEmitter->SetAsset((targetEmitterList)[DebuffType], false);
 		BuffNiagaraEmitter->Activate();
 	}
 }
