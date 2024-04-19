@@ -23,42 +23,7 @@ struct FAnimAssetSoftInfo : public FTableRowBase
 public:
 	GENERATED_USTRUCT_BODY()
 
-	// Animation ฐüทร
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> MeleeAttackAnimMontageSoftPtrList;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TSoftObjectPtr<UAnimMontage> UpperAttackAnimMontageSoftPtr;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> AirAttackAnimMontageSoftPtrList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> ShootAnimMontageSoftPtrList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> ThrowAnimMontageSoftPtrList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> ReloadAnimMontageSoftPtrList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> HitAnimMontageSoftPtrList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> KnockdownAnimMontageSoftPtrList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> RollAnimMontageSoftPtrList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> InvestigateAnimMontageSoftPtrList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> DieAnimMontageSoftPtrList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> PointMontageSoftPtrList;
 };
 
 USTRUCT(BlueprintType)
@@ -117,6 +82,7 @@ struct FCharacterAssetSoftInfo : public FTableRowBase
 public:
 	GENERATED_USTRUCT_BODY()
 
+//--------------- Common ------------------------------------
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
 		int32 CharacterID;
 
@@ -145,9 +111,44 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		UAnimBlueprintGeneratedClass* AnimBlueprint;
 
+//--------------- Animation  ------------------------------------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		FAnimAssetSoftInfo AnimAssetSoftPtrInfo;
+		TArray<TSoftObjectPtr<UAnimMontage>> MeleeAttackAnimMontageSoftPtrList;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TSoftObjectPtr<UAnimMontage> UpperAttackAnimMontageSoftPtr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> AirAttackAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> ShootAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> ThrowAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> ReloadAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> HitAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> KnockdownAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> RollAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> InvestigateAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> DieAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> PointMontageSoftPtrList;
+
+//--------------- etc ------------------------------------
 	// VFX
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TArray<TSoftObjectPtr<UNiagaraSystem>> DebuffNiagaraEffectSoftPtrList;
@@ -166,6 +167,28 @@ struct FAnimAssetHardPtrInfo
 public:
 	GENERATED_USTRUCT_BODY()
 
+};
+
+USTRUCT(BlueprintType)
+struct FCharacterAssetHardInfo
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+//------- Common --------------------------
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
+		USkeletalMesh* CharacterMesh;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TArray<UNiagaraSystem*> DebuffNiagaraEffectList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
+		TArray<UMaterialInterface*> DynamicMaterialList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
+		TArray<UTexture*> EmotionTextureList;
+
+//------- Animation --------------------------
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
 		TArray<UAnimMontage*> MeleeAttackAnimMontageList;
 
@@ -201,27 +224,4 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
 		TArray<UAnimMontage*> PointMontageList;
-};
-
-USTRUCT(BlueprintType)
-struct FCharacterAssetHardInfo
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	//Character Skeletal Mesh
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
-		USkeletalMesh* CharacterMesh;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
-		TArray<UNiagaraSystem*> DebuffNiagaraEffectList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
-		TArray<UMaterialInterface*> DynamicMaterialList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
-		TArray<UTexture*> EmotionTextureList;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
-		FAnimAssetHardPtrInfo AnimAssetHardPtrInfo;
 };
