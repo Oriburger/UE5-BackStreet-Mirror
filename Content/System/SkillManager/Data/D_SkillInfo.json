@@ -523,6 +523,11 @@
 				{
 					"AnimMontage": "/Script/Engine.AnimMontage'/Game/System/SkillManager/Animation/MainCharacter/AM_Teleport.AM_Teleport'",
 					"AnimPlayRate": 1
+				},
+				"Teleport_Boss":
+				{
+					"AnimMontage": "/Script/Engine.AnimMontage'/Game/System/SkillManager/Animation/EnemyCharacter/AM_Teleport_Boss.AM_Teleport_Boss'",
+					"AnimPlayRate": 1
 				}
 			},
 			"MaterialInfoMap":
