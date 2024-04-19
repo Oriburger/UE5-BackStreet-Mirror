@@ -180,12 +180,12 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
 		Die();
 	}
-	else if (AssetSoftPtrInfo.AnimAssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num() > 0 && this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
+	else if (this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
 	{
-		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AssetSoftPtrInfo.AnimAssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num() - 1);
-		if (IsValid(AssetHardPtrInfo.AnimAssetHardPtrInfo.HitAnimMontageList[randomIdx]))
+		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num() - 1);
+		if (AssetHardPtrInfo.HitAnimMontageList.Num() > 0 && IsValid(AssetHardPtrInfo.HitAnimMontageList[randomIdx]))
 		{
-			PlayAnimMontage(AssetHardPtrInfo.AnimAssetHardPtrInfo.HitAnimMontageList[randomIdx]);
+			PlayAnimMontage(AssetHardPtrInfo.HitAnimMontageList[randomIdx]);
 		}
 	}
 	return DamageAmount;
@@ -258,10 +258,10 @@ void ACharacterBase::Die()
 
 	OnCharacterDied.Broadcast();
 
-	if (AssetHardPtrInfo.AnimAssetHardPtrInfo.DieAnimMontageList.Num() > 0
-		&& IsValid(AssetHardPtrInfo.AnimAssetHardPtrInfo.DieAnimMontageList[0]))
+	if (AssetHardPtrInfo.DieAnimMontageList.Num() > 0
+		&& IsValid(AssetHardPtrInfo.DieAnimMontageList[0]))
 	{
-		PlayAnimMontage(AssetHardPtrInfo.AnimAssetHardPtrInfo.DieAnimMontageList[0]);
+		PlayAnimMontage(AssetHardPtrInfo.DieAnimMontageList[0]);
 	}
 	else
 	{
@@ -285,25 +285,25 @@ void ACharacterBase::TryAttack()
 	switch (GetCurrentWeaponRef()->GetWeaponStat().WeaponType)
 	{
 	case EWeaponType::E_Melee:
-		if (AssetHardPtrInfo.AnimAssetHardPtrInfo.MeleeAttackAnimMontageList.Num() > 0)
+		if (AssetHardPtrInfo.MeleeAttackAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.AnimAssetHardPtrInfo.MeleeAttackAnimMontageList.Num();
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.MeleeAttackAnimMontageList.Num();
 		}
-		targetAnimList = AssetHardPtrInfo.AnimAssetHardPtrInfo.MeleeAttackAnimMontageList;
+		targetAnimList = AssetHardPtrInfo.MeleeAttackAnimMontageList;
 		break;
 	case EWeaponType::E_Shoot:
-		if (AssetHardPtrInfo.AnimAssetHardPtrInfo.ShootAnimMontageList.Num() > 0)
+		if (AssetHardPtrInfo.ShootAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.AnimAssetHardPtrInfo.ShootAnimMontageList.Num();
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.ShootAnimMontageList.Num();
 		}
-		targetAnimList = AssetHardPtrInfo.AnimAssetHardPtrInfo.ShootAnimMontageList;
+		targetAnimList = AssetHardPtrInfo.ShootAnimMontageList;
 		break;
 	case EWeaponType::E_Throw:
-		if (AssetHardPtrInfo.AnimAssetHardPtrInfo.ThrowAnimMontageList.Num() > 0)
+		if (AssetHardPtrInfo.ThrowAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.AnimAssetHardPtrInfo.ThrowAnimMontageList.Num();
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.ThrowAnimMontageList.Num();
 		}
-		targetAnimList = AssetHardPtrInfo.AnimAssetHardPtrInfo.ThrowAnimMontageList;
+		targetAnimList = AssetHardPtrInfo.ThrowAnimMontageList;
 		break;
 	}
 	if (targetAnimList.Num() > 0
@@ -389,10 +389,10 @@ void ACharacterBase::TryReload()
 	if (!Cast<ARangedWeaponBase>(GetCurrentWeaponRef())->GetCanReload()) return;
 
 	float reloadTime = GetCurrentWeaponRef()->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
-	if (AssetHardPtrInfo.AnimAssetHardPtrInfo.ReloadAnimMontageList.Num() > 0 
-		&& IsValid(AssetHardPtrInfo.AnimAssetHardPtrInfo.ReloadAnimMontageList[0]))
+	if (AssetHardPtrInfo.ReloadAnimMontageList.Num() > 0 
+		&& IsValid(AssetHardPtrInfo.ReloadAnimMontageList[0]))
 	{
-		UAnimMontage* reloadAnim = AssetHardPtrInfo.AnimAssetHardPtrInfo.ReloadAnimMontageList[0];
+		UAnimMontage* reloadAnim = AssetHardPtrInfo.ReloadAnimMontageList[0];
 		if (IsValid(reloadAnim))
 			PlayAnimMontage(reloadAnim);
 	}
@@ -422,75 +422,75 @@ void ACharacterBase::InitAsset(int32 NewCharacterID)
 		// Animation 관련
 		//AssetToStream.AddUnique(AssetSoftPtrInfo.AnimBlueprint.ToSoftObjectPath());
 
-		if (!AssetSoftPtrInfo.AnimAssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList.IsEmpty())
+		if (!AssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetSoftPtrInfo.AnimAssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetSoftPtrInfo.AnimAssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetSoftPtrInfo.AnimAssetSoftPtrInfo.ShootAnimMontageSoftPtrList.IsEmpty())
+		if (!AssetSoftPtrInfo.ShootAnimMontageSoftPtrList.IsEmpty())
 		{
-			for(int32 i=0;i< AssetSoftPtrInfo.AnimAssetSoftPtrInfo.ShootAnimMontageSoftPtrList.Num();i++)
+			for(int32 i=0;i< AssetSoftPtrInfo.ShootAnimMontageSoftPtrList.Num();i++)
 			{
-				AssetToStream.AddUnique(AssetSoftPtrInfo.AnimAssetSoftPtrInfo.ShootAnimMontageSoftPtrList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.ShootAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 	
-		if (!AssetSoftPtrInfo.AnimAssetSoftPtrInfo.ThrowAnimMontageSoftPtrList.IsEmpty())
+		if (!AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetSoftPtrInfo.AnimAssetSoftPtrInfo.ThrowAnimMontageSoftPtrList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetSoftPtrInfo.AnimAssetSoftPtrInfo.ThrowAnimMontageSoftPtrList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}	
 		}
 
-		if (!AssetSoftPtrInfo.AnimAssetSoftPtrInfo.ReloadAnimMontageSoftPtrList.IsEmpty())
+		if (!AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetSoftPtrInfo.AnimAssetSoftPtrInfo.ReloadAnimMontageSoftPtrList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetSoftPtrInfo.AnimAssetSoftPtrInfo.ReloadAnimMontageSoftPtrList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetSoftPtrInfo.AnimAssetSoftPtrInfo.HitAnimMontageSoftPtrList.IsEmpty())
+		if (!AssetSoftPtrInfo.HitAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetSoftPtrInfo.AnimAssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetSoftPtrInfo.AnimAssetSoftPtrInfo.HitAnimMontageSoftPtrList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.HitAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetSoftPtrInfo.AnimAssetSoftPtrInfo.RollAnimMontageSoftPtrList.IsEmpty())
+		if (!AssetSoftPtrInfo.RollAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetSoftPtrInfo.AnimAssetSoftPtrInfo.RollAnimMontageSoftPtrList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.RollAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetSoftPtrInfo.AnimAssetSoftPtrInfo.RollAnimMontageSoftPtrList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.RollAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 	
-		if (!AssetSoftPtrInfo.AnimAssetSoftPtrInfo.InvestigateAnimMontageSoftPtrList.IsEmpty())
+		if (!AssetSoftPtrInfo.InvestigateAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetSoftPtrInfo.AnimAssetSoftPtrInfo.InvestigateAnimMontageSoftPtrList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.InvestigateAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetSoftPtrInfo.AnimAssetSoftPtrInfo.InvestigateAnimMontageSoftPtrList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.InvestigateAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetSoftPtrInfo.AnimAssetSoftPtrInfo.DieAnimMontageSoftPtrList.IsEmpty())
+		if (!AssetSoftPtrInfo.DieAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetSoftPtrInfo.AnimAssetSoftPtrInfo.DieAnimMontageSoftPtrList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.DieAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetSoftPtrInfo.AnimAssetSoftPtrInfo.DieAnimMontageSoftPtrList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.DieAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetSoftPtrInfo.AnimAssetSoftPtrInfo.PointMontageSoftPtrList.IsEmpty())
+		if (!AssetSoftPtrInfo.PointMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetSoftPtrInfo.AnimAssetSoftPtrInfo.PointMontageSoftPtrList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.PointMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetSoftPtrInfo.AnimAssetSoftPtrInfo.PointMontageSoftPtrList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.PointMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
@@ -575,91 +575,89 @@ void ACharacterBase::SetAsset()
 
 bool ACharacterBase::InitAnimAsset()
 {
-	FAnimAssetHardPtrInfo newAnimAssetHardPtrInfo;
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AnimAssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList)
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList)
 	{
 		if (animSoftPtr.IsValid())
 		{
-			newAnimAssetHardPtrInfo.MeleeAttackAnimMontageList.AddUnique(animSoftPtr.Get());
+			AssetHardPtrInfo.MeleeAttackAnimMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
 	
-	if (AssetSoftPtrInfo.AnimAssetSoftPtrInfo.UpperAttackAnimMontageSoftPtr.IsValid())
+	if (AssetSoftPtrInfo.UpperAttackAnimMontageSoftPtr.IsValid())
 	{
-		newAnimAssetHardPtrInfo.UpperAttackAnimMontage = AssetSoftPtrInfo.AnimAssetSoftPtrInfo.UpperAttackAnimMontageSoftPtr.Get();
+		AssetHardPtrInfo.UpperAttackAnimMontage = AssetSoftPtrInfo.UpperAttackAnimMontageSoftPtr.Get();
 	}
 	
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AnimAssetSoftPtrInfo.AirAttackAnimMontageSoftPtrList)
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AirAttackAnimMontageSoftPtrList)
 	{
 		if (animSoftPtr.IsValid())
 		{
-			newAnimAssetHardPtrInfo.AirAttackAnimMontageList.AddUnique(animSoftPtr.Get());
+			AssetHardPtrInfo.AirAttackAnimMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AnimAssetSoftPtrInfo.ShootAnimMontageSoftPtrList)
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.ShootAnimMontageSoftPtrList)
 	{
 		if (animSoftPtr.IsValid())
 		{
-			newAnimAssetHardPtrInfo.ShootAnimMontageList.AddUnique(animSoftPtr.Get());
+			AssetHardPtrInfo.ShootAnimMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AnimAssetSoftPtrInfo.ThrowAnimMontageSoftPtrList)
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList)
 	{
 		if (animSoftPtr.IsValid())
 		{
-			newAnimAssetHardPtrInfo.ThrowAnimMontageList.AddUnique(animSoftPtr.Get());
+			AssetHardPtrInfo.ThrowAnimMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AnimAssetSoftPtrInfo.ReloadAnimMontageSoftPtrList)
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList)
 	{
 		if (animSoftPtr.IsValid())
 		{
-			newAnimAssetHardPtrInfo.ReloadAnimMontageList.AddUnique(animSoftPtr.Get());
+			AssetHardPtrInfo.ReloadAnimMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AnimAssetSoftPtrInfo.HitAnimMontageSoftPtrList)
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.HitAnimMontageSoftPtrList)
 	{
 		if (animSoftPtr.IsValid())
 		{
-			newAnimAssetHardPtrInfo.HitAnimMontageList.AddUnique(animSoftPtr.Get());
+			AssetHardPtrInfo.HitAnimMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AnimAssetSoftPtrInfo.KnockdownAnimMontageSoftPtrList)
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.KnockdownAnimMontageSoftPtrList)
 	{
 		if (animSoftPtr.IsValid())
 		{
-			newAnimAssetHardPtrInfo.KnockdownAnimMontageList.AddUnique(animSoftPtr.Get());
+			AssetHardPtrInfo.KnockdownAnimMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AnimAssetSoftPtrInfo.RollAnimMontageSoftPtrList)
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.RollAnimMontageSoftPtrList)
 	{
 		if (animSoftPtr.IsValid())
 		{
-			newAnimAssetHardPtrInfo.RollAnimMontageList.AddUnique(animSoftPtr.Get());
+			AssetHardPtrInfo.RollAnimMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AnimAssetSoftPtrInfo.InvestigateAnimMontageSoftPtrList)
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.InvestigateAnimMontageSoftPtrList)
 	{
 		if (animSoftPtr.IsValid())
 		{
-			newAnimAssetHardPtrInfo.InvestigateAnimMontageList.AddUnique(animSoftPtr.Get());
+			AssetHardPtrInfo.InvestigateAnimMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AnimAssetSoftPtrInfo.DieAnimMontageSoftPtrList)
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.DieAnimMontageSoftPtrList)
 	{
 		if (animSoftPtr.IsValid())
 		{
-			newAnimAssetHardPtrInfo.DieAnimMontageList.AddUnique(animSoftPtr.Get());
+			AssetHardPtrInfo.DieAnimMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AnimAssetSoftPtrInfo.PointMontageSoftPtrList)
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.PointMontageSoftPtrList)
 	{
 		if (animSoftPtr.IsValid())
 		{
-			newAnimAssetHardPtrInfo.PointMontageList.AddUnique(animSoftPtr.Get());
+			AssetHardPtrInfo.PointMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
-	AssetHardPtrInfo.AnimAssetHardPtrInfo = newAnimAssetHardPtrInfo;
 
 	return true;
 }

@@ -317,10 +317,10 @@ void AMainCharacterBase::Roll()
 
 	//애니메이션 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Roll;
-	if (AssetHardPtrInfo.AnimAssetHardPtrInfo.RollAnimMontageList.Num() > 0
-		&& IsValid(AssetHardPtrInfo.AnimAssetHardPtrInfo.RollAnimMontageList[0]))
+	if (AssetHardPtrInfo.RollAnimMontageList.Num() > 0
+		&& IsValid(AssetHardPtrInfo.RollAnimMontageList[0]))
 	{
-		PlayAnimMontage(AssetHardPtrInfo.AnimAssetHardPtrInfo.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.DefaultMoveSpeed / 500.0f));
+		PlayAnimMontage(AssetHardPtrInfo.RollAnimMontageList[0], FMath::Max(1.0f, CharacterStat.DefaultMoveSpeed / 500.0f));
 	}
 
 	if (OnRoll.IsBound())
@@ -353,10 +353,10 @@ void AMainCharacterBase::TryInvestigate()
 
 	if (nearActorList.Num())
 	{
-		if (AssetHardPtrInfo.AnimAssetHardPtrInfo.InvestigateAnimMontageList.Num() > 0
-			&& IsValid(AssetHardPtrInfo.AnimAssetHardPtrInfo.InvestigateAnimMontageList[0]))
+		if (AssetHardPtrInfo.InvestigateAnimMontageList.Num() > 0
+			&& IsValid(AssetHardPtrInfo.InvestigateAnimMontageList[0]))
 		{
-			PlayAnimMontage(AssetHardPtrInfo.AnimAssetHardPtrInfo.InvestigateAnimMontageList[0]);
+			PlayAnimMontage(AssetHardPtrInfo.InvestigateAnimMontageList[0]);
 		}
 		Investigate(nearActorList[0]);
 		ResetActionState();
