@@ -60,7 +60,7 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	// Read from dataTable
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
-	AssetInfo.CharacterID = CharacterID = NewCharacterID;
+	AssetSoftPtrInfo.CharacterID = CharacterID = NewCharacterID;
 	
 
 	if (newStat != nullptr)
@@ -292,9 +292,9 @@ void AEnemyCharacterBase::Turn(float Angle)
 
 float AEnemyCharacterBase::PlayPreChaseAnimation()
 {
-	if (AssetInfo.AnimationAsset.PointMontageList.Num() <= 0
-		|| !AssetInfo.AnimationAsset.PointMontageList[0].IsValid()) return 0.0f;
-	return PlayAnimMontage(AssetInfo.AnimationAsset.PointMontageList[0].Get());
+	if (AssetHardPtrInfo.AnimAssetHardPtrInfo.PointMontageList.Num() <= 0
+		|| !IsValid(AssetHardPtrInfo.AnimAssetHardPtrInfo.PointMontageList[0])) return 0.0f;
+	return PlayAnimMontage(AssetHardPtrInfo.AnimAssetHardPtrInfo.PointMontageList[0]);
 }
 
 void AEnemyCharacterBase::ResetTurnAngle()
