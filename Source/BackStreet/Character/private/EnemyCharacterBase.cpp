@@ -60,7 +60,7 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	// Read from dataTable
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
-	AssetInfo.CharacterID = CharacterID = NewCharacterID;
+	AssetSoftPtrInfo.CharacterID = CharacterID = NewCharacterID;
 	
 
 	if (newStat != nullptr)
@@ -97,12 +97,11 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f) return 0.0f;
+	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterStat.bIsInvincibility) return 0.0f;
 	
 	if (AssetManagerBaseRef.IsValid())
 	{
 		ACharacterBase* damageCauser = Cast<ACharacterBase>(DamageCauser);
-
 		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, damageCauser->GetCurrentWeaponRef()->GetWeaponStat().WeaponID, "HitImpact");
 	}
 	
@@ -296,9 +295,8 @@ void AEnemyCharacterBase::Turn(float Angle)
 
 float AEnemyCharacterBase::PlayPreChaseAnimation()
 {
-	if (AssetInfo.AnimationAsset.PointMontageList.Num() <= 0
-		&& AssetInfo.AnimationAsset.PointMontageList[0].IsValid()) return 0.0f;
-	return PlayAnimMontage(AssetInfo.AnimationAsset.PointMontageList[0].Get());
+	if (AssetHardPtrInfo.PointMontageList.Num() <= 0 || !IsValid(AssetHardPtrInfo.PointMontageList[0])) return 0.0f;
+	return PlayAnimMontage(AssetHardPtrInfo.PointMontageList[0]);
 }
 
 void AEnemyCharacterBase::ResetTurnAngle()

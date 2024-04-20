@@ -54,6 +54,16 @@ ASkillBase* USkillManagerBase::SpawnSkillBase(ACharacterBase* NewCauser, FOwnerS
 		checkf(IsValid(OwnerSkillInfo->SkillBaseClassRef), TEXT("Failed to get SkillBase class"));
 		skillBase = Cast<ASkillBase>(GetWorld()->SpawnActor(OwnerSkillInfo->SkillBaseClassRef));
 		skillBase->InitSkill(*skillInfo);
+		if (SkillBaseMap.Contains(NewCauser))
+		{
+			SkillBaseMap.Find(NewCauser)->SkillBaseList.Add(skillBase);
+		}
+		else
+		{
+			FSkillBaseListContainer skillListContainer;
+			skillListContainer.SkillBaseList.Add(skillBase);
+			SkillBaseMap.Add(NewCauser, skillListContainer);
+		}
 		return skillBase;
 	}
 }

@@ -290,6 +290,9 @@ private:
 	UPROPERTY()
 		class UAbilityManagerBase* AbilityManagerRef;
 
+	UPROPERTY()
+		FVector2D MovementInputValue;
+
 	//플레이어 컨트롤러 약 참조
 	TWeakObjectPtr<class AMainCharacterController> PlayerControllerRef;
 

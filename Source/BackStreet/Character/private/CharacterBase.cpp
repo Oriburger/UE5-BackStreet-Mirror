@@ -52,7 +52,7 @@ void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CharacterID = AssetInfo.CharacterID;
+	CharacterID = AssetSoftPtrInfo.CharacterID;
 	InitCharacterState();
 
 	InventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
@@ -171,10 +171,10 @@ void ACharacterBase::KnockDown()
 	//CharacterState.CharacterActionState = ECharacterActionType::E_KnockedDown;
 
 
-	if (AssetInfo.AnimationAsset.KnockdownAnimMontageList.IsValidIndex(0)
-		&& AssetInfo.AnimationAsset.KnockdownAnimMontageList[0].IsValid())
+	if (AssetHardPtrInfo.KnockdownAnimMontageList.IsValidIndex(0)
+		&& IsValid(AssetHardPtrInfo.KnockdownAnimMontageList[0]))
 	{
-		PlayAnimMontage(AssetInfo.AnimationAsset.KnockdownAnimMontageList[0].Get());
+		PlayAnimMontage(AssetHardPtrInfo.KnockdownAnimMontageList[0]);
 	}
 }
 
@@ -256,7 +256,7 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 
 float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	if (!IsValid(DamageCauser)) return 0.0f; 
+	if (!IsValid(DamageCauser) || CharacterStat.bIsInvincibility) return 0.0f; 
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
 
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -307,12 +307,12 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
 		Die();
 	}
-	else if (AssetInfo.AnimationAsset.HitAnimMontageList.Num() > 0 && this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
+	else if (this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
 	{
-		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AssetInfo.AnimationAsset.HitAnimMontageList.Num() - 1);
-		if (AssetInfo.AnimationAsset.HitAnimMontageList[randomIdx].IsValid())
+		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num() - 1);
+		if (AssetHardPtrInfo.HitAnimMontageList.Num() > 0 && IsValid(AssetHardPtrInfo.HitAnimMontageList[randomIdx]))
 		{
-			PlayAnimMontage(AssetInfo.AnimationAsset.HitAnimMontageList[randomIdx].Get());
+			PlayAnimMontage(AssetHardPtrInfo.HitAnimMontageList[randomIdx]);
 		}
 	}
 	return DamageAmount;
@@ -386,10 +386,10 @@ void ACharacterBase::Die()
 
 	OnCharacterDied.Broadcast();
 
-	if (AssetInfo.AnimationAsset.DieAnimMontageList.Num() > 0
-		&& AssetInfo.AnimationAsset.DieAnimMontageList[0].IsValid())
+	if (AssetHardPtrInfo.DieAnimMontageList.Num() > 0
+		&& IsValid(AssetHardPtrInfo.DieAnimMontageList[0]))
 	{
-		PlayAnimMontage(AssetInfo.AnimationAsset.DieAnimMontageList[0].Get());
+		PlayAnimMontage(AssetHardPtrInfo.DieAnimMontageList[0]);
 	}
 	else
 	{
@@ -414,43 +414,41 @@ void ACharacterBase::TryAttack()
 	const float attackSpeed = FMath::Clamp(CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
 	//Choose animation which fit battle situation
-	TArray<TSoftObjectPtr<UAnimMontage>> targetAnimList;
+	TArray <UAnimMontage *> targetAnimList;
 	switch (GetCurrentWeaponRef()->GetWeaponStat().WeaponType)
 	{
 	case EWeaponType::E_Melee:
 		//check melee anim type
-		if (!AssetInfo.AnimationAsset.AirAttackAnimMontageList.IsEmpty() && GetCharacterMovement()->IsFalling())
+		if (AssetHardPtrInfo.AirAttackAnimMontageList.Num() > 0 && GetCharacterMovement()->IsFalling())
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetInfo.AnimationAsset.AirAttackAnimMontageList.Num();
-			targetAnimList = AssetInfo.AnimationAsset.AirAttackAnimMontageList;
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.AirAttackAnimMontageList.Num();
+			targetAnimList = AssetHardPtrInfo.AirAttackAnimMontageList;
 		}
-		else if (AssetInfo.AnimationAsset.MeleeAttackAnimMontageList.Num() > 0)
+		else if (AssetHardPtrInfo.MeleeAttackAnimMontageList.Num() > 0)
 		{
-			targetAnimList = AssetInfo.AnimationAsset.MeleeAttackAnimMontageList;
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetInfo.AnimationAsset.MeleeAttackAnimMontageList.Num();
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.MeleeAttackAnimMontageList.Num();
 		}
+		targetAnimList = AssetHardPtrInfo.MeleeAttackAnimMontageList;
 		break;
 	case EWeaponType::E_Shoot:
-		if (AssetInfo.AnimationAsset.ShootAnimMontageList.Num() > 0)
+		if (AssetHardPtrInfo.ShootAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetInfo.AnimationAsset.ShootAnimMontageList.Num();
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.ShootAnimMontageList.Num();
 		}
-		targetAnimList = AssetInfo.AnimationAsset.ShootAnimMontageList;
+		targetAnimList = AssetHardPtrInfo.ShootAnimMontageList;
 		break;
 	case EWeaponType::E_Throw:
-		if (AssetInfo.AnimationAsset.ThrowAnimMontageList.Num() > 0)
+		if (AssetHardPtrInfo.ThrowAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetInfo.AnimationAsset.ThrowAnimMontageList.Num();
+			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.ThrowAnimMontageList.Num();
 		}
-		targetAnimList = AssetInfo.AnimationAsset.ThrowAnimMontageList;
+		targetAnimList = AssetHardPtrInfo.ThrowAnimMontageList;
 		break;
 	}
-
-	//Play Animation
 	if (targetAnimList.Num() > 0
-		&& targetAnimList[nextAnimIdx].IsValid())
+		&& IsValid(targetAnimList[nextAnimIdx]))
 	{
-		PlayAnimMontage(targetAnimList[nextAnimIdx].Get(), attackSpeed + 0.25f);
+		PlayAnimMontage(targetAnimList[nextAnimIdx], attackSpeed + 0.25f);
 	}
 }
 
@@ -465,12 +463,12 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 			return;
 		break;
 	case ESkillType::E_Character:
-		if (!AssetInfo.CharacterSkillInfoMap.Contains(SkillID))
+		if (!AssetSoftPtrInfo.CharacterSkillInfoMap.Contains(SkillID))
 		{
 			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Character does't have skill")), FColor::White);
 			return;
 		}
-		if (AssetInfo.CharacterSkillInfoMap.Find(SkillID)->bSkillBlocked)
+		if (AssetSoftPtrInfo.CharacterSkillInfoMap.Find(SkillID)->bSkillBlocked)
 		{
 			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("This skill is blocked")), FColor::White);
 			return;
@@ -478,7 +476,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 		else
 		{
 			CharacterState.bCanAttack = false;
-			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &AssetInfo.CharacterSkillInfoMap[SkillID]);
+			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &AssetSoftPtrInfo.CharacterSkillInfoMap[SkillID]);
 			return;
 		}
 		break;
@@ -530,10 +528,10 @@ void ACharacterBase::TryReload()
 	if (!Cast<ARangedWeaponBase>(GetCurrentWeaponRef())->GetCanReload()) return;
 
 	float reloadTime = GetCurrentWeaponRef()->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
-	if (AssetInfo.AnimationAsset.ReloadAnimMontageList.Num() > 0 
-		&& AssetInfo.AnimationAsset.ReloadAnimMontageList[0].IsValid())
+	if (AssetHardPtrInfo.ReloadAnimMontageList.Num() > 0 
+		&& IsValid(AssetHardPtrInfo.ReloadAnimMontageList[0]))
 	{
-		UAnimMontage* reloadAnim = AssetInfo.AnimationAsset.ReloadAnimMontageList[0].Get();
+		UAnimMontage* reloadAnim = AssetHardPtrInfo.ReloadAnimMontageList[0];
 		if (IsValid(reloadAnim))
 			PlayAnimMontage(reloadAnim);
 	}
@@ -544,139 +542,131 @@ void ACharacterBase::TryReload()
 
 void ACharacterBase::InitAsset(int32 NewCharacterID)
 {
-	AssetInfo = GetAssetInfoWithID(NewCharacterID);
+	AssetSoftPtrInfo = GetAssetSoftInfoWithID(NewCharacterID);
 	//SetCharacterAnimAssetInfoData(CharacterID);
 
-	if (!AssetInfo.CharacterMesh.IsNull() && AssetInfo.CharacterMeshMaterialList.Num() != 0)
+	if (!AssetSoftPtrInfo.CharacterMeshSoftPtr.IsNull())
 	{
 		TArray<FSoftObjectPath> AssetToStream;
 
 		// Mesh 관련
-		AssetToStream.AddUnique(AssetInfo.CharacterMesh.ToSoftObjectPath());
-		for (int32 idx = 0; idx < AssetInfo.CharacterMeshMaterialList.Num(); idx++)
-		{
-			if (AssetInfo.CharacterMeshMaterialList.IsValidIndex(idx))
-			{
-				AssetToStream.AddUnique(AssetInfo.CharacterMeshMaterialList[idx].ToSoftObjectPath());
-			}
-		}
+		AssetToStream.AddUnique(AssetSoftPtrInfo.CharacterMeshSoftPtr.ToSoftObjectPath());
 			
 		// Animation 관련
-		//AssetToStream.AddUnique(AssetInfo.AnimationAsset.AnimBlueprint.ToSoftObjectPath());
+		//AssetToStream.AddUnique(AssetSoftPtrInfo.AnimBlueprint.ToSoftObjectPath());
 
-		if (!AssetInfo.AnimationAsset.MeleeAttackAnimMontageList.IsEmpty())
+		if (!AssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.AnimationAsset.MeleeAttackAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.AnimationAsset.MeleeAttackAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
-		AssetToStream.AddUnique(AssetInfo.AnimationAsset.UpperAttackAminMontage.ToSoftObjectPath());
-		if (!AssetInfo.AnimationAsset.AirAttackAnimMontageList.IsEmpty())
+		AssetToStream.AddUnique(AssetSoftPtrInfo.UpperAttackAnimMontageSoftPtr.ToSoftObjectPath());
+		if (!AssetSoftPtrInfo.AirAttackAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.AnimationAsset.AirAttackAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.AirAttackAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.AnimationAsset.AirAttackAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.AirAttackAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
-
-		if (!AssetInfo.AnimationAsset.ShootAnimMontageList.IsEmpty())
+		if (!AssetSoftPtrInfo.ShootAnimMontageSoftPtrList.IsEmpty())
 		{
-			for(int32 i=0;i< AssetInfo.AnimationAsset.ShootAnimMontageList.Num();i++)
+			for(int32 i=0;i< AssetSoftPtrInfo.ShootAnimMontageSoftPtrList.Num();i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.AnimationAsset.ShootAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.ShootAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 	
-		if (!AssetInfo.AnimationAsset.ThrowAnimMontageList.IsEmpty())
+		if (!AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.AnimationAsset.ThrowAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.AnimationAsset.ThrowAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}	
 		}
 
-		if (!AssetInfo.AnimationAsset.ReloadAnimMontageList.IsEmpty())
+		if (!AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.AnimationAsset.ReloadAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.AnimationAsset.ReloadAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetInfo.AnimationAsset.HitAnimMontageList.IsEmpty())
+		if (!AssetSoftPtrInfo.HitAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.AnimationAsset.HitAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.AnimationAsset.HitAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.HitAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetInfo.AnimationAsset.RollAnimMontageList.IsEmpty())
+		if (!AssetSoftPtrInfo.RollAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.AnimationAsset.RollAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.RollAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.AnimationAsset.RollAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.RollAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 	
-		if (!AssetInfo.AnimationAsset.InvestigateAnimMontageList.IsEmpty())
+		if (!AssetSoftPtrInfo.InvestigateAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.AnimationAsset.InvestigateAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.InvestigateAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.AnimationAsset.InvestigateAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.InvestigateAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetInfo.AnimationAsset.DieAnimMontageList.IsEmpty())
+		if (!AssetSoftPtrInfo.DieAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.AnimationAsset.DieAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.DieAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.AnimationAsset.DieAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.DieAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetInfo.AnimationAsset.PointMontageList.IsEmpty())
+		if (!AssetSoftPtrInfo.PointMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.AnimationAsset.PointMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.PointMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.AnimationAsset.PointMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.PointMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetInfo.AnimationAsset.KnockdownAnimMontageList.IsEmpty())
+		if (!AssetSoftPtrInfo.KnockdownAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.AnimationAsset.KnockdownAnimMontageList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.KnockdownAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.AnimationAsset.KnockdownAnimMontageList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.KnockdownAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
 		// VFX
-		if (!AssetInfo.DebuffNiagaraEffectList.IsEmpty())
+		if (!AssetSoftPtrInfo.DebuffNiagaraEffectSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.DebuffNiagaraEffectList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.DebuffNiagaraEffectSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.DebuffNiagaraEffectList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.DebuffNiagaraEffectSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
 		// material
-		if (!AssetInfo.DynamicMaterialList.IsEmpty())
+		if (!AssetSoftPtrInfo.DynamicMaterialSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.DynamicMaterialList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.DynamicMaterialSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.DynamicMaterialList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.DynamicMaterialSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
-		if (!AssetInfo.EmotionTextureList.IsEmpty())
+		if (!AssetSoftPtrInfo.EmotionTextureSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetInfo.EmotionTextureList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.EmotionTextureSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetInfo.EmotionTextureList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.EmotionTextureSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
@@ -688,25 +678,45 @@ void ACharacterBase::InitAsset(int32 NewCharacterID)
 
 void ACharacterBase::SetAsset()
 {
-	if (AssetInfo.CharacterMesh.IsNull() || !IsValid(AssetInfo.CharacterMesh.Get())) return;
-	if (AssetInfo.CharacterMeshMaterialList.Num() == 0) return;
-	//if (AssetInfo.AnimBlueprint.IsNull() || !IsValid(AssetInfo.AnimBlueprint.Get())) return;
+	//------Asset migrate to hard ref -------------------
+	if (AssetSoftPtrInfo.CharacterMeshSoftPtr.IsNull() || !IsValid(AssetSoftPtrInfo.CharacterMeshSoftPtr.Get())) return;
+	
+	AssetHardPtrInfo.CharacterMesh = AssetSoftPtrInfo.CharacterMeshSoftPtr.Get();
 
+	for (TSoftObjectPtr<UNiagaraSystem>& debuffNiagara : AssetSoftPtrInfo.DebuffNiagaraEffectSoftPtrList)
+	{
+		if (debuffNiagara.IsValid())
+		{
+			AssetHardPtrInfo.DebuffNiagaraEffectList.AddUnique(debuffNiagara.Get());
+		}
+	}
+	for (TSoftObjectPtr<UMaterialInterface>& dynamicMaterial : AssetSoftPtrInfo.DynamicMaterialSoftPtrList)
+	{
+		if (dynamicMaterial.IsValid())
+		{
+			AssetHardPtrInfo.DynamicMaterialList.AddUnique(dynamicMaterial.Get());
+		}
+	}
+	for (TSoftObjectPtr<UTexture>& emotionTexture : AssetSoftPtrInfo.EmotionTextureSoftPtrList)
+	{
+		if (emotionTexture.IsValid())
+		{
+			AssetHardPtrInfo.EmotionTextureList.AddUnique(emotionTexture.Get());
+		}
+	}
+
+	//------Asset Initialize  -------------------
 	GetCapsuleComponent()->SetWorldRotation(FRotator::ZeroRotator);
-	SetActorScale3D(AssetInfo.InitialScale);
+	SetActorScale3D(AssetSoftPtrInfo.InitialScale);
 
-	GetMesh()->SetSkeletalMesh(AssetInfo.CharacterMesh.Get());
-	GetMesh()->SetRelativeLocation(AssetInfo.InitialLocation);
+	GetMesh()->SetSkeletalMesh(AssetSoftPtrInfo.CharacterMeshSoftPtr.Get());
+	GetMesh()->SetRelativeLocation(AssetSoftPtrInfo.InitialLocation);
 	GetMesh()->SetWorldRotation(FRotator(0.0f, -90.0f, 0.0f));
 	GetMesh()->SetRelativeScale3D(FVector(1.0f));
-
-	const int32 meshMatCount = AssetInfo.CharacterMeshMaterialList.Num();
-	
 	GetMesh()->OverrideMaterials.Empty();
-	
-	InitMaterialAsset();	
+	GetMesh()->SetAnimInstanceClass(AssetSoftPtrInfo.AnimBlueprint);
 
-	GetMesh()->SetAnimInstanceClass(AssetInfo.AnimationAsset.AnimBlueprint);
+	InitMaterialAsset();	
 	InitAnimAsset();
 	InitSoundAsset();
 	InitVFXAsset();
@@ -714,18 +724,101 @@ void ACharacterBase::SetAsset()
 
 bool ACharacterBase::InitAnimAsset()
 {
-	//Legacy
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList)
+	{
+		if (animSoftPtr.IsValid())
+		{
+			AssetHardPtrInfo.MeleeAttackAnimMontageList.AddUnique(animSoftPtr.Get());
+		}
+	}
+	
+	if (AssetSoftPtrInfo.UpperAttackAnimMontageSoftPtr.IsValid())
+	{
+		AssetHardPtrInfo.UpperAttackAnimMontage = AssetSoftPtrInfo.UpperAttackAnimMontageSoftPtr.Get();
+	}
+	
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AirAttackAnimMontageSoftPtrList)
+	{
+		if (animSoftPtr.IsValid())
+		{
+			AssetHardPtrInfo.AirAttackAnimMontageList.AddUnique(animSoftPtr.Get());
+		}
+	}
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.ShootAnimMontageSoftPtrList)
+	{
+		if (animSoftPtr.IsValid())
+		{
+			AssetHardPtrInfo.ShootAnimMontageList.AddUnique(animSoftPtr.Get());
+		}
+	}
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList)
+	{
+		if (animSoftPtr.IsValid())
+		{
+			AssetHardPtrInfo.ThrowAnimMontageList.AddUnique(animSoftPtr.Get());
+		}
+	}
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList)
+	{
+		if (animSoftPtr.IsValid())
+		{
+			AssetHardPtrInfo.ReloadAnimMontageList.AddUnique(animSoftPtr.Get());
+		}
+	}
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.HitAnimMontageSoftPtrList)
+	{
+		if (animSoftPtr.IsValid())
+		{
+			AssetHardPtrInfo.HitAnimMontageList.AddUnique(animSoftPtr.Get());
+		}
+	}
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.KnockdownAnimMontageSoftPtrList)
+	{
+		if (animSoftPtr.IsValid())
+		{
+			AssetHardPtrInfo.KnockdownAnimMontageList.AddUnique(animSoftPtr.Get());
+		}
+	}
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.RollAnimMontageSoftPtrList)
+	{
+		if (animSoftPtr.IsValid())
+		{
+			AssetHardPtrInfo.RollAnimMontageList.AddUnique(animSoftPtr.Get());
+		}
+	}
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.InvestigateAnimMontageSoftPtrList)
+	{
+		if (animSoftPtr.IsValid())
+		{
+			AssetHardPtrInfo.InvestigateAnimMontageList.AddUnique(animSoftPtr.Get());
+		}
+	}
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.DieAnimMontageSoftPtrList)
+	{
+		if (animSoftPtr.IsValid())
+		{
+			AssetHardPtrInfo.DieAnimMontageList.AddUnique(animSoftPtr.Get());
+		}
+	}
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.PointMontageSoftPtrList)
+	{
+		if (animSoftPtr.IsValid())
+		{
+			AssetHardPtrInfo.PointMontageList.AddUnique(animSoftPtr.Get());
+		}
+	}
+
 	return true;
 }
 
 void ACharacterBase::InitVFXAsset()
 {
-	if (!AssetInfo.DebuffNiagaraEffectList.IsEmpty())
+	if (!AssetSoftPtrInfo.DebuffNiagaraEffectSoftPtrList.IsEmpty())
 	{
-		for (TSoftObjectPtr<UNiagaraSystem>& vfx : AssetInfo.DebuffNiagaraEffectList)
+		for (TSoftObjectPtr<UNiagaraSystem>& vfx : AssetSoftPtrInfo.DebuffNiagaraEffectSoftPtrList)
 		{
 			if (vfx.IsValid())
-				DebuffNiagaraEffectList.AddUnique(vfx.Get());
+				AssetHardPtrInfo.DebuffNiagaraEffectList.AddUnique(vfx.Get());
 		}
 	}
 }
@@ -741,18 +834,18 @@ void ACharacterBase::InitSoundAsset()
 
 void ACharacterBase::InitMaterialAsset()
 {
-	for (int8 matIdx = 0; matIdx < AssetInfo.DynamicMaterialList.Num(); matIdx++)
+	for (int8 matIdx = 0; matIdx < AssetHardPtrInfo.DynamicMaterialList.Num(); matIdx++)
 	{
-		if (AssetInfo.DynamicMaterialList[matIdx].IsValid())
+		if (IsValid(AssetHardPtrInfo.DynamicMaterialList[matIdx]))
 		{
-			GetMesh()->SetMaterial(matIdx, GetMesh()->CreateDynamicMaterialInstance(matIdx, AssetInfo.DynamicMaterialList[matIdx].Get()));
+			GetMesh()->SetMaterial(matIdx, GetMesh()->CreateDynamicMaterialInstance(matIdx, AssetHardPtrInfo.DynamicMaterialList[matIdx]));
 		}
 	}
 	/*
 
-	if (!AssetInfo.EmotionTextureList.IsEmpty())
+	if (!AssetSoftPtrInfo.EmotionTextureList.IsEmpty())
 	{
-		for (TSoftObjectPtr<UTexture> tex : AssetInfo.EmotionTextureList)
+		for (TSoftObjectPtr<UTexture> tex : AssetSoftPtrInfo.EmotionTextureList)
 		{
 			if (tex.IsValid())
 				EmotionTextureList.AddUnique(tex.Get());
@@ -760,18 +853,18 @@ void ACharacterBase::InitMaterialAsset()
 	}*/
 }
 
-FCharacterAssetInfoStruct ACharacterBase::GetAssetInfoWithID(const int32 TargetCharacterID)
+FCharacterAssetSoftInfo ACharacterBase::GetAssetSoftInfoWithID(const int32 TargetCharacterID)
 {
 	if (AssetDataInfoTable != nullptr)
 	{
-		FCharacterAssetInfoStruct* newInfo = nullptr;
+		FCharacterAssetSoftInfo* newInfo = nullptr;
 		FString rowName = FString::FromInt(TargetCharacterID);
 
-		newInfo = AssetDataInfoTable->FindRow<FCharacterAssetInfoStruct>(FName(rowName), rowName);
+		newInfo = AssetDataInfoTable->FindRow<FCharacterAssetSoftInfo>(FName(rowName), rowName);
 
 		if (newInfo != nullptr) return *newInfo;
 	}
-	return FCharacterAssetInfoStruct();
+	return FCharacterAssetSoftInfo();
 }
 
 float ACharacterBase::GetTotalStatValue(float& DefaultValue, FStatInfoStruct& AbilityInfo, FStatInfoStruct& SkillInfo, FStatInfoStruct& DebuffInfo)

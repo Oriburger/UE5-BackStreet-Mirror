@@ -100,7 +100,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0, UIMax = 2500))
 		int32 CharacterID;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		bool bIsInvincibility = false;
 
 	//무한 내구도 / 무한 탄약 (Enemy 기본 스탯)

@@ -94,7 +94,7 @@ void AWeaponBase::InitWeapon(int32 NewWeaponID)
 
 		for (auto& assetPath : tempStream)
 		{
-			if (!assetPath.IsValid() || assetPath.IsNull()) continue;
+			if (!assetPath.IsValid() || !assetPath.IsValid()) continue;
 			assetToStream.AddUnique(assetPath);
 		}
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();

@@ -252,13 +252,13 @@ FVector AMainCharacterBase::GetThrowDestination()
 void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
-	FVector2D movementVector = Value.Get<FVector2D>();
+	MovementInputValue = Value.Get<FVector2D>();
 	if (Controller != nullptr)
 	{
-		AddMovementInput(FollowingCamera->GetForwardVector(), movementVector.Y);
-		AddMovementInput(FollowingCamera->GetRightVector(), movementVector.X);
+		AddMovementInput(FollowingCamera->GetForwardVector(), MovementInputValue.Y);
+		AddMovementInput(FollowingCamera->GetRightVector(), MovementInputValue.X);
 
-		if (movementVector.Length() > 0 && OnMove.IsBound())
+		if (MovementInputValue.Length() > 0 && OnMove.IsBound())
 		{
 			OnMove.Broadcast();
 		}
@@ -316,22 +316,28 @@ void AMainCharacterBase::TryUpperAttack(const FInputActionValue& Value)
 	if (CharacterState.bIsSprinting) SetFieldOfViewWithInterp(90.0f, 0.75f);
 
 	CharacterState.bIsUpperAttacking = true;
-	if (AssetInfo.AnimationAsset.UpperAttackAminMontage.IsValid())
+	if (IsValid(AssetHardPtrInfo.UpperAttackAnimMontage))
 	{
-		PlayAnimMontage(AssetInfo.AnimationAsset.UpperAttackAminMontage.Get());
+		PlayAnimMontage(AssetHardPtrInfo.UpperAttackAnimMontage);
 	}
 	
 }
 
 void AMainCharacterBase::Roll()
 {	
-	if (!GetIsActionActive(ECharacterActionType::E_Idle)) return;
+	if (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Attack)) return;
+
+	if (GetIsActionActive(ECharacterActionType::E_Attack))
+	{
+		StopAttack(); 
+		ResetActionState();
+	}
 	
 	FVector newDirection(0.0f);
 	FRotator newRotation = GetControlRotation();
 	newRotation.Pitch = newRotation.Roll = 0.0f;
-	newDirection.X = GetInputAxisValue(FName("MoveForward"));
-	newDirection.Y = GetInputAxisValue(FName("MoveRight"));
+	newDirection.X = MovementInputValue.Y;
+	newDirection.Y = MovementInputValue.X;
 
 	//아무런 방향 입력이 없다면? 
 	if (newDirection.Y + newDirection.X == 0)
@@ -363,10 +369,10 @@ void AMainCharacterBase::Roll()
 
 	//애니메이션 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Roll;
-	if (AssetInfo.AnimationAsset.RollAnimMontageList.Num() > 0
-		&& AssetInfo.AnimationAsset.RollAnimMontageList[0].IsValid())
+	if (AssetHardPtrInfo.RollAnimMontageList.Num() > 0
+		&& IsValid(AssetHardPtrInfo.RollAnimMontageList[0]))
 	{
-		PlayAnimMontage(AssetInfo.AnimationAsset.RollAnimMontageList[0].Get(), 1.0f);
+		PlayAnimMontage(AssetHardPtrInfo.RollAnimMontageList[0], 1.0f);
 	}
 
 	if (OnRoll.IsBound())
@@ -399,10 +405,10 @@ void AMainCharacterBase::TryInvestigate()
 
 	if (nearActorList.Num())
 	{
-		if (AssetInfo.AnimationAsset.InvestigateAnimMontageList.Num() > 0
-			&& AssetInfo.AnimationAsset.InvestigateAnimMontageList[0].IsValid())
+		if (AssetHardPtrInfo.InvestigateAnimMontageList.Num() > 0
+			&& IsValid(AssetHardPtrInfo.InvestigateAnimMontageList[0]))
 		{
-			PlayAnimMontage(AssetInfo.AnimationAsset.InvestigateAnimMontageList[0].Get());
+			PlayAnimMontage(AssetHardPtrInfo.InvestigateAnimMontageList[0]);
 		}
 		Investigate(nearActorList[0]);
 		ResetActionState();
@@ -659,6 +665,7 @@ void AMainCharacterBase::SwitchToNextWeapon()
 		CharacterState.CharacterActionState == ECharacterActionType::E_Attack ||
 		CharacterState.CharacterActionState == ECharacterActionType::E_Throw ||
 		CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return;
+	if (!IsValid(GetCurrentWeaponRef())) return;
 
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
 	{
@@ -788,13 +795,13 @@ bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
 
 void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)
 {
-	TArray<UNiagaraSystem*>* targetEmitterList = &DebuffNiagaraEffectList;
+	TArray<UNiagaraSystem*>& targetEmitterList = AssetHardPtrInfo.DebuffNiagaraEffectList;
 
-	if (targetEmitterList->IsValidIndex(DebuffType) && (*targetEmitterList)[DebuffType] != nullptr)
+	if (targetEmitterList.IsValidIndex(DebuffType) && targetEmitterList[DebuffType] != nullptr)
 	{
 		BuffNiagaraEmitter->SetRelativeLocation(FVector(0.0f, 0.0f, 125.0f));
 		BuffNiagaraEmitter->Deactivate();
-		BuffNiagaraEmitter->SetAsset((*targetEmitterList)[DebuffType], false);
+		BuffNiagaraEmitter->SetAsset((targetEmitterList)[DebuffType], false);
 		BuffNiagaraEmitter->Activate();
 	}
 }

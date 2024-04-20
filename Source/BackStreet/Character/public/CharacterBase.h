@@ -240,11 +240,14 @@ protected:
 		void InitMaterialAsset();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FCharacterAssetInfoStruct GetAssetInfoWithID(const int32 TargetCharacterID);
+		FCharacterAssetSoftInfo GetAssetSoftInfoWithID(const int32 TargetCharacterID);
 
 protected:
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
-		FCharacterAssetInfoStruct AssetInfo;
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
+		FCharacterAssetSoftInfo AssetSoftPtrInfo;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
+		FCharacterAssetHardInfo AssetHardPtrInfo;
 
 	//적 데이터 테이블 (에셋 정보 포함)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
@@ -253,13 +256,6 @@ protected:
 public:
 	UPROPERTY(BlueprintReadOnly)
 		TArray<USoundCue*> FootStepSoundList;
-
-protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		TArray<class UNiagaraSystem*> DebuffNiagaraEffectList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
-		TArray<class UTexture*> EmotionTextureList;
 
 // ------ 그 외 캐릭터 프로퍼티  ---------------
 protected:

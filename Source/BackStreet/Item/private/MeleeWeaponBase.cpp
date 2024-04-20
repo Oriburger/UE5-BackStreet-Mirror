@@ -152,7 +152,7 @@ void AMeleeWeaponBase::MeleeAttack()
 	for (auto& target : targetList)
 	{
 		//if target is valid, apply damage
-		if (IsValid(target))
+		if (IsValid(target)&&(!Cast<ACharacterBase>(target)->GetCharacterStat().bIsInvincibility))
 		{
 			FCharacterStateStruct targetState = Cast<ACharacterBase>(target)->GetCharacterState();
 			float totalDamage = CalculateTotalDamage(targetState);
