@@ -134,22 +134,22 @@
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
 		{
-			"bIsGradeValid": true,
+			"bIsGradeValid": false,
 			"CommonVariableMap":
 			{
-				"KnockbackEnergy": 1000
+				"KnockbackStrength": 1000
 			},
 			"RareVariableMap":
 			{
-				"KnockbackEnergy": 1500
+				"KnockbackStrength": 1500
 			},
 			"LegendVariableMap":
 			{
-				"KnockbackEnergy": 2000
+				"KnockbackStrength": 2000
 			},
 			"MythicVariableMap":
 			{
-				"KnockbackEnergy": 10000
+				"KnockbackStrength": 10000
 			},
 			"CommonGaugeReq": 1,
 			"RareGaugeReq": 2,
@@ -161,10 +161,6 @@
 			"IconImage": "None",
 			"EffectMap":
 			{
-				"Knockback":
-				{
-					"Effect": "/Script/Niagara.NiagaraSystem'/Game/Asset/VFX/sA_Megapack_v1/sA_SkillSet_1/Fx/NiagaraSystems/NS_Aoe.NS_Aoe'"
-				}
 			},
 			"AnimInfoMap":
 			{
@@ -427,6 +423,10 @@
 			"IconImage": "None",
 			"EffectMap":
 			{
+				"WeaponTransform":
+				{
+					"Effect": "/Script/Niagara.NiagaraSystem'/Game/System/SkillManager/Particle/NS_WeaponTransform.NS_WeaponTransform'"
+				}
 			},
 			"AnimInfoMap":
 			{
