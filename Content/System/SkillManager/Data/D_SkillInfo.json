@@ -134,7 +134,7 @@
 		"bSkillLifeSpanWithCauser": true,
 		"SkillGradeStruct":
 		{
-			"bIsGradeValid": true,
+			"bIsGradeValid": false,
 			"CommonVariableMap":
 			{
 				"KnockbackEnergy": 1000
@@ -427,6 +427,10 @@
 			"IconImage": "None",
 			"EffectMap":
 			{
+				"WeaponTransform":
+				{
+					"Effect": "/Script/Niagara.NiagaraSystem'/Game/System/SkillManager/Particle/NS_WeaponTransform.NS_WeaponTransform'"
+				}
 			},
 			"AnimInfoMap":
 			{
