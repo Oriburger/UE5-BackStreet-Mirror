@@ -606,6 +606,7 @@ void AMainCharacterBase::SwitchToNextWeapon()
 		CharacterState.CharacterActionState == ECharacterActionType::E_Attack ||
 		CharacterState.CharacterActionState == ECharacterActionType::E_Throw ||
 		CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return;
+	if (!IsValid(GetCurrentWeaponRef())) return;
 
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
 	{
