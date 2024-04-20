@@ -129,7 +129,7 @@ public:
 		uint8 WeaponWeight = 1;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		float WeaponKnockBackEnergy = 500.0f;
+		float WeaponKnockBackStrength = 500.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		float SkillGaugeAug = 0.1;
