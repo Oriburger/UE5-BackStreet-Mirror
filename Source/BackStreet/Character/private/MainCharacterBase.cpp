@@ -531,6 +531,8 @@ void AMainCharacterBase::RotateToCursor()
 
 void AMainCharacterBase::PickSubWeapon(const FInputActionValue& Value)
 {
+	if (!IsValid(GetCurrentWeaponRef())) return;
+
 	FVector typeVector = Value.Get<FVector>();
 	int32 targetIdx = typeVector.X - 1;
 
