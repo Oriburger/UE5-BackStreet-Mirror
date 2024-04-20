@@ -9,8 +9,8 @@
 			"FootStep":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_FootstepA.SC_FootstepA'",
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_FootstepB.SC_FootstepB'"
+					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Footstep_A.SC_Footstep_A'",
+					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Footstep_B.SC_Footstep_B'"
 				],
 				"SoundVolumeList": [ 0.75, 0.75 ]
 			},
