@@ -156,5 +156,5 @@ public:
 
 	//Skill causer character reference
 	UPROPERTY(BlueprintReadWrite)
-		class ACharacterBase* Causer;
+		TWeakObjectPtr<class ACharacterBase> Causer;
 };
