@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
@@ -38,6 +39,11 @@ AProjectileBase::AProjectileBase()
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("PROJECTILE_MOVEMENT"));
 	ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
 	ProjectileMovement->bAutoActivate = false;
+
+	TrailParticle = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TRAIL_PARTICLE"));
+	TrailParticle->SetupAttachment(Mesh);
+	TrailParticle->SetRelativeLocation(FVector(0.0f));
+	TrailParticle->bAutoActivate = false;
 
 	InitialLifeSpan = 10.0f;
 	this->Tags.Add("Projectile");
@@ -79,14 +85,11 @@ void AProjectileBase::InitProjectileAsset()
 	if (ProjectileAssetInfo.HitEffectParticleLegacy.IsValid())
 		HitParticle = ProjectileAssetInfo.HitEffectParticleLegacy.Get();
 
-	if (ProjectileAssetInfo.HitSound.IsValid())
-		HitSound = ProjectileAssetInfo.HitSound.Get();
-
 	if (ProjectileAssetInfo.ExplosionParticle.IsValid())
 		ExplosionParticle = ProjectileAssetInfo.ExplosionParticle.Get();
 
-	if (ProjectileAssetInfo.ExplosionSound.IsValid())
-		ExplosionSound = ProjectileAssetInfo.ExplosionSound.Get();
+	if (ProjectileAssetInfo.TrailParticle.IsValid())
+		TrailParticle->SetAsset(ProjectileAssetInfo.TrailParticle.Get());
 }
 
 void AProjectileBase::DestroyWithEffect(FVector Location)
@@ -94,12 +97,12 @@ void AProjectileBase::DestroyWithEffect(FVector Location)
 	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Hit, Location, 100.0f);
 
 	FTransform targetTransform = { FRotator(), Location, {1.0f, 1.0f, 1.0f} };
-	if (HitSound != nullptr)
+	
+	if (AssetManagerBaseRef.IsValid())
 	{
-		if(!OwnerCharacterRef.Get()) return;
-		const float soundVolume = OwnerCharacterRef.Get()->ActorHasTag("Player") ? 1.0f : 0.2;
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, GetActorLocation(), soundVolume);
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, floor(ProjectileID/10.0)*10, "HitImpact");
 	}
+
 	if (HitParticle != nullptr)
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, targetTransform);
 
@@ -118,6 +121,9 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectil
 	}
 	ProjectileID = NewAssetInfo.ProjectileID;
 	UpdateProjectileStat(NewStatInfo);
+
+	AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
+
 	ProjectileAssetInfo = NewAssetInfo;
 
 	if (!ProjectileStat.bIsBullet)
@@ -127,10 +133,9 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectil
 	{
 		TArray<FSoftObjectPath> tempStream, assetToStream;
 		tempStream.AddUnique(ProjectileAssetInfo.ProjectileMesh.ToSoftObjectPath());
+		tempStream.AddUnique(ProjectileAssetInfo.TrailParticle.ToSoftObjectPath());
 		tempStream.AddUnique(ProjectileAssetInfo.HitEffectParticle.ToSoftObjectPath());
 		tempStream.AddUnique(ProjectileAssetInfo.HitEffectParticleLegacy.ToSoftObjectPath());
-		tempStream.AddUnique(ProjectileAssetInfo.HitSound.ToSoftObjectPath());
-		tempStream.AddUnique(ProjectileAssetInfo.ExplosionSound.ToSoftObjectPath());
 			
 		for (auto& assetPath : tempStream)
 		{
@@ -156,17 +161,17 @@ void AProjectileBase::UpdateProjectileStat(FProjectileStatStruct NewStat)
 void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex
 	, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!ProjectileMovement->IsActive() || (IsValid(GetOwner()) && OtherActor == GetOwner())) return;
+	if (!ProjectileMovement->IsActive()) return;
 	if (!OwnerCharacterRef.IsValid() || !GamemodeRef.IsValid()) return;
 	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Item")) return;
 
 	if (OtherActor->ActorHasTag("Character"))
 	{
-		if (OtherActor == OwnerCharacterRef.Get() || OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
+		//It would be change later
+		if(!ProjectileState.bCanAttackCauser&& (OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1]))) return;
 
 		//디버프가 있다면?
-		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(ProjectileStat.DebuffType, OwnerCharacterRef.Get()
-															, ProjectileStat.DebuffTotalTime, ProjectileStat.DebuffVariable);
+		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(ProjectileStat.DebuffInfo, OwnerCharacterRef.Get());
 
 		//폭발하는 발사체라면?
 		if (ProjectileStat.bIsExplosive)
@@ -176,7 +181,7 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		}
 		else
 		{
-			const float totalDamage = ProjectileStat.ProjectileDamage * OwnerCharacterRef.Get()->GetCharacterStat().CharacterAtkMultiplier;
+			const float totalDamage = Cast<AWeaponBase>(GetOwner())->CalculateTotalDamage(Cast<ACharacterBase>(OtherActor)->GetCharacterState());
 			UGameplayStatics::ApplyDamage(OtherActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
 			DestroyWithEffect(SweepResult.Location);
 		}
@@ -235,11 +240,12 @@ void AProjectileBase::Explode()
 	//--- 이펙트 출력 --------------
 	if (ExplosionParticle != nullptr)
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionParticle, GetActorLocation(), GetActorRotation());
-	if (ExplosionSound != nullptr)
+	
+	if (AssetManagerBaseRef.IsValid())
 	{
-		const float soundVolume = OwnerCharacterRef.Get()->ActorHasTag("Player") ? 1.0f : 0.2f;
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation(), soundVolume);
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, floor(ProjectileID / 10.0) * 10, "Explosion");
 	}
+
 	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 5000.0f); //카메라 셰이크 이벤트
 
 	Destroy();
@@ -255,5 +261,9 @@ void AProjectileBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
 void AProjectileBase::ActivateProjectileMovement()
 {
 	ProjectileMovement->Activate();
+	if (IsValid(TrailParticle))
+	{
+		TrailParticle->bAutoActivate = true;
+	}
 	bIsActivated = true; 
 }

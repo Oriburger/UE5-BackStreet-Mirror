@@ -34,8 +34,8 @@ bool UAbilityManagerBase::TryAddNewAbility(int32 AbilityID)
 	if (ActiveAbilityInfoList.Num() >= MaxAbilityCount) return false;
 	FAbilityInfoStruct newAbilityInfo = GetAbilityInfo(AbilityID);
 	if (newAbilityInfo.bIsRepetitive)
-	{
-		const float variable = newAbilityInfo.Variable.Num() > 0 ? newAbilityInfo.Variable[0] : 1.0f;
+	{	
+		float variable = newAbilityInfo.VariableInfo.Num() > 0 ? newAbilityInfo.VariableInfo[0].Variable : 1.0f;
 		newAbilityInfo.TimerDelegate.BindUFunction(OwnerCharacterRef.Get(), newAbilityInfo.FuncName, variable, true, AbilityID);
 		OwnerCharacterRef.Get()->GetWorldTimerManager().SetTimer(newAbilityInfo.TimerHandle, newAbilityInfo.TimerDelegate, 1.0f, true);
 	}
@@ -86,34 +86,77 @@ bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct Target
 	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
 	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
 
-	for (int statIdx = 0; statIdx < TargetAbilityInfo.TargetStatName.Num(); statIdx++)
+	for (int statIdx = 0; statIdx < TargetAbilityInfo.AbilityTypeList.Num(); statIdx++)
 	{
-		FName targetStatName = TargetAbilityInfo.TargetStatName[statIdx];
-		float targetVariable = TargetAbilityInfo.Variable[FMath::Min(TargetAbilityInfo.Variable.Num() - 1, statIdx)];
-		if (bIsReset) targetVariable = 1/targetVariable; //초기화 시 1보다 낮은 값으로 곱함 1.25 vs 0.25
+		ECharacterAbilityType targetType = TargetAbilityInfo.AbilityTypeList[FMath::Min(TargetAbilityInfo.AbilityTypeList.Num() - 1, statIdx)];
+		FAbilityValueInfoStruct targetVariableInfo = TargetAbilityInfo.VariableInfo[FMath::Min(TargetAbilityInfo.VariableInfo.Num() - 1, statIdx)];
+		
+		float targetVariable = targetVariableInfo.Variable;
+		bool bIsPercentage = targetVariableInfo.bIsPercentage;
 
-		/*------ MUST BE EDITED after IndieGo -------*/
-		/*------ Erase targetStatName, use ECharacterAbilityType instead. -------*/
-		if (targetStatName == FName("MaxHP"))
+		if (bIsReset) targetVariable = -1 * targetVariable; //if remove ability, substract the original value
+
+		switch (targetType)
 		{
-			characterStat.CharacterMaxHP *= targetVariable;
-			characterState.CharacterCurrHP = FMath::Min(characterStat.CharacterMaxHP, characterState.CharacterCurrHP);
-		}
-		//else if (targetStatName == FName("CurrHP"))
-		//	characterState.CharacterCurrHP = characterStat.CharacterMaxHP;
-		else if (targetStatName == FName("Attack"))
-			characterStat.CharacterAtkMultiplier *= targetVariable;
-		else if (targetStatName == FName("Defense"))
-			characterStat.CharacterDefense *= targetVariable;
-		else if (targetStatName == FName("MoveSpeed"))
-			characterStat.CharacterMoveSpeed *= targetVariable;
-		else if (targetStatName == FName("AttackSpeed"))
-			characterStat.CharacterAtkSpeed *= targetVariable;
-		else if (targetStatName == FName("MaxProjectileCount"))
-			characterStat.MaxProjectileCount *= targetVariable;
+		case ECharacterAbilityType::E_None:
+		case ECharacterAbilityType::E_AutoHeal:
+			break;
+		case ECharacterAbilityType::E_MaxHP:
+			if (bIsPercentage)
+			{
+				characterState.AbilityHP.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityHP.FixedValue += targetVariable;
+			}
+			break;
+		case ECharacterAbilityType::E_AttackUp:
+			if (bIsPercentage)
+			{
+				characterState.AbilityAttack.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityAttack.FixedValue += targetVariable;
+			}
+			break;
+		case ECharacterAbilityType::E_DefenseUp:
+			if (bIsPercentage)
+			{
+				characterState.AbilityDefense.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityDefense.FixedValue += targetVariable;
+			}
+			break;
+		case ECharacterAbilityType::E_MoveSpeedUp:
+			if (bIsPercentage)
+			{
+				characterState.AbilityMoveSpeed.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityMoveSpeed.FixedValue += targetVariable;
+			}
+			break;
+		case ECharacterAbilityType::E_AtkSpeedUp:
+			if (bIsPercentage)
+			{
+				characterState.AbilityAttackSpeed.PercentValue += targetVariable;
+			}
+			else
+			{
+				characterState.AbilityAttackSpeed.FixedValue += targetVariable;
+			}
+			break;
+		case ECharacterAbilityType::E_MultipleShot:
+			characterStat.ProjectileCountPerAttack += targetVariable;
+			break;
+		}	
 	}
-	OwnerCharacterRef.Get()->UpdateCharacterStat(characterStat);
-	OwnerCharacterRef.Get()->UpdateCharacterState(characterState);
+	OwnerCharacterRef.Get()->UpdateCharacterStatAndState(characterStat, characterState);
 
 	return true;
 }

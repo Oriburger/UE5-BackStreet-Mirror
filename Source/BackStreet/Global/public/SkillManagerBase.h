@@ -5,8 +5,16 @@
 #include "../../Global/public/BackStreet.h"
 #include "SkillManagerBase.generated.h"
 
-/*
- */
+USTRUCT(BlueprintType)
+struct FSkillBaseListContainer : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TArray<ASkillBase*> SkillBaseList;
+};
+
 UCLASS()
 class BACKSTREET_API USkillManagerBase : public UObject
 {
@@ -18,40 +26,28 @@ public:
 	
 	//Initiate Skill Asset Data and Skill
 	UFUNCTION()
-		void InitSkillManagerBase(class ABackStreetGameModeBase* NewGamemodeRef);
+		void InitSkillManagerBase(ABackStreetGameModeBase* NewGamemodeRef);
+
+public:
+	UPROPERTY(VisibleInstanceOnly)
+		TMap<ACharacterBase*, FSkillBaseListContainer> SkillBaseMap;
+		
 
 //------- Default Property, Action -------------------
 public:
-	//SkillManagerBase processes information for the skill
-	UFUNCTION(BlueprintCallable)
-		void ActivateSkill(AActor* NewCauser, TArray<ACharacterBase*> NewTargetList);
+		void TrySkill(ACharacterBase* NewCauser, FOwnerSkillInfoStruct* SkillInfo);
 
-protected:
-	//Set MainCharacter's Skill Grade by Compare SkillGauge
-	UFUNCTION()
-		void SetMainCharacterSkillGrade(AActor* NewCauser);
+		ASkillBase* SpawnSkillBase(ACharacterBase* NewCauser, FOwnerSkillInfoStruct* SkillInfo);
 
-	//Set EnemyCharacter's Skill Grade by Compare Defficulty
-	UFUNCTION()
-		void SetEnemyCharacterSkillGrade(AActor* NewCauser);
+		ASkillBase* GetSkillFromSkillBaseMap(ACharacterBase* NewCauser, FOwnerSkillInfoStruct* SkillInfo);
 
-	//Return is Not E_None
 	UFUNCTION()
-		bool IsValidGrade(AActor* NewCauser);
-
-	//Add skill at SkillMap if there is no skill object that matches the ID
-	UFUNCTION()
-		ASkillBase* ComposeSkillMap(AActor* NewCauser, int32 NewSkillID);
-
-	//Create New skill ref
-	UFUNCTION()
-		class ASkillBase* MakeSkillBase(AActor* NewCauser, int32 NewSkillID);
+		void RemoveSkillInSkillBaseMap(ACharacterBase* NewCauser);
 
 
 //--------- DataTable ----------------------
 public:
-	UFUNCTION(BlueprintPure, BlueprintCallable)
-		UDataTable* GetSkillInfoTable() { return SkillInfoTable; }
+	FSkillInfoStruct* GetSkillInfoStructBySkillID(FOwnerSkillInfoStruct* OwnerSkillInfo);
 
 protected:
 	//Skill Info Table

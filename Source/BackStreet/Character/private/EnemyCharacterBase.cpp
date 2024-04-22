@@ -1,6 +1,4 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "../public/EnemyCharacterBase.h"
 #include "../../AISystem/public/AIControllerBase.h"
 #include "../public/CharacterInfoStruct.h"
@@ -13,6 +11,7 @@
 #include "../../StageSystem/public/ChapterManagerBase.h"
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../public/MainCharacterBase.h"
 
 #define TURN_TIME_OUT_SEC 1.0f
@@ -54,7 +53,6 @@ void AEnemyCharacterBase::BeginPlay()
 	InitEnemyCharacter(CharacterID);
 
 	SetDefaultWeapon();
-	InitDynamicMeshMaterial(GetMesh()->GetMaterial(0));
 }
 
 void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
@@ -62,7 +60,7 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	// Read from dataTable
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
-	AssetInfo.CharacterID = CharacterID = NewCharacterID;
+	AssetSoftPtrInfo.CharacterID = CharacterID = NewCharacterID;
 	
 
 	if (newStat != nullptr)
@@ -72,7 +70,7 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		//Set CharacterStat with setting default additional stat bInfinite (infinite use of ammo)
 		UpdateCharacterStat(EnemyStat.CharacterStat);
 		CharacterStat.bInfinite = true;
-		CharacterState.CharacterCurrHP = EnemyStat.CharacterStat.CharacterMaxHP;
+		CharacterState.CurrentHP = EnemyStat.CharacterStat.DefaultHP;
 		SetDefaultWeapon();
 	}
 
@@ -99,8 +97,14 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f) return 0.0f;
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitImpactSound, GetActorLocation());
+	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterStat.bIsInvincibility) return 0.0f;
+	
+	if (AssetManagerBaseRef.IsValid())
+	{
+		ACharacterBase* damageCauser = Cast<ACharacterBase>(DamageCauser);
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, damageCauser->GetCurrentWeaponRef()->GetWeaponStat().WeaponID, "HitImpact");
+	}
+	
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 
 	if (DamageCauser->ActorHasTag("Player"))
@@ -139,7 +143,7 @@ void AEnemyCharacterBase::TryAttack()
 	Super::TryAttack();
 }
 
-void AEnemyCharacterBase::TrySkill()
+void AEnemyCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	check(GetCurrentWeaponRef() != nullptr);
 
@@ -152,7 +156,7 @@ void AEnemyCharacterBase::TrySkill()
 		return;
 	}
 
-	Super::TrySkill();
+	Super::TrySkill(SkillType, SkillID);
 }
 
 void AEnemyCharacterBase::Attack()
@@ -161,7 +165,7 @@ void AEnemyCharacterBase::Attack()
 
 	float attackSpeed = 0.5f;
 	if(IsValid(GetCurrentWeaponRef()))
-		attackSpeed = FMath::Min(1.5f, CharacterStat.CharacterAtkSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
+		attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
 
 	GetWorldTimerManager().SetTimer(AtkIntervalHandle, this, &ACharacterBase::ResetAtkIntervalTimer
 		, 1.0f, false, FMath::Max(0.0f, 1.5f - attackSpeed));
@@ -255,11 +259,11 @@ void AEnemyCharacterBase::ResetActionStateForTimer()
 
 void AEnemyCharacterBase::SetFacialMaterialEffect(bool NewState)
 {
-	if (CurrentDynamicMaterial == nullptr) return;
-
-	CurrentDynamicMaterial->SetScalarParameterValue(FName("EyeBrightness"), NewState ? 5.0f : 35.0f);
-	CurrentDynamicMaterial->SetVectorParameterValue(FName("EyeColor"), NewState ? FColor::Red : FColor::Yellow);
-	InitDynamicMeshMaterial(CurrentDynamicMaterial);
+	//if (CurrentDynamicMaterialList.IsEmpty()) return;
+	//HardCoding
+	//CurrentDynamicMaterialList[0]->SetScalarParameterValue(FName("EyeBrightness"), NewState ? 5.0f : 35.0f);
+	//CurrentDynamicMaterialList[0]->SetVectorParameterValue(FName("EyeColor"), NewState ? FColor::Red : FColor::Yellow);
+	//InitDynamicMaterialList(DynamicMaterialList);
 }
 
 void AEnemyCharacterBase::Turn(float Angle)
@@ -288,8 +292,8 @@ void AEnemyCharacterBase::Turn(float Angle)
 
 float AEnemyCharacterBase::PlayPreChaseAnimation()
 {
-	if (PreChaseAnimMontage == nullptr) return 0.0f;
-	return PlayAnimMontage(PreChaseAnimMontage);
+	if (AssetHardPtrInfo.PointMontageList.Num() <= 0 || !IsValid(AssetHardPtrInfo.PointMontageList[0])) return 0.0f;
+	return PlayAnimMontage(AssetHardPtrInfo.PointMontageList[0]);
 }
 
 void AEnemyCharacterBase::ResetTurnAngle()
@@ -306,4 +310,14 @@ void AEnemyCharacterBase::ClearAllTimerHandle()
 	TurnTimeOutTimerHandle.Invalidate();
 	HitTimeOutTimerHandle.Invalidate();
 	DamageAIDelayTimer.Invalidate();
+}
+
+bool AEnemyCharacterBase::PickWeapon(int32 NewWeaponID)
+{
+	return Super::PickWeapon(NewWeaponID);
+}
+
+void AEnemyCharacterBase::SwitchToNextWeapon()
+{
+	return Super::SwitchToNextWeapon();
 }

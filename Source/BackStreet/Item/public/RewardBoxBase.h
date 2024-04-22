@@ -79,9 +79,6 @@ protected:
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
 		class UParticleSystem* DestroyEffectParticle;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* TakeAbilitySound;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Sound")
 		class USoundCue* SpawnAbilityBoxSound;

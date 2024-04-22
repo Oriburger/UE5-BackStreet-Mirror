@@ -69,11 +69,17 @@ public:
 	UFUNCTION()
 		void UpdateCharacterStat(class ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }
+
 	UFUNCTION(BlueprintCallable)
-		class USkillManagerBase* GetGlobalSkillmanagerBaseRef() { return SkillManagerBase; }
+		class USkillManagerBase* GetGlobalSkillManagerBaseRef() { return SkillManagerBase; }
 
 	UFUNCTION(BlueprintCallable)
 		class AChapterManagerBase* GetChapterManagerRef() { return ChapterManager; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class UCraftingManagerBase* GetCraftingManagerRef() { return CraftingManagerBase; }
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void UpdateMiniMapUI();
@@ -102,7 +108,13 @@ protected:
 		class AMainCharacterBase* PlayerCharacterRef;
 
 	UPROPERTY()
+		class UAssetManagerBase* AssetManagerBase;
+
+	UPROPERTY()
 		class USkillManagerBase* SkillManagerBase;
+
+	UPROPERTY()
+		class UCraftingManagerBase* CraftingManagerBase;
 
 	UPROPERTY(BlueprintReadWrite)
 		class AChapterManagerBase* ChapterManager;

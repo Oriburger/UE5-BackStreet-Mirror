@@ -4,6 +4,14 @@
 #include "../../Character/public/CharacterInfoEnum.h"
 #include "ProjectileInfoStruct.generated.h"
 
+USTRUCT(BlueprintType)
+struct FProjectileStateStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	
+	bool bCanAttackCauser = false;
+};
 
 USTRUCT(BlueprintType)
 struct FProjectileStatStruct : public FTableRowBase
@@ -32,8 +40,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float ProjectileSpeed = 2000.0f;
 
-	//발사체의 데미지
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	//Damage of projectile, inherited by parent (ranged weapon)
+	UPROPERTY(BlueprintReadOnly)
 		float ProjectileDamage = 0.2f;
 
 	//중력 스케일
@@ -44,15 +52,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsHoming = false;
 
-	//발사체는 각 하나의 디버프만 가짐
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		ECharacterDebuffType DebuffType;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float DebuffTotalTime;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float DebuffVariable;
+		FDebuffInfoStruct DebuffInfo;
 };
 
 USTRUCT(BlueprintType)
@@ -86,6 +87,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UNiagaraSystem> HitEffectParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UNiagaraSystem> TrailParticle;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UNiagaraSystem> ExplosionParticle;

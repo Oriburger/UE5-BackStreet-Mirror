@@ -75,10 +75,9 @@ void ARewardBoxBase::AddAbilityToPlayer(AMainCharacterBase* PlayerCharacterRef)
 	const bool result = PlayerCharacterRef->TryAddNewAbility(AbilityID);
 	if (result)
 	{
-		if (DestroyEffectParticle && TakeAbilitySound)
+		if (DestroyEffectParticle)
 		{
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyEffectParticle, GetActorLocation());
-			UGameplayStatics::PlaySoundAtLocation(GetWorld(), TakeAbilitySound, GetActorLocation());
 		}
 		if (OnAddAbility.IsBound())
 			OnAddAbility.Broadcast();

@@ -4,6 +4,8 @@
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCharacterDied);
+
 UCLASS()
 class BACKSTREET_API ACharacterBase : public ACharacter
 {
@@ -18,6 +20,10 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	//Weapon이 파괴되었을때 호출할 이벤트
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FOnCharacterDied OnCharacterDied;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -43,7 +49,7 @@ public:
 	virtual void TryAttack();
 
 	///Input에 Binding 되어 스킬공격을 시도 (AnimMontage를 호출)
-	virtual void TrySkill();
+	virtual void TrySkill(ESkillType SkillType, int32 SkillID);
 
 	//AnimNotify에 Binding 되어 실제 공격을 수행
 	virtual void Attack();
@@ -63,7 +69,7 @@ public:
 
 	//플레이어의 ActionState를 Idle로 전환한다.
 	UFUNCTION(BlueprintCallable)
-			void ResetActionState(bool bForceReset = false);
+		void ResetActionState(bool bForceReset = false);
 
 	//Set Player's Action State
 	UFUNCTION(BlueprintCallable)
@@ -71,11 +77,11 @@ public:
 
 	//플레이어가 체력을 회복함 (일회성)
 	UFUNCTION()
-		void TakeHeal(float HealAmountRate, bool bIsTimerEvent = false, uint8 BuffDebuffType = 0);
+		void TakeHeal(float HealAmount, bool bIsTimerEvent = false, uint8 BuffDebuffType = 0);
 
 	//디버프 데미지를 입힘 (일회성)
 	UFUNCTION(BlueprintCallable)
-		float TakeDebuffDamage(float DamageAmount, ECharacterDebuffType DebuffType, AActor* Causer);
+		float TakeDebuffDamage(ECharacterDebuffType DebuffType, float DamageAmount, AActor* Causer);
 
 	UFUNCTION(BlueprintCallable)
 		void ApplyKnockBack(AActor* Target, float Strength);
@@ -92,11 +98,15 @@ public:
 
 	//캐릭터의 디버프 정보를 업데이트
 	UFUNCTION(BlueprintCallable)
-		virtual	bool TryAddNewDebuff(ECharacterDebuffType NewDebuffType, AActor* Causer = nullptr, float TotalTime = 0.0f, float Value = 0.0f);
+		virtual	bool TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer);
 
 	//디버프가 활성화 되어있는지 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetDebuffIsActive(ECharacterDebuffType DebuffType);
+
+	//Update Character's stat and state
+	UFUNCTION(BlueprintCallable)
+		void UpdateCharacterStatAndState(FCharacterStatStruct NewStat, FCharacterStateStruct NewState);
 
 	//캐릭터의 스탯을 업데이트
 	UFUNCTION(BlueprintCallable)
@@ -113,6 +123,11 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FCharacterStateStruct GetCharacterState() { return CharacterState; }
+
+private:
+	//Calculate Total Stat Value
+	UFUNCTION()
+		float GetTotalStatValue(float& DefaultValue, FStatInfoStruct& AbilityInfo, FStatInfoStruct& SkillInfo, FStatInfoStruct& DebuffInfo);
 
 // ------ 무기 관련 -------------------------------------------
 public:
@@ -176,11 +191,6 @@ private:
 	//무기 액터를 스폰
 	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
 
-// ---- Skill --------------------
-private:
-	UFUNCTION()
-		float GetSkillAnimPlayRate(uint8 SkillAnimIndex);
-
 // ---- Asset -------------------
 public:
 	// 외부에서 Init하기위해 Call
@@ -204,80 +214,43 @@ protected:
 		void InitMaterialAsset();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FCharacterAssetInfoStruct GetAssetInfoWithID(const int32 TargetCharacterID);
+		FCharacterAssetSoftInfo GetAssetSoftInfoWithID(const int32 TargetCharacterID);
 
 protected:
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
-		FCharacterAssetInfoStruct AssetInfo;
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
+		FCharacterAssetSoftInfo AssetSoftPtrInfo;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
+		FCharacterAssetHardInfo AssetHardPtrInfo;
 
 	//적 데이터 테이블 (에셋 정보 포함)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
 		UDataTable* AssetDataInfoTable;
 
-protected:
-	//애니메이션, VFX, 사운드큐 등 저장
-	UPROPERTY()
-		struct FCharacterAnimAssetInfoStruct AnimAssetData;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Animation")
-		class UAnimMontage* PreChaseAnimMontage;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Animation")
-		class UAnimMontage* InvestigateAnimation;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-		class USoundCue* RollSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-		class USoundCue* BuffSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-		class USoundCue* DebuffSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-		USoundCue* HitImpactSound;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		TArray<class UNiagaraSystem*> DebuffNiagaraEffectList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
-		class UMaterialInterface* NormalMaterial;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
-		class UMaterialInterface* WallThroughMaterial;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
-		TArray<class UTexture*> EmotionTextureList;
-
-	UPROPERTY()
-		class UMaterialInstanceDynamic* CurrentDynamicMaterial;
-
-protected:
-	UFUNCTION()
-		void InitDynamicMeshMaterial(UMaterialInterface* NewMaterial);
+public:
+	UPROPERTY(BlueprintReadOnly)
+		TArray<USoundCue*> FootStepSoundList;
 
 // ------ 그 외 캐릭터 프로퍼티  ---------------
 protected:
 	//캐릭터의 스탯
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
 		FCharacterStatStruct CharacterStat;
 
 	//캐릭터의 현재 상태
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
 		FCharacterStateStruct CharacterState;
 
 	//Gamemode 약 참조
-	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+	//Gamemode 약 참조
+		TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
 
 // ----- 타이머 관련 ---------------------------------
 protected:
 	UFUNCTION()
 		virtual void ClearAllTimerHandle();
-
-	UFUNCTION()
-		void PlaySkillAnimation();
-	UFUNCTION()
-		void PlayNextSkillAnimation();
 
 	//공격 간 딜레이 핸들
 	UPROPERTY()
@@ -285,17 +258,5 @@ protected:
 
 	UPROPERTY()
 		FTimerHandle ReloadTimerHandle;
-
-	UPROPERTY()
-		TArray<FTimerHandle> SkillAnimPlayTimerHandleList;
-
-private:
-	//Current number of multiple SkillAnimPlayTimers
-	UPROPERTY()
-		int SkillAnimPlayTimerCurr;
-
-	//Threshold number of multiple SkillAnimPlayTimer
-	UPROPERTY()
-		int SkillAnimPlayTimerThreshold;
 
 };

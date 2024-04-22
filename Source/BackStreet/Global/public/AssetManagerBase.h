@@ -1,151 +1,67 @@
 #pragma once
+
 #include "BackStreet.h"
 #include "Engine/DataTable.h"
 #include "Engine/StreamableManager.h"
 #include "AssetManagerBase.generated.h"
-#define MAX_STAGE_CNT 5
-
-//캐릭터의 애니메이션 에셋 경로를 저장하는 데이터 테이블 구조체
-USTRUCT(BlueprintType)
-struct FCharacterAnimAssetInfoStruct : public FTableRowBase
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	//캐릭터의 ID
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 CharacterID;
-
-	//근접 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<UAnimMontage*> MeleeAttackAnimMontageList;
-
-	//사격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<UAnimMontage*> ShootAnimMontageList;
-
-	//투척 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<UAnimMontage*> ThrowAnimMontageList;
-
-	//재장전 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<UAnimMontage*> ReloadAnimMontageList;
-
-	//타격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<UAnimMontage*> HitAnimMontageList;
-
-	//스킬 애니메이션 / 무기 ID로 매핑하여 관리
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TMap<int32, FSkillAnimAssetMontageStruct> SkillAnimMontageMap;
-
-	//구르기 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<UAnimMontage*> RollAnimMontageList;
-
-	//상호작용 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<UAnimMontage*> InvestigateAnimMontageList;
-
-	//사망 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<UAnimMontage*> DieAnimMontageList;
-};
-
-//캐릭터의 VFX 에셋 경로를 저장하는 데이터 테이블 구조체
-USTRUCT(BlueprintType)
-struct FCharacterVFXAssetInfoStruct : public FTableRowBase
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	//캐릭터의 디버프 나이아가라 리스트
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<class UNiagaraSystem*> DebuffNiagaraEffectLis;
-};
-
-//캐릭터의 에셋 경로를 저장하는 데이터 테이블 구조체
-//USTRUCT(BlueprintType)
-//struct FCharacterAssetInfoStruct
-//{
-//public:
-//	GENERATED_USTRUCT_BODY()
-//
-//	//캐릭터 애니메이션 에셋 경로 정보
-//	UPROPERTY()
-//		TMap<int32, FCharacterAnimAssetInfoStruct> AnimAssetInfoMap;
-//
-//	//캐릭터 VFX 에셋 경로 정보
-//	UPROPERTY()
-//		TMap<int32, FCharacterVFXAssetInfoStruct> VFXAssetInfoMap;
-//};
 
 UCLASS()
-class BACKSTREET_API AAssetManagerBase : public AActor
+class BACKSTREET_API UAssetManagerBase : public UObject
 {
 	GENERATED_BODY()
 
 public:
-	AAssetManagerBase();
+	UAssetManagerBase();
 
-protected:
-	virtual void BeginPlay() override;
+	UFUNCTION()
+		void InitAssetManager(ABackStreetGameModeBase* NewGamemodeRef);
 
+//----- Sound --------
 public:
-	UFUNCTION()
-		TSubclassOf<AEnemyCharacterBase> GetEnemyWithID(int32 EnemyID);
+	
+	//GetSoundList From SoundAssetTable
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<USoundCue*> GetSoundList(ESoundAssetType SoundType, int32 TargetID, FName SoundName);
+	
+	//Play Single Sound
+	UFUNCTION(BlueprintCallable)
+		void PlaySingleSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName);
 
-	UFUNCTION()
-		ULevelSequence* GetTileTravelEffectSequence() { return TileTravelEffectSequence; }
+	//Play Random Sound
+	UFUNCTION(BlueprintCallable)
+		void PlayRandomSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName);
 
-	UFUNCTION()
-		ULevelSequence* GetFadeOutEffectSequence() { return FadeOutEffectSequence; }
+	//Which is for Spawning and Stopping the sound
+	UFUNCTION(BlueprintCallable)
+		UAudioComponent* SpawnSound2D(ESoundAssetType SoundType, int32 TargetID, FName SoundName);
 
-	UFUNCTION()
-		ULevelSequence* GetFadeInEffectSequence() { return FadeInEffectSequence; }
+private:
+	FSoundAssetInfoStruct* GetSoundAssetInfo(ESoundAssetType SoundType, int32 TargetID);
 
-	UFUNCTION()
-		FName GetRandomMap();
+	FSoundAssetInfoStruct* GetSystemSoundMapWithID(int32 TargetID);
 
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<TSubclassOf<class AEnemyCharacterBase>> EnemyAssets;
+	FSoundAssetInfoStruct* GetWeaponSoundMapWithID(int32 TargetID);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<TSubclassOf<class AEnemyCharacterBase>> MissionEnemyAssets;
+	FSoundAssetInfoStruct* GetCharacterSoundMapWithID(int32 TargetID);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<TSubclassOf<class AItemBoxBase>> ItemBoxAssets;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<TSubclassOf<class AWeaponBase>> WeaponAssets;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<TSubclassOf<class ARewardBoxBase>> RewardBoxAssets;
-
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<TSubclassOf<class AProjectileBase>> ProjectileAssets;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<TSubclassOf<class AItemBoxBase>> MissionAssets;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class ULevelSequence* TileTravelEffectSequence;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class ULevelSequence* FadeOutEffectSequence;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class ULevelSequence* FadeInEffectSequence;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<FName> MapNames;
+	FSoundAssetInfoStruct* GetSkillSoundMapWithID(int32 TargetID);
 
 private:
 	UPROPERTY()
-		class ABackStreetGameModeBase* GameModeRef;
+		UDataTable* SystemSoundAssetTable;
 
+	UPROPERTY()
+		UDataTable* WeaponSoundAssetTable;
+
+	UPROPERTY()
+		UDataTable* SkillSoundAssetTable;
+
+	UPROPERTY()
+		UDataTable* CharacterSoundAssetTable;
+
+	//-------- ETC. (Ref)-------------------------------
+private:
+	UPROPERTY()
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 };
 

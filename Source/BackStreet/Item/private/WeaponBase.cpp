@@ -7,6 +7,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 
 
@@ -36,6 +37,7 @@ void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
 }
 
 void AWeaponBase::InitWeapon(int32 NewWeaponID)
@@ -92,7 +94,7 @@ void AWeaponBase::InitWeapon(int32 NewWeaponID)
 
 		for (auto& assetPath : tempStream)
 		{
-			if (!assetPath.IsValid() || assetPath.IsNull()) continue;
+			if (!assetPath.IsValid() || !assetPath.IsValid()) continue;
 			assetToStream.AddUnique(assetPath);
 		}
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
@@ -114,12 +116,6 @@ void AWeaponBase::InitWeaponAsset()
 
 	if (WeaponAssetInfo.DestroyEffectParticle.IsValid())
 		DestroyEffectParticle = WeaponAssetInfo.DestroyEffectParticle.Get();
-
-	if (WeaponAssetInfo.AttackSound.IsValid())
-		AttackSound = WeaponAssetInfo.AttackSound.Get();
-
-	if (WeaponAssetInfo.AttackFailSound.IsValid())
-		AttackFailSound = WeaponAssetInfo.AttackFailSound.Get();
 }
 
 FWeaponStatStruct AWeaponBase::GetWeaponStatInfoWithID(int32 TargetWeaponID)
@@ -165,6 +161,15 @@ void AWeaponBase::Attack() {}
 
 void AWeaponBase::StopAttack() { }
 
+float AWeaponBase::CalculateTotalDamage(FCharacterStateStruct TargetState)
+{
+	if (!OwnerCharacterRef.IsValid()) return 0.0f;
+	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
+	return WeaponStat.WeaponDamage * (1 + FMath::Max(-1, ownerState.TotalAttack - TargetState.TotalDefense))
+			* (1 + WeaponStat.bCriticalApply * WeaponStat.CriticalDamageRate)
+			+ (!WeaponStat.bFixDamageApply ? 0.0f : WeaponStat.FixedDamageAmount);
+}
+
 void AWeaponBase::UpdateComboState()
 {
 	WeaponState.ComboCount = (WeaponState.ComboCount + 1); 
@@ -184,12 +189,6 @@ void AWeaponBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)
 	if (!IsValid(NewOwnerCharacterRef)) return;
 	OwnerCharacterRef = NewOwnerCharacterRef;
 	SetOwner(OwnerCharacterRef.Get());
-}
-
-void AWeaponBase::PlayEffectSound(USoundCue* EffectSound)
-{
-	if (EffectSound == nullptr || !OwnerCharacterRef.IsValid() || !OwnerCharacterRef.Get()->ActorHasTag("Player")) return;
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), EffectSound, GetActorLocation());
 }
 
 void AWeaponBase::ClearAllTimerHandle()

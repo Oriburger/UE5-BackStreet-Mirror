@@ -51,7 +51,7 @@ public:
 		void BossNearAttack();
 
 	UFUNCTION(BlueprintCallable)
-		virtual void TrySkill() override;
+		virtual void TrySkill(ESkillType SkillType, int32 SkillID) override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
@@ -71,6 +71,14 @@ public:
 private:
 	UFUNCTION()
 		void ResetTurnAngle();
+
+//-------- Inventory -------------
+public:
+	UFUNCTION(BlueprintCallable)
+		virtual bool PickWeapon(int32 NewWeaponID) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SwitchToNextWeapon() override;
 
 // ----- 캐릭터 스탯 및 상태 관련 ---------
 public:

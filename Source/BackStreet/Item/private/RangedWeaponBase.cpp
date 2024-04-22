@@ -8,6 +8,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "../../Character/public/CharacterBase.h"
 #include "../../Character/public/MainCharacterBase.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define AUTO_RELOAD_DELAY_VALUE 0.1
 
@@ -30,7 +31,12 @@ void ARangedWeaponBase::Attack()
 	Super::Attack();
 
 	bool result = TryFireProjectile();
-	PlayEffectSound(result ? AttackSound : AttackFailSound);
+
+	if (AssetManagerBaseRef.IsValid())
+	{
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, result ? "Shoot" : "ShootFail");
+	}
+
 	if (result)	UpdateDurabilityState();
 }
 
@@ -119,7 +125,7 @@ void ARangedWeaponBase::SpawnShootNiagaraEffect()
 	if (!OwnerCharacterRef.IsValid()) return;
 
 	FVector spawnLocation = OwnerCharacterRef.Get()->GetActorLocation() + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 50.0f;
-	FRotator spawnRotation = OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation() + FRotator(0.0f, 90.0f, 0.0f);
+	FRotator spawnRotation = OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation() + FRotator(0.0f, 0.0f, 0.0f);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShootNiagaraEmitter, spawnLocation, spawnRotation);
 }
 
@@ -147,7 +153,8 @@ AProjectileBase* ARangedWeaponBase::CreateProjectile()
 	{
 		newProjectile->SetOwner(this);
 		newProjectile->InitProjectile(OwnerCharacterRef.Get(), ProjectileAssetInfo, ProjectileStatInfo);
-		newProjectile->ProjectileStat.ProjectileDamage *= WeaponStat.WeaponDamageRate; //버프/디버프로 인해 강화/너프된 값을 반영
+		newProjectile->ProjectileStat.DebuffInfo = WeaponStat.DebuffInfo;
+		newProjectile->ProjectileStat.ProjectileDamage = WeaponStat.WeaponDamage;
 		return newProjectile;
 	}
 	return nullptr;
@@ -168,6 +175,11 @@ void ARangedWeaponBase::Reload()
 
 	if (OwnerCharacterRef.IsValid())
 		OwnerCharacterRef.Get()->ResetActionState(true);
+
+	if (AssetManagerBaseRef.IsValid())
+	{
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, "Reload");
+	}
 }	
 	
 bool ARangedWeaponBase::GetCanReload()
@@ -199,7 +211,7 @@ bool ARangedWeaponBase::TryFireProjectile()
 		GetWorldTimerManager().SetTimer(AutoReloadTimerHandle, OwnerCharacterRef.Get(), &ACharacterBase::TryReload, 1.0f, false, AUTO_RELOAD_DELAY_VALUE);
 		return false;
 	}
-	const int32 fireProjectileCnt = FMath::Min(WeaponState.RangedWeaponState.CurrentAmmoCount, OwnerCharacterRef.Get()->GetCharacterStat().MaxProjectileCount);
+	const int32 fireProjectileCnt = FMath::Min(WeaponState.RangedWeaponState.CurrentAmmoCount, OwnerCharacterRef.Get()->GetCharacterStat().ProjectileCountPerAttack);
 
 	if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
 	{

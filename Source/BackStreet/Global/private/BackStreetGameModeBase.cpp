@@ -12,6 +12,7 @@
 #include "../../Character/public/MainCharacterBase.h"
 #include "../public/AssetManagerBase.h"
 #include "../public/SkillManagerBase.h"
+#include "../public/CraftingManagerBase.h"
 
 ABackStreetGameModeBase::ABackStreetGameModeBase()
 {
@@ -21,6 +22,10 @@ ABackStreetGameModeBase::ABackStreetGameModeBase()
 void ABackStreetGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//----- Asset Manager 초기화 -------
+	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
+	AssetManagerBase->InitAssetManager(this);
 }
 
 void ABackStreetGameModeBase::InitializeGame()
@@ -46,6 +51,10 @@ void ABackStreetGameModeBase::InitializeGame()
 		//------ Global Skill Manager 초기화 --------
 		SkillManagerBase = NewObject<USkillManagerBase>(this, USkillManagerBase::StaticClass(), FName("SkillManagerBase"));
 		SkillManagerBase->InitSkillManagerBase(this);
+
+		//------ Global Crafting Manager 초기화 --------
+		CraftingManagerBase = NewObject<UCraftingManagerBase>(this, UCraftingManagerBase::StaticClass(), FName("CraftingManagerBase"));
+		CraftingManagerBase->InitCraftingManager(this);
 	}
 }
 

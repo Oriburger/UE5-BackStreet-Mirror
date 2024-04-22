@@ -3,7 +3,6 @@
 #include "Engine/DataTable.h"
 #include "../../Character/public/CharacterInfoEnum.h"
 #include "../../SkillSystem/public/SkillInfoStruct.h"
-#include "ProjectileInfoStruct.h"
 #include "WeaponInfoStruct.generated.h"
 
 UENUM(BlueprintType)
@@ -23,27 +22,26 @@ enum class EWeaponType : uint8
 	E_Melee				UMETA(DisplayName = "Melee"),
 	E_Throw				UMETA(DisplayName = "Throw"),
 	E_Shoot				UMETA(DisplayName = "Shoot")
+
 };
 
 USTRUCT(BlueprintType)
-struct FMeleeWeaponStatStruct : public FTableRowBase
+struct FDebuffInfoStruct
 {
 public:
 	GENERATED_USTRUCT_BODY()
 
-	//----- 근접 관련 Property --------------------
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float WeaponMeleeDamage = 0.2f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		ECharacterDebuffType Type;
 
-	//무기는 각 하나의 디버프만 가짐 (임시)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		ECharacterDebuffType DebuffType;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float TotalTime;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float DebuffTotalTime;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float Variable;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float DebuffVariable;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool bIsPercentage;
 };
 
 USTRUCT(BlueprintType)
@@ -95,14 +93,29 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		UTexture2D* WeaponImage;
 
-	//----- 공통 Stat -------
-	//공격 속도 Rate
+//----- 공통 Stat -------
+	//Weapon Attack Speed Rate
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float WeaponAtkSpeedRate = 1.0f;
 
-	//무기 데미지
+	//Default Weapon Damage
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.0f, UIMax = 500.0f))
+		float WeaponDamage = 10.0f;
+
+	//Critical Damage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float WeaponDamageRate = 1.0f;
+		bool bCriticalApply = false; 
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.0f, UIMax = 2.0f))
+		float CriticalDamageRate = 0.5f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool bFixDamageApply = false; 
+
+	//Fixed Damage Amount
+	//This value is able to be used in skillsystem with editing dynamically
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f))
+		float FixedDamageAmount = 0.0f;
 
 	// 내구도 PROPERTY 추가
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -116,21 +129,15 @@ public:
 		uint8 WeaponWeight = 1;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		float WeaponKnockBackEnergy = 500.0f;
+		float WeaponKnockBackStrength = 500.0f;
 
-	//Weapon Skill 게이지 사용량 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float SkillGaugeAug = 0.1;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FSkillGaugeInfo SkillGaugeInfo;
+		FDebuffInfoStruct DebuffInfo;
 
-	//Skill ID List
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FSkillSetInfo SkillSetInfo;
-
-	//----- 근거리 Stat ------
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FMeleeWeaponStatStruct MeleeWeaponStat;
-
-	//----- 원거리 Stat ------
+//----- 원거리 Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FRangedWeaponStatStruct RangedWeaponStat;
 };
@@ -229,6 +236,10 @@ public:
 	//메시의 초기 크기 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		FVector InitialScale;
+
+	//WeaponSkill Info
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FOwnerSkillInfoStruct WeaponSkillInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UParticleSystem> DestroyEffectParticle;

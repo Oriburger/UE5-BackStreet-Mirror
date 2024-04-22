@@ -74,7 +74,7 @@ void AWaveManager::CheckWaveCategoryByType(class AStageData* Target, AEnemyChara
 		if (IsValid(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
 		{
 			ACharacterBase* playerRef = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-			currHP = IsValid(playerRef) ? playerRef->GetCharacterState().CharacterCurrHP : 0.0f;
+			currHP = IsValid(playerRef) ? playerRef->GetCharacterState().CurrentHP : 0.0f;
 		}
 		
 		if (Target->GetMonsterList().IsEmpty() && currHP > 0.0f)

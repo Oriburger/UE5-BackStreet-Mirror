@@ -37,6 +37,9 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
 		UStaticMeshComponent* Mesh;
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+		UNiagaraComponent* TrailParticle;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UProjectileMovementComponent* ProjectileMovement;
 
@@ -51,18 +54,15 @@ protected:
 	//현재 무기의 에셋 정보
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
 		FProjectileAssetInfoStruct ProjectileAssetInfo;
+
+	UPROPERTY()
+		FSoundAssetInfoStruct SoundAssetInfo;
 //------- 기본 프로퍼티 -------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
 		int32 ProjectileID;
 
 protected:
-	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Sound")
-		USoundCue* HitSound;
-
-	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Sound")
-		USoundCue* ExplosionSound;
-
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|VFX")
 		UParticleSystem* HitParticle;
 
@@ -74,6 +74,9 @@ protected:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
 		struct FProjectileStatStruct ProjectileStat;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
+		struct FProjectileStateStruct ProjectileState;
 
 //------ 기본 함수  ------------------
 public:
@@ -108,6 +111,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetOwnerCharacter(class ACharacterBase* NewOwnerCharacterRef);
 
+	UFUNCTION(BlueprintCallable)
+		void SetCauserSelfAttackValidity(bool bCanAttackCauser) {ProjectileState.bCanAttackCauser = bCanAttackCauser;}
+
 //------ private 프로퍼티 ------------------
 private: 
 	UPROPERTY()
@@ -124,4 +130,7 @@ private:
 
 	UPROPERTY()
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+	UPROPERTY()
+		TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
 };

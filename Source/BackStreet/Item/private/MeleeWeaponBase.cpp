@@ -5,6 +5,7 @@
 #include "../public/WeaponBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "../../Character/public/CharacterBase.h"
+#include "../../Global/public/AssetManagerBase.h"
 #include "../../Global/public/BackStreetGameModeBase.h"
 #define MAX_LINETRACE_POS_COUNT 6
 #define DEFAULT_MELEE_ATK_RANGE 150.0f
@@ -24,8 +25,12 @@ void AMeleeWeaponBase::Attack()
 {
 	if (WeaponID == 0) return;
 	Super::Attack();
-	
-	PlayEffectSound(AttackSound);
+
+	if (AssetManagerBaseRef.IsValid())
+	{
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, "Wield");
+	}
+
 	GetWorldTimerManager().SetTimer(MeleeAtkTimerHandle, this, &AMeleeWeaponBase::MeleeAttack, 0.01f, true);
 	MeleeTrailParticle->Activate(true);
 	
@@ -90,9 +95,7 @@ void AMeleeWeaponBase::InitWeaponAsset()
 
 	if (MeleeWeaponAssetInfo.HitEffectParticle.IsValid())
 		HitEffectParticle = MeleeWeaponAssetInfo.HitEffectParticle.Get();
-		
-	if (MeleeWeaponAssetInfo.HitImpactSound.IsValid())
-		HitImpactSound = MeleeWeaponAssetInfo.HitImpactSound.Get();
+	
 }
 
 TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
@@ -102,7 +105,7 @@ TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
 	FVector traceStartPos = (WeaponMesh->GetSocketLocation("GrabPoint")
 							+ WeaponMesh->GetSocketLocation("End")) / 2;
 	float traceRadius = UKismetMathLibrary::Vector_Distance(WeaponMesh->GetSocketLocation("GrabPoint")
-						, WeaponMesh->GetSocketLocation("End")) + 10.0f;
+						, WeaponMesh->GetSocketLocation("End")) + 40.0f;
 	
 	TEnumAsByte<EObjectTypeQuery> pawnTypeQuery = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
 	TArray<AActor*> overlapResultList, meleeDamageTargetList;
@@ -140,6 +143,8 @@ void AMeleeWeaponBase::MeleeAttack()
 	FHitResult hitResult;
 	bool bIsMeleeTraceSucceed = false;
 
+	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
+
 	TArray<FVector> currTracePositionList = GetCurrentMeleePointList();
 	TArray<AActor*> targetList = CheckMeleeAttackTargetWithSphereTrace(); 
 	MeleePrevTracePointList = currTracePositionList;
@@ -147,21 +152,26 @@ void AMeleeWeaponBase::MeleeAttack()
 	for (auto& target : targetList)
 	{
 		//if target is valid, apply damage
-		if (IsValid(target))
+		if (IsValid(target) && (!Cast<ACharacterBase>(target)->GetCharacterStat().bIsInvincibility))
 		{
+			FCharacterStateStruct targetState = Cast<ACharacterBase>(target)->GetCharacterState();
+			float totalDamage = CalculateTotalDamage(targetState);
+
 			//Activate Melee Hit Effect
 			ActivateMeleeHitEffect(target->GetActorLocation());
 			
 			//Apply Knockback
-			OwnerCharacterRef.Get()->ApplyKnockBack(target, GetWeaponStat().WeaponKnockBackEnergy);
+			if(!target->ActorHasTag("Boss"))
+			{
+				OwnerCharacterRef.Get()->ApplyKnockBack(target, GetWeaponStat().WeaponKnockBackStrength);
+			}
+
 			//Apply Damage
-			UGameplayStatics::ApplyDamage(target, WeaponStat.MeleeWeaponStat.WeaponMeleeDamage * WeaponStat.WeaponDamageRate * OwnerCharacterRef.Get()->GetCharacterStat().CharacterAtkMultiplier
-				, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
+			UGameplayStatics::ApplyDamage(target, totalDamage, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
 			MeleeLineTraceQueryParams.AddIgnoredActor(target); 
 
 			//Apply Debuff 
-			Cast<ACharacterBase>(target)->TryAddNewDebuff(WeaponStat.MeleeWeaponStat.DebuffType, OwnerCharacterRef.Get()
-												, WeaponStat.MeleeWeaponStat.DebuffTotalTime, WeaponStat.MeleeWeaponStat.DebuffVariable);
+			Cast<ACharacterBase>(target)->TryAddNewDebuff(WeaponStat.DebuffInfo, OwnerCharacterRef.Get());
 
 			//Update Durability
 			UpdateDurabilityState();
@@ -212,9 +222,9 @@ void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location)
 	GamemodeRef.Get()->PlayCameraShakeEffect(OwnerCharacterRef.Get()->ActorHasTag("Player") ? ECameraShakeType::E_Attack : ECameraShakeType::E_Hit, Location);
 
 	// »ç¿îµå
-	if (HitImpactSound != nullptr)
+	if (AssetManagerBaseRef.IsValid())
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, HitImpactSound, GetActorLocation());
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, "HitImpact");
 	}
 }
 
