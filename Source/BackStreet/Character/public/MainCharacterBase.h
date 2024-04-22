@@ -85,60 +85,19 @@ public:
 // ------- Character Input Action ------- 
 public:
 	// MappingContext
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 		class UInputMappingContext* DefaultMappingContext;
 
-	// Move Input Action
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* MoveAction;
+	//Input Action Infos
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+		FPlayerInputActionInfo InputActionInfo;
 
-	// Roll Input Action
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* RollAction;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* AttackAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* ReloadAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* ZoomAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* ThrowReadyAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* ThrowAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* InvestigateAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* SwitchWeaponAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* DropWeaponAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* PickSubWeaponAction;
-
-	// Jump Input Action
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* JumpAction;
-
-	// Look Input Action
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* LookAction;
+	//Targeting system
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+		class UInputAction* LockToTargetAction;
 
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* SprintAction;
-
-	// Crouch Input Action
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	//	class UInputAction* CrouchAction;
-
+// ------- Character Action ------- 
 public:
 	UFUNCTION()
 		void Move(const FInputActionValue& Value);
@@ -147,12 +106,19 @@ public:
 	UFUNCTION()
 		void Look(const FInputActionValue& Value);
 
+	UFUNCTION()
+		void StartJump(const FInputActionValue& Value);
+
 	// Called for sprinting input
 	UFUNCTION()
 		void Sprint(const FInputActionValue& Value);
 
 	UFUNCTION()
 		void StopSprint(const FInputActionValue& Value);
+
+	//Try Upper Attack
+	UFUNCTION()
+		void TryUpperAttack(const FInputActionValue& Value);
 
 	//구르기를 시도한다.
 	UFUNCTION()
@@ -202,6 +168,10 @@ public:
 	UFUNCTION()
 		virtual void DropWeapon() override;
 
+	//Targeting system
+	UFUNCTION(BlueprintImplementableEvent)
+		void LockToTarget(const FInputActionValue& Value);
+
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 			, AController* EventInstigator, AActor* DamageCauser) override;
@@ -216,9 +186,30 @@ public:
 
 	UFUNCTION()
 		TArray<AActor*> GetNearInteractionActorList();
+
 private:
 	UFUNCTION()
 		void StopDashMovement();
+
+//------- Movement Interpolation Event---------
+public:
+	UFUNCTION()
+		void SetWalkSpeedWithInterp(float NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+	UFUNCTION()
+		void SetFieldOfViewWithInterp(float NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+private:
+	//interp function
+	//it must not be called alone.
+	//if you set the value of bAutoReset false, you have to call this function to reset to original value
+	UFUNCTION()
+		void UpdateWalkSpeed(const float TargetValue, const float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+	//interp function
+	//it must not be called alone.
+	UFUNCTION()
+		void UpdateFieldOfView(const float TargetValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
 
 // ------- SaveData 관련 --------------------
 protected:
@@ -294,6 +285,9 @@ public:
 
 private:
 	UPROPERTY()
+		float TargetFieldOfView = 0.0f;
+
+	UPROPERTY()
 		class UAbilityManagerBase* AbilityManagerRef;
 
 	UPROPERTY()
@@ -310,6 +304,14 @@ private:
 	//구르기 딜레이 타이머
 	UPROPERTY()
 		FTimerHandle RollTimerHandle;
+
+	//WalkSpeed Interpolate timer
+	UPROPERTY()
+		FTimerHandle WalkSpeedInterpTimerHandle;
+
+	//Field Of View Interpolate timer
+	UPROPERTY()
+		FTimerHandle FOVInterpHandle;
 
 	//구르기 내 대쉬 딜레이 핸들
 	UPROPERTY()
