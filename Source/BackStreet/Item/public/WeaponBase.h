@@ -65,7 +65,7 @@ protected:
 	virtual void InitWeaponAsset();
 
 	//현재 무기의 에셋 정보
-	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly,  Category = "Gameplay|Asset")
 		FWeaponAssetInfoStruct WeaponAssetInfo;
 
 public:

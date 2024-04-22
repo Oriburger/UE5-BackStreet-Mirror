@@ -53,7 +53,6 @@ void AEnemyCharacterBase::BeginPlay()
 	InitEnemyCharacter(CharacterID);
 
 	SetDefaultWeapon();
-	InitDynamicMeshMaterial(GetMesh()->GetMaterial(0));
 }
 
 void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
@@ -61,7 +60,7 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	// Read from dataTable
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
-	AssetInfo.CharacterID = CharacterID = NewCharacterID;
+	AssetSoftPtrInfo.CharacterID = CharacterID = NewCharacterID;
 	
 
 	if (newStat != nullptr)
@@ -98,12 +97,11 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f) return 0.0f;
+	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterStat.bIsInvincibility) return 0.0f;
 	
 	if (AssetManagerBaseRef.IsValid())
 	{
 		ACharacterBase* damageCauser = Cast<ACharacterBase>(DamageCauser);
-
 		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, damageCauser->GetCurrentWeaponRef()->GetWeaponStat().WeaponID, "HitImpact");
 	}
 	
@@ -148,7 +146,7 @@ void AEnemyCharacterBase::TryAttack()
 	Super::TryAttack();
 }
 
-void AEnemyCharacterBase::TrySkill()
+void AEnemyCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	check(GetCurrentWeaponRef() != nullptr);
 
@@ -161,7 +159,7 @@ void AEnemyCharacterBase::TrySkill()
 		return;
 	}
 
-	Super::TrySkill();
+	Super::TrySkill(SkillType, SkillID);
 }
 
 void AEnemyCharacterBase::Attack()
@@ -264,11 +262,11 @@ void AEnemyCharacterBase::ResetActionStateForTimer()
 
 void AEnemyCharacterBase::SetFacialMaterialEffect(bool NewState)
 {
-	if (CurrentDynamicMaterial == nullptr) return;
-
-	CurrentDynamicMaterial->SetScalarParameterValue(FName("EyeBrightness"), NewState ? 5.0f : 35.0f);
-	CurrentDynamicMaterial->SetVectorParameterValue(FName("EyeColor"), NewState ? FColor::Red : FColor::Yellow);
-	InitDynamicMeshMaterial(CurrentDynamicMaterial);
+	//if (CurrentDynamicMaterialList.IsEmpty()) return;
+	//HardCoding
+	//CurrentDynamicMaterialList[0]->SetScalarParameterValue(FName("EyeBrightness"), NewState ? 5.0f : 35.0f);
+	//CurrentDynamicMaterialList[0]->SetVectorParameterValue(FName("EyeColor"), NewState ? FColor::Red : FColor::Yellow);
+	//InitDynamicMaterialList(DynamicMaterialList);
 }
 
 void AEnemyCharacterBase::Turn(float Angle)
@@ -297,8 +295,8 @@ void AEnemyCharacterBase::Turn(float Angle)
 
 float AEnemyCharacterBase::PlayPreChaseAnimation()
 {
-	if (PreChaseAnimMontage == nullptr) return 0.0f;
-	return PlayAnimMontage(PreChaseAnimMontage);
+	if (AssetHardPtrInfo.PointMontageList.Num() <= 0 || !IsValid(AssetHardPtrInfo.PointMontageList[0])) return 0.0f;
+	return PlayAnimMontage(AssetHardPtrInfo.PointMontageList[0]);
 }
 
 void AEnemyCharacterBase::ResetTurnAngle()
@@ -315,4 +313,14 @@ void AEnemyCharacterBase::ClearAllTimerHandle()
 	TurnTimeOutTimerHandle.Invalidate();
 	HitTimeOutTimerHandle.Invalidate();
 	DamageAIDelayTimer.Invalidate();
+}
+
+bool AEnemyCharacterBase::PickWeapon(int32 NewWeaponID)
+{
+	return Super::PickWeapon(NewWeaponID);
+}
+
+void AEnemyCharacterBase::SwitchToNextWeapon()
+{
+	return Super::SwitchToNextWeapon();
 }

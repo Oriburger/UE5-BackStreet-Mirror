@@ -105,7 +105,7 @@ TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
 	FVector traceStartPos = (WeaponMesh->GetSocketLocation("GrabPoint")
 							+ WeaponMesh->GetSocketLocation("End")) / 2;
 	float traceRadius = UKismetMathLibrary::Vector_Distance(WeaponMesh->GetSocketLocation("GrabPoint")
-						, WeaponMesh->GetSocketLocation("End")) + 10.0f;
+						, WeaponMesh->GetSocketLocation("End")) + 40.0f;
 	
 	TEnumAsByte<EObjectTypeQuery> pawnTypeQuery = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
 	TArray<AActor*> overlapResultList, meleeDamageTargetList;
@@ -152,7 +152,7 @@ void AMeleeWeaponBase::MeleeAttack()
 	for (auto& target : targetList)
 	{
 		//if target is valid, apply damage
-		if (IsValid(target))
+		if (IsValid(target) && (!Cast<ACharacterBase>(target)->GetCharacterStat().bIsInvincibility))
 		{
 			FCharacterStateStruct targetState = Cast<ACharacterBase>(target)->GetCharacterState();
 			float totalDamage = CalculateTotalDamage(targetState);
@@ -161,7 +161,10 @@ void AMeleeWeaponBase::MeleeAttack()
 			ActivateMeleeHitEffect(target->GetActorLocation());
 			
 			//Apply Knockback
-			OwnerCharacterRef.Get()->ApplyKnockBack(target, GetWeaponStat().WeaponKnockBackEnergy);
+			if(!target->ActorHasTag("Boss"))
+			{
+				OwnerCharacterRef.Get()->ApplyKnockBack(target, GetWeaponStat().WeaponKnockBackStrength);
+			}
 
 			//Apply Damage
 			UGameplayStatics::ApplyDamage(target, totalDamage, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);

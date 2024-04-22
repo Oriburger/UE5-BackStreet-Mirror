@@ -10,59 +10,20 @@ UENUM(BlueprintType)
 enum class ESoundAssetType : uint8
 {
 	E_None				UMETA(DisplayName = "None"),
-	E_System				UMETA(DisplayName = "System"),
+	E_System			UMETA(DisplayName = "System"),
 	E_Weapon			UMETA(DisplayName = "Weapon"),
 	E_Character			UMETA(DisplayName = "Character"),
-	E_Skill					UMETA(DisplayName = "Skill"),
+	E_Skill				UMETA(DisplayName = "Skill"),
 };
 
 
-//캐릭터의 애니메이션 에셋 경로를 저장하는 데이터 테이블 구조체
 USTRUCT(BlueprintType)
-struct FCharacterAnimAssetInfoStruct : public FTableRowBase
+struct FAnimAssetSoftInfo : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
 
-	//캐릭터의 ID
-		UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 CharacterID;
 
-	//근접 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> MeleeAttackAnimMontageList;
-
-	//사격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> ShootAnimMontageList;
-
-	//투척 공격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> ThrowAnimMontageList;
-
-	//재장전 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> ReloadAnimMontageList;
-
-	//타격 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> HitAnimMontageList;
-
-	//스킬 애니메이션 / 무기 ID로 매핑하여 관리
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TMap<int32, FSkillAnimAssetMontageStruct> SkillAnimMontageMap;
-
-	//구르기 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> RollAnimMontageList;
-
-	//상호작용 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> InvestigateAnimMontageList;
-
-	//사망 애니메이션 / List로 관리 -> 랜덤하게 출력
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UAnimMontage*> DieAnimMontageList;
 };
 
 USTRUCT(BlueprintType)
@@ -72,10 +33,10 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-	TArray<USoundCue*> SoundList;
+		TArray<USoundCue*> SoundList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data", meta = (UIMin = 0.001f, UIMax = 10.0f))
-	TArray<float> SoundVolumeList;
+		TArray<float> SoundVolumeList;
 };
 
 USTRUCT(BlueprintType)
@@ -100,17 +61,167 @@ public:
 	*******************************************************/
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	ESoundAssetType SoundType;
+		ESoundAssetType SoundType;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	int32 TargetID;
+		int32 TargetID;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FName SoundTarget;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FName SoundTarget;
+		TMap<FName, FSoundArrayContainer> SoundMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TMap<FName, FSoundArrayContainer> SoundMap;
+		FName SoundAssetDescription;
+};
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FName SoundAssetDescription;
+USTRUCT(BlueprintType)
+struct FCharacterAssetSoftInfo : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+//--------------- Common ------------------------------------
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		int32 CharacterID;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FName CharacterName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
+		TSoftObjectPtr<USkeletalMesh> CharacterMeshSoftPtr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
+		FVector InitialLocation;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
+		FRotator InitialRotation;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
+		FVector InitialScale;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
+		FVector InitialCapsuleComponentScale;
+
+	//CharacterSkillList
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		TMap<int32, FOwnerSkillInfoStruct> CharacterSkillInfoMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		UAnimBlueprintGeneratedClass* AnimBlueprint;
+
+//--------------- Animation  ------------------------------------
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> MeleeAttackAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TSoftObjectPtr<UAnimMontage> UpperAttackAnimMontageSoftPtr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> AirAttackAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> ShootAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> ThrowAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> ReloadAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> HitAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> KnockdownAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> RollAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> InvestigateAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> DieAnimMontageSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> PointMontageSoftPtrList;
+
+//--------------- etc ------------------------------------
+	// VFX
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TArray<TSoftObjectPtr<UNiagaraSystem>> DebuffNiagaraEffectSoftPtrList;
+
+	// Material
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
+		TArray<TSoftObjectPtr<UMaterialInterface>> DynamicMaterialSoftPtrList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
+		TArray<TSoftObjectPtr<UTexture>> EmotionTextureSoftPtrList;
+};
+
+USTRUCT(BlueprintType)
+struct FAnimAssetHardPtrInfo
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+};
+
+USTRUCT(BlueprintType)
+struct FCharacterAssetHardInfo
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+//------- Common --------------------------
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
+		USkeletalMesh* CharacterMesh;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TArray<UNiagaraSystem*> DebuffNiagaraEffectList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
+		TArray<UMaterialInterface*> DynamicMaterialList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
+		TArray<UTexture*> EmotionTextureList;
+
+//------- Animation --------------------------
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		TArray<UAnimMontage*> MeleeAttackAnimMontageList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		UAnimMontage* UpperAttackAnimMontage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		TArray<UAnimMontage*> AirAttackAnimMontageList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		TArray<UAnimMontage*> ShootAnimMontageList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		TArray<UAnimMontage*> ThrowAnimMontageList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		TArray<UAnimMontage*> ReloadAnimMontageList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		TArray<UAnimMontage*> HitAnimMontageList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		TArray<UAnimMontage*> KnockdownAnimMontageList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		TArray<UAnimMontage*> RollAnimMontageList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		TArray<UAnimMontage*> InvestigateAnimMontageList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		TArray<UAnimMontage*> DieAnimMontageList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		TArray<UAnimMontage*> PointMontageList;
 };

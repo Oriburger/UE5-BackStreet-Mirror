@@ -7,10 +7,10 @@
 UAssetManagerBase::UAssetManagerBase()
 {
 	//------ Sound Datatable Initiation ---------
-	static ConstructorHelpers::FObjectFinder<UDataTable> systemSoundAssetTableFinder(TEXT("/Game/Asset/Data/Sound/D_SystemSoundAsset.D_SystemSoundAsset"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> weaponSoundAssetTableFinder(TEXT("/Game/Asset/Data/Sound/D_WeaponSoundAsset.D_WeaponSoundAsset"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> characterSoundAssetTableFinder(TEXT("/Game/Asset/Data/Sound/D_CharacterSoundAsset.D_CharacterSoundAsset"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> skillSoundAssetTableFinder(TEXT("/Game/Asset/Data/Sound/D_SkillSoundAsset.D_SkillSoundAsset"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> systemSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_SystemSoundAsset.D_SystemSoundAsset"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> weaponSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_WeaponSoundAsset.D_WeaponSoundAsset"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> characterSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_CharacterSoundAsset.D_CharacterSoundAsset"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> skillSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_SkillSoundAsset.D_SkillSoundAsset"));
 
 	checkf(systemSoundAssetTableFinder.Succeeded(), TEXT("SystemSoundAssetTable class discovery failed."));
 	checkf(weaponSoundAssetTableFinder.Succeeded(), TEXT("WeaponSoundAssetTable class discovery failed."));
@@ -110,15 +110,24 @@ void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, ESoundAssetType Sou
 	
 	TArray<USoundCue*> soundList = soundAssetInfo->SoundMap.Find(SoundName)->SoundList;
 	TArray<float> volumeList = soundAssetInfo->SoundMap.Find(SoundName)->SoundVolumeList;
-	if (!soundList.IsValidIndex(0) || !volumeList.IsValidIndex(0)) return;
-	
-	if (TargetActor == nullptr)
+
+	if (soundList.Num() != volumeList.Num())
 	{
-		UGameplayStatics::PlaySound2D(GetWorld(), soundList[0], volumeList[0]);
+		UE_LOG(LogTemp, Warning, TEXT("UAssetManagerBase::PlaySingleSound, soundList volumeList member count is not same"));
 	}
-	else
+
+	for (int32 idx = 0; idx < volumeList.Num(); idx++)
 	{
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[0], TargetActor->GetActorLocation(), volumeList[0]);
+		if (!soundList.IsValidIndex(idx) || !volumeList.IsValidIndex(idx)) return;
+
+		if (TargetActor == nullptr)
+		{
+			UGameplayStatics::PlaySound2D(GetWorld(), soundList[idx], volumeList[idx]);
+		}
+		else
+		{
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[idx], TargetActor->GetActorLocation(), volumeList[idx]);
+		}
 	}
 }
 
