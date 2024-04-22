@@ -178,10 +178,7 @@ void AWeaponBase::UpdateComboState()
 
 void AWeaponBase::SetResetComboTimer()
 {
-	GetWorldTimerManager().ClearTimer(ComboTimerHandle);
-	const float delayValue = FMath::Clamp((-1.0f * WeaponStat.WeaponAtkSpeedRate) + 2.0f, 0.25f, 10.0f);
-
-	GetWorldTimerManager().SetTimer(ComboTimerHandle, this, &AWeaponBase::ResetComboCnt, delayValue, false);
+	ResetComboCnt();
 }
 
 void AWeaponBase::SetOwnerCharacter(ACharacterBase* NewOwnerCharacterRef)

@@ -36,6 +36,9 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		UChildActorComponent* InventoryComponent;	
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		USceneComponent* HitSceneComponent;
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 		class UDebuffManagerComponent* DebuffManagerComponent;
@@ -90,6 +93,29 @@ public:
 	UFUNCTION()
 		void ResetAtkIntervalTimer();
 
+	UFUNCTION()
+		void SetLocationWithInterp(FVector NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+private:
+	//interp function
+	//it must not be called alone.
+	//if you set the value of bAutoReset false, you have to call this function to reset to original value
+	UFUNCTION()
+		void UpdateLocation(const FVector TargetValue, const float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+	//Set distance from ground for air attack
+	UFUNCTION()
+		void SetAirAttackLocation();
+
+	UFUNCTION()
+		void OnPlayerLanded(const FHitResult& Hit);
+
+	UFUNCTION()
+		void ResetHitCounter();	
+
+	//Knock down with 
+	virtual void KnockDown();
+	
 // ------- Character Stat/State ------------------------------
 public:
 	//캐릭터의 상태 정보를 초기화
@@ -195,7 +221,7 @@ private:
 public:
 	// 외부에서 Init하기위해 Call
 	UFUNCTION(BlueprintCallable)
-		void InitAsset(int32 NewEnemyID);
+		void InitAsset(int32 NewCharacterID);
 
 protected:
 	UFUNCTION()
@@ -258,5 +284,27 @@ protected:
 
 	UPROPERTY()
 		FTimerHandle ReloadTimerHandle;
+
+	UPROPERTY()
+		TArray<FTimerHandle> SkillAnimPlayTimerHandleList;
+
+	UPROPERTY()
+		FTimerHandle KnockDownDelayTimerHandle;	
+
+	UPROPERTY()
+		FTimerHandle HitCounterResetTimerHandle;
+
+	//Player Location Interpolate timer
+	UPROPERTY()
+		FTimerHandle LocationInterpHandle;
+
+private:
+	//Current number of multiple SkillAnimPlayTimers
+	UPROPERTY()
+		int SkillAnimPlayTimerCurr;
+
+	//Threshold number of multiple SkillAnimPlayTimer
+	UPROPERTY()
+		int SkillAnimPlayTimerThreshold;
 
 };
