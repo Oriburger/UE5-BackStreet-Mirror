@@ -543,6 +543,7 @@ void ACharacterBase::TryReload()
 void ACharacterBase::InitAsset(int32 NewCharacterID)
 {
 	AssetSoftPtrInfo = GetAssetSoftInfoWithID(NewCharacterID);
+	AssetHardPtrInfo = FCharacterAssetHardInfo();
 	//SetCharacterAnimAssetInfoData(CharacterID);
 
 	if (!AssetSoftPtrInfo.CharacterMeshSoftPtr.IsNull())
@@ -680,7 +681,7 @@ void ACharacterBase::SetAsset()
 {
 	//------Asset migrate to hard ref -------------------
 	if (AssetSoftPtrInfo.CharacterMeshSoftPtr.IsNull() || !IsValid(AssetSoftPtrInfo.CharacterMeshSoftPtr.Get())) return;
-	
+
 	AssetHardPtrInfo.CharacterMesh = AssetSoftPtrInfo.CharacterMeshSoftPtr.Get();
 
 	for (TSoftObjectPtr<UNiagaraSystem>& debuffNiagara : AssetSoftPtrInfo.DebuffNiagaraEffectSoftPtrList)
@@ -713,8 +714,8 @@ void ACharacterBase::SetAsset()
 	GetMesh()->SetRelativeLocation(AssetSoftPtrInfo.InitialLocation);
 	GetMesh()->SetWorldRotation(FRotator(0.0f, -90.0f, 0.0f));
 	GetMesh()->SetRelativeScale3D(FVector(1.0f));
-	GetMesh()->OverrideMaterials.Empty();
 	GetMesh()->SetAnimInstanceClass(AssetSoftPtrInfo.AnimBlueprint);
+	GetMesh()->OverrideMaterials.Empty();
 
 	InitMaterialAsset();	
 	InitAnimAsset();
@@ -834,6 +835,7 @@ void ACharacterBase::InitSoundAsset()
 
 void ACharacterBase::InitMaterialAsset()
 {
+
 	for (int8 matIdx = 0; matIdx < AssetHardPtrInfo.DynamicMaterialList.Num(); matIdx++)
 	{
 		if (IsValid(AssetHardPtrInfo.DynamicMaterialList[matIdx]))

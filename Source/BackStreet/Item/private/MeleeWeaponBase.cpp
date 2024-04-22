@@ -152,7 +152,7 @@ void AMeleeWeaponBase::MeleeAttack()
 	for (auto& target : targetList)
 	{
 		//if target is valid, apply damage
-		if (IsValid(target)&&(!Cast<ACharacterBase>(target)->GetCharacterStat().bIsInvincibility))
+		if (IsValid(target) && (!Cast<ACharacterBase>(target)->GetCharacterStat().bIsInvincibility))
 		{
 			FCharacterStateStruct targetState = Cast<ACharacterBase>(target)->GetCharacterState();
 			float totalDamage = CalculateTotalDamage(targetState);
@@ -161,7 +161,10 @@ void AMeleeWeaponBase::MeleeAttack()
 			ActivateMeleeHitEffect(target->GetActorLocation());
 			
 			//Apply Knockback
-			OwnerCharacterRef.Get()->ApplyKnockBack(target, GetWeaponStat().WeaponKnockBackEnergy);
+			if(!target->ActorHasTag("Boss"))
+			{
+				OwnerCharacterRef.Get()->ApplyKnockBack(target, GetWeaponStat().WeaponKnockBackStrength);
+			}
 
 			//Apply Damage
 			UGameplayStatics::ApplyDamage(target, totalDamage, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);

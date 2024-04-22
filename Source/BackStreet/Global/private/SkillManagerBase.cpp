@@ -71,8 +71,10 @@ ASkillBase* USkillManagerBase::SpawnSkillBase(ACharacterBase* NewCauser, FOwnerS
 ASkillBase* USkillManagerBase::GetSkillFromSkillBaseMap(ACharacterBase* NewCauser, FOwnerSkillInfoStruct* OwnerSkillInfo)
 {
 	if(SkillBaseMap.IsEmpty()) return nullptr;
-	if(SkillBaseMap.Find(NewCauser)->SkillBaseList.IsEmpty()) return nullptr;
-	for (ASkillBase* skillBase : SkillBaseMap.Find(NewCauser)->SkillBaseList)
+	FSkillBaseListContainer* targetListInfo = SkillBaseMap.Find(NewCauser);
+	if (targetListInfo == nullptr) return nullptr;
+	if(targetListInfo->SkillBaseList.IsEmpty()) return nullptr;
+	for (ASkillBase* skillBase : targetListInfo->SkillBaseList)
 	{
 		if(!(skillBase->SkillInfo.SkillID == OwnerSkillInfo->SkillID)) continue;
 		else return skillBase;
