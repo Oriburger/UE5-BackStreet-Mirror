@@ -708,12 +708,12 @@ void ACharacterBase::SetAsset()
 
 	//------Asset Initialize  -------------------
 	GetCapsuleComponent()->SetWorldRotation(FRotator::ZeroRotator);
-	SetActorScale3D(AssetSoftPtrInfo.InitialScale);
+	SetActorScale3D(AssetSoftPtrInfo.InitialCapsuleComponentScale);
 
 	GetMesh()->SetSkeletalMesh(AssetSoftPtrInfo.CharacterMeshSoftPtr.Get());
 	GetMesh()->SetRelativeLocation(AssetSoftPtrInfo.InitialLocation);
 	GetMesh()->SetWorldRotation(FRotator(0.0f, -90.0f, 0.0f));
-	GetMesh()->SetRelativeScale3D(FVector(1.0f));
+	GetMesh()->SetRelativeScale3D(AssetSoftPtrInfo.InitialScale);
 	GetMesh()->SetAnimInstanceClass(AssetSoftPtrInfo.AnimBlueprint);
 	GetMesh()->OverrideMaterials.Empty();
 
