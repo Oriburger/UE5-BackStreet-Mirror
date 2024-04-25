@@ -161,7 +161,8 @@ void AMeleeWeaponBase::MeleeAttack()
 			ActivateMeleeHitEffect(target->GetActorLocation());
 			
 			//Apply Knockback
-			if(!target->ActorHasTag("Boss"))
+			if(!target->ActorHasTag("Boss")
+				&& !OwnerCharacterRef.Get()->GetCharacterState().bIsAirAttacking)
 			{
 				OwnerCharacterRef.Get()->ApplyKnockBack(target, GetWeaponStat().WeaponKnockBackStrength);
 			}

@@ -51,6 +51,12 @@ public:
 	//Input에 Binding 되어 공격을 시도 (AnimMontage를 호출)
 	virtual void TryAttack();
 
+	//Try Upper Attack
+	virtual	void TryUpperAttack();
+
+	//Try Downer Attack
+	virtual	void TryDownwardAttack();
+
 	///Input에 Binding 되어 스킬공격을 시도 (AnimMontage를 호출)
 	virtual void TrySkill(ESkillType SkillType, int32 SkillID);
 
@@ -93,8 +99,19 @@ public:
 	UFUNCTION()
 		void ResetAtkIntervalTimer();
 
+	//Update Character's world Location using interporlation
 	UFUNCTION()
 		void SetLocationWithInterp(FVector NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
+
+	//Set air atk location update event timer
+	//This func is called by upper atk anim montage's notify
+	UFUNCTION(BlueprintCallable)
+		void SetAirAtkLocationUpdateTimer(); 
+
+	//Disable air atk location update event timer
+	//This func is called by downward atk anim montage's notify
+	UFUNCTION(BlueprintCallable)
+		void ResetAirAtkLocationUpdateTimer();
 
 private:
 	//interp function
@@ -290,6 +307,9 @@ protected:
 
 	UPROPERTY()
 		FTimerHandle KnockDownDelayTimerHandle;	
+
+	UPROPERTY()
+		FTimerHandle AirAtkLocationUpdateHandle;
 
 	UPROPERTY()
 		FTimerHandle HitCounterResetTimerHandle;

@@ -116,10 +116,6 @@ public:
 	UFUNCTION()
 		void StopSprint(const FInputActionValue& Value);
 
-	//Try Upper Attack
-	UFUNCTION()
-		void TryUpperAttack(const FInputActionValue& Value);
-
 	//구르기를 시도한다.
 	UFUNCTION()
 		void Roll();
@@ -145,6 +141,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		virtual void TryAttack() override;
+
+	UFUNCTION(BlueprintCallable)
+		virtual void TryUpperAttack() override;
+
+	UFUNCTION(BlueprintCallable)
+		virtual void TryDownwardAttack() override;
+
 
 	UFUNCTION(BlueprintCallable)
 		virtual void TrySkill(ESkillType SkillType, int32 SkillID) override;
