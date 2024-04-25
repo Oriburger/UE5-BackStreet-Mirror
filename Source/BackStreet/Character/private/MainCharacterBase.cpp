@@ -869,9 +869,7 @@ void AMainCharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(RollTimerHandle); 
 	GetWorldTimerManager().ClearTimer(DashDelayTimerHandle);
-	GetWorldTimerManager().ClearTimer(AutoEnemyTargetingHandle);
 
-	AutoEnemyTargetingHandle.Invalidate();
 	BuffEffectResetTimerHandle.Invalidate();
 	FacialEffectResetTimerHandle.Invalidate();
 	RollTimerHandle.Invalidate();
