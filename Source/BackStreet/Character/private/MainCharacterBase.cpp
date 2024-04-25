@@ -467,6 +467,11 @@ void AMainCharacterBase::TryAttack()
 	if(GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130) return;
 	//---------------------------------------------------------------------------------
 
+	if (!CharacterState.TargetedEnemy.IsValid())
+	{
+		CharacterState.TargetedEnemy = FindNearEnemyToTarget();
+	}
+
 	if (GetCurrentWeaponRef()->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
@@ -491,33 +496,14 @@ void AMainCharacterBase::TryUpperAttack()
 		SetFieldOfViewWithInterp(90.0f, 0.75f);
 	}
 
-	//Find upper atk target enemy (cloest pawn)
-	TArray<AActor*> outResult;
-	UClass* targetClassList = ACharacterBase::StaticClass();
-	const TEnumAsByte<EObjectTypeQuery> targetObjectType = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
-	FVector overlapBeginPos = HitSceneComponent->GetComponentLocation();
-
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), overlapBeginPos, 150.0f
-		, { targetObjectType }, targetClassList, { this }, outResult);
-
-	//DrawDebugSphere(GetWorld(), overlapBeginPos, 100.0f, 25, FColor::Yellow, false, 1000.0f, 0u, 1.0f);
-
-	float minDist = FLT_MAX;
-	for (AActor*& pawn : outResult)
+	//Update upper atk target enemy (cloest pawn)
+	CharacterState.TargetedEnemy = FindNearEnemyToTarget();
+	
+	if (CharacterState.TargetedEnemy.IsValid()
+		&& FVector::Distance(GetActorLocation(), CharacterState.TargetedEnemy.Get()->GetActorLocation()) <= 300.0f)
 	{
-		if (!IsValid(pawn)) continue;
-		if(!pawn->Tags.IsValidIndex(1) || !this->Tags.IsValidIndex(1)) continue;
-		if (pawn->Tags[1] == this->Tags[1]) continue;
-
-		float dist = FVector::Distance(pawn->GetActorLocation(), overlapBeginPos);
-		if (dist < minDist)
-		{
-			dist = minDist;
-			CharacterState.TargetedEnemy = Cast<ACharacterBase>(pawn);
-		}
-	}
-	if (CharacterState.TargetedEnemy.IsValid())
-	{
+		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(CharacterState.TargetedEnemy.Get()->GetActorLocation(), GetActorLocation());
+		CharacterState.TargetedEnemy.Get()->SetActorRotation(newRotation);
 		SetLocationWithInterp(CharacterState.TargetedEnemy.Get()->HitSceneComponent->GetComponentLocation(), 5.0f);
 	}
 
@@ -883,9 +869,46 @@ void AMainCharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(RollTimerHandle); 
 	GetWorldTimerManager().ClearTimer(DashDelayTimerHandle);
+	GetWorldTimerManager().ClearTimer(AutoEnemyTargetingHandle);
 
+	AutoEnemyTargetingHandle.Invalidate();
 	BuffEffectResetTimerHandle.Invalidate();
 	FacialEffectResetTimerHandle.Invalidate();
 	RollTimerHandle.Invalidate();
 	DashDelayTimerHandle.Invalidate();
+}
+
+ACharacterBase* AMainCharacterBase::FindNearEnemyToTarget()
+{
+	TArray<AActor*> outResult;
+	UClass* targetClassList = ACharacterBase::StaticClass();
+	const TEnumAsByte<EObjectTypeQuery> targetObjectType = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
+	FVector overlapBeginPos = HitSceneComponent->GetComponentLocation();
+
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), overlapBeginPos, 150.0f
+		, { targetObjectType }, targetClassList, { this }, outResult);
+
+	//DrawDebugSphere(GetWorld(), overlapBeginPos, 100.0f, 25, FColor::Yellow, false, 1000.0f, 0u, 1.0f);
+
+	float minDist = FLT_MAX;
+	ACharacterBase* target = nullptr;
+	for (AActor*& pawn : outResult)
+	{
+		if (!IsValid(pawn)) continue;
+		if (!pawn->Tags.IsValidIndex(1) || !this->Tags.IsValidIndex(1)) continue;
+		if (pawn->Tags[1] == this->Tags[1]) continue;
+
+		float dist = FVector::Distance(pawn->GetActorLocation(), overlapBeginPos);
+		if (dist < minDist)
+		{
+			dist = minDist;
+			target = Cast<ACharacterBase>(pawn);
+		}
+	}
+	return target;
+}
+
+void AMainCharacterBase::ResetTargetedEnemy()
+{
+	CharacterState.TargetedEnemy.Reset();
 }
