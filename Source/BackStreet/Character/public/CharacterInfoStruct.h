@@ -228,12 +228,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float CharacterCurrSkillGauge;
 
-	//Upper Atk Movement
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		bool bIsUpperAttacking = false;	
-
+	//Air Atk Movement
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		bool bIsAirAttacking = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool bIsDownwardAttacking = false;
 
 	//Hit Counter For Knockback Event
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -241,7 +241,7 @@ public:
 
 	//
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		class AActor* TargetedEnemy;
+		TWeakObjectPtr<ACharacterBase> TargetedEnemy;
 };
 
 

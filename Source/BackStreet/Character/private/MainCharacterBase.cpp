@@ -308,24 +308,10 @@ void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 	SetFieldOfViewWithInterp(90.0f, 0.5f);
 }
 
-void AMainCharacterBase::TryUpperAttack(const FInputActionValue& Value)
-{
-	if (GetCharacterMovement()->IsFalling()) return;
-	if (CharacterState.bIsUpperAttacking) return;
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (CharacterState.bIsSprinting) SetFieldOfViewWithInterp(90.0f, 0.75f);
-
-	CharacterState.bIsUpperAttacking = true;
-	if (IsValid(AssetHardPtrInfo.UpperAttackAnimMontage))
-	{
-		PlayAnimMontage(AssetHardPtrInfo.UpperAttackAnimMontage);
-	}
-	
-}
-
 void AMainCharacterBase::Roll()
 {	
 	if (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Attack)) return;
+	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
 
 	if (GetIsActionActive(ECharacterActionType::E_Attack))
 	{
@@ -493,6 +479,59 @@ void AMainCharacterBase::TryAttack()
 	this->Tags.Add("Attack|Common");
 	//RotateToCursor(); //백뷰에서는 미사용
 	Super::TryAttack();
+}
+
+void AMainCharacterBase::TryUpperAttack()
+{
+	if (GetCharacterMovement()->IsFalling()) return;
+	if (CharacterState.bIsAirAttacking) return;
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (CharacterState.bIsSprinting)
+	{
+		SetFieldOfViewWithInterp(90.0f, 0.75f);
+	}
+
+	//Find upper atk target enemy (cloest pawn)
+	TArray<AActor*> outResult;
+	UClass* targetClassList = ACharacterBase::StaticClass();
+	const TEnumAsByte<EObjectTypeQuery> targetObjectType = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
+	FVector overlapBeginPos = HitSceneComponent->GetComponentLocation();
+
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), overlapBeginPos, 150.0f
+		, { targetObjectType }, targetClassList, { this }, outResult);
+
+	//DrawDebugSphere(GetWorld(), overlapBeginPos, 100.0f, 25, FColor::Yellow, false, 1000.0f, 0u, 1.0f);
+
+	float minDist = FLT_MAX;
+	for (AActor*& pawn : outResult)
+	{
+		if (!IsValid(pawn)) continue;
+		if(!pawn->Tags.IsValidIndex(1) || !this->Tags.IsValidIndex(1)) continue;
+		if (pawn->Tags[1] == this->Tags[1]) continue;
+
+		float dist = FVector::Distance(pawn->GetActorLocation(), overlapBeginPos);
+		if (dist < minDist)
+		{
+			dist = minDist;
+			CharacterState.TargetedEnemy = Cast<ACharacterBase>(pawn);
+		}
+	}
+	if (CharacterState.TargetedEnemy.IsValid())
+	{
+		SetLocationWithInterp(CharacterState.TargetedEnemy.Get()->HitSceneComponent->GetComponentLocation(), 5.0f);
+	}
+
+	Super::TryUpperAttack();
+}
+
+void AMainCharacterBase::TryDownwardAttack()
+{
+	Super::TryDownwardAttack();
+	if (!GetCharacterMovement()->IsFalling()) return;
+	if (CharacterState.bIsSprinting)
+	{
+		SetFieldOfViewWithInterp(90.0f, 0.75f);
+	}
 }
 
 void AMainCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
