@@ -116,10 +116,6 @@ public:
 	UFUNCTION()
 		void StopSprint(const FInputActionValue& Value);
 
-	//Try Upper Attack
-	UFUNCTION()
-		void TryUpperAttack(const FInputActionValue& Value);
-
 	//구르기를 시도한다.
 	UFUNCTION()
 		void Roll();
@@ -145,6 +141,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		virtual void TryAttack() override;
+
+	UFUNCTION(BlueprintCallable)
+		virtual void TryUpperAttack() override;
+
+	UFUNCTION(BlueprintCallable)
+		virtual void TryDownwardAttack() override;
+
 
 	UFUNCTION(BlueprintCallable)
 		virtual void TrySkill(ESkillType SkillType, int32 SkillID) override;
@@ -283,6 +286,12 @@ protected:
 public:
 	virtual void ClearAllTimerHandle() override;
 
+	UFUNCTION()
+		class ACharacterBase* FindNearEnemyToTarget();
+
+	UFUNCTION()
+		void ResetTargetedEnemy();	
+
 private:
 	UPROPERTY()
 		float TargetFieldOfView = 0.0f;
@@ -296,6 +305,8 @@ private:
 	//플레이어 컨트롤러 약 참조
 	TWeakObjectPtr<class AMainCharacterController> PlayerControllerRef;
 
+// ----- Timer Handle ---------------------
+private:
 	//공격 시, 마우스 커서의 위치로 캐릭터가 바라보는 로직을 초기화하는 타이머
 	//초기화 시에는 다시 movement 방향으로 캐릭터의 Rotation Set 
 	UPROPERTY()

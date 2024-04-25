@@ -119,6 +119,9 @@ public:
 		TSoftObjectPtr<UAnimMontage> UpperAttackAnimMontageSoftPtr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TSoftObjectPtr<UAnimMontage> DownwardAttackAnimMontageSoftPtr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> AirAttackAnimMontageSoftPtrList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
@@ -194,6 +197,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
 		UAnimMontage* UpperAttackAnimMontage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		UAnimMontage* DownwardAttackAnimMontage;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
 		TArray<UAnimMontage*> AirAttackAnimMontageList;
