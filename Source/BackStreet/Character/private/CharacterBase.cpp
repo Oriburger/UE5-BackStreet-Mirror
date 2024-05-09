@@ -188,17 +188,17 @@ void ACharacterBase::ResetHitCounter()
 }
 
 void ACharacterBase::KnockDown()
-{
+{	
 	ResetHitCounter();
-	//AssetInfo.KnockDownAnimMontageList[0]
-	//CharacterState.CharacterActionState = ECharacterActionType::E_KnockedDown;
+	
+	CharacterState.CharacterActionState = ECharacterActionType::E_KnockedDown;
 
+	GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
+	KnockDownDelayTimerHandle.Invalidate();
 
-	if (AssetHardPtrInfo.KnockdownAnimMontageList.IsValidIndex(0)
-		&& IsValid(AssetHardPtrInfo.KnockdownAnimMontageList[0]))
-	{
-		PlayAnimMontage(AssetHardPtrInfo.KnockdownAnimMontageList[0]);
-	}
+	FTimerDelegate resetActionDelegate;
+	resetActionDelegate.BindUFunction(this, "ResetActionState", false);
+	GetWorldTimerManager().SetTimer(KnockDownDelayTimerHandle, resetActionDelegate, 1.0f, false, 5.0f);
 }
 
 void ACharacterBase::InitCharacterState()
@@ -267,8 +267,12 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;
 	
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
-	FWeaponStatStruct currWeaponStat = this->GetCurrentWeaponRef()->GetWeaponStat();
-	this->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
+	
+	if (IsValid(GetCurrentWeaponRef()))
+	{
+		FWeaponStatStruct currWeaponStat = this->GetCurrentWeaponRef()->GetWeaponStat();
+		this->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
+	}
 	StopAttack();
 
 	if (!GetWorldTimerManager().IsTimerActive(AtkIntervalHandle))
@@ -323,14 +327,18 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	// Set hit counter reset event using retriggable timer
 	GetWorldTimerManager().ClearTimer(HitCounterResetTimerHandle);
 	HitCounterResetTimerHandle.Invalidate();
-	GetWorldTimerManager().SetTimer(HitCounterResetTimerHandle, this, &ACharacterBase::ResetHitCounter, 3.0f, false);
+	GetWorldTimerManager().SetTimer(HitCounterResetTimerHandle, this, &ACharacterBase::ResetHitCounter, 1.0f, false, 3.0f);
+
+	UE_LOG(LogTemp, Warning, TEXT("HitCounter : %d"), CharacterState.HitCounter);
 
 	// Check knock down condition and set knock down event using retriggable timer
 	if (CharacterState.HitCounter >= 3)
 	{
-		GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
+		KnockDown();
+		/*GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
 		KnockDownDelayTimerHandle.Invalidate();
-		GetWorldTimerManager().SetTimer(KnockDownDelayTimerHandle, this, &ACharacterBase::KnockDown, 3.0f, false);
+		GetWorldTimerManager().SetTimer(KnockDownDelayTimerHandle, this, &ACharacterBase::KnockDown, 1.0f, false, 0.1f);
+		*/
 	}
 
 	return DamageAmount;

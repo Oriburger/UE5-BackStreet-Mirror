@@ -45,6 +45,7 @@ void UBTSTurnToTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 	if (OwnerCharacterRef.Get()->GetIsActionActive(ECharacterActionType::E_Idle)
 		|| OwnerCharacterRef.Get()->GetIsActionActive(ECharacterActionType::E_Skill))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Whyrano"));
 		OwnerCharacterRef->SetActorRotation(GetTurnRotation(OwnerCharacterRef.Get()));
 	}
 }

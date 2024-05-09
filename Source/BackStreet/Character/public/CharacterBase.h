@@ -73,7 +73,7 @@ public:
 	virtual void Die();
 
 	//플레이어가 현재 해당 Action을 수행하고 있는지 반환
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsActionActive(ECharacterActionType Type) { return CharacterState.CharacterActionState == Type; }
 
 	//플레이어의 ActionState를 Idle로 전환한다.
@@ -113,7 +113,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void ResetAirAtkLocationUpdateTimer();
 
-private:
+protected:
 	//interp function
 	//it must not be called alone.
 	//if you set the value of bAutoReset false, you have to call this function to reset to original value

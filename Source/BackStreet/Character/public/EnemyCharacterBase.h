@@ -47,6 +47,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void TryAttack() override;
 
+	//temporary code
 	UFUNCTION(BlueprintImplementableEvent)
 		void BossNearAttack();
 
@@ -62,15 +63,12 @@ public:
 	UFUNCTION()
 		virtual void Die() override;
 
-	UFUNCTION(BlueprintCallable)
-		void Turn(float Angle);
-
 	//플레이어를 발견한 직후 취할 Action(Anim), 재생 시간을 반환
 	UFUNCTION(BlueprintCallable)
 		float PlayPreChaseAnimation();
-private:
-	UFUNCTION()
-		void ResetTurnAngle();
+
+protected:
+	virtual void KnockDown() override;
 
 //-------- Inventory -------------
 public:

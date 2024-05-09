@@ -48,7 +48,7 @@ void AAIControllerBase::ActivateAI()
 
 void AAIControllerBase::DeactivateAI()
 {
-	GetBrainComponent()->StopLogic(FString("GameOver"));
+	GetBrainComponent()->StopLogic("Pause");
 }
 
 void AAIControllerBase::UpdateTargetPerception(AActor* Actor, FAIStimulus Stimulus)
@@ -62,10 +62,7 @@ void AAIControllerBase::UpdateTargetPerception(AActor* Actor, FAIStimulus Stimul
 		ProcessHearing(Actor, Stimulus);
 
 	else
-	{
 		ProcessPrediction(Actor, Stimulus);
-		UE_LOG(LogTemp, Warning, TEXT("Prediction!!!!"));
-	}
 		
 }
 

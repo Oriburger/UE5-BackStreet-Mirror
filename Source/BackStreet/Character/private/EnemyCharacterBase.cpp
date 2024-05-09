@@ -49,9 +49,7 @@ void AEnemyCharacterBase::BeginPlay()
 	Super::BeginPlay();
 	
 	SpawnDefaultController();
-
 	InitEnemyCharacter(CharacterID);
-
 	SetDefaultWeapon();
 }
 
@@ -118,7 +116,7 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		float fovValue = 90.0f + FMath::Clamp(DamageAmount/100.0f, 0.0f, 1.0f) * 35.0f;
 		Cast<AMainCharacterBase>(DamageCauser)->SetFieldOfViewWithInterp(fovValue, 5.0f, true);
 	}	
-
+	
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Hit)
 	{
 		GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, this, &AEnemyCharacterBase::ResetActionStateForTimer, 1.0f, false, CharacterID == 1200 ? 0.1f : 0.5f);
@@ -269,39 +267,24 @@ void AEnemyCharacterBase::SetFacialMaterialEffect(bool NewState)
 	//InitDynamicMaterialList(DynamicMaterialList);
 }
 
-void AEnemyCharacterBase::Turn(float Angle)
-{
-	if (FMath::Abs(Angle) <= 0.05f)
-	{
-		CharacterState.TurnDirection = 0;
-		return;
-	}
-
-	FRotator newRotation =  GetActorRotation();
-	newRotation.Yaw += Angle;
-	newRotation.Pitch = newRotation.Roll = 0.0f;
-	SetActorRotation(newRotation);
-	
-	if (GetVelocity().Length() == 0.0f)
-	{
-		CharacterState.TurnDirection = (FMath::Sign(Angle) == 1 ? 2 : 1);
-		GetWorldTimerManager().ClearTimer(TurnTimeOutTimerHandle);
-		GetWorldTimerManager().SetTimer(TurnTimeOutTimerHandle, this, &AEnemyCharacterBase::ResetTurnAngle, 1.0f, false, TURN_TIME_OUT_SEC);
-		return;
-	}
-	ResetTurnAngle();
-	return;
-}
-
 float AEnemyCharacterBase::PlayPreChaseAnimation()
 {
 	if (AssetHardPtrInfo.PointMontageList.Num() <= 0 || !IsValid(AssetHardPtrInfo.PointMontageList[0])) return 0.0f;
 	return PlayAnimMontage(AssetHardPtrInfo.PointMontageList[0]);
 }
 
-void AEnemyCharacterBase::ResetTurnAngle()
+void AEnemyCharacterBase::KnockDown()
 {
-	CharacterState.TurnDirection = 0;
+	Super::KnockDown();
+
+	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(Controller);
+
+	if (IsValid(aiControllerRef))
+	{
+		aiControllerRef->DeactivateAI();
+		GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
+		GetWorldTimerManager().SetTimer(DamageAIDelayTimer, aiControllerRef, &AAIControllerBase::ActivateAI, 1.0f, false, 5.0f);
+	}
 }
 
 void AEnemyCharacterBase::ClearAllTimerHandle()
