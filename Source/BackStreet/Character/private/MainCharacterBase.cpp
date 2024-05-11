@@ -151,7 +151,7 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StopSprint);
 
 		//Jump
-		EnhancedInputComponent->BindAction(InputActionInfo.JumpAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StartJump);
+		//EnhancedInputComponent->BindAction(InputActionInfo.JumpAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StartJump);
 
 		//Zoom
 		//EnhancedInputComponent->BindAction(InputActionInfo.ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
@@ -255,7 +255,13 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 	MovementInputValue = Value.Get<FVector2D>();
 	if (Controller != nullptr)
 	{
-		AddMovementInput(FollowingCamera->GetForwardVector(), MovementInputValue.Y);
+		FVector forwardAxis = !CharacterState.TargetedEnemy.IsValid() ? FollowingCamera->GetForwardVector()
+							  : CharacterState.TargetedEnemy.Get()->GetActorLocation() - GetActorLocation();
+		FVector rightAxis = UKismetMathLibrary::RotateAngleAxis(forwardAxis, 90.0f, GetActorUpVector());
+
+		rightAxis.Z = forwardAxis.Z = 0.0f;
+
+		AddMovementInput(forwardAxis, MovementInputValue.Y);
 		AddMovementInput(FollowingCamera->GetRightVector(), MovementInputValue.X);
 
 		if (MovementInputValue.Length() > 0 && OnMove.IsBound())
@@ -504,7 +510,7 @@ void AMainCharacterBase::TryUpperAttack()
 	{
 		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(CharacterState.TargetedEnemy.Get()->GetActorLocation(), GetActorLocation());
 		CharacterState.TargetedEnemy.Get()->SetActorRotation(newRotation);
-		SetLocationWithInterp(CharacterState.TargetedEnemy.Get()->HitSceneComponent->GetComponentLocation(), 5.0f);
+		SetLocationWithInterp(CharacterState.TargetedEnemy.Get()->HitSceneComponent->GetComponentLocation() + 100.0f, 5.0f);
 	}
 
 	Super::TryUpperAttack();

@@ -178,6 +178,22 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 	CharacterState.bIsAirAttacking = false;
 	CharacterState.bIsDownwardAttacking = false;
 
+	//damager side 
+	if (this->GetVelocity().Length() >= 3500.0f)
+	{
+		GamemodeRef.Get()->ActivateSlowHitEffect(0.2f);
+		GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 1000.0f);
+
+		if (CharacterState.CharacterActionState == ECharacterActionType::E_Die)
+		{
+			Die();
+		}
+	}
+	else
+	{
+		CharacterState.TargetedEnemy.Reset();
+	}
+
 	//Test code for knockdown on ground event
 	UE_LOG(LogTemp, Warning, TEXT("$Land %s  / Speed %.2lf$"), *(this->GetName()), this->GetVelocity().Length());
 }
@@ -189,6 +205,7 @@ void ACharacterBase::ResetHitCounter()
 
 void ACharacterBase::KnockDown()
 {	
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die) return;
 	ResetHitCounter();
 	
 	CharacterState.CharacterActionState = ECharacterActionType::E_KnockedDown;
@@ -284,7 +301,7 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	if (!IsValid(DamageCauser) || CharacterStat.bIsInvincibility || DamageAmount <= 0.0f) return 0.0f;
-	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
+	//if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
 
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
@@ -294,7 +311,10 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	if (CharacterState.CurrentHP == 0.0f)
 	{
 		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
-		Die();
+		if(!GetCharacterMovement()->IsFalling())
+		{
+			Die();
+		}
 	}
 	else if (this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill && !this->CharacterState.bIsAirAttacking)
 	{
@@ -327,15 +347,16 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	// Set hit counter reset event using retriggable timer
 	GetWorldTimerManager().ClearTimer(HitCounterResetTimerHandle);
 	HitCounterResetTimerHandle.Invalidate();
-	GetWorldTimerManager().SetTimer(HitCounterResetTimerHandle, this, &ACharacterBase::ResetHitCounter, 1.0f, false, 3.0f);
+	GetWorldTimerManager().SetTimer(HitCounterResetTimerHandle, this, &ACharacterBase::ResetHitCounter, 1.0f, false, 1.0f);
 
 	UE_LOG(LogTemp, Warning, TEXT("HitCounter : %d"), CharacterState.HitCounter);
 
 	// Check knock down condition and set knock down event using retriggable timer
-	if (CharacterState.HitCounter >= 3)
+	if (CharacterState.HitCounter >= 7)
 	{
 		KnockDown();
-		/*GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
+		/*
+		GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
 		KnockDownDelayTimerHandle.Invalidate();
 		GetWorldTimerManager().SetTimer(KnockDownDelayTimerHandle, this, &ACharacterBase::KnockDown, 1.0f, false, 0.1f);
 		*/
