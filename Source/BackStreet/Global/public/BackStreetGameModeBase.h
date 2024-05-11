@@ -60,6 +60,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void PlayCameraShakeEffect(ECameraShakeType EffectType, FVector Location, float Radius = 100.0f);
 
+	UFUNCTION(BlueprintCallable)
+		void ActivateSlowHitEffect(float DilationValue, float Length = 0.25f);
+
+	UFUNCTION(BlueprintCallable)
+		void DeactivateSlowHitEffect();
+
 	UFUNCTION()
 		AItemBase* SpawnItemToWorld(int32 ItemID, FVector SpawnLocation);
 
