@@ -72,7 +72,7 @@ public:
 public: 
 	//인벤토리를 초기화
 	UFUNCTION()
-		void InitInventory(int32 NewMaxCapacity = 6);
+		void InitInventory(int32 NewMaxCapacity = 1);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<FInventoryItemInfoStruct> GetInventoryArray() { return InventoryArray; }
