@@ -75,7 +75,7 @@ void ACharacterBase::BeginPlay()
 	{
 		InventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		InventoryRef->SetOwner(this);
-		InventoryRef->InitInventory();
+		InventoryRef->InitInventory(ActorHasTag("Player") ? 1 : 6);
 		InitWeaponActors();
 	}
 
