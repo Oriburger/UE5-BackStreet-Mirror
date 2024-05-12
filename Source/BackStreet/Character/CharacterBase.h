@@ -284,6 +284,8 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
 		FCharacterStateStruct CharacterState;
 
+	//Character Item Inventory
+
 	//Gamemode ¾à ÂüÁ¶
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 

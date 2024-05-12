@@ -1,5 +1,5 @@
 #include "CharacterBase.h"
-#include "DebuffManagerComponent.h"
+#include "Component/DebuffManagerComponent.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/SkillSystem/SkillManagerBase.h"

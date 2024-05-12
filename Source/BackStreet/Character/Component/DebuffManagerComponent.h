@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../Global/BackStreet.h"
+#include "../../Global/BackStreet.h"
 #include "Components/ActorComponent.h"
 #include "DebuffManagerComponent.generated.h"
 
