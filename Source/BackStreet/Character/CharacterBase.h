@@ -190,10 +190,10 @@ public:
 		bool TrySwitchToSubWeapon(int32 SubWeaponIdx);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class AWeaponInventoryBase* GetInventoryRef();
+		class AWeaponInventoryBase* GetWeaponInventoryRef();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class AWeaponInventoryBase* GetSubInventoryRef();
+		class AWeaponInventoryBase* GetSubWeaponInventoryRef();
 
 	//무기 Ref를 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -208,10 +208,10 @@ protected:
 
 private:
 	UPROPERTY()
-		class AWeaponInventoryBase* InventoryRef;
+		class AWeaponInventoryBase* WeaponInventoryRef;
 
 	UPROPERTY()
-		class AWeaponInventoryBase* SubInventoryRef;
+		class AWeaponInventoryBase* SubWeaponInventoryRef;
 
 	//0번째 : 들고 있는 무기 / 1번째, 숨겨져 있는 다른 타임의무기
 	UPROPERTY()

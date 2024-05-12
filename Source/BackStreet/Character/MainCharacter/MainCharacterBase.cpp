@@ -620,10 +620,10 @@ void AMainCharacterBase::PickSubWeapon(const FInputActionValue& Value)
 	int32 targetIdx = typeVector.X - 1;
 
 	//If player press current picked sub weapon, switch to the first main weapon.
-	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw && GetSubInventoryRef()->GetCurrentIdx() == targetIdx)
+	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw && GetSubWeaponInventoryRef()->GetCurrentIdx() == targetIdx)
 	{
-		GetInventoryRef()->EquipWeaponByIdx(0);
-		GetSubInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
+		GetWeaponInventoryRef()->EquipWeaponByIdx(0);
+		GetSubWeaponInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
 		return;
 	}
 
@@ -632,7 +632,7 @@ void AMainCharacterBase::PickSubWeapon(const FInputActionValue& Value)
 	if (result)
 	{
 		//Force UI update with manual calling delegate
-		GetInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
+		GetWeaponInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
 	}
 	else
 	{
@@ -696,8 +696,8 @@ void AMainCharacterBase::SwitchToNextWeapon()
 
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
 	{
-		GetInventoryRef()->EquipWeaponByIdx(0);
-		GetSubInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
+		GetWeaponInventoryRef()->EquipWeaponByIdx(0);
+		GetSubWeaponInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
 		return;
 	}
 
@@ -803,18 +803,18 @@ bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 
 bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
 {
-	if (!IsValid(GetInventoryRef()) || !IsValid(GetSubInventoryRef())) return false;
+	if (!IsValid(GetWeaponInventoryRef()) || !IsValid(GetSubWeaponInventoryRef())) return false;
 	
 	bool result = false; 
-	EWeaponType weaponType = GetInventoryRef()->GetWeaponType(NewWeaponID);
+	EWeaponType weaponType = GetWeaponInventoryRef()->GetWeaponType(NewWeaponID);
 	
 	if (weaponType == EWeaponType::E_Throw)
 	{
-		result = GetSubInventoryRef()->AddWeapon(NewWeaponID);
+		result = GetSubWeaponInventoryRef()->AddWeapon(NewWeaponID);
 	}
 	else if(weaponType != EWeaponType::E_None)
 	{
-		result = GetInventoryRef()->AddWeapon(NewWeaponID);
+		result = GetWeaponInventoryRef()->AddWeapon(NewWeaponID);
 	}
 
 	return result;
