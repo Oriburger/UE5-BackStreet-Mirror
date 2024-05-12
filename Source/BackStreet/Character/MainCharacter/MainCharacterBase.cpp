@@ -486,9 +486,15 @@ void AMainCharacterBase::TryAttack()
 
 	//=============
 
-	//공격을 하고, 커서 위치로 Rotation을 조정
 	this->Tags.Add("Attack|Common");
-	//RotateToCursor(); //백뷰에서는 미사용
+
+	if (CharacterState.bIsSprinting && !CharacterState.bIsAirAttacking
+		&& !CharacterState.bIsDownwardAttacking && !GetCharacterMovement()->IsFalling())
+	{
+		TryDashAttack();
+		return;
+	}
+
 	Super::TryAttack();
 }
 
@@ -520,9 +526,9 @@ void AMainCharacterBase::TryDownwardAttack()
 {
 	Super::TryDownwardAttack();
 	if (!GetCharacterMovement()->IsFalling()) return;
-	if (CharacterState.bIsSprinting)
+	if (CharacterState.TargetedEnemy.IsValid())
 	{
-		SetFieldOfViewWithInterp(90.0f, 0.75f);
+		SetFieldOfViewWithInterp(110.0f, 0.75f);
 	}
 }
 
@@ -599,23 +605,6 @@ void AMainCharacterBase::RotateToCursor()
 	newRotation.Pitch = newRotation.Roll = 0.0f;
 	SetActorRotation(newRotation);
 	return;
-
-	/* 시점 전환을 위해 제거
-	FRotator newRotation = PlayerControllerRef.Get()->GetRotationToCursor();
-	if (newRotation != FRotator())
-	{
-		newRotation.Pitch = newRotation.Roll = 0.0f;
-		GetMesh()->SetWorldRotation(newRotation);
-	}
-	GetMesh()->SetWorldRotation(newRotation.Quaternion());
-
-	GetWorld()->GetTimerManager().ClearTimer(RotationResetTimerHandle);
-	GetWorld()->GetTimerManager().SetTimer(RotationResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
-		ResetRotationToMovement();
-		FRotator newRotation = PlayerControllerRef.Get()->GetLastRotationToCursor();
-		newRotation.Yaw = FMath::Fmod((newRotation.Yaw + 90.0f), 360.0f);
-		SetActorRotation(newRotation.Quaternion(), ETeleportType::ResetPhysics);
-	}), 1.0f, false);*/
 }
 
 void AMainCharacterBase::PickSubWeapon(const FInputActionValue& Value)
@@ -882,14 +871,14 @@ void AMainCharacterBase::ClearAllTimerHandle()
 	DashDelayTimerHandle.Invalidate();
 }
 
-ACharacterBase* AMainCharacterBase::FindNearEnemyToTarget()
+ACharacterBase* AMainCharacterBase::FindNearEnemyToTarget(float Radius)
 {
 	TArray<AActor*> outResult;
 	UClass* targetClassList = ACharacterBase::StaticClass();
 	const TEnumAsByte<EObjectTypeQuery> targetObjectType = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
 	FVector overlapBeginPos = HitSceneComponent->GetComponentLocation();
 
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), overlapBeginPos, 150.0f
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), overlapBeginPos, Radius
 		, { targetObjectType }, targetClassList, { this }, outResult);
 
 	//DrawDebugSphere(GetWorld(), overlapBeginPos, 100.0f, 25, FColor::Yellow, false, 1000.0f, 0u, 1.0f);

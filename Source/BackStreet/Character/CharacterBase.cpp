@@ -24,7 +24,7 @@ ACharacterBase::ACharacterBase()
 
 	HitSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("HIT_SCENE"));
 	HitSceneComponent->SetupAttachment(GetMesh());
-	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 150.0f, 90.0f));
+	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 115.0f, 90.0f));
 
 
 	static ConstructorHelpers::FClassFinder<AWeaponInventoryBase> weaponInventoryClassFinder(TEXT("/Game/Weapon/Blueprint/BP_WeaponInventory"));
@@ -126,7 +126,7 @@ void ACharacterBase::ResetAirAtkLocationUpdateTimer()
 void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset)
 {
 	FVector currentLocation = GetActorLocation();
-	if (currentLocation.Equals(TargetValue, 50.0f))
+	if (currentLocation.Equals(TargetValue, 75.0f))
 	{
 		GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 		if (bAutoReset)
@@ -195,7 +195,7 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 	}
 
 	//Test code for knockdown on ground event
-	UE_LOG(LogTemp, Warning, TEXT("$Land %s  / Speed %.2lf$"), *(this->GetName()), this->GetVelocity().Length());
+	//UE_LOG(LogTemp, Warning, TEXT("$Land %s  / Speed %.2lf$"), *(this->GetName()), this->GetVelocity().Length());
 }
 
 void ACharacterBase::ResetHitCounter()
@@ -453,7 +453,6 @@ void ACharacterBase::TryAttack()
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
 
-
 	int32 nextAnimIdx = 0;
 	const float attackSpeed = FMath::Clamp(CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
@@ -540,6 +539,42 @@ void ACharacterBase::TryDownwardAttack()
 	{
 		PlayAnimMontage(AssetHardPtrInfo.DownwardAttackAnimMontage);
 	}
+}
+
+void ACharacterBase::TryDashAttack()
+{
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
+	if (GetCharacterMovement()->IsFalling()) return;
+	if (!IsValid(AssetHardPtrInfo.DashAttackAnimMontage)) return;
+	if (GetVelocity().Length() <= CharacterState.TotalMoveSpeed * 0.9f) return;
+
+	// set action state
+	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
+
+	// activate dash anim with interp to target location
+	PlayAnimMontage(AssetHardPtrInfo.DashAttackAnimMontage);
+}
+
+void ACharacterBase::DashAttack()
+{
+	//init local parameter
+	const float dashLength = 500.0f;
+	FVector targetLocation = GetActorLocation() + GetVelocity().GetSafeNormal() * dashLength;
+
+	//check if there are any obstacle (wall, prop, enemy etc.)
+	FHitResult hitResult;
+	FCollisionQueryParams collisionQueryParams;
+	collisionQueryParams.AddIgnoredActor(this);
+	if (IsValid(GetCurrentWeaponRef()))
+	{
+		collisionQueryParams.AddIgnoredActor(this);
+	}
+	GetWorld()->LineTraceSingleByChannel(hitResult, HitSceneComponent->GetComponentLocation(), targetLocation, ECollisionChannel::ECC_Camera);
+	targetLocation = hitResult.bBlockingHit ? hitResult.Location : targetLocation;
+
+	DrawDebugSphere(GetWorld(), targetLocation, 50.0f, 12, FColor::Yellow, true);
+	SetLocationWithInterp(targetLocation, 0.15f);
 }
 
 void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
@@ -656,6 +691,7 @@ void ACharacterBase::InitAsset(int32 NewCharacterID)
 
 		AssetToStream.AddUnique(AssetSoftPtrInfo.UpperAttackAnimMontageSoftPtr.ToSoftObjectPath());
 		AssetToStream.AddUnique(AssetSoftPtrInfo.DownwardAttackAnimMontageSoftPtr.ToSoftObjectPath());
+		AssetToStream.AddUnique(AssetSoftPtrInfo.DashAttackAnimMontageSoftPtr.ToSoftObjectPath());
 
 		if (!AssetSoftPtrInfo.AirAttackAnimMontageSoftPtrList.IsEmpty())
 		{
@@ -833,6 +869,11 @@ bool ACharacterBase::InitAnimAsset()
 	if (AssetSoftPtrInfo.DownwardAttackAnimMontageSoftPtr.IsValid())
 	{
 		AssetHardPtrInfo.DownwardAttackAnimMontage = AssetSoftPtrInfo.DownwardAttackAnimMontageSoftPtr.Get();
+	}
+
+	if (AssetSoftPtrInfo.DashAttackAnimMontageSoftPtr.IsValid())
+	{
+		AssetHardPtrInfo.DashAttackAnimMontage = AssetSoftPtrInfo.DashAttackAnimMontageSoftPtr.Get();
 	}
 
 	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AirAttackAnimMontageSoftPtrList)

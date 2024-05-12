@@ -148,7 +148,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void TryDownwardAttack() override;
 
-
 	UFUNCTION(BlueprintCallable)
 		virtual void TrySkill(ESkillType SkillType, int32 SkillID) override;
 
@@ -287,7 +286,7 @@ public:
 	virtual void ClearAllTimerHandle() override;
 
 	UFUNCTION()
-		class ACharacterBase* FindNearEnemyToTarget();
+		class ACharacterBase* FindNearEnemyToTarget(float Radius = 150.0f);
 
 	UFUNCTION()
 		void ResetTargetedEnemy();	

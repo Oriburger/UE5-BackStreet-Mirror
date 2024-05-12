@@ -57,6 +57,14 @@ public:
 	//Try Downer Attack
 	virtual	void TryDownwardAttack();
 
+	//try play dash atk montage
+	UFUNCTION()
+		void TryDashAttack();
+
+	// called with notify, activate dash logic with interp
+	UFUNCTION(BlueprintCallable)
+		void DashAttack();
+
 	///Input에 Binding 되어 스킬공격을 시도 (AnimMontage를 호출)
 	virtual void TrySkill(ESkillType SkillType, int32 SkillID);
 
@@ -132,7 +140,7 @@ protected:
 
 	//Knock down with 
 	virtual void KnockDown();
-	
+
 // ------- Character Stat/State ------------------------------
 public:
 	//캐릭터의 상태 정보를 초기화

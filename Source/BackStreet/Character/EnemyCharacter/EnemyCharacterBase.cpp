@@ -111,7 +111,11 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 			DamageCauser->Tags.Remove("Attack|Common");
 		}
 		//apply fov hit effect by damage amount
-		float fovValue = 90.0f + FMath::Clamp(DamageAmount/100.0f, 0.0f, 1.0f) * 35.0f;
+		float fovValue = 90.0f + FMath::Clamp(DamageAmount/100.0f, 0.0f, 1.0f) * 45.0f;
+		if (Cast<AMainCharacterBase>(DamageCauser)->GetCharacterState().bIsDownwardAttacking)
+		{
+			fovValue = 120.0f;
+		}
 		Cast<AMainCharacterBase>(DamageCauser)->SetFieldOfViewWithInterp(fovValue, 5.0f, true);
 	}	
 	
