@@ -148,7 +148,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void TryDownwardAttack() override;
 
-
 	UFUNCTION(BlueprintCallable)
 		virtual void TrySkill(ESkillType SkillType, int32 SkillID) override;
 
@@ -172,7 +171,7 @@ public:
 		virtual void DropWeapon() override;
 
 	//Targeting system
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION()
 		void LockToTarget(const FInputActionValue& Value);
 
 	UFUNCTION()
@@ -285,12 +284,6 @@ protected:
 // ------- ±× ¿Ü -----------
 public:
 	virtual void ClearAllTimerHandle() override;
-
-	UFUNCTION()
-		class ACharacterBase* FindNearEnemyToTarget();
-
-	UFUNCTION()
-		void ResetTargetedEnemy();	
 
 private:
 	UPROPERTY()

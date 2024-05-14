@@ -45,7 +45,7 @@ protected:
 		FColor MeleeTrailParticleColor;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class UParticleSystem* HitEffectParticle;
+		class UNiagaraSystem* HitEffectParticle;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
 		class USoundCue* WieldSound;
@@ -70,12 +70,6 @@ private:
 	//사운드, 파티클, 카메라 등의 근접 공격 효과를 출력한다.
 	UFUNCTION()
 		void ActivateMeleeHitEffect(const FVector& Location);
-
-	UFUNCTION()
-		void ActivateSlowHitEffect();
-
-	UFUNCTION()
-		void DeactivateSlowHitEffect();
 
 private:
 	UFUNCTION()

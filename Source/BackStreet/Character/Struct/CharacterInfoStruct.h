@@ -149,10 +149,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bIsSprinting = false;
 
-	//0 : Idle,  1 : Left Turn,  2 : Right Turn
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		uint8 TurnDirection = 0;
-
 	//캐릭터의 행동 정보
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		ECharacterActionType CharacterActionState;
@@ -238,10 +234,6 @@ public:
 	//Hit Counter For Knockback Event
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		int32 HitCounter = 0;
-
-	//
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TWeakObjectPtr<ACharacterBase> TargetedEnemy;
 };
 
 
