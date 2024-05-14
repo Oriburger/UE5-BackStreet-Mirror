@@ -127,7 +127,7 @@ protected:
 
 	//해당 Weapon이 인벤토리에 포함이 되어있는지 반환
 	UFUNCTION(BlueprintCallable)
-		int32 GetWeaponInventoryIdx(int32 WeaponID);
+		int32 GetInventoryIdx(int32 WeaponID);
 
 	//인벤토리에 TargetWeaponID라는 ID를 가진 Weapon이 있는지 체크.
 	//중복되는게 있다면 해당 인벤토리의 Idx를 반환

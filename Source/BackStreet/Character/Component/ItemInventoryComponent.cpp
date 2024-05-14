@@ -31,4 +31,16 @@ void UItemInventoryComponent::InitItemInventory()
 	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
 }
 
+void UItemInventoryComponent::AddItem(int32 ItemID, int32 ItemCnt)
+{
+}
+
+void UItemInventoryComponent::RemoveItem(int32 ItemID, int32 ItemCnt)
+{
+}
+
+void UItemInventoryComponent::GetItemCount(int32 ItemID)
+{
+}
+
 

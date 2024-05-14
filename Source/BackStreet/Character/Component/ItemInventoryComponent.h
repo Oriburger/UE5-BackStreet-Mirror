@@ -39,7 +39,7 @@ public:
 
 //====== Property ===========================
 private:
-	TMap<FItemInventoryStruct> ItemInventoryMap;
+	//TMap<FItemInventoryStruct> ItemInventoryMap;
 	//owner character ref
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 
