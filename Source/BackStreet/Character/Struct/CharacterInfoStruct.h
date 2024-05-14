@@ -234,10 +234,6 @@ public:
 	//Hit Counter For Knockback Event
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		int32 HitCounter = 0;
-
-	//
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TWeakObjectPtr<ACharacterBase> TargetedEnemy;
 };
 
 

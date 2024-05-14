@@ -43,6 +43,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 		class UDebuffManagerComponent* DebuffManagerComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UTargetingManagerComponent* TargetingManagerComponent;
+
 // ------- Character Action ±âº» ------- 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")

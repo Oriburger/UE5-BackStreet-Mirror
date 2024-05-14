@@ -1,6 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "MainCharacterBase.h"
 #include "MainCharacterController.h"
+#include "../TargetingManagerComponent.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SaveSystem/BackStreetGameInstance.h"
 #include "../../System/AbilitySystem/AbilityManagerBase.h"
@@ -255,8 +256,9 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 	MovementInputValue = Value.Get<FVector2D>();
 	if (Controller != nullptr)
 	{
-		FVector forwardAxis = !CharacterState.TargetedEnemy.IsValid() ? FollowingCamera->GetForwardVector()
-							  : CharacterState.TargetedEnemy.Get()->GetActorLocation() - GetActorLocation();
+		FVector forwardAxis = FollowingCamera->GetForwardVector();
+		//!CharacterState.TargetedEnemy.IsValid() ? FollowingCamera->GetForwardVector()
+		//					  : CharacterState.TargetedEnemy.Get()->GetActorLocation() - GetActorLocation();
 		FVector rightAxis = UKismetMathLibrary::RotateAngleAxis(forwardAxis, 90.0f, GetActorUpVector());
 
 		rightAxis.Z = forwardAxis.Z = 0.0f;
@@ -450,6 +452,18 @@ void AMainCharacterBase::TryReload()
 	Super::TryReload();
 }
 
+void AMainCharacterBase::LockToTarget(const FInputActionValue& Value)
+{
+	if (!TargetingManagerComponent->GetIsTargetingActivated())
+	{
+		TargetingManagerComponent->ActivateTargeting();
+	}
+	else
+	{
+		TargetingManagerComponent->DeactivateTargeting();
+	}
+}
+
 float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -472,11 +486,6 @@ void AMainCharacterBase::TryAttack()
 	//IndieGo용 임시 코드----------------------------------------------------------
 	if(GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130) return;
 	//---------------------------------------------------------------------------------
-
-	if (!CharacterState.TargetedEnemy.IsValid())
-	{
-		CharacterState.TargetedEnemy = FindNearEnemyToTarget();
-	}
 
 	if (GetCurrentWeaponRef()->WeaponID == 0)
 	{
@@ -509,14 +518,15 @@ void AMainCharacterBase::TryUpperAttack()
 	}
 
 	//Update upper atk target enemy (cloest pawn)
-	CharacterState.TargetedEnemy = FindNearEnemyToTarget();
+	TargetingManagerComponent->ForceTargetingToNearestCharacter();
+	AActor* targetedEnemy = TargetingManagerComponent->GetTargetedCharacter();
 	
-	if (CharacterState.TargetedEnemy.IsValid()
-		&& FVector::Distance(GetActorLocation(), CharacterState.TargetedEnemy.Get()->GetActorLocation()) <= 300.0f)
+	if (IsValid(targetedEnemy)
+		&& FVector::Distance(GetActorLocation(), targetedEnemy->GetActorLocation()) <= 300.0f)
 	{
-		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(CharacterState.TargetedEnemy.Get()->GetActorLocation(), GetActorLocation());
-		CharacterState.TargetedEnemy.Get()->SetActorRotation(newRotation);
-		SetLocationWithInterp(CharacterState.TargetedEnemy.Get()->HitSceneComponent->GetComponentLocation() + 100.0f, 5.0f);
+		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(targetedEnemy->GetActorLocation(), GetActorLocation());
+		targetedEnemy->SetActorRotation(newRotation);
+		SetLocationWithInterp(Cast<ACharacterBase>(targetedEnemy)->HitSceneComponent->GetComponentLocation() + 100.0f, 5.0f);
 	}
 
 	Super::TryUpperAttack();
@@ -526,7 +536,7 @@ void AMainCharacterBase::TryDownwardAttack()
 {
 	Super::TryDownwardAttack();
 	if (!GetCharacterMovement()->IsFalling()) return;
-	if (CharacterState.TargetedEnemy.IsValid())
+	if (IsValid(TargetingManagerComponent->GetTargetedCharacter()))
 	{
 		SetFieldOfViewWithInterp(110.0f, 0.75f);
 	}
@@ -869,39 +879,4 @@ void AMainCharacterBase::ClearAllTimerHandle()
 	FacialEffectResetTimerHandle.Invalidate();
 	RollTimerHandle.Invalidate();
 	DashDelayTimerHandle.Invalidate();
-}
-
-ACharacterBase* AMainCharacterBase::FindNearEnemyToTarget(float Radius)
-{
-	TArray<AActor*> outResult;
-	UClass* targetClassList = ACharacterBase::StaticClass();
-	const TEnumAsByte<EObjectTypeQuery> targetObjectType = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
-	FVector overlapBeginPos = HitSceneComponent->GetComponentLocation();
-
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), overlapBeginPos, Radius
-		, { targetObjectType }, targetClassList, { this }, outResult);
-
-	//DrawDebugSphere(GetWorld(), overlapBeginPos, 100.0f, 25, FColor::Yellow, false, 1000.0f, 0u, 1.0f);
-
-	float minDist = FLT_MAX;
-	ACharacterBase* target = nullptr;
-	for (AActor*& pawn : outResult)
-	{
-		if (!IsValid(pawn)) continue;
-		if (!pawn->Tags.IsValidIndex(1) || !this->Tags.IsValidIndex(1)) continue;
-		if (pawn->Tags[1] == this->Tags[1]) continue;
-
-		float dist = FVector::Distance(pawn->GetActorLocation(), overlapBeginPos);
-		if (dist < minDist)
-		{
-			dist = minDist;
-			target = Cast<ACharacterBase>(pawn);
-		}
-	}
-	return target;
-}
-
-void AMainCharacterBase::ResetTargetedEnemy()
-{
-	CharacterState.TargetedEnemy.Reset();
 }

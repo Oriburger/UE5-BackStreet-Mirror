@@ -1,5 +1,6 @@
 #include "CharacterBase.h"
 #include "DebuffManagerComponent.h"
+#include "TargetingManagerComponent.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/SkillSystem/SkillManagerBase.h"
@@ -43,6 +44,7 @@ ACharacterBase::ACharacterBase()
 	WeaponClassList.Add(shootWeaponClassFinder.Class);
 
 	DebuffManagerComponent = CreateDefaultSubobject<UDebuffManagerComponent>(TEXT("DEBUFF_MANAGER"));
+	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));
 
 	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
 }
@@ -189,10 +191,6 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 			Die();
 		}
 	}
-	else
-	{
-		CharacterState.TargetedEnemy.Reset();
-	}
 
 	//Test code for knockdown on ground event
 	//UE_LOG(LogTemp, Warning, TEXT("$Land %s  / Speed %.2lf$"), *(this->GetName()), this->GetVelocity().Length());
@@ -333,8 +331,9 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	FVector location = HitSceneComponent->GetComponentLocation();
 	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(DamageCauser->GetActorLocation(), GetActorLocation());
 	newRotation.Pitch = newRotation.Roll = 0.0f;
-	if (Cast<ACharacterBase>(DamageCauser)->GetCharacterState().TargetedEnemy.IsValid()
-		&& Cast<ACharacterBase>(DamageCauser)->GetCharacterState().TargetedEnemy.Get() == this)
+
+	ACharacterBase* causerTarget = Cast<ACharacterBase>(DamageCauser)->TargetingManagerComponent->GetTargetedCharacter();
+	if (IsValid(causerTarget) && causerTarget == this)
 	{
 		Cast<ACharacterBase>(DamageCauser)->SetActorRotation(newRotation);
 		newRotation.Yaw += 180.0f;

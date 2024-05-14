@@ -171,7 +171,7 @@ public:
 		virtual void DropWeapon() override;
 
 	//Targeting system
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION()
 		void LockToTarget(const FInputActionValue& Value);
 
 	UFUNCTION()
@@ -284,12 +284,6 @@ protected:
 // ------- ±× ¿Ü -----------
 public:
 	virtual void ClearAllTimerHandle() override;
-
-	UFUNCTION()
-		class ACharacterBase* FindNearEnemyToTarget(float Radius = 150.0f);
-
-	UFUNCTION()
-		void ResetTargetedEnemy();	
 
 private:
 	UPROPERTY()
