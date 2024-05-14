@@ -11,6 +11,7 @@ UItemInventoryComponent::UItemInventoryComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
+	InitItemInventory();
 	// ...
 }
 
@@ -24,5 +25,10 @@ void UItemInventoryComponent::BeginPlay()
 	
 }
 
+void UItemInventoryComponent::InitItemInventory()
+{
+	//Initialize the owner character ref
+	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
+}
 
 
