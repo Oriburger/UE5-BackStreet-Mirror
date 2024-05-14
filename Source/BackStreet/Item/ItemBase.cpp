@@ -109,8 +109,8 @@ void AItemBase::OnItemPicked(AActor* Causer)
 	if (!IsValid(Causer) || Causer->IsActorBeingDestroyed()) return;
 
 	AMainCharacterBase* playerRef = Cast<AMainCharacterBase>(Causer);
-	AWeaponInventoryBase* playerInventoryRef = playerRef->GetInventoryRef();
-	check(IsValid(playerInventoryRef)); //player가 살아있는데, Inventory가 Invalid하면 안됨
+	AWeaponInventoryBase* playerWeaponInventoryRef = playerRef->GetWeaponInventoryRef();
+	check(IsValid(playerWeaponInventoryRef)); //player가 살아있는데, Inventory가 Invalid하면 안됨
 
 	switch (ItemInfo.ItemType)
 	{
@@ -125,11 +125,11 @@ void AItemBase::OnItemPicked(AActor* Causer)
 		if (Causer->ActorHasTag("Player"))
 		{
 			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_BULLET_ID_DIFF_VALUE;
-			//FWeaponStatStruct targetWeaponStat = playerInventoryRef->GetWeaponStatInfoWithID(targetWeaponID);
+			//FWeaponStatStruct targetWeaponStat = playerWeaponInventoryRef->GetWeaponStatInfoWithID(targetWeaponID);
 
-			if (playerInventoryRef->GetWeaponIsContained(targetWeaponID))
+			if (playerWeaponInventoryRef->GetWeaponIsContained(targetWeaponID))
 			{
-			//	ensure(playerInventoryRef->TryAddAmmoToWeapon(targetWeaponID, (int32)ItemInfo.Variable));
+			//	ensure(playerWeaponInventoryRef->TryAddAmmoToWeapon(targetWeaponID, (int32)ItemInfo.Variable));
 			}
 			else
 			{

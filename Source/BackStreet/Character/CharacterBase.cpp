@@ -57,8 +57,8 @@ void ACharacterBase::BeginPlay()
 	CharacterID = AssetSoftPtrInfo.CharacterID;
 	InitCharacterState();
 
-	InventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
-	SubInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
+	WeaponInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
+	SubWeaponInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	
 	if (GamemodeRef.IsValid())
@@ -66,18 +66,18 @@ void ACharacterBase::BeginPlay()
 		AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
 	}
 
-	if (IsValid(SubInventoryRef) && !SubInventoryRef->IsActorBeingDestroyed())
+	if (IsValid(SubWeaponInventoryRef) && !SubWeaponInventoryRef->IsActorBeingDestroyed())
 	{
-		SubInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
-		SubInventoryRef->SetOwner(this);
-		SubInventoryRef->InitInventory(2);
+		SubWeaponInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+		SubWeaponInventoryRef->SetOwner(this);
+		SubWeaponInventoryRef->InitInventory(2);
 	}
 
-	if (IsValid(InventoryRef) && !InventoryRef->IsActorBeingDestroyed())
+	if (IsValid(WeaponInventoryRef) && !WeaponInventoryRef->IsActorBeingDestroyed())
 	{
-		InventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
-		InventoryRef->SetOwner(this);
-		InventoryRef->InitInventory(ActorHasTag("Player") ? 1 : 6);
+		WeaponInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+		WeaponInventoryRef->SetOwner(this);
+		WeaponInventoryRef->InitInventory(ActorHasTag("Player") ? 1 : 6);
 		InitWeaponActors();
 	}
 
@@ -271,7 +271,7 @@ void ACharacterBase::UpdateCharacterState(FCharacterStateStruct NewState)
 
 void ACharacterBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
-	if (!IsValid(GetCurrentWeaponRef()) || InventoryRef->IsActorBeingDestroyed()) return;
+	if (!IsValid(GetCurrentWeaponRef()) || WeaponInventoryRef->IsActorBeingDestroyed()) return;
 	GetCurrentWeaponRef()->UpdateWeaponStat(NewStat);
 }
 
@@ -402,13 +402,13 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 
 void ACharacterBase::Die()
 {
-	if (IsValid(InventoryRef) && !InventoryRef->IsActorBeingDestroyed())
+	if (IsValid(WeaponInventoryRef) && !WeaponInventoryRef->IsActorBeingDestroyed())
 	{
 		//캐릭터가 죽으면 3가지 타입의 무기 액터를 순차적으로 반환
 		for (int weaponIdx = 2; weaponIdx >= 0; weaponIdx--)
 		{
 			WeaponActorList[weaponIdx]->Destroy();
-			InventoryRef->Destroy();
+			WeaponInventoryRef->Destroy();
 		}
 	}
 	//Disable Collision
@@ -1025,16 +1025,16 @@ bool ACharacterBase::EquipWeapon(AWeaponBase* TargetWeapon)
 
 bool ACharacterBase::PickWeapon(int32 NewWeaponID)
 {
-	if (!IsValid(InventoryRef)) return false;
-	bool result = InventoryRef->AddWeapon(NewWeaponID);
+	if (!IsValid(WeaponInventoryRef)) return false;
+	bool result = WeaponInventoryRef->AddWeapon(NewWeaponID);
 	return result;
 }
 
 void ACharacterBase::SwitchToNextWeapon()
 {
-	if (!IsValid(InventoryRef)) return;
+	if (!IsValid(WeaponInventoryRef)) return;
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
-	InventoryRef->SwitchToNextWeapon();
+	WeaponInventoryRef->SwitchToNextWeapon();
 }
 
 void ACharacterBase::DropWeapon()
@@ -1043,11 +1043,11 @@ void ACharacterBase::DropWeapon()
 	
 	if (CurrentWeaponRef->GetWeaponType() == EWeaponType::E_Throw)
 	{
-		SubInventoryRef->RemoveCurrentWeapon();
+		SubWeaponInventoryRef->RemoveCurrentWeapon();
 		SwitchWeaponActor(EWeaponType::E_Melee);
-		InventoryRef->EquipWeaponByIdx(0);
+		WeaponInventoryRef->EquipWeaponByIdx(0);
 	}
-	else InventoryRef->RemoveCurrentWeapon();
+	else WeaponInventoryRef->RemoveCurrentWeapon();
 	
 	SwitchToNextWeapon();
 		
@@ -1056,27 +1056,27 @@ void ACharacterBase::DropWeapon()
 
 bool ACharacterBase::TrySwitchToSubWeapon(int32 SubWeaponIdx)
 {
-	if (SubWeaponIdx >= SubInventoryRef->GetCurrentWeaponCount()) return false;
+	if (SubWeaponIdx >= SubWeaponInventoryRef->GetCurrentWeaponCount()) return false;
 
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
-		SubInventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
+		SubWeaponInventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
 	else
-		InventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
-	SubInventoryRef->EquipWeaponByIdx(SubWeaponIdx);
+		WeaponInventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
+	SubWeaponInventoryRef->EquipWeaponByIdx(SubWeaponIdx);
 
 	return true;
 }
 
-AWeaponInventoryBase* ACharacterBase::GetInventoryRef()
+AWeaponInventoryBase* ACharacterBase::GetWeaponInventoryRef()
 {
-	if (!IsValid(InventoryRef) || InventoryRef->IsActorBeingDestroyed()) return nullptr;
-	return InventoryRef;
+	if (!IsValid(WeaponInventoryRef) || WeaponInventoryRef->IsActorBeingDestroyed()) return nullptr;
+	return WeaponInventoryRef;
 }
 
-AWeaponInventoryBase* ACharacterBase::GetSubInventoryRef()
+AWeaponInventoryBase* ACharacterBase::GetSubWeaponInventoryRef()
 {	
-	if (!IsValid(SubInventoryRef) || SubInventoryRef->IsActorBeingDestroyed()) return nullptr;
-	return SubInventoryRef;
+	if (!IsValid(SubWeaponInventoryRef) || SubWeaponInventoryRef->IsActorBeingDestroyed()) return nullptr;
+	return SubWeaponInventoryRef;
 }
 
 AWeaponBase* ACharacterBase::GetCurrentWeaponRef()

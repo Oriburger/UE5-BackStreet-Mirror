@@ -171,7 +171,7 @@ void ARangedWeaponBase::Reload()
 	}
 	WeaponState.RangedWeaponState.CurrentAmmoCount += addAmmoCnt;
 	WeaponState.RangedWeaponState.ExtraAmmoCount -= addAmmoCnt;
-	OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
+	OwnerCharacterRef.Get()->GetWeaponInventoryRef()->SyncCurrentWeaponInfo(true);
 
 	//if (OwnerCharacterRef.IsValid())
 	//	OwnerCharacterRef.Get()->ResetActionState(true);
@@ -216,7 +216,7 @@ bool ARangedWeaponBase::TryFireProjectile()
 	if (!WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
 	{
 		WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
-		OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
+		OwnerCharacterRef.Get()->GetWeaponInventoryRef()->SyncCurrentWeaponInfo(true);
 	}
 
 	for (int idx = 1; idx <= fireProjectileCnt; idx++)
@@ -238,12 +238,12 @@ bool ARangedWeaponBase::TryFireProjectile()
 				//플레이어가 소유한 보조무기라면? 보조무기 인벤토리에서 제거
 				if (OwnerCharacterRef.Get()->ActorHasTag("Player") && WeaponStat.WeaponType == EWeaponType::E_Throw)
 				{
-					Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->GetSubInventoryRef()->RemoveCurrentWeapon();
+					Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->GetSubWeaponInventoryRef()->RemoveCurrentWeapon();
 				}
 				//그렇지 않다면 일반 인벤토리에서 제거 
 				else
 				{
-					OwnerCharacterRef.Get()->GetInventoryRef()->RemoveCurrentWeapon();
+					OwnerCharacterRef.Get()->GetWeaponInventoryRef()->RemoveCurrentWeapon();
 				}
 			}
 
