@@ -2,10 +2,10 @@
 
 
 #include "TargetingManagerComponent.h"
-#include "./MainCharacter/MainCharacterBase.h"
+#include "../MainCharacter/MainCharacterBase.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "CharacterBase.h"
+#include "../CharacterBase.h"
 
 // Sets default values for this component's properties
 UTargetingManagerComponent::UTargetingManagerComponent()
