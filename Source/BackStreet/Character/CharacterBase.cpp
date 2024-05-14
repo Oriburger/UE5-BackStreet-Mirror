@@ -1,5 +1,6 @@
 #include "CharacterBase.h"
-#include "Component/DebuffManagerComponent.h"
+#include "./Component/DebuffManagerComponent.h"
+#include "./Component/TargetingManagerComponent.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/SkillSystem/SkillManagerBase.h"
@@ -24,7 +25,7 @@ ACharacterBase::ACharacterBase()
 
 	HitSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("HIT_SCENE"));
 	HitSceneComponent->SetupAttachment(GetMesh());
-	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 150.0f, 90.0f));
+	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 115.0f, 90.0f));
 
 
 	static ConstructorHelpers::FClassFinder<AWeaponInventoryBase> weaponInventoryClassFinder(TEXT("/Game/Weapon/Blueprint/BP_WeaponInventory"));
@@ -43,6 +44,7 @@ ACharacterBase::ACharacterBase()
 	WeaponClassList.Add(shootWeaponClassFinder.Class);
 
 	DebuffManagerComponent = CreateDefaultSubobject<UDebuffManagerComponent>(TEXT("DEBUFF_MANAGER"));
+	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));
 
 	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
 }
@@ -75,7 +77,7 @@ void ACharacterBase::BeginPlay()
 	{
 		WeaponInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		WeaponInventoryRef->SetOwner(this);
-		WeaponInventoryRef->InitInventory();
+		WeaponInventoryRef->InitWeaponInventory(ActorHasTag("Player") ? 1 : 6);
 		InitWeaponActors();
 	}
 
@@ -126,7 +128,7 @@ void ACharacterBase::ResetAirAtkLocationUpdateTimer()
 void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset)
 {
 	FVector currentLocation = GetActorLocation();
-	if (currentLocation.Equals(TargetValue, 50.0f))
+	if (currentLocation.Equals(TargetValue, 75.0f))
 	{
 		GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 		if (bAutoReset)
@@ -178,8 +180,20 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 	CharacterState.bIsAirAttacking = false;
 	CharacterState.bIsDownwardAttacking = false;
 
+	//damager side 
+	if (this->GetVelocity().Length() >= 3500.0f)
+	{
+		GamemodeRef.Get()->ActivateSlowHitEffect(0.2f);
+		GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 1000.0f);
+
+		if (CharacterState.CharacterActionState == ECharacterActionType::E_Die)
+		{
+			Die();
+		}
+	}
+
 	//Test code for knockdown on ground event
-	UE_LOG(LogTemp, Warning, TEXT("$Land %s  / Speed %.2lf$"), *(this->GetName()), this->GetVelocity().Length());
+	//UE_LOG(LogTemp, Warning, TEXT("$Land %s  / Speed %.2lf$"), *(this->GetName()), this->GetVelocity().Length());
 }
 
 void ACharacterBase::ResetHitCounter()
@@ -188,17 +202,18 @@ void ACharacterBase::ResetHitCounter()
 }
 
 void ACharacterBase::KnockDown()
-{
+{	
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die) return;
 	ResetHitCounter();
-	//AssetInfo.KnockDownAnimMontageList[0]
-	//CharacterState.CharacterActionState = ECharacterActionType::E_KnockedDown;
+	
+	CharacterState.CharacterActionState = ECharacterActionType::E_KnockedDown;
 
+	GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
+	KnockDownDelayTimerHandle.Invalidate();
 
-	if (AssetHardPtrInfo.KnockdownAnimMontageList.IsValidIndex(0)
-		&& IsValid(AssetHardPtrInfo.KnockdownAnimMontageList[0]))
-	{
-		PlayAnimMontage(AssetHardPtrInfo.KnockdownAnimMontageList[0]);
-	}
+	FTimerDelegate resetActionDelegate;
+	resetActionDelegate.BindUFunction(this, "ResetActionState", false);
+	GetWorldTimerManager().SetTimer(KnockDownDelayTimerHandle, resetActionDelegate, 1.0f, false, 5.0f);
 }
 
 void ACharacterBase::InitCharacterState()
@@ -267,8 +282,12 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;
 	
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
-	FWeaponStatStruct currWeaponStat = this->GetCurrentWeaponRef()->GetWeaponStat();
-	this->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
+	
+	if (IsValid(GetCurrentWeaponRef()))
+	{
+		FWeaponStatStruct currWeaponStat = this->GetCurrentWeaponRef()->GetWeaponStat();
+		this->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
+	}
 	StopAttack();
 
 	if (!GetWorldTimerManager().IsTimerActive(AtkIntervalHandle))
@@ -280,7 +299,7 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	if (!IsValid(DamageCauser) || CharacterStat.bIsInvincibility || DamageAmount <= 0.0f) return 0.0f;
-	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
+	//if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
 
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
@@ -290,7 +309,10 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	if (CharacterState.CurrentHP == 0.0f)
 	{
 		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
-		Die();
+		if(!GetCharacterMovement()->IsFalling())
+		{
+			Die();
+		}
 	}
 	else if (this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill && !this->CharacterState.bIsAirAttacking)
 	{
@@ -309,8 +331,9 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	FVector location = HitSceneComponent->GetComponentLocation();
 	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(DamageCauser->GetActorLocation(), GetActorLocation());
 	newRotation.Pitch = newRotation.Roll = 0.0f;
-	if (Cast<ACharacterBase>(DamageCauser)->GetCharacterState().TargetedEnemy.IsValid()
-		&& Cast<ACharacterBase>(DamageCauser)->GetCharacterState().TargetedEnemy.Get() == this)
+
+	ACharacterBase* causerTarget = Cast<ACharacterBase>(DamageCauser)->TargetingManagerComponent->GetTargetedCharacter();
+	if (IsValid(causerTarget) && causerTarget == this)
 	{
 		Cast<ACharacterBase>(DamageCauser)->SetActorRotation(newRotation);
 		newRotation.Yaw += 180.0f;
@@ -323,14 +346,19 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	// Set hit counter reset event using retriggable timer
 	GetWorldTimerManager().ClearTimer(HitCounterResetTimerHandle);
 	HitCounterResetTimerHandle.Invalidate();
-	GetWorldTimerManager().SetTimer(HitCounterResetTimerHandle, this, &ACharacterBase::ResetHitCounter, 3.0f, false);
+	GetWorldTimerManager().SetTimer(HitCounterResetTimerHandle, this, &ACharacterBase::ResetHitCounter, 1.0f, false, 1.0f);
+
+	UE_LOG(LogTemp, Warning, TEXT("HitCounter : %d"), CharacterState.HitCounter);
 
 	// Check knock down condition and set knock down event using retriggable timer
-	if (CharacterState.HitCounter >= 3)
+	if (CharacterState.HitCounter >= 7)
 	{
+		KnockDown();
+		/*
 		GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
 		KnockDownDelayTimerHandle.Invalidate();
-		GetWorldTimerManager().SetTimer(KnockDownDelayTimerHandle, this, &ACharacterBase::KnockDown, 3.0f, false);
+		GetWorldTimerManager().SetTimer(KnockDownDelayTimerHandle, this, &ACharacterBase::KnockDown, 1.0f, false, 0.1f);
+		*/
 	}
 
 	return DamageAmount;
@@ -424,7 +452,6 @@ void ACharacterBase::TryAttack()
 	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
 
-
 	int32 nextAnimIdx = 0;
 	const float attackSpeed = FMath::Clamp(CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
@@ -511,6 +538,42 @@ void ACharacterBase::TryDownwardAttack()
 	{
 		PlayAnimMontage(AssetHardPtrInfo.DownwardAttackAnimMontage);
 	}
+}
+
+void ACharacterBase::TryDashAttack()
+{
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
+	if (GetCharacterMovement()->IsFalling()) return;
+	if (!IsValid(AssetHardPtrInfo.DashAttackAnimMontage)) return;
+	if (GetVelocity().Length() <= CharacterState.TotalMoveSpeed * 0.9f) return;
+
+	// set action state
+	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
+
+	// activate dash anim with interp to target location
+	PlayAnimMontage(AssetHardPtrInfo.DashAttackAnimMontage);
+}
+
+void ACharacterBase::DashAttack()
+{
+	//init local parameter
+	const float dashLength = 500.0f;
+	FVector targetLocation = GetActorLocation() + GetVelocity().GetSafeNormal() * dashLength;
+
+	//check if there are any obstacle (wall, prop, enemy etc.)
+	FHitResult hitResult;
+	FCollisionQueryParams collisionQueryParams;
+	collisionQueryParams.AddIgnoredActor(this);
+	if (IsValid(GetCurrentWeaponRef()))
+	{
+		collisionQueryParams.AddIgnoredActor(this);
+	}
+	GetWorld()->LineTraceSingleByChannel(hitResult, HitSceneComponent->GetComponentLocation(), targetLocation, ECollisionChannel::ECC_Camera);
+	targetLocation = hitResult.bBlockingHit ? hitResult.Location : targetLocation;
+
+	DrawDebugSphere(GetWorld(), targetLocation, 50.0f, 12, FColor::Yellow, true);
+	SetLocationWithInterp(targetLocation, 0.15f);
 }
 
 void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
@@ -627,6 +690,7 @@ void ACharacterBase::InitAsset(int32 NewCharacterID)
 
 		AssetToStream.AddUnique(AssetSoftPtrInfo.UpperAttackAnimMontageSoftPtr.ToSoftObjectPath());
 		AssetToStream.AddUnique(AssetSoftPtrInfo.DownwardAttackAnimMontageSoftPtr.ToSoftObjectPath());
+		AssetToStream.AddUnique(AssetSoftPtrInfo.DashAttackAnimMontageSoftPtr.ToSoftObjectPath());
 
 		if (!AssetSoftPtrInfo.AirAttackAnimMontageSoftPtrList.IsEmpty())
 		{
@@ -804,6 +868,11 @@ bool ACharacterBase::InitAnimAsset()
 	if (AssetSoftPtrInfo.DownwardAttackAnimMontageSoftPtr.IsValid())
 	{
 		AssetHardPtrInfo.DownwardAttackAnimMontage = AssetSoftPtrInfo.DownwardAttackAnimMontageSoftPtr.Get();
+	}
+
+	if (AssetSoftPtrInfo.DashAttackAnimMontageSoftPtr.IsValid())
+	{
+		AssetHardPtrInfo.DashAttackAnimMontage = AssetSoftPtrInfo.DashAttackAnimMontageSoftPtr.Get();
 	}
 
 	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.AirAttackAnimMontageSoftPtrList)

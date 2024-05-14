@@ -1,6 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "MainCharacterBase.h"
 #include "MainCharacterController.h"
+#include "../Component/TargetingManagerComponent.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SaveSystem/BackStreetGameInstance.h"
 #include "../../System/AbilitySystem/AbilityManagerBase.h"
@@ -151,7 +152,7 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StopSprint);
 
 		//Jump
-		EnhancedInputComponent->BindAction(InputActionInfo.JumpAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StartJump);
+		//EnhancedInputComponent->BindAction(InputActionInfo.JumpAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StartJump);
 
 		//Zoom
 		//EnhancedInputComponent->BindAction(InputActionInfo.ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
@@ -255,7 +256,14 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 	MovementInputValue = Value.Get<FVector2D>();
 	if (Controller != nullptr)
 	{
-		AddMovementInput(FollowingCamera->GetForwardVector(), MovementInputValue.Y);
+		FVector forwardAxis = FollowingCamera->GetForwardVector();
+		//!CharacterState.TargetedEnemy.IsValid() ? FollowingCamera->GetForwardVector()
+		//					  : CharacterState.TargetedEnemy.Get()->GetActorLocation() - GetActorLocation();
+		FVector rightAxis = UKismetMathLibrary::RotateAngleAxis(forwardAxis, 90.0f, GetActorUpVector());
+
+		rightAxis.Z = forwardAxis.Z = 0.0f;
+
+		AddMovementInput(forwardAxis, MovementInputValue.Y);
 		AddMovementInput(FollowingCamera->GetRightVector(), MovementInputValue.X);
 
 		if (MovementInputValue.Length() > 0 && OnMove.IsBound())
@@ -444,6 +452,18 @@ void AMainCharacterBase::TryReload()
 	Super::TryReload();
 }
 
+void AMainCharacterBase::LockToTarget(const FInputActionValue& Value)
+{
+	if (!TargetingManagerComponent->GetIsTargetingActivated())
+	{
+		TargetingManagerComponent->ActivateTargeting();
+	}
+	else
+	{
+		TargetingManagerComponent->DeactivateTargeting();
+	}
+}
+
 float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -467,11 +487,6 @@ void AMainCharacterBase::TryAttack()
 	if(GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130) return;
 	//---------------------------------------------------------------------------------
 
-	if (!CharacterState.TargetedEnemy.IsValid())
-	{
-		CharacterState.TargetedEnemy = FindNearEnemyToTarget();
-	}
-
 	if (GetCurrentWeaponRef()->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
@@ -480,9 +495,15 @@ void AMainCharacterBase::TryAttack()
 
 	//=============
 
-	//공격을 하고, 커서 위치로 Rotation을 조정
 	this->Tags.Add("Attack|Common");
-	//RotateToCursor(); //백뷰에서는 미사용
+
+	if (CharacterState.bIsSprinting && !CharacterState.bIsAirAttacking
+		&& !CharacterState.bIsDownwardAttacking && !GetCharacterMovement()->IsFalling())
+	{
+		TryDashAttack();
+		return;
+	}
+
 	Super::TryAttack();
 }
 
@@ -497,14 +518,15 @@ void AMainCharacterBase::TryUpperAttack()
 	}
 
 	//Update upper atk target enemy (cloest pawn)
-	CharacterState.TargetedEnemy = FindNearEnemyToTarget();
+	TargetingManagerComponent->ForceTargetingToNearestCharacter();
+	AActor* targetedEnemy = TargetingManagerComponent->GetTargetedCharacter();
 	
-	if (CharacterState.TargetedEnemy.IsValid()
-		&& FVector::Distance(GetActorLocation(), CharacterState.TargetedEnemy.Get()->GetActorLocation()) <= 300.0f)
+	if (IsValid(targetedEnemy)
+		&& FVector::Distance(GetActorLocation(), targetedEnemy->GetActorLocation()) <= 300.0f)
 	{
-		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(CharacterState.TargetedEnemy.Get()->GetActorLocation(), GetActorLocation());
-		CharacterState.TargetedEnemy.Get()->SetActorRotation(newRotation);
-		SetLocationWithInterp(CharacterState.TargetedEnemy.Get()->HitSceneComponent->GetComponentLocation(), 5.0f);
+		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(targetedEnemy->GetActorLocation(), GetActorLocation());
+		targetedEnemy->SetActorRotation(newRotation);
+		SetLocationWithInterp(Cast<ACharacterBase>(targetedEnemy)->HitSceneComponent->GetComponentLocation() + 100.0f, 5.0f);
 	}
 
 	Super::TryUpperAttack();
@@ -514,9 +536,9 @@ void AMainCharacterBase::TryDownwardAttack()
 {
 	Super::TryDownwardAttack();
 	if (!GetCharacterMovement()->IsFalling()) return;
-	if (CharacterState.bIsSprinting)
+	if (IsValid(TargetingManagerComponent->GetTargetedCharacter()))
 	{
-		SetFieldOfViewWithInterp(90.0f, 0.75f);
+		SetFieldOfViewWithInterp(110.0f, 0.75f);
 	}
 }
 
@@ -593,23 +615,6 @@ void AMainCharacterBase::RotateToCursor()
 	newRotation.Pitch = newRotation.Roll = 0.0f;
 	SetActorRotation(newRotation);
 	return;
-
-	/* 시점 전환을 위해 제거
-	FRotator newRotation = PlayerControllerRef.Get()->GetRotationToCursor();
-	if (newRotation != FRotator())
-	{
-		newRotation.Pitch = newRotation.Roll = 0.0f;
-		GetMesh()->SetWorldRotation(newRotation);
-	}
-	GetMesh()->SetWorldRotation(newRotation.Quaternion());
-
-	GetWorld()->GetTimerManager().ClearTimer(RotationResetTimerHandle);
-	GetWorld()->GetTimerManager().SetTimer(RotationResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
-		ResetRotationToMovement();
-		FRotator newRotation = PlayerControllerRef.Get()->GetLastRotationToCursor();
-		newRotation.Yaw = FMath::Fmod((newRotation.Yaw + 90.0f), 360.0f);
-		SetActorRotation(newRotation.Quaternion(), ETeleportType::ResetPhysics);
-	}), 1.0f, false);*/
 }
 
 void AMainCharacterBase::PickSubWeapon(const FInputActionValue& Value)
@@ -874,39 +879,4 @@ void AMainCharacterBase::ClearAllTimerHandle()
 	FacialEffectResetTimerHandle.Invalidate();
 	RollTimerHandle.Invalidate();
 	DashDelayTimerHandle.Invalidate();
-}
-
-ACharacterBase* AMainCharacterBase::FindNearEnemyToTarget()
-{
-	TArray<AActor*> outResult;
-	UClass* targetClassList = ACharacterBase::StaticClass();
-	const TEnumAsByte<EObjectTypeQuery> targetObjectType = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
-	FVector overlapBeginPos = HitSceneComponent->GetComponentLocation();
-
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), overlapBeginPos, 150.0f
-		, { targetObjectType }, targetClassList, { this }, outResult);
-
-	//DrawDebugSphere(GetWorld(), overlapBeginPos, 100.0f, 25, FColor::Yellow, false, 1000.0f, 0u, 1.0f);
-
-	float minDist = FLT_MAX;
-	ACharacterBase* target = nullptr;
-	for (AActor*& pawn : outResult)
-	{
-		if (!IsValid(pawn)) continue;
-		if (!pawn->Tags.IsValidIndex(1) || !this->Tags.IsValidIndex(1)) continue;
-		if (pawn->Tags[1] == this->Tags[1]) continue;
-
-		float dist = FVector::Distance(pawn->GetActorLocation(), overlapBeginPos);
-		if (dist < minDist)
-		{
-			dist = minDist;
-			target = Cast<ACharacterBase>(pawn);
-		}
-	}
-	return target;
-}
-
-void AMainCharacterBase::ResetTargetedEnemy()
-{
-	CharacterState.TargetedEnemy.Reset();
 }
