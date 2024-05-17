@@ -67,6 +67,20 @@ void ABackStreetGameModeBase::PlayCameraShakeEffect(ECameraShakeType EffectType,
 	UGameplayStatics::PlayWorldCameraShake(GetWorld(), CameraShakeEffectList[(uint8)EffectType], Location, Radius * 0.75f, Radius * 1.5f, 0.5f);
 }
 
+void ABackStreetGameModeBase::ActivateSlowHitEffect(float DilationValue, float Length)
+{
+	if (!IsValid(PlayerCharacterRef) || PlayerCharacterRef->IsActorBeingDestroyed()) return;
+
+	FTimerHandle attackSlowEffectTimerHandle;
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), DilationValue);
+	GetWorldTimerManager().SetTimer(attackSlowEffectTimerHandle, this, &ABackStreetGameModeBase::DeactivateSlowHitEffect, Length * DilationValue, false);
+}
+
+void ABackStreetGameModeBase::DeactivateSlowHitEffect()
+{
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
+}
+
 AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector SpawnLocation)
 {
 	if (!IsValid(GetWorld())) return nullptr;

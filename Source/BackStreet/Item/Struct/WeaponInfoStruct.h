@@ -171,6 +171,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		int32 ComboCount = 0;
 
+	//temp, meleeonly
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		FRotator SlashRotation;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FRangedWeaponStateStruct RangedWeaponState;
 };
@@ -182,7 +186,7 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
-		TSoftObjectPtr<class UParticleSystem> HitEffectParticle;
+		TSoftObjectPtr<class UNiagaraSystem> HitEffectParticle;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UNiagaraSystem> MeleeTrailParticle;
