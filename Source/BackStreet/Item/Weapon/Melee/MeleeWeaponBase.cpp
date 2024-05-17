@@ -94,8 +94,9 @@ void AMeleeWeaponBase::InitWeaponAsset()
 	}
 
 	if (MeleeWeaponAssetInfo.HitEffectParticle.IsValid())
+	{
 		HitEffectParticle = MeleeWeaponAssetInfo.HitEffectParticle.Get();
-	
+	}
 }
 
 TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
@@ -123,7 +124,6 @@ TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
 		if (!IsValid(target)) continue;
 		if (!target->ActorHasTag("Character")) continue;
 		if (target->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) continue; 
-		if (Cast<ACharacterBase>(target)->GetIsActionActive(ECharacterActionType::E_Die)) continue;
 
 		FHitResult hitResult;
 		GetWorld()->LineTraceSingleByChannel(hitResult, OwnerCharacterRef->GetActorLocation()
@@ -209,15 +209,27 @@ bool AMeleeWeaponBase::CheckMeleeAttackTarget(FHitResult& hitResult, const TArra
 
 void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location)
 {
-	//근접 공격에서의 슬로우 효과를 시도
-	ActivateSlowHitEffect();
+	//Activate Slow Effect (Hit stop)
+	if (OwnerCharacterRef.Get()->ActorHasTag("Player"))
+	{
+		const float dilationValue = (WeaponState.ComboCount + 1) % 7 == 0 ? 0.08 : 0.75;
+		GamemodeRef.Get()->ActivateSlowHitEffect(dilationValue);
+	}
 
 	//효과 이미터 출력
 	if (IsValid(HitEffectParticle))
 	{
-		FTransform emitterSpawnTransform(FQuat(0.0f), Location, FVector(1.5f));
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffectParticle, emitterSpawnTransform, true, EPSCPoolMethod::None, true);
+		FTransform emitterSpawnTransform(FQuat(0.0f), Location, FVector(1.0f));
 
+		FRotator randomRotator = FRotator::ZeroRotator;
+		randomRotator.Pitch += UKismetMathLibrary::RandomFloatInRange(-30.0f, 30.0f);
+		randomRotator.Yaw += UKismetMathLibrary::RandomFloatInRange(-30.0f, 30.0f);
+		randomRotator.Roll += UKismetMathLibrary::RandomFloatInRange(-30.0f, 30.0f);
+
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitEffectParticle, emitterSpawnTransform.GetLocation()
+														, WeaponState.SlashRotation + randomRotator, emitterSpawnTransform.GetScale3D());
+
+		
 	}
 	//카메라 Shake 효과
 	GamemodeRef.Get()->PlayCameraShakeEffect(OwnerCharacterRef.Get()->ActorHasTag("Player") ? ECameraShakeType::E_Attack : ECameraShakeType::E_Hit, Location);
@@ -227,23 +239,6 @@ void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location)
 	{
 		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, "HitImpact");
 	}
-}
-
-void AMeleeWeaponBase::ActivateSlowHitEffect()
-{
-	if (OwnerCharacterRef.Get()->ActorHasTag("Player"))
-	{
-		FTimerHandle attackSlowEffectTimerHandle;
-		const float dilationValue = WeaponState.ComboCount % 5 == 0 ? 0.08 : 0.15;
-
-		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), dilationValue);
-		GetWorldTimerManager().SetTimer(attackSlowEffectTimerHandle, this, &AMeleeWeaponBase::DeactivateSlowHitEffect, 0.015f, false);
-	}
-}
-
-void AMeleeWeaponBase::DeactivateSlowHitEffect()
-{
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
 }
 
 TArray<FVector> AMeleeWeaponBase::GetCurrentMeleePointList()

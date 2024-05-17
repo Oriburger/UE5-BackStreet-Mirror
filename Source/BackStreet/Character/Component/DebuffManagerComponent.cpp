@@ -2,8 +2,8 @@
 
 
 #include "DebuffManagerComponent.h"
-#include "CharacterBase.h"
-#include "../Global/BackStreetGameModeBase.h"
+#include "../CharacterBase.h"
+#include "../../Global/BackStreetGameModeBase.h"
 
 #define MAX_DEBUFF_IDX 10
 #define DEBUFF_DAMAGE_TIMER_IDX 20
