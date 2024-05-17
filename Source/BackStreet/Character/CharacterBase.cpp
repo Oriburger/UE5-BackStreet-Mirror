@@ -526,7 +526,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	case ESkillType::E_Character:
 		if (!AssetSoftPtrInfo.CharacterSkillInfoMap.Contains(SkillID))
 		{
-			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Character does't have skill")), FColor::White);
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Character doesn't have skill")), FColor::White);
 			return;
 		}
 		if (AssetSoftPtrInfo.CharacterSkillInfoMap.Find(SkillID)->bSkillBlocked)
