@@ -41,9 +41,13 @@ protected:
 	UFUNCTION()
 		void UpdateSpawnPointProperty();
 
-	//Spawn monster 
+	//Spawn enemy character
 	UFUNCTION()
 		void SpawnEnemy();
+
+	//Spawn portals
+	UFUNCTION()
+		void SpawnPortal(int32 GateCount = 1);
 
 	UFUNCTION()
 		void CheckLoadStatusAndStartGame();
@@ -69,15 +73,24 @@ private:
 		void UpdateLoadStatusCount() { LoadStatus -= 1; }
 
 private:
-	ULevelStreamingDynamic* OuterAreaRef;
+	//Spawned actor list to manage life cycle
+	//Gate, Enemy Character, Craftbox
+	TArray<AActor*> SpawnedActorList;
 
+	//Current stage's information 
+	//Level instance ref and gameplay info struct
+	FStageInfo CurrentStageInfo;
+	ULevelStreamingDynamic* OuterAreaRef;
 	ULevelStreamingDynamic* MainAreaRef;
 
+	//The status of level instance load
+	//0 : done.   Over 0 : loading 
 	int32 LoadStatus = 0;
 
+	//Property for level instance load
 	float LoadTimeOut = 30.0f;
-
 	FTimerHandle LoadCheckTimerHandle;
 
-	FStageInfo CurrentStageInfo;
+	//Gate class to spawn on world
+	TSubclassOf<class AGateBase> GateClass;
 };

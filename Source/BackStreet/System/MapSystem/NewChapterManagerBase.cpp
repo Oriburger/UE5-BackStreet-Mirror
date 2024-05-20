@@ -67,8 +67,8 @@ void ANewChapterManagerBase::ResetChapter()
 
 void ANewChapterManagerBase::MoveStage(FVector2D direction)
 {
-	//CurrentStageLocation = CurrentStageLocation + direction;
-	
+	if (!StageInfoList.IsValidIndex(CurrentStageLocation.X + direction.X)) return;
+	CurrentStageLocation = CurrentStageLocation + direction;
 	StageManagerComponent->InitStage(StageInfoList[CurrentStageLocation.X]);
 }
 

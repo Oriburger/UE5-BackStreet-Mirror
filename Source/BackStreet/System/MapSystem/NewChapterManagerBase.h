@@ -112,7 +112,7 @@ public:
 		void ResetChapter();
 
 	//Move next stage
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void MoveStage(FVector2D direction);
 
 protected:

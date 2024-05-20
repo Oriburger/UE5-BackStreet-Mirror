@@ -2,6 +2,7 @@
 
 
 #include "StageManagerComponent.h"
+#include "./Stage/GateBase.h"
 
 // Sets default values for this component's properties
 UStageManagerComponent::UStageManagerComponent()
@@ -10,7 +11,10 @@ UStageManagerComponent::UStageManagerComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
-	// ...
+	// Init gate bp class
+	static ConstructorHelpers::FClassFinder<AGateBase> gateInventoryClassFinder(TEXT("/Game/System/StageManager/Blueprint/BP_Gate"));
+	checkf(gateInventoryClassFinder.Succeeded(), TEXT("Gate 클래스 탐색에 실패했습니다."));
+	GateClass = gateInventoryClassFinder.Class;
 }
 
 
@@ -55,8 +59,22 @@ void UStageManagerComponent::CreateLevelInstance(FName LevelName, FName OuterLev
 void UStageManagerComponent::ClearPreviousLevelInstance()
 {
 	if (!IsValid(MainAreaRef) || !IsValid(OuterAreaRef)) return; 
+
 	MainAreaRef->SetIsRequestingUnloadAndRemoval(true);
 	OuterAreaRef->SetIsRequestingUnloadAndRemoval(true);
+
+
+	//Remove all spawned actors
+	for (int idx = SpawnedActorList.Num() - 1; idx >= 0; idx--)
+	{
+		AActor* target = SpawnedActorList[idx];
+		
+		SpawnedActorList.RemoveAt(idx);
+		if (IsValid(target))
+		{
+			target->Destroy();
+		}
+	}
 }
 
 void UStageManagerComponent::UpdateSpawnPointProperty()
@@ -90,6 +108,22 @@ void UStageManagerComponent::SpawnEnemy()
 
 }
 
+void UStageManagerComponent::SpawnPortal(int32 GateCount)
+{
+	//Temporary code for linear stage system. (GateCount will not be used til BIC)
+
+	AGateBase* newGate = GetWorld()->SpawnActor<AGateBase>(GateClass, CurrentStageInfo.GateLocationList[0], FRotator::ZeroRotator);
+	if (IsValid(newGate))
+	{
+		SpawnedActorList.Add(newGate);
+		newGate->InitGate({ 1, 0 });
+		
+		//temp
+		newGate->ActivateGate();
+		newGate->OnEnterRequestReceived.BindUFunction(GetOwner(), FName("MoveStage"));
+	}
+}
+
 void UStageManagerComponent::CheckLoadStatusAndStartGame()
 {
 	if (GetWorld()->GetTimerManager().GetTimerElapsed(LoadCheckTimerHandle) > LoadTimeOut) return;
@@ -103,8 +137,11 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 		//post load events
 		UpdateSpawnPointProperty();
 
-		//spawn enemy and start
+		//spawn enemy and portal
+		SpawnPortal();
 		SpawnEnemy();
+
+		//start stage
 		StartStage();
 	}
 }
