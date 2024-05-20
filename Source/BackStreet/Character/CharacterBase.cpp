@@ -579,7 +579,13 @@ void ACharacterBase::DashAttack()
 void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
-	checkf(IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()), TEXT("Failed to get SkillmanagerBase"));
+	
+	if (!IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to get SkillmanagerBase"));
+		ensure(IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()));
+		return;
+	}
 
 	switch (SkillType)
 	{
