@@ -41,7 +41,6 @@ void AGateBase::InitGate(FVector2D NewDirection)
 
 void AGateBase::EnterGate()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Ah Su bal"));
 	OnEnterRequestReceived.Execute(Direction);
 }
 
