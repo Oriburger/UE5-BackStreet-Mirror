@@ -43,7 +43,7 @@ protected:
 
 	//Spawn new level instance usina level name
 	UFUNCTION()
-		void CreateLevelInstance(FName LevelName, FName OuterLevelName);
+		void CreateLevelInstance(TSoftObjectPtr<UWorld> MainLevel, TSoftObjectPtr<UWorld> OuterLevel);
 
 	//Clear previous stage's level instance
 	UFUNCTION()

@@ -44,14 +44,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FVector2D TilePos;
 
-	//Map name of this stage
+	//Main level of this stage
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		FName LevelAssetName;
+		TSoftObjectPtr<UWorld> MainLevelAsset;
 
-	//Outer map name of this stage
+	//Outer level of this stage
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		FName OuterLevelAssetName;
-	
+		TSoftObjectPtr<UWorld> OuterLevelAsset;
+
 	//Battle stages only use this value!
 	//List of enemy's composition to spawn 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -103,28 +103,29 @@ public:
 
 //======= Asset =======================
 public:
-	//Entry stage map name list
+	//Entry stage level list
 	UPROPERTY(EditDefaultsOnly)
-		TArray<FName> EntryStageMapNameList;
+		TArray<TSoftObjectPtr<UWorld>> EntryStageLevelList;
 
-	//Combat & elite combat stage map name list
+	//Combat stage level list
 	UPROPERTY(EditDefaultsOnly)
-		TArray<FName> CombatStageMapNameList;
-	
-	//Time attack & elite time attack stage map name list
-	UPROPERTY(EditDefaultsOnly)
-		TArray<FName> TimeAttackStageMapNameList;
+		TArray<TSoftObjectPtr<UWorld>> CombatStageLevelList;
 
+	//Time attack stage level list
 	UPROPERTY(EditDefaultsOnly)
-		TArray<FName> CraftStageMapNameList;
+		TArray<TSoftObjectPtr<UWorld>> TimeAttackStageLevelList;
 
-	//Boss stage map name list
+	//Craft stage level list
 	UPROPERTY(EditDefaultsOnly)
-		TArray<FName> BossStageMapNameList;
+		TArray<TSoftObjectPtr<UWorld>> CraftStageLevelList;
 
-	//Outer Area Map Name
+	//Boss stage level list
 	UPROPERTY(EditDefaultsOnly)
-		TArray<FName> OuterAreaMapNameList;
+		TArray<TSoftObjectPtr<UWorld>> BossStageLevelList;
+
+	//Outer area level asset
+	UPROPERTY(EditDefaultsOnly)
+		TArray<TSoftObjectPtr<UWorld>> OuterStageLevelList;
 };
 
 

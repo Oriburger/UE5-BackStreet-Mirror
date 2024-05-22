@@ -42,6 +42,7 @@ void AGateBase::InitGate(FVector2D NewDirection)
 void AGateBase::EnterGate()
 {
 	OnEnterRequestReceived.Execute(Direction);
+	Destroy();
 }
 
 void AGateBase::ActivateGate()

@@ -51,11 +51,11 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	CurrentStageInfo = NewStageInfo;
 	UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
 	UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
-	UE_LOG(LogTemp, Warning, TEXT("> Level Name : %s"), *CurrentStageInfo.LevelAssetName.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("> Level Name : %s"), *CurrentStageInfo.LevelAssetName.ToString());
 	UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %d"), CurrentStageInfo.TilePos.X);
 
 	//Load new level 
-	CreateLevelInstance(NewStageInfo.LevelAssetName, NewStageInfo.OuterLevelAssetName);
+	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
 	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 1.0f, true);
 }
 
@@ -79,22 +79,28 @@ void UStageManagerComponent::RemoveLoadingScreen()
 	}
 }
 
-void UStageManagerComponent::CreateLevelInstance(FName LevelName, FName OuterLevelName)
+void UStageManagerComponent::CreateLevelInstance(TSoftObjectPtr<UWorld> MainLevel, TSoftObjectPtr<UWorld> OuterLevel)
 {
+	if (MainLevel.IsNull()) return;
+
 	//Init loading screen
 	AddLoadingScreen();
 
 	//Start load
 	bool result = false;
-	LoadStatus = (OuterLevelName.IsNone() ? 1 : 2);
+	LoadStatus = (OuterLevel.IsNull() ? 1 : 2);
 
-	MainAreaRef = MainAreaRef->LoadLevelInstance(GetWorld(), LevelName.ToString(), FVector(0.0f)
-												, FRotator::ZeroRotator, result);
-	OuterAreaRef = OuterAreaRef->LoadLevelInstance(GetWorld(), OuterLevelName.ToString(), FVector(0.0f)
-												, FRotator::ZeroRotator, result);
 
+	MainAreaRef = MainAreaRef->LoadLevelInstanceBySoftObjectPtr(GetWorld(), MainLevel, FVector(0.0f)
+					, FRotator::ZeroRotator, result);
 	MainAreaRef->OnLevelLoaded.AddDynamic(this, &UStageManagerComponent::UpdateLoadStatusCount);
-	OuterAreaRef->OnLevelLoaded.AddDynamic(this, &UStageManagerComponent::UpdateLoadStatusCount);
+	
+	if (OuterLevel.IsNull()) return;
+	{
+		OuterAreaRef = OuterAreaRef->LoadLevelInstanceBySoftObjectPtr(GetWorld(), OuterLevel, FVector(0.0f)
+			, FRotator::ZeroRotator, result);
+		OuterAreaRef->OnLevelLoaded.AddDynamic(this, &UStageManagerComponent::UpdateLoadStatusCount);
+	}
 }
 
 void UStageManagerComponent::ClearPreviousLevelData()
@@ -132,7 +138,6 @@ void UStageManagerComponent::ClearPreviousActors()
 				target->Destroy();
 			}
 		}
-		//SpawnedActorList.RemoveAt(idx);
 	}
 	SpawnedActorList.Reset();
 	RemainingEnemyCount = 0;
@@ -230,7 +235,6 @@ void UStageManagerComponent::SpawnCraftbox()
 void UStageManagerComponent::SpawnPortal(int32 GateCount)
 {
 	//Temporary code for linear stage system. (GateCount will not be used til BIC)
-
 	AGateBase* newGate = GetWorld()->SpawnActor<AGateBase>(GateClass, CurrentStageInfo.PortalLocationList[0], FRotator::ZeroRotator);
 	if (IsValid(newGate))
 	{
@@ -249,7 +253,7 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 
 	if (GetLoadIsDone())
 	{
-		//post load events
+		//Post load events
 		UpdateSpawnPointProperty();
 
 		//Clear timer and invalidate
@@ -285,11 +289,18 @@ void UStageManagerComponent::StartStage()
 		stageOverDelegate.BindUFunction(this, FName("FinishStage"), false, false);
 		GetOwner()->GetWorldTimerManager().SetTimer(TimeAttackTimerHandle, stageOverDelegate, 1.0f, false, CurrentStageInfo.TimeLimitValue);
 	}
+	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft
+			|| CurrentStageInfo.StageType == EStageCategoryInfo::E_MiniGame
+			|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Gatcha)
+	{
+		FinishStage(false, false);
+	}
 }
 
 void UStageManagerComponent::FinishStage(bool bIsGameOver, bool bPayReward)
 {
 	if (CurrentStageInfo.bIsClear) return;
+	CurrentStageInfo.bIsClear = true;
 
 	//Clear all remaining actors
 	ClearPreviousActors();
@@ -300,7 +311,6 @@ void UStageManagerComponent::FinishStage(bool bIsGameOver, bool bPayReward)
 	//Clear time attack timer handle
 	GetOwner()->GetWorldTimerManager().ClearTimer(TimeAttackTimerHandle);
 	TimeAttackTimerHandle.Invalidate();
-	CurrentStageInfo.bIsClear = true;
 
 	//Spawn gate 
 	if (!bIsGameOver)
