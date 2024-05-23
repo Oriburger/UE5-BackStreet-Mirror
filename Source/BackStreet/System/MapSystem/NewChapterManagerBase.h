@@ -7,6 +7,25 @@
 #include "GameFramework/Actor.h"
 #include "NewChapterManagerBase.generated.h"
 
+USTRUCT(BlueprintType)
+struct FEnemyGroupInfo
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		TMap<int32, int32> EnemySet; // EnemyID,스폰 수
+};
+
+USTRUCT(BlueprintType)
+struct FEnemyCompositionInfo
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		TArray<FEnemyGroupInfo> CompositionList;
+};
 
 //이동 예정 LJH
 USTRUCT(BlueprintType)
@@ -15,6 +34,8 @@ struct FStageInfo
 	GENERATED_BODY()
 
 public:
+	//==== Static Proptery ====================
+	
 	//Stage type (entry, combat, time attack, boss, miniGame, gatcha etc..)
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		EStageCategoryInfo StageType;
@@ -23,15 +44,22 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FVector2D TilePos;
 
-	//Map name of this stage
+	//Main level of this stage
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		FName LevelAssetName;
+		TSoftObjectPtr<UWorld> MainLevelAsset;
 
-	//Outer map name of this stage
+	//Outer level of this stage
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		FName OuterLevelAssetName;
-	
+		TSoftObjectPtr<UWorld> OuterLevelAsset;
+
+	//Battle stages only use this value!
+	//List of enemy's composition to spawn 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		FEnemyCompositionInfo EnemyCompositionInfo;
+
+	//==== Dynamic Proptery ====================
 	//Dyanmically update after level load
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TArray<FVector> EnemySpawnLocationList; 
 
@@ -39,7 +67,17 @@ public:
 		FVector PlayerStartLocation;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		TArray<FVector> GateLocationList;
+		TArray<FVector> PortalLocationList;
+
+	//Timed-stage only use this value!
+	UPROPERTY()
+		float TimeLimitValue = 0.0f;
+
+	UPROPERTY()
+		bool bIsClear = false;
+
+	UPROPERTY()
+		bool bIsVisited = false;
 };
 
 USTRUCT(BlueprintType)
@@ -47,34 +85,52 @@ struct FChapterInfo : public FTableRowBase
 {
 	GENERATED_BODY()
 
+//======= Gameplay ====================
 public:
 	//Table Key
 	UPROPERTY(EditDefaultsOnly)
 		int32 ChapterID;
 
-	//Entry stage map name list
+	//Time attack's time limit value
 	UPROPERTY(EditDefaultsOnly)
-		TArray<FName> EntryStageMapNameList;
+		float EliteTimeAtkStageTimeOut = 60.0f;
+	UPROPERTY(EditDefaultsOnly)
+		float NormalTimeAtkStageTimeOut = 50.0f;
 
-	//Combat & elite combat stage map name list
+	//Enemy composition information of stage type
 	UPROPERTY(EditDefaultsOnly)
-		TArray<FName> CombatStageMapNameList;
-	
-	//Time attack & elite time attack stage map name list
-	UPROPERTY(EditDefaultsOnly)
-		TArray<FName> TimeAttackStageMapNameList;
+		TMap<EStageCategoryInfo, FEnemyCompositionInfo> EnemyCompositionInfoMap;
 
+//======= Asset =======================
+public:
+	//Entry stage level list
 	UPROPERTY(EditDefaultsOnly)
-		TArray<FName> CraftStageMapNameList;
+		TArray<TSoftObjectPtr<UWorld>> EntryStageLevelList;
 
-	//Boss stage map name list
+	//Combat stage level list
 	UPROPERTY(EditDefaultsOnly)
-		TArray<FName> BossStageMapNameList;
+		TArray<TSoftObjectPtr<UWorld>> CombatStageLevelList;
 
-	//Outer Area Map Name
+	//Time attack stage level list
 	UPROPERTY(EditDefaultsOnly)
-		TArray<FName> OuterAreaMapNameList;
+		TArray<TSoftObjectPtr<UWorld>> TimeAttackStageLevelList;
+
+	//Craft stage level list
+	UPROPERTY(EditDefaultsOnly)
+		TArray<TSoftObjectPtr<UWorld>> CraftStageLevelList;
+
+	//Boss stage level list
+	UPROPERTY(EditDefaultsOnly)
+		TArray<TSoftObjectPtr<UWorld>> BossStageLevelList;
+
+	//Outer area level asset
+	UPROPERTY(EditDefaultsOnly)
+		TArray<TSoftObjectPtr<UWorld>> OuterStageLevelList;
 };
+
+
+
+
 
 UCLASS()
 class BACKSTREET_API ANewChapterManagerBase : public AActor
@@ -91,10 +147,10 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UStageManagerComponent* StageManagerComponent;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UStageGeneratorComponent* StageGeneratorComponent;
 
 //======== Main Function ===============
@@ -112,12 +168,18 @@ public:
 		void ResetChapter();
 
 	//Move next stage
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void MoveStage(FVector2D direction);
 
 protected:
+	//Init chapter using data table 
+	//It must be called before "StartChapter"
 	UFUNCTION()
 		void InitChapter(int32 NewChapterID);
+
+	//Delegate function called by UStageManageComponent
+	UFUNCTION()
+		void OnStageFinished(FStageInfo StageInfo);
 
 //======== Property ===============
 public:

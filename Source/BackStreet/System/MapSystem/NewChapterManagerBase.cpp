@@ -25,6 +25,7 @@ void ANewChapterManagerBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	StageManagerComponent->OnStageFinished.AddDynamic(this, &ANewChapterManagerBase::OnStageFinished);
 }
 
 void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
@@ -67,8 +68,9 @@ void ANewChapterManagerBase::ResetChapter()
 
 void ANewChapterManagerBase::MoveStage(FVector2D direction)
 {
-	//CurrentStageLocation = CurrentStageLocation + direction;
-	
+	if (!StageInfoList.IsValidIndex(CurrentStageLocation.X + direction.X)) return;
+	CurrentStageLocation = CurrentStageLocation + direction;
+
 	StageManagerComponent->InitStage(StageInfoList[CurrentStageLocation.X]);
 }
 
@@ -86,4 +88,10 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 		CurrentChapterInfo = *newInfo;
 		StageGeneratorComponent->InitGenerator(CurrentChapterInfo);
 	}
+}
+
+void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
+{
+	if (!StageInfoList.IsValidIndex(CurrentStageLocation.X)) return;
+	StageInfoList[CurrentStageLocation.X] = StageInfo;
 }

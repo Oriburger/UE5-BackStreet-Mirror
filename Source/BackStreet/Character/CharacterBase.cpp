@@ -421,10 +421,8 @@ void ACharacterBase::Die()
 	}
 	//모든 타이머를 제거한다. (타이머 매니저의 것도)
 	ClearAllTimerHandle();
-	DebuffManagerComponent->PrintAllDebuff();
 	DebuffManagerComponent->ClearDebuffManager();
-	DebuffManagerComponent->PrintAllDebuff();
-
+	
 	//무적 처리를 하고, Movement를 비활성화
 	CharacterStat.bIsInvincibility = true;
 	GetCharacterMovement()->Deactivate();
@@ -579,7 +577,13 @@ void ACharacterBase::DashAttack()
 void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
-	checkf(IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()), TEXT("Failed to get SkillmanagerBase"));
+	
+	if (!IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to get SkillmanagerBase"));
+		ensure(IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()));
+		return;
+	}
 
 	switch (SkillType)
 	{
