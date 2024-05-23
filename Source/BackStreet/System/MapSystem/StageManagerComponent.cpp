@@ -37,7 +37,6 @@ void UStageManagerComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ..
-	
 }
 
 void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
@@ -54,7 +53,7 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	//UE_LOG(LogTemp, Warning, TEXT("> Level Name : %s"), *CurrentStageInfo.LevelAssetName.ToString());
 	UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %d"), CurrentStageInfo.TilePos.X);
 
-	//Load new level 
+	//Load new level
 	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
 	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 1.0f, true);
 }

@@ -14,8 +14,6 @@
 #include "../../Item/Weapon/WeaponBase.h"
 #include "../../Item/Weapon/Throw/ThrowWeaponBase.h"
 #include "../../Item/Weapon/WeaponInventoryBase.h"
-#include "../../System/MapSystem/Chapter/ChapterManagerBase.h"
-#include "../../System/MapSystem/Stage/StageData.h"
 #include "../../System/MapSystem/Stage/GateBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/AudioComponent.h"
@@ -592,11 +590,7 @@ void AMainCharacterBase::Die()
 {
 	Super::Die();
 	if (GamemodeRef.IsValid())
-	{
-		if(IsValid(GamemodeRef.Get()->GetChapterManagerRef())
-			&& IsValid(GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage()))
-			GamemodeRef.Get()->GetChapterManagerRef()->GetCurrentStage()->AIOffDelegate.Broadcast();
-		
+	{		
 		GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 		//ClearAllTimerHandle();
 		GamemodeRef.Get()->ClearResourceDelegate.Broadcast();

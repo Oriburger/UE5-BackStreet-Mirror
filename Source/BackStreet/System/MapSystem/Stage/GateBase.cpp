@@ -2,9 +2,6 @@
 
 
 #include "GateBase.h"
-#include "StageData.h"
-#include "../TransitionManager.h"
-#include "../Chapter/ChapterManagerBase.h"
 #include "../../../Global/BackStreetGameModeBase.h"
 #include "Math/Color.h"
 #include "Kismet/GameplayStatics.h"
@@ -35,14 +32,22 @@ void AGateBase::BeginPlay()
 
 void AGateBase::InitGate(FVector2D NewDirection)
 {
+	if (bManualMode) return;
 	Direction = NewDirection;
 	bIsGateActive = false;
 }
 
 void AGateBase::EnterGate()
 {
-	OnEnterRequestReceived.Execute(Direction);
-	Destroy();
+	if (bManualMode)
+	{
+		UGameplayStatics::OpenLevel(GetWorld(), ManualTargetLevelName, true);
+	}
+	else
+	{
+		OnEnterRequestReceived.Execute(Direction);
+		Destroy();
+	}
 }
 
 void AGateBase::ActivateGate()

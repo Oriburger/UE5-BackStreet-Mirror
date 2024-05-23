@@ -45,9 +45,6 @@ protected:
 
 // ----- Gameplay Manager -------------------
 public:
-	UFUNCTION(BlueprintImplementableEvent)
-		void CreateChapterManager();
-
 	UFUNCTION(BlueprintCallable)
 		void InitializeGame();
 
@@ -68,8 +65,6 @@ public:
 
 	UFUNCTION()
 		AItemBase* SpawnItemToWorld(int32 ItemID, FVector SpawnLocation);
-
-	UFUNCTION(BlueprintCallable)
 		bool IsLobbyStage();
 
 	UFUNCTION()
@@ -80,9 +75,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		class USkillManagerBase* GetGlobalSkillManagerBaseRef() { return SkillManagerBase; }
-
-	UFUNCTION(BlueprintCallable)
-		class AChapterManagerBase* GetChapterManagerRef() { return ChapterManager; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UCraftingManagerBase* GetCraftingManagerRef() { return CraftingManagerBase; }
@@ -121,9 +113,6 @@ protected:
 
 	UPROPERTY()
 		class UCraftingManagerBase* CraftingManagerBase;
-
-	UPROPERTY(BlueprintReadWrite)
-		class AChapterManagerBase* ChapterManager;
 
 public:
 	//현재 게임 모드가 인게임인지 트랜지션인지 확인

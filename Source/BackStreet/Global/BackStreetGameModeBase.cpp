@@ -4,8 +4,6 @@
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/SkillSystem/SkillManagerBase.h"
 #include "../System/CraftingSystem/CraftingManagerBase.h"
-#include "../System/MapSystem/Chapter/ChapterManagerBase.h"
-#include "../System/MapSystem/Stage/StageData.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
 #include "../Item/ItemBase.h"
@@ -35,11 +33,6 @@ void ABackStreetGameModeBase::InitializeGame()
 		FActorSpawnParameters spawnParams;
 		FRotator rotator;
 		FVector spawnLocation = FVector::ZeroVector;
-
-		CreateChapterManager();
-		//ChapterManager = GetWorld()->SpawnActor<AChapterManagerBase>(AChapterManagerBase::StaticClass(), spawnLocation, rotator, spawnParams);
-		//ChapterManager->SetOwner(this);
-		//ChapterManager->CreateChapterManager();
 
 		//------ 델리게이트 바인딩 ---------------
 		FinishChapterDelegate.AddDynamic(this, &ABackStreetGameModeBase::FinishChapter);
@@ -83,6 +76,7 @@ void ABackStreetGameModeBase::DeactivateSlowHitEffect()
 
 AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector SpawnLocation)
 {
+	/*
 	if (!IsValid(GetWorld())) return nullptr;
 	
 	FActorSpawnParameters actorSpawnParameters;
@@ -95,24 +89,11 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector Spawn
 		if (IsValid(newItem))
 		{
 			newItem->InitItem(ItemID);
-
-			//임시코드!!!!!!!!!!!!!!!! 230704 @ljh
-			if (IsValid(GetChapterManagerRef()) 
-				&& GetChapterManagerRef()->GetCurrentStage())
-			{
-				GetChapterManagerRef()->GetCurrentStage()->AddItemList(newItem);
-			}
 		}
 		return newItem;
 	}
+	*/
 	return nullptr;
-}
-
-bool ABackStreetGameModeBase::IsLobbyStage()
-{
-	if (ChapterManager->GetCurrentStage() == ChapterManager->GetLobbyStage()) 
-		return true; 
-	else return false;
 }
 
 void ABackStreetGameModeBase::UpdateCharacterStat(ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat)

@@ -2,7 +2,6 @@
 #include "./Component/DebuffManagerComponent.h"
 #include "./Component/TargetingManagerComponent.h"
 #include "../Global/BackStreetGameModeBase.h"
-#include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/SkillSystem/SkillManagerBase.h"
 #include "../System/SkillSystem/SkillBase.h"
 #include "../Item/Weapon/WeaponBase.h"
@@ -60,11 +59,6 @@ void ACharacterBase::BeginPlay()
 	WeaponInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	SubWeaponInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	
-	if (GamemodeRef.IsValid())
-	{
-		AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
-	}
 
 	if (IsValid(SubWeaponInventoryRef) && !SubWeaponInventoryRef->IsActorBeingDestroyed())
 	{

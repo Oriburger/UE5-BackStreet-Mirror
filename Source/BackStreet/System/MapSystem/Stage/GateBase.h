@@ -32,6 +32,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* Mesh;
 	
+	//Is gate that open level manually using level name property
+	UPROPERTY(EditInstanceOnly, Category = "Gameplay")
+		bool bManualMode = false;
+
+	//Level asset name to open manually
+	//If you want to use this parameter, activate bManualMode.
+	UPROPERTY(EditInstanceOnly, Category = "Gameplay")
+		FName ManualTargetLevelName;
 
 //----------- ÇÙ½É ·ÎÁ÷ ---------------
 public:

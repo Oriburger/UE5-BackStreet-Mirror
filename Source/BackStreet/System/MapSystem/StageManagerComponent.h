@@ -103,6 +103,16 @@ private:
 	TSubclassOf<UUserWidget> LoadingWidgetClass;
 	UUserWidget* LoadingWidgetRef;
 
+	//Result widget
+	TSubclassOf<UUserWidget> StageClearWidgetClass;
+	TSubclassOf<UUserWidget> ChapterClearWidgetClass;
+	TSubclassOf<UUserWidget> TimeOverWidgetClass;
+	TSubclassOf<UUserWidget> GameOverWidgetClass;
+	UUserWidget* StageClearWidgetRef;
+	UUserWidget* ChapterClearWidgetRef;
+	UUserWidget* TimeOverWidgetRef;
+	UUserWidget* GameOverWidgetRef;
+
 //======== Gameplay Function ===============
 public:
 	//Start current stage 
