@@ -394,7 +394,7 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 	FVector knockBackDirection = Target->GetActorLocation() - GetActorLocation();
 	knockBackDirection = knockBackDirection.GetSafeNormal();
 	knockBackDirection *= Strength;
-	knockBackDirection.Z = 0.0f;
+	knockBackDirection.Z = 1.0f;
 
 	//GetCharacterMovement()->AddImpulse(knockBackDirection);
 	Cast<ACharacterBase>(Target)->LaunchCharacter(knockBackDirection, true, false);
