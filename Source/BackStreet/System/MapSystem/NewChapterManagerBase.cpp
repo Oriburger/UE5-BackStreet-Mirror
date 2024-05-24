@@ -4,6 +4,8 @@
 #include "NewChapterManagerBase.h"
 #include "StageGeneratorComponent.h"
 #include "StageManagerComponent.h"
+#include "SlateBasics.h"
+#include "Runtime/UMG/Public/UMG.h"
 
 // Sets default values
 ANewChapterManagerBase::ANewChapterManagerBase()
@@ -15,9 +17,19 @@ ANewChapterManagerBase::ANewChapterManagerBase()
 	StageManagerComponent = CreateDefaultSubobject<UStageManagerComponent>(TEXT("STAGE MANAGER"));
 	StageGeneratorComponent = CreateDefaultSubobject<UStageGeneratorComponent>(TEXT("STAGE GENERATOR"));
 
+	//Init Data table about chapter info 
 	static ConstructorHelpers::FObjectFinder<UDataTable> chapterInfoTableFinder(TEXT("/Game/System/StageManager/Data/D_NewChapterInfoTable.D_NewChapterInfoTable"));
 	checkf(chapterInfoTableFinder.Succeeded(), TEXT("ANewChapterManagerBase_ chapterInfoTable 탐색에 실패했습니다."));
 	ChapterInfoTable = chapterInfoTableFinder.Object;
+
+	//init widget class (game over / chapter clear)
+	static ConstructorHelpers::FClassFinder<UUserWidget> chapterClearWidgetClassFinder(TEXT("/Game/UI/InGame/Blueprint/WB_GameClear"));
+	checkf(chapterClearWidgetClassFinder.Succeeded(), TEXT("ANewChapterManagerBase::loadingWidget 클래스 탐색에 실패했습니다."));
+	ChapterClearWidgetClass = chapterClearWidgetClassFinder.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> gameOverWidgetClassFinder(TEXT("/Game/UI/InGame/Blueprint/WB_GameOver"));
+	checkf(gameOverWidgetClassFinder.Succeeded(), TEXT("ANewChapterManagerBase::loadingWidget 클래스 탐색에 실패했습니다."));
+	GameOverWidgetClass = gameOverWidgetClassFinder.Class;
 }
 
 // Called when the game starts or when spawned
@@ -48,16 +60,13 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 	}
 }
 
-void ANewChapterManagerBase::FinishChapter(bool bIsGameOver)
+void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 {
-	if (bIsGameOver)
-	{
+	//Chapter Reward
+	// ...
 
-	}
-	else
-	{
-
-	}
+	//Result Widget
+	CreateGameResultWidget(true);
 }
 
 void ANewChapterManagerBase::ResetChapter()
@@ -94,4 +103,26 @@ void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 {
 	if (!StageInfoList.IsValidIndex(CurrentStageLocation.X)) return;
 	StageInfoList[CurrentStageLocation.X] = StageInfo;
+
+	//Game Over
+	if (StageInfo.bIsGameOver)
+	{
+		FinishChapter(false);
+	}
+	else if (StageInfo.bIsClear)
+	{
+		if (StageInfo.StageType == EStageCategoryInfo::E_Boss)
+		{
+			FinishChapter(true);
+		}
+	}
+}
+
+void ANewChapterManagerBase::CreateGameResultWidget(bool bChapterClear)
+{
+	GameResultWidgetRef = CreateWidget(GetWorld(), bChapterClear ? ChapterClearWidgetClass : GameOverWidgetClass);
+	if (IsValid(GameResultWidgetRef))
+	{
+		GameResultWidgetRef->AddToViewport();
+	}
 }

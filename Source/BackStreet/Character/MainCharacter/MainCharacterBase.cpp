@@ -589,13 +589,7 @@ void AMainCharacterBase::StopAttack()
 void AMainCharacterBase::Die()
 {
 	Super::Die();
-	if (GamemodeRef.IsValid())
-	{		
-		GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
-		//ClearAllTimerHandle();
-		GamemodeRef.Get()->ClearResourceDelegate.Broadcast();
-		GamemodeRef.Get()->FinishChapterDelegate.Broadcast(true);
-	}
+	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 }
 
 void AMainCharacterBase::RotateToCursor()
