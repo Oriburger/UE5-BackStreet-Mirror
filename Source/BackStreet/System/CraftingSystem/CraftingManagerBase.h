@@ -24,7 +24,7 @@ public:
 // ------ Default Logic -----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
-		void UpdateCurrentInventoryRef();
+		void UpdateCurrentWeaponInventoryRef();
 
 	UFUNCTION(BlueprintCallable)
 		TArray<FCraftingRecipeStruct> MakeDisplayingRecipeList(EWeaponType SelectedType);
@@ -46,9 +46,9 @@ public:
 		UDataTable* CraftingRecipeTable;
 
 	UPROPERTY(BlueprintReadWrite)
-		AWeaponInventoryBase* InventoryRef;
+		AWeaponInventoryBase* WeaponInventoryRef;
 
 	UPROPERTY(BlueprintReadWrite)
-		AWeaponInventoryBase* SubInventoryRef;
+		AWeaponInventoryBase* SubWeaponInventoryRef;
 
 };

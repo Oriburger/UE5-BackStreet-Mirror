@@ -79,9 +79,9 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 
 void AEnemyCharacterBase::SetDefaultWeapon()
 {
-	if (IsValid(GetInventoryRef()))
+	if (IsValid(GetWeaponInventoryRef()))
 	{
-		bool result = GetInventoryRef()->AddWeapon(EnemyStat.DefaultWeaponID);
+		bool result = GetWeaponInventoryRef()->AddWeapon(EnemyStat.DefaultWeaponID);
 		if (result)
 		{
 			Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();

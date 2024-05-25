@@ -21,16 +21,16 @@ void UCraftingManagerBase::InitCraftingManager(ABackStreetGameModeBase* NewGamem
 	GamemodeRef = NewGamemodeRef;
 }
 
-void UCraftingManagerBase::UpdateCurrentInventoryRef()
+void UCraftingManagerBase::UpdateCurrentWeaponInventoryRef()
 {
 	ACharacterBase* mainCharacter = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (IsValid(mainCharacter->GetInventoryRef()))
+	if (IsValid(mainCharacter->GetWeaponInventoryRef()))
 	{
-		InventoryRef = mainCharacter->GetInventoryRef();
+		WeaponInventoryRef = mainCharacter->GetWeaponInventoryRef();
 	}
-	if (IsValid(mainCharacter->GetSubInventoryRef()))
+	if (IsValid(mainCharacter->GetSubWeaponInventoryRef()))
 	{
-		SubInventoryRef = mainCharacter->GetSubInventoryRef();
+		SubWeaponInventoryRef = mainCharacter->GetSubWeaponInventoryRef();
 	}
 }
 
@@ -119,9 +119,9 @@ ECraftingSlotVisual UCraftingManagerBase::SetRecipeVisual(FCraftingRecipeStruct 
 
 bool UCraftingManagerBase::IsIngredientWeaponValid(int32 IngredientID)
 {
-	if (IsValid(InventoryRef))
+	if (IsValid(WeaponInventoryRef))
 	{
-		for (FInventoryItemInfoStruct InventoryWeapon : InventoryRef->GetInventoryArray())
+		for (FInventoryItemInfoStruct InventoryWeapon : WeaponInventoryRef->GetInventoryArray())
 		{
 			if (InventoryWeapon.WeaponID == IngredientID)
 			{
@@ -129,9 +129,9 @@ bool UCraftingManagerBase::IsIngredientWeaponValid(int32 IngredientID)
 			}
 		}
 	}
-	if (IsValid(SubInventoryRef))
+	if (IsValid(SubWeaponInventoryRef))
 	{
-		for (FInventoryItemInfoStruct SubInventoryWeapon : SubInventoryRef->GetInventoryArray())
+		for (FInventoryItemInfoStruct SubInventoryWeapon : SubWeaponInventoryRef->GetInventoryArray())
 		{
 			if (SubInventoryWeapon.WeaponID == IngredientID)
 			{

@@ -10,7 +10,6 @@ void AMainCharacterController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	this->bShowMouseCursor = true;
 	PrimaryActorTick.bCanEverTick = false;
 }
 

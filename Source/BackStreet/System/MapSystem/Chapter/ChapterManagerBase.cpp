@@ -75,6 +75,7 @@ bool AChapterManagerBase::DoChapterClearTaskAfterCheck()
 		// 챕터 클리어 관련 로직 실행
 		UE_LOG(LogTemp, Log, TEXT("AChapterManagerBase::DoChapterClearTaskAfterCheck: Clear Chapter"));
 
+		/*
 		TArray<AActor*> gates;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGateBase::StaticClass(), gates);
 		for (AActor* gate : gates)
@@ -85,9 +86,9 @@ bool AChapterManagerBase::DoChapterClearTaskAfterCheck()
 
 
 		}
-		return true;
+		return true;*/
 	}
-	else return false;
+	return false;
 }
 
 bool AChapterManagerBase::IsChapterClear()
@@ -158,13 +159,14 @@ void AChapterManagerBase::CreateChapter()
 
 void AChapterManagerBase::InitStartGate()
 {
+	/*
 	TArray<AActor*> gates;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGateBase::StaticClass(), gates);
 	for (AActor* gate : gates)
 	{
 		AGateBase* target = Cast<AGateBase>(gate);
 		target->InitGate();
-	}
+	}*/
 }
 
 void AChapterManagerBase::InitStageTypeArray()
