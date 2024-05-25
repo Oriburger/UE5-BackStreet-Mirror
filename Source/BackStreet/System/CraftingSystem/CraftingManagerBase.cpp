@@ -2,7 +2,6 @@
 
 
 #include "CraftingManagerBase.h"
-#include "../MapSystem/Chapter/ChapterManagerBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -36,7 +35,7 @@ void UCraftingManagerBase::UpdateCurrentWeaponInventoryRef()
 
 EChapterLevel UCraftingManagerBase::GetCurrentChapterLevel()
 {
-	return GamemodeRef.Get()->GetChapterManagerRef()->GetChapterLevel();
+	return EChapterLevel::E_Chapter1;
 }
 
 TArray<FCraftingRecipeStruct> UCraftingManagerBase::MakeDisplayingRecipeList(EWeaponType SelectedType)

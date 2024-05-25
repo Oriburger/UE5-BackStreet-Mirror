@@ -4,7 +4,6 @@
 #include "ItemBoxBase.h"
 #include "ItemBase.h"
 #include "../Global/BackStreetGameModeBase.h"
-#include "../System/MapSystem/Chapter/ChapterManagerBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Math/RandomStream.h"

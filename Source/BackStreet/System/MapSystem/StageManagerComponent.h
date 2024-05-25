@@ -99,7 +99,7 @@ private:
 	float LoadTimeOut = 30.0f;
 	FTimerHandle LoadCheckTimerHandle;
 
-	//For loading widget
+	//For instant loading widget
 	TSubclassOf<UUserWidget> LoadingWidgetClass;
 	UUserWidget* LoadingWidgetRef;
 
@@ -112,7 +112,7 @@ public:
 
 	//not working yet
 	UFUNCTION(BlueprintCallable)
-		void FinishStage(bool bIsGameOver, bool bPayReward);
+		void FinishStage(bool bStageClear);
 
 	//Get remaining time on time attack stage
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -134,6 +134,10 @@ private:
 	//Decrease enemy count
 	UFUNCTION()
 		void UpdateRemainingEnemyCount() { RemainingEnemyCount -= 1; }
+
+	//Finish current stage and chapter
+	UFUNCTION()
+		void SetGameIsOver(); 
 
 private:
 	//Combat stage only!

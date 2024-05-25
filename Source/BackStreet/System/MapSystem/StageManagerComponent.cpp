@@ -36,8 +36,12 @@ void UStageManagerComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ..
-	
+	//Bind to player death delegate
+	ACharacter* playerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	if (IsValid(playerCharacter))
+	{
+		Cast<ACharacterBase>(playerCharacter)->OnCharacterDied.AddDynamic(this, &UStageManagerComponent::SetGameIsOver);
+	}
 }
 
 void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
@@ -54,7 +58,7 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	//UE_LOG(LogTemp, Warning, TEXT("> Level Name : %s"), *CurrentStageInfo.LevelAssetName.ToString());
 	UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %d"), CurrentStageInfo.TilePos.X);
 
-	//Load new level 
+	//Load new level
 	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
 	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 1.0f, true);
 }
@@ -268,6 +272,10 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 
 void UStageManagerComponent::StartStage()
 {
+	//Visit Check
+	if (CurrentStageInfo.bIsVisited) return; 
+	CurrentStageInfo.bIsVisited = true;
+
 	//Remove loading screen 
 	RemoveLoadingScreen();
 
@@ -286,49 +294,50 @@ void UStageManagerComponent::StartStage()
 		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 	{
 		FTimerDelegate stageOverDelegate;
-		stageOverDelegate.BindUFunction(this, FName("FinishStage"), false, false);
+		stageOverDelegate.BindUFunction(this, FName("FinishStage"), false);
 		GetOwner()->GetWorldTimerManager().SetTimer(TimeAttackTimerHandle, stageOverDelegate, 1.0f, false, CurrentStageInfo.TimeLimitValue);
 	}
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft
 			|| CurrentStageInfo.StageType == EStageCategoryInfo::E_MiniGame
 			|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Gatcha)
 	{
-		FinishStage(false, false);
+		FinishStage(true);
 	}
 }
 
-void UStageManagerComponent::FinishStage(bool bIsGameOver, bool bPayReward)
+void UStageManagerComponent::FinishStage(bool bStageClear)
 {
 	if (CurrentStageInfo.bIsClear) return;
-	CurrentStageInfo.bIsClear = true;
+	CurrentStageInfo.bIsClear = bStageClear;
 
 	//Clear all remaining actors
 	ClearPreviousActors();
-
-	//StageFinished Delegate
-	OnStageFinished.Broadcast(CurrentStageInfo);
 
 	//Clear time attack timer handle
 	GetOwner()->GetWorldTimerManager().ClearTimer(TimeAttackTimerHandle);
 	TimeAttackTimerHandle.Invalidate();
 
-	//Spawn gate 
-	if (!bIsGameOver)
+	//if this is not end stage, then spawn the portal
+	if (!CurrentStageInfo.bIsGameOver && bStageClear
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss)
 	{
 		SpawnPortal();
 	}
-	else if(bIsGameOver)
+	else if (CurrentStageInfo.StageType != EStageCategoryInfo::E_None
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Craft
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_MiniGame
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Gatcha)
 	{
-		//create game over widget
+		//Stage Clear UI Update using delegate
 	}
-	else if(bPayReward)
+	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 	{
-		//Pay reward to player
+		//Time Out using delegate
 	}
-	else
-	{
-		//create timeatk stage over widget
-	}
+
+	//StageFinished Delegate
+	OnStageFinished.Broadcast(CurrentStageInfo);
 }
 
 void UStageManagerComponent::UpdateEnemyCountAndCheckClear()
@@ -336,7 +345,7 @@ void UStageManagerComponent::UpdateEnemyCountAndCheckClear()
 	UpdateRemainingEnemyCount();
 	if (CheckStageClearStatus())
 	{
-		FinishStage(false, true);
+		FinishStage(true);
 	}
 }
 
@@ -346,7 +355,9 @@ bool UStageManagerComponent::CheckStageClearStatus()
 	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat
 	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
 	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
-	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Boss)
+	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Boss
+	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteCombat
+	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 	{
 		return RemainingEnemyCount == 0;
 	}
@@ -358,4 +369,11 @@ bool UStageManagerComponent::CheckStageClearStatus()
 	}
 
 	return false;
+}
+
+void UStageManagerComponent::SetGameIsOver()
+{
+	CurrentStageInfo.bIsClear = false;
+	CurrentStageInfo.bIsGameOver = true;
+	FinishStage(false);
 }
