@@ -176,6 +176,7 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 void UStageManagerComponent::SpawnEnemy()
 {
 	//Basic condition (stage type check and data count check
+	if (CurrentStageInfo.EnemySpawnLocationList.Num() <= 0) return;
 	if (CurrentStageInfo.StageType != EStageCategoryInfo::E_Entry
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Combat
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_TimeAttack
