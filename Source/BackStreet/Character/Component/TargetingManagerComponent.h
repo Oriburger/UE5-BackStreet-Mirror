@@ -6,11 +6,20 @@
 #include "Components/ActorComponent.h"
 #include "TargetingManagerComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateTargetUpdate, APawn*, Target);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateTargetingActivate, bool, bIsActivated, APawn*, Target);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API UTargetingManagerComponent : public UActorComponent
 {
 	GENERATED_BODY()
+// ============ Delegate ====================
+public:
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTargetUpdate OnTargetUpdated;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTargetingActivate OnTargetingActivated;
 
 // ============ Basic =======================
 public:	
@@ -55,7 +64,7 @@ public:
 		void SetIsTargetingActivated(bool NewState) { bIsTargetingActivated = NewState; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class ACharacterBase* GetTargetedCharacter() { return TargetedCharacter.IsValid() ? TargetedCharacter.Get() : nullptr; }
+		class ACharacterBase* GetTargetedCharacter();// {  }
 
 	UFUNCTION(BlueprintCallable)
 		void SetTargetedCharacter(class ACharacterBase* NewTarget);
