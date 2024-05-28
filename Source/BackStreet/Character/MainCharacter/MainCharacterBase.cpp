@@ -524,7 +524,7 @@ void AMainCharacterBase::TryUpperAttack()
 	{
 		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(targetedEnemy->GetActorLocation(), GetActorLocation());
 		targetedEnemy->SetActorRotation(newRotation);
-		SetLocationWithInterp(Cast<ACharacterBase>(targetedEnemy)->HitSceneComponent->GetComponentLocation() + 100.0f, 5.0f);
+		SetLocationWithInterp(Cast<ACharacterBase>(targetedEnemy)->HitSceneComponent->GetComponentLocation() + 100.0f, 50.0f);
 	}
 
 	Super::TryUpperAttack();

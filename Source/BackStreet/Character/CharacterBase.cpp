@@ -122,7 +122,7 @@ void ACharacterBase::ResetAirAtkLocationUpdateTimer()
 void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset)
 {
 	FVector currentLocation = GetActorLocation();
-	if (currentLocation.Equals(TargetValue, 75.0f))
+	if (currentLocation.Equals(TargetValue, 10.0f))
 	{
 		GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 		if (bAutoReset)
@@ -326,13 +326,19 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(DamageCauser->GetActorLocation(), GetActorLocation());
 	newRotation.Pitch = newRotation.Roll = 0.0f;
 
-	ACharacterBase* causerTarget = Cast<ACharacterBase>(DamageCauser)->TargetingManagerComponent->GetTargetedCharacter();
-	if (IsValid(causerTarget) && causerTarget == this)
+	if (DamageCauser->ActorHasTag("Player"))
 	{
-		Cast<ACharacterBase>(DamageCauser)->SetActorRotation(newRotation);
-		newRotation.Yaw += 180.0f;
-		SetActorRotation(newRotation);
+		ACharacterBase* causerTarget = Cast<ACharacterBase>(DamageCauser)->TargetingManagerComponent->GetTargetedCharacter();
+		if (IsValid(causerTarget) && causerTarget == this)
+		{
+			Cast<ACharacterBase>(DamageCauser)->SetActorRotation(newRotation);
+			newRotation.Yaw += 180.0f;
+			SetActorRotation(newRotation);
+		}
 	}
+
+	//Reset Location Interp Timer Handle
+	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 
 	// ====== Hit Counter & Knock Down Check ===========================
 	CharacterState.HitCounter += 1;
