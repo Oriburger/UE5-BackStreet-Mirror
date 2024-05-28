@@ -23,7 +23,6 @@
 #include "../Item/Struct/ItemInfoStruct.h"
 #include "../Item/Struct/WeaponInfoStruct.h"
 #include "../Item/Struct/ProjectileInfoStruct.h"
-#include "../System/MapSystem/Struct/DirectionEnumInfo.h"
 #include "../System/MapSystem/Struct/StageInfoStruct.h"
 #include "../System/SkillSystem/Struct/SkillInfoStruct.h"
 #include "../System/CraftingSystem/Struct/CraftingInfoStruct.h"

@@ -5,7 +5,6 @@
 #include "../../System/SkillSystem/SkillManagerBase.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
 #include "../../System/AISystem/AIControllerBase.h"
-#include "../../System/MapSystem/Chapter/ChapterManagerBase.h"
 #include "../../Item/ItemBase.h"
 #include "../../Item/Weapon/WeaponInventoryBase.h"
 #include "../../Item/Weapon/WeaponBase.h"
@@ -79,9 +78,9 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 
 void AEnemyCharacterBase::SetDefaultWeapon()
 {
-	if (IsValid(GetInventoryRef()))
+	if (IsValid(GetWeaponInventoryRef()))
 	{
-		bool result = GetInventoryRef()->AddWeapon(EnemyStat.DefaultWeaponID);
+		bool result = GetWeaponInventoryRef()->AddWeapon(EnemyStat.DefaultWeaponID);
 		if (result)
 		{
 			Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();

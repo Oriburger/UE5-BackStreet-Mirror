@@ -47,7 +47,7 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float Radius)
 	TArray<FHitResult> hitResultList;
 
 	UKismetSystemLibrary::SphereTraceMultiByProfile(GetWorld(), startLocation, endLocation, Radius, "Pawn", false
-		, { OwnerCharacter.Get() }, EDrawDebugTrace::ForDuration, hitResultList, true);
+		, { OwnerCharacter.Get() }, EDrawDebugTrace::None, hitResultList, true);
 
 	float minDist = FLT_MAX;
 	ACharacterBase* target = nullptr;

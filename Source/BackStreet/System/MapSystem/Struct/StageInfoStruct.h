@@ -3,23 +3,28 @@
 #include "Engine/DataTable.h"
 #include "StageInfoStruct.generated.h"
 
-
-
 UENUM(BlueprintType)
 enum class EStageCategoryInfo : uint8
 {
 	E_None				  	UMETA(DisplayName = "None"),
-	E_Normal				UMETA(DisplayName = "Normal"),
-	E_Mission			  	UMETA(DisplayName = "Mission"),
-	E_Boss				    UMETA(DisplayName = "Boss"),
 	E_Lobby					UMETA(DisplayName = "Lobby"),
 
+	E_Entry					UMETA(DisplayName = "Entry"),
+	E_Combat				UMETA(DisplayName = "Combat"),
+	E_TimeAttack			UMETA(DisplayName = "TimeAttack"),
+	E_EliteCombat			UMETA(DisplayName = "EliteCombat"),
+	E_EliteTimeAttack		UMETA(DisplayName = "EliteTimeAttack"),
+	E_Boss					UMETA(DisplayName = "Boss"),
+
+	E_Craft					UMETA(DisplayName = "Craft"),
+	E_MiniGame				UMETA(DisplayName = "MiniGame"),
+	E_Gatcha				UMETA(DisplayName = "Gatcha"),
 };
 
 UENUM(BlueprintType)
 enum class EWaveCategoryInfo : uint8
 {
-	E_None				  	UMETA(DisplayName = "None"),
+	E_None				  		UMETA(DisplayName = "None"),
 	E_NomalWave					UMETA(DisplayName = "E_NomalWave"),
 	E_TimeLimitWave			  	UMETA(DisplayName = "E_TimeLimitWave"),
 };
@@ -35,150 +40,125 @@ enum class EChapterLevel : uint8
 };
 
 USTRUCT(BlueprintType)
-struct FWaveEnemyStruct : public FTableRowBase
+struct FEnemyGroupInfo
 {
 	GENERATED_BODY()
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		TMap<int32, int32> EnemyList; // EnemyID,스폰 수
-
+		TMap<int32, int32> EnemySet; // EnemyID,스폰 수
 };
 
 USTRUCT(BlueprintType)
-struct FStageInfoStruct : public FTableRowBase
+struct FEnemyCompositionInfo
 {
 	GENERATED_BODY()
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		int32 StageID;
+		TArray<FEnemyGroupInfo> CompositionList;
+};
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		int32 ChapterLevel;
+//이동 예정 LJH
+USTRUCT(BlueprintType)
+struct FStageInfo
+{
+	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+public:
+	//==== Static Proptery ====================
+
+	//Stage type (entry, combat, time attack, boss, miniGame, gatcha etc..)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		EStageCategoryInfo StageType;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		TArray<FName> LevelList;
+	//Map location in 2nd array (현재 선형으로 1차원 X값만 사용)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		FVector2D TilePos;
+	
+	//Main level of this stage
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TSoftObjectPtr<UWorld> MainLevelAsset;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blueprint")
-		TArray<UBlueprint*> ItemBoxBPList;
+	//Outer level of this stage
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TSoftObjectPtr<UWorld> OuterLevelAsset;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blueprint")
-		TArray<UBlueprint*> RewardBoxBPList;
+	//Battle stages only use this value!
+	//List of enemy's composition to spawn 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		FEnemyCompositionInfo EnemyCompositionInfo;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blueprint")
-		TArray<UBlueprint*> CraftingBoxBPList;
+	//==== Dynamic Proptery ====================
+	//Dyanmically update after level load
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
-		int32 MaxSpawnItem;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TArray<FVector> EnemySpawnLocationList;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
-		int32 MinSpawnItem;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		FVector PlayerStartLocation;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		EWaveCategoryInfo WaveType;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TArray<FVector> PortalLocationList;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		int32 MaxWave; // 총 웨이브 수
+	//Timed-stage only use this value!
+	UPROPERTY()
+		float TimeLimitValue = 0.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
-		TArray<int32> WaveComposition;// 각 웨이브 단계에 스폰할 Enemy 목록의 데이터 테이블 ID를 지님, 항상 총 웨이브 수 만큼의 요소가 들어있어야함
+	UPROPERTY()
+		bool bIsClear = false;
 
-	// 웨이브타입이 디펜스인 경우
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		TMap<int32, float> ClearTimeForEachWave; // 웨이브별 버텨야하는 시간
+	UPROPERTY()
+		bool bIsVisited = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		float SpawnInterval;
-
+	UPROPERTY()
+		bool bIsGameOver = false;
 };
 
-
 USTRUCT(BlueprintType)
-struct FStageDataStruct : public FTableRowBase
+struct FChapterInfo : public FTableRowBase
 {
 	GENERATED_BODY()
 
+	//======= Gameplay ====================
 public:
-	UPROPERTY()
-		int32 XPos;
+	//Table Key
+	UPROPERTY(EditDefaultsOnly)
+		int32 ChapterID;
 
-	UPROPERTY()
-		int32 YPos;
+	//Time attack's time limit value
+	UPROPERTY(EditDefaultsOnly)
+		float EliteTimeAtkStageTimeOut = 60.0f;
+	UPROPERTY(EditDefaultsOnly)
+		float NormalTimeAtkStageTimeOut = 50.0f;
+	
+	//Enemy composition information of stage type
+	UPROPERTY(EditDefaultsOnly)
+		TMap<EStageCategoryInfo, FEnemyCompositionInfo> EnemyCompositionInfoMap;
 
-	UPROPERTY()
-		FVector StageLocation;
+	//======= Asset =======================
+public:
+	//Entry stage level list
+	UPROPERTY(EditDefaultsOnly)
+		TArray<TSoftObjectPtr<UWorld>> EntryStageLevelList;
 
-	UPROPERTY()
-		TArray<bool> GateInfo;
+	//Combat stage level list
+	UPROPERTY(EditDefaultsOnly)
+		TArray<TSoftObjectPtr<UWorld>> CombatStageLevelList;
 
-	UPROPERTY()
-		EStageCategoryInfo StageCategoryType;
+	//Time attack stage level list
+	UPROPERTY(EditDefaultsOnly)
+		TArray<TSoftObjectPtr<UWorld>> TimeAttackStageLevelList;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		FStageInfoStruct StageType;
+	//Craft stage level list
+	UPROPERTY(EditDefaultsOnly)
+		TArray<TSoftObjectPtr<UWorld>> CraftStageLevelList;
 
-	UPROPERTY()
-		FName LevelToLoad;
+	//Boss stage level list
+	UPROPERTY(EditDefaultsOnly)
+		TArray<TSoftObjectPtr<UWorld>> BossStageLevelList;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		int32 CurrentWaveLevel;
-
-	UPROPERTY()
-		bool bIsVisited;
-
-	UPROPERTY()
-		bool bIsClear;
-
-	UPROPERTY()
-		bool bIsValid;
-
-	UPROPERTY()
-		int32 MonsterSpawnPointOrderIdx;
-
-	UPROPERTY()
-		TMap<int32, int32> ExistEnemyList;
-
-	UPROPERTY()
-		TArray<FVector> MonsterSpawnPoints;
-
-	UPROPERTY()
-		TArray<FVector> ItemSpawnPoints;
-
-	UPROPERTY()
-		TArray<FVector> CharacterSpawnPoint;
-
-	UPROPERTY()
-		TArray<FVector> RewardBoxSpawnPoint;
-
-	UPROPERTY()
-		TArray<FVector> CraftingBoxSpawnPoint;
-
-	UPROPERTY()
-		TArray<FRotator> CraftingBoxSpawnRotatorPoint;
-
-	UPROPERTY()
-		TArray<class AEnemyCharacterBase*> MonsterList;
-
-	UPROPERTY()
-		TArray<class AItemBase*> ItemList;
-
-	UPROPERTY()
-		TArray<class AItemBoxBase*> ItemBoxList;
-
-	UPROPERTY()
-		TArray<class AGateBase*> GateList;
-
-	UPROPERTY()
-		class ARewardBoxBase* RewardBoxRef;
-
-	UPROPERTY()
-		class ACraftBoxBase* CraftingBoxRef;
-
-	UPROPERTY()
-		ULevelStreaming* LevelRef;
-
+	//Outer area level asset
+	UPROPERTY(EditDefaultsOnly)
+		TArray<TSoftObjectPtr<UWorld>> OuterStageLevelList;
 };
