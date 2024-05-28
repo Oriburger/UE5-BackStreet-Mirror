@@ -114,6 +114,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetLocationWithInterp(FVector NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
 
+	UFUNCTION(BlueprintCallable)
+		void ResetLocationInterpTimer();
+	
 	//Set air atk location update event timer
 	//This func is called by upper atk anim montage's notify
 	UFUNCTION(BlueprintCallable)

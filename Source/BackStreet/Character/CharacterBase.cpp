@@ -110,8 +110,13 @@ void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, 
 	updateFunctionDelegate.BindUFunction(this, FName("UpdateLocation"), NewValue, InterpSpeed, bAutoReset);
 
 	//Calling MyUsefulFunction after 5 seconds without looping
-	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
+	ResetLocationInterpTimer();
 	GetWorld()->GetTimerManager().SetTimer(LocationInterpHandle, updateFunctionDelegate, 0.01f, true);
+}
+
+void ACharacterBase::ResetLocationInterpTimer()
+{
+	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 }
 
 void ACharacterBase::SetAirAtkLocationUpdateTimer()
