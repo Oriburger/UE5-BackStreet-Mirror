@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../Global/BackStreet.h"
 #include "../../Character/Struct/CharacterInfoEnum.h"
 #include "Engine/DataTable.h"
 #include "ProjectileInfoStruct.generated.h"

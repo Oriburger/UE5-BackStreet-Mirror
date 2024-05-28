@@ -211,7 +211,7 @@ void AWeaponInventoryBase::RemoveWeapon(int32 WeaponID)
 {
 	if (!GetWeaponIsContained(WeaponID)) return;
 
-	int32 targetInventoryIdx = GetWeaponInventoryIdx(WeaponID);
+	int32 targetInventoryIdx = GetInventoryIdx(WeaponID);
 	if (!InventoryArray.IsValidIndex(targetInventoryIdx)) return;
 
 	TotalWeight -= InventoryArray[targetInventoryIdx].WeaponStat.WeaponWeight;
@@ -318,7 +318,7 @@ bool AWeaponInventoryBase::GetWeaponIsContained(int32 WeaponID)
 
 bool AWeaponInventoryBase::TryAddAmmoToWeapon(int32 WeaponID, int32 AmmoCount)
 {
-	const int32 targetInventoryIdx = GetWeaponInventoryIdx(WeaponID);
+	const int32 targetInventoryIdx = GetInventoryIdx(WeaponID);
 	if (targetInventoryIdx == -1) return false;
 	if (InventoryArray[targetInventoryIdx].WeaponStat.WeaponType != EWeaponType::E_Shoot
 		&& InventoryArray[targetInventoryIdx].WeaponStat.WeaponType != EWeaponType::E_Throw) return false;
@@ -375,7 +375,7 @@ void AWeaponInventoryBase::SortInventory()
 	}
 }
 
-int32 AWeaponInventoryBase::GetWeaponInventoryIdx(int32 WeaponID)
+int32 AWeaponInventoryBase::GetInventoryIdx(int32 WeaponID)
 {
 	for (int32 inventoryIdx = 0; inventoryIdx < InventoryArray.Num(); inventoryIdx++)
 	{

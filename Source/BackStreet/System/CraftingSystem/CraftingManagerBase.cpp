@@ -2,7 +2,6 @@
 
 
 #include "CraftingManagerBase.h"
-#include "../MapSystem/Chapter/ChapterManagerBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -21,22 +20,22 @@ void UCraftingManagerBase::InitCraftingManager(ABackStreetGameModeBase* NewGamem
 	GamemodeRef = NewGamemodeRef;
 }
 
-void UCraftingManagerBase::UpdateCurrentInventoryRef()
+void UCraftingManagerBase::UpdateCurrentWeaponInventoryRef()
 {
 	ACharacterBase* mainCharacter = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (IsValid(mainCharacter->GetInventoryRef()))
+	if (IsValid(mainCharacter->GetWeaponInventoryRef()))
 	{
-		InventoryRef = mainCharacter->GetInventoryRef();
+		WeaponInventoryRef = mainCharacter->GetWeaponInventoryRef();
 	}
-	if (IsValid(mainCharacter->GetSubInventoryRef()))
+	if (IsValid(mainCharacter->GetSubWeaponInventoryRef()))
 	{
-		SubInventoryRef = mainCharacter->GetSubInventoryRef();
+		SubWeaponInventoryRef = mainCharacter->GetSubWeaponInventoryRef();
 	}
 }
 
 EChapterLevel UCraftingManagerBase::GetCurrentChapterLevel()
 {
-	return GamemodeRef.Get()->GetChapterManagerRef()->GetChapterLevel();
+	return EChapterLevel::E_Chapter1;
 }
 
 TArray<FCraftingRecipeStruct> UCraftingManagerBase::MakeDisplayingRecipeList(EWeaponType SelectedType)
@@ -119,9 +118,9 @@ ECraftingSlotVisual UCraftingManagerBase::SetRecipeVisual(FCraftingRecipeStruct 
 
 bool UCraftingManagerBase::IsIngredientWeaponValid(int32 IngredientID)
 {
-	if (IsValid(InventoryRef))
+	if (IsValid(WeaponInventoryRef))
 	{
-		for (FInventoryItemInfoStruct InventoryWeapon : InventoryRef->GetInventoryArray())
+		for (FInventoryItemInfoStruct InventoryWeapon : WeaponInventoryRef->GetInventoryArray())
 		{
 			if (InventoryWeapon.WeaponID == IngredientID)
 			{
@@ -129,9 +128,9 @@ bool UCraftingManagerBase::IsIngredientWeaponValid(int32 IngredientID)
 			}
 		}
 	}
-	if (IsValid(SubInventoryRef))
+	if (IsValid(SubWeaponInventoryRef))
 	{
-		for (FInventoryItemInfoStruct SubInventoryWeapon : SubInventoryRef->GetInventoryArray())
+		for (FInventoryItemInfoStruct SubInventoryWeapon : SubWeaponInventoryRef->GetInventoryArray())
 		{
 			if (SubInventoryWeapon.WeaponID == IngredientID)
 			{

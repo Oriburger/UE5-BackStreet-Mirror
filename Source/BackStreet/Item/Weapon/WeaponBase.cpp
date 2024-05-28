@@ -173,7 +173,7 @@ float AWeaponBase::CalculateTotalDamage(FCharacterStateStruct TargetState)
 void AWeaponBase::UpdateComboState()
 {
 	WeaponState.ComboCount = (WeaponState.ComboCount + 1); 
-	OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
+	OwnerCharacterRef.Get()->GetWeaponInventoryRef()->SyncCurrentWeaponInfo(true);
 }
 
 void AWeaponBase::SetResetComboTimer()
@@ -209,7 +209,7 @@ void AWeaponBase::UpdateDurabilityState()
 		OwnerCharacterRef.Get()->DropWeapon();
 		return;
 	}
-	OwnerCharacterRef.Get()->GetInventoryRef()->SyncCurrentWeaponInfo(true);
+	OwnerCharacterRef.Get()->GetWeaponInventoryRef()->SyncCurrentWeaponInfo(true);
 }
 
 float AWeaponBase::GetAttackRange() 

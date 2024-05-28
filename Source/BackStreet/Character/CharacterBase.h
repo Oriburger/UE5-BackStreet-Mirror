@@ -4,7 +4,7 @@
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCharacterDied);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateCharacterDie);
 
 UCLASS()
 class BACKSTREET_API ACharacterBase : public ACharacter
@@ -23,7 +23,7 @@ public:
 
 	//Weapon이 파괴되었을때 호출할 이벤트
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FOnCharacterDied OnCharacterDied;
+		FDelegateCharacterDie OnCharacterDied;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -204,10 +204,10 @@ public:
 		bool TrySwitchToSubWeapon(int32 SubWeaponIdx);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class AWeaponInventoryBase* GetInventoryRef();
+		class AWeaponInventoryBase* GetWeaponInventoryRef();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class AWeaponInventoryBase* GetSubInventoryRef();
+		class AWeaponInventoryBase* GetSubWeaponInventoryRef();
 
 	//무기 Ref를 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -222,10 +222,10 @@ protected:
 
 private:
 	UPROPERTY()
-		class AWeaponInventoryBase* InventoryRef;
+		class AWeaponInventoryBase* WeaponInventoryRef;
 
 	UPROPERTY()
-		class AWeaponInventoryBase* SubInventoryRef;
+		class AWeaponInventoryBase* SubWeaponInventoryRef;
 
 	//0번째 : 들고 있는 무기 / 1번째, 숨겨져 있는 다른 타임의무기
 	UPROPERTY()
@@ -297,6 +297,8 @@ protected:
 	//캐릭터의 현재 상태
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
 		FCharacterStateStruct CharacterState;
+
+	//Character Item Inventory
 
 	//Gamemode 약 참조
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;

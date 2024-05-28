@@ -7,21 +7,19 @@
 #include "GateBase.generated.h"
 
 
-DECLARE_DELEGATE_OneParam(FDelegateMove, EDirection);
+DECLARE_DELEGATE_OneParam(FDelegateMove, FVector2D);
 
 UCLASS()
 class BACKSTREET_API AGateBase : public AActor
 {
 	GENERATED_BODY()
 public:
-		FDelegateMove  MoveStageDelegate;
+	FDelegateMove OnEnterRequestReceived;
 
 //------------ Global / Component -------------------
 public:
 	// Sets default values for this actor's properties
 	AGateBase();
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -34,60 +32,42 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* Mesh;
 	
+	//Is gate that open level manually using level name property
+	UPROPERTY(EditInstanceOnly, Category = "Gameplay")
+		bool bManualMode = false;
+
+	//Level asset name to open manually
+	//If you want to use this parameter, activate bManualMode.
+	UPROPERTY(EditInstanceOnly, Category = "Gameplay")
+		FName ManualTargetLevelName;
 
 //----------- 핵심 로직 ---------------
 public:
 	// Initialize Gate
 	UFUNCTION()
-		void InitGate();
-	// Bind Delegate Related to Gate
-	UFUNCTION()
-		void BindGateDelegate();
-	// Add Gate to Stage Gate Reference List
-	UFUNCTION(BlueprintCallable)
-		void AddGate();
+		void InitGate(FVector2D NewDirection = FVector2D(0.0f));
+
 	// Check Gate Is Active and RequsetMoveStage
 	UFUNCTION(BlueprintCallable)
 		void EnterGate();
-	// BroadCast MoveRequest to TransitionManager
-	UFUNCTION()
-		void RequestMoveStage();
+	
 	// Activate Gate
 	UFUNCTION(BlueprintCallable)
 		void ActivateGate();
+	
 	// Deactivate Gate
 	UFUNCTION(BlueprintCallable)
 		void DeactivateGate();
-	// Activate Chapter Gate (Guarantee ChpaterClear)
-	UFUNCTION(BlueprintCallable)
-		void ActivateChapterGateAfterCheck();
-	// Set ActivateChpaterGateMaterial
-	UFUNCTION()
-		void ActivateChapterGateMaterial();
-	// Set ActivateNormalGateMaterial
-	UFUNCTION()
-		void ActivateNormalGateMaterial();
-	// Set DeactivateGateMaterial
-	UFUNCTION()
-		void DeactivateGateMaterial();
-	// Check If Gate Is Needed
-	UFUNCTION(BlueprintCallable)
-		void CheckHaveToNeed();
-	// Deactivate Gate If stage Type is TimeLimitWave
-	UFUNCTION(BlueprintCallable)
-		void SetTimeLimitWaveGate();
 
 private:
 	UPROPERTY()
 		bool bIsGateActive;
 
+	//Gate's direction to move on n*n grid chapter
+	UPROPERTY()
+		FVector2D Direction;
+
 //-------- 그 외-----------------------
-public:
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Material")
-		TArray<class UMaterialInterface*> GateMaterialList;
-
 private:
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
-
 };

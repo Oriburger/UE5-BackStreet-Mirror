@@ -93,7 +93,7 @@ void AThrowWeaponBase::Throw()
 													, newProjectile->GetActorLocation(), ThrowDirection.Rotation());
 
 		WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
-		OwnerCharacterRef.Get()->GetSubInventoryRef()->SyncCurrentWeaponInfo(true);
+		OwnerCharacterRef.Get()->GetSubWeaponInventoryRef()->SyncCurrentWeaponInfo(true);
 	}
 
 	if (AssetManagerBaseRef.IsValid())

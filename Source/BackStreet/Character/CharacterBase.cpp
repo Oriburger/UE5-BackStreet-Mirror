@@ -2,7 +2,6 @@
 #include "./Component/DebuffManagerComponent.h"
 #include "./Component/TargetingManagerComponent.h"
 #include "../Global/BackStreetGameModeBase.h"
-#include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/SkillSystem/SkillManagerBase.h"
 #include "../System/SkillSystem/SkillBase.h"
 #include "../Item/Weapon/WeaponBase.h"
@@ -57,27 +56,22 @@ void ACharacterBase::BeginPlay()
 	CharacterID = AssetSoftPtrInfo.CharacterID;
 	InitCharacterState();
 
-	InventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
-	SubInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
+	WeaponInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
+	SubWeaponInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	
-	if (GamemodeRef.IsValid())
+
+	if (IsValid(SubWeaponInventoryRef) && !SubWeaponInventoryRef->IsActorBeingDestroyed())
 	{
-		AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
+		SubWeaponInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+		SubWeaponInventoryRef->SetOwner(this);
+		SubWeaponInventoryRef->InitInventory(2);
 	}
 
-	if (IsValid(SubInventoryRef) && !SubInventoryRef->IsActorBeingDestroyed())
+	if (IsValid(WeaponInventoryRef) && !WeaponInventoryRef->IsActorBeingDestroyed())
 	{
-		SubInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
-		SubInventoryRef->SetOwner(this);
-		SubInventoryRef->InitInventory(2);
-	}
-
-	if (IsValid(InventoryRef) && !InventoryRef->IsActorBeingDestroyed())
-	{
-		InventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
-		InventoryRef->SetOwner(this);
-		InventoryRef->InitInventory(ActorHasTag("Player") ? 1 : 6);
+		WeaponInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+		WeaponInventoryRef->SetOwner(this);
+		WeaponInventoryRef->InitInventory(ActorHasTag("Player") ? 1 : 6);
 		InitWeaponActors();
 	}
 
@@ -133,7 +127,7 @@ void ACharacterBase::ResetAirAtkLocationUpdateTimer()
 void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset)
 {
 	FVector currentLocation = GetActorLocation();
-	if (currentLocation.Equals(TargetValue, 75.0f))
+	if (currentLocation.Equals(TargetValue, 10.0f))
 	{
 		GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 		if (bAutoReset)
@@ -276,7 +270,7 @@ void ACharacterBase::UpdateCharacterState(FCharacterStateStruct NewState)
 
 void ACharacterBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
-	if (!IsValid(GetCurrentWeaponRef()) || InventoryRef->IsActorBeingDestroyed()) return;
+	if (!IsValid(GetCurrentWeaponRef()) || WeaponInventoryRef->IsActorBeingDestroyed()) return;
 	GetCurrentWeaponRef()->UpdateWeaponStat(NewStat);
 }
 
@@ -337,13 +331,19 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(DamageCauser->GetActorLocation(), GetActorLocation());
 	newRotation.Pitch = newRotation.Roll = 0.0f;
 
-	ACharacterBase* causerTarget = Cast<ACharacterBase>(DamageCauser)->TargetingManagerComponent->GetTargetedCharacter();
-	if (IsValid(causerTarget) && causerTarget == this)
+	if (DamageCauser->ActorHasTag("Player"))
 	{
-		Cast<ACharacterBase>(DamageCauser)->SetActorRotation(newRotation);
-		newRotation.Yaw += 180.0f;
-		SetActorRotation(newRotation);
+		ACharacterBase* causerTarget = Cast<ACharacterBase>(DamageCauser)->TargetingManagerComponent->GetTargetedCharacter();
+		if (IsValid(causerTarget) && causerTarget == this)
+		{
+			Cast<ACharacterBase>(DamageCauser)->SetActorRotation(newRotation);
+			newRotation.Yaw += 180.0f;
+			SetActorRotation(newRotation);
+		}
 	}
+
+	//Reset Location Interp Timer Handle
+	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 
 	// ====== Hit Counter & Knock Down Check ===========================
 	CharacterState.HitCounter += 1;
@@ -407,13 +407,13 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 
 void ACharacterBase::Die()
 {
-	if (IsValid(InventoryRef) && !InventoryRef->IsActorBeingDestroyed())
+	if (IsValid(WeaponInventoryRef) && !WeaponInventoryRef->IsActorBeingDestroyed())
 	{
 		//캐릭터가 죽으면 3가지 타입의 무기 액터를 순차적으로 반환
 		for (int weaponIdx = 2; weaponIdx >= 0; weaponIdx--)
 		{
 			WeaponActorList[weaponIdx]->Destroy();
-			InventoryRef->Destroy();
+			WeaponInventoryRef->Destroy();
 		}
 	}
 	//Disable Collision
@@ -426,10 +426,8 @@ void ACharacterBase::Die()
 	}
 	//모든 타이머를 제거한다. (타이머 매니저의 것도)
 	ClearAllTimerHandle();
-	DebuffManagerComponent->PrintAllDebuff();
 	DebuffManagerComponent->ClearDebuffManager();
-	DebuffManagerComponent->PrintAllDebuff();
-
+	
 	//무적 처리를 하고, Movement를 비활성화
 	CharacterStat.bIsInvincibility = true;
 	GetCharacterMovement()->Deactivate();
@@ -584,7 +582,13 @@ void ACharacterBase::DashAttack()
 void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
-	checkf(IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()), TEXT("Failed to get SkillmanagerBase"));
+	
+	if (!IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to get SkillmanagerBase"));
+		ensure(IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()));
+		return;
+	}
 
 	switch (SkillType)
 	{
@@ -1030,16 +1034,16 @@ bool ACharacterBase::EquipWeapon(AWeaponBase* TargetWeapon)
 
 bool ACharacterBase::PickWeapon(int32 NewWeaponID)
 {
-	if (!IsValid(InventoryRef)) return false;
-	bool result = InventoryRef->AddWeapon(NewWeaponID);
+	if (!IsValid(WeaponInventoryRef)) return false;
+	bool result = WeaponInventoryRef->AddWeapon(NewWeaponID);
 	return result;
 }
 
 void ACharacterBase::SwitchToNextWeapon()
 {
-	if (!IsValid(InventoryRef)) return;
+	if (!IsValid(WeaponInventoryRef)) return;
 	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
-	InventoryRef->SwitchToNextWeapon();
+	WeaponInventoryRef->SwitchToNextWeapon();
 }
 
 void ACharacterBase::DropWeapon()
@@ -1048,11 +1052,11 @@ void ACharacterBase::DropWeapon()
 	
 	if (CurrentWeaponRef->GetWeaponType() == EWeaponType::E_Throw)
 	{
-		SubInventoryRef->RemoveCurrentWeapon();
+		SubWeaponInventoryRef->RemoveCurrentWeapon();
 		SwitchWeaponActor(EWeaponType::E_Melee);
-		InventoryRef->EquipWeaponByIdx(0);
+		WeaponInventoryRef->EquipWeaponByIdx(0);
 	}
-	else InventoryRef->RemoveCurrentWeapon();
+	else WeaponInventoryRef->RemoveCurrentWeapon();
 	
 	SwitchToNextWeapon();
 		
@@ -1061,27 +1065,27 @@ void ACharacterBase::DropWeapon()
 
 bool ACharacterBase::TrySwitchToSubWeapon(int32 SubWeaponIdx)
 {
-	if (SubWeaponIdx >= SubInventoryRef->GetCurrentWeaponCount()) return false;
+	if (SubWeaponIdx >= SubWeaponInventoryRef->GetCurrentWeaponCount()) return false;
 
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
-		SubInventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
+		SubWeaponInventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
 	else
-		InventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
-	SubInventoryRef->EquipWeaponByIdx(SubWeaponIdx);
+		WeaponInventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
+	SubWeaponInventoryRef->EquipWeaponByIdx(SubWeaponIdx);
 
 	return true;
 }
 
-AWeaponInventoryBase* ACharacterBase::GetInventoryRef()
+AWeaponInventoryBase* ACharacterBase::GetWeaponInventoryRef()
 {
-	if (!IsValid(InventoryRef) || InventoryRef->IsActorBeingDestroyed()) return nullptr;
-	return InventoryRef;
+	if (!IsValid(WeaponInventoryRef) || WeaponInventoryRef->IsActorBeingDestroyed()) return nullptr;
+	return WeaponInventoryRef;
 }
 
-AWeaponInventoryBase* ACharacterBase::GetSubInventoryRef()
+AWeaponInventoryBase* ACharacterBase::GetSubWeaponInventoryRef()
 {	
-	if (!IsValid(SubInventoryRef) || SubInventoryRef->IsActorBeingDestroyed()) return nullptr;
-	return SubInventoryRef;
+	if (!IsValid(SubWeaponInventoryRef) || SubWeaponInventoryRef->IsActorBeingDestroyed()) return nullptr;
+	return SubWeaponInventoryRef;
 }
 
 AWeaponBase* ACharacterBase::GetCurrentWeaponRef()
