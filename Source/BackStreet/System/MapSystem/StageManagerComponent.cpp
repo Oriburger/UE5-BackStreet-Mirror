@@ -153,6 +153,7 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 
 	TArray<AActor*> spawnPointList;
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Point"), spawnPointList);
+	const FVector zAxisCalibrationValue = FVector(0.0f, 0.0f, 50.0f);
 
 	for (AActor*& spawnPoint : spawnPointList)
 	{
@@ -160,15 +161,15 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 		
 		if (spawnPoint->Tags[1] == FName("Enemy"))
 		{
-			CurrentStageInfo.EnemySpawnLocationList.Add(spawnPoint->GetActorLocation());
+			CurrentStageInfo.EnemySpawnLocationList.Add(spawnPoint->GetActorLocation() + zAxisCalibrationValue);
 		}
 		else if (spawnPoint->Tags[1] == FName("PlayerStart"))
 		{
-			CurrentStageInfo.PlayerStartLocation = spawnPoint->GetActorLocation();
+			CurrentStageInfo.PlayerStartLocation = spawnPoint->GetActorLocation() + zAxisCalibrationValue;
 		}
 		else if (spawnPoint->Tags[1] == FName("Gate"))
 		{
-			CurrentStageInfo.PortalLocationList.Add(spawnPoint->GetActorLocation());
+			CurrentStageInfo.PortalLocationList.Add(spawnPoint->GetActorLocation() + zAxisCalibrationValue);
 		}
 	}
 }
