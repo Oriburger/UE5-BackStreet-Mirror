@@ -47,10 +47,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void TryAttack() override;
 
-	//temporary code
-	UFUNCTION(BlueprintImplementableEvent)
-		void BossNearAttack();
-
 	UFUNCTION(BlueprintCallable)
 		virtual void TrySkill(ESkillType SkillType, int32 SkillID) override;
 

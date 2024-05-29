@@ -171,12 +171,6 @@ void AEnemyCharacterBase::Attack()
 
 	GetWorldTimerManager().SetTimer(AtkIntervalHandle, this, &ACharacterBase::ResetAtkIntervalTimer
 		, 1.0f, false, FMath::Max(0.0f, 1.5f - attackSpeed));
-
-	//Temporary code for indieGo 
-	if (CharacterID == 1200)
-	{
-		BossNearAttack();
-	}
 }
 
 void AEnemyCharacterBase::StopAttack()
