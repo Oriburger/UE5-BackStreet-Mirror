@@ -97,6 +97,10 @@ void AMeleeWeaponBase::InitWeaponAsset()
 	{
 		HitEffectParticle = MeleeWeaponAssetInfo.HitEffectParticle.Get();
 	}
+	if (MeleeWeaponAssetInfo.HitEffectParticleLarge.IsValid())
+	{
+		HitEffectParticleLarge = MeleeWeaponAssetInfo.HitEffectParticle.Get();
+	}
 }
 
 TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
@@ -141,6 +145,7 @@ TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
 void AMeleeWeaponBase::MeleeAttack()
 {
 	FHitResult hitResult;
+	bool bIsFinalCombo = (GetCurrentComboCnt() % OwnerCharacterRef.Get()->GetMaxComboCount() == 0);
 	bool bIsMeleeTraceSucceed = false;
 
 	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
@@ -168,7 +173,7 @@ void AMeleeWeaponBase::MeleeAttack()
 			}
 
 			//Apply Damage
-			UGameplayStatics::ApplyDamage(target, totalDamage, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
+			UGameplayStatics::ApplyDamage(target, totalDamage * ((int32)bIsFinalCombo + 1.0f) * 2.0f, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
 			MeleeLineTraceQueryParams.AddIgnoredActor(target); 
 
 			//Apply Debuff 
@@ -207,7 +212,7 @@ bool AMeleeWeaponBase::CheckMeleeAttackTarget(FHitResult& hitResult, const TArra
 	return false;
 }
 
-void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location)
+void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location, bool bImpactEffect)
 {
 	//Activate Slow Effect (Hit stop)
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player"))
@@ -216,29 +221,41 @@ void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location)
 		GamemodeRef.Get()->ActivateSlowHitEffect(dilationValue);
 	}
 
-	//효과 이미터 출력
-	if (IsValid(HitEffectParticle))
+	//Spawn emitter
+	FTransform emitterSpawnTransform(FQuat(0.0f), Location, FVector(1.0f));
+	FRotator randomRotator = FRotator::ZeroRotator;
+	randomRotator.Pitch += UKismetMathLibrary::RandomFloatInRange(-30.0f, 30.0f);
+	randomRotator.Yaw += UKismetMathLibrary::RandomFloatInRange(-30.0f, 30.0f);
+	randomRotator.Roll += UKismetMathLibrary::RandomFloatInRange(-30.0f, 30.0f);
+
+	if (!bImpactEffect)
 	{
-		FTransform emitterSpawnTransform(FQuat(0.0f), Location, FVector(1.0f));
-
-		FRotator randomRotator = FRotator::ZeroRotator;
-		randomRotator.Pitch += UKismetMathLibrary::RandomFloatInRange(-30.0f, 30.0f);
-		randomRotator.Yaw += UKismetMathLibrary::RandomFloatInRange(-30.0f, 30.0f);
-		randomRotator.Roll += UKismetMathLibrary::RandomFloatInRange(-30.0f, 30.0f);
-
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitEffectParticle, emitterSpawnTransform.GetLocation()
-														, WeaponState.SlashRotation + randomRotator, emitterSpawnTransform.GetScale3D());
-
-		
+		if (IsValid(HitEffectParticle))
+		{
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitEffectParticle, emitterSpawnTransform.GetLocation()
+				, WeaponState.SlashRotation + randomRotator, emitterSpawnTransform.GetScale3D());
+		}
+		if (AssetManagerBaseRef.IsValid())
+		{
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, "HitImpact");
+		}
 	}
+	else
+	{
+		if (IsValid(HitEffectParticleLarge))
+		{
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitEffectParticleLarge, emitterSpawnTransform.GetLocation()
+				, WeaponState.SlashRotation + randomRotator, emitterSpawnTransform.GetScale3D());
+		}
+		if (AssetManagerBaseRef.IsValid())
+		{
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, "HitImpactLarge");
+		}
+	}
+	
 	//카메라 Shake 효과
 	GamemodeRef.Get()->PlayCameraShakeEffect(OwnerCharacterRef.Get()->ActorHasTag("Player") ? ECameraShakeType::E_Attack : ECameraShakeType::E_Hit, Location);
 
-	// 사운드
-	if (AssetManagerBaseRef.IsValid())
-	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponID, "HitImpact");
-	}
 }
 
 TArray<FVector> AMeleeWeaponBase::GetCurrentMeleePointList()

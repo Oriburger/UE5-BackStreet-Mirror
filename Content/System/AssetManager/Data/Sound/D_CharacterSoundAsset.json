@@ -56,6 +56,13 @@
 					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_EquipWeapon.SC_EquipWeapon'"
 				],
 				"SoundVolumeList": [ 0.75 ]
+			},
+			"Smash":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Smash.SC_Smash'"
+				],
+				"SoundVolumeList": [ 3.2000000476837158 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -74,6 +81,13 @@
 					"None"
 				],
 				"SoundVolumeList": [ 0.75, 0.75 ]
+			},
+			"Smash":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Smash.SC_Smash'"
+				],
+				"SoundVolumeList": [ 3.2000000476837158 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -92,6 +106,13 @@
 					"None"
 				],
 				"SoundVolumeList": [ 0.75, 0.75 ]
+			},
+			"Smash":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Smash.SC_Smash'"
+				],
+				"SoundVolumeList": [ 3.2000000476837158 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -110,6 +131,13 @@
 					"None"
 				],
 				"SoundVolumeList": [ 0.75, 0.75 ]
+			},
+			"Smash":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Smash.SC_Smash'"
+				],
+				"SoundVolumeList": [ 3.2000000476837158 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -128,6 +156,13 @@
 					"None"
 				],
 				"SoundVolumeList": [ 0.75, 0.75 ]
+			},
+			"Smash":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Smash.SC_Smash'"
+				],
+				"SoundVolumeList": [ 3.2000000476837158 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -146,6 +181,13 @@
 					"None"
 				],
 				"SoundVolumeList": [ 0.75, 0.75 ]
+			},
+			"Smash":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Smash.SC_Smash'"
+				],
+				"SoundVolumeList": [ 3.2000000476837158 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -164,6 +206,13 @@
 					"None"
 				],
 				"SoundVolumeList": [ 0.75, 0.75 ]
+			},
+			"Smash":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Smash.SC_Smash'"
+				],
+				"SoundVolumeList": [ 3.2000000476837158 ]
 			}
 		},
 		"SoundAssetDescription": "None"

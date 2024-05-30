@@ -32,6 +32,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|UI")
 		class UWidgetComponent* FloatingHpBar;
 
+	UFUNCTION(BlueprintCallable)
+		virtual void InitAsset(int32 NewCharacterID) override;	
+
 protected:
 	//Stat data of enemy character including stat, default weapon, drop info
 	//EnemyStatStruct.EnemyStat member initializes the parent's member CharacterStat
@@ -46,10 +49,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		virtual void TryAttack() override;
-
-	//temporary code
-	UFUNCTION(BlueprintImplementableEvent)
-		void BossNearAttack();
 
 	UFUNCTION(BlueprintCallable)
 		virtual void TrySkill(ESkillType SkillType, int32 SkillID) override;

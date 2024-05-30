@@ -3,6 +3,7 @@
 #include "./Component/TargetingManagerComponent.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../System/SkillSystem/SkillManagerBase.h"
+#include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/SkillSystem/SkillBase.h"
 #include "../Item/Weapon/WeaponBase.h"
 #include "../Item/Weapon/WeaponInventoryBase.h"
@@ -59,6 +60,10 @@ void ACharacterBase::BeginPlay()
 	WeaponInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	SubWeaponInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GamemodeRef.IsValid())
+	{
+		AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
+	}
 
 	if (IsValid(SubWeaponInventoryRef) && !SubWeaponInventoryRef->IsActorBeingDestroyed())
 	{
@@ -174,8 +179,6 @@ void ACharacterBase::SetAirAttackLocation()
 
 void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 {
-	if (this->GetVelocity().Length() < 900.0f) return;
-
 	CharacterState.bIsAirAttacking = false;
 	CharacterState.bIsDownwardAttacking = false;
 
@@ -185,12 +188,17 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 		GamemodeRef.Get()->ActivateSlowHitEffect(0.2f);
 		GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 1000.0f);
 
+		//play smash sound
+		if (AssetManagerBaseRef.IsValid())
+		{
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "Smash");
+		}
+
 		if (CharacterState.CharacterActionState == ECharacterActionType::E_Die)
 		{
 			Die();
 		}
 	}
-
 	//Test code for knockdown on ground event
 	//UE_LOG(LogTemp, Warning, TEXT("$Land %s  / Speed %.2lf$"), *(this->GetName()), this->GetVelocity().Length());
 }
@@ -282,6 +290,9 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 	
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
 	
+	//Reset Location Interp Timer Handle
+	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
+
 	if (IsValid(GetCurrentWeaponRef()))
 	{
 		FWeaponStatStruct currWeaponStat = this->GetCurrentWeaponRef()->GetWeaponStat();

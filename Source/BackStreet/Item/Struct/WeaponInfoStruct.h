@@ -122,6 +122,9 @@ public:
 		bool bInfinite = false;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool bHasFinalImpact = false;	
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		int32 MaxDurability = 10;
 
 	//인벤토리를 차지하는 칸 수
@@ -188,14 +191,20 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UNiagaraSystem> HitEffectParticle;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		TSoftObjectPtr<class USoundCue> HitImpactSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UNiagaraSystem> HitEffectParticleLarge;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		TSoftObjectPtr<class USoundCue> HitImpactSoundLarge;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UNiagaraSystem> MeleeTrailParticle;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		FColor MeleeTrailParticleColor;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-		TSoftObjectPtr<class USoundCue> HitImpactSound;
 };
 
 USTRUCT(BlueprintType)
