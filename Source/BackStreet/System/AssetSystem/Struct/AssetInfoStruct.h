@@ -111,6 +111,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		UAnimBlueprintGeneratedClass* AnimBlueprint;
 
+//--------------- AI Only  ------------------------------------
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI")
+		TSubclassOf<class AAIControllerBase> AIControllerClass;
+
 //--------------- Animation  ------------------------------------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> MeleeAttackAnimMontageSoftPtrList;
