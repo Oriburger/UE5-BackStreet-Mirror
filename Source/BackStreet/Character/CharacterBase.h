@@ -178,6 +178,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FCharacterStateStruct GetCharacterState() { return CharacterState; }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetMaxComboCount() { return AssetHardPtrInfo.MeleeAttackAnimMontageList.Num(); }
+
 private:
 	//Calculate Total Stat Value
 	UFUNCTION()
