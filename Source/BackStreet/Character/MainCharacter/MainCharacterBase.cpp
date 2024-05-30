@@ -107,6 +107,11 @@ void AMainCharacterBase::Tick(float DeltaTime)
 	//UpdateWallThroughEffect();
 }
 
+void AMainCharacterBase::InitAsset(int32 NewCharacterID)
+{
+	Super::InitAsset(NewCharacterID);
+}
+
 void AMainCharacterBase::OnCapsuleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (!IsValid(OtherActor) || OtherActor->IsActorBeingDestroyed() || !OtherActor->ActorHasTag("Character")) return;

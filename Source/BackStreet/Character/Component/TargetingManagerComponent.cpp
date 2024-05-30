@@ -151,7 +151,7 @@ void UTargetingManagerComponent::UpdateCameraRotation()
 
 ACharacterBase* UTargetingManagerComponent::GetTargetedCharacter()
 {
-	if (TargetedCharacter.IsValid() && !TargetedCharacter.IsExplicitlyNull())
+	if (TargetedCharacter.IsValid())
 	{
 		return TargetedCharacter.Get();
 	}
