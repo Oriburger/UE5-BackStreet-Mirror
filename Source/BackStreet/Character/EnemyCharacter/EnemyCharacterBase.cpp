@@ -50,6 +50,16 @@ void AEnemyCharacterBase::BeginPlay()
 	SetDefaultWeapon();
 }
 
+void AEnemyCharacterBase::InitAsset(int32 NewCharacterID)
+{
+	Super::InitAsset(NewCharacterID);
+
+	if (IsValid(AssetSoftPtrInfo.AIControllerClass))
+	{
+		AIControllerClass = AssetSoftPtrInfo.AIControllerClass;
+	}
+}
+
 void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 {
 	// Read from dataTable

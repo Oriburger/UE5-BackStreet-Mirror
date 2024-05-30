@@ -250,9 +250,8 @@ private:
 
 // ---- Asset -------------------
 public:
-	// 외부에서 Init하기위해 Call
-	UFUNCTION(BlueprintCallable)
-		void InitAsset(int32 NewCharacterID);
+	//Init asset using softref data table
+	virtual void InitAsset(int32 NewCharacterID);
 
 protected:
 	UFUNCTION()
