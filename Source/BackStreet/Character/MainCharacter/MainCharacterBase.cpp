@@ -2,6 +2,7 @@
 #include "MainCharacterBase.h"
 #include "MainCharacterController.h"
 #include "../Component/TargetingManagerComponent.h"
+#include "../Component/ItemInventoryComponent.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SaveSystem/BackStreetGameInstance.h"
 #include "../../System/AbilitySystem/AbilityManagerBase.h"
@@ -57,6 +58,8 @@ AMainCharacterBase::AMainCharacterBase()
 
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
 
+	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
+
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
 
 	this->bUseControllerRotationYaw = false;
@@ -86,17 +89,26 @@ void AMainCharacterBase::BeginPlay()
 
 	AbilityManagerRef = NewObject<UAbilityManagerBase>(this, UAbilityManagerBase::StaticClass(), FName("AbilityfManager"));
 	AbilityManagerRef->InitAbilityManager(this);
+	InitCombatUI();
 
 	UBackStreetGameInstance* GameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
 
 	//Load SaveData
-	if (GameInstance->LoadGameSaveData(SavedData)) return;
+	if (GameInstance->LoadGameSaveData(SavedData))
+	{
+		ItemInventory->InitItemInventory();
+		return;
+	}
 	else
 	{
-		GameInstance->SaveGameData(FSaveData());
+		SetCharacterStatFromSaveData();
+		InitCharacterState();
+		ItemInventory->InitNewItemInventory();
+		FSaveData saveData;
+		saveData.PlayerSaveGameData.PlayerStat = CharacterStat;
+		saveData.PlayerSaveGameData.ItemMap = ItemInventory->ItemMap;
+		GameInstance->SaveGameData(saveData);
 	}
-	SetCharacterStatFromSaveData();
-	InitCharacterState();
 
 }
 
