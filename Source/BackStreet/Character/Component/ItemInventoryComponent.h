@@ -21,26 +21,38 @@ protected:
 	virtual void BeginPlay() override;
 
 //======= Logic ============================
-private:
-	//init ItemInventory
+public:
+	//When SavedData already has Inventory data
 	UFUNCTION()
 		void InitItemInventory();
 
+	UFUNCTION()
+		void InitNewItemInventory();
+
 public:
 	UFUNCTION(BlueprintCallable)
-		void AddItem(int32 ItemID,  int32 ItemCnt);
+		void AddItem(int32 ItemID, uint8 ItemCnt);
 
 	UFUNCTION(BlueprintCallable)
-		void RemoveItem(int32 ItemID, int32 ItemCnt);
+		void RemoveItem(int32 ItemID, uint8 ItemCnt);
 
 	UFUNCTION(BlueprintCallable)
-		void GetItemCount(int32 ItemID);
+		void GetItemData(int32 ItemID, FItemDataStruct& ItemData);
 
 
 //====== Property ===========================
 private:
-	//TMap<FItemInventoryStruct> ItemInventoryMap;
+	UPROPERTY()
+		UDataTable* ItemTable;
+
+public:
+	// Item List
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TMap<int32, FItemDataStruct> ItemMap;
+
 	//owner character ref
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
+
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
 };

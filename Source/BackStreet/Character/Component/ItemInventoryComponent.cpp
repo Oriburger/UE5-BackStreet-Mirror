@@ -3,6 +3,8 @@
 
 #include "ItemInventoryComponent.h"
 #include "../CharacterBase.h"
+#include "../MainCharacter/MainCharacterBase.h"
+#include "../../Global/BackStreetGameModeBase.h"
 
 // Sets default values for this component's properties
 UItemInventoryComponent::UItemInventoryComponent()
@@ -11,8 +13,9 @@ UItemInventoryComponent::UItemInventoryComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	InitItemInventory();
-	// ...
+	static ConstructorHelpers::FObjectFinder<UDataTable> itemTableFinder(TEXT("/Game/System/CraftingManager/Data/D_ItemData.D_ItemData"));
+	checkf(itemTableFinder.Succeeded(), TEXT("ItemTable class discovery failed."));
+	ItemTable = itemTableFinder.Object;
 }
 
 
@@ -21,7 +24,7 @@ void UItemInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	
 }
 
@@ -29,18 +32,52 @@ void UItemInventoryComponent::InitItemInventory()
 {
 	//Initialize the owner character ref
 	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
+	ItemMap = Cast<AMainCharacterBase>(OwnerCharacterRef)->SavedData.PlayerSaveGameData.ItemMap;
 }
 
-void UItemInventoryComponent::AddItem(int32 ItemID, int32 ItemCnt)
+void UItemInventoryComponent::InitNewItemInventory()
 {
+	if (!ItemTable)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("DataTable is null!"));
+		return;
+	}
+	static const FString ContextString(TEXT("GENERAL"));
+	TArray<FItemDataStruct*> allRows;
+	ItemTable->GetAllRows(ContextString, allRows);
+
+	for (FItemDataStruct* row : allRows)
+		if (row)
+		{
+			ItemMap.Add(row->ItemID, *row);
+		}
 }
 
-void UItemInventoryComponent::RemoveItem(int32 ItemID, int32 ItemCnt)
+void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
 {
+	if(ItemMap.IsEmpty()) return;
+	if (ItemMap[ItemID].ItemAmount > sizeof(uint8))
+	{
+		ItemMap[ItemID].ItemAmount += ItemCnt;
+	}
+	else return;
 }
 
-void UItemInventoryComponent::GetItemCount(int32 ItemID)
+void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
 {
+	if (ItemMap.IsEmpty()) return;
+	if (ItemMap[ItemID].ItemAmount > ItemCnt)
+	{
+		ItemMap[ItemID].ItemAmount -= ItemCnt;
+	}
+}
+
+void UItemInventoryComponent::GetItemData(int32 ItemID, FItemDataStruct& ItemData)
+{
+	if (ItemMap.Contains(ItemID))
+	{
+		ItemData = ItemMap[ItemID];
+	}
 }
 
 
