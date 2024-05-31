@@ -23,11 +23,11 @@ ANewChapterManagerBase::ANewChapterManagerBase()
 	ChapterInfoTable = chapterInfoTableFinder.Object;
 
 	//init widget class (game over / chapter clear)
-	static ConstructorHelpers::FClassFinder<UUserWidget> chapterClearWidgetClassFinder(TEXT("/Game/UI/InGame/Blueprint/WB_GameClear"));
+	static ConstructorHelpers::FClassFinder<UUserWidget> chapterClearWidgetClassFinder(TEXT("/Game/UI/InGame/Blueprint/Legacy/WB_GameClear"));
 	checkf(chapterClearWidgetClassFinder.Succeeded(), TEXT("ANewChapterManagerBase::loadingWidget 클래스 탐색에 실패했습니다."));
 	ChapterClearWidgetClass = chapterClearWidgetClassFinder.Class;
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> gameOverWidgetClassFinder(TEXT("/Game/UI/InGame/Blueprint/WB_GameOver"));
+	static ConstructorHelpers::FClassFinder<UUserWidget> gameOverWidgetClassFinder(TEXT("/Game/UI/InGame/Blueprint/Legacy/WB_GameOver"));
 	checkf(gameOverWidgetClassFinder.Succeeded(), TEXT("ANewChapterManagerBase::loadingWidget 클래스 탐색에 실패했습니다."));
 	GameOverWidgetClass = gameOverWidgetClassFinder.Class;
 }
