@@ -24,10 +24,7 @@ protected:
 public:
 	//When SavedData already has Inventory data
 	UFUNCTION()
-		void InitItemInventory();
-
-	UFUNCTION()
-		void InitNewItemInventory();
+		void SetItemInventoryFromSaveData();
 
 public:
 	UFUNCTION(BlueprintCallable)

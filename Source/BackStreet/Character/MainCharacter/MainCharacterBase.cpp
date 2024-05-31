@@ -94,21 +94,14 @@ void AMainCharacterBase::BeginPlay()
 	UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
 
 	//Load SaveData
-	if (gameInstance->LoadGameSaveData(SavedData))
-	{
-		ItemInventory->InitItemInventory();
-		return;
-	}
+	if (gameInstance->LoadGameSaveData(SavedData)) return;
 	else
 	{
-		SetCharacterStatFromSaveData();
-		InitCharacterState();
-		ItemInventory->InitNewItemInventory();
-		FSaveData saveData;
-		saveData.PlayerSaveGameData.PlayerStat = CharacterStat;
-		saveData.PlayerSaveGameData.ItemMap = ItemInventory->ItemMap;
-		gameInstance->SaveGameData(saveData);
+		gameInstance->SaveGameData(FSaveData());
 	}
+	SetCharacterStatFromSaveData();
+	ItemInventory->SetItemInventoryFromSaveData();
+	InitCharacterState();
 
 }
 

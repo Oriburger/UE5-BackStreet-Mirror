@@ -28,31 +28,10 @@ void UItemInventoryComponent::BeginPlay()
 	
 }
 
-void UItemInventoryComponent::InitItemInventory()
+void UItemInventoryComponent::SetItemInventoryFromSaveData()
 {
-	//Initialize the owner character ref
-	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
-	ItemMap = Cast<AMainCharacterBase>(OwnerCharacterRef)->SavedData.PlayerSaveGameData.ItemMap;
-}
-
-void UItemInventoryComponent::InitNewItemInventory()
-{
-	if (!ItemTable)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("DataTable is null!"));
-		return;
-	}
-	static const FString ContextString(TEXT("GENERAL"));
-	TArray<FItemDataStruct*> allRows;
-	ItemTable->GetAllRows(ContextString, allRows);
-
-	for (FItemDataStruct* row : allRows)
-	{
-		if (row)
-		{
-			ItemMap.Add(row->ItemID, *row);
-		}
-	}
+	AMainCharacterBase* playerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	ItemMap = playerCharacterRef->SavedData.PlayerSaveGameData.ItemMap;
 }
 
 void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
