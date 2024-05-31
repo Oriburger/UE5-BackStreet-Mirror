@@ -13,7 +13,7 @@ UItemInventoryComponent::UItemInventoryComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<UDataTable> itemTableFinder(TEXT("/Game/System/CraftingManager/Data/D_ItemData.D_ItemData"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> itemTableFinder(TEXT("/Game/System/CraftingManager/Data/D_CraftingItemData.D_CraftingItemData"));
 	checkf(itemTableFinder.Succeeded(), TEXT("ItemTable class discovery failed."));
 	ItemTable = itemTableFinder.Object;
 }
@@ -47,29 +47,24 @@ void UItemInventoryComponent::InitNewItemInventory()
 	ItemTable->GetAllRows(ContextString, allRows);
 
 	for (FItemDataStruct* row : allRows)
+	{
 		if (row)
 		{
 			ItemMap.Add(row->ItemID, *row);
 		}
+	}
 }
 
 void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
 {
-	if(ItemMap.IsEmpty()) return;
-	if (ItemMap[ItemID].ItemAmount > sizeof(uint8))
-	{
-		ItemMap[ItemID].ItemAmount += ItemCnt;
-	}
-	else return;
+	if (!ItemMap.Contains(ItemID)) return;
+	ItemMap[ItemID].ItemAmount += ItemCnt;
 }
 
 void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
 {
-	if (ItemMap.IsEmpty()) return;
-	if (ItemMap[ItemID].ItemAmount > ItemCnt)
-	{
-		ItemMap[ItemID].ItemAmount -= ItemCnt;
-	}
+	if (!ItemMap.Contains(ItemID)) return;
+	ItemMap[ItemID].ItemAmount -= ItemCnt;
 }
 
 void UItemInventoryComponent::GetItemData(int32 ItemID, FItemDataStruct& ItemData)
