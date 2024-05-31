@@ -140,6 +140,16 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FDebuffInfoStruct DebuffInfo;
 
+//----- CraftingStat ------
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		int32 MaxCraftingAttackAdder = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		int32 MaxCraftingAttackSpeedAdder = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		int32 MaxCraftingFinalImpactAdder = 0;
+
 //----- ¿ø°Å¸® Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FRangedWeaponStatStruct RangedWeaponStat;
