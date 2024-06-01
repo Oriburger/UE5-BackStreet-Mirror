@@ -1,0 +1,105 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
+
+#include "BackStreetGameModeBase.h"
+#include "../System/AssetSystem/AssetManagerBase.h"
+#include "../System/SkillSystem/SkillManagerBase.h"
+#include "../System/CraftingSystem/CraftingManagerBase.h"
+#include "../Character/CharacterBase.h"
+#include "../Character/MainCharacter/MainCharacterBase.h"
+#include "../Item/ItemBase.h"
+#include "../Item/Weapon/WeaponBase.h"
+#include "../Item/Weapon/Throw/ProjectileBase.h"
+#include "../Item/Weapon/Ranged/RangedWeaponBase.h"
+#include "../Item/Weapon/Melee/MeleeWeaponBase.h"
+
+ABackStreetGameModeBase::ABackStreetGameModeBase()
+{
+	PrimaryActorTick.bCanEverTick = false;
+}
+
+void ABackStreetGameModeBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//----- Asset Manager 초기화 -------
+	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
+	AssetManagerBase->InitAssetManager(this);
+}
+
+void ABackStreetGameModeBase::InitializeGame()
+{
+	if (bIsInGame)
+	{
+		FActorSpawnParameters spawnParams;
+		FRotator rotator;
+		FVector spawnLocation = FVector::ZeroVector;
+
+		//------ 델리게이트 바인딩 ---------------
+		FinishChapterDelegate.AddDynamic(this, &ABackStreetGameModeBase::FinishChapter);
+		UIAnimationDelegate.AddDynamic(this, &ABackStreetGameModeBase::PlayUIAnimation);
+
+		//------ Ref 멤버 초기화  ---------------
+		PlayerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+		//------ Global Skill Manager 초기화 --------
+		SkillManagerBase = NewObject<USkillManagerBase>(this, USkillManagerBase::StaticClass(), FName("SkillManagerBase"));
+		SkillManagerBase->InitSkillManagerBase(this);
+
+		//------ Global Crafting Manager 초기화 --------
+		CraftingManagerBase = NewObject<UCraftingManagerBase>(this, UCraftingManagerBase::StaticClass(), FName("CraftingManagerBase"));
+		CraftingManagerBase->InitCraftingManager(this);
+	}
+}
+
+void ABackStreetGameModeBase::PlayCameraShakeEffect(ECameraShakeType EffectType, FVector Location, float Radius)
+{
+	if (!IsValid(GetWorld()) || !CameraShakeEffectList.IsValidIndex((uint8)EffectType)) return;
+	if (!IsValid(PlayerCharacterRef) || PlayerCharacterRef->IsActorBeingDestroyed()) return;
+
+	Location = PlayerCharacterRef->FollowingCamera->GetComponentLocation();
+	UGameplayStatics::PlayWorldCameraShake(GetWorld(), CameraShakeEffectList[(uint8)EffectType], Location, Radius * 0.75f, Radius * 1.5f, 0.5f);
+}
+
+void ABackStreetGameModeBase::ActivateSlowHitEffect(float DilationValue, float Length)
+{
+	if (!IsValid(PlayerCharacterRef) || PlayerCharacterRef->IsActorBeingDestroyed()) return;
+
+	FTimerHandle attackSlowEffectTimerHandle;
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), DilationValue);
+	GetWorldTimerManager().SetTimer(attackSlowEffectTimerHandle, this, &ABackStreetGameModeBase::DeactivateSlowHitEffect, Length * DilationValue, false);
+}
+
+void ABackStreetGameModeBase::DeactivateSlowHitEffect()
+{
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
+}
+
+AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector SpawnLocation)
+{
+	/*
+	if (!IsValid(GetWorld())) return nullptr;
+	
+	FActorSpawnParameters actorSpawnParameters;
+	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	if (ItemClass != nullptr)
+	{
+		AItemBase* newItem = Cast<AItemBase>(GetWorld()->SpawnActor(ItemClass, &SpawnLocation, nullptr, actorSpawnParameters));
+
+		if (IsValid(newItem))
+		{
+			newItem->InitItem(ItemID);
+		}
+		return newItem;
+	}
+	*/
+	return nullptr;
+}
+
+void ABackStreetGameModeBase::UpdateCharacterStat(ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat)
+{
+	if (IsValid(TargetCharacter))
+	{
+		TargetCharacter->UpdateCharacterStat(NewStat);
+	}
+}
