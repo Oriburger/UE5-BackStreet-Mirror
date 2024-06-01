@@ -222,7 +222,7 @@ void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location, bool bImp
 	}
 
 	//Spawn emitter
-	FTransform emitterSpawnTransform(FQuat(0.0f), Location, FVector(1.0f));
+	FTransform emitterSpawnTransform(FQuat(0.0f), Location, FVector(0.5f));
 	FRotator randomRotator = FRotator::ZeroRotator;
 	randomRotator.Pitch += UKismetMathLibrary::RandomFloatInRange(-30.0f, 30.0f);
 	randomRotator.Yaw += UKismetMathLibrary::RandomFloatInRange(-30.0f, 30.0f);

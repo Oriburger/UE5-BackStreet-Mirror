@@ -136,7 +136,7 @@ void ACharacterBase::UpdateLocation(const FVector TargetValue, const float Inter
 		}
 	}
 	currentLocation = FMath::VInterpTo(currentLocation, TargetValue, 0.1f, InterpSpeed);
-	SetActorLocation(currentLocation, false, nullptr, ETeleportType::TeleportPhysics);
+	SetActorLocation(currentLocation, false, nullptr, ETeleportType::None);
 }
 
 void ACharacterBase::SetAirAttackLocation()
@@ -567,7 +567,7 @@ void ACharacterBase::TryDashAttack()
 void ACharacterBase::DashAttack()
 {
 	//init local parameter
-	const float dashLength = 500.0f;
+	const float dashLength = 100.0f;
 	FVector targetLocation = GetActorLocation() + GetVelocity().GetSafeNormal() * dashLength;
 
 	//check if there are any obstacle (wall, prop, enemy etc.)
@@ -582,7 +582,7 @@ void ACharacterBase::DashAttack()
 	targetLocation = hitResult.bBlockingHit ? hitResult.Location : targetLocation;
 
 	DrawDebugSphere(GetWorld(), targetLocation, 50.0f, 12, FColor::Yellow, true);
-	SetLocationWithInterp(targetLocation, 0.15f);
+	SetLocationWithInterp(targetLocation, 2.5f);
 }
 
 void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
