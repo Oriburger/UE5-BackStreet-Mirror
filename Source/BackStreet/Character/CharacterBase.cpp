@@ -196,7 +196,7 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 
 		if (CharacterState.CharacterActionState == ECharacterActionType::E_Die)
 		{
-			Die();
+			//Die();
 		}
 	}
 	//Test code for knockdown on ground event
@@ -321,7 +321,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
 		if(!GetCharacterMovement()->IsFalling())
 		{
-			Die();
+			//Die();
 		}
 	}
 	else if (this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill && !this->CharacterState.bIsAirAttacking)
