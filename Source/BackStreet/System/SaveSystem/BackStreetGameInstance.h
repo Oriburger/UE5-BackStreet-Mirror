@@ -12,9 +12,7 @@
  * 
  */
 UCLASS()
-class BACKSTREET_API 
-	
-	: public UGameInstance
+class BACKSTREET_API UBackStreetGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 

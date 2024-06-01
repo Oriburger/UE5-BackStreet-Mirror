@@ -8,7 +8,7 @@
 
 
 
-::UBackStreetGameInstance(const FObjectInitializer& ObjectInitializer)
+UBackStreetGameInstance::UBackStreetGameInstance(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 	// Constructor implementation

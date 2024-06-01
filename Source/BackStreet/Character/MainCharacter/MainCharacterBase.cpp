@@ -91,13 +91,7 @@ void AMainCharacterBase::BeginPlay()
 	AbilityManagerRef->InitAbilityManager(this);
 	InitCombatUI();
 
-	//
-	
-	
-	
-	
-	* gameInstance = Cast<
->(GetGameInstance());
+	//UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
 
 	//Load SaveData
 	//if (gameInstance->LoadGameSaveData(SavedData)) return;
