@@ -86,7 +86,7 @@
 	{
 		"Name": "11101",
 		"SkillID": 11101,
-		"SkillName": "DashAttack",
+		"SkillName": "ForwardSlash",
 		"SkillDescription": "None",
 		"bHidenInGame": true,
 		"bSkillLifeSpanWithCauser": true,
@@ -118,6 +118,11 @@
 			},
 			"AnimInfoMap":
 			{
+				"ForwardSlash_MainCharacter":
+				{
+					"AnimMontage": "/Script/Engine.AnimMontage'/Game/Character/MainCharacter/Animation/Katana/Montage/Skill/AM_Katana_Blade_Skill_A.AM_Katana_Blade_Skill_A'",
+					"AnimPlayRate": 1
+				}
 			},
 			"MaterialInfoMap":
 			{
@@ -131,7 +136,7 @@
 		"SkillName": "Knockback",
 		"SkillDescription": "None",
 		"bHidenInGame": true,
-		"bSkillLifeSpanWithCauser": true,
+		"bSkillLifeSpanWithCauser": false,
 		"SkillGradeStruct":
 		{
 			"bIsGradeValid": false,

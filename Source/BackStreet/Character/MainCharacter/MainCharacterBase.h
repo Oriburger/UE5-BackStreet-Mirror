@@ -201,7 +201,7 @@ public:
 	UFUNCTION()
 		void SetWalkSpeedWithInterp(float NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void SetFieldOfViewWithInterp(float NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
 
 private:
