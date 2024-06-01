@@ -45,9 +45,13 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float Radius)
 	FVector startLocation = OwnerCharacter.Get()->GetActorLocation();
 	FVector endLocation = startLocation + FollowingCameraRef.Get()->GetForwardVector() * MaxFindDistance;
 	TArray<FHitResult> hitResultList;
-
+	TArray<AActor*> actorToIgnore = { OwnerCharacter.Get() };
+	if (bIsTargetingActivated && TargetedCharacter.IsValid())
+	{
+		actorToIgnore.Add(TargetedCharacter.Get());
+	}
 	UKismetSystemLibrary::SphereTraceMultiByProfile(GetWorld(), startLocation, endLocation, Radius, "Pawn", false
-		, { OwnerCharacter.Get() }, EDrawDebugTrace::None, hitResultList, true);
+		, actorToIgnore, EDrawDebugTrace::None, hitResultList, true);
 
 	float minDist = FLT_MAX;
 	ACharacterBase* target = nullptr;
@@ -88,6 +92,8 @@ void UTargetingManagerComponent::ActivateTargeting()
 
 	TargetedCharacter.Get()->GetCharacterMovement()->bOrientRotationToMovement = false;
 	TargetedCharacter.Get()->GetCharacterMovement()->bUseControllerDesiredRotation = true;
+
+	OnTargetingActivated.Broadcast(true, TargetedCharacter.Get());
 }
 
 void UTargetingManagerComponent::DeactivateTargeting()
@@ -103,6 +109,7 @@ void UTargetingManagerComponent::DeactivateTargeting()
 	{
 		FollowingCameraRef.Get()->SetRelativeLocationAndRotation(FVector::ZeroVector, FRotator::ZeroRotator, false);
 	}
+	OnTargetingActivated.Broadcast(false, nullptr);
 }
 
 void UTargetingManagerComponent::UpdateTargetedCandidate()
@@ -111,6 +118,7 @@ void UTargetingManagerComponent::UpdateTargetedCandidate()
 	if (IsValid(newCandidate))
 	{
 		TargetedCandidate = Cast<ACharacterBase>(newCandidate);
+		OnTargetUpdated.Broadcast(TargetedCandidate.Get());
 	}
 
 	if (TargetedCandidate.IsValid())
@@ -139,6 +147,15 @@ void UTargetingManagerComponent::UpdateCameraRotation()
 		newRotation.Roll = 0.0f;
 		OwnerCharacter.Get()->GetController()->SetControlRotation(newRotation);
 	}
+}
+
+ACharacterBase* UTargetingManagerComponent::GetTargetedCharacter()
+{
+	if (TargetedCharacter.IsValid())
+	{
+		return TargetedCharacter.Get();
+	}
+	return nullptr;
 }
 
 void UTargetingManagerComponent::SetTargetedCharacter(ACharacterBase* NewTarget)

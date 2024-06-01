@@ -47,11 +47,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UNiagaraSystem* HitEffectParticle;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* WieldSound;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraSystem* HitEffectParticleLarge;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
-		class USoundCue* HitImpactSound;
+		class USoundCue* WieldSound;
 
 //-------- Melee 관련 ---------------------------
 public:
@@ -69,7 +69,7 @@ private:
 
 	//사운드, 파티클, 카메라 등의 근접 공격 효과를 출력한다.
 	UFUNCTION()
-		void ActivateMeleeHitEffect(const FVector& Location);
+		void ActivateMeleeHitEffect(const FVector& Location, bool bImpactEffect = false);
 
 private:
 	UFUNCTION()

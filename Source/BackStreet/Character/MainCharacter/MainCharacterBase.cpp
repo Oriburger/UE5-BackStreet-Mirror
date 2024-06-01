@@ -107,6 +107,11 @@ void AMainCharacterBase::Tick(float DeltaTime)
 	//UpdateWallThroughEffect();
 }
 
+void AMainCharacterBase::InitAsset(int32 NewCharacterID)
+{
+	Super::InitAsset(NewCharacterID);
+}
+
 void AMainCharacterBase::OnCapsuleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (!IsValid(OtherActor) || OtherActor->IsActorBeingDestroyed() || !OtherActor->ActorHasTag("Character")) return;
@@ -524,7 +529,7 @@ void AMainCharacterBase::TryUpperAttack()
 	{
 		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(targetedEnemy->GetActorLocation(), GetActorLocation());
 		targetedEnemy->SetActorRotation(newRotation);
-		SetLocationWithInterp(Cast<ACharacterBase>(targetedEnemy)->HitSceneComponent->GetComponentLocation() + 100.0f, 5.0f);
+		SetLocationWithInterp(Cast<ACharacterBase>(targetedEnemy)->HitSceneComponent->GetComponentLocation() + 100.0f, 50.0f);
 	}
 
 	Super::TryUpperAttack();
