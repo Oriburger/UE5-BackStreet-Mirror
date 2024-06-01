@@ -132,7 +132,7 @@ public:
 		bool bSkillBlocked = true;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Image")
-		class UTexture2D* IconImage;
+		TWeakObjectPtr<class UTexture2D> IconImage;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FName SkillName;
