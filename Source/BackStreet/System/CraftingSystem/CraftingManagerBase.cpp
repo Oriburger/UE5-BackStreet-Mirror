@@ -97,7 +97,7 @@ TArray<FCraftingRecipeStruct> UCraftingManagerBase::MakeDisplayingRecipeList(EWe
 	return displayingRecipeList;
 }
 
-void UCraftingManagerBase::GetSkill(int32 SkillID)
+void UCraftingManagerBase::AddSkill(int32 SkillID)
 {
 	AMainCharacterBase* mainCharacter = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (!IsValid(mainCharacter->GetCurrentWeaponRef())) return;
@@ -130,8 +130,7 @@ void UCraftingManagerBase::GetSkill(int32 SkillID)
 	}
 
 	mainCharacter->GetCurrentWeaponRef()->SetWeaponState(weaponState);
-	OnGetSkill.Broadcast();
-	return;
+	SkillUpdateDelegate.Broadcast(*skillInfo);
 }
 
 ECraftingSlotVisual UCraftingManagerBase::SetRecipeVisual(FCraftingRecipeStruct Recipe)

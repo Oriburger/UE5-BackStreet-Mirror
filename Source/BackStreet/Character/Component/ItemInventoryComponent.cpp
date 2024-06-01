@@ -28,6 +28,27 @@ void UItemInventoryComponent::BeginPlay()
 	
 }
 
+void UItemInventoryComponent::InitInventory()
+{
+	if (!ItemTable)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("DataTable is null!"));
+		return;
+	}
+
+	static const FString ContextString(TEXT("GENERAL"));
+	TArray<FItemDataStruct*> allRows;
+	ItemTable->GetAllRows(ContextString, allRows);
+
+	for (FItemDataStruct* row : allRows)
+	{
+		if (row)
+		{
+			ItemMap.Add(row->ItemID, *row);
+		}
+	}
+}
+
 void UItemInventoryComponent::SetItemInventoryFromSaveData()
 {
 	AMainCharacterBase* playerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));

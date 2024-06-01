@@ -91,17 +91,18 @@ void AMainCharacterBase::BeginPlay()
 	AbilityManagerRef->InitAbilityManager(this);
 	InitCombatUI();
 
-	UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
+	//UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
 
 	//Load SaveData
-	if (gameInstance->LoadGameSaveData(SavedData)) return;
-	else
-	{
-		gameInstance->SaveGameData(FSaveData());
-	}
-	SetCharacterStatFromSaveData();
-	ItemInventory->SetItemInventoryFromSaveData();
+	//if (gameInstance->LoadGameSaveData(SavedData)) return;
+	//else
+	//{
+	//	gameInstance->SaveGameData(FSaveData());
+	//}
+	//SetCharacterStatFromSaveData();
+	//ItemInventory->SetItemInventoryFromSaveData();
 	InitCharacterState();
+	ItemInventory->InitInventory();
 
 }
 
