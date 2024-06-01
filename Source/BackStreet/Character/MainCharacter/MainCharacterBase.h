@@ -45,6 +45,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void InitAsset(int32 NewCharacterID) override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void InitCombatUI();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -61,6 +64,9 @@ public:
 	//플레이어의 메인 카메라
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		UCameraComponent* FollowingCamera;
+		
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+		class UItemInventoryComponent* ItemInventory;
 
 // ------- Throw Test -----------
 
@@ -221,7 +227,7 @@ protected:
 	UFUNCTION()
 		void SetCharacterStatFromSaveData();
 
-protected:
+public:
 	UPROPERTY(BlueprintReadOnly, Category = "SaveData")
 		FSaveData SavedData;
 

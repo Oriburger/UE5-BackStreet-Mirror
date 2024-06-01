@@ -9,7 +9,10 @@ enum class ESkillType : uint8
 {
 	E_None				UMETA(DisplayName = "None"),
 	E_Character			UMETA(DisplayName = "Character"),
-	E_Weapon			UMETA(DisplayName = "Weapon")
+	E_Weapon			UMETA(DisplayName = "Weapon"),
+	E_Weapon0			UMETA(DisplayName = "Weapon0"),
+	E_Weapon1			UMETA(DisplayName = "Weapon1"),
+	E_Weapon2			UMETA(DisplayName = "Weapon2")
 };
 
 USTRUCT(BlueprintType)
@@ -123,7 +126,19 @@ public:
 		TSubclassOf<class ASkillBase> SkillBaseClassRef;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		ESkillType SkillType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		bool bSkillBlocked = true;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Image")
+		TWeakObjectPtr<class UTexture2D> IconImage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		FName SkillName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		FName SkillDescription;
 };
 
 

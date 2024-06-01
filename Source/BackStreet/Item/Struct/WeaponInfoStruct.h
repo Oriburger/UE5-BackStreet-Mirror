@@ -140,6 +140,16 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FDebuffInfoStruct DebuffInfo;
 
+//----- CraftingStat ------
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		int32 MaxCraftingAttackAdder = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		int32 MaxCraftingAttackSpeedAdder = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		int32 MaxCraftingFinalImpactAdder = 0;
+
 //----- ¿ø°Å¸® Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FRangedWeaponStatStruct RangedWeaponStat;
@@ -177,6 +187,29 @@ public:
 	//temp, meleeonly
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FRotator SlashRotation;
+//-----Weapon Stat------
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		int32 CraftingAttackAdder = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		int32 CraftingAttackSpeedAdder = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		int32 CraftingFinalImpactAdder = 0;
+
+//-----Weapon Skill------
+	//WeaponSkill Info
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FOwnerSkillInfoStruct ActiveWeaponSkillInfo0;
+
+	//WeaponSkill Info
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FOwnerSkillInfoStruct ActiveWeaponSkillInfo1;
+
+	//WeaponSkill Info
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FOwnerSkillInfoStruct ActiveWeaponSkillInfo2;
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FRangedWeaponStateStruct RangedWeaponState;
