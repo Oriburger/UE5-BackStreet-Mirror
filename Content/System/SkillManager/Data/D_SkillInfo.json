@@ -42,6 +42,53 @@
 		"Causer": "None"
 	},
 	{
+		"Name": "5001",
+		"SkillID": 5001,
+		"SkillName": "WeaknessAnalysis",
+		"SkillDescription": "None",
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": false,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 2,
+			"LegendGaugeReq": 3,
+			"MythicGaugeReq": 4
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+				"WeaknessAnalysis":
+				{
+					"AnimMontage": "/Script/Engine.AnimMontage'/Game/System/SkillManager/Animation/MainCharacter/AM_Katana_Blade_Skill_I.AM_Katana_Blade_Skill_I'",
+					"AnimPlayRate": 1
+				}
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
 		"Name": "11100",
 		"SkillID": 11100,
 		"SkillName": "TaserHoop",
@@ -477,6 +524,147 @@
 			},
 			"AnimInfoMap":
 			{
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
+		"Name": "12001",
+		"SkillID": 12001,
+		"SkillName": "Throw_Elite",
+		"SkillDescription": "None",
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": false,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 2,
+			"LegendGaugeReq": 3,
+			"MythicGaugeReq": 4
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+				"Throw_Elite":
+				{
+					"AnimMontage": "/Script/Engine.AnimMontage'/Game/Character/EnemyCharacter/BotType1-Elite/Animation/Motage/AM_Attack1.AM_Attack1'",
+					"AnimPlayRate": 1
+				}
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
+		"Name": "33333",
+		"SkillID": 33333,
+		"SkillName": "Charge_Boss",
+		"SkillDescription": "None",
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": false,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 2,
+			"LegendGaugeReq": 3,
+			"MythicGaugeReq": 4
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+				"Charge_Boss":
+				{
+					"AnimMontage": "/Script/Engine.AnimMontage'/Game/Character/EnemyCharacter/BotTypeC/Animation/Montage/AM_Greatsword_Combo3_Full_ip.AM_Greatsword_Combo3_Full_ip'",
+					"AnimPlayRate": 1
+				}
+			},
+			"MaterialInfoMap":
+			{
+			}
+		},
+		"Causer": "None"
+	},
+	{
+		"Name": "33334",
+		"SkillID": 33334,
+		"SkillName": "Throw_Boss",
+		"SkillDescription": "None",
+		"bHidenInGame": true,
+		"bSkillLifeSpanWithCauser": true,
+		"SkillGradeStruct":
+		{
+			"bIsGradeValid": false,
+			"CommonVariableMap":
+			{
+			},
+			"RareVariableMap":
+			{
+			},
+			"LegendVariableMap":
+			{
+			},
+			"MythicVariableMap":
+			{
+			},
+			"CommonGaugeReq": 1,
+			"RareGaugeReq": 2,
+			"LegendGaugeReq": 3,
+			"MythicGaugeReq": 4
+		},
+		"SkillAssetStruct":
+		{
+			"IconImage": "None",
+			"EffectMap":
+			{
+			},
+			"AnimInfoMap":
+			{
+				"Throw_Boss":
+				{
+					"AnimMontage": "/Script/Engine.AnimMontage'/Game/System/SkillManager/Animation/EnemyCharacter/AM_Throw_Boss.AM_Throw_Boss'",
+					"AnimPlayRate": 1
+				}
 			},
 			"MaterialInfoMap":
 			{
