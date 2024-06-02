@@ -43,6 +43,10 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+public:
+	UFUNCTION()
+		void Initialize(FChapterInfo NewChapterInfo);
+
 //======== Resource Function ===============
 public:
 	//Initialize stage
@@ -80,7 +84,7 @@ protected:
 	//Spawn enemy character
 	UFUNCTION()
 		void SpawnEnemy();
-
+	
 	//Spawn craftbox
 	UFUNCTION()
 		void SpawnCraftbox(); 
@@ -106,6 +110,7 @@ private:
 
 	//Current stage's information 
 	//Level instance ref and gameplay info struct
+	FChapterInfo CurrentChapterInfo;
 	FStageInfo CurrentStageInfo;
 	ULevelStreamingDynamic* OuterAreaRef;
 	ULevelStreamingDynamic* MainAreaRef;
@@ -168,6 +173,7 @@ private:
 
 	//BP Class, initialize with ConstructorFinder
 	//Gate class to spawn on world
+	//Boss character's class use the data table value
 	TSubclassOf<class AGateBase> GateClass;
 	TSubclassOf<class AEnemyCharacterBase> EnemyCharacterClass;
 };

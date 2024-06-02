@@ -109,8 +109,13 @@ void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, 
 	updateFunctionDelegate.BindUFunction(this, FName("UpdateLocation"), NewValue, InterpSpeed, bAutoReset);
 
 	//Calling MyUsefulFunction after 5 seconds without looping
-	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
+	ResetLocationInterpTimer();
 	GetWorld()->GetTimerManager().SetTimer(LocationInterpHandle, updateFunctionDelegate, 0.01f, true);
+}
+
+void ACharacterBase::ResetLocationInterpTimer()
+{
+	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 }
 
 void ACharacterBase::SetAirAtkLocationUpdateTimer()
@@ -405,7 +410,7 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 	FVector knockBackDirection = Target->GetActorLocation() - GetActorLocation();
 	knockBackDirection = knockBackDirection.GetSafeNormal();
 	knockBackDirection *= Strength;
-	knockBackDirection.Z = 0.0f;
+	knockBackDirection.Z = 1.0f;
 
 	//GetCharacterMovement()->AddImpulse(knockBackDirection);
 	Cast<ACharacterBase>(Target)->LaunchCharacter(knockBackDirection, true, false);
@@ -604,7 +609,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	case ESkillType::E_Character:
 		if (!AssetSoftPtrInfo.CharacterSkillInfoMap.Contains(SkillID))
 		{
-			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Character does't have skill")), FColor::White);
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Character doesn't have skill")), FColor::White);
 			return;
 		}
 		if (AssetSoftPtrInfo.CharacterSkillInfoMap.Find(SkillID)->bSkillBlocked)

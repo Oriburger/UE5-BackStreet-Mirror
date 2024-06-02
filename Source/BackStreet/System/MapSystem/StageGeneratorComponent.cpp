@@ -70,7 +70,7 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 	temp.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
 	temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(EStageCategoryInfo::E_EliteTimeAttack);
 	result.Add(temp);
-
+	
 	temp.StageType = EStageCategoryInfo::E_Boss;
 	temp.TilePos = { 6, 0 };
 	temp.MainLevelAsset = CurrentChapterInfo.BossStageLevelList[0];

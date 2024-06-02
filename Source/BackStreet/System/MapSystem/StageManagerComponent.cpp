@@ -45,6 +45,11 @@ void UStageManagerComponent::BeginPlay()
 
 }
 
+void UStageManagerComponent::Initialize(FChapterInfo NewChapterInfo)
+{
+	CurrentChapterInfo = NewChapterInfo;
+}
+
 void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 {
 	if (IsValid(MainAreaRef)) ClearPreviousLevelData();
@@ -173,11 +178,15 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 		{
 			CurrentStageInfo.EnemySpawnLocationList.Add(spawnPoint->GetActorLocation() + zAxisCalibrationValue);
 		}
+		else if (spawnPoint->Tags[1] == FName("Boss"))
+		{
+			CurrentStageInfo.BossSpawnLocation = spawnPoint->GetActorLocation() + zAxisCalibrationValue;
+			CurrentStageInfo.BossSpawnRotation = spawnPoint->GetActorRotation();
+		}
 		else if (spawnPoint->Tags[1] == FName("PlayerStart"))
 		{
 			CurrentStageInfo.PlayerStartLocation = spawnPoint->GetActorLocation() + zAxisCalibrationValue;
 			CurrentStageInfo.PlayerStartRotation = spawnPoint->GetActorRotation();
-
 		}
 		else if (spawnPoint->Tags[1] == FName("Gate"))
 		{
@@ -189,7 +198,6 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 void UStageManagerComponent::SpawnEnemy()
 {
 	//Basic condition (stage type check and data count check
-	if (CurrentStageInfo.EnemySpawnLocationList.Num() <= 0) return;
 	if (CurrentStageInfo.StageType != EStageCategoryInfo::E_Entry
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Combat
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_TimeAttack
@@ -212,35 +220,58 @@ void UStageManagerComponent::SpawnEnemy()
 	RemainingEnemyCount = 0;
 
 	//Spawn enemy to world and add to SpawnedActorList
-	for (int32 idx = 0; idx < CurrentStageInfo.EnemyCompositionInfo.CompositionList.Num(); idx++)
+	if (CurrentStageInfo.EnemySpawnLocationList.Num() > 0)
 	{
-		FEnemyGroupInfo& composition = CurrentStageInfo.EnemyCompositionInfo.CompositionList[idx];
-		
-		TArray<int32> keyArray = {};
-		FVector spawnLocation = CurrentStageInfo.EnemySpawnLocationList[idx % CurrentStageInfo.EnemySpawnLocationList.Num()];
-		composition.EnemySet.GenerateKeyArray(keyArray);
-
-		for (int32& enemyID : keyArray)
+		for (int32 idx = 0; idx < CurrentStageInfo.EnemyCompositionInfo.CompositionList.Num(); idx++)
 		{
-			int32 count = composition.EnemySet[enemyID];
+			FEnemyGroupInfo& composition = CurrentStageInfo.EnemyCompositionInfo.CompositionList[idx];
 
-			while (count--)
-			{	
-				AEnemyCharacterBase* newEnemy = GetWorld()->SpawnActor<AEnemyCharacterBase>(EnemyCharacterClass
-												, spawnLocation + FVector(0.0f, 0.0f, 200.0f), FRotator::ZeroRotator);
-				if (IsValid(newEnemy))
+			TArray<int32> keyArray = {};
+			FVector spawnLocation = CurrentStageInfo.EnemySpawnLocationList[idx % CurrentStageInfo.EnemySpawnLocationList.Num()];
+			composition.EnemySet.GenerateKeyArray(keyArray);
+
+			for (int32& enemyID : keyArray)
+			{
+				int32 count = composition.EnemySet[enemyID];
+
+				while (count--)
 				{
-					newEnemy->CharacterID = enemyID;
-					newEnemy->InitEnemyCharacter(enemyID);
-					newEnemy->InitAsset(enemyID);
-					newEnemy->SwitchToNextWeapon();
-					newEnemy->EnemyDeathDelegate.BindUFunction(this, FName("UpdateEnemyCountAndCheckClear"));
-					Cast<AAIControllerBase>(newEnemy->GetController())->ActivateAI();
+					AEnemyCharacterBase* newEnemy = GetWorld()->SpawnActor<AEnemyCharacterBase>(EnemyCharacterClass
+						, spawnLocation + FVector(0.0f, 0.0f, 200.0f), FRotator::ZeroRotator);
+					if (IsValid(newEnemy))
+					{
+						newEnemy->CharacterID = enemyID;
+						newEnemy->InitEnemyCharacter(enemyID);
+						newEnemy->InitAsset(enemyID);
+						newEnemy->SpawnDefaultController();
+						newEnemy->SwitchToNextWeapon();
+						newEnemy->EnemyDeathDelegate.BindUFunction(this, FName("UpdateEnemyCountAndCheckClear"));
+						Cast<AAIControllerBase>(newEnemy->GetController())->ActivateAI();
 
-					SpawnedActorList.Add(newEnemy);
-					RemainingEnemyCount += 1;
+						SpawnedActorList.Add(newEnemy);
+						RemainingEnemyCount += 1;
+					}
 				}
 			}
+		}
+	}
+	
+	//Spawn boss character to world 
+	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Boss)
+	{
+		checkf(IsValid(CurrentChapterInfo.BossCharacterClass), TEXT("UStageManagerComponent::현재 챕터에 보스가 지정되어있지 않습니다. "));
+		
+		AEnemyCharacterBase* boss = GetWorld()->SpawnActor<AEnemyCharacterBase>(CurrentChapterInfo.BossCharacterClass
+			, CurrentStageInfo.BossSpawnLocation, CurrentStageInfo.BossSpawnRotation);
+		if (IsValid(boss))
+		{
+			boss->InitEnemyCharacter(boss->CharacterID);
+			boss->InitAsset(boss->CharacterID);
+			boss->SwitchToNextWeapon();
+			boss->EnemyDeathDelegate.BindUFunction(this, FName("UpdateEnemyCountAndCheckClear"));
+			Cast<AAIControllerBase>(boss->GetController())->ActivateAI();
+			SpawnedActorList.Add(boss);
+			RemainingEnemyCount += 1;
 		}
 	}
 }

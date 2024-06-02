@@ -1,0 +1,139 @@
+[
+	{
+		"Name": "1",
+		"ChapterID": 1,
+		"EliteTimeAtkStageTimeOut": 60,
+		"NormalTimeAtkStageTimeOut": 60,
+		"EnemyCompositionInfoMap":
+		{
+			"E_Entry":
+			{
+				"CompositionList": [
+					{
+						"EnemySet":
+						{
+							"1001": 1,
+							"1100": 1
+						}
+					},
+					{
+						"EnemySet":
+						{
+							"1002": 1,
+							"1101": 1
+						}
+					}
+				]
+			},
+			"E_Combat":
+			{
+				"CompositionList": [
+					{
+						"EnemySet":
+						{
+							"1001": 1,
+							"1100": 1
+						}
+					},
+					{
+						"EnemySet":
+						{
+							"1002": 1,
+							"1101": 1
+						}
+					}
+				]
+			},
+			"E_EliteCombat":
+			{
+				"CompositionList": [
+					{
+						"EnemySet":
+						{
+							"1001": 1,
+							"1100": 1
+						}
+					},
+					{
+						"EnemySet":
+						{
+							"1002": 1,
+							"1101": 1
+						}
+					}
+				]
+			},
+			"E_TimeAttack":
+			{
+				"CompositionList": [
+					{
+						"EnemySet":
+						{
+							"1001": 1,
+							"1100": 1
+						}
+					},
+					{
+						"EnemySet":
+						{
+							"1002": 1,
+							"1101": 1
+						}
+					}
+				]
+			},
+			"E_EliteTimeAttack":
+			{
+				"CompositionList": [
+					{
+						"EnemySet":
+						{
+							"1001": 1,
+							"1100": 1
+						}
+					},
+					{
+						"EnemySet":
+						{
+							"1002": 1,
+							"1101": 1
+						}
+					}
+				]
+			},
+			"E_Boss":
+			{
+				"CompositionList": [
+					{
+						"EnemySet":
+						{
+						}
+					}
+				]
+			}
+		},
+		"EntryStageLevelList": [
+			"/Game/Map/Chapter01/Chapter01_Entry.Chapter01_Entry"
+		],
+		"CombatStageLevelList": [
+			"/Game/Map/Chapter01/Chapter01_Combat01.Chapter01_Combat01",
+			"/Game/Map/Chapter01/Chapter01_Combat03.Chapter01_Combat03"
+		],
+		"TimeAttackStageLevelList": [
+			"/Game/Map/Chapter01/Chapter01_Combat02.Chapter01_Combat02",
+			"/Game/Map/Chapter01/Chapter01_Combat04.Chapter01_Combat04"
+		],
+		"CraftStageLevelList": [
+			"/Game/Map/Chapter01/Chapter01_Craft.Chapter01_Craft"
+		],
+		"BossStageLevelList": [
+			"/Game/Map/Chapter01/Chapter01_Boss.Chapter01_Boss"
+		],
+		"OuterStageLevelList": [
+			"/Game/Map/Chapter01/Chapter01_OuterArea01.Chapter01_OuterArea01",
+			"/Game/Map/Chapter01/Chapter01_OuterArea02.Chapter01_OuterArea02",
+			"/Game/Map/Chapter01/Chapter01_OuterArea03.Chapter01_OuterArea03"
+		],
+		"BossCharacterClass": "/Script/Engine.BlueprintGeneratedClass'/Game/Character/EnemyCharacter/Blueprint/BP_BossEnemy.BP_BossEnemy_C'"
+	}
+]

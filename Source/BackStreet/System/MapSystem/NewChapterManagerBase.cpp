@@ -106,6 +106,7 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 	{
 		CurrentChapterInfo = *newInfo;
 		StageGeneratorComponent->InitGenerator(CurrentChapterInfo);
+		StageManagerComponent->Initialize(CurrentChapterInfo);
 	}
 }
 
