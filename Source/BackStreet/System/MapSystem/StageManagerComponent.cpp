@@ -106,6 +106,9 @@ void UStageManagerComponent::CreateLevelInstance(TSoftObjectPtr<UWorld> MainLeve
 			, FRotator::ZeroRotator, result);
 		OuterAreaRef->OnLevelLoaded.AddDynamic(this, &UStageManagerComponent::UpdateLoadStatusCount);
 	}
+
+	//Load Begin
+	OnStageLoadBegin.Broadcast();
 }
 
 void UStageManagerComponent::ClearPreviousLevelData()
@@ -278,6 +281,10 @@ void UStageManagerComponent::StartStage()
 	if (CurrentStageInfo.bIsVisited) return; 
 	CurrentStageInfo.bIsVisited = true;
 
+	//Load End
+	OnStageLoadEnd.Broadcast();
+
+	//Update spawn points
 	UpdateSpawnPointProperty();
 
 	//Remove loading screen 

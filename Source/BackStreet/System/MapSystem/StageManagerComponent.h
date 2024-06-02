@@ -9,6 +9,8 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateStageEnd, FStageInfo, StageInfo);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateStageClear);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeOver);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadBegin);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadEnd);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API UStageManagerComponent : public UActorComponent
@@ -25,6 +27,12 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTimeOver OnTimeIsOver;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateLoadBegin OnStageLoadBegin;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateLoadEnd OnStageLoadEnd;
 
 //======== Basic ===============
 public:	
