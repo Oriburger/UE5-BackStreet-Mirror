@@ -141,7 +141,7 @@ void UTargetingManagerComponent::UpdateCameraRotation()
 		return;
 	}
 
-	if (FVector::Dist(OwnerCharacter.Get()->GetActorLocation(), TargetedCandidate.Get()->GetActorLocation()) >= 50.0f)
+	if (FVector::Dist(OwnerCharacter.Get()->GetActorLocation(), TargetedCharacter.Get()->GetActorLocation()) >= 50.0f)
 	{
 		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(FollowingCameraRef.Get()->GetComponentLocation(), TargetedCharacter.Get()->GetActorLocation());
 		newRotation.Roll = 0.0f;
