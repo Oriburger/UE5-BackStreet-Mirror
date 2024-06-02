@@ -5,6 +5,7 @@
 #include "../../Global/BackStreet.h"
 #include "../../Item/Weapon/WeaponInventoryBase.h"
 #include "CraftingManagerBase.generated.h"
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateGetSkill, FOwnerSkillInfoStruct, SkillInfo);
 
 UCLASS(BlueprintType)
 class BACKSTREET_API UCraftingManagerBase : public UObject
@@ -21,6 +22,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		EChapterLevel GetCurrentChapterLevel();
 
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateGetSkill SkillUpdateDelegate;
+
 // ------ Default Logic -----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
@@ -28,6 +32,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		TArray<FCraftingRecipeStruct> MakeDisplayingRecipeList(EWeaponType SelectedType);
+
+	UFUNCTION(BlueprintCallable)
+		void AddSkill(int32 SkillID);
 
 private:
 	UFUNCTION(BlueprintCallable)
@@ -44,6 +51,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		UDataTable* CraftingRecipeTable;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		UDataTable* CraftingSkillTable;
 
 	UPROPERTY(BlueprintReadWrite)
 		AWeaponInventoryBase* WeaponInventoryRef;

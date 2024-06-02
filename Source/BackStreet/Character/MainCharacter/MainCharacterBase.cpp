@@ -2,6 +2,7 @@
 #include "MainCharacterBase.h"
 #include "MainCharacterController.h"
 #include "../Component/TargetingManagerComponent.h"
+#include "../Component/ItemInventoryComponent.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SaveSystem/BackStreetGameInstance.h"
 #include "../../System/AbilitySystem/AbilityManagerBase.h"
@@ -57,6 +58,8 @@ AMainCharacterBase::AMainCharacterBase()
 
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
 
+	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
+
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
 
 	this->bUseControllerRotationYaw = false;
@@ -86,17 +89,20 @@ void AMainCharacterBase::BeginPlay()
 
 	AbilityManagerRef = NewObject<UAbilityManagerBase>(this, UAbilityManagerBase::StaticClass(), FName("AbilityfManager"));
 	AbilityManagerRef->InitAbilityManager(this);
+	InitCombatUI();
 
-	UBackStreetGameInstance* GameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
+	//UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
 
 	//Load SaveData
-	if (GameInstance->LoadGameSaveData(SavedData)) return;
-	else
-	{
-		GameInstance->SaveGameData(FSaveData());
-	}
-	SetCharacterStatFromSaveData();
+	//if (gameInstance->LoadGameSaveData(SavedData)) return;
+	//else
+	//{
+	//	gameInstance->SaveGameData(FSaveData());
+	//}
+	//SetCharacterStatFromSaveData();
+	//ItemInventory->SetItemInventoryFromSaveData();
 	InitCharacterState();
+	ItemInventory->InitInventory();
 
 }
 
@@ -520,19 +526,27 @@ void AMainCharacterBase::TryUpperAttack()
 		SetFieldOfViewWithInterp(90.0f, 0.75f);
 	}
 
-	//Update upper atk target enemy (cloest pawn)
-	TargetingManagerComponent->ForceTargetingToNearestCharacter();
 	AActor* targetedEnemy = TargetingManagerComponent->GetTargetedCharacter();
+
+	//Update upper atk target enemy (cloest pawn)
+	if (!IsValid(targetedEnemy)
+		|| FVector::Distance(GetActorLocation(), targetedEnemy->GetActorLocation()) >= 300.0f)
+	{
+		TargetingManagerComponent->ForceTargetingToNearestCharacter();
+		targetedEnemy = TargetingManagerComponent->GetTargetedCharacter();
+	}
 	
 	if (IsValid(targetedEnemy)
 		&& FVector::Distance(GetActorLocation(), targetedEnemy->GetActorLocation()) <= 300.0f)
 	{
 		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(targetedEnemy->GetActorLocation(), GetActorLocation());
 		targetedEnemy->SetActorRotation(newRotation);
-		SetLocationWithInterp(Cast<ACharacterBase>(targetedEnemy)->HitSceneComponent->GetComponentLocation() + 100.0f, 50.0f);
-	}
+		newRotation.Add(0.0f, 180.0f, 0.0f);
+		SetActorRotation(newRotation);
+		SetLocationWithInterp(Cast<ACharacterBase>(targetedEnemy)->HitSceneComponent->GetComponentLocation(), 100.0f);
 
-	Super::TryUpperAttack();
+		Super::TryUpperAttack();
+	}
 }
 
 void AMainCharacterBase::TryDownwardAttack()

@@ -111,7 +111,7 @@ public:
 		void ResetAtkIntervalTimer();
 
 	//Update Character's world Location using interporlation
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void SetLocationWithInterp(FVector NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
 
 	//Set air atk location update event timer

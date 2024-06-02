@@ -42,6 +42,7 @@ void UStageManagerComponent::BeginPlay()
 	{
 		Cast<ACharacterBase>(playerCharacter)->OnCharacterDied.AddDynamic(this, &UStageManagerComponent::SetGameIsOver);
 	}
+
 }
 
 void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
@@ -53,14 +54,20 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 
 	//Init new stage
 	CurrentStageInfo = NewStageInfo;
-	UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
-	UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
+	//UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
+	//UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
 	//UE_LOG(LogTemp, Warning, TEXT("> Level Name : %s"), *CurrentStageInfo.LevelAssetName.ToString());
-	UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %d"), CurrentStageInfo.TilePos.X);
+	//UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %d"), CurrentStageInfo.TilePos.X);
 
 	//Load new level
 	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
 	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 1.0f, true);
+}
+
+void UStageManagerComponent::ClearResource()
+{
+	ClearPreviousActors();
+	ClearPreviousLevelData();
 }
 
 void UStageManagerComponent::AddLoadingScreen()
@@ -105,6 +112,9 @@ void UStageManagerComponent::CreateLevelInstance(TSoftObjectPtr<UWorld> MainLeve
 			, FRotator::ZeroRotator, result);
 		OuterAreaRef->OnLevelLoaded.AddDynamic(this, &UStageManagerComponent::UpdateLoadStatusCount);
 	}
+
+	//Load Begin
+	OnStageLoadBegin.Broadcast();
 }
 
 void UStageManagerComponent::ClearPreviousLevelData()
@@ -166,6 +176,8 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 		else if (spawnPoint->Tags[1] == FName("PlayerStart"))
 		{
 			CurrentStageInfo.PlayerStartLocation = spawnPoint->GetActorLocation() + zAxisCalibrationValue;
+			CurrentStageInfo.PlayerStartRotation = spawnPoint->GetActorRotation();
+
 		}
 		else if (spawnPoint->Tags[1] == FName("Gate"))
 		{
@@ -259,9 +271,6 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 
 	if (GetLoadIsDone())
 	{
-		//Post load events
-		UpdateSpawnPointProperty();
-
 		//Clear timer and invalidate
 		GetWorld()->GetTimerManager().ClearTimer(LoadCheckTimerHandle);
 		LoadCheckTimerHandle.Invalidate();
@@ -278,6 +287,12 @@ void UStageManagerComponent::StartStage()
 	if (CurrentStageInfo.bIsVisited) return; 
 	CurrentStageInfo.bIsVisited = true;
 
+	//Load End
+	OnStageLoadEnd.Broadcast();
+
+	//Update spawn points
+	UpdateSpawnPointProperty();
+
 	//Remove loading screen 
 	RemoveLoadingScreen();
 
@@ -289,6 +304,8 @@ void UStageManagerComponent::StartStage()
 	if (IsValid(playerCharacter))
 	{
 		playerCharacter->SetActorLocation(CurrentStageInfo.PlayerStartLocation);
+		playerCharacter->SetActorRotation(CurrentStageInfo.PlayerStartRotation);
+		playerCharacter->GetController()->SetControlRotation(CurrentStageInfo.PlayerStartRotation);
 	}
 
 	//Start timer if stage type if timeattack
@@ -309,8 +326,9 @@ void UStageManagerComponent::StartStage()
 
 void UStageManagerComponent::FinishStage(bool bStageClear)
 {
-	if (CurrentStageInfo.bIsClear) return;
+	if (CurrentStageInfo.bIsFinished) return;
 	CurrentStageInfo.bIsClear = bStageClear;
+	CurrentStageInfo.bIsFinished = true;
 
 	//Clear all remaining actors
 	ClearPreviousActors();
@@ -320,24 +338,28 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	TimeAttackTimerHandle.Invalidate();
 
 	//if this is not end stage, then spawn the portal
-	if (!CurrentStageInfo.bIsGameOver && bStageClear
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss)
+	if (!CurrentStageInfo.bIsGameOver && CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss)
 	{
 		SpawnPortal();
 	}
-	else if (CurrentStageInfo.StageType != EStageCategoryInfo::E_None
+
+	if (bStageClear
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_None
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Craft
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_MiniGame
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Gatcha)
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Gatcha
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss)
 	{
+
 		//Stage Clear UI Update using delegate
+		OnStageCleared.Broadcast();
 	}
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
 		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 	{
 		//Time Out using delegate
+		OnTimeIsOver.Broadcast();
 	}
-
 	//StageFinished Delegate
 	OnStageFinished.Broadcast(CurrentStageInfo);
 }

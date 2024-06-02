@@ -45,6 +45,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void InitAsset(int32 NewCharacterID) override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void InitCombatUI();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -61,6 +64,9 @@ public:
 	//플레이어의 메인 카메라
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		UCameraComponent* FollowingCamera;
+		
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+		class UItemInventoryComponent* ItemInventory;
 
 // ------- Throw Test -----------
 
@@ -201,7 +207,7 @@ public:
 	UFUNCTION()
 		void SetWalkSpeedWithInterp(float NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void SetFieldOfViewWithInterp(float NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
 
 private:
@@ -221,7 +227,7 @@ protected:
 	UFUNCTION()
 		void SetCharacterStatFromSaveData();
 
-protected:
+public:
 	UPROPERTY(BlueprintReadOnly, Category = "SaveData")
 		FSaveData SavedData;
 

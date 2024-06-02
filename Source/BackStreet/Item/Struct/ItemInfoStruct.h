@@ -5,6 +5,13 @@
 #include "Engine/DataTable.h"
 #include "ItemInfoStruct.generated.h"
 
+UENUM(BlueprintType)
+enum class EItemType : uint8
+{
+	E_None					UMETA(DisplayName = "None"),
+	E_Permanant			UMETA(DisplayName = "Permanant"),
+	E_Temporary			UMETA(DisplayName = "Temporary"),
+};
 
 UENUM(BlueprintType)
 enum class EItemCategoryInfo : uint8
@@ -98,3 +105,39 @@ public:
 		FWeaponStateStruct WeaponState;
 };
 
+//for "Not Actor Item"
+USTRUCT(BlueprintType)
+struct FItemDataStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	//Item ID
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		int32 ItemID;
+
+	//Item name
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FName ItemName;
+
+	//Item type
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		EItemType ItemType;
+
+	//Attainable Chapter
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		uint8 AttainableChapter;
+
+	//Item Description
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FName ItemDescription;
+
+	//Item Icon Image
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		UTexture2D* ItemImage;
+
+	//Item Amount which can not edit in datatable
+	UPROPERTY(BlueprintReadOnly)
+		uint8 ItemAmount = 0;
+
+};

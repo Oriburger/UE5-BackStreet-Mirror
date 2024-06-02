@@ -15,6 +15,10 @@ public:
 	//======= SaveData of Character Default Stat ======================
 	UPROPERTY(BlueprintReadWrite)
 		FCharacterStatStruct PlayerStat;
+	
+	UPROPERTY(BlueprintReadWrite)
+		TMap<int32, FItemDataStruct> ItemMap;
+
 
 	//======= SaveData of Character Skin(Costume) =====================
 

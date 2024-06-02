@@ -99,19 +99,29 @@ public:
 		FVector PlayerStartLocation;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		FRotator PlayerStartRotation;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TArray<FVector> PortalLocationList;
 
 	//Timed-stage only use this value!
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float TimeLimitValue = 0.0f;
 
-	UPROPERTY()
-		bool bIsClear = false;
-
-	UPROPERTY()
+	//Is stage visited?
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bIsVisited = false;
 
-	UPROPERTY()
+	//Is stage finished?
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		bool bIsFinished = false;
+
+	//Is stage cleared
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		bool bIsClear = false;
+
+	//Is game over
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bIsGameOver = false;
 };
 
