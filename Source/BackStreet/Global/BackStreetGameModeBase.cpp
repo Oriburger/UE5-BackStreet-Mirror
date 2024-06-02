@@ -21,19 +21,20 @@ ABackStreetGameModeBase::ABackStreetGameModeBase()
 void ABackStreetGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
-}
 
-void ABackStreetGameModeBase::InitialzeGame()
-{
 	//----- Asset Manager ÃÊ±âÈ­ -------
 	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
 	AssetManagerBase->InitAssetManager(this);
 
-	//------ Initialize Chapter Manager ------------
-	ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>();
-
 	//------ Ref ¸â¹ö  ---------------
 	PlayerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+}
+
+void ABackStreetGameModeBase::InitialzeGame()
+{
+	//------ Initialize Chapter Manager ------------
+	ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>();
 
 	//------ Initialize Global Skill Manager --------
 	SkillManagerBase = NewObject<USkillManagerBase>(this, USkillManagerBase::StaticClass(), FName("SkillManagerBase"));

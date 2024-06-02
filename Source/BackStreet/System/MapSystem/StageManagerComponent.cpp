@@ -54,14 +54,20 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 
 	//Init new stage
 	CurrentStageInfo = NewStageInfo;
-	UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
-	UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
+	//UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
+	//UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
 	//UE_LOG(LogTemp, Warning, TEXT("> Level Name : %s"), *CurrentStageInfo.LevelAssetName.ToString());
-	UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %d"), CurrentStageInfo.TilePos.X);
+	//UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %d"), CurrentStageInfo.TilePos.X);
 
 	//Load new level
 	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
 	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 1.0f, true);
+}
+
+void UStageManagerComponent::ClearResource()
+{
+	ClearPreviousActors();
+	ClearPreviousLevelData();
 }
 
 void UStageManagerComponent::AddLoadingScreen()
@@ -341,7 +347,8 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_None
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Craft
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_MiniGame
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Gatcha)
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Gatcha
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss)
 	{
 
 		//Stage Clear UI Update using delegate

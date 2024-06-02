@@ -69,10 +69,13 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 
 void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 {
+	//Clear resource
+	StageManagerComponent->ClearResource();
+
 	//Reward Ã³¸®
 
 
-	//
+	//change level to main menu
 	UGameplayStatics::OpenLevel(GetWorld(), "MainMenuPersistent");
 }
 

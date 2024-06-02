@@ -49,6 +49,9 @@ public:
 	UFUNCTION()
 		void InitStage(FStageInfo NewStageInfo);
 
+	UFUNCTION()
+		void ClearResource();
+
 protected:
 	//Add loading screen
 	UFUNCTION()
@@ -56,8 +59,6 @@ protected:
 
 	UFUNCTION()
 		void RemoveLoadingScreen();
-
-
 
 	//Spawn new level instance usina level name
 	UFUNCTION()
