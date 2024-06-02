@@ -7,6 +7,8 @@
 #include "StageManagerComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateStageEnd, FStageInfo, StageInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateStageClear);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeOver);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API UStageManagerComponent : public UActorComponent
@@ -15,8 +17,14 @@ class BACKSTREET_API UStageManagerComponent : public UActorComponent
 
 //======== Delegate ============
 public:
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+	UPROPERTY()
 		FDelegateStageEnd OnStageFinished;	
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateStageClear OnStageCleared; 
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTimeOver OnTimeIsOver;
 
 //======== Basic ===============
 public:	
@@ -40,6 +48,8 @@ protected:
 
 	UFUNCTION()
 		void RemoveLoadingScreen();
+
+
 
 	//Spawn new level instance usina level name
 	UFUNCTION()

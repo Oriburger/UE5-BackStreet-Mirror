@@ -42,6 +42,7 @@ void UStageManagerComponent::BeginPlay()
 	{
 		Cast<ACharacterBase>(playerCharacter)->OnCharacterDied.AddDynamic(this, &UStageManagerComponent::SetGameIsOver);
 	}
+
 }
 
 void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
@@ -166,6 +167,8 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 		else if (spawnPoint->Tags[1] == FName("PlayerStart"))
 		{
 			CurrentStageInfo.PlayerStartLocation = spawnPoint->GetActorLocation() + zAxisCalibrationValue;
+			CurrentStageInfo.PlayerStartRotation = spawnPoint->GetActorRotation();
+
 		}
 		else if (spawnPoint->Tags[1] == FName("Gate"))
 		{
@@ -259,9 +262,6 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 
 	if (GetLoadIsDone())
 	{
-		//Post load events
-		UpdateSpawnPointProperty();
-
 		//Clear timer and invalidate
 		GetWorld()->GetTimerManager().ClearTimer(LoadCheckTimerHandle);
 		LoadCheckTimerHandle.Invalidate();
@@ -278,6 +278,8 @@ void UStageManagerComponent::StartStage()
 	if (CurrentStageInfo.bIsVisited) return; 
 	CurrentStageInfo.bIsVisited = true;
 
+	UpdateSpawnPointProperty();
+
 	//Remove loading screen 
 	RemoveLoadingScreen();
 
@@ -289,6 +291,8 @@ void UStageManagerComponent::StartStage()
 	if (IsValid(playerCharacter))
 	{
 		playerCharacter->SetActorLocation(CurrentStageInfo.PlayerStartLocation);
+		playerCharacter->SetActorRotation(CurrentStageInfo.PlayerStartRotation);
+		playerCharacter->GetController()->SetControlRotation(CurrentStageInfo.PlayerStartRotation);
 	}
 
 	//Start timer if stage type if timeattack
@@ -309,8 +313,9 @@ void UStageManagerComponent::StartStage()
 
 void UStageManagerComponent::FinishStage(bool bStageClear)
 {
-	if (CurrentStageInfo.bIsClear) return;
+	if (CurrentStageInfo.bIsFinished) return;
 	CurrentStageInfo.bIsClear = bStageClear;
+	CurrentStageInfo.bIsFinished = true;
 
 	//Clear all remaining actors
 	ClearPreviousActors();
@@ -320,24 +325,27 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	TimeAttackTimerHandle.Invalidate();
 
 	//if this is not end stage, then spawn the portal
-	if (!CurrentStageInfo.bIsGameOver && bStageClear
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss)
+	if (!CurrentStageInfo.bIsGameOver && CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss)
 	{
 		SpawnPortal();
 	}
-	else if (CurrentStageInfo.StageType != EStageCategoryInfo::E_None
+
+	if (bStageClear
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_None
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Craft
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_MiniGame
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Gatcha)
 	{
+
 		//Stage Clear UI Update using delegate
+		OnStageCleared.Broadcast();
 	}
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
 		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 	{
 		//Time Out using delegate
+		OnTimeIsOver.Broadcast();
 	}
-
 	//StageFinished Delegate
 	OnStageFinished.Broadcast(CurrentStageInfo);
 }
