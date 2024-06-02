@@ -7,6 +7,10 @@
 #include "StageManagerComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateStageEnd, FStageInfo, StageInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateStageClear);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeOver);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadBegin);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadEnd);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API UStageManagerComponent : public UActorComponent
@@ -15,8 +19,20 @@ class BACKSTREET_API UStageManagerComponent : public UActorComponent
 
 //======== Delegate ============
 public:
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+	UPROPERTY()
 		FDelegateStageEnd OnStageFinished;	
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateStageClear OnStageCleared; 
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTimeOver OnTimeIsOver;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateLoadBegin OnStageLoadBegin;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateLoadEnd OnStageLoadEnd;
 
 //======== Basic ===============
 public:	
@@ -32,6 +48,9 @@ public:
 	//Initialize stage
 	UFUNCTION()
 		void InitStage(FStageInfo NewStageInfo);
+
+	UFUNCTION()
+		void ClearResource();
 
 protected:
 	//Add loading screen

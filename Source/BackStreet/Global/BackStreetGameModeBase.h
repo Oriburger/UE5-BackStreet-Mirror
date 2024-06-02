@@ -8,33 +8,18 @@
 #include "BackStreetGameModeBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateClearResource);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSingleParam, bool, bGameIsOver);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateSystemMessage, FName, Message, FColor, TextColor);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateUIAnimation, FName, AnimationName);
-
-
-
 
 UCLASS()
 class BACKSTREET_API ABackStreetGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 public:
-
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateSingleParam StartChapterDelegate;
-
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateSingleParam FinishChapterDelegate;
-
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateClearResource ClearResourceDelegate;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateSystemMessage PrintSystemMessageDelegate;
-
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateUIAnimation UIAnimationDelegate;
 
 public:
 	ABackStreetGameModeBase();
@@ -42,17 +27,19 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable)
+		void InitialzeGame();
 
 // ----- Gameplay Manager -------------------
 public:
 	UFUNCTION(BlueprintCallable)
-		void InitializeGame();
+		void StartGame(int32 ChapterID);
+
+	UFUNCTION(BlueprintCallable)
+		void FinishGame(bool bGameIsOver);
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void PrintDebugMessage();
-
-	UFUNCTION(BlueprintImplementableEvent)
-		void FinishChapter(bool bGameIsOver);
 
 	UFUNCTION(BlueprintCallable)
 		void PlayCameraShakeEffect(ECameraShakeType EffectType, FVector Location, float Radius = 100.0f);
@@ -101,6 +88,13 @@ public:
 		TSubclassOf<class AItemBase> ItemClass;
 
 //------ 그 외 프로퍼티 ---------------
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class ANewChapterManagerBase* GetChapterManagerRef() { return ChapterManagerRef; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class UUserWidget* GetCombatWidgetRef();
+
 protected:
 	UPROPERTY()
 		class AMainCharacterBase* PlayerCharacterRef;
@@ -113,6 +107,9 @@ protected:
 
 	UPROPERTY()
 		class UCraftingManagerBase* CraftingManagerBase;
+
+	UPROPERTY()
+		class ANewChapterManagerBase* ChapterManagerRef;
 
 public:
 	//현재 게임 모드가 인게임인지 트랜지션인지 확인

@@ -3,6 +3,7 @@
 #include "BackStreetGameModeBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/SkillSystem/SkillManagerBase.h"
+#include "../System/MapSystem/NewChapterManagerBase.h"
 #include "../System/CraftingSystem/CraftingManagerBase.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
@@ -24,31 +25,40 @@ void ABackStreetGameModeBase::BeginPlay()
 	//----- Asset Manager 초기화 -------
 	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
 	AssetManagerBase->InitAssetManager(this);
+
+	//------ Ref 멤버  ---------------
+	PlayerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
 }
 
-void ABackStreetGameModeBase::InitializeGame()
+void ABackStreetGameModeBase::InitialzeGame()
 {
-	if (bIsInGame)
+	//------ Initialize Chapter Manager ------------
+	ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>();
+
+	//------ Initialize Global Skill Manager --------
+	SkillManagerBase = NewObject<USkillManagerBase>(this, USkillManagerBase::StaticClass(), FName("SkillManagerBase"));
+	SkillManagerBase->InitSkillManagerBase(this);
+
+	//------ Initialize Global Crafting Manager --------
+	CraftingManagerBase = NewObject<UCraftingManagerBase>(this, UCraftingManagerBase::StaticClass(), FName("CraftingManagerBase"));
+	CraftingManagerBase->InitCraftingManager(this);
+}
+
+void ABackStreetGameModeBase::StartGame(int32 ChapterID)
+{
+	InitialzeGame();
+
+	if (IsValid(ChapterManagerRef))
 	{
-		FActorSpawnParameters spawnParams;
-		FRotator rotator;
-		FVector spawnLocation = FVector::ZeroVector;
-
-		//------ 델리게이트 바인딩 ---------------
-		FinishChapterDelegate.AddDynamic(this, &ABackStreetGameModeBase::FinishChapter);
-		UIAnimationDelegate.AddDynamic(this, &ABackStreetGameModeBase::PlayUIAnimation);
-
-		//------ Ref 멤버 초기화  ---------------
-		PlayerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-
-		//------ Global Skill Manager 초기화 --------
-		SkillManagerBase = NewObject<USkillManagerBase>(this, USkillManagerBase::StaticClass(), FName("SkillManagerBase"));
-		SkillManagerBase->InitSkillManagerBase(this);
-
-		//------ Global Crafting Manager 초기화 --------
-		CraftingManagerBase = NewObject<UCraftingManagerBase>(this, UCraftingManagerBase::StaticClass(), FName("CraftingManagerBase"));
-		CraftingManagerBase->InitCraftingManager(this);
+		ChapterManagerRef->StartChapter(ChapterID);
 	}
+}
+
+void ABackStreetGameModeBase::FinishGame(bool bGameIsOver)
+{
+	if (!IsValid(ChapterManagerRef)) return;
+	ChapterManagerRef->FinishChapter(!bGameIsOver);
 }
 
 void ABackStreetGameModeBase::PlayCameraShakeEffect(ECameraShakeType EffectType, FVector Location, float Radius)
@@ -102,4 +112,10 @@ void ABackStreetGameModeBase::UpdateCharacterStat(ACharacterBase* TargetCharacte
 	{
 		TargetCharacter->UpdateCharacterStat(NewStat);
 	}
+}
+
+UUserWidget* ABackStreetGameModeBase::GetCombatWidgetRef()
+{
+	if (!IsValid(ChapterManagerRef)) return nullptr;
+	return ChapterManagerRef->GetCombatWidgetRef();
 }

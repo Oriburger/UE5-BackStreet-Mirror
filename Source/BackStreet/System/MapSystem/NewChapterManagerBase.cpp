@@ -23,13 +23,17 @@ ANewChapterManagerBase::ANewChapterManagerBase()
 	ChapterInfoTable = chapterInfoTableFinder.Object;
 
 	//init widget class (game over / chapter clear)
-	static ConstructorHelpers::FClassFinder<UUserWidget> chapterClearWidgetClassFinder(TEXT("/Game/UI/InGame/Blueprint/Legacy/WB_GameClear"));
+	static ConstructorHelpers::FClassFinder<UUserWidget> chapterClearWidgetClassFinder(TEXT("/Game/UI/InGame/Blueprint/01_CombatUI/WB_ChapterClear"));
+	static ConstructorHelpers::FClassFinder<UUserWidget> gameOverWidgetClassFinder(TEXT("/Game/UI/InGame/Blueprint/01_CombatUI/WB_GameOver"));
 	checkf(chapterClearWidgetClassFinder.Succeeded(), TEXT("ANewChapterManagerBase::loadingWidget 클래스 탐색에 실패했습니다."));
-	ChapterClearWidgetClass = chapterClearWidgetClassFinder.Class;
-
-	static ConstructorHelpers::FClassFinder<UUserWidget> gameOverWidgetClassFinder(TEXT("/Game/UI/InGame/Blueprint/Legacy/WB_GameOver"));
 	checkf(gameOverWidgetClassFinder.Succeeded(), TEXT("ANewChapterManagerBase::loadingWidget 클래스 탐색에 실패했습니다."));
+	ChapterClearWidgetClass = chapterClearWidgetClassFinder.Class;
 	GameOverWidgetClass = gameOverWidgetClassFinder.Class;
+
+	//main combat hud widget
+	static ConstructorHelpers::FClassFinder<UUserWidget> combatWidgetClassFinder(TEXT("/Game/UI/InGame/Blueprint/01_CombatUI/WB_CombatUI"));
+	checkf(combatWidgetClassFinder.Succeeded(), TEXT("UStageManagerComponent::combatuWidget 클래스 탐색에 실패했습니다."));
+	CombatWidgetClass = combatWidgetClassFinder.Class;
 }
 
 // Called when the game starts or when spawned
@@ -57,16 +61,22 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 		FInputModeGameOnly gameOnlyData;
 		playerControllerRef->SetInputMode(gameOnlyData);
 		playerControllerRef->bShowMouseCursor = false;
+
+		//Add combat widet to screen
+		AddCombatWidget();
 	}
 }
 
 void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 {
-	//Chapter Reward
-	// ...
+	//Clear resource
+	StageManagerComponent->ClearResource();
 
-	//Result Widget
-	CreateGameResultWidget(true);
+	//Reward 처리
+
+
+	//change level to main menu
+	UGameplayStatics::OpenLevel(GetWorld(), "MainMenuPersistent");
 }
 
 void ANewChapterManagerBase::ResetChapter()
@@ -107,13 +117,15 @@ void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 	//Game Over
 	if (StageInfo.bIsGameOver)
 	{
-		FinishChapter(false);
+		//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishGame' 
+		CreateGameResultWidget(false);
 	}
 	else if (StageInfo.bIsClear)
 	{
 		if (StageInfo.StageType == EStageCategoryInfo::E_Boss)
 		{
-			FinishChapter(true);
+			//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishGame'
+			CreateGameResultWidget(true);
 		}
 	}
 }
@@ -124,5 +136,14 @@ void ANewChapterManagerBase::CreateGameResultWidget(bool bChapterClear)
 	if (IsValid(GameResultWidgetRef))
 	{
 		GameResultWidgetRef->AddToViewport();
+	}
+}
+
+void ANewChapterManagerBase::AddCombatWidget()
+{
+	CombatWidgetRef = CreateWidget(GetWorld(), CombatWidgetClass);
+	if (IsValid(CombatWidgetRef))
+	{
+		CombatWidgetRef->AddToViewport();
 	}
 }
