@@ -5,7 +5,7 @@
 #include "../../Global/BackStreet.h"
 #include "../../Item/Weapon/WeaponInventoryBase.h"
 #include "CraftingManagerBase.generated.h"
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateGetSkill, FOwnerSkillInfoStruct, SkillInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateGetSkill, FSkillInfoStruct, SkillInfo);
 
 UCLASS(BlueprintType)
 class BACKSTREET_API UCraftingManagerBase : public UObject
@@ -19,29 +19,14 @@ public:
 	UFUNCTION()
 		void InitCraftingManager(ABackStreetGameModeBase* NewGamemodeRef);
 
-	UFUNCTION(BlueprintCallable)
-		EChapterLevel GetCurrentChapterLevel();
-
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateGetSkill SkillUpdateDelegate;
 
 // ------ Default Logic -----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
-		void UpdateCurrentWeaponInventoryRef();
-
-	UFUNCTION(BlueprintCallable)
-		TArray<FCraftingRecipeStruct> MakeDisplayingRecipeList(EWeaponType SelectedType);
-
-	UFUNCTION(BlueprintCallable)
 		void AddSkill(int32 SkillID);
 
-private:
-	UFUNCTION(BlueprintCallable)
-		ECraftingSlotVisual SetRecipeVisual(FCraftingRecipeStruct Recipe);
-
-	UFUNCTION(BlueprintCallable)
-		bool IsIngredientWeaponValid(int32 IngredientWeaponID);
 
 
 //-------- ETC. (Ref)-------------------------------
@@ -49,16 +34,18 @@ public:
 	UPROPERTY()
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
+	UPROPERTY()
+		TWeakObjectPtr<class AMainCharacterBase> MainCharacterRef;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		UDataTable* CraftingRecipeTable;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		UDataTable* CraftingSkillTable;
 
-	UPROPERTY(BlueprintReadWrite)
-		AWeaponInventoryBase* WeaponInventoryRef;
-
-	UPROPERTY(BlueprintReadWrite)
-		AWeaponInventoryBase* SubWeaponInventoryRef;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		UDataTable* CraftingItemData;
+		
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TArray<FOwnerSkillInfoStruct> DisplaySkillInfoList; 
 };

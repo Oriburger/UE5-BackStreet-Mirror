@@ -5,14 +5,13 @@
 #include "NiagaraSystem.h"
 #include "CraftingInfoStruct.generated.h"
 
-UENUM(BlueprintType)
-enum class ECraftingSlotVisual : uint8
+USTRUCT(BlueprintType)
+struct FCraftingMaterialStruct : public FTableRowBase
 {
-	E_None				UMETA(DisplayName = "None"),
-	E_Craftable			UMETA(DisplayName = "Craftable"),
-	E_Uncraftable		UMETA(DisplayName = "Uncraftable"),
-	E_Unidentified		UMETA(DisplayName = "UnIdentified"),
-	E_Hide				UMETA(DisplayName = "Hide"),
+public:
+	GENERATED_USTRUCT_BODY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TArray<uint8> RequiredMaterialByLevel;
 };
 
 USTRUCT(BlueprintType)
@@ -23,25 +22,15 @@ public:
 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		int32 ResultWeaponID;
+		int32 SkillID;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TArray<int32> IngredientWeaponID;
-
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TArray<uint8> CraftableChapterList;
+		int32 WeaponID;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		EWeaponType ResultWeaponType;
+		uint8 MaxLevel;
 
+	//<MaterialID, Need Num of Material>
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		uint8 CraftableLevel;
-
-	//Craftable State for widget visual
-	//UnIdentified and Uncraftable: E_UnIdentified
-	//Identified but Uncraftable : E_Uncraftable
-	//Identified and Craftable : E_Craftable
-	UPROPERTY(BlueprintReadWrite)
-		ECraftingSlotVisual CraftingSlotVisual = ECraftingSlotVisual::E_Craftable;
+		TMap<int32, FCraftingMaterialStruct> RequiredMaterialMap;
 };
