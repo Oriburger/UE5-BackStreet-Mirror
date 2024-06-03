@@ -8,9 +8,13 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateStageEnd, FStageInfo, StageInfo);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateStageClear);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeOver);
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadBegin);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadEnd);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeAttackBegin);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeAttackEnd);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeOver);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API UStageManagerComponent : public UActorComponent
@@ -33,6 +37,12 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateLoadEnd OnStageLoadEnd;
+	
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTimeAttackBegin OnTimeAttackStageBegin;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTimeAttackEnd OnTimeAttackStageEnd;
 
 //======== Basic ===============
 public:	
@@ -55,6 +65,10 @@ public:
 
 	UFUNCTION()
 		void ClearResource();
+
+	//Time attack stage only
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetStageRemainingTime();
 
 protected:
 	//Add loading screen

@@ -75,6 +75,11 @@ void UStageManagerComponent::ClearResource()
 	ClearPreviousLevelData();
 }
 
+float UStageManagerComponent::GetStageRemainingTime()
+{
+	return GetOwner()->GetWorldTimerManager().GetTimerRemaining(TimeAttackTimerHandle);
+}
+
 void UStageManagerComponent::AddLoadingScreen()
 {
 	UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
@@ -219,7 +224,7 @@ void UStageManagerComponent::SpawnEnemy()
 	//Init enemy count to zero
 	RemainingEnemyCount = 0;
 
-	//Spawn enemy to world and add to SpawnedActorList
+	//--------------Spawn enemy to world and add to SpawnedActorList-------------------------------
 	if (CurrentStageInfo.EnemySpawnLocationList.Num() > 0)
 	{
 		for (int32 idx = 0; idx < CurrentStageInfo.EnemyCompositionInfo.CompositionList.Num(); idx++)
@@ -256,7 +261,7 @@ void UStageManagerComponent::SpawnEnemy()
 		}
 	}
 	
-	//Spawn boss character to world 
+	//--------------Spawn boss character to world -----------------------------
 	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Boss)
 	{
 		checkf(IsValid(CurrentChapterInfo.BossCharacterClass), TEXT("UStageManagerComponent::현재 챕터에 보스가 지정되어있지 않습니다. "));
@@ -346,6 +351,9 @@ void UStageManagerComponent::StartStage()
 		FTimerDelegate stageOverDelegate;
 		stageOverDelegate.BindUFunction(this, FName("FinishStage"), false);
 		GetOwner()->GetWorldTimerManager().SetTimer(TimeAttackTimerHandle, stageOverDelegate, 1.0f, false, CurrentStageInfo.TimeLimitValue);
+		
+		//UI Event
+		OnTimeAttackStageBegin.Broadcast();
 	}
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft
 			|| CurrentStageInfo.StageType == EStageCategoryInfo::E_MiniGame
@@ -374,23 +382,31 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 		SpawnPortal();
 	}
 
-	if (bStageClear
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_None
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Craft
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_MiniGame
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Gatcha
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss)
+	if (bStageClear &&
+		(CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteCombat))
 	{
-
 		//Stage Clear UI Update using delegate
 		OnStageCleared.Broadcast();
 	}
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
 		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 	{
-		//Time Out using delegate
-		OnTimeIsOver.Broadcast();
+		if (bStageClear)
+		{
+			//Stage Clear UI Update using delegate
+			OnStageCleared.Broadcast();
+		}
+		else
+		{
+			//Time Out using delegate
+			OnTimeIsOver.Broadcast();	
+
+		}
+		//TimeAttack UI Event
+		OnTimeAttackStageEnd.Broadcast();
 	}
+	
 	//StageFinished Delegate
 	OnStageFinished.Broadcast(CurrentStageInfo);
 }
