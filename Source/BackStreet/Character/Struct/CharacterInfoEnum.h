@@ -15,16 +15,6 @@ enum class ECharacterAbilityType : uint8
 };
 
 UENUM(BlueprintType)
-enum class ESkillGrade : uint8
-{
-	E_None				UMETA(DisplayName = "None"),
-	E_Common			UMETA(DisplayName = "Common"),
-	E_Rare				UMETA(DisplayName = "Rare"),
-	E_Legend			UMETA(DisplayName = "Legend"),
-	E_Mythic			UMETA(DisplayName = "Mythic")
-};
-
-UENUM(BlueprintType)
 enum class ECharacterDebuffType : uint8
 {
 	E_None				UMETA(DisplayName = "None"),

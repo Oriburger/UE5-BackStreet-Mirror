@@ -598,7 +598,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 
 	if (SkillType != ESkillType::E_Character)
 	{
-		if (!IsValid(GetCurrentWeaponRef()))
+		if (GetCurrentWeaponRef()->WeaponID == 0)
 		{
 			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Does't have any weapon")), FColor::White);
 			return;
@@ -647,7 +647,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 		}
 		case ESkillType::E_Weapon0:
 		{
-			FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().ActiveWeaponSkillInfo0;
+			FOwnerSkillInfoStruct skillInfo = *GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Find(ESkillType::E_Weapon0);
 			if (CheckCanTrySkill(SkillID, &skillInfo))
 			{
 				CharacterState.bCanAttack = false;
@@ -657,7 +657,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 		}
 		case ESkillType::E_Weapon1:
 		{
-			FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().ActiveWeaponSkillInfo1;
+			FOwnerSkillInfoStruct skillInfo = *GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Find(ESkillType::E_Weapon1);
 			if (CheckCanTrySkill(SkillID, &skillInfo))
 			{
 				CharacterState.bCanAttack = false;
@@ -667,7 +667,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 		}
 		case ESkillType::E_Weapon2:
 		{
-			FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().ActiveWeaponSkillInfo2;
+			FOwnerSkillInfoStruct skillInfo = *GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Find(ESkillType::E_Weapon2);
 			if (CheckCanTrySkill(SkillID, &skillInfo))
 			{
 				CharacterState.bCanAttack = false;

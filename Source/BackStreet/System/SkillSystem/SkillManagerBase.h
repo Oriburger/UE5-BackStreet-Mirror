@@ -46,8 +46,14 @@ public:
 
 
 //--------- DataTable ----------------------
-public:
+private:
+	//Get SkillInfo for Inner Class
 	FSkillInfoStruct* GetSkillInfoStructBySkillID(FOwnerSkillInfoStruct* OwnerSkillInfo);
+
+public:
+	//Get SkillInfo for Outer Class
+	UFUNCTION(BlueprintCallable)
+		FSkillInfoStruct GetSkillInfoStructByOwnerSkillInfo(FOwnerSkillInfoStruct OwnerSkillInfo);
 
 protected:
 	//Skill Info Table

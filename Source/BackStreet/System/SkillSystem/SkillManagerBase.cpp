@@ -28,10 +28,6 @@ void USkillManagerBase::TrySkill(ACharacterBase* NewCauser, FOwnerSkillInfoStruc
 {
 	ASkillBase* skillBase = SpawnSkillBase(NewCauser, OwnerSkillInfo);
 	if(!IsValid(skillBase)) return;
-	if (skillBase->SkillInfo.SkillGradeStruct.bIsGradeValid)
-	{
-		if (!skillBase->CheckSkillGauge()) return;
-	}
 	NewCauser->SetActionState(ECharacterActionType::E_Skill);
 	skillBase->ActivateSkill();
 }
@@ -96,7 +92,22 @@ FSkillInfoStruct* USkillManagerBase::GetSkillInfoStructBySkillID(FOwnerSkillInfo
 	if (!IsValid(SkillInfoTable)) { UE_LOG(LogTemp, Log, TEXT("There's no SkillInfoTable")); return nullptr; }
 
 	FString rowName = FString::FromInt(OwnerSkillInfo->SkillID);
-	return SkillInfoTable->FindRow<FSkillInfoStruct>(FName(rowName), rowName);
+	
+	FSkillInfoStruct* skillInfo = SkillInfoTable->FindRow<FSkillInfoStruct>(FName(rowName), rowName);
+	skillInfo->SkillLevelStruct.SkillLevel = OwnerSkillInfo->SkillLevel;
+	return skillInfo;
+}
+
+FSkillInfoStruct USkillManagerBase::GetSkillInfoStructByOwnerSkillInfo(FOwnerSkillInfoStruct OwnerSkillInfo)
+{
+	if (!IsValid(SkillInfoTable)) { UE_LOG(LogTemp, Log, TEXT("There's no SkillInfoTable")); return FSkillInfoStruct(); }
+
+	FString rowName = FString::FromInt(OwnerSkillInfo.SkillID);
+
+	FSkillInfoStruct* skillInfo = SkillInfoTable->FindRow<FSkillInfoStruct>(FName(rowName), rowName);
+	skillInfo->SkillLevelStruct.SkillLevel = OwnerSkillInfo.SkillLevel;
+	skillInfo->SkillType = OwnerSkillInfo.SkillType;
+	return *skillInfo;
 }
 
 

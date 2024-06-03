@@ -557,27 +557,12 @@ void AMainCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	//IndieGo용 임시 코드----------------------------------------------------------
-	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130)
-	{
-		CharacterState.CharacterCurrSkillGauge = 10;
-	}
-	//---------------------------------------------------------------------------------
 
 	Super::TrySkill(SkillType, SkillID);
 
 	//Try Skill and adjust rotation to cursor position
 	//RotateToCursor();
 }
-
-void AMainCharacterBase::AddSkillGauge()
-{
-	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
-
-	AWeaponBase* weaponRef = GetCurrentWeaponRef();
-	CharacterState.CharacterCurrSkillGauge += weaponRef->GetWeaponStat().SkillGaugeAug;
-}
-
 
 void AMainCharacterBase::Attack()
 {

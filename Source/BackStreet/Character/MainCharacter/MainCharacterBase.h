@@ -254,12 +254,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual bool PickWeapon(int32 NewWeaponID) override;
 
-//-------- Skill ---------------------
-public:
-	//Add Skill Gauge when attacking(E_Attack) Enemy.
-	UFUNCTION(BlueprintCallable)
-		void AddSkillGauge();
-
 // -------- VFX --------------------
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
