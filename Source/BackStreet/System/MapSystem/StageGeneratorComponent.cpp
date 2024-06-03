@@ -60,17 +60,17 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 
 	temp.StageType = EStageCategoryInfo::E_EliteCombat;
 	temp.TilePos = { 4, 0 };
-	temp.MainLevelAsset = CurrentChapterInfo.CombatStageLevelList[0];
+	temp.MainLevelAsset = CurrentChapterInfo.CombatStageLevelList[1];
 	temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(EStageCategoryInfo::E_EliteCombat);
 	result.Add(temp);
 
 	temp.StageType = EStageCategoryInfo::E_EliteTimeAttack;
 	temp.TilePos = { 5, 0 };
-	temp.MainLevelAsset = CurrentChapterInfo.TimeAttackStageLevelList[0];
+	temp.MainLevelAsset = CurrentChapterInfo.TimeAttackStageLevelList[1];
 	temp.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
 	temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(EStageCategoryInfo::E_EliteTimeAttack);
 	result.Add(temp);
-
+	
 	temp.StageType = EStageCategoryInfo::E_Boss;
 	temp.TilePos = { 6, 0 };
 	temp.MainLevelAsset = CurrentChapterInfo.BossStageLevelList[0];

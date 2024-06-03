@@ -42,6 +42,12 @@ void UStageManagerComponent::BeginPlay()
 	{
 		Cast<ACharacterBase>(playerCharacter)->OnCharacterDied.AddDynamic(this, &UStageManagerComponent::SetGameIsOver);
 	}
+
+}
+
+void UStageManagerComponent::Initialize(FChapterInfo NewChapterInfo)
+{
+	CurrentChapterInfo = NewChapterInfo;
 }
 
 void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
@@ -53,14 +59,25 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 
 	//Init new stage
 	CurrentStageInfo = NewStageInfo;
-	UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
-	UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
+	//UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
+	//UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
 	//UE_LOG(LogTemp, Warning, TEXT("> Level Name : %s"), *CurrentStageInfo.LevelAssetName.ToString());
-	UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %d"), CurrentStageInfo.TilePos.X);
+	//UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %d"), CurrentStageInfo.TilePos.X);
 
 	//Load new level
 	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
 	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 1.0f, true);
+}
+
+void UStageManagerComponent::ClearResource()
+{
+	ClearPreviousActors();
+	ClearPreviousLevelData();
+}
+
+float UStageManagerComponent::GetStageRemainingTime()
+{
+	return GetOwner()->GetWorldTimerManager().GetTimerRemaining(TimeAttackTimerHandle);
 }
 
 void UStageManagerComponent::AddLoadingScreen()
@@ -105,6 +122,9 @@ void UStageManagerComponent::CreateLevelInstance(TSoftObjectPtr<UWorld> MainLeve
 			, FRotator::ZeroRotator, result);
 		OuterAreaRef->OnLevelLoaded.AddDynamic(this, &UStageManagerComponent::UpdateLoadStatusCount);
 	}
+
+	//Load Begin
+	OnStageLoadBegin.Broadcast();
 }
 
 void UStageManagerComponent::ClearPreviousLevelData()
@@ -163,9 +183,15 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 		{
 			CurrentStageInfo.EnemySpawnLocationList.Add(spawnPoint->GetActorLocation() + zAxisCalibrationValue);
 		}
+		else if (spawnPoint->Tags[1] == FName("Boss"))
+		{
+			CurrentStageInfo.BossSpawnLocation = spawnPoint->GetActorLocation() + zAxisCalibrationValue;
+			CurrentStageInfo.BossSpawnRotation = spawnPoint->GetActorRotation();
+		}
 		else if (spawnPoint->Tags[1] == FName("PlayerStart"))
 		{
 			CurrentStageInfo.PlayerStartLocation = spawnPoint->GetActorLocation() + zAxisCalibrationValue;
+			CurrentStageInfo.PlayerStartRotation = spawnPoint->GetActorRotation();
 		}
 		else if (spawnPoint->Tags[1] == FName("Gate"))
 		{
@@ -177,7 +203,6 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 void UStageManagerComponent::SpawnEnemy()
 {
 	//Basic condition (stage type check and data count check
-	if (CurrentStageInfo.EnemySpawnLocationList.Num() <= 0) return;
 	if (CurrentStageInfo.StageType != EStageCategoryInfo::E_Entry
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Combat
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_TimeAttack
@@ -199,36 +224,59 @@ void UStageManagerComponent::SpawnEnemy()
 	//Init enemy count to zero
 	RemainingEnemyCount = 0;
 
-	//Spawn enemy to world and add to SpawnedActorList
-	for (int32 idx = 0; idx < CurrentStageInfo.EnemyCompositionInfo.CompositionList.Num(); idx++)
+	//--------------Spawn enemy to world and add to SpawnedActorList-------------------------------
+	if (CurrentStageInfo.EnemySpawnLocationList.Num() > 0)
 	{
-		FEnemyGroupInfo& composition = CurrentStageInfo.EnemyCompositionInfo.CompositionList[idx];
-		
-		TArray<int32> keyArray = {};
-		FVector spawnLocation = CurrentStageInfo.EnemySpawnLocationList[idx % CurrentStageInfo.EnemySpawnLocationList.Num()];
-		composition.EnemySet.GenerateKeyArray(keyArray);
-
-		for (int32& enemyID : keyArray)
+		for (int32 idx = 0; idx < CurrentStageInfo.EnemyCompositionInfo.CompositionList.Num(); idx++)
 		{
-			int32 count = composition.EnemySet[enemyID];
+			FEnemyGroupInfo& composition = CurrentStageInfo.EnemyCompositionInfo.CompositionList[idx];
 
-			while (count--)
-			{	
-				AEnemyCharacterBase* newEnemy = GetWorld()->SpawnActor<AEnemyCharacterBase>(EnemyCharacterClass
-												, spawnLocation + FVector(0.0f, 0.0f, 200.0f), FRotator::ZeroRotator);
-				if (IsValid(newEnemy))
+			TArray<int32> keyArray = {};
+			FVector spawnLocation = CurrentStageInfo.EnemySpawnLocationList[idx % CurrentStageInfo.EnemySpawnLocationList.Num()];
+			composition.EnemySet.GenerateKeyArray(keyArray);
+
+			for (int32& enemyID : keyArray)
+			{
+				int32 count = composition.EnemySet[enemyID];
+
+				while (count--)
 				{
-					newEnemy->CharacterID = enemyID;
-					newEnemy->InitEnemyCharacter(enemyID);
-					newEnemy->InitAsset(enemyID);
-					newEnemy->SwitchToNextWeapon();
-					newEnemy->EnemyDeathDelegate.BindUFunction(this, FName("UpdateEnemyCountAndCheckClear"));
-					Cast<AAIControllerBase>(newEnemy->GetController())->ActivateAI();
+					AEnemyCharacterBase* newEnemy = GetWorld()->SpawnActor<AEnemyCharacterBase>(EnemyCharacterClass
+						, spawnLocation + FVector(0.0f, 0.0f, 200.0f), FRotator::ZeroRotator);
+					if (IsValid(newEnemy))
+					{
+						newEnemy->CharacterID = enemyID;
+						newEnemy->InitEnemyCharacter(enemyID);
+						newEnemy->InitAsset(enemyID);
+						newEnemy->SpawnDefaultController();
+						newEnemy->SwitchToNextWeapon();
+						newEnemy->EnemyDeathDelegate.BindUFunction(this, FName("UpdateEnemyCountAndCheckClear"));
+						Cast<AAIControllerBase>(newEnemy->GetController())->ActivateAI();
 
-					SpawnedActorList.Add(newEnemy);
-					RemainingEnemyCount += 1;
+						SpawnedActorList.Add(newEnemy);
+						RemainingEnemyCount += 1;
+					}
 				}
 			}
+		}
+	}
+	
+	//--------------Spawn boss character to world -----------------------------
+	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Boss)
+	{
+		checkf(IsValid(CurrentChapterInfo.BossCharacterClass), TEXT("UStageManagerComponent::현재 챕터에 보스가 지정되어있지 않습니다. "));
+		
+		AEnemyCharacterBase* boss = GetWorld()->SpawnActor<AEnemyCharacterBase>(CurrentChapterInfo.BossCharacterClass
+			, CurrentStageInfo.BossSpawnLocation, CurrentStageInfo.BossSpawnRotation);
+		if (IsValid(boss))
+		{
+			boss->InitEnemyCharacter(boss->CharacterID);
+			boss->InitAsset(boss->CharacterID);
+			boss->SwitchToNextWeapon();
+			boss->EnemyDeathDelegate.BindUFunction(this, FName("UpdateEnemyCountAndCheckClear"));
+			Cast<AAIControllerBase>(boss->GetController())->ActivateAI();
+			SpawnedActorList.Add(boss);
+			RemainingEnemyCount += 1;
 		}
 	}
 }
@@ -259,9 +307,6 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 
 	if (GetLoadIsDone())
 	{
-		//Post load events
-		UpdateSpawnPointProperty();
-
 		//Clear timer and invalidate
 		GetWorld()->GetTimerManager().ClearTimer(LoadCheckTimerHandle);
 		LoadCheckTimerHandle.Invalidate();
@@ -278,6 +323,12 @@ void UStageManagerComponent::StartStage()
 	if (CurrentStageInfo.bIsVisited) return; 
 	CurrentStageInfo.bIsVisited = true;
 
+	//Load End
+	OnStageLoadEnd.Broadcast();
+
+	//Update spawn points
+	UpdateSpawnPointProperty();
+
 	//Remove loading screen 
 	RemoveLoadingScreen();
 
@@ -289,6 +340,8 @@ void UStageManagerComponent::StartStage()
 	if (IsValid(playerCharacter))
 	{
 		playerCharacter->SetActorLocation(CurrentStageInfo.PlayerStartLocation);
+		playerCharacter->SetActorRotation(CurrentStageInfo.PlayerStartRotation);
+		playerCharacter->GetController()->SetControlRotation(CurrentStageInfo.PlayerStartRotation);
 	}
 
 	//Start timer if stage type if timeattack
@@ -298,6 +351,9 @@ void UStageManagerComponent::StartStage()
 		FTimerDelegate stageOverDelegate;
 		stageOverDelegate.BindUFunction(this, FName("FinishStage"), false);
 		GetOwner()->GetWorldTimerManager().SetTimer(TimeAttackTimerHandle, stageOverDelegate, 1.0f, false, CurrentStageInfo.TimeLimitValue);
+		
+		//UI Event
+		OnTimeAttackStageBegin.Broadcast();
 	}
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft
 			|| CurrentStageInfo.StageType == EStageCategoryInfo::E_MiniGame
@@ -309,8 +365,9 @@ void UStageManagerComponent::StartStage()
 
 void UStageManagerComponent::FinishStage(bool bStageClear)
 {
-	if (CurrentStageInfo.bIsClear) return;
+	if (CurrentStageInfo.bIsFinished) return;
 	CurrentStageInfo.bIsClear = bStageClear;
+	CurrentStageInfo.bIsFinished = true;
 
 	//Clear all remaining actors
 	ClearPreviousActors();
@@ -320,24 +377,36 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	TimeAttackTimerHandle.Invalidate();
 
 	//if this is not end stage, then spawn the portal
-	if (!CurrentStageInfo.bIsGameOver && bStageClear
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss)
+	if (!CurrentStageInfo.bIsGameOver && CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss)
 	{
 		SpawnPortal();
 	}
-	else if (CurrentStageInfo.StageType != EStageCategoryInfo::E_None
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Craft
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_MiniGame
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Gatcha)
+
+	if (bStageClear &&
+		(CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteCombat))
 	{
 		//Stage Clear UI Update using delegate
+		OnStageCleared.Broadcast();
 	}
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
 		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 	{
-		//Time Out using delegate
-	}
+		if (bStageClear)
+		{
+			//Stage Clear UI Update using delegate
+			OnStageCleared.Broadcast();
+		}
+		else
+		{
+			//Time Out using delegate
+			OnTimeIsOver.Broadcast();	
 
+		}
+		//TimeAttack UI Event
+		OnTimeAttackStageEnd.Broadcast();
+	}
+	
 	//StageFinished Delegate
 	OnStageFinished.Broadcast(CurrentStageInfo);
 }

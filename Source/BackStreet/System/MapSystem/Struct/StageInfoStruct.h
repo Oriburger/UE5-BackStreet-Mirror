@@ -45,8 +45,9 @@ struct FEnemyGroupInfo
 	GENERATED_BODY()
 
 public:
+	//DO NOT ASSIGN THE BOSS ID 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		TMap<int32, int32> EnemySet; // EnemyID,½ºÆù ¼ö
+		TMap<int32, int32> EnemySet; // EnemyID, spawn count
 };
 
 USTRUCT(BlueprintType)
@@ -95,23 +96,39 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TArray<FVector> EnemySpawnLocationList;
 
+	//Boss Stage only
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		FVector BossSpawnLocation;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		FRotator BossSpawnRotation;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FVector PlayerStartLocation;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		FRotator PlayerStartRotation;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TArray<FVector> PortalLocationList;
 
 	//Timed-stage only use this value!
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float TimeLimitValue = 0.0f;
 
-	UPROPERTY()
-		bool bIsClear = false;
-
-	UPROPERTY()
+	//Is stage visited?
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bIsVisited = false;
 
-	UPROPERTY()
+	//Is stage finished?
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		bool bIsFinished = false;
+
+	//Is stage cleared
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		bool bIsClear = false;
+
+	//Is game over
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bIsGameOver = false;
 };
 
@@ -161,4 +178,8 @@ public:
 	//Outer area level asset
 	UPROPERTY(EditDefaultsOnly)
 		TArray<TSoftObjectPtr<UWorld>> OuterStageLevelList;
+
+	//Boss character class per chapter
+	UPROPERTY(EditDefaultsOnly)
+		TSubclassOf<class AEnemyCharacterBase> BossCharacterClass;
 };

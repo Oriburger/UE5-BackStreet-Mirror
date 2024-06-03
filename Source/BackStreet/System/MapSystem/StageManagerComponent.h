@@ -7,6 +7,14 @@
 #include "StageManagerComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateStageEnd, FStageInfo, StageInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateStageClear);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadBegin);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadEnd);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeAttackBegin);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeAttackEnd);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeOver);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API UStageManagerComponent : public UActorComponent
@@ -15,8 +23,26 @@ class BACKSTREET_API UStageManagerComponent : public UActorComponent
 
 //======== Delegate ============
 public:
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+	UPROPERTY()
 		FDelegateStageEnd OnStageFinished;	
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateStageClear OnStageCleared; 
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTimeOver OnTimeIsOver;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateLoadBegin OnStageLoadBegin;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateLoadEnd OnStageLoadEnd;
+	
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTimeAttackBegin OnTimeAttackStageBegin;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTimeAttackEnd OnTimeAttackStageEnd;
 
 //======== Basic ===============
 public:	
@@ -27,11 +53,22 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+public:
+	UFUNCTION()
+		void Initialize(FChapterInfo NewChapterInfo);
+
 //======== Resource Function ===============
 public:
 	//Initialize stage
 	UFUNCTION()
 		void InitStage(FStageInfo NewStageInfo);
+
+	UFUNCTION()
+		void ClearResource();
+
+	//Time attack stage only
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetStageRemainingTime();
 
 protected:
 	//Add loading screen
@@ -61,7 +98,7 @@ protected:
 	//Spawn enemy character
 	UFUNCTION()
 		void SpawnEnemy();
-
+	
 	//Spawn craftbox
 	UFUNCTION()
 		void SpawnCraftbox(); 
@@ -87,6 +124,7 @@ private:
 
 	//Current stage's information 
 	//Level instance ref and gameplay info struct
+	FChapterInfo CurrentChapterInfo;
 	FStageInfo CurrentStageInfo;
 	ULevelStreamingDynamic* OuterAreaRef;
 	ULevelStreamingDynamic* MainAreaRef;
@@ -149,6 +187,7 @@ private:
 
 	//BP Class, initialize with ConstructorFinder
 	//Gate class to spawn on world
+	//Boss character's class use the data table value
 	TSubclassOf<class AGateBase> GateClass;
 	TSubclassOf<class AEnemyCharacterBase> EnemyCharacterClass;
 };

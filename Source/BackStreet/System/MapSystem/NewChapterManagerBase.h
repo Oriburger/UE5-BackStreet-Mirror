@@ -7,11 +7,17 @@
 #include "GameFramework/Actor.h"
 #include "NewChapterManagerBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateChapterClear);
 
 UCLASS()
 class BACKSTREET_API ANewChapterManagerBase : public AActor
 {
 	GENERATED_BODY()
+
+//======== Delegate ============
+public:
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateChapterClear OnChapterCleared;
 
 //======== Basic ===============
 public:
@@ -77,15 +83,27 @@ private:
 	TArray<FStageInfo> StageInfoList;
 
 
+
 //========= Widget =====================
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		UUserWidget* GetCombatWidgetRef() { return CombatWidgetRef; }
+
 protected:
 	UFUNCTION()
 		void CreateGameResultWidget(bool bChapterClear);
+
+	//Add Combat UI
+	UFUNCTION()
+		void AddCombatWidget();
 
 private:
 	//Result widget
 	TSubclassOf<UUserWidget> ChapterClearWidgetClass;
 	TSubclassOf<UUserWidget> GameOverWidgetClass;
-
 	UUserWidget* GameResultWidgetRef;
+
+	//For combat hud widget
+	TSubclassOf<UUserWidget> CombatWidgetClass;
+	UUserWidget* CombatWidgetRef;
 };
