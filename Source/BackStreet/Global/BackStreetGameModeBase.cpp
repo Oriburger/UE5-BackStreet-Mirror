@@ -40,7 +40,8 @@ void ABackStreetGameModeBase::InitialzeGame()
 	SkillManagerBase = NewObject<USkillManagerBase>(this, USkillManagerBase::StaticClass(), FName("SkillManagerBase"));
 	SkillManagerBase->InitSkillManagerBase(this);
 
-	//------ Initialize Global Crafting Manager --------
+
+	//----- Crafting Manager √ ±‚»≠ -------
 	CraftingManagerBase = NewObject<UCraftingManagerBase>(this, UCraftingManagerBase::StaticClass(), FName("CraftingManagerBase"));
 	CraftingManagerBase->InitCraftingManager(this);
 }

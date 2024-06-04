@@ -1,0 +1,34 @@
+[
+	{
+		"Name": "0",
+		"SkillID": 0,
+		"SkillBaseClassRef": "None",
+		"SkillType": "E_None",
+		"bSkillBlocked": true,
+		"SkillLevel": 0
+	},
+	{
+		"Name": "5000",
+		"SkillID": 5000,
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/MainCharacter/BPS_Teleport_Player.BPS_Teleport_Player_C'",
+		"SkillType": "E_Weapon0",
+		"bSkillBlocked": false,
+		"SkillLevel": 0
+	},
+	{
+		"Name": "5001",
+		"SkillID": 5001,
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/MainCharacter/BPS_WeaknessAnalysis.BPS_WeaknessAnalysis_C'",
+		"SkillType": "E_Weapon1",
+		"bSkillBlocked": false,
+		"SkillLevel": 0
+	},
+	{
+		"Name": "5002",
+		"SkillID": 5002,
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/MainCharacter/BPS_StraightCutting.BPS_StraightCutting_C'",
+		"SkillType": "E_Weapon2",
+		"bSkillBlocked": false,
+		"SkillLevel": 0
+	}
+]

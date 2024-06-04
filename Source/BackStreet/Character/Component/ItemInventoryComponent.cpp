@@ -75,4 +75,23 @@ void UItemInventoryComponent::GetItemData(int32 ItemID, FItemDataStruct& ItemDat
 	}
 }
 
+TArray<uint8> UItemInventoryComponent::GetCraftingItemAmount()
+{
+	TArray<uint8> currItemAmountList;
+	//하드코딩 BIC이후 변경예정
+	for (int32 itemID = 1; itemID <= 3; itemID++)
+	{
+		if (ItemMap.Contains(itemID))
+		{
+			uint8 itemAmount = ItemMap[itemID].ItemAmount;
+			currItemAmountList.Add(itemAmount);
+		}
+		else
+		{
+			currItemAmountList.Add(0);
+		}
+	}
+	return currItemAmountList;
+}
+
 

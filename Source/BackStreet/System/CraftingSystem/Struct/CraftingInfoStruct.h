@@ -10,17 +10,28 @@ struct FCraftingMaterialStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		TArray<uint8> RequiredMaterialByLevel;
 };
 
 USTRUCT(BlueprintType)
-struct FCraftingRecipeStruct : public FTableRowBase
+struct FVariableByLevelStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TArray<float> VariableByLevel;
+};
 
+
+USTRUCT(BlueprintType)
+struct FSkillUpgradeInfoStruct : public FTableRowBase
+{
 public:
+	GENERATED_USTRUCT_BODY()
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		int32 SkillID;
 
@@ -33,4 +44,10 @@ public:
 	//<MaterialID, Need Num of Material>
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		TMap<int32, FCraftingMaterialStruct> RequiredMaterialMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TArray<float> CoolTimeByLevel;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<FName, FVariableByLevelStruct> SkillVariableMap;
 };

@@ -5,7 +5,10 @@
 #include "../../Global/BackStreet.h"
 #include "../../Item/Weapon/WeaponInventoryBase.h"
 #include "CraftingManagerBase.generated.h"
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateGetSkill, FSkillInfoStruct, SkillInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateFailedToGetCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateFailedToGetWeapon);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateFailedToGetItemInventory);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateSkillLevelUpdated);
 
 UCLASS(BlueprintType)
 class BACKSTREET_API UCraftingManagerBase : public UObject
@@ -20,14 +23,41 @@ public:
 		void InitCraftingManager(ABackStreetGameModeBase* NewGamemodeRef);
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateGetSkill SkillUpdateDelegate;
+		FDelegateFailedToGetCharacter OnFailedToGetCharacter;
 
-// ------ Default Logic -----------------------------
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateFailedToGetWeapon OnFailedToGetWeapon;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateFailedToGetItemInventory OnFailedToGetItemInventory;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateSkillLevelUpdated OnSkillLevelUpdated;
+
+
+// ------ Default SkillUpgrade Logic -----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
-		void AddSkill(int32 SkillID);
+		bool AddSkill(int32 SkillID);
 
+	//Return true when successfully upgraded
+	UFUNCTION(BlueprintCallable)		
+		bool UpgradeSkill(ESkillType SkillType, uint8 Adder);
 
+	UFUNCTION()
+		bool IsSkillUpgradeAvailable(ESkillType SkillType, uint8 Adder);
+
+	UFUNCTION()
+		bool IsValidLevelForSkillUpgrade(FSkillInfoStruct SkillInfo, uint8 Adder);
+
+	UFUNCTION()
+		uint8  GetSkillMaxLevel(int32 SkillID);
+
+	UFUNCTION()
+		bool IsOwnMaterialEnoughForSkillUpgrade(FSkillInfoStruct SkillInfo, uint8 Adder);
+
+	UFUNCTION()
+		TArray<uint8> GetRequiredMaterialAmount(FSkillInfoStruct SkillInfo, uint8 Adder);
 
 //-------- ETC. (Ref)-------------------------------
 public:
@@ -35,17 +65,14 @@ public:
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
 	UPROPERTY()
+		TWeakObjectPtr<class USkillManagerBase> SkillManagerRef;
+
+	UPROPERTY()
 		TWeakObjectPtr<class AMainCharacterBase> MainCharacterRef;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		UDataTable* CraftingRecipeTable;
+		UDataTable* SkillUpgradeInfoTable;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		UDataTable* CraftingSkillTable;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		UDataTable* CraftingItemData;
-		
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TArray<FOwnerSkillInfoStruct> DisplaySkillInfoList; 
+		UDataTable* PlayerActiveSkillTable;
 };
