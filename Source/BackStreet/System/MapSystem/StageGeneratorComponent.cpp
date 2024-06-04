@@ -28,6 +28,8 @@ void UStageGeneratorComponent::InitGenerator(FChapterInfo NewChapterInfo)
 
 TArray<FStageInfo> UStageGeneratorComponent::Generate()
 {
+	if (CurrentChapterInfo.ChapterID == 0) return TArray<FStageInfo>();
+
 	//####### 선형 임시코드 ####### 
 	TArray<FStageInfo> result;
 	
