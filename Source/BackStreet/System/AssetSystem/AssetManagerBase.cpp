@@ -102,7 +102,7 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetSkillSoundMapWithID(int32 TargetID)
 	return soundAssetInfo;
 }
 
-void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName)
+void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName, float VolumeMultiplierOverride, float PitchMultiplier, float StartTime)
 {
 	FSoundAssetInfoStruct* soundAssetInfo = GetSoundAssetInfo(SoundType, TargetID);
 	if (soundAssetInfo == nullptr) return;
@@ -120,18 +120,19 @@ void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, ESoundAssetType Sou
 	{
 		if (!soundList.IsValidIndex(idx) || !volumeList.IsValidIndex(idx)) return;
 
+		const float targetVolume = VolumeMultiplierOverride != 0.0f ? VolumeMultiplierOverride : volumeList[idx];
 		if (TargetActor == nullptr)
 		{
-			UGameplayStatics::PlaySound2D(GetWorld(), soundList[idx], volumeList[idx]);
+			UGameplayStatics::PlaySound2D(GetWorld(), soundList[idx], targetVolume, PitchMultiplier, StartTime);
 		}
 		else
 		{
-			UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[idx], TargetActor->GetActorLocation(), volumeList[idx]);
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[idx], TargetActor->GetActorLocation(), targetVolume, PitchMultiplier, StartTime);
 		}
 	}
 }
 
-void UAssetManagerBase::PlayRandomSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName)
+void UAssetManagerBase::PlayRandomSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName, float VolumeMultiplierOverride, float PitchMultiplier, float StartTime)
 {
 	FSoundAssetInfoStruct* soundAssetInfo = GetSoundAssetInfo(SoundType, TargetID);
 	if (!soundAssetInfo->SoundMap.Contains(SoundName)) return;
@@ -143,13 +144,15 @@ void UAssetManagerBase::PlayRandomSound(AActor* TargetActor, ESoundAssetType Sou
 	int8 randIdx;
 	randIdx = UKismetMathLibrary::RandomIntegerInRange(0, soundList.Num()-1);
 
+	const float targetVolume = VolumeMultiplierOverride != 0.0f ? VolumeMultiplierOverride : volumeList[randIdx];
+
 	if (TargetActor == nullptr)
 	{
-		UGameplayStatics::PlaySound2D(GetWorld(), soundList[randIdx], volumeList[randIdx]);
+		UGameplayStatics::PlaySound2D(GetWorld(), soundList[randIdx], targetVolume, PitchMultiplier, StartTime);
 	}
 	else
 	{
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[randIdx], TargetActor->GetActorLocation(), volumeList[randIdx]);
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[randIdx], TargetActor->GetActorLocation(), targetVolume, PitchMultiplier, StartTime);
 	}
 }
 
