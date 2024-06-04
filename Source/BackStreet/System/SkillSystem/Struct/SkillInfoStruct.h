@@ -49,20 +49,10 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FSkillLevelVariablelStruct : public FTableRowBase
-{
-public:
-	GENERATED_USTRUCT_BODY()
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TArray<float> SkillLevelVariable;
-};
-
-USTRUCT(BlueprintType)
 struct FSkillLevelStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
-	//Whether skill uses skill gauge
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		bool bIsLevelValid = false;
 
@@ -71,10 +61,11 @@ public:
 
 	//Cool Time List By Skill Level
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TArray<float> CoolTimeList;
+		float CoolTime;
 
+	//Skill Variable 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<FName, FSkillLevelVariablelStruct> SkillLevelVariableMap;
+		TMap<FName, float> SkillVariableMap;
 };
 
 USTRUCT(BlueprintType)
@@ -106,19 +97,19 @@ struct FOwnerSkillInfoStruct : public FTableRowBase
 public:
 	GENERATED_USTRUCT_BODY()
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		int32 SkillID;
+		int32 SkillID = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		TSubclassOf<class ASkillBase> SkillBaseClassRef;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		ESkillType SkillType;
+		ESkillType SkillType = ESkillType::E_None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		bool bSkillBlocked = true;
 
 	UPROPERTY(BlueprintReadWrite)
-		uint8 SkillLevel;
+		uint8 SkillLevel = 0;
 };
 
 
@@ -138,7 +129,7 @@ public:
 		FName SkillDescription;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		ESkillType SkillType;
+		ESkillType SkillType = ESkillType::E_None;
 
 	UPROPERTY(BlueprintReadWrite)
 		bool bHidenInGame = true;
