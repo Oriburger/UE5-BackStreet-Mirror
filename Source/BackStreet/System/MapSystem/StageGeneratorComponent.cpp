@@ -34,6 +34,13 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 	FStageInfo temp;
 	temp.OuterLevelAsset = CurrentChapterInfo.OuterStageLevelList[0];
 
+	temp.StageType = EStageCategoryInfo::E_Boss;
+	temp.TilePos = { 6, 0 };
+	temp.MainLevelAsset = CurrentChapterInfo.BossStageLevelList[0];
+	temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(EStageCategoryInfo::E_Boss);
+	result.Add(temp);
+
+	/*
 	temp.StageType = EStageCategoryInfo::E_Entry;
 	temp.TilePos = { 0, 0 };
 	temp.MainLevelAsset = CurrentChapterInfo.EntryStageLevelList[0];
@@ -76,6 +83,7 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 	temp.MainLevelAsset = CurrentChapterInfo.BossStageLevelList[0];
 	temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(EStageCategoryInfo::E_Boss);
 	result.Add(temp);
+	*/
 
 	return result;
 }
