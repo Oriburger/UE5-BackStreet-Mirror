@@ -6,6 +6,10 @@
 		"MaxLevel": 0,
 		"RequiredMaterialMap":
 		{
+		},
+		"CoolTimeByLevel": [],
+		"SkillVariableMap":
+		{
 		}
 	},
 	{
@@ -26,6 +30,14 @@
 			"3":
 			{
 				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+			}
+		},
+		"CoolTimeByLevel": [],
+		"SkillVariableMap":
+		{
+			"CoolTime":
+			{
+				"VariableByLevel": [ 5, 4, 3, 2 ]
 			}
 		}
 	},
@@ -48,6 +60,14 @@
 			{
 				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
 			}
+		},
+		"CoolTimeByLevel": [],
+		"SkillVariableMap":
+		{
+			"CoolTime":
+			{
+				"VariableByLevel": [ 5, 4, 3, 2 ]
+			}
 		}
 	},
 	{
@@ -68,6 +88,14 @@
 			"3":
 			{
 				"RequiredMaterialByLevel": [ 0, 1, 2, 3 ]
+			}
+		},
+		"CoolTimeByLevel": [],
+		"SkillVariableMap":
+		{
+			"CoolTime":
+			{
+				"VariableByLevel": [ 6, 5, 4, 3 ]
 			}
 		}
 	}
