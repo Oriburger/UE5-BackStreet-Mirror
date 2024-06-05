@@ -537,7 +537,7 @@ void AMainCharacterBase::TryUpperAttack()
 		targetedEnemy = TargetingManagerComponent->GetTargetedCharacter();
 	}
 	
-	if (IsValid(targetedEnemy)
+	if (IsValid(targetedEnemy) && !targetedEnemy->ActorHasTag("Boss")
 		&& FVector::Distance(GetActorLocation(), targetedEnemy->GetActorLocation()) <= 300.0f)
 	{
 		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(targetedEnemy->GetActorLocation(), GetActorLocation());
