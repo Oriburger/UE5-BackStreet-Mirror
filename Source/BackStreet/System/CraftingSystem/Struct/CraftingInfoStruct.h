@@ -5,43 +5,49 @@
 #include "NiagaraSystem.h"
 #include "CraftingInfoStruct.generated.h"
 
-UENUM(BlueprintType)
-enum class ECraftingSlotVisual : uint8
-{
-	E_None				UMETA(DisplayName = "None"),
-	E_Craftable			UMETA(DisplayName = "Craftable"),
-	E_Uncraftable		UMETA(DisplayName = "Uncraftable"),
-	E_Unidentified		UMETA(DisplayName = "UnIdentified"),
-	E_Hide				UMETA(DisplayName = "Hide"),
-};
-
 USTRUCT(BlueprintType)
-struct FCraftingRecipeStruct : public FTableRowBase
+struct FCraftingMaterialStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
-
-public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		int32 ResultWeaponID;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TArray<int32> IngredientWeaponID;
-
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TArray<uint8> CraftableChapterList;
+		TArray<uint8> RequiredMaterialByLevel;
+};
+
+USTRUCT(BlueprintType)
+struct FVariableByLevelStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TArray<float> VariableByLevel;
+};
+
+
+USTRUCT(BlueprintType)
+struct FSkillUpgradeInfoStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		int32 SkillID;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		EWeaponType ResultWeaponType;
+		int32 WeaponID;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		uint8 CraftableLevel;
+		uint8 MaxLevel;
 
-	//Craftable State for widget visual
-	//UnIdentified and Uncraftable: E_UnIdentified
-	//Identified but Uncraftable : E_Uncraftable
-	//Identified and Craftable : E_Craftable
-	UPROPERTY(BlueprintReadWrite)
-		ECraftingSlotVisual CraftingSlotVisual = ECraftingSlotVisual::E_Craftable;
+	//<MaterialID, Need Num of Material>
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<int32, FCraftingMaterialStruct> RequiredMaterialMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TArray<float> CoolTimeByLevel;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<FName, FVariableByLevelStruct> SkillVariableMap;
 };

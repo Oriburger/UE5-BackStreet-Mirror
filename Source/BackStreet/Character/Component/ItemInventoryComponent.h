@@ -39,6 +39,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void GetItemData(int32 ItemID, FItemDataStruct& ItemData);
 
+	UFUNCTION(BlueprintCallable)
+		TArray<uint8> GetCraftingItemAmount();
 
 //====== Property ===========================
 private:

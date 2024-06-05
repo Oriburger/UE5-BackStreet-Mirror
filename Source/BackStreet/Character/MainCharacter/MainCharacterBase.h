@@ -14,6 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialAttack);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialMove);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialZoom);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialRoll);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTakeDamage);
 
 UCLASS()
 class BACKSTREET_API AMainCharacterBase : public ACharacterBase
@@ -32,6 +33,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTutorialRoll OnRoll;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTakeDamage OnTakeDamage;
 
 
 //-------- Global -----------------
@@ -253,12 +257,6 @@ public:
 public:
 	UFUNCTION(BlueprintCallable)
 		virtual bool PickWeapon(int32 NewWeaponID) override;
-
-//-------- Skill ---------------------
-public:
-	//Add Skill Gauge when attacking(E_Attack) Enemy.
-	UFUNCTION(BlueprintCallable)
-		void AddSkillGauge();
 
 // -------- VFX --------------------
 protected:
