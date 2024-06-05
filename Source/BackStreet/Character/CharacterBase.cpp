@@ -562,10 +562,10 @@ void ACharacterBase::TryDashAttack()
 	if (!IsValid(AssetHardPtrInfo.DashAttackAnimMontage)) return;
 	if (GetVelocity().Length() <= CharacterState.TotalMoveSpeed * 0.9f) return;
 
-	// set action state
+	// Set action state
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
 
-	// activate dash anim with interp to target location
+	// Activate dash anim with interp to target location
 	PlayAnimMontage(AssetHardPtrInfo.DashAttackAnimMontage);
 }
 
