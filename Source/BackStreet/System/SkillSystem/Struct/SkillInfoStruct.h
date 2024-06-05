@@ -60,11 +60,11 @@ public:
 		uint8 SkillLevel = 0;
 
 	//Cool Time List By Skill Level
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite)
 		float CoolTime;
 
 	//Skill Variable 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite)
 		TMap<FName, float> SkillVariableMap;
 };
 

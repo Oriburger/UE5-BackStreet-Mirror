@@ -57,7 +57,7 @@ ASkillBase* USkillManagerBase::UpdateSkillInfo(ASkillBase* SkillBase, FOwnerSkil
 	//SkillBase의 레벨 변화 여부 확인
 	if (SkillBase->SkillInfo.SkillLevelStruct.SkillLevel == OwnerSkillInfo->SkillLevel) return SkillBase;
 	SkillBase->SkillInfo.SkillLevelStruct.SkillLevel = OwnerSkillInfo->SkillLevel;
-	
+
 	//스킬 레벨 변경시 변화요소 확인을 위해 SkillUpgradeInfo 정보를 받아옴
 	checkf(IsValid(SkillUpgradeInfoTable), TEXT("Failed to get FSkillUpgradeInfoStruct"));
 	FString rowName = FString::FromInt(OwnerSkillInfo->SkillID);
@@ -68,9 +68,9 @@ ASkillBase* USkillManagerBase::UpdateSkillInfo(ASkillBase* SkillBase, FOwnerSkil
 	SkillBase->SkillInfo.SkillLevelStruct.CoolTime = skillUpgradeInfo->CoolTimeByLevel[currSkillLevel];
 
 	//스킬 강화 변수 변화 여부 확인 / 반영
-	TArray<FName> keyList; 
+	TArray<FName> keyList;
 	skillUpgradeInfo->SkillVariableMap.GetKeys(keyList);
-	if(keyList.Num() == 0) return SkillBase;
+	if (keyList.Num() == 0) return SkillBase;
 	for (FName key : keyList)
 	{
 		SkillBase->SkillInfo.SkillLevelStruct.SkillVariableMap.Add(key, skillUpgradeInfo->SkillVariableMap[key].VariableByLevel[currSkillLevel]);
@@ -80,13 +80,13 @@ ASkillBase* USkillManagerBase::UpdateSkillInfo(ASkillBase* SkillBase, FOwnerSkil
 
 ASkillBase* USkillManagerBase::GetSkillFromSkillBaseMap(ACharacterBase* NewCauser, FOwnerSkillInfoStruct* OwnerSkillInfo)
 {
-	if(SkillBaseMap.IsEmpty()) return nullptr;
+	if (SkillBaseMap.IsEmpty()) return nullptr;
 	FSkillBaseListContainer* targetListInfo = SkillBaseMap.Find(NewCauser);
 	if (targetListInfo == nullptr) return nullptr;
-	if(targetListInfo->SkillBaseList.IsEmpty()) return nullptr;
+	if (targetListInfo->SkillBaseList.IsEmpty()) return nullptr;
 	for (ASkillBase* skillBase : targetListInfo->SkillBaseList)
 	{
-		if(!(skillBase->SkillInfo.SkillID == OwnerSkillInfo->SkillID)) continue;
+		if (!(skillBase->SkillInfo.SkillID == OwnerSkillInfo->SkillID)) continue;
 		else return skillBase;
 	}
 	return nullptr;
@@ -129,7 +129,7 @@ void USkillManagerBase::RemoveSkillInSkillBaseMap(ACharacterBase* NewCauser)
 
 bool USkillManagerBase::IsSkillInfoStructValid(const FSkillInfoStruct& SkillInfo)
 {
-	if(SkillInfo.SkillID != 0) return true;
+	if (SkillInfo.SkillID != 0) return true;
 	return false;
 }
 
@@ -139,11 +139,46 @@ FSkillInfoStruct USkillManagerBase::GetCurrSkillInfoByType(ESkillType SkillType)
 	if (!IsValid(mainCharacterRef)) return FSkillInfoStruct();
 	TWeakObjectPtr<class AWeaponBase> weaponRef = mainCharacterRef->GetCurrentWeaponRef();
 	if (!IsValid(weaponRef.Get())) return FSkillInfoStruct();
-	if(!weaponRef->GetWeaponState().SkillInfoMap.Contains(SkillType)) return FSkillInfoStruct();
+	if (!weaponRef->GetWeaponState().SkillInfoMap.Contains(SkillType)) return FSkillInfoStruct();
 	FOwnerSkillInfoStruct* ownerSkillInfo = weaponRef->GetWeaponState().SkillInfoMap.Find(SkillType);
 	if (ownerSkillInfo->SkillID == 0) return FSkillInfoStruct();
 
-	return GetSkillInfoStructBySkillID(ownerSkillInfo->SkillID);			
+	//기존에 만들어져 있는 스킬 베이스 중 원하는 스킬이 있는지 확인
+	if (SkillBaseMap.Contains(mainCharacterRef))
+	{
+		for (ASkillBase* skillBase : SkillBaseMap.Find(mainCharacterRef)->SkillBaseList)
+		{
+			if (skillBase->SkillInfo.SkillID == ownerSkillInfo->SkillID)
+			{
+				return UpdateSkillInfo(skillBase, ownerSkillInfo)->SkillInfo;
+			}
+		}
+	}
+
+	//기존에 만들어져 있는 스킬 베이스가 없다면 구조체를 생성
+	//ID에 따른 스킬 기본 구조 불러오기
+
+	FString rowName = FString::FromInt(ownerSkillInfo->SkillID);
+
+	FSkillInfoStruct* skillInfo = SkillInfoTable->FindRow<FSkillInfoStruct>(FName(rowName), rowName);
+	FSkillUpgradeInfoStruct* skillUpgradeInfo = SkillUpgradeInfoTable->FindRow<FSkillUpgradeInfoStruct>(FName(rowName), rowName);
+	
+	//스킬 레벨 반영
+	skillInfo->SkillLevelStruct.SkillLevel = ownerSkillInfo->SkillLevel;
+
+	//스킬 쿨타임 변화 여부 확인 / 반영
+	skillInfo->SkillLevelStruct.CoolTime = skillUpgradeInfo->CoolTimeByLevel[ownerSkillInfo->SkillLevel];
+
+	//스킬 강화 변수 변화 여부 확인 / 반영
+	TArray<FName> keyList;
+	skillUpgradeInfo->SkillVariableMap.GetKeys(keyList);
+	if (keyList.Num() == 0) return *skillInfo;
+	for (FName key : keyList)
+	{
+		skillInfo->SkillLevelStruct.SkillVariableMap.Add(key, skillUpgradeInfo->SkillVariableMap[key].VariableByLevel[ownerSkillInfo->SkillLevel]);
+	}
+
+	return *skillInfo;			
 }
 
 int32 USkillManagerBase::GetCurrSkillIDByType(ESkillType SkillType)
