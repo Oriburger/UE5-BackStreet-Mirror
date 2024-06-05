@@ -60,11 +60,11 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class USkillManagerBase* GetGlobalSkillManagerBaseRef() { return SkillManagerBase; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class UCraftingManagerBase* GetCraftingManagerRef() { return CraftingManagerBase; }
+		class UCraftingManagerBase* GetGlobalCraftingManagerBaseRef() { return CraftingManagerBase; }
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void UpdateMiniMapUI();

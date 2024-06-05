@@ -562,10 +562,10 @@ void ACharacterBase::TryDashAttack()
 	if (!IsValid(AssetHardPtrInfo.DashAttackAnimMontage)) return;
 	if (GetVelocity().Length() <= CharacterState.TotalMoveSpeed * 0.9f) return;
 
-	// set action state
+	// Set action state
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
 
-	// activate dash anim with interp to target location
+	// Activate dash anim with interp to target location
 	PlayAnimMontage(AssetHardPtrInfo.DashAttackAnimMontage);
 }
 
@@ -593,7 +593,7 @@ void ACharacterBase::DashAttack()
 void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
-	
+
 	if (!IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to get SkillmanagerBase"));
@@ -601,15 +601,23 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 		return;
 	}
 
+	if (SkillType != ESkillType::E_Character)
+	{
+		if (GetCurrentWeaponRef()->WeaponID == 0)
+		{
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Does't have any weapon")), FColor::White);
+			return;
+		}
+	}
+
 	switch (SkillType)
 	{
-	case ESkillType::E_None:
-			return;
-		break;
+	case ESkillType::E_None: return;
 	case ESkillType::E_Character:
+	{
 		if (!AssetSoftPtrInfo.CharacterSkillInfoMap.Contains(SkillID))
 		{
-			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Character doesn't have skill")), FColor::White);
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Character does't have skill")), FColor::White);
 			return;
 		}
 		if (AssetSoftPtrInfo.CharacterSkillInfoMap.Find(SkillID)->bSkillBlocked)
@@ -624,13 +632,10 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 			return;
 		}
 		break;
+	}
 	case ESkillType::E_Weapon:
-		if (!IsValid(GetCurrentWeaponRef()))
-		{
-			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Does't have any weapon")), FColor::White);
-			return;
-		}
-		if(SkillID != GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.SkillID) return;
+	{
+		if (SkillID != GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.SkillID) return;
 
 		if (GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.bSkillBlocked)
 		{
@@ -645,6 +650,49 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 		}
 		break;
 	}
+	case ESkillType::E_Weapon0:
+	{
+		FOwnerSkillInfoStruct skillInfo = *GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Find(ESkillType::E_Weapon0);
+		if (CheckCanTrySkill(SkillID, &skillInfo))
+		{
+			CharacterState.bCanAttack = false;
+			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
+			break;
+		}
+	}
+	case ESkillType::E_Weapon1:
+	{
+		FOwnerSkillInfoStruct skillInfo = *GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Find(ESkillType::E_Weapon1);
+		if (CheckCanTrySkill(SkillID, &skillInfo))
+		{
+			CharacterState.bCanAttack = false;
+			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
+			break;
+		}
+	}
+	case ESkillType::E_Weapon2:
+	{
+		FOwnerSkillInfoStruct skillInfo = *GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Find(ESkillType::E_Weapon2);
+		if (CheckCanTrySkill(SkillID, &skillInfo))
+		{
+			CharacterState.bCanAttack = false;
+			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
+			break;
+		}
+	}
+	}
+}
+
+bool ACharacterBase::CheckCanTrySkill(int32 SkillID, FOwnerSkillInfoStruct* SkillInfo)
+{
+	if (SkillID != SkillInfo->SkillID) return false;
+
+	if (SkillInfo->bSkillBlocked)
+	{
+		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("This skill is blocked")), FColor::White);
+		return false;
+	}
+	return true;
 }
 
 void ACharacterBase::Attack()

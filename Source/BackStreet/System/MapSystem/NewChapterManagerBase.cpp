@@ -51,8 +51,13 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 	CurrentStageLocation = FVector2D(0.0f);
 	StageInfoList = StageGeneratorComponent->Generate();
 
-	//init stage and start game
-	StageManagerComponent->InitStage(StageInfoList[0]);
+	//init the first stage and start game
+	if (StageInfoList.IsValidIndex(0))
+	{
+		StageManagerComponent->InitStage(StageInfoList[0]);
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("LoL"));
 
 	//(Temporary code) set input mode game only and hide mouse cursor
 	APlayerController* playerControllerRef = UGameplayStatics::GetPlayerController(GetWorld(), 0);
@@ -61,6 +66,8 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 		FInputModeGameOnly gameOnlyData;
 		playerControllerRef->SetInputMode(gameOnlyData);
 		playerControllerRef->bShowMouseCursor = false;
+
+		UE_LOG(LogTemp, Warning, TEXT("LoL2"));
 
 		//Add combat widet to screen
 		AddCombatWidget();

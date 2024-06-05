@@ -220,10 +220,6 @@ public:
 		FStatInfoStruct DebuffDefense;
 
 //====== Player ====================================	
-	//Player Skill Gauge
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		float CharacterCurrSkillGauge;
-
 	//Air Atk Movement
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		bool bIsAirAttacking = false;

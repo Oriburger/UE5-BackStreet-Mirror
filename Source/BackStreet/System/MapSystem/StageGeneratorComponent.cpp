@@ -28,19 +28,24 @@ void UStageGeneratorComponent::InitGenerator(FChapterInfo NewChapterInfo)
 
 TArray<FStageInfo> UStageGeneratorComponent::Generate()
 {
+	if (CurrentChapterInfo.ChapterID == 0) return TArray<FStageInfo>();
+
 	//####### 선형 임시코드 ####### 
 	TArray<FStageInfo> result;
 	
 	FStageInfo temp;
 	temp.OuterLevelAsset = CurrentChapterInfo.OuterStageLevelList[0];
 
+
+	/* ------ Boss Debug
 	temp.StageType = EStageCategoryInfo::E_Boss;
 	temp.TilePos = { 6, 0 };
 	temp.MainLevelAsset = CurrentChapterInfo.BossStageLevelList[0];
 	temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(EStageCategoryInfo::E_Boss);
 	result.Add(temp);
+	*/
 
-	/*
+
 	temp.StageType = EStageCategoryInfo::E_Entry;
 	temp.TilePos = { 0, 0 };
 	temp.MainLevelAsset = CurrentChapterInfo.EntryStageLevelList[0];
@@ -83,7 +88,7 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 	temp.MainLevelAsset = CurrentChapterInfo.BossStageLevelList[0];
 	temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(EStageCategoryInfo::E_Boss);
 	result.Add(temp);
-	*/
+	
 
 	return result;
 }
