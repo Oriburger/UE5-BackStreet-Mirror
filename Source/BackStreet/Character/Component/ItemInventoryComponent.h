@@ -42,7 +42,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		TArray<uint8> GetCraftingItemAmount();
 
-
 //====== Property ===========================
 private:
 	UPROPERTY()

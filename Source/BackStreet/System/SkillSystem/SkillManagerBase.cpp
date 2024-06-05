@@ -133,42 +133,43 @@ bool USkillManagerBase::IsSkillInfoStructValid(const FSkillInfoStruct& SkillInfo
 	return false;
 }
 
-FSkillInfoStruct USkillManagerBase::GetCurrentSkillInfoByType(ESkillType SkillType)
+FSkillInfoStruct USkillManagerBase::GetCurrSkillInfoByType(ESkillType SkillType)
 {
 	AMainCharacterBase* mainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (!IsValid(mainCharacterRef)) return FSkillInfoStruct();
 	TWeakObjectPtr<class AWeaponBase> weaponRef = mainCharacterRef->GetCurrentWeaponRef();
 	if (!IsValid(weaponRef.Get())) return FSkillInfoStruct();
+	if(!weaponRef->GetWeaponState().SkillInfoMap.Contains(SkillType)) return FSkillInfoStruct();
 	FOwnerSkillInfoStruct* ownerSkillInfo = weaponRef->GetWeaponState().SkillInfoMap.Find(SkillType);
 	if (ownerSkillInfo->SkillID == 0) return FSkillInfoStruct();
 
 	return GetSkillInfoStructBySkillID(ownerSkillInfo->SkillID);			
 }
 
-int32 USkillManagerBase::GetSkillIDByType(ESkillType SkillType)
+int32 USkillManagerBase::GetCurrSkillIDByType(ESkillType SkillType)
 {
-	FSkillInfoStruct skillInfo = GetCurrentSkillInfoByType(SkillType);
+	FSkillInfoStruct skillInfo = GetCurrSkillInfoByType(SkillType);
 	if (!IsSkillInfoStructValid(skillInfo)) return 0;
 	return skillInfo.SkillID;
 }
 
-UTexture2D* USkillManagerBase::GetSkillImageByType(ESkillType SkillType)
+UTexture2D* USkillManagerBase::GetCurrSkillImageByType(ESkillType SkillType)
 {
-	FSkillInfoStruct skillInfo= GetCurrentSkillInfoByType(SkillType);
+	FSkillInfoStruct skillInfo= GetCurrSkillInfoByType(SkillType);
 	if(!IsSkillInfoStructValid(skillInfo)) return nullptr;
 	return skillInfo.SkillAssetStruct.IconImage;
 }
 
-uint8 USkillManagerBase::GetSkillLevelByType(ESkillType SkillType)
+uint8 USkillManagerBase::GetCurrSkillLevelByType(ESkillType SkillType)
 {
-	FSkillInfoStruct skillInfo = GetCurrentSkillInfoByType(SkillType);
+	FSkillInfoStruct skillInfo = GetCurrSkillInfoByType(SkillType);
 	if (!IsSkillInfoStructValid(skillInfo)) return 0;
 	return skillInfo.SkillLevelStruct.SkillLevel;
 }
 
-float USkillManagerBase::GetSkillCoolTimeByType(ESkillType SkillType)
+float USkillManagerBase::GetCurrSkillCoolTimeByType(ESkillType SkillType)
 {
-	FSkillInfoStruct skillInfo = GetCurrentSkillInfoByType(SkillType);
+	FSkillInfoStruct skillInfo = GetCurrSkillInfoByType(SkillType);
 	if (!IsSkillInfoStructValid(skillInfo)) return 0;
 	return skillInfo.SkillLevelStruct.CoolTime;
 }

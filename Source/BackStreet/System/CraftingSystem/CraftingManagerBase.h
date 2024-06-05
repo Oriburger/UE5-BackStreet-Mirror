@@ -38,26 +38,35 @@ public:
 // ------ Default SkillUpgrade Logic -----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
-		bool AddSkill(int32 SkillID);
+		bool AddSkill(int32 NewSkillID);
 
 	//Return true when successfully upgraded
 	UFUNCTION(BlueprintCallable)		
-		bool UpgradeSkill(ESkillType SkillType, uint8 Adder);
+		bool UpgradeSkill(int32 NewSkillID, uint8 TempSkillLevel);
 
-	UFUNCTION()
-		bool IsSkillUpgradeAvailable(ESkillType SkillType, uint8 Adder);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool IsSkillUpgradeAvailable(int32 NewSkillID, uint8 TempSkillLevel);
 
-	UFUNCTION()
-		bool IsValidLevelForSkillUpgrade(FSkillInfoStruct SkillInfo, uint8 Adder);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool IsValidLevelForSkillUpgrade(FSkillInfoStruct NewSkillInfo, uint8 TempSkillLevel);
 
-	UFUNCTION()
-		uint8  GetSkillMaxLevel(int32 SkillID);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		uint8  GetSkillMaxLevel(int32 NewSkillID);
 
-	UFUNCTION()
-		bool IsOwnMaterialEnoughForSkillUpgrade(FSkillInfoStruct SkillInfo, uint8 Adder);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool IsOwnMaterialEnoughForSkillUpgrade(FSkillInfoStruct NewSkillInfo, uint8 TempSkillLevel);
 
-	UFUNCTION()
-		TArray<uint8> GetRequiredMaterialAmount(FSkillInfoStruct SkillInfo, uint8 Adder);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<uint8> GetRequiredMaterialAmount(FSkillInfoStruct NewSkillInfo, uint8 TempSkillLevel);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		ESkillType GetSkillTypeByID(int32 NewSkillID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FName> GetSkillVariableKeyList(int32 NewSkillID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FVariableByLevelStruct> GetSkillVariableValueList(int32 NewSkillID);
 
 //-------- ETC. (Ref)-------------------------------
 public:

@@ -55,23 +55,23 @@ public:
 	
 	//Get current player's weapon SkillInfo by type
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillInfoStruct GetCurrentSkillInfoByType(ESkillType SkillType);
+		FSkillInfoStruct GetCurrSkillInfoByType(ESkillType SkillType);
 
 	//Get current player's weapon SkillID by type
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetSkillIDByType(ESkillType SkillType);
+		int32 GetCurrSkillIDByType(ESkillType SkillType);
 
 	//Get current player's weapon SkillImage by type
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		UTexture2D* GetSkillImageByType(ESkillType SkillType);
+		UTexture2D* GetCurrSkillImageByType(ESkillType SkillType);
 
 	//Get current player's weapon SkillLevel by type
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		uint8 GetSkillLevelByType(ESkillType SkillType);
+		uint8 GetCurrSkillLevelByType(ESkillType SkillType);
 
 	//Get current player's weapon SkillCoolTime by type
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-			float GetSkillCoolTimeByType(ESkillType SkillType);
+			float GetCurrSkillCoolTimeByType(ESkillType SkillType);
 
 
 //--------- DataTable, Data ----------------------
@@ -81,7 +81,7 @@ private:
 
 public:
 	//Get SkillInfo for Outer Class
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FSkillInfoStruct GetSkillInfoStructBySkillID(int32 SkillID);
 
 protected:
