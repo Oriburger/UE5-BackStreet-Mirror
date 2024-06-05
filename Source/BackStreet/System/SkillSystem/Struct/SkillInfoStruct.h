@@ -49,46 +49,23 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FSkillGradeStruct : public FTableRowBase
+struct FSkillLevelStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
-	//Whether skill uses skill gauge
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		bool bIsGradeValid = false;
-	
-	//Variables to be used as properties for skills according to Common grades.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<FName, float> CommonVariableMap;
+		bool bIsLevelValid = false;
 
-	//Variables to be used as properties for skills according to Rare grades.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<FName, float> RareVariableMap;
+	UPROPERTY(BlueprintReadWrite)
+		uint8 SkillLevel = 0;
 
-	//Variables to be used as properties for skills according to Legend grades.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<FName, float> LegendVariableMap;
+	//Cool Time List By Skill Level
+	UPROPERTY(BlueprintReadWrite)
+		float CoolTime;
 
-	//Variables to be used as properties for skills according to Mythic grades.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<FName, float> MythicVariableMap;
-
-	//common skill gauge requirement
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	float CommonGaugeReq = 1.0;
-
-	// rare skill gauge requirement
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	float RareGaugeReq = 2.0;
-
-	// Legend skill gauge requirement
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	float LegendGaugeReq = 3.0;
-
-	// mythic skill gauge requirement
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	float MythicGaugeReq = 4.0;
-		
+	//Skill Variable 
+	UPROPERTY(BlueprintReadWrite)
+		TMap<FName, float> SkillVariableMap;
 };
 
 USTRUCT(BlueprintType)
@@ -126,19 +103,13 @@ public:
 		TSubclassOf<class ASkillBase> SkillBaseClassRef;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		ESkillType SkillType;
+		ESkillType SkillType = ESkillType::E_None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		bool bSkillBlocked = true;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Image")
-		TWeakObjectPtr<class UTexture2D> IconImage;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		FName SkillName;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		FName SkillDescription;
+	UPROPERTY(BlueprintReadWrite)
+		uint8 SkillLevel = 0;
 };
 
 
@@ -157,6 +128,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FName SkillDescription;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		ESkillType SkillType = ESkillType::E_None;
+
 	UPROPERTY(BlueprintReadWrite)
 		bool bHidenInGame = true;
 
@@ -164,7 +138,7 @@ public:
 		bool bSkillLifeSpanWithCauser = true;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		FSkillGradeStruct SkillGradeStruct;
+		FSkillLevelStruct SkillLevelStruct;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FSkillAssetStruct SkillAssetStruct;

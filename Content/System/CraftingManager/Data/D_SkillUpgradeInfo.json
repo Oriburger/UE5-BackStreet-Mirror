@@ -1,0 +1,102 @@
+[
+	{
+		"Name": "0",
+		"SkillID": 0,
+		"WeaponID": 0,
+		"MaxLevel": 0,
+		"RequiredMaterialMap":
+		{
+		},
+		"CoolTimeByLevel": [],
+		"SkillVariableMap":
+		{
+		}
+	},
+	{
+		"Name": "5000",
+		"SkillID": 5000,
+		"WeaponID": 11100,
+		"MaxLevel": 3,
+		"RequiredMaterialMap":
+		{
+			"1":
+			{
+				"RequiredMaterialByLevel": [ 0, 1, 2, 3 ]
+			},
+			"2":
+			{
+				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+			},
+			"3":
+			{
+				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+			}
+		},
+		"CoolTimeByLevel": [ 5, 4, 3, 2 ],
+		"SkillVariableMap":
+		{
+			"CoolTime":
+			{
+				"VariableByLevel": [ 5, 4, 3, 2 ]
+			}
+		}
+	},
+	{
+		"Name": "5001",
+		"SkillID": 5001,
+		"WeaponID": 11100,
+		"MaxLevel": 3,
+		"RequiredMaterialMap":
+		{
+			"1":
+			{
+				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+			},
+			"2":
+			{
+				"RequiredMaterialByLevel": [ 0, 1, 2, 3 ]
+			},
+			"3":
+			{
+				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+			}
+		},
+		"CoolTimeByLevel": [ 5, 4, 3, 2 ],
+		"SkillVariableMap":
+		{
+			"CoolTime":
+			{
+				"VariableByLevel": [ 5, 4, 3, 2 ]
+			}
+		}
+	},
+	{
+		"Name": "5002",
+		"SkillID": 5002,
+		"WeaponID": 11100,
+		"MaxLevel": 3,
+		"RequiredMaterialMap":
+		{
+			"1":
+			{
+				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+			},
+			"2":
+			{
+				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+			},
+			"3":
+			{
+				"RequiredMaterialByLevel": [ 0, 1, 2, 3 ]
+			}
+		},
+		"CoolTimeByLevel": [ 6, 5, 4, 3 ],
+		"SkillVariableMap":
+		{
+			"CoolTime":
+			{
+				"VariableByLevel": [ 6, 5, 4, 3 ]
+			}
+		}
+	}
+]
