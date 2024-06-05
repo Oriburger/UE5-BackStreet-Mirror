@@ -32,7 +32,7 @@
 				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
 			}
 		},
-		"CoolTimeByLevel": [],
+		"CoolTimeByLevel": [ 5, 4, 3, 2 ],
 		"SkillVariableMap":
 		{
 			"CoolTime":
@@ -61,7 +61,7 @@
 				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
 			}
 		},
-		"CoolTimeByLevel": [],
+		"CoolTimeByLevel": [ 5, 4, 3, 2 ],
 		"SkillVariableMap":
 		{
 			"CoolTime":
@@ -90,7 +90,7 @@
 				"RequiredMaterialByLevel": [ 0, 1, 2, 3 ]
 			}
 		},
-		"CoolTimeByLevel": [],
+		"CoolTimeByLevel": [ 6, 5, 4, 3 ],
 		"SkillVariableMap":
 		{
 			"CoolTime":

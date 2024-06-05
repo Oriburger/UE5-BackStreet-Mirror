@@ -26,7 +26,7 @@
 	{
 		"Name": "5002",
 		"SkillID": 5002,
-		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/MainCharacter/BPS_StraightCutting.BPS_StraightCutting_C'",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/MainCharacter/BPS_ForwardSlash.BPS_ForwardSlash_C'",
 		"SkillType": "E_Weapon2",
 		"bSkillBlocked": false,
 		"SkillLevel": 0
