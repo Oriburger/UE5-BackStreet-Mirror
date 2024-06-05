@@ -11,16 +11,19 @@ UAssetManagerBase::UAssetManagerBase()
 	static ConstructorHelpers::FObjectFinder<UDataTable> weaponSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_WeaponSoundAsset.D_WeaponSoundAsset"));
 	static ConstructorHelpers::FObjectFinder<UDataTable> characterSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_CharacterSoundAsset.D_CharacterSoundAsset"));
 	static ConstructorHelpers::FObjectFinder<UDataTable> skillSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_SkillSoundAsset.D_SkillSoundAsset"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> propSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_PropSoundAsset.D_PropSoundAsset"));
 
 	checkf(systemSoundAssetTableFinder.Succeeded(), TEXT("SystemSoundAssetTable class discovery failed."));
 	checkf(weaponSoundAssetTableFinder.Succeeded(), TEXT("WeaponSoundAssetTable class discovery failed."));
 	checkf(characterSoundAssetTableFinder.Succeeded(), TEXT("CharacterSoundAssetTable class discovery failed."));
 	checkf(skillSoundAssetTableFinder.Succeeded(), TEXT("SkillSoundAssetTable class discovery failed."));
+	checkf(propSoundAssetTableFinder.Succeeded(), TEXT("propSoundAssetTable class discovery failed."));
 
 	SystemSoundAssetTable = systemSoundAssetTableFinder.Object;
 	WeaponSoundAssetTable = weaponSoundAssetTableFinder.Object;
 	CharacterSoundAssetTable = characterSoundAssetTableFinder.Object;
 	SkillSoundAssetTable = skillSoundAssetTableFinder.Object;
+	PropSoundAssetTable = propSoundAssetTableFinder.Object;
 }
 
 void UAssetManagerBase::InitAssetManager(ABackStreetGameModeBase* NewGamemodeRef)
@@ -49,6 +52,9 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetSoundAssetInfo(ESoundAssetType Soun
 		break;
 	case ESoundAssetType::E_Skill:
 		soundAssetInfo = GetSkillSoundMapWithID(TargetID);
+		break;
+	case ESoundAssetType::E_Prop:
+		soundAssetInfo = GetPropSoundMapWithID(TargetID);
 		break;
 	default:
 		soundAssetInfo = nullptr;
@@ -102,7 +108,16 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetSkillSoundMapWithID(int32 TargetID)
 	return soundAssetInfo;
 }
 
-void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName)
+FSoundAssetInfoStruct* UAssetManagerBase::GetPropSoundMapWithID(int32 TargetID)
+{
+	// Read from dataTable
+	FString rowName = FString::FromInt(TargetID);
+	FSoundAssetInfoStruct* soundAssetInfo = PropSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
+
+	return soundAssetInfo;
+}
+
+void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName, float VolumeMultiplierOverride, float PitchMultiplier, float StartTime)
 {
 	FSoundAssetInfoStruct* soundAssetInfo = GetSoundAssetInfo(SoundType, TargetID);
 	if (soundAssetInfo == nullptr) return;
@@ -120,18 +135,20 @@ void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, ESoundAssetType Sou
 	{
 		if (!soundList.IsValidIndex(idx) || !volumeList.IsValidIndex(idx)) return;
 
+		const float targetVolume = VolumeMultiplierOverride != 1.0f ? VolumeMultiplierOverride : volumeList[idx];
 		if (TargetActor == nullptr)
 		{
-			UGameplayStatics::PlaySound2D(GetWorld(), soundList[idx], volumeList[idx]);
+			UGameplayStatics::PlaySound2D(GetWorld(), soundList[idx], targetVolume, PitchMultiplier, StartTime);
 		}
 		else
 		{
-			UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[idx], TargetActor->GetActorLocation(), volumeList[idx]);
+			UE_LOG(LogTemp, Warning, TEXT("Sound #2.3 -- %.2lf"), targetVolume);
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[idx], TargetActor->GetActorLocation(), targetVolume, PitchMultiplier, StartTime);
 		}
 	}
 }
 
-void UAssetManagerBase::PlayRandomSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName)
+void UAssetManagerBase::PlayRandomSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName, float VolumeMultiplierOverride, float PitchMultiplier, float StartTime)
 {
 	FSoundAssetInfoStruct* soundAssetInfo = GetSoundAssetInfo(SoundType, TargetID);
 	if (!soundAssetInfo->SoundMap.Contains(SoundName)) return;
@@ -143,13 +160,15 @@ void UAssetManagerBase::PlayRandomSound(AActor* TargetActor, ESoundAssetType Sou
 	int8 randIdx;
 	randIdx = UKismetMathLibrary::RandomIntegerInRange(0, soundList.Num()-1);
 
+	const float targetVolume = VolumeMultiplierOverride != 0.0f ? VolumeMultiplierOverride : volumeList[randIdx];
+
 	if (TargetActor == nullptr)
 	{
-		UGameplayStatics::PlaySound2D(GetWorld(), soundList[randIdx], volumeList[randIdx]);
+		UGameplayStatics::PlaySound2D(GetWorld(), soundList[randIdx], targetVolume, PitchMultiplier, StartTime);
 	}
 	else
 	{
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[randIdx], TargetActor->GetActorLocation(), volumeList[randIdx]);
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[randIdx], TargetActor->GetActorLocation(), targetVolume, PitchMultiplier, StartTime);
 	}
 }
 

@@ -16,19 +16,17 @@
 ABackStreetGameModeBase::ABackStreetGameModeBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
+
+
+
 }
 
 void ABackStreetGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//----- Asset Manager 초기화 -------
-	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
-	AssetManagerBase->InitAssetManager(this);
-
 	//------ Ref 멤버  ---------------
 	PlayerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-
 }
 
 void ABackStreetGameModeBase::InitialzeGame()
@@ -44,6 +42,10 @@ void ABackStreetGameModeBase::InitialzeGame()
 	//----- Crafting Manager 초기화 -------
 	CraftingManagerBase = NewObject<UCraftingManagerBase>(this, UCraftingManagerBase::StaticClass(), FName("CraftingManagerBase"));
 	CraftingManagerBase->InitCraftingManager(this);
+
+	//----- Asset Manager 초기화 -------
+	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
+	AssetManagerBase->InitAssetManager(this);
 }
 
 void ABackStreetGameModeBase::StartGame(int32 ChapterID)

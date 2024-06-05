@@ -383,7 +383,8 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	}
 
 	if (bStageClear &&
-		(CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat
+		(CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat
 		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteCombat))
 	{
 		//Stage Clear UI Update using delegate

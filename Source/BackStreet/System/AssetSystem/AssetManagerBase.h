@@ -18,18 +18,17 @@ public:
 
 //----- Sound --------
 public:
-	
 	//GetSoundList From SoundAssetTable
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<USoundCue*> GetSoundList(ESoundAssetType SoundType, int32 TargetID, FName SoundName);
 	
 	//Play Single Sound
 	UFUNCTION(BlueprintCallable)
-		void PlaySingleSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName);
+		void PlaySingleSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName, float VolumeMultiplierOverride = 1.0f, float PitchMultiplier = 1.0f, float StartTime = 0.0f);
 
 	//Play Random Sound
 	UFUNCTION(BlueprintCallable)
-		void PlayRandomSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName);
+		void PlayRandomSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName, float VolumeMultiplierOverride = 0.0f, float PitchMultiplier = 1.0f, float StartTime = 0.0f);
 
 	//Which is for Spawning and Stopping the sound
 	UFUNCTION(BlueprintCallable)
@@ -46,6 +45,8 @@ private:
 
 	FSoundAssetInfoStruct* GetSkillSoundMapWithID(int32 TargetID);
 
+	FSoundAssetInfoStruct* GetPropSoundMapWithID(int32 TargetID);
+
 private:
 	UPROPERTY()
 		UDataTable* SystemSoundAssetTable;
@@ -58,6 +59,9 @@ private:
 
 	UPROPERTY()
 		UDataTable* CharacterSoundAssetTable;
+
+	UPROPERTY()
+		UDataTable* PropSoundAssetTable;
 
 	//-------- ETC. (Ref)-------------------------------
 private:

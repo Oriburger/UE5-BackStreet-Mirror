@@ -14,6 +14,7 @@ enum class ESoundAssetType : uint8
 	E_Weapon			UMETA(DisplayName = "Weapon"),
 	E_Character			UMETA(DisplayName = "Character"),
 	E_Skill				UMETA(DisplayName = "Skill"),
+	E_Prop				UMETA(DisplayName = "Prop"),
 };
 
 
