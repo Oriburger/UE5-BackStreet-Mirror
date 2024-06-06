@@ -36,6 +36,13 @@
 					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/SC_InGameBGM.SC_InGameBGM'"
 				],
 				"SoundVolumeList": [ 0.75 ]
+			},
+			"BossBGM":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/SC_BossStage.SC_BossStage'"
+				],
+				"SoundVolumeList": [ 1 ]
 			}
 		},
 		"SoundAssetDescription": "None"
