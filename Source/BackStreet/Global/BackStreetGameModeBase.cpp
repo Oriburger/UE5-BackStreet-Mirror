@@ -17,9 +17,7 @@ ABackStreetGameModeBase::ABackStreetGameModeBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	//----- Asset Manager 초기화 -------
-	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
-	AssetManagerBase->InitAssetManager(this);
+
 }
 
 void ABackStreetGameModeBase::BeginPlay()
@@ -28,6 +26,10 @@ void ABackStreetGameModeBase::BeginPlay()
 
 	//------ Ref 멤버  ---------------
 	PlayerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	//----- Asset Manager 초기화 -------
+	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
+	AssetManagerBase->InitAssetManager(this);
 }
 
 void ABackStreetGameModeBase::InitialzeGame()

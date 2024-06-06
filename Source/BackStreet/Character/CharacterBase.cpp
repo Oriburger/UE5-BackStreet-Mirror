@@ -164,11 +164,11 @@ void ACharacterBase::SetAirAttackLocation()
 
 	UKismetSystemLibrary::LineTraceSingleForObjects(GetWorld(), GetActorLocation()
 				, GetActorLocation() - FVector(0.0f, 0.0f, jumpHeight), objectTypes, false, { this }
-	, EDrawDebugTrace::ForDuration, hitResult, true);
+	, EDrawDebugTrace::None, hitResult, true);
 
 	//For Debug // Do not erase this comment
-	DrawDebugLine(GetWorld(), GetActorLocation(), GetActorLocation() - FVector(0.0f, 0.0f, jumpHeight), FColor::Yellow
-		, false, 800.0f, 1u, 5.0f);
+	//DrawDebugLine(GetWorld(), GetActorLocation(), GetActorLocation() - FVector(0.0f, 0.0f, jumpHeight), FColor::Yellow
+	//	, false, 800.0f, 1u, 5.0f);
 
 	if (hitResult.bBlockingHit)
 	{
@@ -191,7 +191,7 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 		//play smash sound
 		if (AssetManagerBaseRef.IsValid())
 		{
-			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "Smash");
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 1, "Chop");
 		}
 
 		if (CharacterState.CharacterActionState == ECharacterActionType::E_Die)
@@ -572,7 +572,7 @@ void ACharacterBase::TryDashAttack()
 void ACharacterBase::DashAttack()
 {
 	//init local parameter
-	const float dashLength = 100.0f;
+	const float dashLength = 200.0f;
 	FVector targetLocation = GetActorLocation() + GetVelocity().GetSafeNormal() * dashLength;
 
 	//check if there are any obstacle (wall, prop, enemy etc.)
@@ -586,7 +586,6 @@ void ACharacterBase::DashAttack()
 	GetWorld()->LineTraceSingleByChannel(hitResult, HitSceneComponent->GetComponentLocation(), targetLocation, ECollisionChannel::ECC_Camera);
 	targetLocation = hitResult.bBlockingHit ? hitResult.Location : targetLocation;
 
-	DrawDebugSphere(GetWorld(), targetLocation, 50.0f, 12, FColor::Yellow, true);
 	SetLocationWithInterp(targetLocation, 2.5f);
 }
 
