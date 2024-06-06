@@ -19,21 +19,21 @@
 			"MainMenuBGM_TypeA":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/System/BGM/SC_MainMenuTypeA_BGM.SC_MainMenuTypeA_BGM'"
+					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/SC_MainMenuTypeA_BGM.SC_MainMenuTypeA_BGM'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"MainMenuBGM_TypeB":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/System/BGM/SC_MainMenuTypeB_BGM.SC_MainMenuTypeB_BGM'"
+					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/SC_MainMenuTypeB_BGM.SC_MainMenuTypeB_BGM'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"InGameBGM":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/System/BGM/SC_InGameBGM.SC_InGameBGM'"
+					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/SC_InGameBGM.SC_InGameBGM'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			}
@@ -50,35 +50,35 @@
 			"Button":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/System/UI/SC_Button.SC_Button'"
+					"/Script/Engine.SoundCue'/Game/UI/Sound/SC_Button.SC_Button'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"Lose":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/System/UI/SC_Lose.SC_Lose'"
+					"/Script/Engine.SoundCue'/Game/UI/Sound/SC_Lose.SC_Lose'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"Win":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/System/UI/SC_Win.SC_Win'"
+					"/Script/Engine.SoundCue'/Game/UI/Sound/SC_Win.SC_Win'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"Clear":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/System/UI/SC_Clear.SC_Clear'"
+					"/Script/Engine.SoundCue'/Game/UI/Sound/SC_Clear.SC_Clear'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"Error":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/System/UI/SC_Error.SC_Error'"
+					"/Script/Engine.SoundCue'/Game/UI/Sound/SC_Error.SC_Error'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			}
@@ -95,14 +95,14 @@
 			"Gate":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/System/ETC/SC_Gate.SC_Gate'"
+					"/Script/Engine.SoundCue'/Game/System/Sound/ETC/SC_Gate.SC_Gate'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"SpawnAbilityBox":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/System/ETC/SC_SpawnAbilityBox.SC_SpawnAbilityBox'"
+					"/Script/Engine.SoundCue'/Game/System/Sound/ETC/SC_SpawnAbilityBox.SC_SpawnAbilityBox'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			}
