@@ -28,7 +28,7 @@ public:
 
 	//Play Random Sound
 	UFUNCTION(BlueprintCallable)
-		void PlayRandomSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName, float VolumeMultiplierOverride = 0.0f, float PitchMultiplier = 1.0f, float StartTime = 0.0f);
+		void PlayRandomSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName, float VolumeMultiplierOverride = 1.0f, float PitchMultiplier = 1.0f, float StartTime = 0.0f);
 
 	//Which is for Spawning and Stopping the sound
 	UFUNCTION(BlueprintCallable)

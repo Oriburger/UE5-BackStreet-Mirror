@@ -142,7 +142,6 @@ void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, ESoundAssetType Sou
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Sound #2.3 -- %.2lf"), targetVolume);
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), soundList[idx], TargetActor->GetActorLocation(), targetVolume, PitchMultiplier, StartTime);
 		}
 	}

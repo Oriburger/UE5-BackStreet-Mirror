@@ -9,58 +9,58 @@
 			"FootStep":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Footstep_A.SC_Footstep_A'",
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Footstep_B.SC_Footstep_B'"
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Footstep_A.SC_Footstep_A'",
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Footstep_B.SC_Footstep_B'"
 				],
 				"SoundVolumeList": [ 0.75, 0.75 ]
 			},
 			"Roll":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Roll.SC_Roll'"
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Roll.SC_Roll'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"Buff":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Debuff.SC_Debuff'"
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Debuff.SC_Debuff'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"DeBuff":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Debuff.SC_Debuff'"
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Debuff.SC_Debuff'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"OpenAbilityBox":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_OpenAbilityBox.SC_OpenAbilityBox'"
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_OpenAbilityBox.SC_OpenAbilityBox'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"OpenItemBox":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_OpenItemBox_1.SC_OpenItemBox_1'",
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_OpenItemBox_2.SC_OpenItemBox_2'"
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_OpenItemBox_1.SC_OpenItemBox_1'",
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_OpenItemBox_2.SC_OpenItemBox_2'"
 				],
 				"SoundVolumeList": [ 0.75, 0.75 ]
 			},
 			"EquipWeapon":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_EquipWeapon.SC_EquipWeapon'"
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_EquipWeapon.SC_EquipWeapon'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"Smash":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Smash.SC_Smash'"
+					"None"
 				],
 				"SoundVolumeList": [ 3.2000000476837158 ]
 			}
@@ -85,7 +85,7 @@
 			"Smash":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Smash.SC_Smash'"
+					"None"
 				],
 				"SoundVolumeList": [ 3.2000000476837158 ]
 			}
@@ -110,7 +110,7 @@
 			"Smash":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Smash.SC_Smash'"
+					"None"
 				],
 				"SoundVolumeList": [ 3.2000000476837158 ]
 			}
@@ -135,7 +135,7 @@
 			"Smash":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Smash.SC_Smash'"
+					"None"
 				],
 				"SoundVolumeList": [ 3.2000000476837158 ]
 			}
@@ -160,7 +160,7 @@
 			"Smash":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Smash.SC_Smash'"
+					"None"
 				],
 				"SoundVolumeList": [ 3.2000000476837158 ]
 			}
@@ -185,7 +185,7 @@
 			"Smash":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Smash.SC_Smash'"
+					"None"
 				],
 				"SoundVolumeList": [ 3.2000000476837158 ]
 			}
@@ -210,7 +210,7 @@
 			"Smash":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Art/Sound/Character/MainCharacter/SC_Smash.SC_Smash'"
+					"None"
 				],
 				"SoundVolumeList": [ 3.2000000476837158 ]
 			}
@@ -231,6 +231,23 @@
 					"None"
 				],
 				"SoundVolumeList": [ 0.75, 0.75 ]
+			}
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "1",
+		"SoundType": "E_Character",
+		"TargetID": 1,
+		"SoundTarget": "MainCharacter",
+		"SoundMap":
+		{
+			"Chop":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Chop.SC_Chop'"
+				],
+				"SoundVolumeList": [ 1 ]
 			}
 		},
 		"SoundAssetDescription": "None"
