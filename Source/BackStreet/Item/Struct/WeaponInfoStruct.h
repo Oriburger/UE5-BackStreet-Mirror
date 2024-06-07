@@ -134,9 +134,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		float WeaponKnockBackStrength = 500.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		float SkillGaugeAug = 0.1;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FDebuffInfoStruct DebuffInfo;
 
@@ -199,19 +196,10 @@ public:
 
 //-----Weapon Skill------
 	//WeaponSkill Info
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		FOwnerSkillInfoStruct ActiveWeaponSkillInfo0;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		TMap<ESkillType, FOwnerSkillInfoStruct> SkillInfoMap;
 
-	//WeaponSkill Info
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		FOwnerSkillInfoStruct ActiveWeaponSkillInfo1;
-
-	//WeaponSkill Info
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		FOwnerSkillInfoStruct ActiveWeaponSkillInfo2;
-
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FRangedWeaponStateStruct RangedWeaponState;
 };
 

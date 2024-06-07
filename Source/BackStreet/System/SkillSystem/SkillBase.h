@@ -42,14 +42,6 @@ public:
 	UFUNCTION()
 		void DestroySkill();
 
-	//Check skillgauge when skill grade is avilable
-	UFUNCTION()
-		bool CheckSkillGauge();
-
-	//Use skillgauge when skill grade is avilable
-	UFUNCTION()
-		void UseSkillGauge();
-
 //--------- DataTable, Asset ----------------------
 protected:
 	UFUNCTION(BlueprintCallable)
@@ -65,14 +57,6 @@ public:
 	//Skill Info
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		FSkillInfoStruct SkillInfo;
-	
-	//MainCharacter's available Skill Grade
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		ESkillGrade SkillGrade;
-
-	//Skill grade VariableMap when current SkillGrade
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		TMap<FName, float> VariableMap;
 //-------- ETC. (Ref)-------------------------------
 protected:
 	//GameMode Soft Ref

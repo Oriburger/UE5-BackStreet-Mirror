@@ -5,7 +5,10 @@
 #include "../../Global/BackStreet.h"
 #include "../../Item/Weapon/WeaponInventoryBase.h"
 #include "CraftingManagerBase.generated.h"
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateGetSkill, FOwnerSkillInfoStruct, SkillInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateFailedToGetCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateFailedToGetWeapon);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateFailedToGetItemInventory);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateSkillLevelUpdated);
 
 UCLASS(BlueprintType)
 class BACKSTREET_API UCraftingManagerBase : public UObject
@@ -19,46 +22,66 @@ public:
 	UFUNCTION()
 		void InitCraftingManager(ABackStreetGameModeBase* NewGamemodeRef);
 
-	UFUNCTION(BlueprintCallable)
-		EChapterLevel GetCurrentChapterLevel();
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateFailedToGetCharacter OnFailedToGetCharacter;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateGetSkill SkillUpdateDelegate;
+		FDelegateFailedToGetWeapon OnFailedToGetWeapon;
 
-// ------ Default Logic -----------------------------
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateFailedToGetItemInventory OnFailedToGetItemInventory;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateSkillLevelUpdated OnSkillLevelUpdated;
+
+
+// ------ Default SkillUpgrade Logic -----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
-		void UpdateCurrentWeaponInventoryRef();
+		bool AddSkill(int32 NewSkillID);
 
-	UFUNCTION(BlueprintCallable)
-		TArray<FCraftingRecipeStruct> MakeDisplayingRecipeList(EWeaponType SelectedType);
+	//Return true when successfully upgraded
+	UFUNCTION(BlueprintCallable)		
+		bool UpgradeSkill(int32 NewSkillID, uint8 TempSkillLevel);
 
-	UFUNCTION(BlueprintCallable)
-		void AddSkill(int32 SkillID);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool IsSkillUpgradeAvailable(int32 NewSkillID, uint8 TempSkillLevel);
 
-private:
-	UFUNCTION(BlueprintCallable)
-		ECraftingSlotVisual SetRecipeVisual(FCraftingRecipeStruct Recipe);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool IsValidLevelForSkillUpgrade(FSkillInfoStruct NewSkillInfo, uint8 TempSkillLevel);
 
-	UFUNCTION(BlueprintCallable)
-		bool IsIngredientWeaponValid(int32 IngredientWeaponID);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		uint8  GetSkillMaxLevel(int32 NewSkillID);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool IsOwnMaterialEnoughForSkillUpgrade(FSkillInfoStruct NewSkillInfo, uint8 TempSkillLevel);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<uint8> GetRequiredMaterialAmount(FSkillInfoStruct NewSkillInfo, uint8 TempSkillLevel);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		ESkillType GetSkillTypeByID(int32 NewSkillID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FName> GetSkillVariableKeyList(int32 NewSkillID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FVariableByLevelStruct> GetSkillVariableValueList(int32 NewSkillID);
 
 //-------- ETC. (Ref)-------------------------------
 public:
 	UPROPERTY()
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		UDataTable* CraftingRecipeTable;
+	UPROPERTY()
+		TWeakObjectPtr<class USkillManagerBase> SkillManagerRef;
+
+	UPROPERTY()
+		TWeakObjectPtr<class AMainCharacterBase> MainCharacterRef;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		UDataTable* CraftingSkillTable;
+		UDataTable* SkillUpgradeInfoTable;
 
-	UPROPERTY(BlueprintReadWrite)
-		AWeaponInventoryBase* WeaponInventoryRef;
-
-	UPROPERTY(BlueprintReadWrite)
-		AWeaponInventoryBase* SubWeaponInventoryRef;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		UDataTable* PlayerActiveSkillTable;
 };
