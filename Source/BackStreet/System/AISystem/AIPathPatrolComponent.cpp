@@ -23,13 +23,13 @@ TPair<APathPatrolPoint*, int32> UAIPathPatrolComponent::GetNearestPointInfo()
 	//find neareat point in the list
 	for (idx = 0; idx < PatrolPathInfoList.Num(); idx++)
 	{
-		if (IsValid(PatrolPathInfoList[idx].Point))
+		if (PatrolPathInfoList[idx].Point.IsValid())
 		{
 			float targetDistance = (PatrolPathInfoList[idx].Point)->GetDistanceTo(GetOwner());
 			if (targetDistance < minDistance)
 			{
 				minDistance = targetDistance;
-				result = PatrolPathInfoList[idx].Point;
+				result = PatrolPathInfoList[idx].Point.Get();
 			}
 		}
 	}
@@ -42,7 +42,7 @@ int32 UAIPathPatrolComponent::FindTargetPointIdx(APathPatrolPoint* Target)
 	
 	//Try to find 'target' in info list
 	for (int32 idx = 0; idx < PatrolPathInfoList.Num(); idx++)
-		if (PatrolPathInfoList[idx].Point == Target)
+		if (PatrolPathInfoList[idx].Point.Get() == Target)
 			return idx;
 	//Failed to find 
 	return -1;

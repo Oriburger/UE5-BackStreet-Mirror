@@ -17,17 +17,17 @@ UStageManagerComponent::UStageManagerComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 
 	// Init blueprint class
-	static ConstructorHelpers::FClassFinder<AGateBase> gateInventoryClassFinder(TEXT("/Game/System/StageManager/Blueprint/BP_Gate"));
-	checkf(gateInventoryClassFinder.Succeeded(), TEXT("UStageManagerComponent::Gate 클래스 탐색에 실패했습니다."));
-	GateClass = gateInventoryClassFinder.Class;
+	//static ConstructorHelpers::FClassFinder<AGateBase> gateInventoryClassFinder(TEXT("/Game/System/StageManager/Blueprint/BP_Gate"));
+	//checkf(gateInventoryClassFinder.Succeeded(), TEXT("UStageManagerComponent::Gate 클래스 탐색에 실패했습니다."));
+	//GateClass = gateInventoryClassFinder.Class;
 
-	static ConstructorHelpers::FClassFinder<AEnemyCharacterBase> enemyCharacterClassFinder(TEXT("/Game/Character/EnemyCharacter/Blueprint/BP_EnemyCharacter"));
-	checkf(enemyCharacterClassFinder.Succeeded(), TEXT("UStageManagerComponent::EnemyCharacter 클래스 탐색에 실패했습니다."));
-	EnemyCharacterClass = enemyCharacterClassFinder.Class;
+	//static ConstructorHelpers::FClassFinder<AEnemyCharacterBase> enemyCharacterClassFinder(TEXT("/Game/Character/EnemyCharacter/Blueprint/BP_EnemyCharacter"));
+	//checkf(enemyCharacterClassFinder.Succeeded(), TEXT("UStageManagerComponent::EnemyCharacter 클래스 탐색에 실패했습니다."));
+	//EnemyCharacterClass = enemyCharacterClassFinder.Class;
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> loadingWidgetClassFinder(TEXT("/Game/UI/Global/Blueprint/WB_LoadingScreenSimple"));
-	checkf(loadingWidgetClassFinder.Succeeded(), TEXT("UStageManagerComponent::loadingWidget 클래스 탐색에 실패했습니다."));
-	LoadingWidgetClass = loadingWidgetClassFinder.Class;
+	//static ConstructorHelpers::FClassFinder<UUserWidget> loadingWidgetClassFinder(TEXT("/Game/UI/Global/Blueprint/WB_LoadingScreenSimple"));
+	//checkf(loadingWidgetClassFinder.Succeeded(), TEXT("UStageManagerComponent::loadingWidget 클래스 탐색에 실패했습니다."));
+	//LoadingWidgetClass = loadingWidgetClassFinder.Class;
 }
 
 

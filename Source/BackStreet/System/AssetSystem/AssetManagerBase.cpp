@@ -7,23 +7,23 @@
 UAssetManagerBase::UAssetManagerBase()
 {
 	//------ Sound Datatable Initiation ---------
-	static ConstructorHelpers::FObjectFinder<UDataTable> systemSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_SystemSoundAsset.D_SystemSoundAsset"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> weaponSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_WeaponSoundAsset.D_WeaponSoundAsset"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> characterSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_CharacterSoundAsset.D_CharacterSoundAsset"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> skillSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_SkillSoundAsset.D_SkillSoundAsset"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> propSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_PropSoundAsset.D_PropSoundAsset"));
+	//static ConstructorHelpers::FObjectFinder<UDataTable> systemSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_SystemSoundAsset.D_SystemSoundAsset"));
+	//static ConstructorHelpers::FObjectFinder<UDataTable> weaponSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_WeaponSoundAsset.D_WeaponSoundAsset"));
+	//static ConstructorHelpers::FObjectFinder<UDataTable> characterSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_CharacterSoundAsset.D_CharacterSoundAsset"));
+	//static ConstructorHelpers::FObjectFinder<UDataTable> skillSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_SkillSoundAsset.D_SkillSoundAsset"));
+	//static ConstructorHelpers::FObjectFinder<UDataTable> propSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_PropSoundAsset.D_PropSoundAsset"));
 
-	checkf(systemSoundAssetTableFinder.Succeeded(), TEXT("SystemSoundAssetTable class discovery failed."));
-	checkf(weaponSoundAssetTableFinder.Succeeded(), TEXT("WeaponSoundAssetTable class discovery failed."));
-	checkf(characterSoundAssetTableFinder.Succeeded(), TEXT("CharacterSoundAssetTable class discovery failed."));
-	checkf(skillSoundAssetTableFinder.Succeeded(), TEXT("SkillSoundAssetTable class discovery failed."));
-	checkf(propSoundAssetTableFinder.Succeeded(), TEXT("propSoundAssetTable class discovery failed."));
+	//checkf(systemSoundAssetTableFinder.Succeeded(), TEXT("SystemSoundAssetTable class discovery failed."));
+	//checkf(weaponSoundAssetTableFinder.Succeeded(), TEXT("WeaponSoundAssetTable class discovery failed."));
+	//checkf(characterSoundAssetTableFinder.Succeeded(), TEXT("CharacterSoundAssetTable class discovery failed."));
+	//checkf(skillSoundAssetTableFinder.Succeeded(), TEXT("SkillSoundAssetTable class discovery failed."));
+	//checkf(propSoundAssetTableFinder.Succeeded(), TEXT("propSoundAssetTable class discovery failed."));
 
-	SystemSoundAssetTable = systemSoundAssetTableFinder.Object;
-	WeaponSoundAssetTable = weaponSoundAssetTableFinder.Object;
-	CharacterSoundAssetTable = characterSoundAssetTableFinder.Object;
-	SkillSoundAssetTable = skillSoundAssetTableFinder.Object;
-	PropSoundAssetTable = propSoundAssetTableFinder.Object;
+	//SystemSoundAssetTable = systemSoundAssetTableFinder.Object;
+	//WeaponSoundAssetTable = weaponSoundAssetTableFinder.Object;
+	//CharacterSoundAssetTable = characterSoundAssetTableFinder.Object;
+	//SkillSoundAssetTable = skillSoundAssetTableFinder.Object;
+	//PropSoundAssetTable = propSoundAssetTableFinder.Object;
 }
 
 void UAssetManagerBase::InitAssetManager(ABackStreetGameModeBase* NewGamemodeRef)

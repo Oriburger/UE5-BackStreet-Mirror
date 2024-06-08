@@ -11,12 +11,12 @@
 
 USkillManagerBase::USkillManagerBase()
 {
-	static ConstructorHelpers::FObjectFinder<UDataTable> skillInfoTableFinder(TEXT("/Game/System/SkillManager/Data/D_SkillInfo.D_SkillInfo"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> skillUpgradeInfoTableFinder(TEXT("/Game/System/CraftingManager/Data/D_SkillUpgradeInfo.D_SkillUpgradeInfo"));
-	checkf(skillInfoTableFinder.Succeeded(), TEXT("SkillInfoTable class discovery failed."));
-	checkf(skillUpgradeInfoTableFinder.Succeeded(), TEXT("skillUpgradeInfoTable class discovery failed."));
-	SkillInfoTable = skillInfoTableFinder.Object;
-	SkillUpgradeInfoTable = skillUpgradeInfoTableFinder.Object;
+	//static ConstructorHelpers::FObjectFinder<UDataTable> skillInfoTableFinder(TEXT("/Game/System/SkillManager/Data/D_SkillInfo.D_SkillInfo"));
+	////static ConstructorHelpers::FObjectFinder<UDataTable> skillUpgradeInfoTableFinder(TEXT("/Game/System/CraftingManager/Data/D_SkillUpgradeInfo.D_SkillUpgradeInfo"));
+	//checkf(skillUpgradeInfoTableFinder.Succeeded(), TEXT("skillUpgradeInfoTable class discovery failed."));
+	//checkf(skillInfoTableFinder.Succeeded(), TEXT("SkillInfoTable class discovery failed."));
+	//SkillInfoTable = skillInfoTableFinder.Object;
+	//SkillUpgradeInfoTable = skillUpgradeInfoTableFinder.Object;
 }
 
 void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemodeRef)
@@ -54,6 +54,8 @@ ASkillBase* USkillManagerBase::ActivateSkillBase(ACharacterBase* NewCauser, FOwn
 
 ASkillBase* USkillManagerBase::UpdateSkillInfo(ASkillBase* SkillBase, FOwnerSkillInfoStruct* OwnerSkillInfo)
 {
+	if (SkillUpgradeInfoTable == nullptr) return nullptr;
+
 	//SkillBase의 레벨 변화 여부 확인
 	if (SkillBase->SkillInfo.SkillLevelStruct.SkillLevel == OwnerSkillInfo->SkillLevel) return SkillBase;
 	SkillBase->SkillInfo.SkillLevelStruct.SkillLevel = OwnerSkillInfo->SkillLevel;
@@ -135,6 +137,7 @@ bool USkillManagerBase::IsSkillInfoStructValid(const FSkillInfoStruct& SkillInfo
 
 FSkillInfoStruct USkillManagerBase::GetCurrSkillInfoByType(ESkillType SkillType)
 {
+	if (SkillUpgradeInfoTable == nullptr) return FSkillInfoStruct();
 	AMainCharacterBase* mainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (!IsValid(mainCharacterRef)) return FSkillInfoStruct();
 	TWeakObjectPtr<class AWeaponBase> weaponRef = mainCharacterRef->GetCurrentWeaponRef();

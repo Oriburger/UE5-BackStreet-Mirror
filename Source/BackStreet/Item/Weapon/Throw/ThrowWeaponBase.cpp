@@ -28,17 +28,18 @@ AThrowWeaponBase::AThrowWeaponBase()
 	ProjectilePathSpline->SetupAttachment(RootComponent);
 	ProjectilePathSpline->bHiddenInGame = false; 
 	ProjectilePathSpline->SetVisibility(true);
-
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> splineMeshFinder(TEXT("/Game/Weapon/StaticMesh/SM_SplineMesh.SM_SplineMesh"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInterface> splineMeshMaterialFinder(TEXT("/Game/Weapon/Material/M_ProjectilePathSpline.M_ProjectilePathSpline"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInterface> pathTargetDecalMaterialFinder(TEXT("/Game/Weapon/Material/M_ProjectileTarget.M_ProjectileTarget"));
-	checkf(splineMeshFinder.Succeeded(), TEXT("spline mesh 클래스 탐색에 실패했습니다."));
-	checkf(splineMeshMaterialFinder.Succeeded(), TEXT("spline mesh material 클래스 탐색에 실패했습니다."));
-	checkf(pathTargetDecalMaterialFinder.Succeeded(), TEXT("path target decal material 클래스 탐색에 실패했습니다."));
 	
-	SplineMesh = splineMeshFinder.Object;
-	SplineMeshMaterial = splineMeshMaterialFinder.Object;
-	PathTargetDecalMaterial = pathTargetDecalMaterialFinder.Object;
+	//static ConstructorHelpers::FObjectFinder<UStaticMesh> splineMeshFinder(TEXT("/Game/Weapon/StaticMesh/SM_SplineMesh.SM_SplineMesh"));
+	//static ConstructorHelpers::FObjectFinder<UMaterialInterface> splineMeshMaterialFinder(TEXT("/Game/Weapon/Material/M_ProjectilePathSpline.M_ProjectilePathSpline"));
+	//static ConstructorHelpers::FObjectFinder<UMaterialInterface> pathTargetDecalMaterialFinder(TEXT("/Game/Weapon/Material/M_ProjectileTarget.M_ProjectileTarget"));
+	
+	//checkf(splineMeshFinder.Succeeded(), TEXT("spline mesh 클래스 탐색에 실패했습니다."));
+	//checkf(splineMeshMaterialFinder.Succeeded(), TEXT("spline mesh material 클래스 탐색에 실패했습니다."));
+	//checkf(pathTargetDecalMaterialFinder.Succeeded(), TEXT("path target decal material 클래스 탐색에 실패했습니다."));
+	
+	//SplineMesh = splineMeshFinder.Object;
+	//SplineMeshMaterial = splineMeshMaterialFinder.Object;
+	//PathTargetDecalMaterial = pathTargetDecalMaterialFinder.Object;
 }
 
 void AThrowWeaponBase::Attack()

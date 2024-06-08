@@ -28,20 +28,20 @@ ACharacterBase::ACharacterBase()
 	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 115.0f, 90.0f));
 
 
-	static ConstructorHelpers::FClassFinder<AWeaponInventoryBase> weaponInventoryClassFinder(TEXT("/Game/Weapon/Blueprint/BP_WeaponInventory"));
-	static ConstructorHelpers::FClassFinder<AWeaponBase> meleeWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_MeleeWeaponBase"));
-	static ConstructorHelpers::FClassFinder<AWeaponBase> throwWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_ThrowWeaponBase"));
-	static ConstructorHelpers::FClassFinder<AWeaponBase> shootWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_ShootWeaponBase"));
+	//static ConstructorHelpers::FClassFinder<AWeaponInventoryBase> weaponInventoryClassFinder(TEXT("/Game/Weapon/Blueprint/BP_WeaponInventory"));
+	//static ConstructorHelpers::FClassFinder<AWeaponBase> meleeWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_MeleeWeaponBase"));
+	//static ConstructorHelpers::FClassFinder<AWeaponBase> throwWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_ThrowWeaponBase"));
+	//static ConstructorHelpers::FClassFinder<AWeaponBase> shootWeaponClassFinder(TEXT("/Game/Weapon/Blueprint/BP_ShootWeaponBase"));
 
 	//클래스를 제대로 명시하지 않았으면 크래시를 띄움
-	checkf(weaponInventoryClassFinder.Succeeded(), TEXT("Weapon Inventory 클래스 탐색에 실패했습니다."));
-	checkf(meleeWeaponClassFinder.Succeeded(), TEXT("Melee Weapon 클래스 탐색에 실패했습니다.")); 
-	checkf(shootWeaponClassFinder.Succeeded(), TEXT("Ranged Weapon 클래스 탐색에 실패했습니다."));
+	//checkf(weaponInventoryClassFinder.Succeeded(), TEXT("Weapon Inventory 클래스 탐색에 실패했습니다."));
+	//checkf(meleeWeaponClassFinder.Succeeded(), TEXT("Melee Weapon 클래스 탐색에 실패했습니다.")); 
+	//checkf(shootWeaponClassFinder.Succeeded(), TEXT("Ranged Weapon 클래스 탐색에 실패했습니다."));
 
-	WeaponInventoryClass = weaponInventoryClassFinder.Class; 
-	WeaponClassList.Add(meleeWeaponClassFinder.Class);
-	WeaponClassList.Add(throwWeaponClassFinder.Class);
-	WeaponClassList.Add(shootWeaponClassFinder.Class);
+	//WeaponInventoryClass = weaponInventoryClassFinder.Class; 
+	//WeaponClassList.Add(meleeWeaponClassFinder.Class);
+	//WeaponClassList.Add(throwWeaponClassFinder.Class);
+	//WeaponClassList.Add(shootWeaponClassFinder.Class);
 
 	DebuffManagerComponent = CreateDefaultSubobject<UDebuffManagerComponent>(TEXT("DEBUFF_MANAGER"));
 	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));

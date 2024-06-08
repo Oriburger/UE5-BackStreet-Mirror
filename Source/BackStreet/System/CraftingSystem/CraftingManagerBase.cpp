@@ -12,12 +12,12 @@
 // Sets default values
 UCraftingManagerBase::UCraftingManagerBase()
 {
-	static ConstructorHelpers::FObjectFinder<UDataTable> skillUpgradeInfoTableFinder(TEXT("/Game/System/CraftingManager/Data/D_SkillUpgradeInfo.D_SkillUpgradeInfo"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> playerActiveSkillTableFinder(TEXT("/Game/System/CraftingManager/Data/D_PlayerActiveSkill.D_PlayerActiveSkill"));
-	checkf(skillUpgradeInfoTableFinder.Succeeded(), TEXT("SkillUpgradeInfoTable class discovery failed."));
-	checkf(playerActiveSkillTableFinder.Succeeded(), TEXT("PlayerActiveSkillTable class discovery failed."));
-	SkillUpgradeInfoTable = skillUpgradeInfoTableFinder.Object;
-	PlayerActiveSkillTable = playerActiveSkillTableFinder.Object;
+	//static ConstructorHelpers::FObjectFinder<UDataTable> skillUpgradeInfoTableFinder(TEXT("/Game/System/CraftingManager/Data/D_SkillUpgradeInfo.D_SkillUpgradeInfo"));
+	//static ConstructorHelpers::FObjectFinder<UDataTable> playerActiveSkillTableFinder(TEXT("/Game/System/CraftingManager/Data/D_PlayerActiveSkill.D_PlayerActiveSkill"));
+	//checkf(skillUpgradeInfoTableFinder.Succeeded(), TEXT("SkillUpgradeInfoTable class discovery failed."));
+	//checkf(playerActiveSkillTableFinder.Succeeded(), TEXT("PlayerActiveSkillTable class discovery failed."));
+	//SkillUpgradeInfoTable = skillUpgradeInfoTableFinder.Object;
+	//PlayerActiveSkillTable = playerActiveSkillTableFinder.Object;
 }
 
 void UCraftingManagerBase::InitCraftingManager(ABackStreetGameModeBase* NewGamemodeRef)
