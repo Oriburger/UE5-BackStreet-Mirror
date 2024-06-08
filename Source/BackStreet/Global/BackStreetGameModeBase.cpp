@@ -16,8 +16,6 @@
 ABackStreetGameModeBase::ABackStreetGameModeBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
-
 }
 
 void ABackStreetGameModeBase::BeginPlay()
@@ -35,7 +33,7 @@ void ABackStreetGameModeBase::BeginPlay()
 void ABackStreetGameModeBase::InitialzeGame()
 {
 	//------ Initialize Chapter Manager ------------
-	ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>();
+	ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
 
 	//------ Initialize Global Skill Manager --------
 	SkillManagerBase = NewObject<USkillManagerBase>(this, USkillManagerBase::StaticClass(), FName("SkillManagerBase"));

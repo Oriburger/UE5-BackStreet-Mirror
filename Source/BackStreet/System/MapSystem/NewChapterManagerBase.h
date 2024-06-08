@@ -67,12 +67,16 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FChapterInfo GetCurrentChapterInfo() { return CurrentChapterInfo; }
 
+
+protected:
+	//Assign on blueprint
+	UPROPERTY(EditDefaultsOnly, Category = "Data")
+		UDataTable* ChapterInfoTable;
+
 private:
 	int32 ChapterID;
 
 	FChapterInfo CurrentChapterInfo;
-
-	UDataTable* ChapterInfoTable;
 
 	FVector2D CurrentStageLocation;
 
@@ -82,12 +86,20 @@ private:
 
 	TArray<FStageInfo> StageInfoList;
 
-
-
 //========= Widget =====================
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		UUserWidget* GetCombatWidgetRef() { return CombatWidgetRef; }
+
+	//Result widget
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<UUserWidget> ChapterClearWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<UUserWidget> GameOverWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<UUserWidget> CombatWidgetClass;
 
 protected:
 	UFUNCTION()
@@ -98,12 +110,8 @@ protected:
 		void AddCombatWidget();
 
 private:
-	//Result widget
-	TSubclassOf<UUserWidget> ChapterClearWidgetClass;
-	TSubclassOf<UUserWidget> GameOverWidgetClass;
 	UUserWidget* GameResultWidgetRef;
 
 	//For combat hud widget
-	TSubclassOf<UUserWidget> CombatWidgetClass;
 	UUserWidget* CombatWidgetRef;
 };

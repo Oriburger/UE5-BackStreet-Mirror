@@ -12,12 +12,9 @@
 // Sets default values
 UCraftingManagerBase::UCraftingManagerBase()
 {
-	//static ConstructorHelpers::FObjectFinder<UDataTable> skillUpgradeInfoTableFinder(TEXT("/Game/System/CraftingManager/Data/D_SkillUpgradeInfo.D_SkillUpgradeInfo"));
-	//static ConstructorHelpers::FObjectFinder<UDataTable> playerActiveSkillTableFinder(TEXT("/Game/System/CraftingManager/Data/D_PlayerActiveSkill.D_PlayerActiveSkill"));
-	//checkf(skillUpgradeInfoTableFinder.Succeeded(), TEXT("SkillUpgradeInfoTable class discovery failed."));
-	//checkf(playerActiveSkillTableFinder.Succeeded(), TEXT("PlayerActiveSkillTable class discovery failed."));
-	//SkillUpgradeInfoTable = skillUpgradeInfoTableFinder.Object;
-	//PlayerActiveSkillTable = playerActiveSkillTableFinder.Object;
+	static ConstructorHelpers::FObjectFinder<UDataTable> playerActiveSkillTableFinder(TEXT("/Game/System/CraftingManager/Data/D_PlayerActiveSkill.D_PlayerActiveSkill"));
+	checkf(playerActiveSkillTableFinder.Succeeded(), TEXT("PlayerActiveSkillTable class discovery failed."));
+	PlayerActiveSkillTable = playerActiveSkillTableFinder.Object;
 }
 
 void UCraftingManagerBase::InitCraftingManager(ABackStreetGameModeBase* NewGamemodeRef)
@@ -118,12 +115,8 @@ bool UCraftingManagerBase::IsValidLevelForSkillUpgrade(FSkillInfoStruct NewSkill
 
 uint8 UCraftingManagerBase::GetSkillMaxLevel(int32 NewSkillID)
 {
-	checkf(IsValid(SkillUpgradeInfoTable), TEXT("Failed to get CraftinSkillTable"));
-
-	FString rowName = FString::FromInt(NewSkillID);
-	FSkillUpgradeInfoStruct* skillUpgradeInfo = SkillUpgradeInfoTable->FindRow<FSkillUpgradeInfoStruct>(FName(rowName), rowName);
-	
-	return skillUpgradeInfo->MaxLevel;
+	FSkillUpgradeInfoStruct skillUpgradeInfo = GetSkillUpgradeInfoStructBySkillID(NewSkillID);
+	return skillUpgradeInfo.MaxLevel;
 }
 
 bool UCraftingManagerBase::IsOwnMaterialEnoughForSkillUpgrade(FSkillInfoStruct NewSkillInfo, uint8 TempLevel)
@@ -152,7 +145,7 @@ TArray<uint8> UCraftingManagerBase::GetRequiredMaterialAmount(FSkillInfoStruct N
 		currSkillLevel = SkillManagerRef->GetCurrSkillLevelByType(skillType);
 	}
 	FString rowName = FString::FromInt(NewSkillInfo.SkillID);
-	FSkillUpgradeInfoStruct* skillUpgradeInfo = SkillUpgradeInfoTable->FindRow<FSkillUpgradeInfoStruct>(FName(rowName), rowName);
+	FSkillUpgradeInfoStruct skillUpgradeInfo = GetSkillUpgradeInfoStructBySkillID(NewSkillInfo.SkillID);
 	if (TempSkillLevel <= currSkillLevel)
 	{
 		requiredItemAmountList.Init(0, 3);
@@ -162,7 +155,7 @@ TArray<uint8> UCraftingManagerBase::GetRequiredMaterialAmount(FSkillInfoStruct N
 	{
 		uint8 itemAmount = 0;
 		//Map에 해당 재료가 존재하는지 확인
-		if (!skillUpgradeInfo->RequiredMaterialMap.Contains(itemID))
+		if (!skillUpgradeInfo.RequiredMaterialMap.Contains(itemID))
 		{
 			itemAmount = 0;
 		}
@@ -171,7 +164,7 @@ TArray<uint8> UCraftingManagerBase::GetRequiredMaterialAmount(FSkillInfoStruct N
 			//재료가 존재하면 TempLevel까지 갯수를 모두 합함
 			for (uint8 temp = currSkillLevel + 1; temp <= TempSkillLevel; temp++)
 			{
-				itemAmount += skillUpgradeInfo->RequiredMaterialMap[itemID].RequiredMaterialByLevel[temp];
+				itemAmount += skillUpgradeInfo.RequiredMaterialMap[itemID].RequiredMaterialByLevel[temp];
 			}
 		}
 		//요구 재료 배열에 추가함
@@ -192,8 +185,8 @@ TArray<FName> UCraftingManagerBase::GetSkillVariableKeyList(int32 NewSkillID)
 {
 	TArray<FName> skillVariableKeyList;
 	FString rowName = FString::FromInt(NewSkillID);
-	FSkillUpgradeInfoStruct* skillUpgradeInfo = SkillUpgradeInfoTable->FindRow<FSkillUpgradeInfoStruct>(FName(rowName), rowName);
-	skillUpgradeInfo->SkillVariableMap.GenerateKeyArray(skillVariableKeyList);
+	FSkillUpgradeInfoStruct skillUpgradeInfo = GetSkillUpgradeInfoStructBySkillID(NewSkillID);
+	skillUpgradeInfo.SkillVariableMap.GenerateKeyArray(skillVariableKeyList);
 	return skillVariableKeyList;
 }
 
@@ -201,7 +194,13 @@ TArray<FVariableByLevelStruct> UCraftingManagerBase::GetSkillVariableValueList(i
 {
 	TArray<FVariableByLevelStruct> skillVariableValueList;
 	FString rowName = FString::FromInt(NewSkillID);
-	FSkillUpgradeInfoStruct* skillUpgradeInfo = SkillUpgradeInfoTable->FindRow<FSkillUpgradeInfoStruct>(FName(rowName), rowName);
-	skillUpgradeInfo->SkillVariableMap.GenerateValueArray(skillVariableValueList);
+	FSkillUpgradeInfoStruct skillUpgradeInfo = GetSkillUpgradeInfoStructBySkillID(NewSkillID);
+	skillUpgradeInfo.SkillVariableMap.GenerateValueArray(skillVariableValueList);
 	return skillVariableValueList;
+}
+
+FSkillUpgradeInfoStruct UCraftingManagerBase::GetSkillUpgradeInfoStructBySkillID(int32 SkillID)
+{
+	if (!GamemodeRef.IsValid() || !IsValid(GamemodeRef.Get()->GetSkillManagerRef())) return FSkillUpgradeInfoStruct();
+	return GamemodeRef.Get()->GetSkillManagerRef()->GetSkillUpgradeInfoStructBySkillID(SkillID);
 }

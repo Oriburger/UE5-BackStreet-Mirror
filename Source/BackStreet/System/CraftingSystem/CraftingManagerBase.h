@@ -68,6 +68,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<FVariableByLevelStruct> GetSkillVariableValueList(int32 NewSkillID);
 
+private:
+	//For convenience
+	FSkillUpgradeInfoStruct GetSkillUpgradeInfoStructBySkillID(int32 SkillID);
+
 //-------- ETC. (Ref)-------------------------------
 public:
 	UPROPERTY()
@@ -78,9 +82,6 @@ public:
 
 	UPROPERTY()
 		TWeakObjectPtr<class AMainCharacterBase> MainCharacterRef;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		UDataTable* SkillUpgradeInfoTable;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		UDataTable* PlayerActiveSkillTable;

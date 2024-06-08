@@ -138,7 +138,6 @@ private:
 	FTimerHandle LoadCheckTimerHandle;
 
 	//For instant loading widget
-	TSubclassOf<UUserWidget> LoadingWidgetClass;
 	UUserWidget* LoadingWidgetRef;
 
 //======== Gameplay Function ===============
@@ -185,9 +184,17 @@ private:
 	//Time-attack timer
 	FTimerHandle TimeAttackTimerHandle;
 
-	//BP Class, initialize with ConstructorFinder
+public:
+	//BP Class, initialize with BP
 	//Gate class to spawn on world
 	//Boss character's class use the data table value
-	TSubclassOf<class AGateBase> GateClass;
-	TSubclassOf<class AEnemyCharacterBase> EnemyCharacterClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Class")
+		TSubclassOf<class AGateBase> GateClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Class")
+		TSubclassOf<class AEnemyCharacterBase> EnemyCharacterClass;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Class")
+		TSubclassOf<UUserWidget> LoadingWidgetClass;
 };

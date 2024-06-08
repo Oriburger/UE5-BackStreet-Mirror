@@ -16,24 +16,6 @@ ANewChapterManagerBase::ANewChapterManagerBase()
 	//Init Component
 	StageManagerComponent = CreateDefaultSubobject<UStageManagerComponent>(TEXT("STAGE MANAGER"));
 	StageGeneratorComponent = CreateDefaultSubobject<UStageGeneratorComponent>(TEXT("STAGE GENERATOR"));
-
-	//Init Data table about chapter info 
-	//static ConstructorHelpers::FObjectFinder<UDataTable> chapterInfoTableFinder(TEXT("/Game/System/StageManager/Data/D_NewChapterInfoTable.D_NewChapterInfoTable"));
-	//checkf(chapterInfoTableFinder.Succeeded(), TEXT("ANewChapterManagerBase_ chapterInfoTable 탐색에 실패했습니다."));
-	//ChapterInfoTable = chapterInfoTableFinder.Object;
-
-	//init widget class (game over / chapter clear)
-	//static ConstructorHelpers::FClassFinder<UUserWidget> chapterClearWidgetClassFinder(TEXT("/Game/UI/InGame/Blueprint/01_CombatUI/WB_ChapterClear"));
-	//static ConstructorHelpers::FClassFinder<UUserWidget> gameOverWidgetClassFinder(TEXT("/Game/UI/InGame/Blueprint/01_CombatUI/WB_GameOver"));
-	//checkf(chapterClearWidgetClassFinder.Succeeded(), TEXT("ANewChapterManagerBase::loadingWidget 클래스 탐색에 실패했습니다."));
-	//checkf(gameOverWidgetClassFinder.Succeeded(), TEXT("ANewChapterManagerBase::loadingWidget 클래스 탐색에 실패했습니다."));
-	//ChapterClearWidgetClass = chapterClearWidgetClassFinder.Class;
-	//GameOverWidgetClass = gameOverWidgetClassFinder.Class;
-
-	//main combat hud widget
-	//static ConstructorHelpers::FClassFinder<UUserWidget> combatWidgetClassFinder(TEXT("/Game/UI/InGame/Blueprint/01_CombatUI/WB_CombatUI"));
-	//checkf(combatWidgetClassFinder.Succeeded(), TEXT("UStageManagerComponent::combatuWidget 클래스 탐색에 실패했습니다."));
-	//CombatWidgetClass = combatWidgetClassFinder.Class;
 }
 
 // Called when the game starts or when spawned

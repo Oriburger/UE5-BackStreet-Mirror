@@ -84,6 +84,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FSkillInfoStruct GetSkillInfoStructBySkillID(int32 SkillID);
 
+	//Get SkillInfo for Outer Class
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FSkillUpgradeInfoStruct GetSkillUpgradeInfoStructBySkillID(int32 SkillID);	
+
 protected:
 	//Skill Info Table
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay|Data")

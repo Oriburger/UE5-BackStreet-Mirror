@@ -11,12 +11,12 @@
 
 USkillManagerBase::USkillManagerBase()
 {
-	//static ConstructorHelpers::FObjectFinder<UDataTable> skillInfoTableFinder(TEXT("/Game/System/SkillManager/Data/D_SkillInfo.D_SkillInfo"));
-	////static ConstructorHelpers::FObjectFinder<UDataTable> skillUpgradeInfoTableFinder(TEXT("/Game/System/CraftingManager/Data/D_SkillUpgradeInfo.D_SkillUpgradeInfo"));
-	//checkf(skillUpgradeInfoTableFinder.Succeeded(), TEXT("skillUpgradeInfoTable class discovery failed."));
-	//checkf(skillInfoTableFinder.Succeeded(), TEXT("SkillInfoTable class discovery failed."));
-	//SkillInfoTable = skillInfoTableFinder.Object;
-	//SkillUpgradeInfoTable = skillUpgradeInfoTableFinder.Object;
+	static ConstructorHelpers::FObjectFinder<UDataTable> skillInfoTableFinder(TEXT("/Game/System/SkillManager/Data/D_SkillInfo.D_SkillInfo"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> skillUpgradeInfoTableFinder(TEXT("/Game/System/CraftingManager/Data/D_SkillUpgradeInfo.D_SkillUpgradeInfo"));
+	checkf(skillUpgradeInfoTableFinder.Succeeded(), TEXT("skillUpgradeInfoTable class discovery failed."));
+	checkf(skillInfoTableFinder.Succeeded(), TEXT("SkillInfoTable class discovery failed."));
+	SkillInfoTable = skillInfoTableFinder.Object;
+	SkillUpgradeInfoTable = skillUpgradeInfoTableFinder.Object;
 }
 
 void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemodeRef)
@@ -234,6 +234,24 @@ FSkillInfoStruct USkillManagerBase::GetSkillInfoStructBySkillID(int32 SkillID)
 		return *skillInfo;
 	}
 	return FSkillInfoStruct();
+}
+
+FSkillUpgradeInfoStruct USkillManagerBase::GetSkillUpgradeInfoStructBySkillID(int32 SkillID)
+{
+	if (!IsValid(SkillUpgradeInfoTable)) 
+	{ 
+		UE_LOG(LogTemp, Log, TEXT("There's no SkillUpgradeInfoTable")); 
+		return FSkillUpgradeInfoStruct(); 
+	}
+
+	FString rowName = FString::FromInt(SkillID);
+
+	FSkillUpgradeInfoStruct* skillUpgradeInfo = SkillUpgradeInfoTable->FindRow<FSkillUpgradeInfoStruct>(FName(rowName), rowName);
+	if (skillUpgradeInfo != nullptr)
+	{
+		return *skillUpgradeInfo;
+	}
+	return FSkillUpgradeInfoStruct();
 }
 
 

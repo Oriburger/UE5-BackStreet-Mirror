@@ -219,7 +219,7 @@ public:
 		class AWeaponBase* GetCurrentWeaponRef();
 
 protected:
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, Category = "Class")
 		TSubclassOf<class AWeaponInventoryBase> WeaponInventoryClass;
 
 	UFUNCTION()
@@ -243,10 +243,10 @@ protected:
 	//0번째 : 근접 무기 / 1번째 : 원거리 무기
 	//하나의 WeaponBase로 통일을 한다면 이렇게 하지 않아도 될텐데..
 
-private:
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, Category="Class")
 		TArray<TSubclassOf<class AWeaponBase>> WeaponClassList; 
 
+private:
 	//초기 무기 액터들을 스폰하고 초기화 한다.
 	void InitWeaponActors();
 

@@ -23,13 +23,6 @@ AWeaponBase::AWeaponBase()
 
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPON_MESH"));
 	WeaponMesh->SetupAttachment(DefaultSceneRoot);
-	
-	static ConstructorHelpers::FObjectFinder<UDataTable> statInfoTableFinder(TEXT("/Game/Weapon/Data/D_WeaponStatTable.D_WeaponStatTable"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> assetInfoTableFinder(TEXT("/Game/Weapon/Data/D_WeaponAssetInfo.D_WeaponAssetInfo"));
-	checkf(statInfoTableFinder.Succeeded(), TEXT("statInfoTable 탐색에 실패했습니다."));
-	checkf(assetInfoTableFinder.Succeeded(), TEXT("assetInfoTable 클래스 탐색에 실패했습니다."));
-	WeaponStatInfoTable = statInfoTableFinder.Object;
-	WeaponAssetInfoTable = assetInfoTableFinder.Object;
 }
 
 // Called when the game starts or when spawned

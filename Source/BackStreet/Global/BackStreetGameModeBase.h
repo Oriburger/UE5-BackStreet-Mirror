@@ -80,17 +80,23 @@ public:
 
 
 // ----- Class Info ------------------------------------ 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|VFX")
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Class")
 		TArray<TSubclassOf<UCameraShakeBase> > CameraShakeEffectList;
 	
 	//스폰할 아이템 클래스 (초기화를 위한 데이터테이블이 포함된 BP를 지정해야함)
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Item")
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Class")
 		TSubclassOf<class AItemBase> ItemClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Class")
+		TSubclassOf<class ANewChapterManagerBase> ChapterManagerClass;
 
 //------ 그 외 프로퍼티 ---------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class ANewChapterManagerBase* GetChapterManagerRef() { return ChapterManagerRef; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class USkillManagerBase* GetSkillManagerRef() { return SkillManagerBase; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UUserWidget* GetCombatWidgetRef();
