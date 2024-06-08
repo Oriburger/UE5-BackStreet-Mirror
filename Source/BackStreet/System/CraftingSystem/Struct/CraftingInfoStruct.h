@@ -33,13 +33,13 @@ public:
 	GENERATED_USTRUCT_BODY()
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		int32 SkillID;
+		int32 SkillID = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		int32 WeaponID;
+		int32 WeaponID = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		uint8 MaxLevel;
+		uint8 MaxLevel = 0;
 
 	//<MaterialID, Need Num of Material>
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)

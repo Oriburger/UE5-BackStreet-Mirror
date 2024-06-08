@@ -21,7 +21,7 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		int32 ProjectileID;
+		int32 ProjectileID = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FName ProjectileName;
@@ -31,11 +31,11 @@ public:
 
 	//폭발 타입의 발사체인지? (RadialDamage)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bIsExplosive;
+		bool bIsExplosive = false;
 
 	//총알형 발사체인지? (bSimulatePhysics 유무)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bIsBullet; 
+		bool bIsBullet = false; 
 
 	//발사체의 속도
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -65,7 +65,7 @@ public:
 
 	//아이템 ID
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		int32 ProjectileID;
+		int32 ProjectileID = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
 		FName ProjectileName;
@@ -76,15 +76,15 @@ public:
 
 	//메시의 초기 위치 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
-		FVector InitialLocation;
+		FVector InitialLocation = FVector::ZeroVector;
 
 	//메시의 초기 회전 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
-		FRotator InitialRotation;
+		FRotator InitialRotation = FRotator::ZeroRotator;
 
 	//메시의 초기 크기 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
-		FVector InitialScale;
+		FVector InitialScale = FVector::ZeroVector;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UNiagaraSystem> HitEffectParticle;

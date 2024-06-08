@@ -32,14 +32,14 @@ public:
 
 	//아이템 ID
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		int32 ItemID;
+		int32 ItemID = 0;
 
 	//아이템명
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FName ItemName;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		EItemCategoryInfo ItemType;
+		EItemCategoryInfo ItemType = EItemCategoryInfo::E_None;
 
 	//스폰할 아이템 스태틱 메시 정보 저장
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
@@ -47,22 +47,22 @@ public:
 
 	//메시의 초기 위치 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
-		FVector InitialLocation; 
+		FVector InitialLocation = FVector::ZeroVector; 
 
 	//메시의 초기 회전 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
-		FRotator InitialRotation;
+		FRotator InitialRotation = FRotator::ZeroRotator;
 
 	//메시의 초기 크기 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
-		FVector InitialScale;
+		FVector InitialScale = FVector::ZeroVector;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
 		TSoftObjectPtr<UMaterialInstance> OutlineMaterial;
 
 	//특정 아이템을 위한 변수 (총알, 미션 등)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		float Variable;
+		float Variable = 0.0f;
 
 	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 //		FSound
@@ -77,7 +77,7 @@ public:
 
 	//스테이지 ID
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 StageID;
+		int32 StageID = 0;
 
 	//스폰할 아이템 클래스 정보 저장
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -96,7 +96,7 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
-		int32 WeaponID;
+		int32 WeaponID = 0;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		FWeaponStatStruct WeaponStat; 
@@ -114,7 +114,7 @@ public:
 
 	//Item ID
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		int32 ItemID;
+		int32 ItemID = 0;
 
 	//Item name
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
@@ -122,11 +122,11 @@ public:
 
 	//Item type
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		EItemType ItemType;
+		EItemType ItemType = EItemType::E_None;
 
 	//Attainable Chapter
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		uint8 AttainableChapter;
+		uint8 AttainableChapter = 0;
 
 	//Item Description
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")

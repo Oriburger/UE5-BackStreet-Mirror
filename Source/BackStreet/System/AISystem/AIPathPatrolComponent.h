@@ -14,10 +14,10 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditInstanceOnly)
-		class APathPatrolPoint* Point;
+		TWeakObjectPtr<class APathPatrolPoint> Point;
 
 	UPROPERTY(EditInstanceOnly)
-		float DelayValue;
+		float DelayValue = 0.0f;
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )

@@ -22,7 +22,7 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
-	UNiagaraSystem* Effect;
+		UNiagaraSystem* Effect;
 };
 
 USTRUCT(BlueprintType)
@@ -32,10 +32,10 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-	UAnimMontage* AnimMontage;
+		UAnimMontage* AnimMontage;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-	float AnimPlayRate = 1.0f;
+		float AnimPlayRate = 1.0f;
 };
 
 USTRUCT(BlueprintType)
@@ -45,7 +45,7 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Material")
-	TArray<UMaterialInterface*> MaterialList;
+		TArray<UMaterialInterface*> MaterialList;
 };
 
 USTRUCT(BlueprintType)
@@ -61,7 +61,7 @@ public:
 
 	//Cool Time List By Skill Level
 	UPROPERTY(BlueprintReadWrite)
-		float CoolTime;
+		float CoolTime = 0.0f;
 
 	//Skill Variable 
 	UPROPERTY(BlueprintReadWrite)

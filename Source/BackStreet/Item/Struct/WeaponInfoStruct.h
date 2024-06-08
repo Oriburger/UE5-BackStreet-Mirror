@@ -32,16 +32,16 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		ECharacterDebuffType Type;
+		ECharacterDebuffType Type = ECharacterDebuffType::E_None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		float TotalTime;
+		float TotalTime = 0.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		float Variable;
+		float Variable = 0.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		bool bIsPercentage;
+		bool bIsPercentage = false;
 };
 
 USTRUCT(BlueprintType)
@@ -53,15 +53,15 @@ public:
 	//----- 발사체 관련 Property ------------------
 	//무한 탄약인지?
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bIsInfiniteAmmo;
+		bool bIsInfiniteAmmo = false;
 
 	//무한 탄창인지?
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bInfiniteMagazine;
+		bool bInfiniteMagazine = false;
 
 	//한 탄창에 최대 발사체 수
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 MaxAmmoPerMagazine;
+		int32 MaxAmmoPerMagazine = 0;
 
 	//소지할 수 있는 최대 발사체 개수 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -69,7 +69,7 @@ public:
 
 	//장전 시간
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float LoadingDelayTime;
+		float LoadingDelayTime = 0.0f;
 };
 
 USTRUCT(BlueprintType)
@@ -79,7 +79,7 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		int32 WeaponID;
+		int32 WeaponID = 0;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
 		FName WeaponName;
@@ -88,7 +88,7 @@ public:
 		FName Description;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
-		EWeaponType WeaponType;
+		EWeaponType WeaponType = EWeaponType::E_None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		UTexture2D* WeaponImage;
@@ -183,7 +183,7 @@ public:
 
 	//temp, meleeonly
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		FRotator SlashRotation;
+		FRotator SlashRotation = FRotator::ZeroRotator;
 //-----Weapon Stat------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		int32 CraftingAttackAdder = 0;
@@ -225,7 +225,7 @@ public:
 		TSoftObjectPtr<class UNiagaraSystem> MeleeTrailParticle;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
-		FColor MeleeTrailParticleColor;
+		FColor MeleeTrailParticleColor = FColor::White;
 };
 
 USTRUCT(BlueprintType)
@@ -236,7 +236,7 @@ public:
 
 	//스폰할 발사체의 ID
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		int32 ProjectileID;
+		int32 ProjectileID = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UNiagaraSystem> ShootEffectParticle;
@@ -250,7 +250,7 @@ public:
 
 	//아이템 ID
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		int32 WeaponID;
+		int32 WeaponID = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
 		FName WeaponName;
@@ -261,15 +261,15 @@ public:
 
 	//메시의 초기 위치 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
-		FVector InitialLocation;
+		FVector InitialLocation = FVector::ZeroVector;
 
 	//메시의 초기 회전 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
-		FRotator InitialRotation;
+		FRotator InitialRotation = FRotator::ZeroRotator;
 
 	//메시의 초기 크기 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
-		FVector InitialScale;
+		FVector InitialScale = FVector::ZeroVector;
 
 	//WeaponSkill Info
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")

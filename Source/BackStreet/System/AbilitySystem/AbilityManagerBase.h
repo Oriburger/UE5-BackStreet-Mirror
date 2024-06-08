@@ -13,10 +13,10 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		float Variable;
+		float Variable = 0.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		bool bIsPercentage;
+		bool bIsPercentage  = false;
 };
 
 USTRUCT(BlueprintType)
@@ -27,7 +27,7 @@ public:
 
 	//어빌리티의 ID
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0, UIMax = 10))
-		int32 AbilityId;
+		int32 AbilityId = 0;
 
 	//Ability Type (Multiple Type / this value is for updating stat)
 	//ex)  {E_AttackUp, E_DefenseUp}  ->  update character's attack stat var and def stat
@@ -48,7 +48,7 @@ public:
 		
 	//반복적인 연산이 필요한지? (도트 힐) , 현재 미사용
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
-		bool bIsRepetitive;
+		bool bIsRepetitive = false;
 
 	//Callback 함수명
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
