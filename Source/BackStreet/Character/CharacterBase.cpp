@@ -173,6 +173,11 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 
 	ResetActionState();
 
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die)
+	{
+		Die();
+	}
+
 	//damager side 
 	if (this->GetVelocity().Length() >= 3500.0f)
 	{
@@ -183,11 +188,6 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 		if (AssetManagerBaseRef.IsValid())
 		{
 			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 1, "Chop");
-		}
-
-		if (CharacterState.CharacterActionState == ECharacterActionType::E_Die)
-		{
-			Die();
 		}
 	}
 	//Test code for knockdown on ground event
