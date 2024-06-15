@@ -113,17 +113,20 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void InitFloatingHpWidget();
 
+private:
+	void SetInstantHpWidgetVisibility();
+
+//----- Timer ----------------
 public:
 	void ClearAllTimerHandle();
 
 private:
 	//무한 Turn에 빠지지 않게 TimeOut 처리 시켜주는 타이머 핸들
-	UPROPERTY()
-		FTimerHandle TurnTimeOutTimerHandle;
+	FTimerHandle TurnTimeOutTimerHandle;
 
-	UPROPERTY()
-		FTimerHandle HitTimeOutTimerHandle;
+	FTimerHandle HitTimeOutTimerHandle;
 
-	UPROPERTY()
-		FTimerHandle DamageAIDelayTimer;
+	FTimerHandle DamageAIDelayTimer;
+
+	FTimerHandle HpWidgetAutoDisappearTimer;
 };
