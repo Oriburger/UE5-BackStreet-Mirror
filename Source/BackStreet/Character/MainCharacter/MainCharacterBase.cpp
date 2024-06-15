@@ -553,7 +553,7 @@ void AMainCharacterBase::TryUpperAttack()
 void AMainCharacterBase::TryDownwardAttack()
 {
 	Super::TryDownwardAttack();
-	if (!GetCharacterMovement()->IsFalling()) return;
+	if (!GetCharacterMovement()->IsFalling() || !CharacterState.bIsAirAttacking) return;
 	if (IsValid(TargetingManagerComponent->GetTargetedCharacter()))
 	{
 		SetFieldOfViewWithInterp(110.0f, 0.75f);
