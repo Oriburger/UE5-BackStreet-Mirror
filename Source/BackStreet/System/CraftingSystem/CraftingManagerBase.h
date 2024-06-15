@@ -34,7 +34,6 @@ public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateSkillLevelUpdated OnSkillLevelUpdated;
 
-
 // ------ Default SkillUpgrade Logic -----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
