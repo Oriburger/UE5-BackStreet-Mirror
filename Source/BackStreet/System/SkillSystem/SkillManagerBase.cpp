@@ -205,6 +205,16 @@ uint8 USkillManagerBase::GetCurrSkillLevelByType(ESkillType SkillType)
 	return skillInfo.SkillLevelStruct.SkillLevel;
 }
 
+uint8 USkillManagerBase::GetCurrSkillLevelByID(int32 SkillID)
+{
+	ESkillType skillType = GetSkillInfoStructBySkillID(SkillID).SkillType;
+	AMainCharacterBase* mainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	TMap<ESkillType, FOwnerSkillInfoStruct> skillInfoMap = mainCharacterRef->GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap;
+	if(!skillInfoMap.Contains(skillType)) return 0;
+	if(skillInfoMap.Find(skillType)->SkillID != SkillID) return 0;
+	return GetCurrSkillLevelByType(skillType);
+}
+
 float USkillManagerBase::GetCurrSkillCoolTimeByType(ESkillType SkillType)
 {
 	FSkillInfoStruct skillInfo = GetCurrSkillInfoByType(SkillType);

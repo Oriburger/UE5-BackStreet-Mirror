@@ -69,6 +69,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		uint8 GetCurrSkillLevelByType(ESkillType SkillType);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		uint8 GetCurrSkillLevelByID(int32 SkillID);
+
 	//Get current player's weapon SkillCoolTime by type
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 			float GetCurrSkillCoolTimeByType(ESkillType SkillType);
