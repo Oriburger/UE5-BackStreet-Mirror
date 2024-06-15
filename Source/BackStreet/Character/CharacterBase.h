@@ -129,6 +129,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void ResetAirAtkLocationUpdateTimer();
 
+	////Launch event when upperattack
+	//UFUNCTION(BlueprintCallable)
+	//	void LaunchCharacterWithTarget();
+	//
+	//UFUNCTION(BlueprintCallable);
+	//	void LaunchCharacterWithTarget();
+
+	//UFUNCTION(BlueprintCallable)
+	//	void ActivateAirMode(bool bDeactivateFlag = false);	
+
 protected:
 	//interp function
 	//it must not be called alone.
