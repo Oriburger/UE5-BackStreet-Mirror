@@ -139,6 +139,9 @@ public:
 
 //----- CraftingStat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool bIsDefaultWeapon = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		int32 MaxCraftingAttackAdder = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

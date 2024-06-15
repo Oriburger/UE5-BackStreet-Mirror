@@ -6,6 +6,12 @@
 #include "GameFramework/InputSettings.h"
 #include "Kismet/KismetMathLibrary.h"
 
+AMainCharacterController::AMainCharacterController()
+{
+	bEnableClickEvents = true;
+	bEnableMouseOverEvents = true;
+}
+
 void AMainCharacterController::BeginPlay()
 {
 	Super::BeginPlay();
