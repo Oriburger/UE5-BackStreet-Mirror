@@ -110,7 +110,7 @@ TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
 	FVector traceStartPos = (WeaponMesh->GetSocketLocation("GrabPoint")
 							+ WeaponMesh->GetSocketLocation("End")) / 2;
 	float traceRadius = UKismetMathLibrary::Vector_Distance(WeaponMesh->GetSocketLocation("GrabPoint")
-						, WeaponMesh->GetSocketLocation("End")) + 40.0f;
+						, WeaponMesh->GetSocketLocation("End")) + 35.0f;
 	
 	TEnumAsByte<EObjectTypeQuery> pawnTypeQuery = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
 	TArray<AActor*> overlapResultList, meleeDamageTargetList;
