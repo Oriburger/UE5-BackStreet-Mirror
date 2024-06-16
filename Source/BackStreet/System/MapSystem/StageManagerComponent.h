@@ -160,6 +160,10 @@ public:
 		FStageInfo GetCurrentStageInfo() { return CurrentStageInfo; }
 
 private:
+	//Grant stage reward
+	UFUNCTION()
+		void GrantStageRewards();
+
 	//Bind to enemy character death delegate
 	UFUNCTION()
 		void UpdateEnemyCountAndCheckClear();

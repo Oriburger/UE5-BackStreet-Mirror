@@ -4,32 +4,20 @@
 #include "../../Global/BackStreetGameModeBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
-UAssetManagerBase::UAssetManagerBase()
-{
-	//------ Sound Datatable Initiation ---------
-	static ConstructorHelpers::FObjectFinder<UDataTable> systemSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_SystemSoundAsset.D_SystemSoundAsset"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> weaponSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_WeaponSoundAsset.D_WeaponSoundAsset"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> characterSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_CharacterSoundAsset.D_CharacterSoundAsset"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> skillSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_SkillSoundAsset.D_SkillSoundAsset"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> propSoundAssetTableFinder(TEXT("/Game/System/AssetManager/Data/Sound/D_PropSoundAsset.D_PropSoundAsset"));
-
-	checkf(systemSoundAssetTableFinder.Succeeded(), TEXT("SystemSoundAssetTable class discovery failed."));
-	checkf(weaponSoundAssetTableFinder.Succeeded(), TEXT("WeaponSoundAssetTable class discovery failed."));
-	checkf(characterSoundAssetTableFinder.Succeeded(), TEXT("CharacterSoundAssetTable class discovery failed."));
-	checkf(skillSoundAssetTableFinder.Succeeded(), TEXT("SkillSoundAssetTable class discovery failed."));
-	checkf(propSoundAssetTableFinder.Succeeded(), TEXT("propSoundAssetTable class discovery failed."));
-
-	SystemSoundAssetTable = systemSoundAssetTableFinder.Object;
-	WeaponSoundAssetTable = weaponSoundAssetTableFinder.Object;
-	CharacterSoundAssetTable = characterSoundAssetTableFinder.Object;
-	SkillSoundAssetTable = skillSoundAssetTableFinder.Object;
-	PropSoundAssetTable = propSoundAssetTableFinder.Object;
-}
+UAssetManagerBase::UAssetManagerBase() {}
 
 void UAssetManagerBase::InitAssetManager(ABackStreetGameModeBase* NewGamemodeRef)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Init Asset Manager #1"));
 	if (!IsValid(NewGamemodeRef)) return;
+	UE_LOG(LogTemp, Warning, TEXT("Init Asset Manager #2"));
 	GamemodeRef = NewGamemodeRef;
+
+	SystemSoundAssetTable = GamemodeRef.Get()->SystemSoundAssetTable;
+	WeaponSoundAssetTable = GamemodeRef.Get()->WeaponSoundAssetTable;
+	CharacterSoundAssetTable = GamemodeRef.Get()->CharacterSoundAssetTable;
+	SkillSoundAssetTable = GamemodeRef.Get()->SkillSoundAssetTable;
+	PropSoundAssetTable = GamemodeRef.Get()->PropSoundAssetTable;
 }
 
 FSoundAssetInfoStruct* UAssetManagerBase::GetSoundAssetInfo(ESoundAssetType SoundType, int32 TargetID)
@@ -67,13 +55,21 @@ TArray<USoundCue*> UAssetManagerBase::GetSoundList(ESoundAssetType SoundType, in
 {
 	// Read from dataTable
 	TArray<USoundCue*> soundList;
-	soundList = GetSoundAssetInfo(SoundType, TargetID)->SoundMap.Find(SoundName)->SoundList;
+	FSoundAssetInfoStruct* soundAssetInfoStruct = GetSoundAssetInfo(SoundType, TargetID);
+	UE_LOG(LogTemp, Warning, TEXT("Get Sound List #1"));
+	if (soundAssetInfoStruct)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Get Sound List #2"));
+		soundList = soundAssetInfoStruct->SoundMap.Find(SoundName)->SoundList;
+	}
 
 	return soundList;
 }
 
 FSoundAssetInfoStruct* UAssetManagerBase::GetSystemSoundMapWithID(int32 TargetID)
 {	
+	if (!SystemSoundAssetTable) return nullptr; 
+
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAssetInfo = SystemSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
@@ -83,6 +79,8 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetSystemSoundMapWithID(int32 TargetID
 
 FSoundAssetInfoStruct* UAssetManagerBase::GetWeaponSoundMapWithID(int32 TargetID)
 {
+	if (!WeaponSoundAssetTable) return nullptr;
+
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAssetInfo = WeaponSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
@@ -92,6 +90,8 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetWeaponSoundMapWithID(int32 TargetID
 
 FSoundAssetInfoStruct* UAssetManagerBase::GetCharacterSoundMapWithID(int32 TargetID)
 {
+	if (!CharacterSoundAssetTable) return nullptr;
+
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAssetInfo = CharacterSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
@@ -101,6 +101,8 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetCharacterSoundMapWithID(int32 Targe
 
 FSoundAssetInfoStruct* UAssetManagerBase::GetSkillSoundMapWithID(int32 TargetID)
 {
+	if (!SkillSoundAssetTable) return nullptr;
+
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAssetInfo = SkillSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
@@ -110,6 +112,8 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetSkillSoundMapWithID(int32 TargetID)
 
 FSoundAssetInfoStruct* UAssetManagerBase::GetPropSoundMapWithID(int32 TargetID)
 {
+	if (!PropSoundAssetTable) return nullptr;
+
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAssetInfo = PropSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);

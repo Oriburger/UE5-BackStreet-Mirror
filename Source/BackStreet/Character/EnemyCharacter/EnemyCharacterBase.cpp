@@ -30,13 +30,6 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 
 	this->Tags.Add("Enemy");
 	this->Tags.Add("Easy");
-
-	
-	static ConstructorHelpers::FObjectFinder<UDataTable> statTableFinder(TEXT("/Game/Character/EnemyCharacter/Data/D_EnemyStatDataTable.D_EnemyStatDataTable"));
-	
-	//if stat table is not identified on editor, crash event is force activated.
-	checkf(statTableFinder.Succeeded(), TEXT("Enemy Stat Table 탐색에 실패했습니다."));
-	EnemyStatTable = statTableFinder.Object;
 }
 
 void AEnemyCharacterBase::BeginPlay()

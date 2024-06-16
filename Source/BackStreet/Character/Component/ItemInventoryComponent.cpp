@@ -12,10 +12,6 @@ UItemInventoryComponent::UItemInventoryComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	static ConstructorHelpers::FObjectFinder<UDataTable> itemTableFinder(TEXT("/Game/System/CraftingManager/Data/D_CraftingItemData.D_CraftingItemData"));
-	checkf(itemTableFinder.Succeeded(), TEXT("ItemTable class discovery failed."));
-	ItemTable = itemTableFinder.Object;
 }
 
 
@@ -25,7 +21,10 @@ void UItemInventoryComponent::BeginPlay()
 	Super::BeginPlay();
 
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	
+	if (GamemodeRef.IsValid())
+	{
+		ItemTable = GamemodeRef.Get()->ItemInfoTable;
+	}
 }
 
 void UItemInventoryComponent::InitInventory()

@@ -4,8 +4,11 @@
 #include "StageManagerComponent.h"
 #include "../../Character/EnemyCharacter/EnemyCharacterBase.h"
 #include "../../Character/CharacterBase.h"
+#include "../../Character/Component/ItemInventoryComponent.h"
+#include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "../AISystem/AIControllerBase.h"
 #include "./Stage/GateBase.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "SlateBasics.h"
 #include "Runtime/UMG/Public/UMG.h"
 
@@ -376,6 +379,9 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	{
 		//Stage Clear UI Update using delegate
 		OnStageCleared.Broadcast();
+
+		//Stage Reward
+		GrantStageRewards();
 	}
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
 		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
@@ -384,6 +390,9 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 		{
 			//Stage Clear UI Update using delegate
 			OnStageCleared.Broadcast();
+
+			//Stage Reward
+			GrantStageRewards();
 		}
 		else
 		{
@@ -397,6 +406,36 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	
 	//StageFinished Delegate
 	OnStageFinished.Broadcast(CurrentStageInfo);
+}
+
+void UStageManagerComponent::GrantStageRewards()
+{
+	AMainCharacterBase* playerCharacter = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (IsValid(playerCharacter))
+	{
+		//@@@@@@@@@@@@@ Hard coding for BIC @@@@@@@@@@@@@@@@@@
+		int32 maxGrantCountPerItem = 0;
+
+		maxGrantCountPerItem = (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
+							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat
+							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack)
+							? 3 : maxGrantCountPerItem;
+		maxGrantCountPerItem = (CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteCombat
+							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
+							? 5 : maxGrantCountPerItem;
+
+		UE_LOG(LogTemp, Warning, TEXT("Grant %d"), maxGrantCountPerItem);
+
+		for (int32 id = 1; id <= 3; id++)
+		{ 
+			int32 grantCnt = UKismetMathLibrary::RandomInteger(maxGrantCountPerItem + 1);
+			if (grantCnt > 0)
+			{
+				playerCharacter->ItemInventory->AddItem(id, grantCnt);
+			}
+		}
+			
+	}
 }
 
 void UStageManagerComponent::UpdateEnemyCountAndCheckClear()

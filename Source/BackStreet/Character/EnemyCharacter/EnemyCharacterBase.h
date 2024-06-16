@@ -84,6 +84,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void InitEnemyCharacter(int32 NewCharacterID);
 
+	//적의 스탯 테이블
+	UPROPERTY(EditDefaultsOnly, Category = "Data|Table")
+		UDataTable* EnemyStatTable;
+
 private:
 	//Set default weapon actor using weapon inventory
 	UFUNCTION()
@@ -98,10 +102,6 @@ private:
 private:
 	UPROPERTY()
 		float DefaultKnockBackStrength = 2000.0f;
-
-	//적의 스탯 테이블
-	UPROPERTY()
-		UDataTable* EnemyStatTable;
 
 // ---- VFX ---------------------
 public:
