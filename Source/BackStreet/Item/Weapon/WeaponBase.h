@@ -111,7 +111,6 @@ public:
 	UFUNCTION()
 		float CalculateTotalDamage(FCharacterStateStruct TargetState);
 
-protected:
 	//Weapon¿« ¡æ«’ Stat
 	UPROPERTY(EditInstanceOnly, Category = "Gameplay|Stat")
 		FWeaponStatStruct WeaponStat;

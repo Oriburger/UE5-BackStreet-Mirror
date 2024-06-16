@@ -28,7 +28,7 @@ void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemod
 
 void USkillManagerBase::TrySkill(ACharacterBase* NewCauser, FOwnerSkillInfoStruct* OwnerSkillInfo)
 {
-	ASkillBase* skillBase = ActivateSkillBase(NewCauser, OwnerSkillInfo);
+	ASkillBase* skillBase = ActivateSkillBase(NewCauser, OwnerSkillInfo); //ambigious name 
 	if(!IsValid(skillBase)) return;
 	NewCauser->SetActionState(ECharacterActionType::E_Skill);
 	skillBase->ActivateSkill();
@@ -264,4 +264,13 @@ FSkillUpgradeInfoStruct USkillManagerBase::GetSkillUpgradeInfoStructBySkillID(in
 	return FSkillUpgradeInfoStruct();
 }
 
+void USkillManagerBase::SetSkillBlockState(ACharacterBase* Owner, ESkillType SkillType, bool bNewBlockState)
+{
+	if (!IsValid(Owner) || !IsValid(Owner->GetCurrentWeaponRef())) return;
 
+	FOwnerSkillInfoStruct* ownerSkillInfo = Owner->GetCurrentWeaponRef()->WeaponState.SkillInfoMap.Find(SkillType);
+	if (ownerSkillInfo)
+	{
+		ownerSkillInfo->bSkillBlocked = bNewBlockState;
+	}
+}

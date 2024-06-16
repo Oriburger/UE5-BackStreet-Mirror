@@ -587,6 +587,7 @@ void ACharacterBase::DashAttack()
 void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
+	if (!IsValid(GetCurrentWeaponRef())) return;
 
 	if (!IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()))
 	{
@@ -616,7 +617,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 		}
 		if (AssetSoftPtrInfo.CharacterSkillInfoMap.Find(SkillID)->bSkillBlocked)
 		{
-			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("This skill is blocked")), FColor::White);
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("현재 스킬을 사용할 수 없습니다.")), FColor::White);
 			return;
 		}
 		else
@@ -633,7 +634,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 
 		if (GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.bSkillBlocked)
 		{
-			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("This skill is blocked")), FColor::White);
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("현재 스킬을 사용할 수 없습니다.")), FColor::White);
 			return;
 		}
 		else
@@ -647,6 +648,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	case ESkillType::E_Weapon0:
 	{
 		FOwnerSkillInfoStruct skillInfo = *GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Find(ESkillType::E_Weapon0);
+		UE_LOG(LogTemp, Warning, TEXT("SKILL BLOCK STATE : %d"), (int32)skillInfo.bSkillBlocked);
 		if (CheckCanTrySkill(SkillID, &skillInfo))
 		{
 			CharacterState.bCanAttack = false;
@@ -657,6 +659,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	case ESkillType::E_Weapon1:
 	{
 		FOwnerSkillInfoStruct skillInfo = *GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Find(ESkillType::E_Weapon1);
+		UE_LOG(LogTemp, Warning, TEXT("SKILL BLOCK STATE : %d"), (int32)skillInfo.bSkillBlocked);
 		if (CheckCanTrySkill(SkillID, &skillInfo))
 		{
 			CharacterState.bCanAttack = false;
@@ -683,7 +686,7 @@ bool ACharacterBase::CheckCanTrySkill(int32 SkillID, FOwnerSkillInfoStruct* Skil
 
 	if (SkillInfo->bSkillBlocked)
 	{
-		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("This skill is blocked")), FColor::White);
+		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("현재 스킬을 사용할 수 없습니다.")), FColor::White);
 		return false;
 	}
 	return true;

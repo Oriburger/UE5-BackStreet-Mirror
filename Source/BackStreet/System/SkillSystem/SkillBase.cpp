@@ -4,6 +4,7 @@
 #include "../AssetSystem/AssetManagerBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Character/CharacterBase.h"
+#include "../../Item/Weapon/WeaponBase.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 #include "Components/AudioComponent.h"
@@ -18,7 +19,6 @@ ASkillBase::ASkillBase()
 	DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DEFAULT_SCENE_ROOT"));
 	DefaultSceneRoot->SetupAttachment(RootComponent);
 	SetRootComponent(DefaultSceneRoot);
-
 }
 
 // Called when the game starts or when spawned
@@ -32,7 +32,7 @@ void ASkillBase::BeginPlay()
 
 void ASkillBase::InitSkill(FSkillInfoStruct NewSkillInfo)
 {
-	SkillInfo=NewSkillInfo;
+	SkillInfo = NewSkillInfo;
 	SkillInfo.bHidenInGame = true; 
 	AssetManagerBaseRef =GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
 
@@ -46,6 +46,13 @@ void ASkillBase::InitSkill(FSkillInfoStruct NewSkillInfo)
 void ASkillBase::ActivateSkill_Implementation()
 {
 	SetActorHiddenInGame(false);
+	
+	//Set cooltime timer
+	FSkillLevelStruct skillLevelInfo = SkillInfo.SkillLevelStruct;
+	if (skillLevelInfo.bIsLevelValid && skillLevelInfo.CoolTime > 0.0f)
+	{
+		SetSkillBlockedTimer(skillLevelInfo.CoolTime);
+	}
 }
 
 void ASkillBase::DeactivateSkill()
@@ -84,4 +91,28 @@ UNiagaraSystem* ASkillBase::GetNiagaraEffect(FName EffectName)
 {
 	if(!SkillInfo.SkillAssetStruct.EffectMap.Contains(EffectName)) return nullptr;
 	return SkillInfo.SkillAssetStruct.EffectMap.Find(EffectName)->Effect;
+}
+
+float ASkillBase::GetSkillRemainingCoolTime()
+{
+	//If timer is invalid, return -1.0f
+	return GetWorldTimerManager().GetTimerRemaining(SkillCoolTimeHandle);
+}
+
+void ASkillBase::SetSkillBlockedTimer(float Delay)
+{
+	//Clear timer resource
+	GetWorldTimerManager().ClearTimer(SkillCoolTimeHandle);
+	SkillCoolTimeHandle.Invalidate();
+
+	//Set new timer that is going to call the function "ResetSkillBlockdTimer"
+	SkillManagerRef.Get()->SetSkillBlockState(SkillInfo.Causer.Get(), SkillInfo.SkillType, true);
+	GetWorldTimerManager().SetTimer(SkillCoolTimeHandle, this, &ASkillBase::ResetSkillBlockedTimer
+									, Delay, false);
+}
+
+void ASkillBase::ResetSkillBlockedTimer()
+{
+	if (!SkillInfo.Causer.IsValid()) return;
+	SkillManagerRef.Get()->SetSkillBlockState(SkillInfo.Causer.Get(), SkillInfo.SkillType, false);
 }

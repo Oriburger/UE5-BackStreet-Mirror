@@ -104,4 +104,9 @@ protected:
 private:
 	UPROPERTY()
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+//-------- Timer --------------------------------------------
+public:
+	UFUNCTION(BlueprintCallable)
+		void SetSkillBlockState(ACharacterBase* Owner, ESkillType SkillType, bool bNewBlockState = false);
 };
