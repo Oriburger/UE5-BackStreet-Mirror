@@ -1,0 +1,73 @@
+[
+	{
+		"Name": "0",
+		"WeaponID": 0,
+		"MaxWeaponStatLevelMap":
+		{
+		},
+		"StatAttackRequiredMap":
+		{
+		},
+		"StatAttackSpeedRequiredMap":
+		{
+		},
+		"StatFinalImpactRequiredMap":
+		{
+		}
+	},
+	{
+		"Name": "11100",
+		"WeaponID": 11100,
+		"MaxWeaponStatLevelMap":
+		{
+			"E_Attack": 3,
+			"E_AttackSpeed": 3,
+			"E_FinalImpact": 3
+		},
+		"StatAttackRequiredMap":
+		{
+			"1":
+			{
+				"RequiredMaterialByLevel": [ 0, 1, 1, 1 ]
+			},
+			"2":
+			{
+				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+			},
+			"3":
+			{
+				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+			}
+		},
+		"StatAttackSpeedRequiredMap":
+		{
+			"1":
+			{
+				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+			},
+			"2":
+			{
+				"RequiredMaterialByLevel": [ 0, 1, 1, 1 ]
+			},
+			"3":
+			{
+				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+			}
+		},
+		"StatFinalImpactRequiredMap":
+		{
+			"1":
+			{
+				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+			},
+			"2":
+			{
+				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+			},
+			"3":
+			{
+				"RequiredMaterialByLevel": [ 0, 1, 1, 1 ]
+			}
+		}
+	}
+]

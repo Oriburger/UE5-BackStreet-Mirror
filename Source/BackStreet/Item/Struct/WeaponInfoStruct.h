@@ -25,6 +25,16 @@ enum class EWeaponType : uint8
 
 };
 
+UENUM(BlueprintType)
+enum class EWeaponStatType : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_Attack				UMETA(DisplayName = "Attack"),
+	E_AttackSpeed		UMETA(DisplayName = "AttackSpeed"),
+	E_FinalImpact		UMETA(DisplayName = "FinalImpact")
+
+};
+
 USTRUCT(BlueprintType)
 struct FDebuffInfoStruct
 {
@@ -141,15 +151,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsDefaultWeapon = false;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 MaxCraftingAttackAdder = 0;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 MaxCraftingAttackSpeedAdder = 0;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 MaxCraftingFinalImpactAdder = 0;
-
 //----- ¿ø°Å¸® Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FRangedWeaponStatStruct RangedWeaponStat;
@@ -187,15 +188,10 @@ public:
 	//temp, meleeonly
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FRotator SlashRotation = FRotator::ZeroRotator;
+
 //-----Weapon Stat------
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		int32 CraftingAttackAdder = 0;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		int32 CraftingAttackSpeedAdder = 0;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		int32 CraftingFinalImpactAdder = 0;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		TMap<EWeaponStatType, uint8> WeaponStatLevelMap;
 
 //-----Weapon Skill------
 	//WeaponSkill Info
@@ -204,6 +200,13 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FRangedWeaponStateStruct RangedWeaponState;
+
+	FWeaponStateStruct()
+	{
+		WeaponStatLevelMap.Add(EWeaponStatType::E_Attack, 0);
+		WeaponStatLevelMap.Add(EWeaponStatType::E_AttackSpeed, 0);
+		WeaponStatLevelMap.Add(EWeaponStatType::E_FinalImpact, 0);
+	}
 };
 
 USTRUCT(BlueprintType)

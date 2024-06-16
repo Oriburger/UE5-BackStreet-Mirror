@@ -111,6 +111,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|CraftingManager")
 		UDataTable* PlayerActiveSkillTable;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|CraftingManager")
+		UDataTable* StatUpgradeInfoTable;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|SkillManager")
 		UDataTable* SkillInfoTable;
 

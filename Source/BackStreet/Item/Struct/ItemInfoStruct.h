@@ -1,7 +1,7 @@
 #pragma once
 
 #include "WeaponInfoStruct.h"
-#include "../Character/Struct/CharacterInfoEnum.h"
+#include "../../Character/Struct/CharacterInfoEnum.h"
 #include "Engine/DataTable.h"
 #include "ItemInfoStruct.generated.h"
 
