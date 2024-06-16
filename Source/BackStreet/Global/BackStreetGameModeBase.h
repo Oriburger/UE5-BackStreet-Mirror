@@ -90,6 +90,33 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Class")
 		TSubclassOf<class ANewChapterManagerBase> ChapterManagerClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|AssetManager")
+		UDataTable* SystemSoundAssetTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|AssetManager")
+		UDataTable* WeaponSoundAssetTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|AssetManager")
+		UDataTable* SkillSoundAssetTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|AssetManager")
+		UDataTable* CharacterSoundAssetTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|AssetManager")
+		UDataTable* PropSoundAssetTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|ItemInventory")
+		UDataTable* ItemInfoTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|CraftingManager")
+		UDataTable* PlayerActiveSkillTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|SkillManager")
+		UDataTable* SkillInfoTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|SkillManager")
+		UDataTable* SkillUpgradeInfoTable;
+
 //------ 그 외 프로퍼티 ---------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)

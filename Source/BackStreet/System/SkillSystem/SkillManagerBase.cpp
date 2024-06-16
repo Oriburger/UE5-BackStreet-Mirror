@@ -11,12 +11,6 @@
 
 USkillManagerBase::USkillManagerBase()
 {
-	static ConstructorHelpers::FObjectFinder<UDataTable> skillInfoTableFinder(TEXT("/Game/System/SkillManager/Data/D_SkillInfo.D_SkillInfo"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> skillUpgradeInfoTableFinder(TEXT("/Game/System/CraftingManager/Data/D_SkillUpgradeInfo.D_SkillUpgradeInfo"));
-	checkf(skillUpgradeInfoTableFinder.Succeeded(), TEXT("skillUpgradeInfoTable class discovery failed."));
-	checkf(skillInfoTableFinder.Succeeded(), TEXT("SkillInfoTable class discovery failed."));
-	SkillInfoTable = skillInfoTableFinder.Object;
-	SkillUpgradeInfoTable = skillUpgradeInfoTableFinder.Object;
 }
 
 void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemodeRef)
@@ -24,6 +18,8 @@ void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemod
 	checkf(IsValid(NewGamemodeRef), TEXT("Failed to get GameMode reference"));
 	if (!IsValid(NewGamemodeRef)) return;
 	GamemodeRef = NewGamemodeRef;
+	SkillInfoTable = GamemodeRef.Get()->SkillInfoTable;
+	SkillUpgradeInfoTable = GamemodeRef.Get()->SkillUpgradeInfoTable;
 }
 
 void USkillManagerBase::TrySkill(ACharacterBase* NewCauser, FOwnerSkillInfoStruct* OwnerSkillInfo)

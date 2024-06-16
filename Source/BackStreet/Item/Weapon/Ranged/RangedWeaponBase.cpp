@@ -16,13 +16,6 @@ ARangedWeaponBase::ARangedWeaponBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	this->Tags.Add("Ranged");
-
-	static ConstructorHelpers::FObjectFinder<UDataTable> projectileStatInfoTableFinder(TEXT("/Game/Weapon/Data/D_ProjectileStatTable.D_ProjectileStatTable"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> projectileAssetInfoTableFinder(TEXT("/Game/Weapon/Data/D_ProjectileAssetInfo.D_ProjectileAssetInfo"));
-	checkf(projectileStatInfoTableFinder.Succeeded(), TEXT("statInfoTable 탐색에 실패했습니다."));
-	checkf(projectileAssetInfoTableFinder.Succeeded(), TEXT("assetInfoTable 클래스 탐색에 실패했습니다."));
-	ProjectileStatInfoTable = projectileStatInfoTableFinder.Object;
-	ProjectileAssetInfoTable = projectileAssetInfoTableFinder.Object;
 }
 
 void ARangedWeaponBase::Attack()

@@ -12,9 +12,6 @@
 // Sets default values
 UCraftingManagerBase::UCraftingManagerBase()
 {
-	static ConstructorHelpers::FObjectFinder<UDataTable> playerActiveSkillTableFinder(TEXT("/Game/System/CraftingManager/Data/D_PlayerActiveSkill.D_PlayerActiveSkill"));
-	checkf(playerActiveSkillTableFinder.Succeeded(), TEXT("PlayerActiveSkillTable class discovery failed."));
-	PlayerActiveSkillTable = playerActiveSkillTableFinder.Object;
 }
 
 void UCraftingManagerBase::InitCraftingManager(ABackStreetGameModeBase* NewGamemodeRef)
@@ -23,6 +20,8 @@ void UCraftingManagerBase::InitCraftingManager(ABackStreetGameModeBase* NewGamem
 	GamemodeRef = NewGamemodeRef;
 	checkf(IsValid(GamemodeRef.Get()), TEXT("Failed to get GamemodeRef"));
 	
+	PlayerActiveSkillTable = GamemodeRef.Get()->PlayerActiveSkillTable;
+
 	SkillManagerRef = GamemodeRef->GetGlobalSkillManagerBaseRef();
 	checkf(IsValid(SkillManagerRef.Get()), TEXT("Failed to get SkillManagerRef"));
 
