@@ -2,8 +2,8 @@
 	{
 		"Name": "1",
 		"ChapterID": 1,
-		"EliteTimeAtkStageTimeOut": 60,
-		"NormalTimeAtkStageTimeOut": 10,
+		"EliteTimeAtkStageTimeOut": 120,
+		"NormalTimeAtkStageTimeOut": 90,
 		"EnemyCompositionInfoMap":
 		{
 			"E_Entry":
@@ -12,15 +12,20 @@
 					{
 						"EnemySet":
 						{
-							"1001": 1,
+							"1001": 2,
 							"1100": 1
 						}
 					},
 					{
 						"EnemySet":
 						{
-							"1002": 1,
+							"1002": 2,
 							"1101": 1
+						}
+					},
+					{
+						"EnemySet":
+						{
 						}
 					}
 				]
@@ -31,14 +36,23 @@
 					{
 						"EnemySet":
 						{
-							"1001": 1,
-							"1100": 1
+							"1001": 2,
+							"1100": 2
 						}
 					},
 					{
 						"EnemySet":
 						{
+							"1002": 2,
+							"1101": 2
+						}
+					},
+					{
+						"EnemySet":
+						{
+							"1001": 1,
 							"1002": 1,
+							"1100": 1,
 							"1101": 1
 						}
 					}
@@ -51,14 +65,25 @@
 						"EnemySet":
 						{
 							"1001": 1,
-							"1100": 1
+							"1100": 2,
+							"1110": 1
 						}
 					},
 					{
 						"EnemySet":
 						{
 							"1002": 1,
-							"1101": 1
+							"1101": 2,
+							"1110": 1
+						}
+					},
+					{
+						"EnemySet":
+						{
+							"1001": 1,
+							"1002": 1,
+							"1100": 1,
+							"1110": 1
 						}
 					}
 				]
@@ -69,7 +94,7 @@
 					{
 						"EnemySet":
 						{
-							"1001": 1,
+							"1001": 2,
 							"1100": 1
 						}
 					},
@@ -77,6 +102,15 @@
 						"EnemySet":
 						{
 							"1002": 1,
+							"1101": 2
+						}
+					},
+					{
+						"EnemySet":
+						{
+							"1001": 1,
+							"1002": 1,
+							"1100": 1,
 							"1101": 1
 						}
 					}
@@ -89,14 +123,25 @@
 						"EnemySet":
 						{
 							"1001": 1,
-							"1100": 1
+							"1100": 1,
+							"1110": 1
 						}
 					},
 					{
 						"EnemySet":
 						{
-							"1002": 1,
-							"1101": 1
+							"1002": 2,
+							"1101": 1,
+							"1110": 1
+						}
+					},
+					{
+						"EnemySet":
+						{
+							"1001": 1,
+							"1100": 1,
+							"1101": 1,
+							"1110": 1
 						}
 					}
 				]
@@ -107,7 +152,6 @@
 					{
 						"EnemySet":
 						{
-							"1200": 1
 						}
 					}
 				]
@@ -134,6 +178,7 @@
 			"/Game/Map/Chapter01/Chapter01_OuterArea01.Chapter01_OuterArea01",
 			"/Game/Map/Chapter01/Chapter01_OuterArea02.Chapter01_OuterArea02",
 			"/Game/Map/Chapter01/Chapter01_OuterArea03.Chapter01_OuterArea03"
-		]
+		],
+		"BossCharacterClass": "/Script/Engine.BlueprintGeneratedClass'/Game/Character/EnemyCharacter/Blueprint/BP_BossEnemy.BP_BossEnemy_C'"
 	}
 ]
