@@ -51,3 +51,26 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		TMap<FName, FVariableByLevelStruct> SkillVariableMap;
 };
+
+USTRUCT(BlueprintType)
+struct FStatUpgradeInfoStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		int32 WeaponID = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<EWeaponStatType, uint8> MaxWeaponStatLevelMap;
+
+	//<MaterialID, Need Num of Material>
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<int32, FCraftingMaterialStruct> StatAttackRequiredMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<int32, FCraftingMaterialStruct> StatAttackSpeedRequiredMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<int32, FCraftingMaterialStruct> StatFinalImpactRequiredMap;
+};

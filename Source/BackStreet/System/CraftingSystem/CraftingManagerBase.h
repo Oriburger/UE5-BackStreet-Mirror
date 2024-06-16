@@ -5,10 +5,14 @@
 #include "../../Global/BackStreet.h"
 #include "../../Item/Weapon/WeaponInventoryBase.h"
 #include "CraftingManagerBase.generated.h"
+
+#define MAX_STAT_LEVEL 5
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateFailedToGetCharacter);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateFailedToGetWeapon);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateFailedToGetItemInventory);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateSkillLevelUpdated);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateStatLevelUpdated);
 
 UCLASS(BlueprintType)
 class BACKSTREET_API UCraftingManagerBase : public UObject
@@ -33,6 +37,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateSkillLevelUpdated OnSkillLevelUpdated;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateStatLevelUpdated OnStatLevelUpdated;
 
 // ------ Default SkillUpgrade Logic -----------------------------
 public:
@@ -71,6 +78,29 @@ private:
 	//For convenience
 	FSkillUpgradeInfoStruct GetSkillUpgradeInfoStructBySkillID(int32 SkillID);
 
+// ------ Default StatUpgrade Logic -----------------------------
+public:
+	UFUNCTION(BlueprintCallable)
+		bool UpgradeStat(TMap<EWeaponStatType, uint8> NewTempStatMap);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool IsStatUpgradeAvailable(TMap<EWeaponStatType, uint8> NewTempStatMap);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool IsValidLevelForStatUpgrade(TMap<EWeaponStatType, uint8> NewTempStatMap);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool IsOwnMaterialEnoughForStatUpgrade(TMap<EWeaponStatType, uint8> NewTempStatMap);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	TArray<uint8> GetRequiredMaterialAmountForStat(TMap<EWeaponStatType, uint8> NewTempStatMap);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		uint8 GetCurrentStatLevel(int32 CurrWeaponID, EWeaponStatType WeaponStatType);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		uint8 GetMaxStatLevel(int32 CurrWeaponID, EWeaponStatType WeaponStatType);
+
 //-------- ETC. (Ref)-------------------------------
 public:
 	UPROPERTY()
@@ -84,4 +114,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		UDataTable* PlayerActiveSkillTable;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		UDataTable* StatUpgradeInfoTable;
 };
