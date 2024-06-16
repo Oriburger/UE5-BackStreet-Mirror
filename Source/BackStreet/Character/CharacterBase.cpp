@@ -885,7 +885,7 @@ void ACharacterBase::SetAsset()
 	{
 		if (dynamicMaterial.IsValid())
 		{
-			AssetHardPtrInfo.DynamicMaterialList.AddUnique(dynamicMaterial.Get());
+			AssetHardPtrInfo.DynamicMaterialList.Add(dynamicMaterial.Get());
 		}
 	}
 	for (TSoftObjectPtr<UTexture>& emotionTexture : AssetSoftPtrInfo.EmotionTextureSoftPtrList)
