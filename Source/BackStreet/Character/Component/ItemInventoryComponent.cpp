@@ -59,12 +59,14 @@ void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
 {
 	if (!ItemMap.Contains(ItemID)) return;
 	ItemMap[ItemID].ItemAmount += ItemCnt;
+	OnUpdateItem.Broadcast();
 }
 
 void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
 {
 	if (!ItemMap.Contains(ItemID)) return;
 	ItemMap[ItemID].ItemAmount -= ItemCnt;
+	OnUpdateItem.Broadcast();
 }
 
 void UItemInventoryComponent::GetItemData(int32 ItemID, FItemDataStruct& ItemData)
