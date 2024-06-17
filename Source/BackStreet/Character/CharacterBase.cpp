@@ -615,7 +615,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 		}
 		if (AssetSoftPtrInfo.CharacterSkillInfoMap.Find(SkillID)->bSkillBlocked)
 		{
-			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("현재 스킬을 사용할 수 없습니다.")), FColor::White);
+			//GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("현재 스킬을 사용할 수 없습니다.")), FColor::White);
 			return;
 		}
 		else
@@ -632,7 +632,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 
 		if (GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.bSkillBlocked)
 		{
-			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("현재 스킬을 사용할 수 없습니다.")), FColor::White);
+			//GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("현재 스킬을 사용할 수 없습니다.")), FColor::White);
 			return;
 		}
 		else
@@ -684,7 +684,7 @@ bool ACharacterBase::CheckCanTrySkill(int32 SkillID, FOwnerSkillInfoStruct* Skil
 
 	if (SkillInfo->bSkillBlocked)
 	{
-		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("현재 스킬을 사용할 수 없습니다.")), FColor::White);
+		//GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("현재 스킬을 사용할 수 없습니다.")), FColor::White);
 		return false;
 	}
 	return true;
