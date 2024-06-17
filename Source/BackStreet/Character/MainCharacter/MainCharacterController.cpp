@@ -26,16 +26,16 @@ FRotator AMainCharacterController::GetAimingRotation()
 	//if (genericApplication.Get() != nullptr && genericApplication->IsGamepadAttached())
 	//{
 		//return GetRightAnalogRotation();
-	//	return FRotator();
+	//	return FRotator::ZeroRotator;
 	//}
 	return GetRotationToCursor();
 }
 
 FRotator AMainCharacterController::GetRotationToCursor()
 {
-	if (!IsValid(GetPawn())) return FRotator();
+	if (!IsValid(GetPawn())) return FRotator::ZeroRotator;
 
-	FRotator retRotation = FRotator();
+	FRotator retRotation = FRotator::ZeroRotator;
 	FVector cursorWorldDeprojectionLocation = GetCursorDeprojectionWorldLocation();
 
 	retRotation = UKismetMathLibrary::FindLookAtRotation(GetPawn()->GetActorLocation(), cursorWorldDeprojectionLocation);

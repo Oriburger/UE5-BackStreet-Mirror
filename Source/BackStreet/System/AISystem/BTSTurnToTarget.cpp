@@ -51,7 +51,7 @@ void UBTSTurnToTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 
 FRotator UBTSTurnToTarget::GetTurnRotation(APawn* ControlledPawn)
 {
-	if (!IsValid(ControlledPawn)) return FRotator();
+	if (!IsValid(ControlledPawn)) return FRotator::ZeroRotator;
 
 	if (TargetBBKey.SelectedKeyType == UBlackboardKeyType_Rotator::StaticClass())
 	{
@@ -67,13 +67,13 @@ FRotator UBTSTurnToTarget::GetTurnRotation(APawn* ControlledPawn)
 	{
 		AActor* targetActor = Cast<AActor>(BlackboardRef->GetValueAsObject(TargetBBKey.SelectedKeyName));
 		if (!IsValid(targetActor))
-			return FRotator();
+			return FRotator::ZeroRotator;
 		targetLocation = targetActor->GetActorLocation();
 	}
 	else if (TargetBBKey.SelectedKeyType == UBlackboardKeyType_Vector::StaticClass())
 		targetLocation = BlackboardRef->GetValueAsVector(TargetBBKey.SelectedKeyName);
 	else
-		return FRotator();
+		return FRotator::ZeroRotator;
 
 	//Get target rotation using target location.
 	FVector directionToTarget = targetLocation - ControlledPawn->GetActorLocation();
