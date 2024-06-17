@@ -44,7 +44,7 @@ public:
 // ------ Default SkillUpgrade Logic -----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
-		bool AddSkill(int32 NewSkillID);
+		void AddSkill(int32 NewSkillID);
 
 	//Return true when successfully upgraded
 	UFUNCTION(BlueprintCallable)		

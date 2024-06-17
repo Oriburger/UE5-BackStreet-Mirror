@@ -645,7 +645,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	}
 	case ESkillType::E_Weapon0:
 	{
-		FOwnerSkillInfoStruct skillInfo = *GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Find(ESkillType::E_Weapon0);
+		FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon0];
 		UE_LOG(LogTemp, Warning, TEXT("SKILL BLOCK STATE : %d"), (int32)skillInfo.bSkillBlocked);
 		if (CheckCanTrySkill(SkillID, &skillInfo))
 		{
@@ -656,7 +656,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	}
 	case ESkillType::E_Weapon1:
 	{
-		FOwnerSkillInfoStruct skillInfo = *GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Find(ESkillType::E_Weapon1);
+		FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon1];
 		UE_LOG(LogTemp, Warning, TEXT("SKILL BLOCK STATE : %d"), (int32)skillInfo.bSkillBlocked);
 		if (CheckCanTrySkill(SkillID, &skillInfo))
 		{
@@ -667,7 +667,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	}
 	case ESkillType::E_Weapon2:
 	{
-		FOwnerSkillInfoStruct skillInfo = *GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Find(ESkillType::E_Weapon2);
+		FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon2];
 		if (CheckCanTrySkill(SkillID, &skillInfo))
 		{
 			CharacterState.bCanAttack = false;
