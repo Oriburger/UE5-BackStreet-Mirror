@@ -139,7 +139,7 @@ FSkillInfoStruct USkillManagerBase::GetCurrSkillInfoByType(ESkillType SkillType)
 	TWeakObjectPtr<class AWeaponBase> weaponRef = mainCharacterRef->GetCurrentWeaponRef();
 	if (!IsValid(weaponRef.Get())) return FSkillInfoStruct();
 	if (!weaponRef->GetWeaponState().SkillInfoMap.Contains(SkillType)) return FSkillInfoStruct();
-	FOwnerSkillInfoStruct* ownerSkillInfo = weaponRef->GetWeaponState().SkillInfoMap.Find(SkillType);
+	FOwnerSkillInfoStruct* ownerSkillInfo = &weaponRef->WeaponState.SkillInfoMap[SkillType];
 	if (ownerSkillInfo->SkillID == 0) return FSkillInfoStruct();
 
 	//기존에 만들어져 있는 스킬 베이스 중 원하는 스킬이 있는지 확인
@@ -158,7 +158,6 @@ FSkillInfoStruct USkillManagerBase::GetCurrSkillInfoByType(ESkillType SkillType)
 	//ID에 따른 스킬 기본 구조 불러오기
 
 	FString rowName = FString::FromInt(ownerSkillInfo->SkillID);
-
 	FSkillInfoStruct* skillInfo = SkillInfoTable->FindRow<FSkillInfoStruct>(FName(rowName), rowName);
 	FSkillUpgradeInfoStruct* skillUpgradeInfo = SkillUpgradeInfoTable->FindRow<FSkillUpgradeInfoStruct>(FName(rowName), rowName);
 	
@@ -223,7 +222,6 @@ FSkillInfoStruct* USkillManagerBase::GetSkillInfoStructByOwnerSkillInfo(FOwnerSk
 	if (!IsValid(SkillInfoTable)) { UE_LOG(LogTemp, Log, TEXT("There's no SkillInfoTable")); return nullptr; }
 
 	FString rowName = FString::FromInt(OwnerSkillInfo->SkillID);
-	
 	FSkillInfoStruct* skillInfo = SkillInfoTable->FindRow<FSkillInfoStruct>(FName(rowName), rowName);
 	return skillInfo;
 }
@@ -233,7 +231,6 @@ FSkillInfoStruct USkillManagerBase::GetSkillInfoStructBySkillID(int32 SkillID)
 	if (!IsValid(SkillInfoTable)) { UE_LOG(LogTemp, Log, TEXT("There's no SkillInfoTable")); return FSkillInfoStruct(); }
 
 	FString rowName = FString::FromInt(SkillID);
-
 	FSkillInfoStruct* skillInfo = SkillInfoTable->FindRow<FSkillInfoStruct>(FName(rowName), rowName);
 	if (IsSkillInfoStructValid(*skillInfo))
 	{
@@ -251,7 +248,6 @@ FSkillUpgradeInfoStruct USkillManagerBase::GetSkillUpgradeInfoStructBySkillID(in
 	}
 
 	FString rowName = FString::FromInt(SkillID);
-
 	FSkillUpgradeInfoStruct* skillUpgradeInfo = SkillUpgradeInfoTable->FindRow<FSkillUpgradeInfoStruct>(FName(rowName), rowName);
 	if (skillUpgradeInfo != nullptr)
 	{

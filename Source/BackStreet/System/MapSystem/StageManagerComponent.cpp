@@ -278,13 +278,19 @@ void UStageManagerComponent::SpawnCraftbox()
 
 void UStageManagerComponent::SpawnPortal(int32 GateCount)
 {
+	if (CurrentStageInfo.PortalLocationList.Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::SpawnPortal -> Can't Find Portal Spawn Point!"));
+		return;
+	}
+
 	//Temporary code for linear stage system. (GateCount will not be used til BIC)
 	AGateBase* newGate = GetWorld()->SpawnActor<AGateBase>(GateClass, CurrentStageInfo.PortalLocationList[0], FRotator::ZeroRotator);
 	if (IsValid(newGate))
 	{
 		SpawnedActorList.Add(newGate);
 		newGate->InitGate({ 1, 0 });
-		
+
 		//temp
 		newGate->ActivateGate();
 		newGate->OnEnterRequestReceived.BindUFunction(GetOwner(), FName("MoveStage"));
@@ -303,7 +309,7 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 
 		//Start stage with delay
 		FTimerHandle gameStartDelayHandle;
-		GetWorld()->GetTimerManager().SetTimer(gameStartDelayHandle, this, &UStageManagerComponent::StartStage, 1.0f, false, 1.5f);
+		GetWorld()->GetTimerManager().SetTimer(gameStartDelayHandle, this, &UStageManagerComponent::StartStage, 2.0f, false);
 	}
 }
 

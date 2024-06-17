@@ -47,9 +47,9 @@ void UCraftingManagerBase::InitCraftingManager(ABackStreetGameModeBase* NewGamem
 	}
 }
 
-bool UCraftingManagerBase::AddSkill(int32 NewSkillID)
+void UCraftingManagerBase::AddSkill(int32 NewSkillID)
 {
-	if(MainCharacterRef->GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 0) return false;
+	if(MainCharacterRef->GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 0) return;
 	ESkillType newSkillType = GetSkillTypeByID(NewSkillID);
 	FWeaponStateStruct weaponState = MainCharacterRef->GetCurrentWeaponRef()->GetWeaponState();
 	//플레이어가 해당 스킬을 가지고 있지 않은경우
@@ -66,7 +66,7 @@ bool UCraftingManagerBase::AddSkill(int32 NewSkillID)
 		weaponState.SkillInfoMap[newSkillType].SkillLevel = SkillManagerRef->GetCurrSkillLevelByType(newSkillType);
 	}
 	MainCharacterRef->GetCurrentWeaponRef()->SetWeaponState(weaponState);
-	return true;
+	return;
 }
 
 bool UCraftingManagerBase::UpgradeSkill(int32 NewSkillID, uint8 TempLevel)
@@ -74,14 +74,14 @@ bool UCraftingManagerBase::UpgradeSkill(int32 NewSkillID, uint8 TempLevel)
 	ESkillType skillType = GetSkillTypeByID(NewSkillID);
 	if(TempLevel == SkillManagerRef->GetCurrSkillLevelByType(skillType)) return false;
 	if (!IsSkillUpgradeAvailable(NewSkillID, TempLevel)) return false;
-	if (!AddSkill(NewSkillID)) return false;
+	AddSkill(NewSkillID);
 	FWeaponStateStruct weaponState = MainCharacterRef->GetCurrentWeaponRef()->GetWeaponState();
 	FOwnerSkillInfoStruct ownerSkillInfo = weaponState.SkillInfoMap[skillType];
 	ownerSkillInfo.SkillLevel = TempLevel;
 	weaponState.SkillInfoMap.Add(skillType, ownerSkillInfo);
 	
 	//하드코딩 BIC이후 제거
-	for (int i = 0; i < 3; i++)
+	for (int32 i = 0; i < 3; i++)
 	{
 		MainCharacterRef->ItemInventory->RemoveItem(i+1, GetRequiredMaterialAmount(SkillManagerRef->GetCurrSkillInfoByType(skillType), TempLevel)[i]);
 	}
