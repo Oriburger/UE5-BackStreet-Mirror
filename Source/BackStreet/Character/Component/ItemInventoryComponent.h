@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "ItemInventoryComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateUpdateItem);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API UItemInventoryComponent : public UActorComponent
@@ -18,6 +19,9 @@ public:
 
 	UFUNCTION()
 		void InitInventory();
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+	FDelegateUpdateItem OnUpdateItem;
 
 protected:
 	// Called when the game starts

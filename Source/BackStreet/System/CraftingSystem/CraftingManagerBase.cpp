@@ -220,7 +220,6 @@ bool UCraftingManagerBase::UpgradeStat(TMap<EWeaponStatType, uint8> NewTempStatM
 	MainCharacterRef->GetCurrentWeaponRef()->SetWeaponState(weaponState);
 	OnStatLevelUpdated.Broadcast();
 	return true;
-	return false;
 }
 
 bool UCraftingManagerBase::IsStatUpgradeAvailable(TMap<EWeaponStatType, uint8> NewTempStatMap)
