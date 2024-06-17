@@ -49,6 +49,9 @@ public:
 		void RemoveSkillInSkillBaseMap(ACharacterBase* NewCauser);
 
 //--------- Getter --------------------------
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetSkillRemainingCoolTime(ACharacterBase Causer, int32 SkillID);
+
 	//Checks if given struct's SkillID != 0 returns true
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool IsSkillInfoStructValid(const FSkillInfoStruct& SkillInfo);
@@ -74,7 +77,7 @@ public:
 
 	//Get current player's weapon SkillCoolTime by type
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-			float GetCurrSkillCoolTimeByType(ESkillType SkillType);
+		float GetCurrSkillCoolTimeByType(ESkillType SkillType);
 
 
 //--------- DataTable, Data ----------------------
