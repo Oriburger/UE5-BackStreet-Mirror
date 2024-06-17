@@ -20,19 +20,20 @@ void UItemInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (GamemodeRef.IsValid())
-	{
-		ItemTable = GamemodeRef.Get()->ItemInfoTable;
-	}
 }
 
 void UItemInventoryComponent::InitInventory()
 {
-	if (!ItemTable)
+	UE_LOG(LogTemp, Warning, TEXT(""))
+	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GamemodeRef.IsValid())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("DataTable is null!"));
-		return;
+		ItemTable = GamemodeRef.Get()->ItemInfoTable;
+		if (!ItemTable)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("DataTable is null!"));
+			return;
+		}
 	}
 
 	static const FString ContextString(TEXT("GENERAL"));
