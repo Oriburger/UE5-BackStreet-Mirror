@@ -33,7 +33,7 @@ protected:
 // ============ Core Function =======================
 public:
 	UFUNCTION()	
-		AActor* FindNearEnemyToTarget(float Radius = 350.0f);
+		AActor* FindNearEnemyToTarget(float Radius = 500.0f);
 
 	UFUNCTION()
 		void ForceTargetingToNearestCharacter();
@@ -73,10 +73,10 @@ public:
 		bool bAutoTargeting = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float TargetingRadius = 350.0f;
+		float TargetingRadius = 500.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float MaxFindDistance = 1000.0f;
+		float MaxFindDistance = 1500.0f;
 		
 private:
 	bool bIsTargetingActivated;
