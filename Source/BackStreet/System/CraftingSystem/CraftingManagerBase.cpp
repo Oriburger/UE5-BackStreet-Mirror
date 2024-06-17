@@ -184,7 +184,6 @@ ESkillType UCraftingManagerBase::GetSkillTypeByID(int32 NewSkillID)
 TArray<FName> UCraftingManagerBase::GetSkillVariableKeyList(int32 NewSkillID)
 {
 	TArray<FName> skillVariableKeyList;
-	FString rowName = FString::FromInt(NewSkillID);
 	FSkillUpgradeInfoStruct skillUpgradeInfo = GetSkillUpgradeInfoStructBySkillID(NewSkillID);
 	skillUpgradeInfo.SkillVariableMap.GenerateKeyArray(skillVariableKeyList);
 	return skillVariableKeyList;
@@ -263,21 +262,33 @@ TArray<uint8> UCraftingManagerBase::GetRequiredMaterialAmountForStat(TMap<EWeapo
 {
 	int32 currWeaponID = MainCharacterRef->GetCurrentWeaponRef()->WeaponStat.WeaponID;
 	TArray<uint8> requiredMaterialList;
-
 	FString rowName = FString::FromInt(currWeaponID);
 	FStatUpgradeInfoStruct* statUpgradeInfo = StatUpgradeInfoTable->FindRow<FStatUpgradeInfoStruct>(FName(rowName), rowName);
-	uint8 tempType = 0;
-	uint8 sumAttack = 0;
-	uint8 sumAttackSpeed = 0;
-	uint8 sumFinalImpact = 0;
-	TArray<EWeaponStatType> WeaponStatTypeList;
-	NewTempStatMap.GenerateKeyArray(WeaponStatTypeList);
+	
+	TArray<uint8> sumStat = {0,0,0};
 
 	//스탯 타입 별로 순회
-	for (EWeaponStatType StatType:WeaponStatTypeList)
+	for(uint8 type = 1; type<=3; type++)
 	{
-		EWeaponStatType statType = static_cast<EWeaponStatType>(tempType);
-		uint8 tempLevel = *NewTempStatMap.Find(statType);
+		UE_LOG(LogTemp, Warning, TEXT("%d번 타입"), type);
+		EWeaponStatType statType = EWeaponStatType::E_None;
+		switch (type)
+		{
+		case 1:
+			statType = EWeaponStatType::E_Attack;
+			break;
+		case 2:
+			statType = EWeaponStatType::E_AttackSpeed;
+			break;
+		case 3:
+			statType = EWeaponStatType::E_FinalImpact;
+			break;
+		}
+		uint8 tempLevel = 0;
+		if (NewTempStatMap.Contains(statType))
+		{
+			tempLevel = *NewTempStatMap.Find(statType);
+		}
 		uint8 currLevel = GetCurrentStatLevel(currWeaponID, statType);
 		switch (statType)
 		{
@@ -286,61 +297,64 @@ TArray<uint8> UCraftingManagerBase::GetRequiredMaterialAmountForStat(TMap<EWeapo
 			for (uint8 tempMat = 1; tempMat <= 3; tempMat++)
 			{
 				//레벨별로 순회
-				for (currLevel; currLevel < tempLevel; currLevel++)
+				for (currLevel +=1; currLevel <= tempLevel; currLevel++)
 				{
 					switch (tempMat)
 					{
 					case 1:
-						sumAttack += statUpgradeInfo->StatAttackRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
+						sumStat[tempMat-1] = sumStat[tempMat - 1] + statUpgradeInfo->StatAttackRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
 					case 2:
-						sumAttackSpeed += statUpgradeInfo->StatAttackSpeedRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
+						sumStat[tempMat - 1] = sumStat[tempMat - 1] + statUpgradeInfo->StatAttackSpeedRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
 					case 3:
-						sumFinalImpact += statUpgradeInfo->StatFinalImpactRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
+						sumStat[tempMat - 1] = sumStat[tempMat-1] + statUpgradeInfo->StatFinalImpactRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
 					}
 				}
+				UE_LOG(LogTemp, Warning, TEXT("%d : % d"), tempMat, sumStat[tempMat - 1]);
 			}
 			break;
 		case EWeaponStatType::E_AttackSpeed:
 			for (uint8 tempMat = 1; tempMat <= 3; tempMat++)
 			{
 				//레벨별로 순회
-				for (currLevel; currLevel < tempLevel; currLevel++)
+				for (currLevel += 1; currLevel <= tempLevel; currLevel++)
 				{
 					switch (tempMat)
 					{
 					case 1:
-						sumAttack += statUpgradeInfo->StatAttackRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
+						sumStat[tempMat - 1] = sumStat[tempMat - 1] + statUpgradeInfo->StatAttackRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
 					case 2:
-						sumAttackSpeed += statUpgradeInfo->StatAttackSpeedRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
+						sumStat[tempMat - 1] = sumStat[tempMat - 1] + statUpgradeInfo->StatAttackSpeedRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
 					case 3:
-						sumFinalImpact += statUpgradeInfo->StatFinalImpactRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
+						sumStat[tempMat - 1] = sumStat[tempMat - 1] + statUpgradeInfo->StatFinalImpactRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
 					}
 				}
+				UE_LOG(LogTemp, Warning, TEXT("%d : % d"), tempMat, sumStat[tempMat - 1]);
 			}
 			break;
 		case EWeaponStatType::E_FinalImpact:
 			for (uint8 tempMat = 1; tempMat <= 3; tempMat++)
 			{
 				//레벨별로 순회
-				for (currLevel; currLevel < tempLevel; currLevel++)
+				for (currLevel += 1; currLevel <= tempLevel; currLevel++)
 				{
 					switch (tempMat)
 					{
 					case 1:
-						sumAttack += statUpgradeInfo->StatAttackRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
+						sumStat[tempMat - 1] = sumStat[tempMat - 1] + statUpgradeInfo->StatAttackRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
 					case 2:
-						sumAttackSpeed += statUpgradeInfo->StatAttackSpeedRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
+						sumStat[tempMat - 1] = sumStat[tempMat - 1] + statUpgradeInfo->StatAttackSpeedRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
 					case 3:
-						sumFinalImpact += statUpgradeInfo->StatFinalImpactRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
+						sumStat[tempMat - 1] = sumStat[tempMat - 1] + statUpgradeInfo->StatFinalImpactRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
 					}
 				}
+				UE_LOG(LogTemp, Warning, TEXT("%d : % d"), tempMat, sumStat[tempMat - 1]);
 			}
 			break;
 		}
 	}
-	requiredMaterialList.Add(sumAttack);
-	requiredMaterialList.Add(sumAttackSpeed);
-	requiredMaterialList.Add(sumFinalImpact);
+	requiredMaterialList.Add(sumStat[0]);
+	requiredMaterialList.Add(sumStat[1]);
+	requiredMaterialList.Add(sumStat[2]);
 	return requiredMaterialList;
 }
 

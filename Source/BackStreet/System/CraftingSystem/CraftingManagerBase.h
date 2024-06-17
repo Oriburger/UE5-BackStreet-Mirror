@@ -93,7 +93,7 @@ public:
 		bool IsOwnMaterialEnoughForStatUpgrade(TMap<EWeaponStatType, uint8> NewTempStatMap);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	TArray<uint8> GetRequiredMaterialAmountForStat(TMap<EWeaponStatType, uint8> NewTempStatMap);
+		TArray<uint8> GetRequiredMaterialAmountForStat(TMap<EWeaponStatType, uint8> NewTempStatMap);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		uint8 GetCurrentStatLevel(int32 CurrWeaponID, EWeaponStatType WeaponStatType);
