@@ -51,7 +51,7 @@ EBTNodeResult::Type UBTTaskTurnToTargetLocation::ExecuteTask(UBehaviorTreeCompon
     
 FRotator UBTTaskTurnToTargetLocation::GetTurnRotation(APawn* ControlledPawn)
 {   
-    if (!IsValid(ControlledPawn)) return FRotator();
+    if (!IsValid(ControlledPawn)) return FRotator::ZeroRotator;
 
     //if key type is frotator -> get target rotation using target rotation 
     if (TargetBBKey.SelectedKeyType == UBlackboardKeyType_Rotator::StaticClass())
@@ -68,13 +68,13 @@ FRotator UBTTaskTurnToTargetLocation::GetTurnRotation(APawn* ControlledPawn)
     {
         AActor* targetActor = Cast<AActor>(BlackboardRef->GetValueAsObject(TargetBBKey.SelectedKeyName));
         if (!IsValid(targetActor))
-            return FRotator();
+            return FRotator::ZeroRotator;
         targetLocation = targetActor->GetActorLocation();
     }
     else if (TargetBBKey.SelectedKeyType == UBlackboardKeyType_Vector::StaticClass())
         targetLocation = BlackboardRef->GetValueAsVector(TargetBBKey.SelectedKeyName);
     else 
-        return FRotator();
+        return FRotator::ZeroRotator;
 
     //Get target rotation using target location.
     FVector directionToTarget = targetLocation - ControlledPawn->GetActorLocation();

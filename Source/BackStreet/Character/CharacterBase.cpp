@@ -1175,7 +1175,7 @@ AWeaponBase* ACharacterBase::SpawnWeaponActor(EWeaponType TargetWeaponType)
 	spawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	const FVector spawnLocation = GetActorLocation();
-	const FRotator spawnRotation = FRotator();
+	const FRotator spawnRotation = FRotator::ZeroRotator;
 	const FVector spawnScale3D = ActorHasTag("Player") ? FVector(2.0f) : FVector(1.0f / GetCapsuleComponent()->GetComponentScale().X);
 	FTransform spawnTransform = FTransform(spawnRotation, spawnLocation, spawnScale3D);
 	AWeaponBase* newWeapon = Cast<AWeaponBase>(GetWorld()->SpawnActor(weaponClass, &spawnTransform, spawnParams));

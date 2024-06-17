@@ -196,7 +196,7 @@ void AWeaponBase::UpdateDurabilityState()
 	{
 		if (IsValid(DestroyEffectParticle))
 		{
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyEffectParticle, GetActorLocation(), FRotator()); //파괴 효과
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyEffectParticle, GetActorLocation(), FRotator::ZeroRotator); //파괴 효과
 		}
 		ClearAllTimerHandle();
 		OwnerCharacterRef.Get()->StopAttack();
