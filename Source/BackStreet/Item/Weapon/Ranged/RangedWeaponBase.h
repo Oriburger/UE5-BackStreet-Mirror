@@ -66,15 +66,16 @@ protected:
 	UFUNCTION()
 		void SpawnShootNiagaraEffect();
 
-protected:
+public:
 	//발사체의 에셋 테이블
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Weapon|Projectile")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* ProjectileAssetInfoTable;
 
 	//발사체의 스탯 테이블
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Weapon|Projectile")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* ProjectileStatInfoTable;
 
+protected:
 	//발사체의 에셋 정보를 담을 캐시 변수
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Weapon|Projectile")
 		FProjectileAssetInfoStruct ProjectileAssetInfo;
