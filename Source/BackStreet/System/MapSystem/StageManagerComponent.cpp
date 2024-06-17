@@ -4,8 +4,11 @@
 #include "StageManagerComponent.h"
 #include "../../Character/EnemyCharacter/EnemyCharacterBase.h"
 #include "../../Character/CharacterBase.h"
+#include "../../Character/Component/ItemInventoryComponent.h"
+#include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "../AISystem/AIControllerBase.h"
 #include "./Stage/GateBase.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "SlateBasics.h"
 #include "Runtime/UMG/Public/UMG.h"
 
@@ -15,19 +18,6 @@ UStageManagerComponent::UStageManagerComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-
-	// Init blueprint class
-	static ConstructorHelpers::FClassFinder<AGateBase> gateInventoryClassFinder(TEXT("/Game/System/StageManager/Blueprint/BP_Gate"));
-	checkf(gateInventoryClassFinder.Succeeded(), TEXT("UStageManagerComponent::Gate 클래스 탐색에 실패했습니다."));
-	GateClass = gateInventoryClassFinder.Class;
-
-	static ConstructorHelpers::FClassFinder<AEnemyCharacterBase> enemyCharacterClassFinder(TEXT("/Game/Character/EnemyCharacter/Blueprint/BP_EnemyCharacter"));
-	checkf(enemyCharacterClassFinder.Succeeded(), TEXT("UStageManagerComponent::EnemyCharacter 클래스 탐색에 실패했습니다."));
-	EnemyCharacterClass = enemyCharacterClassFinder.Class;
-
-	static ConstructorHelpers::FClassFinder<UUserWidget> loadingWidgetClassFinder(TEXT("/Game/UI/Global/Blueprint/WB_LoadingScreenSimple"));
-	checkf(loadingWidgetClassFinder.Succeeded(), TEXT("UStageManagerComponent::loadingWidget 클래스 탐색에 실패했습니다."));
-	LoadingWidgetClass = loadingWidgetClassFinder.Class;
 }
 
 
@@ -288,13 +278,19 @@ void UStageManagerComponent::SpawnCraftbox()
 
 void UStageManagerComponent::SpawnPortal(int32 GateCount)
 {
+	if (CurrentStageInfo.PortalLocationList.Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::SpawnPortal -> Can't Find Portal Spawn Point!"));
+		return;
+	}
+
 	//Temporary code for linear stage system. (GateCount will not be used til BIC)
 	AGateBase* newGate = GetWorld()->SpawnActor<AGateBase>(GateClass, CurrentStageInfo.PortalLocationList[0], FRotator::ZeroRotator);
 	if (IsValid(newGate))
 	{
 		SpawnedActorList.Add(newGate);
 		newGate->InitGate({ 1, 0 });
-		
+
 		//temp
 		newGate->ActivateGate();
 		newGate->OnEnterRequestReceived.BindUFunction(GetOwner(), FName("MoveStage"));
@@ -313,7 +309,7 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 
 		//Start stage with delay
 		FTimerHandle gameStartDelayHandle;
-		GetWorld()->GetTimerManager().SetTimer(gameStartDelayHandle, this, &UStageManagerComponent::StartStage, 1.0f, false, 1.5f);
+		GetWorld()->GetTimerManager().SetTimer(gameStartDelayHandle, this, &UStageManagerComponent::StartStage, 2.0f, false);
 	}
 }
 
@@ -389,6 +385,9 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	{
 		//Stage Clear UI Update using delegate
 		OnStageCleared.Broadcast();
+
+		//Stage Reward
+		GrantStageRewards();
 	}
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
 		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
@@ -397,6 +396,9 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 		{
 			//Stage Clear UI Update using delegate
 			OnStageCleared.Broadcast();
+
+			//Stage Reward
+			GrantStageRewards();
 		}
 		else
 		{
@@ -410,6 +412,36 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	
 	//StageFinished Delegate
 	OnStageFinished.Broadcast(CurrentStageInfo);
+}
+
+void UStageManagerComponent::GrantStageRewards()
+{
+	AMainCharacterBase* playerCharacter = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (IsValid(playerCharacter))
+	{
+		//@@@@@@@@@@@@@ Hard coding for BIC @@@@@@@@@@@@@@@@@@
+		int32 maxGrantCountPerItem = 0;
+
+		maxGrantCountPerItem = (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
+							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat
+							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack)
+							? 3 : maxGrantCountPerItem;
+		maxGrantCountPerItem = (CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteCombat
+							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
+							? 5 : maxGrantCountPerItem;
+
+		UE_LOG(LogTemp, Warning, TEXT("Grant %d"), maxGrantCountPerItem);
+
+		for (int32 id = 1; id <= 3; id++)
+		{ 
+			int32 grantCnt = UKismetMathLibrary::RandomInteger(maxGrantCountPerItem + 1);
+			if (grantCnt > 0)
+			{
+				playerCharacter->ItemInventory->AddItem(id, grantCnt);
+			}
+		}
+			
+	}
 }
 
 void UStageManagerComponent::UpdateEnemyCountAndCheckClear()

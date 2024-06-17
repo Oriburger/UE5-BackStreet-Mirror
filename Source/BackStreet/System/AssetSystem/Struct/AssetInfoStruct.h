@@ -62,10 +62,10 @@ public:
 	*******************************************************/
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		ESoundAssetType SoundType;
+		ESoundAssetType SoundType = ESoundAssetType::E_None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 TargetID;
+		int32 TargetID = 0;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FName SoundTarget;
@@ -85,7 +85,7 @@ public:
 
 //--------------- Common ------------------------------------
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		int32 CharacterID;
+		int32 CharacterID = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FName CharacterName;
@@ -94,16 +94,16 @@ public:
 		TSoftObjectPtr<USkeletalMesh> CharacterMeshSoftPtr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
-		FVector InitialLocation;
+		FVector InitialLocation = FVector::ZeroVector;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
-		FRotator InitialRotation;
+		FRotator InitialRotation = FRotator::ZeroRotator;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
-		FVector InitialScale;
+		FVector InitialScale = FVector::ZeroVector;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
-		FVector InitialCapsuleComponentScale;
+		FVector InitialCapsuleComponentScale = FVector::ZeroVector;
 
 	//CharacterSkillList
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")

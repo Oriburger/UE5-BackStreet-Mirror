@@ -23,10 +23,10 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(BlueprintReadOnly)
-		float PercentValue;
+		float PercentValue = 0.0f;
 
 	UPROPERTY(BlueprintReadOnly)
-		float FixedValue;
+		float FixedValue = 0.0f;
 };
 
 //===============================================
@@ -98,7 +98,7 @@ public:
 
 	//캐릭터의 종류를 나타내는 ID
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0, UIMax = 2500))
-		int32 CharacterID;
+		int32 CharacterID = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		bool bIsInvincibility = false;
@@ -151,27 +151,27 @@ public:
 
 	//캐릭터의 행동 정보
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		ECharacterActionType CharacterActionState;
+		ECharacterActionType CharacterActionState = ECharacterActionType::E_Idle;
 
 //====== Current Stat ===================
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float TotalHP;
+		float TotalHP = 0.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float TotalAttack;
+		float TotalAttack = 0.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float TotalDefense;
+		float TotalDefense = 0.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float TotalMoveSpeed;
+		float TotalMoveSpeed = 0.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float TotalAttackSpeed;
+		float TotalAttackSpeed = 0.0f;
 
 	//PlayerMaxHP는 1.0f
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float CurrentHP;
+		float CurrentHP = 0.0f;
 
 //======= Additional Stat , Uneditable ======================
 	UPROPERTY(BlueprintReadWrite)
@@ -245,7 +245,7 @@ struct FEnemyDropInfoStruct
 	public:
 	//Max item count to spawn after dead event.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem", meta = (UIMin = 0, UIMax = 2))
-		int32 MaxSpawnItemCount;
+		int32 MaxSpawnItemCount = 0;
 
 	//Item type list to spawn after dead event. (each item is identified by index)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|DropItem")
@@ -267,10 +267,10 @@ struct FEnemyStatStruct : public FTableRowBase
 
 	public:
 	UPROPERTY(EditAnywhere)
-		int32 EnemyID;
+		int32 EnemyID = 0;
 
 	UPROPERTY(EditAnywhere)
-		FName EnemyName;
+		FName EnemyName = FName("");
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
 		FCharacterStatStruct CharacterStat;
@@ -284,5 +284,5 @@ struct FEnemyStatStruct : public FTableRowBase
 		FEnemyDropInfoStruct DropInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
-		float DefaultAttackSpeed;
+		float DefaultAttackSpeed = 0.0f;
 };

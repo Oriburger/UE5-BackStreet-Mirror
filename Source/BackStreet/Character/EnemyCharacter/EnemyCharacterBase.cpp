@@ -23,22 +23,13 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	FloatingHpBar->SetRelativeLocation(FVector(0.0f, 0.0f, 85.0f));
 	FloatingHpBar->SetWorldRotation(FRotator(0.0f, 180.0f, 0.0f));
 	FloatingHpBar->SetDrawSize({ 80.0f, 10.0f });
+	FloatingHpBar->SetVisibility(false);
 
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	this->Tags.Add("Enemy");
 	this->Tags.Add("Easy");
-
-	
-	static ConstructorHelpers::FObjectFinder<UDataTable> statTableFinder(TEXT("/Game/Character/EnemyCharacter/Data/D_EnemyStatDataTable.D_EnemyStatDataTable"));
-	
-	//if stat table is not identified on editor, crash event is force activated.
-	checkf(statTableFinder.Succeeded(), TEXT("Enemy Stat Table 탐색에 실패했습니다."));
-	if(statTableFinder.Succeeded())
-	{
-		EnemyStatTable = statTableFinder.Object;
-	}
 }
 
 void AEnemyCharacterBase::BeginPlay()
@@ -111,6 +102,11 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	}
 	
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
+	SetInstantHpWidgetVisibility();
+	if (CharacterState.CurrentHP <= 0.0f)
+	{
+		FloatingHpBar->SetVisibility(false);
+	}
 
 	if (DamageCauser->ActorHasTag("Player"))
 	{
@@ -285,6 +281,20 @@ void AEnemyCharacterBase::KnockDown()
 		GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
 		GetWorldTimerManager().SetTimer(DamageAIDelayTimer, aiControllerRef, &AAIControllerBase::ActivateAI, 1.0f, false, 5.0f);
 	}
+}
+
+void AEnemyCharacterBase::SetInstantHpWidgetVisibility()
+{
+	FloatingHpBar->SetVisibility(true);
+
+	//Clear and invalidate timer
+	GetWorldTimerManager().ClearTimer(HpWidgetAutoDisappearTimer);
+	HpWidgetAutoDisappearTimer.Invalidate();
+
+	//Set new timer
+	FTimerDelegate disappearEvent;
+	disappearEvent.BindUFunction(FloatingHpBar, FName("SetVisibility"), false);
+	GetWorldTimerManager().SetTimer(HpWidgetAutoDisappearTimer, disappearEvent, 5.0f, false);
 }
 
 void AEnemyCharacterBase::ClearAllTimerHandle()

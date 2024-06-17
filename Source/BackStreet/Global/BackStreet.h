@@ -35,3 +35,7 @@
 #define MIN_ITEM_SPAWN 5
 #define MAX_STAGE_TYPE 5
 #define MAX_GRID_SIZE 3
+
+#define LOG_CALLINFO ANSI_TO_TCHAR(__FUNCTION__)
+#define BS_LOG(LogCat, Verbosity, Format, ...) UE_LOG(LogCat, Verbosity, TEXT("[%s] %s"), LOG_CALLINFO, *FString::Printf(Format, ##__VA_ARGS__))
+DECLARE_LOG_CATEGORY_EXTERN(LogBS, Log, All)

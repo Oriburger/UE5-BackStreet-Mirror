@@ -121,7 +121,7 @@ void UTargetingManagerComponent::UpdateTargetedCandidate()
 		OnTargetUpdated.Broadcast(TargetedCandidate.Get());
 	}
 
-	if (TargetedCandidate.IsValid())
+	if (TargetedCandidate.IsValid() && !OwnerCharacter.Get()->GetCharacterState().bIsAirAttacking)
 	{
 		if (FVector::Dist(OwnerCharacter.Get()->GetActorLocation(), TargetedCandidate.Get()->GetActorLocation()) > MaxFindDistance)
 		{

@@ -13,7 +13,10 @@ UCLASS()
 class BACKSTREET_API AMainCharacterController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+public:
+	AMainCharacterController();
+
 public:
 	UFUNCTION()
 		virtual void BeginPlay() override;

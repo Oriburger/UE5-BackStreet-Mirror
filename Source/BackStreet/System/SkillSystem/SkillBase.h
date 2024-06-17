@@ -69,5 +69,19 @@ protected:
 	TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
 
 //-------- Timer --------------------------------------------
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetSkillRemainingCoolTime();
 
+protected:
+	//Call after activate skill
+	UFUNCTION(BlueprintCallable)
+		void SetSkillBlockedTimer(float Delay);
+
+	//Reset skill unblocked
+	UFUNCTION(BlueprintCallable)
+		void ResetSkillBlockedTimer();
+private:
+	//Manage skill's cool time
+	FTimerHandle SkillCoolTimeHandle;
 };

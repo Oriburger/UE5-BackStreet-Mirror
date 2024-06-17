@@ -49,7 +49,7 @@ protected:
 		void InitProjectileAsset();
 
 	UFUNCTION()
-		void DestroyWithEffect(FVector Location = FVector(0.0f));
+		void DestroyWithEffect(FVector Location = FVector(0.0f), bool bContainCameraShake = false);
 
 	//현재 무기의 에셋 정보
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|Asset")

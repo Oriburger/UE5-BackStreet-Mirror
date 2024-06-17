@@ -71,11 +71,11 @@ public:
 
 	//Stage type (entry, combat, time attack, boss, miniGame, gatcha etc..)
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		EStageCategoryInfo StageType;
+		EStageCategoryInfo StageType = EStageCategoryInfo::E_None;
 
 	//Map location in 2nd array (현재 선형으로 1차원 X값만 사용)
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		FVector2D TilePos;
+		FVector2D TilePos = FVector2D::ZeroVector;
 	
 	//Main level of this stage
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -98,15 +98,15 @@ public:
 
 	//Boss Stage only
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		FVector BossSpawnLocation;
+		FVector BossSpawnLocation = FVector::ZeroVector;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		FRotator BossSpawnRotation;
+		FRotator BossSpawnRotation = FRotator::ZeroRotator;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		FVector PlayerStartLocation;
+		FVector PlayerStartLocation = FVector::ZeroVector;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		FRotator PlayerStartRotation;
+		FRotator PlayerStartRotation = FRotator::ZeroRotator;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TArray<FVector> PortalLocationList;
@@ -141,7 +141,7 @@ struct FChapterInfo : public FTableRowBase
 public:
 	//Table Key
 	UPROPERTY(EditDefaultsOnly)
-		int32 ChapterID;
+		int32 ChapterID = 0;
 
 	//Time attack's time limit value
 	UPROPERTY(EditDefaultsOnly)

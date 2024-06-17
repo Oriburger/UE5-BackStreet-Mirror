@@ -69,9 +69,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		uint8 GetCurrSkillLevelByType(ESkillType SkillType);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		uint8 GetCurrSkillLevelByID(int32 SkillID);
+
 	//Get current player's weapon SkillCoolTime by type
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-			float GetCurrSkillCoolTimeByType(ESkillType SkillType);
+		float GetCurrSkillCoolTimeByType(ESkillType SkillType);
 
 
 //--------- DataTable, Data ----------------------
@@ -83,6 +86,10 @@ public:
 	//Get SkillInfo for Outer Class
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FSkillInfoStruct GetSkillInfoStructBySkillID(int32 SkillID);
+
+	//Get SkillInfo for Outer Class
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FSkillUpgradeInfoStruct GetSkillUpgradeInfoStructBySkillID(int32 SkillID);	
 
 protected:
 	//Skill Info Table
@@ -97,4 +104,9 @@ protected:
 private:
 	UPROPERTY()
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+//-------- Timer --------------------------------------------
+public:
+	UFUNCTION(BlueprintCallable)
+		void SetSkillBlockState(ACharacterBase* Owner, ESkillType SkillType, bool bNewBlockState = false);
 };

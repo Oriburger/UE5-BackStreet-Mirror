@@ -55,11 +55,11 @@ public:
 //--------- 데이터 테이블, 에셋 관련 ----------------------
 protected:
 	//무기 에셋 정보 테이블
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* WeaponAssetInfoTable;
 	
 	//무기 스탯 테이블
-	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay|Data")
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* WeaponStatInfoTable;
 
 	virtual void InitWeaponAsset();
@@ -111,7 +111,6 @@ public:
 	UFUNCTION()
 		float CalculateTotalDamage(FCharacterStateStruct TargetState);
 
-protected:
 	//Weapon의 종합 Stat
 	UPROPERTY(EditInstanceOnly, Category = "Gameplay|Stat")
 		FWeaponStatStruct WeaponStat;

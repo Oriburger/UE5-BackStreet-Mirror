@@ -32,12 +32,12 @@
 				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
 			}
 		},
-		"CoolTimeByLevel": [ 5, 4, 3, 2 ],
+		"CoolTimeByLevel": [ 8, 7, 6, 5 ],
 		"SkillVariableMap":
 		{
 			"CoolTime":
 			{
-				"VariableByLevel": [ 5, 4, 3, 2 ]
+				"VariableByLevel": [ 8, 7, 6, 5 ]
 			}
 		}
 	},
@@ -61,12 +61,12 @@
 				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
 			}
 		},
-		"CoolTimeByLevel": [ 5, 4, 3, 2 ],
+		"CoolTimeByLevel": [ 9, 8, 7, 6 ],
 		"SkillVariableMap":
 		{
 			"CoolTime":
 			{
-				"VariableByLevel": [ 5, 4, 3, 2 ]
+				"VariableByLevel": [ 9, 8, 7, 6 ]
 			}
 		}
 	},
@@ -90,12 +90,12 @@
 				"RequiredMaterialByLevel": [ 0, 1, 2, 3 ]
 			}
 		},
-		"CoolTimeByLevel": [ 6, 5, 4, 3 ],
+		"CoolTimeByLevel": [ 5, 4.5, 4, 3.5 ],
 		"SkillVariableMap":
 		{
 			"CoolTime":
 			{
-				"VariableByLevel": [ 6, 5, 4, 3 ]
+				"VariableByLevel": [ 5, 4.5, 4, 3.5 ]
 			}
 		}
 	}

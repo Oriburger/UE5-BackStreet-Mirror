@@ -92,9 +92,12 @@ void AProjectileBase::InitProjectileAsset()
 		TrailParticle->SetAsset(ProjectileAssetInfo.TrailParticle.Get());
 }
 
-void AProjectileBase::DestroyWithEffect(FVector Location)
+void AProjectileBase::DestroyWithEffect(FVector Location, bool bContainCameraShake)
 {
-	GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Hit, Location, 100.0f);
+	if (bContainCameraShake)
+	{
+		GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Hit, Location, 100.0f);
+	}
 
 	FTransform targetTransform = { FRotator(), Location, {1.0f, 1.0f, 1.0f} };
 	
@@ -183,7 +186,7 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		{
 			const float totalDamage = Cast<AWeaponBase>(GetOwner())->CalculateTotalDamage(Cast<ACharacterBase>(OtherActor)->GetCharacterState());
 			UGameplayStatics::ApplyDamage(OtherActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
-			DestroyWithEffect(SweepResult.Location);
+			DestroyWithEffect(SweepResult.Location, true);
 		}
 	}
 }
@@ -194,7 +197,7 @@ void AProjectileBase::OnProjectileHit(UPrimitiveComponent* HitComponet, AActor* 
 	if (ProjectileStat.bIsBullet)
 	{
 		if (ProjectileStat.bIsExplosive) Explode();
-		DestroyWithEffect(GetActorLocation());
+		DestroyWithEffect(GetActorLocation(), false);
 		return;	
 	}
 

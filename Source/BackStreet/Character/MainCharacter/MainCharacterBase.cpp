@@ -261,6 +261,8 @@ FVector AMainCharacterBase::GetThrowDestination()
 
 void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
+	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
+
 	// input is a Vector2D
 	MovementInputValue = Value.Get<FVector2D>();
 	if (Controller != nullptr)
@@ -463,6 +465,9 @@ void AMainCharacterBase::TryReload()
 
 void AMainCharacterBase::LockToTarget(const FInputActionValue& Value)
 {
+	if (GetCharacterMovement()->IsFalling()) return;
+	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
+
 	if (!TargetingManagerComponent->GetIsTargetingActivated())
 	{
 		TargetingManagerComponent->ActivateTargeting();
@@ -553,7 +558,7 @@ void AMainCharacterBase::TryUpperAttack()
 void AMainCharacterBase::TryDownwardAttack()
 {
 	Super::TryDownwardAttack();
-	if (!GetCharacterMovement()->IsFalling()) return;
+	if (!GetCharacterMovement()->IsFalling() || !CharacterState.bIsAirAttacking) return;
 	if (IsValid(TargetingManagerComponent->GetTargetedCharacter()))
 	{
 		SetFieldOfViewWithInterp(110.0f, 0.75f);

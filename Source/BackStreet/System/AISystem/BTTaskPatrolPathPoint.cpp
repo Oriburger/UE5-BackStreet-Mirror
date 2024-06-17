@@ -69,7 +69,7 @@ void UBTTaskPatrolPathPoint::MoveToPatrolPoint()
     }
     else
     {
-        patrolPointInfo.Key = PathPatrolComponent->PatrolPathInfoList[PathPatrolComponent->CurrentPointIdx].Point;
+        patrolPointInfo.Key = PathPatrolComponent->PatrolPathInfoList[PathPatrolComponent->CurrentPointIdx].Point.Get();
     }
 
     if (!IsValid(patrolPointInfo.Key))

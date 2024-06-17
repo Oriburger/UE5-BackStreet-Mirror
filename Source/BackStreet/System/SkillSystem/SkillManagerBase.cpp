@@ -11,12 +11,6 @@
 
 USkillManagerBase::USkillManagerBase()
 {
-	static ConstructorHelpers::FObjectFinder<UDataTable> skillInfoTableFinder(TEXT("/Game/System/SkillManager/Data/D_SkillInfo.D_SkillInfo"));
-	static ConstructorHelpers::FObjectFinder<UDataTable> skillUpgradeInfoTableFinder(TEXT("/Game/System/CraftingManager/Data/D_SkillUpgradeInfo.D_SkillUpgradeInfo"));
-	checkf(skillInfoTableFinder.Succeeded(), TEXT("SkillInfoTable class discovery failed."));
-	checkf(skillUpgradeInfoTableFinder.Succeeded(), TEXT("skillUpgradeInfoTable class discovery failed."));
-	SkillInfoTable = skillInfoTableFinder.Object;
-	SkillUpgradeInfoTable = skillUpgradeInfoTableFinder.Object;
 }
 
 void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemodeRef)
@@ -24,11 +18,13 @@ void USkillManagerBase::InitSkillManagerBase(ABackStreetGameModeBase* NewGamemod
 	checkf(IsValid(NewGamemodeRef), TEXT("Failed to get GameMode reference"));
 	if (!IsValid(NewGamemodeRef)) return;
 	GamemodeRef = NewGamemodeRef;
+	SkillInfoTable = GamemodeRef.Get()->SkillInfoTable;
+	SkillUpgradeInfoTable = GamemodeRef.Get()->SkillUpgradeInfoTable;
 }
 
 void USkillManagerBase::TrySkill(ACharacterBase* NewCauser, FOwnerSkillInfoStruct* OwnerSkillInfo)
 {
-	ASkillBase* skillBase = ActivateSkillBase(NewCauser, OwnerSkillInfo);
+	ASkillBase* skillBase = ActivateSkillBase(NewCauser, OwnerSkillInfo); //ambigious name 
 	if(!IsValid(skillBase)) return;
 	NewCauser->SetActionState(ECharacterActionType::E_Skill);
 	skillBase->ActivateSkill();
@@ -54,6 +50,8 @@ ASkillBase* USkillManagerBase::ActivateSkillBase(ACharacterBase* NewCauser, FOwn
 
 ASkillBase* USkillManagerBase::UpdateSkillInfo(ASkillBase* SkillBase, FOwnerSkillInfoStruct* OwnerSkillInfo)
 {
+	if (SkillUpgradeInfoTable == nullptr) return nullptr;
+
 	//SkillBase의 레벨 변화 여부 확인
 	if (SkillBase->SkillInfo.SkillLevelStruct.SkillLevel == OwnerSkillInfo->SkillLevel) return SkillBase;
 	SkillBase->SkillInfo.SkillLevelStruct.SkillLevel = OwnerSkillInfo->SkillLevel;
@@ -135,12 +133,13 @@ bool USkillManagerBase::IsSkillInfoStructValid(const FSkillInfoStruct& SkillInfo
 
 FSkillInfoStruct USkillManagerBase::GetCurrSkillInfoByType(ESkillType SkillType)
 {
+	if (SkillUpgradeInfoTable == nullptr) return FSkillInfoStruct();
 	AMainCharacterBase* mainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (!IsValid(mainCharacterRef)) return FSkillInfoStruct();
 	TWeakObjectPtr<class AWeaponBase> weaponRef = mainCharacterRef->GetCurrentWeaponRef();
 	if (!IsValid(weaponRef.Get())) return FSkillInfoStruct();
 	if (!weaponRef->GetWeaponState().SkillInfoMap.Contains(SkillType)) return FSkillInfoStruct();
-	FOwnerSkillInfoStruct* ownerSkillInfo = weaponRef->GetWeaponState().SkillInfoMap.Find(SkillType);
+	FOwnerSkillInfoStruct* ownerSkillInfo = &weaponRef->WeaponState.SkillInfoMap[SkillType];
 	if (ownerSkillInfo->SkillID == 0) return FSkillInfoStruct();
 
 	//기존에 만들어져 있는 스킬 베이스 중 원하는 스킬이 있는지 확인
@@ -159,7 +158,6 @@ FSkillInfoStruct USkillManagerBase::GetCurrSkillInfoByType(ESkillType SkillType)
 	//ID에 따른 스킬 기본 구조 불러오기
 
 	FString rowName = FString::FromInt(ownerSkillInfo->SkillID);
-
 	FSkillInfoStruct* skillInfo = SkillInfoTable->FindRow<FSkillInfoStruct>(FName(rowName), rowName);
 	FSkillUpgradeInfoStruct* skillUpgradeInfo = SkillUpgradeInfoTable->FindRow<FSkillUpgradeInfoStruct>(FName(rowName), rowName);
 	
@@ -202,6 +200,16 @@ uint8 USkillManagerBase::GetCurrSkillLevelByType(ESkillType SkillType)
 	return skillInfo.SkillLevelStruct.SkillLevel;
 }
 
+uint8 USkillManagerBase::GetCurrSkillLevelByID(int32 SkillID)
+{
+	ESkillType skillType = GetSkillInfoStructBySkillID(SkillID).SkillType;
+	AMainCharacterBase* mainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	TMap<ESkillType, FOwnerSkillInfoStruct> skillInfoMap = mainCharacterRef->GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap;
+	if(!skillInfoMap.Contains(skillType)) return 0;
+	if(skillInfoMap.Find(skillType)->SkillID != SkillID) return 0;
+	return GetCurrSkillLevelByType(skillType);
+}
+
 float USkillManagerBase::GetCurrSkillCoolTimeByType(ESkillType SkillType)
 {
 	FSkillInfoStruct skillInfo = GetCurrSkillInfoByType(SkillType);
@@ -214,7 +222,6 @@ FSkillInfoStruct* USkillManagerBase::GetSkillInfoStructByOwnerSkillInfo(FOwnerSk
 	if (!IsValid(SkillInfoTable)) { UE_LOG(LogTemp, Log, TEXT("There's no SkillInfoTable")); return nullptr; }
 
 	FString rowName = FString::FromInt(OwnerSkillInfo->SkillID);
-	
 	FSkillInfoStruct* skillInfo = SkillInfoTable->FindRow<FSkillInfoStruct>(FName(rowName), rowName);
 	return skillInfo;
 }
@@ -224,7 +231,6 @@ FSkillInfoStruct USkillManagerBase::GetSkillInfoStructBySkillID(int32 SkillID)
 	if (!IsValid(SkillInfoTable)) { UE_LOG(LogTemp, Log, TEXT("There's no SkillInfoTable")); return FSkillInfoStruct(); }
 
 	FString rowName = FString::FromInt(SkillID);
-
 	FSkillInfoStruct* skillInfo = SkillInfoTable->FindRow<FSkillInfoStruct>(FName(rowName), rowName);
 	if (IsSkillInfoStructValid(*skillInfo))
 	{
@@ -233,4 +239,30 @@ FSkillInfoStruct USkillManagerBase::GetSkillInfoStructBySkillID(int32 SkillID)
 	return FSkillInfoStruct();
 }
 
+FSkillUpgradeInfoStruct USkillManagerBase::GetSkillUpgradeInfoStructBySkillID(int32 SkillID)
+{
+	if (!IsValid(SkillUpgradeInfoTable)) 
+	{ 
+		UE_LOG(LogTemp, Log, TEXT("There's no SkillUpgradeInfoTable")); 
+		return FSkillUpgradeInfoStruct(); 
+	}
 
+	FString rowName = FString::FromInt(SkillID);
+	FSkillUpgradeInfoStruct* skillUpgradeInfo = SkillUpgradeInfoTable->FindRow<FSkillUpgradeInfoStruct>(FName(rowName), rowName);
+	if (skillUpgradeInfo != nullptr)
+	{
+		return *skillUpgradeInfo;
+	}
+	return FSkillUpgradeInfoStruct();
+}
+
+void USkillManagerBase::SetSkillBlockState(ACharacterBase* Owner, ESkillType SkillType, bool bNewBlockState)
+{
+	if (!IsValid(Owner) || !IsValid(Owner->GetCurrentWeaponRef())) return;
+
+	FOwnerSkillInfoStruct* ownerSkillInfo = Owner->GetCurrentWeaponRef()->WeaponState.SkillInfoMap.Find(SkillType);
+	if (ownerSkillInfo)
+	{
+		ownerSkillInfo->bSkillBlocked = bNewBlockState;
+	}
+}
