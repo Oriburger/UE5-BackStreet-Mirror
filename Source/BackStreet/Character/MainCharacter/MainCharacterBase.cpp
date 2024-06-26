@@ -474,7 +474,7 @@ void AMainCharacterBase::LockToTarget(const FInputActionValue& Value)
 	}
 	else
 	{
-		TargetingManagerComponent->DeactivateTargeting();
+		TargetingManagerComponent->ActivateTargeting();
 	}
 }
 
