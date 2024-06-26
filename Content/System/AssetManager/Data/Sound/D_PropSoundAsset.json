@@ -1,0 +1,46 @@
+[
+	{
+		"Name": "0",
+		"SoundType": "E_None",
+		"TargetID": 0,
+		"SoundTarget": "None",
+		"SoundMap":
+		{
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "1001",
+		"SoundType": "E_Prop",
+		"TargetID": 1001,
+		"SoundTarget": "Boss",
+		"SoundMap":
+		{
+			"BossStun":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/System/SkillManager/Sound/SC_BossStun.SC_BossStun'"
+				],
+				"SoundVolumeList": [ 0.75 ]
+			}
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "1002",
+		"SoundType": "E_Prop",
+		"TargetID": 1002,
+		"SoundTarget": "Pillar",
+		"SoundMap":
+		{
+			"PillarHit":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/System/SkillManager/Sound/SC_BossShootSkill_End2.SC_BossShootSkill_End2'"
+				],
+				"SoundVolumeList": [ 1 ]
+			}
+		},
+		"SoundAssetDescription": "None"
+	}
+]
