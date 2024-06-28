@@ -25,16 +25,6 @@ enum class EWeaponType : uint8
 
 };
 
-UENUM(BlueprintType)
-enum class EWeaponStatType : uint8
-{
-	E_None				UMETA(DisplayName = "None"),
-	E_Attack				UMETA(DisplayName = "Attack"),
-	E_AttackSpeed		UMETA(DisplayName = "AttackSpeed"),
-	E_FinalImpact		UMETA(DisplayName = "FinalImpact")
-
-};
-
 USTRUCT(BlueprintType)
 struct FDebuffInfoStruct
 {
@@ -189,10 +179,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FRotator SlashRotation = FRotator::ZeroRotator;
 
-//-----Weapon Stat------
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
-		TMap<EWeaponStatType, uint8> WeaponStatLevelMap;
-
 //-----Weapon Skill------
 	//WeaponSkill Info
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
@@ -201,12 +187,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FRangedWeaponStateStruct RangedWeaponState;
 
-	FWeaponStateStruct()
-	{
-		WeaponStatLevelMap.Add(EWeaponStatType::E_Attack, 0);
-		WeaponStatLevelMap.Add(EWeaponStatType::E_AttackSpeed, 0);
-		WeaponStatLevelMap.Add(EWeaponStatType::E_FinalImpact, 0);
-	}
+//-----Weapon Upgraded Stat
+	//Upgraded Stat(in combat area)List 0:Attack, 1:AttackSpeed, 2:finalImpact
+	UPROPERTY(BlueprintReadWrite)
+		TArray<uint8> UpgradedStatList = { 0,0,0 };
 };
 
 USTRUCT(BlueprintType)

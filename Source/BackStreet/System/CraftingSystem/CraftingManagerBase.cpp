@@ -203,50 +203,59 @@ FSkillUpgradeInfoStruct UCraftingManagerBase::GetSkillUpgradeInfoStructBySkillID
 	return GamemodeRef.Get()->GetSkillManagerRef()->GetSkillUpgradeInfoStructBySkillID(SkillID);
 }
 
-bool UCraftingManagerBase::UpgradeStat(TMap<EWeaponStatType, uint8> NewTempStatMap)
+bool UCraftingManagerBase::UpgradeStat(TArray<uint8> TempUpgradedStatList)
 {
-	if (!IsStatUpgradeAvailable(NewTempStatMap)) return false;
+	if (!IsStatUpgradeAvailable(TempUpgradedStatList)) return false;
 	FWeaponStateStruct weaponState = MainCharacterRef->GetCurrentWeaponRef()->GetWeaponState();
-	weaponState.WeaponStatLevelMap[EWeaponStatType::E_Attack] = NewTempStatMap[EWeaponStatType::E_Attack];
-	weaponState.WeaponStatLevelMap[EWeaponStatType::E_AttackSpeed] = NewTempStatMap[EWeaponStatType::E_AttackSpeed];
-	weaponState.WeaponStatLevelMap[EWeaponStatType::E_FinalImpact] = NewTempStatMap[EWeaponStatType::E_FinalImpact];
+	weaponState.UpgradedStatList[0] = TempUpgradedStatList[0];
+	weaponState.UpgradedStatList[1] = TempUpgradedStatList[1];
+	weaponState.UpgradedStatList[2] = TempUpgradedStatList[2];
 
+	int32 currWeaponID = MainCharacterRef->GetCurrentWeaponRef()->WeaponID;
+	FString rowName = FString::FromInt(currWeaponID);
+	FStatUpgradeInfoStruct* statUpgradeInfo = StatUpgradeInfoTable->FindRow<FStatUpgradeInfoStruct>(FName(rowName), rowName);
+
+	FWeaponStatStruct weaponStat = MainCharacterRef->GetCurrentWeaponRef()->GetWeaponStat();
+	weaponStat.WeaponDamage = statUpgradeInfo->RequiredInfo[0].RequiredMaterialByLevel[TempUpgradedStatList[0]].StatByLevel;
+	weaponStat.WeaponAtkSpeedRate = statUpgradeInfo->RequiredInfo[0].RequiredMaterialByLevel[TempUpgradedStatList[1]].StatByLevel;
+	//weaponStat.파이널 임팩트 = statUpgradeInfo->RequiredInfo[0].RequiredMaterialByLevel[TempUpgradedStatList[2]].StatByLevel
 	//하드코딩 BIC이후 제거
 	for (int i = 0; i < 3; i++)
 	{
-		MainCharacterRef->ItemInventory->RemoveItem(i + 1, GetRequiredMaterialAmountForStat(NewTempStatMap)[i]);
+		MainCharacterRef->ItemInventory->RemoveItem(i + 1, GetRequiredMaterialAmountForStat(TempUpgradedStatList)[i]);
 	}
 
+	MainCharacterRef->GetCurrentWeaponRef()->SetWeaponStat(weaponStat);
 	MainCharacterRef->GetCurrentWeaponRef()->SetWeaponState(weaponState);
+	UE_LOG(LogTemp, Log, TEXT("Damage : %f"), MainCharacterRef->GetCurrentWeaponRef()->GetWeaponStat().WeaponDamage);
+	UE_LOG(LogTemp, Log, TEXT("Atk : %f"), MainCharacterRef->GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
 	OnStatLevelUpdated.Broadcast();
 	return true;
 }
 
-bool UCraftingManagerBase::IsStatUpgradeAvailable(TMap<EWeaponStatType, uint8> NewTempStatMap)
+bool UCraftingManagerBase::IsStatUpgradeAvailable(TArray<uint8> TempUpgradedStatList)
 {
-	if (!IsValidLevelForStatUpgrade(NewTempStatMap)) return false;
-	if (!IsOwnMaterialEnoughForStatUpgrade(NewTempStatMap)) return false;
+	if (!IsValidLevelForStatUpgrade(TempUpgradedStatList)) return false;
+	if (!IsOwnMaterialEnoughForStatUpgrade(TempUpgradedStatList)) return false;
 
 	return true;
 }
 
-bool UCraftingManagerBase::IsValidLevelForStatUpgrade(TMap<EWeaponStatType, uint8> NewTempStatMap)
+bool UCraftingManagerBase::IsValidLevelForStatUpgrade(TArray<uint8> TempUpgradedStatList)
 {
-
-	if(NewTempStatMap.Find(EWeaponStatType::E_Attack) >= 
-		MainCharacterRef->GetCurrentWeaponRef()->WeaponState.WeaponStatLevelMap.Find(EWeaponStatType::E_Attack)) return false;
-	if (NewTempStatMap.Find(EWeaponStatType::E_AttackSpeed) >=
-		MainCharacterRef->GetCurrentWeaponRef()->WeaponState.WeaponStatLevelMap.Find(EWeaponStatType::E_AttackSpeed)) return false;
-	if (NewTempStatMap.Find(EWeaponStatType::E_FinalImpact) >=
-		MainCharacterRef->GetCurrentWeaponRef()->WeaponState.WeaponStatLevelMap.Find(EWeaponStatType::E_FinalImpact)) return false;
-
+	//무기의 현재레벨이 Stat의 max 수치보다 작은지 확인
+	TArray<uint8> maxLevelList = GetStatMaxLevel();
+	for (uint8 idx = 0; idx < 3; idx++)
+	{
+		if (TempUpgradedStatList[idx] > maxLevelList[idx]) return false;
+	}
 	return true;
 }
 
-bool UCraftingManagerBase::IsOwnMaterialEnoughForStatUpgrade(TMap<EWeaponStatType, uint8> NewTempStatMap)
+bool UCraftingManagerBase::IsOwnMaterialEnoughForStatUpgrade(TArray<uint8> TempUpgradedStatList)
 {
 	TArray<uint8> currItemAmountList = MainCharacterRef->ItemInventory->GetCraftingItemAmount();
-	TArray<uint8> requiredItemAmountList = GetRequiredMaterialAmountForStat(NewTempStatMap);
+	TArray<uint8> requiredItemAmountList = GetRequiredMaterialAmountForStat(TempUpgradedStatList);
 
 	//하드코딩 BIC이후 변경
 	for (int32 itemID = 1; itemID <= 3; itemID++)
@@ -257,118 +266,43 @@ bool UCraftingManagerBase::IsOwnMaterialEnoughForStatUpgrade(TMap<EWeaponStatTyp
 	return true;
 }
 
-TArray<uint8> UCraftingManagerBase::GetRequiredMaterialAmountForStat(TMap<EWeaponStatType, uint8> NewTempStatMap)
+TArray<uint8> UCraftingManagerBase::GetRequiredMaterialAmountForStat(TArray<uint8> TempUpgradedStatList)
 {
 	int32 currWeaponID = MainCharacterRef->GetCurrentWeaponRef()->WeaponStat.WeaponID;
-	TArray<uint8> requiredMaterialList;
+	TArray<uint8> currLevel = GetCurrentStatLevel();
+	TArray<uint8> requiredMaterialList = {0, 0, 0};
 	FString rowName = FString::FromInt(currWeaponID);
 	FStatUpgradeInfoStruct* statUpgradeInfo = StatUpgradeInfoTable->FindRow<FStatUpgradeInfoStruct>(FName(rowName), rowName);
-	
-	TArray<uint8> sumStat = {0,0,0};
-
-	//스탯 타입 별로 순회
-	for(uint8 type = 1; type<=3; type++)
+	//스탯구분
+	for (uint8 idx = 0; idx < 3; idx++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%d번 타입"), type);
-		EWeaponStatType statType = EWeaponStatType::E_None;
-		switch (type)
+		//현재 레벨로부터의 합산
+		for (uint8 calcLevel = currLevel[idx] + 1; calcLevel <= TempUpgradedStatList[idx]; calcLevel++)
 		{
-		case 1:
-			statType = EWeaponStatType::E_Attack;
-			break;
-		case 2:
-			statType = EWeaponStatType::E_AttackSpeed;
-			break;
-		case 3:
-			statType = EWeaponStatType::E_FinalImpact;
-			break;
-		}
-		uint8 tempLevel = 0;
-		if (NewTempStatMap.Contains(statType))
-		{
-			tempLevel = *NewTempStatMap.Find(statType);
-		}
-		uint8 currLevel = GetCurrentStatLevel(currWeaponID, statType);
-		switch (statType)
-		{
-		case EWeaponStatType::E_Attack:
-			//재료 종류별로 순회(하드코딩)
-			for (uint8 tempMat = 1; tempMat <= 3; tempMat++)
+			//재료
+			for (uint8 idx2 = 0; idx2< 3; idx2++)
 			{
-				//레벨별로 순회
-				for (currLevel +=1; currLevel <= tempLevel; currLevel++)
-				{
-					switch (tempMat)
-					{
-					case 1:
-						sumStat[tempMat-1] = sumStat[tempMat - 1] + statUpgradeInfo->StatAttackRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
-					case 2:
-						sumStat[tempMat - 1] = sumStat[tempMat - 1] + statUpgradeInfo->StatAttackSpeedRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
-					case 3:
-						sumStat[tempMat - 1] = sumStat[tempMat-1] + statUpgradeInfo->StatFinalImpactRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
-					}
-				}
-				UE_LOG(LogTemp, Warning, TEXT("%d : % d"), tempMat, sumStat[tempMat - 1]);
+				requiredMaterialList[idx2] += statUpgradeInfo->RequiredInfo[idx].RequiredMaterialByLevel[calcLevel].RequiredMaterial[idx2];
 			}
-			break;
-		case EWeaponStatType::E_AttackSpeed:
-			for (uint8 tempMat = 1; tempMat <= 3; tempMat++)
-			{
-				//레벨별로 순회
-				for (currLevel += 1; currLevel <= tempLevel; currLevel++)
-				{
-					switch (tempMat)
-					{
-					case 1:
-						sumStat[tempMat - 1] = sumStat[tempMat - 1] + statUpgradeInfo->StatAttackRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
-					case 2:
-						sumStat[tempMat - 1] = sumStat[tempMat - 1] + statUpgradeInfo->StatAttackSpeedRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
-					case 3:
-						sumStat[tempMat - 1] = sumStat[tempMat - 1] + statUpgradeInfo->StatFinalImpactRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
-					}
-				}
-				UE_LOG(LogTemp, Warning, TEXT("%d : % d"), tempMat, sumStat[tempMat - 1]);
-			}
-			break;
-		case EWeaponStatType::E_FinalImpact:
-			for (uint8 tempMat = 1; tempMat <= 3; tempMat++)
-			{
-				//레벨별로 순회
-				for (currLevel += 1; currLevel <= tempLevel; currLevel++)
-				{
-					switch (tempMat)
-					{
-					case 1:
-						sumStat[tempMat - 1] = sumStat[tempMat - 1] + statUpgradeInfo->StatAttackRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
-					case 2:
-						sumStat[tempMat - 1] = sumStat[tempMat - 1] + statUpgradeInfo->StatAttackSpeedRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
-					case 3:
-						sumStat[tempMat - 1] = sumStat[tempMat - 1] + statUpgradeInfo->StatFinalImpactRequiredMap.Find(tempMat)->RequiredMaterialByLevel.Find(currLevel);
-					}
-				}
-				UE_LOG(LogTemp, Warning, TEXT("%d : % d"), tempMat, sumStat[tempMat - 1]);
-			}
-			break;
 		}
 	}
-	requiredMaterialList.Add(sumStat[0]);
-	requiredMaterialList.Add(sumStat[1]);
-	requiredMaterialList.Add(sumStat[2]);
 	return requiredMaterialList;
 }
 
-uint8 UCraftingManagerBase::GetCurrentStatLevel(int32 CurrWeaponID, EWeaponStatType WeaponStatType)
+TArray<uint8> UCraftingManagerBase::GetCurrentStatLevel()
 {
-	TMap<EWeaponStatType, uint8> weaponStatLevelMap = MainCharacterRef->GetCurrentWeaponRef()->WeaponState.WeaponStatLevelMap;
-	if(!weaponStatLevelMap.Contains(WeaponStatType)) return 0;
-	if(weaponStatLevelMap.Find(WeaponStatType) == nullptr) return 0;
-	return *weaponStatLevelMap.Find(WeaponStatType);
+	return MainCharacterRef->GetCurrentWeaponRef()->GetWeaponState().UpgradedStatList;
 }
 
-uint8 UCraftingManagerBase::GetMaxStatLevel(int32 CurrWeaponID, EWeaponStatType WeaponStatType)
+TArray<uint8> UCraftingManagerBase::GetStatMaxLevel()
 {
-	FString rowName = FString::FromInt(CurrWeaponID);
+	int32 currWeaponID = MainCharacterRef->GetCurrentWeaponRef()->WeaponID;
+	FString rowName = FString::FromInt(currWeaponID);
 	FStatUpgradeInfoStruct* statUpgradeInfo = StatUpgradeInfoTable->FindRow<FStatUpgradeInfoStruct>(FName(rowName), rowName);
-	if(!statUpgradeInfo->MaxWeaponStatLevelMap.Contains(WeaponStatType)) return MAX_STAT_LEVEL;
-	return *statUpgradeInfo->MaxWeaponStatLevelMap.Find(WeaponStatType);
+	TArray<uint8> maxLevelList;
+	for (uint8 idx = 0; idx < 3; idx++)
+	{
+		maxLevelList.Add(statUpgradeInfo->RequiredInfo[idx].MaxLevel);
+	}
+	return maxLevelList;
 }
