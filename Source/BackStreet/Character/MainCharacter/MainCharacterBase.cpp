@@ -104,7 +104,6 @@ void AMainCharacterBase::BeginPlay()
 	InitCharacterState();
 	ItemInventory->InitInventory();
 
-
 	TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
 }
 
@@ -680,6 +679,7 @@ void AMainCharacterBase::StopDashMovement()
 
 void AMainCharacterBase::SetAutomaticRotateMode()
 {
+	if (TargetingManagerComponent->GetIsTargetingActivated()) return;
 	CameraBoom->bEnableCameraRotationLag = true;
 	CameraBoom->SetRelativeRotation(FRotator::ZeroRotator);
 	CameraBoom->bUsePawnControlRotation = false;

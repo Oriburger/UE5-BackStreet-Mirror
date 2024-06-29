@@ -99,7 +99,7 @@ void AMeleeWeaponBase::InitWeaponAsset()
 	}
 	if (MeleeWeaponAssetInfo.HitEffectParticleLarge.IsValid())
 	{
-		HitEffectParticleLarge = MeleeWeaponAssetInfo.HitEffectParticle.Get();
+		HitEffectParticleLarge = MeleeWeaponAssetInfo.HitEffectParticleLarge.Get();
 	}
 }
 
@@ -145,7 +145,7 @@ TArray<AActor*> AMeleeWeaponBase::CheckMeleeAttackTargetWithSphereTrace()
 void AMeleeWeaponBase::MeleeAttack()
 {
 	FHitResult hitResult;
-	bool bIsFinalCombo = (GetCurrentComboCnt() % OwnerCharacterRef.Get()->GetMaxComboCount() == 0);
+	bool bIsFinalCombo = GetIsFinalCombo();
 	bool bIsMeleeTraceSucceed = false;
 
 	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
@@ -161,9 +161,10 @@ void AMeleeWeaponBase::MeleeAttack()
 		{
 			FCharacterStateStruct targetState = Cast<ACharacterBase>(target)->GetCharacterState();
 			float totalDamage = CalculateTotalDamage(targetState);
+			totalDamage = bIsFinalCombo ? totalDamage * (WeaponStat.FinalImpactStrength + 1.0f) : totalDamage;
 
 			//Activate Melee Hit Effect
-			ActivateMeleeHitEffect(target->GetActorLocation());
+			ActivateMeleeHitEffect(target->GetActorLocation(), bIsFinalCombo && WeaponStat.FinalImpactStrength > 0.0f);
 			
 			//Apply Knockback
 			if(!target->ActorHasTag("Boss")
@@ -173,7 +174,7 @@ void AMeleeWeaponBase::MeleeAttack()
 			}
 
 			//Apply Damage
-			UGameplayStatics::ApplyDamage(target, totalDamage * ((int32)bIsFinalCombo + 1.0f) * 2.0f, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
+			UGameplayStatics::ApplyDamage(target, totalDamage, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
 			MeleeLineTraceQueryParams.AddIgnoredActor(target); 
 
 			//Apply Debuff 
@@ -183,6 +184,11 @@ void AMeleeWeaponBase::MeleeAttack()
 			UpdateDurabilityState();
 		}
 	}
+}
+
+bool AMeleeWeaponBase::GetIsFinalCombo()
+{
+	return GetCurrentComboCnt() % OwnerCharacterRef.Get()->GetMaxComboCount() == 0; 
 }
 
 bool AMeleeWeaponBase::CheckMeleeAttackTarget(FHitResult& hitResult, const TArray<FVector>& TracePositionList)
@@ -217,7 +223,7 @@ void AMeleeWeaponBase::ActivateMeleeHitEffect(const FVector& Location, bool bImp
 	//Activate Slow Effect (Hit stop)
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player"))
 	{
-		const float dilationValue = (WeaponState.ComboCount + 1) % 7 == 0 ? 0.08 : 0.75;
+		const float dilationValue = GetIsFinalCombo() ? 0.08 : 0.75;
 		GamemodeRef.Get()->ActivateSlowHitEffect(dilationValue);
 	}
 
