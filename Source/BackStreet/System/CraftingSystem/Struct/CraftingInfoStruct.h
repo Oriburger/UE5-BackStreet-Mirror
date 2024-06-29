@@ -10,9 +10,35 @@ struct FCraftingMaterialStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TArray<uint8> RequiredMaterialByLevel;
+};
+
+USTRUCT(BlueprintType)
+struct FRequiredMaterialContainer : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TArray<uint8> RequiredMaterial;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float StatByLevel;
+};
+
+USTRUCT(BlueprintType)
+struct FWeaponUpgradedStatInfo : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	//주어진 무기의 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		uint8 MaxLevel = 5;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TArray<uint8> RequiredMaterialByLevel;
+		TArray<FRequiredMaterialContainer> RequiredMaterialByLevel;
 };
 
 USTRUCT(BlueprintType)
@@ -61,16 +87,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		int32 WeaponID = 0;
 
+	//0 : Attack, 1 : AttackSpeed, 2 : FinalImpact
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<EWeaponStatType, uint8> MaxWeaponStatLevelMap;
-
-	//<MaterialID, Need Num of Material>
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<int32, FCraftingMaterialStruct> StatAttackRequiredMap;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<int32, FCraftingMaterialStruct> StatAttackSpeedRequiredMap;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<int32, FCraftingMaterialStruct> StatFinalImpactRequiredMap;
+		TArray<FWeaponUpgradedStatInfo> RequiredInfo;
 };

@@ -81,25 +81,25 @@ private:
 // ------ Default StatUpgrade Logic -----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
-		bool UpgradeStat(TMap<EWeaponStatType, uint8> NewTempStatMap);
+		bool UpgradeStat(TArray<uint8> TempUpgradedStatList);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool IsStatUpgradeAvailable(TMap<EWeaponStatType, uint8> NewTempStatMap);
+	bool IsStatUpgradeAvailable(TArray<uint8> TempUpgradedStatList);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool IsValidLevelForStatUpgrade(TMap<EWeaponStatType, uint8> NewTempStatMap);
+	bool IsValidLevelForStatUpgrade(TArray<uint8> TempUpgradedStatList);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool IsOwnMaterialEnoughForStatUpgrade(TMap<EWeaponStatType, uint8> NewTempStatMap);
+	bool IsOwnMaterialEnoughForStatUpgrade(TArray<uint8> TempUpgradedStatList);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<uint8> GetRequiredMaterialAmountForStat(TMap<EWeaponStatType, uint8> NewTempStatMap);
+	TArray<uint8> GetRequiredMaterialAmountForStat(TArray<uint8> TempUpgradedStatList);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		uint8 GetCurrentStatLevel(int32 CurrWeaponID, EWeaponStatType WeaponStatType);
+		TArray<uint8> GetCurrentStatLevel();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		uint8 GetMaxStatLevel(int32 CurrWeaponID, EWeaponStatType WeaponStatType);
+		TArray<uint8> GetStatMaxLevel();
 
 //-------- ETC. (Ref)-------------------------------
 public:
