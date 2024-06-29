@@ -104,6 +104,8 @@ void AMainCharacterBase::BeginPlay()
 	InitCharacterState();
 	ItemInventory->InitInventory();
 
+
+	TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
 }
 
 // Called every frame
@@ -139,7 +141,7 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		//Moving
-		//EnhancedInputComponent->BindAction(InputActionInfo.MoveAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Move);
+		EnhancedInputComponent->BindAction(InputActionInfo.MoveAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Move);
 
 		//Look 
 		EnhancedInputComponent->BindAction(InputActionInfo.LookAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Look);
@@ -281,6 +283,7 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 		{
 			OnMove.Broadcast();
 		}
+		SetRotationLagSpeed(Value.Get<FVector2D>());
 	}
 }
 
@@ -289,11 +292,20 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
+	if (Controller != nullptr && !TargetingManagerComponent->GetIsTargetingActivated())
 	{
 		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X/2.0f);
-		AddControllerPitchInput(LookAxisVector.Y/2.0f);
+		AddControllerYawInput(LookAxisVector.X / 2.0f);
+		AddControllerPitchInput(LookAxisVector.Y / 2.0f);
+		SetManualRotateMode();
+
+		// set timer for automatic rotate mode 
+		if (LookAxisVector.Length() <= 0.5f)
+		{
+			GetWorldTimerManager().ClearTimer(SwitchCameraRotateModeTimerHandle);
+			SwitchCameraRotateModeTimerHandle.Invalidate();
+			GetWorldTimerManager().SetTimer(SwitchCameraRotateModeTimerHandle, this, &AMainCharacterBase::SetAutomaticRotateMode, AutomaticModeSwitchTime);
+		}
 	}
 }
 
@@ -339,7 +351,7 @@ void AMainCharacterBase::Roll()
 	}
 	
 	FVector newDirection(0.0f);
-	FRotator newRotation = GetControlRotation();
+	FRotator newRotation = FollowingCamera->GetComponentRotation();
 	newRotation.Pitch = newRotation.Roll = 0.0f;
 	newDirection.X = MovementInputValue.Y;
 	newDirection.Y = MovementInputValue.X;
@@ -468,14 +480,7 @@ void AMainCharacterBase::LockToTarget(const FInputActionValue& Value)
 	if (GetCharacterMovement()->IsFalling()) return;
 	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
 
-	if (!TargetingManagerComponent->GetIsTargetingActivated())
-	{
-		TargetingManagerComponent->ActivateTargeting();
-	}
-	else
-	{
-		TargetingManagerComponent->ActivateTargeting();
-	}
+	TargetingManagerComponent->ActivateTargeting();
 }
 
 float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -671,6 +676,49 @@ void AMainCharacterBase::StopDashMovement()
 	const FVector& direction = GetMesh()->GetRightVector();
 	float& speed = GetCharacterMovement()->MaxWalkSpeed;
 	GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
+}
+
+void AMainCharacterBase::SetAutomaticRotateMode()
+{
+	CameraBoom->bEnableCameraRotationLag = true;
+	CameraBoom->SetRelativeRotation(FRotator::ZeroRotator);
+	CameraBoom->bUsePawnControlRotation = false;
+	CameraBoom->bInheritYaw = true;
+}
+
+void AMainCharacterBase::SetManualRotateMode()
+{
+	CameraBoom->bEnableCameraRotationLag = false;
+	CameraBoom->bUsePawnControlRotation = true;
+	if (Controller != nullptr)
+	{
+		GetController()->SetControlRotation(FollowingCamera->GetComponentRotation());
+	}
+	CameraBoom->bInheritYaw = true;
+}
+
+void AMainCharacterBase::SetRotationLagSpeed(FVector2D ModeInput)
+{
+	if (ModeInput.Y == -1.0f && FMath::Abs(ModeInput.X) <= 0.3f)
+	{
+		CameraBoom->CameraRotationLagSpeed = FaceToFaceLagSpeed;
+	}
+	else
+	{
+		CameraBoom->CameraRotationLagSpeed = NoramlLagSpeed;
+	}
+}
+
+void AMainCharacterBase::OnTargetingStateUpdated(bool bIsActivated, APawn* Target)
+{
+	if (bIsActivated && IsValid(Target))
+	{
+		SetManualRotateMode();
+	}
+	else
+	{
+		SetAutomaticRotateMode();
+	}
 }
 
 void AMainCharacterBase::SetCharacterStatFromSaveData()

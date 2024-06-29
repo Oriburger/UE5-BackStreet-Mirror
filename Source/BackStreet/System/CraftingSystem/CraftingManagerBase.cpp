@@ -302,7 +302,10 @@ TArray<uint8> UCraftingManagerBase::GetStatMaxLevel()
 	TArray<uint8> maxLevelList;
 	for (uint8 idx = 0; idx < 3; idx++)
 	{
-		maxLevelList.Add(statUpgradeInfo->RequiredInfo[idx].MaxLevel);
+		if (statUpgradeInfo->RequiredInfo.IsValidIndex(idx))
+		{
+			maxLevelList.Add(statUpgradeInfo->RequiredInfo[idx].MaxLevel);
+		}
 	}
 	return maxLevelList;
 }

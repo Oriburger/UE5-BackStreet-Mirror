@@ -206,6 +206,35 @@ private:
 	UFUNCTION()
 		void StopDashMovement();
 
+//------- Camera Rotation Support Event ------ 
+protected:
+	UFUNCTION()
+		void SetAutomaticRotateMode();	
+
+	UFUNCTION()
+		void SetManualRotateMode();
+
+	//If character run forward to camera using down move input when automatic rotate mode is activated,
+	// this function will be called then remove the camera shake by setting camera boom's rotate lag speed to zero.
+	UFUNCTION()
+		void SetRotationLagSpeed(FVector2D ModeInput);
+
+	UFUNCTION()
+		void OnTargetingStateUpdated(bool bIsActivated, APawn* Target);
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "Camera|AutoRotateSupport")
+		bool bIsManualMode = false;
+
+	UPROPERTY(EditAnywhere, Category = "Camera|AutoRotateSupport")
+		float FaceToFaceLagSpeed = 0.001;
+	
+	UPROPERTY(EditAnywhere, Category = "Camera|AutoRotateSupport")
+		float NoramlLagSpeed = 1.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Camera|AutoRotateSupport")
+		float AutomaticModeSwitchTime = 3.0f;
+
 //------- Movement Interpolation Event---------
 public:
 	UFUNCTION()
@@ -335,4 +364,7 @@ private:
 	//캐릭터 얼굴 효과 (머티리얼 값 변경) 리셋 타이머
 	UPROPERTY()
 		FTimerHandle FacialEffectResetTimerHandle;
+
+	UPROPERTY()
+		FTimerHandle SwitchCameraRotateModeTimerHandle;
 };
