@@ -121,8 +121,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bInfinite = false;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bHasFinalImpact = false;	
+	// Final Impact Strength, Default is zero.  1.0 + this value 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.0f, UIMax = 5.0f))
+		float FinalImpactStrength = 0.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		int32 MaxDurability = 10;
