@@ -19,28 +19,28 @@
 			"MainMenuBGM_TypeA":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/SC_MainMenuTypeA_BGM.SC_MainMenuTypeA_BGM'"
+					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/Legacy/SC_MainMenuTypeA_BGM.SC_MainMenuTypeA_BGM'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"MainMenuBGM_TypeB":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/SC_MainMenuTypeB_BGM.SC_MainMenuTypeB_BGM'"
+					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/Legacy/SC_MainMenuTypeB_BGM.SC_MainMenuTypeB_BGM'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"InGameBGM":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/SC_InGameBGM.SC_InGameBGM'"
+					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/SC_Chapter01_Drone_NormalStage.SC_Chapter01_Drone_NormalStage'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"BossBGM":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/SC_BossStage.SC_BossStage'"
+					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/SC_Chapter01_Drone_BossStage.SC_Chapter01_Drone_BossStage'"
 				],
 				"SoundVolumeList": [ 1 ]
 			}
