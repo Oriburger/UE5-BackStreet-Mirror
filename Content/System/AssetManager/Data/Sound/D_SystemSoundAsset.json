@@ -35,14 +35,14 @@
 				"SoundList": [
 					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/SC_Chapter01_Drone_NormalStage.SC_Chapter01_Drone_NormalStage'"
 				],
-				"SoundVolumeList": [ 0.75 ]
+				"SoundVolumeList": [ 1.5 ]
 			},
 			"BossBGM":
 			{
 				"SoundList": [
 					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/SC_Chapter01_Drone_BossStage.SC_Chapter01_Drone_BossStage'"
 				],
-				"SoundVolumeList": [ 1 ]
+				"SoundVolumeList": [ 0.75 ]
 			}
 		},
 		"SoundAssetDescription": "None"
