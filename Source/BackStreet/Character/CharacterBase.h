@@ -98,7 +98,7 @@ public:
 		void SetActionState(ECharacterActionType Type);
 
 	//플레이어가 체력을 회복함 (일회성)
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void TakeHeal(float HealAmount, bool bIsTimerEvent = false, uint8 BuffDebuffType = 0);
 
 	//디버프 데미지를 입힘 (일회성)
