@@ -39,7 +39,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		USceneComponent* HitSceneComponent;
 
-protected:
 	UPROPERTY(VisibleAnywhere)
 		class UDebuffManagerComponent* DebuffManagerComponent;
 
