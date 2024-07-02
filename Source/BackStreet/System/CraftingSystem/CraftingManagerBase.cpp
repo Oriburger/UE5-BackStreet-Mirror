@@ -218,7 +218,7 @@ bool UCraftingManagerBase::UpgradeStat(TArray<uint8> TempUpgradedStatList)
 	FWeaponStatStruct weaponStat = MainCharacterRef->GetCurrentWeaponRef()->GetWeaponStat();
 	weaponStat.WeaponDamage = statUpgradeInfo->RequiredInfo[0].RequiredMaterialByLevel[TempUpgradedStatList[0]].StatByLevel;
 	weaponStat.WeaponAtkSpeedRate = statUpgradeInfo->RequiredInfo[0].RequiredMaterialByLevel[TempUpgradedStatList[1]].StatByLevel;
-	//weaponStat.파이널 임팩트 = statUpgradeInfo->RequiredInfo[0].RequiredMaterialByLevel[TempUpgradedStatList[2]].StatByLevel
+	weaponStat.FinalImpactStrength = statUpgradeInfo->RequiredInfo[0].RequiredMaterialByLevel[TempUpgradedStatList[2]].StatByLevel;
 	//하드코딩 BIC이후 제거
 	for (int i = 0; i < 3; i++)
 	{
