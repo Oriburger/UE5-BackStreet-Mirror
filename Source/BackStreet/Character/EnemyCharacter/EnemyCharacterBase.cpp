@@ -1,5 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "EnemyCharacterBase.h"
+#include "../Component/TargetingManagerComponent.h"
 #include "../MainCharacter/MainCharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SkillSystem/SkillManagerBase.h"
@@ -24,6 +25,14 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	FloatingHpBar->SetWorldRotation(FRotator(0.0f, 180.0f, 0.0f));
 	FloatingHpBar->SetDrawSize({ 80.0f, 10.0f });
 	FloatingHpBar->SetVisibility(false);
+
+	TargetingSupportWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("TARGETING_SUPPORT"));
+	TargetingSupportWidget->SetupAttachment(GetCapsuleComponent());
+	TargetingSupportWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 160.0f));
+	TargetingSupportWidget->SetWorldRotation(FRotator(0.0f, 180.0f, 0.0f));
+	TargetingSupportWidget->SetRelativeScale3D(FVector(0.15f));
+	TargetingSupportWidget->SetDrawSize({ 500.0f, 500.0f });
+	TargetingSupportWidget->SetVisibility(false);
 
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -71,6 +80,8 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	}
 
 	InitFloatingHpWidget();
+	InitTargetingSupportingWidget();
+
 	if (NewCharacterID == 1200)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Floating Widget 초기화"));
@@ -187,6 +198,9 @@ void AEnemyCharacterBase::Die()
 	ClearAllTimerHandle();
 	EnemyDeathDelegate.ExecuteIfBound(this);
 
+	FloatingHpBar->SetVisibility(false);
+	TargetingSupportWidget->SetVisibility(false);
+
 	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(Controller);
 
 	if (IsValid(aiControllerRef))
@@ -261,6 +275,16 @@ void AEnemyCharacterBase::SetFacialMaterialEffect(bool NewState)
 	//CurrentDynamicMaterialList[0]->SetScalarParameterValue(FName("EyeBrightness"), NewState ? 5.0f : 35.0f);
 	//CurrentDynamicMaterialList[0]->SetVectorParameterValue(FName("EyeColor"), NewState ? FColor::Red : FColor::Yellow);
 	//InitDynamicMaterialList(DynamicMaterialList);
+}
+
+void AEnemyCharacterBase::InitTargetingSupportingWidget_Implementation()
+{
+	AMainCharacterBase* playerCharacter = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (IsValid(playerCharacter))
+	{
+		playerCharacter->TargetingManagerComponent->OnTargetUpdated.AddDynamic(this, &AEnemyCharacterBase::OnTargetUpdated);
+		playerCharacter->TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AEnemyCharacterBase::OnTargetingActivated);
+	}
 }
 
 float AEnemyCharacterBase::PlayPreChaseAnimation()

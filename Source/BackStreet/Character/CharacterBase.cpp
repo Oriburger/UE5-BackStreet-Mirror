@@ -676,6 +676,12 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 		}
 	}
 	}
+
+	//Reset Combo
+	if (IsValid(GetCurrentWeaponRef()))
+	{
+		GetCurrentWeaponRef()->ResetComboCnt();
+	}
 }
 
 bool ACharacterBase::CheckCanTrySkill(int32 SkillID, FOwnerSkillInfoStruct* SkillInfo)

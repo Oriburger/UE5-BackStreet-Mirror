@@ -32,6 +32,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|UI")
 		class UWidgetComponent* FloatingHpBar;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|UI")
+		class UWidgetComponent* TargetingSupportWidget;
+
 	UFUNCTION(BlueprintCallable)
 		virtual void InitAsset(int32 NewCharacterID) override;	
 
@@ -109,9 +112,18 @@ public:
 		void SetFacialMaterialEffect(bool NewState);
 
 // ---- 그 외 (위젯, 사운드 등) ----
-public:
+protected:
 	UFUNCTION(BlueprintImplementableEvent)
 		void InitFloatingHpWidget();
+
+	UFUNCTION(BlueprintNativeEvent)
+		void InitTargetingSupportingWidget();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnTargetUpdated(APawn* Target);
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnTargetingActivated(bool bIsActivated, APawn* Target);
 
 private:
 	void SetInstantHpWidgetVisibility();
