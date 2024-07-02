@@ -485,6 +485,8 @@ void ACharacterBase::TryAttack()
 			{
 				TargetingManagerComponent->GetTargetedCharacter()->ResetAirAtkLocationUpdateTimer();
 			}
+			TryDownwardAttack();
+			return;
 		}
 
 		else if (AssetHardPtrInfo.MeleeAttackAnimMontageList.Num() > 0)

@@ -268,6 +268,7 @@ void AMainCharacterBase::ResetMovementInputValue()
 
 void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
+	if (GetCharacterMovement()->IsFalling()) return;
 	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
 
 	// input is a Vector2D
@@ -334,7 +335,7 @@ void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 	}
 	CharacterState.bIsSprinting = true;
 	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed, 0.75f);
-	SetFieldOfViewWithInterp(110.0f, 0.75f);
+	SetFieldOfViewWithInterp(105.0f, 0.25f);
 }
 
 void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
