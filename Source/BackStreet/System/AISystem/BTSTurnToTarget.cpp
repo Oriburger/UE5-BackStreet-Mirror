@@ -10,6 +10,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 
 #include "Kismet/KismetMathLibrary.h"
+#include "AIControllerBase.h"
 #include "AIController.h"
 
 typedef UKismetMathLibrary UKML;
@@ -47,8 +48,32 @@ void UBTSTurnToTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 	{
 		OwnerCharacterRef->SetActorRotation(GetTurnRotation(OwnerCharacterRef.Get()));
 	}
+
+	//Turn In Place를 위한 회전방향 구하기
+	if (OwnerCharacterRef->GetVelocity().Length() == 0){
+		float dot = FVector::DotProduct(OwnerCharacterRef->GetActorRightVector(), ForwardVector);
+		Direction = dot;
+		ForwardVector = OwnerCharacterRef->GetActorForwardVector();
+
+		if (Direction > 0.007) {
+			CheckTurnDirection(false, true);
+		}
+		else TurnLeft = false;
+
+		if (Direction < -0.007) {
+			CheckTurnDirection(true, false);
+		}
+		else TurnRight = false;
+	}
+	else {
+		CheckTurnDirection(false, false);
+	}
+	CharAIController = Cast<AAIControllerBase>(OwnerCharacterRef->GetController());
+	CharAIController->SetTurnDirection(TurnRight, TurnLeft);
+
 }
 
+//Get target location for calcurate rotation value to target
 FRotator UBTSTurnToTarget::GetTurnRotation(APawn* ControlledPawn)
 {
 	if (!IsValid(ControlledPawn)) return FRotator::ZeroRotator;
@@ -83,4 +108,16 @@ FRotator UBTSTurnToTarget::GetTurnRotation(APawn* ControlledPawn)
 	FRotator targetRotation = UKismetMathLibrary::MakeRotFromX(directionToTarget);
 
 	return UKismetMathLibrary::RInterpTo(pawnRotation, targetRotation, GetWorld()->GetDeltaSeconds(), 10.0f);
+}
+
+bool UBTSTurnToTarget::GetTurnDirection(bool GetRightLeft) 
+{
+	if (GetRightLeft) return TurnRight;
+	else return TurnLeft;
+}
+
+void UBTSTurnToTarget::CheckTurnDirection(bool Right, bool Left) 
+{
+	TurnRight = Right;
+	TurnLeft = Left;
 }
