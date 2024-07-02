@@ -141,6 +141,7 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	{
 		//Moving
 		EnhancedInputComponent->BindAction(InputActionInfo.MoveAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Move);
+		EnhancedInputComponent->BindAction(InputActionInfo.MoveAction, ETriggerEvent::Completed, this, &AMainCharacterBase::ResetMovementInputValue);
 
 		//Look 
 		EnhancedInputComponent->BindAction(InputActionInfo.LookAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Look);
@@ -152,7 +153,7 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(InputActionInfo.AttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryAttack);
 
 		//Upper Attack
-		EnhancedInputComponent->BindAction(InputActionInfo.UpperAttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryUpperAttack);
+		//EnhancedInputComponent->BindAction(InputActionInfo.UpperAttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryUpperAttack);
 
 		//Reload
 		EnhancedInputComponent->BindAction(InputActionInfo.ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryReload);
@@ -260,12 +261,19 @@ FVector AMainCharacterBase::GetThrowDestination()
 	return startLocation;
 }
 
+void AMainCharacterBase::ResetMovementInputValue()
+{
+	MovementInputValue = FVector2D::ZeroVector;
+}
+
 void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
 	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
 
 	// input is a Vector2D
 	MovementInputValue = Value.Get<FVector2D>();
+	if (MovementInputValue == FVector2D::ZeroVector) return;
+
 	if (Controller != nullptr)
 	{
 		FVector forwardAxis = FollowingCamera->GetForwardVector();
@@ -375,7 +383,6 @@ void AMainCharacterBase::Roll()
 	//ResetRotationToMovement();
 	SetActorRotation(newRotation + FRotator(0.0f, 90.0f, 0.0f));
 	GetMesh()->SetWorldRotation(newRotation);
-	
 
 	// 사운드
 	if (AssetManagerBaseRef.IsValid())
@@ -392,7 +399,9 @@ void AMainCharacterBase::Roll()
 	}
 
 	if (OnRoll.IsBound())
+	{
 		OnRoll.Broadcast();
+	}		
 }
 
 void AMainCharacterBase::Dash()
@@ -503,7 +512,7 @@ void AMainCharacterBase::TryAttack()
 	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw) return;
 
 	//IndieGo용 임시 코드----------------------------------------------------------
-	if(GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130) return;
+	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130) return;
 	//---------------------------------------------------------------------------------
 
 	if (GetCurrentWeaponRef()->WeaponID == 0)
@@ -511,9 +520,6 @@ void AMainCharacterBase::TryAttack()
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
 		return;
 	}
-
-	//=============
-
 	this->Tags.Add("Attack|Common");
 
 	if (CharacterState.bIsSprinting && !CharacterState.bIsAirAttacking
@@ -522,8 +528,20 @@ void AMainCharacterBase::TryAttack()
 		TryDashAttack();
 		return;
 	}
-
 	Super::TryAttack();
+
+
+	//Rotate to attack direction using input (1. movement / 2. camera)
+	if (MovementInputValue.Length() > 0)
+	{
+		float turnAngle = FMath::RadiansToDegrees(FMath::Atan2(MovementInputValue.X, MovementInputValue.Y))
+						 + FollowingCamera->GetComponentRotation().Yaw;
+		SetActorRotation(FRotator(0.0f, turnAngle, 0.0f));
+	}
+	else
+	{
+		SetActorRotation(FRotator(0.0f, FollowingCamera->GetComponentRotation().Yaw, 0.0f));
+	}
 }
 
 void AMainCharacterBase::TryUpperAttack()
@@ -535,7 +553,6 @@ void AMainCharacterBase::TryUpperAttack()
 	{
 		SetFieldOfViewWithInterp(90.0f, 0.75f);
 	}
-
 	AActor* targetedEnemy = TargetingManagerComponent->GetTargetedCharacter();
 
 	//Update upper atk target enemy (cloest pawn)

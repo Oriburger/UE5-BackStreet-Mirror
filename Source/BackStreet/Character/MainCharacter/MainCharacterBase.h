@@ -109,6 +109,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 		class UInputAction* LockToTargetAction;
 
+protected:
+	UFUNCTION()
+		void ResetMovementInputValue();
+
+	UPROPERTY()
+		FVector2D MovementInputValue;
 
 // ------- Character Action ------- 
 public:
@@ -230,7 +236,7 @@ protected:
 		float FaceToFaceLagSpeed = 0.001;
 	
 	UPROPERTY(EditAnywhere, Category = "Camera|AutoRotateSupport")
-		float NoramlLagSpeed = 1.0f;
+		float NoramlLagSpeed = 0.5f;
 
 	UPROPERTY(EditAnywhere, Category = "Camera|AutoRotateSupport")
 		float AutomaticModeSwitchTime = 3.0f;
@@ -327,9 +333,6 @@ private:
 
 	UPROPERTY()
 		class UAbilityManagerBase* AbilityManagerRef;
-
-	UPROPERTY()
-		FVector2D MovementInputValue;
 
 	//플레이어 컨트롤러 약 참조
 	TWeakObjectPtr<class AMainCharacterController> PlayerControllerRef;
