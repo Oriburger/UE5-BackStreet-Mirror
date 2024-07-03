@@ -14,6 +14,7 @@
 
 AAIControllerBase::AAIControllerBase()
 {
+	
 }
 
 void AAIControllerBase::OnPossess(APawn* PossessedPawn)
@@ -126,4 +127,16 @@ void AAIControllerBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(SightLossTimerHandle);
 	SightLossTimerHandle.Invalidate();
+}
+
+bool AAIControllerBase::GetTurnDirection(bool Direction) 
+{
+	if (Direction) return TurnRight;
+	else return TurnLeft;
+}
+
+void AAIControllerBase::SetTurnDirection(bool Right, bool Left) 
+{
+	TurnRight = Right;
+	TurnLeft = Left;
 }

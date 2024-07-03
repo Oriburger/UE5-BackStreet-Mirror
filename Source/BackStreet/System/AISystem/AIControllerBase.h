@@ -6,6 +6,7 @@
 #include "AIController.h"
 #include "AIControllerBase.generated.h"
 
+
 /**
  * 
  */
@@ -29,6 +30,18 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void DeactivateAI();
+
+	UFUNCTION(BlueprintCallable)
+		bool GetTurnDirection(bool Direction);
+		
+	UFUNCTION()
+		void SetTurnDirection(bool Right, bool Left);
+
+private:
+
+	bool TurnRight;
+
+	bool TurnLeft;
 
 //--Perception ฐüทร ---------------------
 public:

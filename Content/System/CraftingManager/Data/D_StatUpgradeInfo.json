@@ -55,19 +55,19 @@
 				"RequiredMaterialByLevel": [
 					{
 						"RequiredMaterial": [ 0, 0, 0 ],
-						"StatByLevel": 0
+						"StatByLevel": 0.2
 					},
 					{
 						"RequiredMaterial": [ 1, 0, 0 ],
-						"StatByLevel": 0
+						"StatByLevel": 0.5
 					},
 					{
 						"RequiredMaterial": [ 2, 0, 0 ],
-						"StatByLevel": 0
+						"StatByLevel": 0.7
 					},
 					{
 						"RequiredMaterial": [ 3, 0, 0 ],
-						"StatByLevel": 0
+						"StatByLevel": 1
 					}
 				]
 			}
