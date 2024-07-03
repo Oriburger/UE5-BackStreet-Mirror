@@ -13,19 +13,19 @@
 				"RequiredMaterialByLevel": [
 					{
 						"RequiredMaterial": [ 0, 0, 0 ],
-						"StatByLevel": 3
-					},
-					{
-						"RequiredMaterial": [ 0, 1, 0 ],
 						"StatByLevel": 5
 					},
 					{
-						"RequiredMaterial": [ 0, 2, 0 ],
+						"RequiredMaterial": [ 0, 1, 0 ],
 						"StatByLevel": 6
 					},
 					{
-						"RequiredMaterial": [ 0, 3, 0 ],
+						"RequiredMaterial": [ 0, 2, 0 ],
 						"StatByLevel": 7
+					},
+					{
+						"RequiredMaterial": [ 0, 3, 0 ],
+						"StatByLevel": 8
 					}
 				]
 			},
@@ -55,19 +55,19 @@
 				"RequiredMaterialByLevel": [
 					{
 						"RequiredMaterial": [ 0, 0, 0 ],
-						"StatByLevel": 0.2
+						"StatByLevel": 3
 					},
 					{
 						"RequiredMaterial": [ 1, 0, 0 ],
-						"StatByLevel": 0.5
+						"StatByLevel": 3.5
 					},
 					{
 						"RequiredMaterial": [ 2, 0, 0 ],
-						"StatByLevel": 0.7
+						"StatByLevel": 4
 					},
 					{
 						"RequiredMaterial": [ 3, 0, 0 ],
-						"StatByLevel": 1
+						"StatByLevel": 4.5
 					}
 				]
 			}
