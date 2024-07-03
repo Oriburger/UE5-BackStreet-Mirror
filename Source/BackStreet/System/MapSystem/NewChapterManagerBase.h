@@ -86,6 +86,8 @@ private:
 
 	TArray<FStageInfo> StageInfoList;
 
+	bool bIsChapterFinished = false;
+
 //========= Widget =====================
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -114,4 +116,12 @@ private:
 
 	//For combat hud widget
 	UUserWidget* CombatWidgetRef;
+
+//======== Timer ==========================
+protected:
+	UFUNCTION()
+		void OpenMainMenuLevel();
+
+private:
+	FTimerHandle OpenLevelDelayHandle; 
 };

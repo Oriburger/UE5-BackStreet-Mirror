@@ -5,6 +5,7 @@
 #include "StageGeneratorComponent.h"
 #include "StageManagerComponent.h"
 #include "SlateBasics.h"
+#include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "Runtime/UMG/Public/UMG.h"
 
 // Sets default values
@@ -29,6 +30,7 @@ void ANewChapterManagerBase::BeginPlay()
 void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 {
 	//init chapter with generate stage infos
+	bIsChapterFinished = false;
 	InitChapter(NewChapterID);
 	CurrentStageLocation = FVector2D(0.0f);
 	StageInfoList = StageGeneratorComponent->Generate();
@@ -58,14 +60,20 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 
 void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 {
+	//Set state variable
+	bIsChapterFinished = true;
+
 	//Clear resource
+	UGameplayStatics::ApplyDamage(PlayerRef.Get(), 1e8, nullptr, GetOwner(), nullptr);
 	StageManagerComponent->ClearResource();
 
 	//Reward Ã³¸®
 
 
 	//change level to main menu
-	UGameplayStatics::OpenLevel(GetWorld(), "MainMenuPersistent");
+	FTimerDelegate openLevelDelegate;
+	openLevelDelegate.BindUFunction(this, "OpenMainMenuLevel");
+	GetWorldTimerManager().SetTimer(OpenLevelDelayHandle, openLevelDelegate, 0.5f, false);
 }
 
 void ANewChapterManagerBase::ResetChapter()
@@ -101,6 +109,7 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 
 void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 {
+	if (bIsChapterFinished) return;
 	if (!StageInfoList.IsValidIndex(CurrentStageLocation.X)) return;
 	StageInfoList[CurrentStageLocation.X] = StageInfo;
 
@@ -136,4 +145,9 @@ void ANewChapterManagerBase::AddCombatWidget()
 	{
 		CombatWidgetRef->AddToViewport();
 	}
+}
+
+void ANewChapterManagerBase::OpenMainMenuLevel()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), "MainMenuPersistent");
 }
