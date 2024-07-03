@@ -76,6 +76,7 @@ bool UCraftingManagerBase::UpgradeSkill(int32 NewSkillID, uint8 TempLevel)
 	if (!IsSkillUpgradeAvailable(NewSkillID, TempLevel)) return false;
 	AddSkill(NewSkillID);
 	FWeaponStateStruct weaponState = MainCharacterRef->GetCurrentWeaponRef()->GetWeaponState();
+	if (!weaponState.SkillInfoMap.Contains(skillType)) return false;
 	FOwnerSkillInfoStruct ownerSkillInfo = weaponState.SkillInfoMap[skillType];
 	ownerSkillInfo.SkillLevel = TempLevel;
 	weaponState.SkillInfoMap.Add(skillType, ownerSkillInfo);

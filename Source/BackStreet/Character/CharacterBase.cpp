@@ -647,34 +647,43 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	}
 	case ESkillType::E_Weapon0:
 	{
-		FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon0];
-		UE_LOG(LogTemp, Warning, TEXT("SKILL BLOCK STATE : %d"), (int32)skillInfo.bSkillBlocked);
-		if (CheckCanTrySkill(SkillID, &skillInfo))
+		if (GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon0))
 		{
-			CharacterState.bCanAttack = false;
-			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
-			break;
+			FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon0];
+			UE_LOG(LogTemp, Warning, TEXT("SKILL BLOCK STATE : %d"), (int32)skillInfo.bSkillBlocked);
+			if (CheckCanTrySkill(SkillID, &skillInfo))
+			{
+				CharacterState.bCanAttack = false;
+				GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
+				break;
+			}
 		}
 	}
 	case ESkillType::E_Weapon1:
 	{
-		FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon1];
-		UE_LOG(LogTemp, Warning, TEXT("SKILL BLOCK STATE : %d"), (int32)skillInfo.bSkillBlocked);
-		if (CheckCanTrySkill(SkillID, &skillInfo))
+		if (GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon1))
 		{
-			CharacterState.bCanAttack = false;
-			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
-			break;
+			FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon1];
+			UE_LOG(LogTemp, Warning, TEXT("SKILL BLOCK STATE : %d"), (int32)skillInfo.bSkillBlocked);
+			if (CheckCanTrySkill(SkillID, &skillInfo))
+			{
+				CharacterState.bCanAttack = false;
+				GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
+				break;
+			}
 		}
 	}
 	case ESkillType::E_Weapon2:
 	{
-		FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon2];
-		if (CheckCanTrySkill(SkillID, &skillInfo))
+		if (GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon2))
 		{
-			CharacterState.bCanAttack = false;
-			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
-			break;
+			FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon2];
+			if (CheckCanTrySkill(SkillID, &skillInfo))
+			{
+				CharacterState.bCanAttack = false;
+				GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
+				break;
+			}
 		}
 	}
 	}
