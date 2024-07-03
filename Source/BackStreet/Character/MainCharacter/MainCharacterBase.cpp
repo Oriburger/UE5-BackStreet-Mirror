@@ -529,20 +529,23 @@ void AMainCharacterBase::TryAttack()
 		TryDashAttack();
 		return;
 	}
-	Super::TryAttack();
-
 
 	//Rotate to attack direction using input (1. movement / 2. camera)
-	if (MovementInputValue.Length() > 0)
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Idle)
 	{
-		float turnAngle = FMath::RadiansToDegrees(FMath::Atan2(MovementInputValue.X, MovementInputValue.Y))
-						 + FollowingCamera->GetComponentRotation().Yaw;
-		SetActorRotation(FRotator(0.0f, turnAngle, 0.0f));
+		if (MovementInputValue.Length() > 0)
+		{
+			float turnAngle = FMath::RadiansToDegrees(FMath::Atan2(MovementInputValue.X, MovementInputValue.Y))
+				+ FollowingCamera->GetComponentRotation().Yaw;
+			SetActorRotation(FRotator(0.0f, turnAngle, 0.0f));
+		}
+		else
+		{
+			SetActorRotation(FRotator(0.0f, FollowingCamera->GetComponentRotation().Yaw, 0.0f));
+		}
 	}
-	else
-	{
-		SetActorRotation(FRotator(0.0f, FollowingCamera->GetComponentRotation().Yaw, 0.0f));
-	}
+
+	Super::TryAttack();
 }
 
 void AMainCharacterBase::TryUpperAttack()
