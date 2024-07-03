@@ -9,10 +9,9 @@
 			"FootStep":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Footstep_A.SC_Footstep_A'",
-					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Footstep_B.SC_Footstep_B'"
+					"/Script/Engine.SoundCue'/Game/Character/MainCharacter/Sound/SC_FootStep.SC_FootStep'"
 				],
-				"SoundVolumeList": [ 0.75, 0.75 ]
+				"SoundVolumeList": [ 0.5 ]
 			},
 			"Roll":
 			{

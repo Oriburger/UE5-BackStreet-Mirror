@@ -280,7 +280,7 @@ void AEnemyCharacterBase::SetFacialMaterialEffect(bool NewState)
 void AEnemyCharacterBase::InitTargetingSupportingWidget_Implementation()
 {
 	AMainCharacterBase* playerCharacter = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (IsValid(playerCharacter))
+	if (IsValid(playerCharacter) && IsValid(playerCharacter->TargetingManagerComponent))
 	{
 		playerCharacter->TargetingManagerComponent->OnTargetUpdated.AddDynamic(this, &AEnemyCharacterBase::OnTargetUpdated);
 		playerCharacter->TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AEnemyCharacterBase::OnTargetingActivated);
