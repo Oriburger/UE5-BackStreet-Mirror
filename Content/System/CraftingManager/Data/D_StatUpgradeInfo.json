@@ -17,15 +17,15 @@
 					},
 					{
 						"RequiredMaterial": [ 0, 1, 0 ],
-						"StatByLevel": 6
+						"StatByLevel": 5.25
 					},
 					{
 						"RequiredMaterial": [ 0, 2, 0 ],
-						"StatByLevel": 7
+						"StatByLevel": 5.5
 					},
 					{
 						"RequiredMaterial": [ 0, 3, 0 ],
-						"StatByLevel": 8
+						"StatByLevel": 5.75
 					}
 				]
 			},
@@ -38,15 +38,15 @@
 					},
 					{
 						"RequiredMaterial": [ 0, 0, 1 ],
-						"StatByLevel": 1.2
+						"StatByLevel": 1.5
 					},
 					{
 						"RequiredMaterial": [ 0, 0, 2 ],
-						"StatByLevel": 1.4
+						"StatByLevel": 2
 					},
 					{
 						"RequiredMaterial": [ 0, 0, 3 ],
-						"StatByLevel": 1.6
+						"StatByLevel": 2.5
 					}
 				]
 			},
@@ -55,19 +55,19 @@
 				"RequiredMaterialByLevel": [
 					{
 						"RequiredMaterial": [ 0, 0, 0 ],
-						"StatByLevel": 3
+						"StatByLevel": 2
 					},
 					{
 						"RequiredMaterial": [ 1, 0, 0 ],
-						"StatByLevel": 3.5
+						"StatByLevel": 2
 					},
 					{
 						"RequiredMaterial": [ 2, 0, 0 ],
-						"StatByLevel": 4
+						"StatByLevel": 2.5
 					},
 					{
 						"RequiredMaterial": [ 3, 0, 0 ],
-						"StatByLevel": 4.5
+						"StatByLevel": 3
 					}
 				]
 			}
