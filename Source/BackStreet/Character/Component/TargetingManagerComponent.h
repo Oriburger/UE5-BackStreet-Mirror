@@ -73,10 +73,10 @@ public:
 		bool bAutoTargeting = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float TargetingRadius = 500.0f;
+		float TargetingMaintainThreashold = 2500.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float MaxFindDistance = 1500.0f;
+		float MaxFindDistance = 1000.0f;
 		
 private:
 	bool bIsTargetingActivated;

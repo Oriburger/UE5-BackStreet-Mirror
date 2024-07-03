@@ -84,6 +84,11 @@ void UTargetingManagerComponent::ForceTargetingToNearestCharacter()
 void UTargetingManagerComponent::ActivateTargeting()
 {
 	if (!TargetedCandidate.IsValid()) return;
+	if (bIsTargetingActivated && TargetedCharacter == TargetedCandidate)
+	{
+		DeactivateTargeting();
+		return;
+	}
 	TargetedCharacter = TargetedCandidate;
 
 	bIsTargetingActivated = true;
@@ -123,7 +128,7 @@ void UTargetingManagerComponent::UpdateTargetedCandidate()
 
 	if (TargetedCandidate.IsValid() && !OwnerCharacter.Get()->GetCharacterState().bIsAirAttacking)
 	{
-		if (FVector::Dist(OwnerCharacter.Get()->GetActorLocation(), TargetedCandidate.Get()->GetActorLocation()) > MaxFindDistance)
+		if (FVector::Dist(OwnerCharacter.Get()->GetActorLocation(), TargetedCandidate.Get()->GetActorLocation()) > TargetingMaintainThreashold)
 		{
 			TargetedCandidate.Reset();
 			DeactivateTargeting();

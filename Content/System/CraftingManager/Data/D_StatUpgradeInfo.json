@@ -2,72 +2,75 @@
 	{
 		"Name": "0",
 		"WeaponID": 0,
-		"MaxWeaponStatLevelMap":
-		{
-		},
-		"StatAttackRequiredMap":
-		{
-		},
-		"StatAttackSpeedRequiredMap":
-		{
-		},
-		"StatFinalImpactRequiredMap":
-		{
-		}
+		"RequiredInfo": []
 	},
 	{
 		"Name": "11100",
 		"WeaponID": 11100,
-		"MaxWeaponStatLevelMap":
-		{
-			"E_Attack": 3,
-			"E_AttackSpeed": 3,
-			"E_FinalImpact": 3
-		},
-		"StatAttackRequiredMap":
-		{
-			"1":
+		"RequiredInfo": [
 			{
-				"RequiredMaterialByLevel": [ 0, 1, 1, 1 ]
+				"MaxLevel": 3,
+				"RequiredMaterialByLevel": [
+					{
+						"RequiredMaterial": [ 0, 0, 0 ],
+						"StatByLevel": 5
+					},
+					{
+						"RequiredMaterial": [ 0, 1, 0 ],
+						"StatByLevel": 6
+					},
+					{
+						"RequiredMaterial": [ 0, 2, 0 ],
+						"StatByLevel": 7
+					},
+					{
+						"RequiredMaterial": [ 0, 3, 0 ],
+						"StatByLevel": 8
+					}
+				]
 			},
-			"2":
 			{
-				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+				"MaxLevel": 3,
+				"RequiredMaterialByLevel": [
+					{
+						"RequiredMaterial": [ 0, 0, 0 ],
+						"StatByLevel": 1
+					},
+					{
+						"RequiredMaterial": [ 0, 0, 1 ],
+						"StatByLevel": 1.2
+					},
+					{
+						"RequiredMaterial": [ 0, 0, 2 ],
+						"StatByLevel": 1.4
+					},
+					{
+						"RequiredMaterial": [ 0, 0, 3 ],
+						"StatByLevel": 1.6
+					}
+				]
 			},
-			"3":
 			{
-				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
+				"MaxLevel": 3,
+				"RequiredMaterialByLevel": [
+					{
+						"RequiredMaterial": [ 0, 0, 0 ],
+						"StatByLevel": 3
+					},
+					{
+						"RequiredMaterial": [ 1, 0, 0 ],
+						"StatByLevel": 3.5
+					},
+					{
+						"RequiredMaterial": [ 2, 0, 0 ],
+						"StatByLevel": 4
+					},
+					{
+						"RequiredMaterial": [ 3, 0, 0 ],
+						"StatByLevel": 4.5
+					}
+				]
 			}
-		},
-		"StatAttackSpeedRequiredMap":
-		{
-			"1":
-			{
-				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
-			},
-			"2":
-			{
-				"RequiredMaterialByLevel": [ 0, 1, 1, 1 ]
-			},
-			"3":
-			{
-				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
-			}
-		},
-		"StatFinalImpactRequiredMap":
-		{
-			"1":
-			{
-				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
-			},
-			"2":
-			{
-				"RequiredMaterialByLevel": [ 0, 0, 0, 0 ]
-			},
-			"3":
-			{
-				"RequiredMaterialByLevel": [ 0, 1, 1, 1 ]
-			}
-		}
+		]
 	}
 ]

@@ -69,5 +69,7 @@ private:
 
 //-------- ±× ¿Ü-----------------------
 private:
-		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+	TWeakObjectPtr<class UAssetManagerBase> AssetManagerRef;
+
 };
