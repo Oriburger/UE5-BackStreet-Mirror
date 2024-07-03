@@ -310,3 +310,18 @@ TArray<uint8> UCraftingManagerBase::GetStatMaxLevel()
 	}
 	return maxLevelList;
 }
+
+TArray<uint8> UCraftingManagerBase::GetStatMaxLevelByWeaponID(int32 WeaponID)
+{
+	FString rowName = FString::FromInt(WeaponID);
+	FStatUpgradeInfoStruct* statUpgradeInfo = StatUpgradeInfoTable->FindRow<FStatUpgradeInfoStruct>(FName(rowName), rowName);
+	TArray<uint8> maxLevelList;
+	for (uint8 idx = 0; idx < 3; idx++)
+	{
+		if (statUpgradeInfo->RequiredInfo.IsValidIndex(idx))
+		{
+			maxLevelList.Add(statUpgradeInfo->RequiredInfo[idx].MaxLevel);
+		}
+	}
+	return maxLevelList;
+}
