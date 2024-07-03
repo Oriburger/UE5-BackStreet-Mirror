@@ -101,6 +101,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<uint8> GetStatMaxLevel();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<uint8> GetStatMaxLevelByWeaponID(int32 WeaponID);
+
 //-------- ETC. (Ref)-------------------------------
 public:
 	UPROPERTY()
