@@ -3,6 +3,7 @@
 
 #include "GateBase.h"
 #include "../../../Global/BackStreetGameModeBase.h"
+#include "../../AssetSystem/AssetManagerBase.h"
 #include "Math/Color.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -28,6 +29,10 @@ void AGateBase::BeginPlay()
 {
 	Super::BeginPlay();
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (GamemodeRef.IsValid())
+	{
+		AssetManagerRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
+	}
 }
 
 void AGateBase::InitGate(FVector2D NewDirection)
@@ -39,6 +44,12 @@ void AGateBase::InitGate(FVector2D NewDirection)
 
 void AGateBase::EnterGate()
 {
+	//play smash sound
+	if (AssetManagerRef.IsValid())
+	{
+		AssetManagerRef.Get()->PlaySingleSound(this, ESoundAssetType::E_System, 3000, "Gate");
+	}
+
 	if (bManualMode)
 	{
 		UGameplayStatics::OpenLevel(GetWorld(), ManualTargetLevelName, true);
