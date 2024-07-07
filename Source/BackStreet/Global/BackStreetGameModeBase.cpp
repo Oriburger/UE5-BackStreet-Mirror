@@ -8,10 +8,7 @@
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
 #include "../Item/ItemBase.h"
-#include "../Item/Weapon/WeaponBase.h"
 #include "../Item/Weapon/Throw/ProjectileBase.h"
-#include "../Item/Weapon/Ranged/RangedWeaponBase.h"
-#include "../Item/Weapon/Melee/MeleeWeaponBase.h"
 
 ABackStreetGameModeBase::ABackStreetGameModeBase()
 {

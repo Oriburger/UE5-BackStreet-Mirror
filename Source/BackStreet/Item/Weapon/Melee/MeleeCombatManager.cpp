@@ -82,16 +82,12 @@ TArray<AActor*> UMeleeCombatManager::CheckMeleeAttackTargetWithSphereTrace()
 
 void UMeleeCombatManager::MeleeAttack()
 {
-	UE_LOG(LogTemp, Warning, TEXT("MELLE #3"));
-
 	FHitResult hitResult;
 	bool bIsFinalCombo = WeaponComponentRef.Get()->GetIsFinalCombo();
 	bool bIsMeleeTraceSucceed = false;
 
 	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
 	
-	UE_LOG(LogTemp, Warning, TEXT("MELLE #4"));
-
 	TArray<FVector> currTracePositionList = GetCurrentMeleePointList();
 	TArray<AActor*> targetList = CheckMeleeAttackTargetWithSphereTrace();
 	MeleePrevTracePointList = currTracePositionList;

@@ -4,7 +4,7 @@
 #include "AIControllerBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Character/EnemyCharacter/EnemyCharacterBase.h"
-#include "../../Item/Weapon/WeaponBase.h"
+#include "../../Character/Component/WeaponComponentBase.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "Perception/AISenseConfig_Sight.h"
@@ -114,13 +114,7 @@ void AAIControllerBase::ProcessPrediction(AActor* Actor, FAIStimulus Stimulus)
 void AAIControllerBase::UpdateNewWeapon()
 {
 	if(!IsValid(GetPawn())) return;
-
-	AWeaponBase* weaponActorRef = Cast<ACharacterBase>(GetPawn())->GetCurrentWeaponRef();
-
-	if (IsValid(weaponActorRef))
-	{
-		GetBlackboardComponent()->SetValueAsBool("HasRangedWeapon", weaponActorRef->GetWeaponStat().WeaponType != EWeaponType::E_Melee);
-	}		
+	GetBlackboardComponent()->SetValueAsBool("HasRangedWeapon", Cast<ACharacterBase>(GetPawn())->WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Melee);
 }
 
 void AAIControllerBase::ClearAllTimerHandle()

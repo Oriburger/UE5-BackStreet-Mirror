@@ -2,13 +2,11 @@
 #include "./Component/DebuffManagerComponent.h"
 #include "./Component/TargetingManagerComponent.h"
 #include "./Component/WeaponComponentBase.h"
+#include "../Item/Weapon/Ranged/RangedCombatManager.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../System/SkillSystem/SkillManagerBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/SkillSystem/SkillBase.h"
-#include "../Item/Weapon/WeaponBase.h"
-#include "../Item/Weapon/WeaponInventoryBase.h"
-#include "../Item/Weapon/Ranged/RangedWeaponBase.h"
 #include "Engine/DamageEvents.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -45,29 +43,11 @@ void ACharacterBase::BeginPlay()
 	CharacterID = AssetSoftPtrInfo.CharacterID;
 	InitCharacterState();
 
-	WeaponInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
-	SubWeaponInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (GamemodeRef.IsValid())
 	{
 		AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
 	}
-
-	if (IsValid(SubWeaponInventoryRef) && !SubWeaponInventoryRef->IsActorBeingDestroyed())
-	{
-		SubWeaponInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
-		SubWeaponInventoryRef->SetOwner(this);
-		SubWeaponInventoryRef->InitInventory(2);
-	}
-
-	if (IsValid(WeaponInventoryRef) && !WeaponInventoryRef->IsActorBeingDestroyed())
-	{
-		WeaponInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
-		WeaponInventoryRef->SetOwner(this);
-		WeaponInventoryRef->InitInventory(ActorHasTag("Player") ? 1 : 6);
-		InitWeaponActors();
-	}
-
 	LandedDelegate.AddDynamic(this, &ACharacterBase::OnPlayerLanded);
 }
 
@@ -273,8 +253,7 @@ void ACharacterBase::UpdateCharacterState(FCharacterStateStruct NewState)
 
 void ACharacterBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
-	if (!IsValid(GetCurrentWeaponRef()) || WeaponInventoryRef->IsActorBeingDestroyed()) return;
-	GetCurrentWeaponRef()->UpdateWeaponStat(NewStat);
+	WeaponComponent->WeaponStat = NewStat;
 }
 
 void ACharacterBase::ResetActionState(bool bForceReset)
@@ -288,11 +267,8 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 	//Reset Location Interp Timer Handle
 	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 
-	if (IsValid(GetCurrentWeaponRef()))
-	{
-		FWeaponStatStruct currWeaponStat = this->GetCurrentWeaponRef()->GetWeaponStat();
-		this->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
-	}
+	FWeaponStatStruct currWeaponStat = this->WeaponComponent->GetWeaponStat();
+	this->WeaponComponent->SetWeaponStat(currWeaponStat);
 	StopAttack();
 
 	if (!GetWorldTimerManager().IsTimerActive(AtkIntervalHandle))
@@ -411,26 +387,12 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 
 void ACharacterBase::Die()
 {
-	if (IsValid(WeaponInventoryRef) && !WeaponInventoryRef->IsActorBeingDestroyed())
-	{
-		//캐릭터가 죽으면 3가지 타입의 무기 액터를 순차적으로 반환
-		for (int weaponIdx = 2; weaponIdx >= 0; weaponIdx--)
-		{
-			WeaponActorList[weaponIdx]->Destroy();
-			WeaponInventoryRef->Destroy();
-		}
-	}
 	//Disable Collision
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 
-	if (IsValid(GetCurrentWeaponRef()) && !GetCurrentWeaponRef()->IsActorBeingDestroyed())
-	{
-		GetCurrentWeaponRef()->ClearAllTimerHandle();
-	}
 	//모든 타이머를 제거한다. (타이머 매니저의 것도)
 	ClearAllTimerHandle();
-	DebuffManagerComponent->ClearDebuffManager();
 
 	//무적 처리를 하고, Movement를 비활성화
 	CharacterStat.bIsInvincibility = true;
@@ -525,10 +487,9 @@ void ACharacterBase::TryUpperAttack()
 	if (GetCharacterMovement()->IsFalling()) return;
 	if (CharacterState.bIsAirAttacking) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (!IsValid(GetCurrentWeaponRef())) return;
 
 	CharacterState.bIsAirAttacking = true;
-	GetCurrentWeaponRef()->ResetComboCnt();
+	WeaponComponent->ResetComboCnt();
 
 	//LaunchCharcter is called by anim notify on upper attack animation
 
@@ -544,7 +505,7 @@ void ACharacterBase::TryDownwardAttack()
 
 	CharacterState.bIsAirAttacking = false;
 	CharacterState.bIsDownwardAttacking = true;
-	GetCurrentWeaponRef()->ResetComboCnt();
+	WeaponComponent->ResetComboCnt();
 
 	if (IsValid(AssetHardPtrInfo.DownwardAttackAnimMontage))
 	{
@@ -577,10 +538,6 @@ void ACharacterBase::DashAttack()
 	FHitResult hitResult;
 	FCollisionQueryParams collisionQueryParams;
 	collisionQueryParams.AddIgnoredActor(this);
-	if (IsValid(GetCurrentWeaponRef()))
-	{
-		collisionQueryParams.AddIgnoredActor(this);
-	}
 	GetWorld()->LineTraceSingleByChannel(hitResult, HitSceneComponent->GetComponentLocation(), targetLocation, ECollisionChannel::ECC_Camera);
 	targetLocation = hitResult.bBlockingHit ? hitResult.Location : targetLocation;
 
@@ -691,10 +648,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	}
 
 	//Reset Combo
-	if (IsValid(WeaponComponent))
-	{
-		WeaponComponent->ResetComboCnt();
-	}
+	WeaponComponent->ResetComboCnt();
 }
 
 bool ACharacterBase::CheckCanTrySkill(int32 SkillID, FOwnerSkillInfoStruct* SkillInfo)
@@ -722,14 +676,12 @@ void ACharacterBase::StopAttack()
 
 void ACharacterBase::TryReload()
 {
-	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
+	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Shoot
+		&& WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return;
 
-	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponType != EWeaponType::E_Shoot
-		&& GetCurrentWeaponRef()->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return;
+	if (WeaponComponent->RangedCombatManager->GetCanReload()) return;
 
-	if (!Cast<ARangedWeaponBase>(GetCurrentWeaponRef())->GetCanReload()) return;
-
-	float reloadTime = GetCurrentWeaponRef()->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
+	float reloadTime = WeaponComponent->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
 	if (AssetHardPtrInfo.ReloadAnimMontageList.Num() > 0
 		&& IsValid(AssetHardPtrInfo.ReloadAnimMontageList[0]))
 	{
@@ -739,7 +691,7 @@ void ACharacterBase::TryReload()
 	}
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Reload;
-	GetWorldTimerManager().SetTimer(ReloadTimerHandle, Cast<ARangedWeaponBase>(GetCurrentWeaponRef()), &ARangedWeaponBase::Reload, reloadTime, false);
+	GetWorldTimerManager().SetTimer(ReloadTimerHandle, WeaponComponent->RangedCombatManager, &URangedCombatManager::Reload, reloadTime, false);
 }
 
 void ACharacterBase::InitAsset(int32 NewCharacterID)
@@ -880,7 +832,6 @@ void ACharacterBase::InitAsset(int32 NewCharacterID)
 		streamable.RequestAsyncLoad(AssetToStream, FStreamableDelegate::CreateUObject(this, &ACharacterBase::SetAsset));
 	}
 }
-
 
 void ACharacterBase::SetAsset()
 {
@@ -1103,127 +1054,10 @@ float ACharacterBase::GetTotalStatValue(float& DefaultValue, FStatInfoStruct& Ab
 		+ (AbilityInfo.FixedValue + SkillInfo.FixedValue - DebuffInfo.FixedValue);
 }
 
-bool ACharacterBase::EquipWeapon(AWeaponBase* TargetWeapon)
-{
-	TargetWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, "Weapon_R");
-	TargetWeapon->SetActorRelativeLocation(FVector(0.0f), false);
-	TargetWeapon->SetActorRelativeRotation(FRotator::ZeroRotator, false);
-	TargetWeapon->SetOwnerCharacter(this);
-	CurrentWeaponRef = TargetWeapon;
-	return true;
-}
-
 bool ACharacterBase::PickWeapon(int32 NewWeaponID)
 {
 	WeaponComponent->InitWeapon(NewWeaponID);
 	return true;
-}
-
-void ACharacterBase::SwitchToNextWeapon()
-{
-	if (!IsValid(WeaponInventoryRef)) return;
-	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
-	WeaponInventoryRef->SwitchToNextWeapon();
-}
-
-void ACharacterBase::DropWeapon()
-{
-	if (!IsValid(GetCurrentWeaponRef())) return;
-
-	if (CurrentWeaponRef->GetWeaponType() == EWeaponType::E_Throw)
-	{
-		SubWeaponInventoryRef->RemoveCurrentWeapon();
-		SwitchWeaponActor(EWeaponType::E_Melee);
-		WeaponInventoryRef->EquipWeaponByIdx(0);
-	}
-	else WeaponInventoryRef->RemoveCurrentWeapon();
-
-	SwitchToNextWeapon();
-
-	/*---- 현재 무기를 월드에 버리는 기능은 미구현 -----*/
-}
-
-bool ACharacterBase::TrySwitchToSubWeapon(int32 SubWeaponIdx)
-{
-	if (SubWeaponIdx >= SubWeaponInventoryRef->GetCurrentWeaponCount()) return false;
-
-	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
-		SubWeaponInventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
-	else
-		WeaponInventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
-	SubWeaponInventoryRef->EquipWeaponByIdx(SubWeaponIdx);
-
-	return true;
-}
-
-AWeaponInventoryBase* ACharacterBase::GetWeaponInventoryRef()
-{
-	if (!IsValid(WeaponInventoryRef) || WeaponInventoryRef->IsActorBeingDestroyed()) return nullptr;
-	return WeaponInventoryRef;
-}
-
-AWeaponInventoryBase* ACharacterBase::GetSubWeaponInventoryRef()
-{
-	if (!IsValid(SubWeaponInventoryRef) || SubWeaponInventoryRef->IsActorBeingDestroyed()) return nullptr;
-	return SubWeaponInventoryRef;
-}
-
-AWeaponBase* ACharacterBase::GetCurrentWeaponRef()
-{
-	if (!CurrentWeaponRef.IsValid()) return nullptr;
-	return CurrentWeaponRef.Get();
-}
-
-void ACharacterBase::SwitchWeaponActor(EWeaponType TargetWeaponType)
-{
-	if (!WeaponActorList.IsValidIndex((int32)TargetWeaponType - 1)) return;
-	if (!IsValid(WeaponActorList[(int32)TargetWeaponType - 1]))  return;
-	if (!IsValid(GetCurrentWeaponRef())) return;
-
-	GetCurrentWeaponRef()->SetActorHiddenInGame(true);
-	GetCurrentWeaponRef()->InitWeapon(0);
-	CurrentWeaponRef = WeaponActorList[(int32)TargetWeaponType - 1];
-	GetCurrentWeaponRef()->SetActorHiddenInGame(false);
-}
-
-AWeaponBase* ACharacterBase::SpawnWeaponActor(EWeaponType TargetWeaponType)
-{
-	checkf(WeaponClassList.Num() == 3, TEXT("초기 무기 클래스 지정이 실패했습니다."));
-	TSubclassOf<AWeaponBase> weaponClass = WeaponClassList[(int)TargetWeaponType - 1];
-
-	if (!IsValid(weaponClass))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Weapon Class가 Invalid 합니다."));
-		return nullptr;
-	}
-	FActorSpawnParameters spawnParams;
-	spawnParams.Owner = this;
-	spawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-	const FVector spawnLocation = GetActorLocation();
-	const FRotator spawnRotation = FRotator::ZeroRotator;
-	const FVector spawnScale3D = ActorHasTag("Player") ? FVector(2.0f) : FVector(1.0f / GetCapsuleComponent()->GetComponentScale().X);
-	FTransform spawnTransform = FTransform(spawnRotation, spawnLocation, spawnScale3D);
-	AWeaponBase* newWeapon = Cast<AWeaponBase>(GetWorld()->SpawnActor(weaponClass, &spawnTransform, spawnParams));
-	newWeapon->InitWeapon(0);
-
-	return newWeapon;
-}
-
-void ACharacterBase::InitWeaponActors()
-{
-	if (!WeaponActorList.IsEmpty()) return;
-
-	//근접과 원거리의 무기 액터를 스폰
-	for (int idx = 0; idx < 3; idx++)
-	{
-		WeaponActorList.Add(SpawnWeaponActor((EWeaponType)(idx + 1)));
-		WeaponActorList[idx]->SetOwner(this);
-		checkf(IsValid(WeaponActorList[idx]), TEXT("무기 %d 타입 스폰에 실패했습니다."));
-		EquipWeapon(WeaponActorList[idx]);
-	}
-	EquipWeapon(WeaponActorList[0]);
-	CurrentWeaponRef = WeaponActorList[0];
 }
 
 void ACharacterBase::ClearAllTimerHandle()

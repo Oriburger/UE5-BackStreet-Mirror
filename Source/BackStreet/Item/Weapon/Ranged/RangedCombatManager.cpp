@@ -23,6 +23,7 @@ void URangedCombatManager::Attack()
 	UE_LOG(LogTemp, Warning, TEXT("RANGED #1"));
 	bool result = TryFireProjectile();
 
+	UE_LOG(LogTemp, Warning, TEXT("RANGED #4, %d"), (int32)WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo);
 	if (AssetManagerRef.IsValid())
 	{
 		AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon
@@ -51,22 +52,28 @@ bool URangedCombatManager::TryFireProjectile()
 		GamemodeRef.Get()->GetWorldTimerManager().SetTimer(AutoReloadTimerHandle, OwnerCharacterRef.Get(), &ACharacterBase::TryReload, 1.0f, false, AUTO_RELOAD_DELAY_VALUE);
 		return false;
 	}
-	const int32 fireProjectileCnt = FMath::Min(WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount, OwnerCharacterRef.Get()->GetCharacterStat().ProjectileCountPerAttack);
+	int32 fireProjectileCnt = OwnerCharacterRef.Get()->GetCharacterStat().ProjectileCountPerAttack;
+	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo)
+	{
+		fireProjectileCnt = FMath::Min(fireProjectileCnt, WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount);
+	}
 
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
 	{
 		WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
 	}
-
+	UE_LOG(LogTemp, Warning, TEXT("RANGED #3. %d"), fireProjectileCnt);
 	for (int idx = 1; idx <= fireProjectileCnt; idx++)
 	{
 		FTimerHandle delayHandle;
 
 		GetWorld()->GetTimerManager().SetTimer(delayHandle, FTimerDelegate::CreateLambda([&]() {
 				AProjectileBase* newProjectile = CreateProjectile();
+				UE_LOG(LogTemp, Warning, TEXT("RANGED #3.1"));
 				//스폰한 발사체가 Valid 하다면 발사
 				if (IsValid(newProjectile))
 				{
+					UE_LOG(LogTemp, Warning, TEXT("RANGED #3.2"));
 					newProjectile->ActivateProjectileMovement();
 					SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
 				}
@@ -111,6 +118,7 @@ void URangedCombatManager::AddAmmo(int32 Count)
 
 AProjectileBase* URangedCombatManager::CreateProjectile()
 {
+	UE_LOG(LogTemp, Warning, TEXT("PROJECTILE #1"));
 	FWeaponStatStruct weaponStat = WeaponComponentRef.Get()->WeaponStat;
 	FWeaponStateStruct weaponState = WeaponComponentRef.Get()->WeaponState;
 
@@ -119,11 +127,11 @@ AProjectileBase* URangedCombatManager::CreateProjectile()
 	spawmParams.Instigator = OwnerCharacterRef.Get()->GetInstigator();
 	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	FVector SpawnLocation = OwnerCharacterRef->GetActorLocation();
-	FRotator SpawnRotation = OwnerCharacterRef->GetMesh()->GetComponentRotation();
+	FVector SpawnLocation = OwnerCharacterRef.Get()->GetActorLocation();
+	FRotator SpawnRotation = OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation();
 
-	SpawnLocation = SpawnLocation + OwnerCharacterRef->GetMesh()->GetForwardVector() * 20.0f;
-	SpawnLocation = SpawnLocation + OwnerCharacterRef->GetMesh()->GetRightVector() * 50.0f;
+	SpawnLocation = SpawnLocation + OwnerCharacterRef.Get()->GetMesh()->GetForwardVector() * 20.0f;
+	SpawnLocation = SpawnLocation + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 50.0f;
 	SpawnLocation = SpawnLocation + FVector(0.0f, 0.0f, 50.0f);
 
 	SpawnRotation.Pitch = SpawnRotation.Roll = 0.0f;
@@ -132,10 +140,11 @@ AProjectileBase* URangedCombatManager::CreateProjectile()
 	FTransform SpawnTransform = { SpawnRotation, SpawnLocation, {1.0f, 1.0f, 1.0f} };
 	AProjectileBase* newProjectile = Cast<AProjectileBase>(GetWorld()->SpawnActor(AProjectileBase::StaticClass(), &SpawnTransform, spawmParams));
 
-	if (IsValid(newProjectile) && ProjectileAssetInfo.ProjectileID != 0)
+	UE_LOG(LogTemp, Warning, TEXT("PROJECTILE #2,  %d"), WeaponComponentRef.Get()->ProjectileAssetInfo.ProjectileID);
+	if (IsValid(newProjectile) && WeaponComponentRef.Get()->ProjectileAssetInfo.ProjectileID != 0)
 	{
 		newProjectile->SetOwner(OwnerCharacterRef.Get());
-		newProjectile->InitProjectile(OwnerCharacterRef.Get(), ProjectileAssetInfo, ProjectileStatInfo);
+		newProjectile->InitProjectile(OwnerCharacterRef.Get(), WeaponComponentRef.Get()->ProjectileAssetInfo, WeaponComponentRef.Get()->ProjectileStatInfo);
 		newProjectile->ProjectileStat.DebuffInfo = WeaponComponentRef.Get()->WeaponStat.DebuffInfo;
 		newProjectile->ProjectileStat.ProjectileDamage = WeaponComponentRef.Get()->WeaponStat.WeaponDamage;
 		return newProjectile;
@@ -168,38 +177,4 @@ void URangedCombatManager::SpawnShootNiagaraEffect()
 	FVector spawnLocation = OwnerCharacterRef.Get()->GetActorLocation() + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 50.0f;
 	FRotator spawnRotation = OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation() + FRotator(0.0f, 0.0f, 0.0f);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShootNiagaraEmitter, spawnLocation, spawnRotation);
-}
-
-FProjectileStatStruct URangedCombatManager::GetProjectileStatInfo(int32 TargetProjectileID)
-{
-	//캐시에 기록이 되어있다면?
-	if (ProjectileStatInfo.ProjectileID == TargetProjectileID) return ProjectileStatInfo;
-
-	//없다면 새로 읽어옴
-	else if (ProjectileAssetInfoTable != nullptr && TargetProjectileID != 0)
-	{
-		FProjectileStatStruct* newInfo = nullptr;
-		FString rowName = FString::FromInt(TargetProjectileID);
-
-		newInfo = ProjectileStatInfoTable->FindRow<FProjectileStatStruct>(FName(rowName), rowName);
-		if (newInfo != nullptr) return *newInfo;
-	}
-	return FProjectileStatStruct();
-}
-
-FProjectileAssetInfoStruct URangedCombatManager::GetProjectileAssetInfo(int32 TargetProjectileID)
-{
-	//캐시에 기록이 되어있다면?
-	if (ProjectileAssetInfo.ProjectileID == TargetProjectileID) return ProjectileAssetInfo;
-
-	//없다면 새로 읽어옴
-	else if (ProjectileAssetInfoTable != nullptr && TargetProjectileID != 0)
-	{
-		FProjectileAssetInfoStruct* newInfo = nullptr;
-		FString rowName = FString::FromInt(TargetProjectileID);
-
-		newInfo = ProjectileAssetInfoTable->FindRow<FProjectileAssetInfoStruct>(FName(rowName), rowName);
-		if (newInfo != nullptr) return *newInfo;
-	}
-	return FProjectileAssetInfoStruct();
 }

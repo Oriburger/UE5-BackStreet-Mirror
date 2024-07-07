@@ -5,7 +5,7 @@
 #include "../SkillSystem/SkillManagerBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
-#include "../../Item/Weapon/WeaponBase.h"
+#include "../../Character/Component/WeaponComponentBase.h"
 #include "../../Character/Component/ItemInventoryComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -32,12 +32,6 @@ void UCraftingManagerBase::InitCraftingManager(ABackStreetGameModeBase* NewGamem
 		OnFailedToGetCharacter.Broadcast();
 		return;
 	}
-	TWeakObjectPtr<class AWeaponBase> weaponRef = MainCharacterRef->GetCurrentWeaponRef();
-	if (!IsValid(weaponRef.Get())) return;
-	{
-		OnFailedToGetWeapon.Broadcast();
-		return;
-	}
 
 	TWeakObjectPtr<class UItemInventoryComponent> itemInventoryRef = MainCharacterRef->ItemInventory;
 	if (!IsValid(itemInventoryRef.Get())) return;
@@ -49,9 +43,9 @@ void UCraftingManagerBase::InitCraftingManager(ABackStreetGameModeBase* NewGamem
 
 void UCraftingManagerBase::AddSkill(int32 NewSkillID)
 {
-	if(MainCharacterRef->GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 0) return;
+	if(MainCharacterRef->WeaponComponent->GetWeaponStat().WeaponID == 0) return;
 	ESkillType newSkillType = GetSkillTypeByID(NewSkillID);
-	FWeaponStateStruct weaponState = MainCharacterRef->GetCurrentWeaponRef()->GetWeaponState();
+	FWeaponStateStruct weaponState = MainCharacterRef->WeaponComponent->GetWeaponState();
 	//플레이어가 해당 스킬을 가지고 있지 않은경우
 	if (!SkillManagerRef->IsSkillInfoStructValid(SkillManagerRef->GetCurrSkillInfoByType(newSkillType)))
 	{
@@ -65,7 +59,7 @@ void UCraftingManagerBase::AddSkill(int32 NewSkillID)
 	{
 		weaponState.SkillInfoMap[newSkillType].SkillLevel = SkillManagerRef->GetCurrSkillLevelByType(newSkillType);
 	}
-	MainCharacterRef->GetCurrentWeaponRef()->SetWeaponState(weaponState);
+	MainCharacterRef->WeaponComponent->SetWeaponState(weaponState);
 	return;
 }
 
@@ -75,7 +69,7 @@ bool UCraftingManagerBase::UpgradeSkill(int32 NewSkillID, uint8 TempLevel)
 	if(TempLevel == SkillManagerRef->GetCurrSkillLevelByType(skillType)) return false;
 	if (!IsSkillUpgradeAvailable(NewSkillID, TempLevel)) return false;
 	AddSkill(NewSkillID);
-	FWeaponStateStruct weaponState = MainCharacterRef->GetCurrentWeaponRef()->GetWeaponState();
+	FWeaponStateStruct weaponState = MainCharacterRef->WeaponComponent->GetWeaponState();
 	if (!weaponState.SkillInfoMap.Contains(skillType)) return false;
 	FOwnerSkillInfoStruct ownerSkillInfo = weaponState.SkillInfoMap[skillType];
 	ownerSkillInfo.SkillLevel = TempLevel;
@@ -87,7 +81,7 @@ bool UCraftingManagerBase::UpgradeSkill(int32 NewSkillID, uint8 TempLevel)
 		MainCharacterRef->ItemInventory->RemoveItem(i+1, GetRequiredMaterialAmount(SkillManagerRef->GetCurrSkillInfoByType(skillType), TempLevel)[i]);
 	}
 
-	MainCharacterRef->GetCurrentWeaponRef()->SetWeaponState(weaponState);
+	MainCharacterRef->WeaponComponent->SetWeaponState(weaponState);
 	OnSkillLevelUpdated.Broadcast();
 	return true;
 }
@@ -207,16 +201,16 @@ FSkillUpgradeInfoStruct UCraftingManagerBase::GetSkillUpgradeInfoStructBySkillID
 bool UCraftingManagerBase::UpgradeStat(TArray<uint8> TempUpgradedStatList)
 {
 	if (!IsStatUpgradeAvailable(TempUpgradedStatList)) return false;
-	FWeaponStateStruct weaponState = MainCharacterRef->GetCurrentWeaponRef()->GetWeaponState();
+	FWeaponStateStruct weaponState = MainCharacterRef->WeaponComponent->GetWeaponState();
 	weaponState.UpgradedStatList[0] = TempUpgradedStatList[0];
 	weaponState.UpgradedStatList[1] = TempUpgradedStatList[1];
 	weaponState.UpgradedStatList[2] = TempUpgradedStatList[2];
 
-	int32 currWeaponID = MainCharacterRef->GetCurrentWeaponRef()->WeaponID;
+	int32 currWeaponID = MainCharacterRef->WeaponComponent->WeaponID;
 	FString rowName = FString::FromInt(currWeaponID);
 	FStatUpgradeInfoStruct* statUpgradeInfo = StatUpgradeInfoTable->FindRow<FStatUpgradeInfoStruct>(FName(rowName), rowName);
 
-	FWeaponStatStruct weaponStat = MainCharacterRef->GetCurrentWeaponRef()->GetWeaponStat();
+	FWeaponStatStruct weaponStat = MainCharacterRef->WeaponComponent->GetWeaponStat();
 	weaponStat.WeaponDamage = statUpgradeInfo->RequiredInfo[0].RequiredMaterialByLevel[TempUpgradedStatList[0]].StatByLevel;
 	weaponStat.WeaponAtkSpeedRate = statUpgradeInfo->RequiredInfo[0].RequiredMaterialByLevel[TempUpgradedStatList[1]].StatByLevel;
 	weaponStat.FinalImpactStrength = statUpgradeInfo->RequiredInfo[0].RequiredMaterialByLevel[TempUpgradedStatList[2]].StatByLevel;
@@ -226,10 +220,10 @@ bool UCraftingManagerBase::UpgradeStat(TArray<uint8> TempUpgradedStatList)
 		MainCharacterRef->ItemInventory->RemoveItem(i + 1, GetRequiredMaterialAmountForStat(TempUpgradedStatList)[i]);
 	}
 
-	MainCharacterRef->GetCurrentWeaponRef()->SetWeaponStat(weaponStat);
-	MainCharacterRef->GetCurrentWeaponRef()->SetWeaponState(weaponState);
-	UE_LOG(LogTemp, Log, TEXT("Damage : %f"), MainCharacterRef->GetCurrentWeaponRef()->GetWeaponStat().WeaponDamage);
-	UE_LOG(LogTemp, Log, TEXT("Atk : %f"), MainCharacterRef->GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
+	MainCharacterRef->WeaponComponent->SetWeaponStat(weaponStat);
+	MainCharacterRef->WeaponComponent->SetWeaponState(weaponState);
+	UE_LOG(LogTemp, Log, TEXT("Damage : %f"), MainCharacterRef->WeaponComponent->GetWeaponStat().WeaponDamage);
+	UE_LOG(LogTemp, Log, TEXT("Atk : %f"), MainCharacterRef->WeaponComponent->GetWeaponStat().WeaponAtkSpeedRate);
 	OnStatLevelUpdated.Broadcast();
 	return true;
 }
@@ -269,7 +263,7 @@ bool UCraftingManagerBase::IsOwnMaterialEnoughForStatUpgrade(TArray<uint8> TempU
 
 TArray<uint8> UCraftingManagerBase::GetRequiredMaterialAmountForStat(TArray<uint8> TempUpgradedStatList)
 {
-	int32 currWeaponID = MainCharacterRef->GetCurrentWeaponRef()->WeaponStat.WeaponID;
+	int32 currWeaponID = MainCharacterRef->WeaponComponent->WeaponStat.WeaponID;
 	TArray<uint8> currLevel = GetCurrentStatLevel();
 	TArray<uint8> requiredMaterialList = {0, 0, 0};
 	FString rowName = FString::FromInt(currWeaponID);
@@ -292,12 +286,12 @@ TArray<uint8> UCraftingManagerBase::GetRequiredMaterialAmountForStat(TArray<uint
 
 TArray<uint8> UCraftingManagerBase::GetCurrentStatLevel()
 {
-	return MainCharacterRef->GetCurrentWeaponRef()->GetWeaponState().UpgradedStatList;
+	return MainCharacterRef->WeaponComponent->GetWeaponState().UpgradedStatList;
 }
 
 TArray<uint8> UCraftingManagerBase::GetStatMaxLevel()
 {
-	int32 currWeaponID = MainCharacterRef->GetCurrentWeaponRef()->WeaponID;
+	int32 currWeaponID = MainCharacterRef->WeaponComponent->WeaponID;
 	FString rowName = FString::FromInt(currWeaponID);
 	FStatUpgradeInfoStruct* statUpgradeInfo = StatUpgradeInfoTable->FindRow<FStatUpgradeInfoStruct>(FName(rowName), rowName);
 	TArray<uint8> maxLevelList;

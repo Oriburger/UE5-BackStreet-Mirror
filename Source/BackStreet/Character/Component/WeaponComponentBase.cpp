@@ -37,16 +37,12 @@ void UWeaponComponentBase::Attack()
 {
 	if (!IsValid(MeleeCombatManager) || !IsValid(RangedCombatManager)) return;
 
-	UE_LOG(LogTemp, Warning, TEXT("MELLE #0"));
-
 	switch (WeaponStat.WeaponType)
 	{
 	case EWeaponType::E_Melee:
-		UE_LOG(LogTemp, Warning, TEXT("MELLE #0"));
 		MeleeCombatManager->Attack();
 		break;
 	case EWeaponType::E_Shoot:
-		UE_LOG(LogTemp, Warning, TEXT("RANGED #0"));
 		RangedCombatManager->Attack();
 		break;
 	}
@@ -82,6 +78,12 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 
 	if (WeaponID != 0)
 	{
+		if (WeaponStat.WeaponType == EWeaponType::E_Shoot)
+		{
+			ProjectileStatInfo = GetProjectileStatInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
+			ProjectileAssetInfo = GetProjectileAssetInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
+		}
+
 		TArray<FSoftObjectPath> tempStream, assetToStream;
 		tempStream.AddUnique(WeaponAssetInfo.WeaponMesh.ToSoftObjectPath());
 		tempStream.AddUnique(WeaponAssetInfo.DestroyEffectParticle.ToSoftObjectPath());
@@ -146,6 +148,42 @@ FWeaponStatStruct UWeaponComponentBase::GetWeaponStatInfoWithID(int32 TargetWeap
 	}
 	return FWeaponStatStruct();
 }
+
+
+FProjectileStatStruct UWeaponComponentBase::GetProjectileStatInfo(int32 TargetProjectileID)
+{
+	//캐시에 기록이 되어있다면?
+	if (ProjectileStatInfo.ProjectileID == TargetProjectileID) return ProjectileStatInfo;
+
+	//없다면 새로 읽어옴
+	else if (ProjectileAssetInfoTable != nullptr && TargetProjectileID != 0)
+	{
+		FProjectileStatStruct* newInfo = nullptr;
+		FString rowName = FString::FromInt(TargetProjectileID);
+
+		newInfo = ProjectileStatInfoTable->FindRow<FProjectileStatStruct>(FName(rowName), rowName);
+		if (newInfo != nullptr) return *newInfo;
+	}
+	return FProjectileStatStruct();
+}
+
+FProjectileAssetInfoStruct UWeaponComponentBase::GetProjectileAssetInfo(int32 TargetProjectileID)
+{
+	//캐시에 기록이 되어있다면?
+	if (ProjectileAssetInfo.ProjectileID == TargetProjectileID) return ProjectileAssetInfo;
+
+	//없다면 새로 읽어옴
+	else if (ProjectileAssetInfoTable != nullptr && TargetProjectileID != 0)
+	{
+		FProjectileAssetInfoStruct* newInfo = nullptr;
+		FString rowName = FString::FromInt(TargetProjectileID);
+
+		newInfo = ProjectileAssetInfoTable->FindRow<FProjectileAssetInfoStruct>(FName(rowName), rowName);
+		if (newInfo != nullptr) return *newInfo;
+	}
+	return FProjectileAssetInfoStruct();
+}
+
 
 float UWeaponComponentBase::CalculateTotalDamage(FCharacterStateStruct TargetState)
 {

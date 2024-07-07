@@ -4,7 +4,6 @@
 #include "../AssetSystem/AssetManagerBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Character/CharacterBase.h"
-#include "../../Item/Weapon/WeaponBase.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 #include "Components/AudioComponent.h"

@@ -239,7 +239,6 @@ void UStageManagerComponent::SpawnEnemy()
 						newEnemy->InitEnemyCharacter(enemyID);
 						newEnemy->InitAsset(enemyID);
 						newEnemy->SpawnDefaultController();
-						newEnemy->SwitchToNextWeapon();
 						newEnemy->EnemyDeathDelegate.BindUFunction(this, FName("UpdateEnemyCountAndCheckClear"));
 						Cast<AAIControllerBase>(newEnemy->GetController())->ActivateAI();
 
@@ -262,7 +261,6 @@ void UStageManagerComponent::SpawnEnemy()
 		{
 			boss->InitEnemyCharacter(boss->CharacterID);
 			boss->InitAsset(boss->CharacterID);
-			boss->SwitchToNextWeapon();
 			boss->EnemyDeathDelegate.BindUFunction(this, FName("UpdateEnemyCountAndCheckClear"));
 			Cast<AAIControllerBase>(boss->GetController())->ActivateAI();
 			SpawnedActorList.Add(boss);

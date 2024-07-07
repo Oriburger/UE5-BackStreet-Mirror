@@ -54,7 +54,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetCanReload();
 
-	//------ Asset----------------------------------
+//------ Asset----------------------------------
 protected:
 	//발사 순간에 출력될 이미터 (임시, 추후 데이터 테이블로 관리 예정)
 	UPROPERTY(VisibleInstanceOnly)
@@ -64,31 +64,7 @@ protected:
 	UFUNCTION()
 		void SpawnShootNiagaraEffect();
 
-public:
-	//발사체의 에셋 테이블
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* ProjectileAssetInfoTable;
-
-	//발사체의 스탯 테이블
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		UDataTable* ProjectileStatInfoTable;
-
-protected:
-	//발사체의 에셋 정보를 담을 캐시 변수
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Weapon|Projectile")
-		FProjectileAssetInfoStruct ProjectileAssetInfo;
-
-	//발사체의 스탯을 담을 캐시 변수
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Weapon|Projectile")
-		FProjectileStatStruct ProjectileStatInfo;
-
-	UFUNCTION()
-		FProjectileStatStruct GetProjectileStatInfo(int32 TargetProjectileID);
-
-	UFUNCTION()
-		FProjectileAssetInfoStruct GetProjectileAssetInfo(int32 TargetProjectileID);
-
-	//--------타이머 관련--------------------
+//--------타이머 관련--------------------
 protected:
 	UPROPERTY()
 		FTimerHandle AutoReloadTimerHandle;

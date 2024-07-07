@@ -35,7 +35,7 @@ public:
 		int32 WeaponID;
 
 	//init weapon with load asset
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void InitWeapon(int32 NewWeaponID);
 
 //--------- Data Table, Asset Load ----------------------
@@ -53,14 +53,24 @@ protected:
 	//data table for weapon asset
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		UDataTable* WeaponAssetInfoTable;
-	
+
 	//data table for weapon stat
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* WeaponStatInfoTable;
+
+	//data table for projectile asset
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
+		UDataTable* ProjectileAssetInfoTable;
+
+	//data table for projectile stat
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
+		UDataTable* ProjectileStatInfoTable;
+
 public:
 	//asset info for this weapon instance
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
 		FWeaponAssetInfoStruct WeaponAssetInfo;
+
 
 //------ State, Stat ---------------------------------
 public:
@@ -72,6 +82,15 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay|Stat")
 		FWeaponStateStruct WeaponState;
 
+	//발사체의 에셋 정보를 담을 캐시 변수
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Weapon|Projectile")
+		FProjectileAssetInfoStruct ProjectileAssetInfo;
+
+	//발사체의 스탯을 담을 캐시 변수
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Weapon|Projectile")
+		FProjectileStatStruct ProjectileStatInfo;
+
+public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsWeaponRangeType() { return WeaponStat.WeaponType == EWeaponType::E_Shoot || WeaponStat.WeaponType == EWeaponType::E_Throw; }
 
@@ -80,6 +99,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FWeaponStateStruct GetWeaponState() { return WeaponState; }
+
+	UFUNCTION()
+		FProjectileStatStruct GetProjectileStatInfo(int32 TargetProjectileID);
+
+	UFUNCTION()
+		FProjectileAssetInfoStruct GetProjectileAssetInfo(int32 TargetProjectileID);
 
 	UFUNCTION(BlueprintCallable)
 		void SetWeaponStat(FWeaponStatStruct NewStat) { WeaponStat = NewStat; }
