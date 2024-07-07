@@ -39,6 +39,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		USceneComponent* HitSceneComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UWeaponComponentBase* WeaponComponent;
+
 	UPROPERTY(VisibleAnywhere)
 		class UDebuffManagerComponent* DebuffManagerComponent;
 

@@ -15,7 +15,9 @@
 #include "../../Item/Weapon/WeaponBase.h"
 #include "../../Item/Weapon/Throw/ThrowWeaponBase.h"
 #include "../../Item/Weapon/WeaponInventoryBase.h"
+#include "../../Item/Weapon/Ranged/RangedWeaponBase.h"
 #include "../../System/MapSystem/Stage/GateBase.h"
+#include "../Component/WeaponComponentBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/AudioComponent.h"
 #include "Animation/AnimInstance.h"
@@ -510,13 +512,13 @@ void AMainCharacterBase::TryAttack()
 {
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw) return;
+	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw) return;
 
 	//IndieGo용 임시 코드----------------------------------------------------------
-	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130) return;
+	if (WeaponComponent->WeaponStat.WeaponID == 12130) return;
 	//---------------------------------------------------------------------------------
 
-	if (GetCurrentWeaponRef()->WeaponID == 0)
+	if (WeaponComponent->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
 		return;
@@ -879,21 +881,7 @@ bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 
 bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
 {
-	if (!IsValid(GetWeaponInventoryRef()) || !IsValid(GetSubWeaponInventoryRef())) return false;
-	
-	bool result = false; 
-	EWeaponType weaponType = GetWeaponInventoryRef()->GetWeaponType(NewWeaponID);
-	
-	if (weaponType == EWeaponType::E_Throw)
-	{
-		result = GetSubWeaponInventoryRef()->AddWeapon(NewWeaponID);
-	}
-	else if(weaponType != EWeaponType::E_None)
-	{
-		result = GetWeaponInventoryRef()->AddWeapon(NewWeaponID);
-	}
-
-	return result;
+	return Super::PickWeapon(NewWeaponID);
 }
 
 void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)

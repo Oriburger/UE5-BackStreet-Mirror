@@ -1,6 +1,7 @@
 #include "CharacterBase.h"
 #include "./Component/DebuffManagerComponent.h"
 #include "./Component/TargetingManagerComponent.h"
+#include "./Component/WeaponComponentBase.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../System/SkillSystem/SkillManagerBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
@@ -29,6 +30,9 @@ ACharacterBase::ACharacterBase()
 
 	DebuffManagerComponent = CreateDefaultSubobject<UDebuffManagerComponent>(TEXT("DEBUFF_MANAGER"));
 	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));
+
+	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
+	WeaponComponent->SetupAttachment(GetMesh());
 
 	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
 }
@@ -448,7 +452,6 @@ void ACharacterBase::Die()
 
 void ACharacterBase::TryAttack()
 {
-	if (!IsValid(GetCurrentWeaponRef())) return;
 	if (GetWorldTimerManager().IsTimerActive(AtkIntervalHandle)) return;
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 
@@ -456,11 +459,11 @@ void ACharacterBase::TryAttack()
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
 
 	int32 nextAnimIdx = 0;
-	const float attackSpeed = FMath::Clamp(CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
+	const float attackSpeed = FMath::Clamp(CharacterStat.DefaultAttackSpeed * WeaponComponent->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
 	//Choose animation which fit battle situation
 	TArray <UAnimMontage*> targetAnimList;
-	switch (GetCurrentWeaponRef()->GetWeaponStat().WeaponType)
+	switch (WeaponComponent->GetWeaponStat().WeaponType)
 	{
 	case EWeaponType::E_Melee:
 		//check melee anim type
@@ -468,10 +471,10 @@ void ACharacterBase::TryAttack()
 		{
 			if (AssetHardPtrInfo.AirAttackAnimMontageList.Num() > 0)
 			{
-				nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.AirAttackAnimMontageList.Num();
+				nextAnimIdx = WeaponComponent->GetCurrentComboCnt() % AssetHardPtrInfo.AirAttackAnimMontageList.Num();
 				targetAnimList = AssetHardPtrInfo.AirAttackAnimMontageList;
 
-				if (GetCurrentWeaponRef()->GetCurrentComboCnt() == AssetHardPtrInfo.AirAttackAnimMontageList.Num())
+				if (WeaponComponent->GetCurrentComboCnt() == AssetHardPtrInfo.AirAttackAnimMontageList.Num())
 				{
 					TryDownwardAttack();
 					return;
@@ -491,21 +494,21 @@ void ACharacterBase::TryAttack()
 
 		else if (AssetHardPtrInfo.MeleeAttackAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.MeleeAttackAnimMontageList.Num();
+			nextAnimIdx = WeaponComponent->GetCurrentComboCnt() % AssetHardPtrInfo.MeleeAttackAnimMontageList.Num();
 			targetAnimList = AssetHardPtrInfo.MeleeAttackAnimMontageList;
 		}
 		break;
 	case EWeaponType::E_Shoot:
 		if (AssetHardPtrInfo.ShootAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.ShootAnimMontageList.Num();
+			nextAnimIdx = WeaponComponent->GetCurrentComboCnt() % AssetHardPtrInfo.ShootAnimMontageList.Num();
 		}
 		targetAnimList = AssetHardPtrInfo.ShootAnimMontageList;
 		break;
 	case EWeaponType::E_Throw:
 		if (AssetHardPtrInfo.ThrowAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.ThrowAnimMontageList.Num();
+			nextAnimIdx = WeaponComponent->GetCurrentComboCnt() % AssetHardPtrInfo.ThrowAnimMontageList.Num();
 		}
 		targetAnimList = AssetHardPtrInfo.ThrowAnimMontageList;
 		break;
@@ -587,7 +590,6 @@ void ACharacterBase::DashAttack()
 void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
-	if (!IsValid(GetCurrentWeaponRef())) return;
 
 	if (!IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()))
 	{
@@ -598,7 +600,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 
 	if (SkillType != ESkillType::E_Character)
 	{
-		if (GetCurrentWeaponRef()->WeaponID == 0)
+		if (WeaponComponent->WeaponID == 0)
 		{
 			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Does't have any weapon")), FColor::White);
 			return;
@@ -630,9 +632,9 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	}
 	case ESkillType::E_Weapon:
 	{
-		if (SkillID != GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.SkillID) return;
+		if (SkillID != WeaponComponent->WeaponAssetInfo.WeaponSkillInfo.SkillID) return;
 
-		if (GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.bSkillBlocked)
+		if (WeaponComponent->WeaponAssetInfo.WeaponSkillInfo.bSkillBlocked)
 		{
 			//GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("현재 스킬을 사용할 수 없습니다.")), FColor::White);
 			return;
@@ -640,16 +642,16 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 		else
 		{
 			CharacterState.bCanAttack = false;
-			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo);
+			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &WeaponComponent->WeaponAssetInfo.WeaponSkillInfo);
 			return;
 		}
 		break;
 	}
 	case ESkillType::E_Weapon0:
 	{
-		if (GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon0))
+		if (WeaponComponent->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon0))
 		{
-			FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon0];
+			FOwnerSkillInfoStruct skillInfo = WeaponComponent->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon0];
 			UE_LOG(LogTemp, Warning, TEXT("SKILL BLOCK STATE : %d"), (int32)skillInfo.bSkillBlocked);
 			if (CheckCanTrySkill(SkillID, &skillInfo))
 			{
@@ -661,9 +663,9 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	}
 	case ESkillType::E_Weapon1:
 	{
-		if (GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon1))
+		if (WeaponComponent->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon1))
 		{
-			FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon1];
+			FOwnerSkillInfoStruct skillInfo = WeaponComponent->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon1];
 			UE_LOG(LogTemp, Warning, TEXT("SKILL BLOCK STATE : %d"), (int32)skillInfo.bSkillBlocked);
 			if (CheckCanTrySkill(SkillID, &skillInfo))
 			{
@@ -675,9 +677,9 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	}
 	case ESkillType::E_Weapon2:
 	{
-		if (GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon2))
+		if (WeaponComponent->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon2))
 		{
-			FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon2];
+			FOwnerSkillInfoStruct skillInfo = WeaponComponent->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon2];
 			if (CheckCanTrySkill(SkillID, &skillInfo))
 			{
 				CharacterState.bCanAttack = false;
@@ -689,9 +691,9 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	}
 
 	//Reset Combo
-	if (IsValid(GetCurrentWeaponRef()))
+	if (IsValid(WeaponComponent))
 	{
-		GetCurrentWeaponRef()->ResetComboCnt();
+		WeaponComponent->ResetComboCnt();
 	}
 }
 
@@ -709,17 +711,13 @@ bool ACharacterBase::CheckCanTrySkill(int32 SkillID, FOwnerSkillInfoStruct* Skil
 
 void ACharacterBase::Attack()
 {
-	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
-
-	const float attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
-
-	GetCurrentWeaponRef()->Attack();
+	const float attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * WeaponComponent->WeaponStat.WeaponAtkSpeedRate);
+	WeaponComponent->Attack();
 }
 
 void ACharacterBase::StopAttack()
 {
-	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
-	GetCurrentWeaponRef()->StopAttack();
+	WeaponComponent->StopAttack();
 }
 
 void ACharacterBase::TryReload()
@@ -924,6 +922,18 @@ void ACharacterBase::SetAsset()
 	GetMesh()->SetAnimInstanceClass(AssetSoftPtrInfo.AnimBlueprint);
 	GetMesh()->OverrideMaterials.Empty();
 
+	//------ weapon component attachment ----------------------
+	bool result = WeaponComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName("Weapon_R"));
+	if (!result)
+	{
+		GEngine->AddOnScreenDebugMessage(0, 10, FColor::Yellow, FString("Failed"));
+	}
+	FLatentActionInfo latentInfo;
+	latentInfo.CallbackTarget = this;
+	UKismetSystemLibrary::MoveComponentTo(WeaponComponent, FVector(0, 0, 0), FRotator(0, 0, 0)
+		, 0, 0, 0, 0, EMoveComponentAction::Type::Move, latentInfo);
+
+	//----Init other asset------------
 	InitMaterialAsset();
 	InitAnimAsset();
 	InitSoundAsset();
@@ -1105,9 +1115,8 @@ bool ACharacterBase::EquipWeapon(AWeaponBase* TargetWeapon)
 
 bool ACharacterBase::PickWeapon(int32 NewWeaponID)
 {
-	if (!IsValid(WeaponInventoryRef)) return false;
-	bool result = WeaponInventoryRef->AddWeapon(NewWeaponID);
-	return result;
+	WeaponComponent->InitWeapon(NewWeaponID);
+	return true;
 }
 
 void ACharacterBase::SwitchToNextWeapon()
