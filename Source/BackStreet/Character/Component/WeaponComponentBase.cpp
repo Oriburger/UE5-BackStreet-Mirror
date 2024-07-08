@@ -13,9 +13,7 @@
 #include "Engine/StreamableManager.h"
 
 
-UWeaponComponentBase::UWeaponComponentBase() 
-{
-}
+UWeaponComponentBase::UWeaponComponentBase() {}
 
 void UWeaponComponentBase::BeginPlay()
 {
@@ -36,7 +34,7 @@ void UWeaponComponentBase::BeginPlay()
 void UWeaponComponentBase::Attack()
 {
 	if (!IsValid(MeleeCombatManager) || !IsValid(RangedCombatManager)) return;
-
+	
 	switch (WeaponStat.WeaponType)
 	{
 	case EWeaponType::E_Melee:
@@ -46,6 +44,11 @@ void UWeaponComponentBase::Attack()
 		RangedCombatManager->Attack();
 		break;
 	}
+	if (IsValid(WeaponTrailParticle))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Trail Test #1"));
+		WeaponTrailParticle->Activate(true);
+	}
 }
 
 void UWeaponComponentBase::StopAttack()
@@ -54,6 +57,11 @@ void UWeaponComponentBase::StopAttack()
 
 	MeleeCombatManager->StopAttack();
 	RangedCombatManager->StopAttack();
+	if (IsValid(WeaponTrailParticle))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Trail Test #2"));
+		WeaponTrailParticle->Deactivate();
+	}
 }
 
 void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
@@ -120,6 +128,41 @@ void UWeaponComponentBase::InitWeaponAsset()
 		this->SetRelativeRotation(WeaponAssetInfo.InitialRotation);
 		this->SetRelativeScale3D(WeaponAssetInfo.InitialScale);
 		this->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+
+	if (IsValid(WeaponTrailParticle))
+	{
+		WeaponTrailParticle->DestroyComponent();
+	}
+	if (WeaponAssetInfo.MeleeWeaponAssetInfo.MeleeTrailParticle.IsValid()
+		&& !OwnerCharacterRef.Get()->ActorHasTag("Player"))
+	{	
+		WeaponTrailParticle = NewObject<UNiagaraComponent>(GetOwner());
+		WeaponTrailParticle->AttachToComponent(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		WeaponTrailParticle->RegisterComponent();
+		WeaponTrailParticle->bAutoActivate = false;
+
+		WeaponTrailParticle->SetAsset(WeaponAssetInfo.MeleeWeaponAssetInfo.MeleeTrailParticle.Get());
+		FColor weaponTrailParticleColor = WeaponAssetInfo.MeleeWeaponAssetInfo.MeleeTrailParticleColor;
+		WeaponTrailParticle->SetColorParameter(FName("Color"), weaponTrailParticleColor);
+
+		FVector startLocation = this->GetSocketLocation("Mid");
+		FVector endLocation = this->GetSocketLocation("End");
+		FVector socketLocalLocation = UKismetMathLibrary::MakeRelativeTransform(this->GetSocketTransform(FName("End"))
+			, this->GetComponentTransform()).GetLocation();
+
+		WeaponTrailParticle->SetVectorParameter(FName("Start"), startLocation);
+		WeaponTrailParticle->SetVectorParameter(FName("End"), endLocation);
+		WeaponTrailParticle->SetRelativeLocation(socketLocalLocation);
+	}
+
+	if (WeaponAssetInfo.MeleeWeaponAssetInfo.HitEffectParticle.IsValid())
+	{
+		HitEffectParticle = WeaponAssetInfo.MeleeWeaponAssetInfo.HitEffectParticle.Get();
+	}
+	if (WeaponAssetInfo.MeleeWeaponAssetInfo.HitEffectParticleLarge.IsValid())
+	{
+		HitEffectParticleLarge = WeaponAssetInfo.MeleeWeaponAssetInfo.HitEffectParticleLarge.Get();
 	}
 }
 
