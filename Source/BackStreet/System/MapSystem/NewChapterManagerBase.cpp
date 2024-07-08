@@ -41,8 +41,6 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 		StageManagerComponent->InitStage(StageInfoList[0]);
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("LoL"));
-
 	//(Temporary code) set input mode game only and hide mouse cursor
 	APlayerController* playerControllerRef = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (IsValid(playerControllerRef))
@@ -50,8 +48,6 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 		FInputModeGameOnly gameOnlyData;
 		playerControllerRef->SetInputMode(gameOnlyData);
 		playerControllerRef->bShowMouseCursor = false;
-
-		UE_LOG(LogTemp, Warning, TEXT("LoL2"));
 
 		//Add combat widet to screen
 		AddCombatWidget();

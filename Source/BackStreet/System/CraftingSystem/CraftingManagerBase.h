@@ -3,7 +3,6 @@
 #pragma once
 
 #include "../../Global/BackStreet.h"
-#include "../../Item/Weapon/WeaponInventoryBase.h"
 #include "CraftingManagerBase.generated.h"
 
 #define MAX_STAT_LEVEL 5

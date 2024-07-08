@@ -1,14 +1,13 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "EnemyCharacterBase.h"
 #include "../Component/TargetingManagerComponent.h"
+#include "../Component/WeaponComponentBase.h"
 #include "../MainCharacter/MainCharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SkillSystem/SkillManagerBase.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
 #include "../../System/AISystem/AIControllerBase.h"
 #include "../../Item/ItemBase.h"
-#include "../../Item/Weapon/WeaponInventoryBase.h"
-#include "../../Item/Weapon/WeaponBase.h"
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -67,7 +66,6 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
 	AssetSoftPtrInfo.CharacterID = CharacterID = NewCharacterID;
 	
-
 	if (newStat != nullptr)
 	{
 		EnemyStat = *newStat;
@@ -90,13 +88,11 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 
 void AEnemyCharacterBase::SetDefaultWeapon()
 {
-	if (IsValid(GetWeaponInventoryRef()))
+	PickWeapon(EnemyStat.DefaultWeaponID);
+	UE_LOG(LogTemp, Warning, TEXT("DefaultWeapon ID : %d"), EnemyStat.DefaultWeaponID);
+	if (IsValid(Controller))
 	{
-		bool result = GetWeaponInventoryRef()->AddWeapon(EnemyStat.DefaultWeaponID);
-		if (result && IsValid(Controller))
-		{
-			Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();
-		}
+		Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();
 	}
 }
 
@@ -109,7 +105,7 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	if (AssetManagerBaseRef.IsValid())
 	{
 		ACharacterBase* damageCauser = Cast<ACharacterBase>(DamageCauser);
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, damageCauser->GetCurrentWeaponRef()->GetWeaponStat().WeaponID, "HitImpact");
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponComponent->GetWeaponStat().WeaponID, "HitImpact");
 	}
 	
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
@@ -159,12 +155,12 @@ void AEnemyCharacterBase::TryAttack()
 
 void AEnemyCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
-	check(GetCurrentWeaponRef() != nullptr);
+	check(WeaponComponent != nullptr);
 
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Skill
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 
-	if (GetCurrentWeaponRef()->WeaponID == 0)
+	if (WeaponComponent->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("The Skill Is Not Available")), FColor::White);
 		return;
@@ -178,8 +174,7 @@ void AEnemyCharacterBase::Attack()
 	Super::Attack();
 
 	float attackSpeed = 0.5f;
-	if(IsValid(GetCurrentWeaponRef()))
-		attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
+	attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * WeaponComponent->GetWeaponStat().WeaponAtkSpeedRate);
 
 	GetWorldTimerManager().SetTimer(AtkIntervalHandle, this, &ACharacterBase::ResetAtkIntervalTimer
 		, 1.0f, false, FMath::Max(0.0f, 1.5f - attackSpeed));
@@ -330,14 +325,4 @@ void AEnemyCharacterBase::ClearAllTimerHandle()
 	TurnTimeOutTimerHandle.Invalidate();
 	HitTimeOutTimerHandle.Invalidate();
 	DamageAIDelayTimer.Invalidate();
-}
-
-bool AEnemyCharacterBase::PickWeapon(int32 NewWeaponID)
-{
-	return Super::PickWeapon(NewWeaponID);
-}
-
-void AEnemyCharacterBase::SwitchToNextWeapon()
-{
-	return Super::SwitchToNextWeapon();
 }

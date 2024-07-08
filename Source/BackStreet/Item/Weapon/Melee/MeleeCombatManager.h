@@ -3,44 +3,26 @@
 #pragma once
 
 #include "../../../Global/BackStreet.h"
-#include "../WeaponBase.h"
-#include "MeleeWeaponBase.generated.h"
+#include "../CombatManager.h"
+#include "MeleeCombatManager.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BACKSTREET_API AMeleeWeaponBase : public AWeaponBase
+class BACKSTREET_API UMeleeCombatManager : public UCombatManager
 {
 	GENERATED_BODY()
 public:
-	AMeleeWeaponBase();
+	UMeleeCombatManager();
 
-	//공격 처리		
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
 
-	//공격 마무리 처리
 	UFUNCTION(BlueprintCallable)
 		virtual void StopAttack() override;
 
-	UFUNCTION(BlueprintCallable)
-		virtual float GetAttackRange() override;
-
-
-//------ 스탯/상태 관련 ---------------------------------
 protected:
-	UFUNCTION(BlueprintCallable)
-		virtual void UpdateWeaponStat(FWeaponStatStruct NewStat) override;
-
-//-------- 에셋 관련 ----------------------------
-protected:
-	UFUNCTION()
-		virtual void InitWeaponAsset() override;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class UNiagaraComponent* MeleeTrailParticle;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		FColor MeleeTrailParticleColor;
 
@@ -53,7 +35,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
 		class USoundCue* WieldSound;
 
-//-------- Melee 관련 ---------------------------
+	//-------- Melee 관련 ---------------------------
 public:
 	UFUNCTION(BlueprintCallable)
 		TArray<AActor*> CheckMeleeAttackTargetWithSphereTrace();
@@ -61,10 +43,6 @@ public:
 	//근접 공격을 수행
 	UFUNCTION()
 		void MeleeAttack();
-
-protected:
-	UFUNCTION()
-		bool GetIsFinalCombo();// 
 
 private:
 	//검로 Trace, 근접 무기의 각 지점에서 이전 월드 좌표 -> 현재 월드 좌표로 LineTrace를 진행 
@@ -76,21 +54,11 @@ private:
 		void ActivateMeleeHitEffect(const FVector& Location, bool bImpactEffect = false);
 
 private:
-	UFUNCTION()
-		TArray<FVector> GetCurrentMeleePointList();
+	TArray<FVector> GetCurrentMeleePointList();
+	TArray<FVector> MeleePrevTracePointList;
 
-	UPROPERTY()
-		TArray<FVector> MeleePrevTracePointList;
-		
 	//근접 공격의 오버랩 체크 시, 무시할 액터의 리스트이다.
-	TArray<AActor*> IgnoreActorList; 
-
-	//UPROPERTY()
+	TArray<AActor*> IgnoreActorList;
 	FCollisionQueryParams MeleeLineTraceQueryParams;
-
-protected:
-	virtual void ClearAllTimerHandle() override;
-
-	UPROPERTY()
-		FTimerHandle MeleeAtkTimerHandle;
+	FTimerHandle MeleeAtkTimerHandle;
 };
