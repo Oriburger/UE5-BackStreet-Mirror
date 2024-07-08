@@ -20,6 +20,17 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+//------- VFX --------------------------------
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraComponent* WeaponTrailParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraSystem* HitEffectParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraSystem* HitEffectParticleLarge;
+
 //------- Basic property, Action -------------------
 public:
 	//process attack 
