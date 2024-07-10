@@ -190,6 +190,10 @@ void ACharacterBase::KnockDown()
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_KnockedDown;
 
+	if (AssetHardPtrInfo.KnockdownAnimMontageList.IsEmpty() || !IsValid(AssetHardPtrInfo.KnockdownAnimMontageList[0])) return;
+	PlayAnimMontage(AssetHardPtrInfo.KnockdownAnimMontageList[0]);
+	UE_LOG(LogTemp, Warning, TEXT("Final impact"));
+
 	GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
 	KnockDownDelayTimerHandle.Invalidate();
 
@@ -336,7 +340,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	GetWorldTimerManager().SetTimer(HitCounterResetTimerHandle, this, &ACharacterBase::ResetHitCounter, 1.0f, false, 1.0f);
 
 	// Check knock down condition and set knock down event using retriggable timer
-	if (CharacterState.HitCounter >= 7)
+	if (Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetIsFinalCombo())
 	{
 		KnockDown();
 		/*
@@ -345,7 +349,6 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		GetWorldTimerManager().SetTimer(KnockDownDelayTimerHandle, this, &ACharacterBase::KnockDown, 1.0f, false, 0.1f);
 		*/
 	}
-
 	return DamageAmount;
 }
 
