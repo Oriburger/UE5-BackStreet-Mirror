@@ -121,6 +121,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 
 void UWeaponComponentBase::InitWeaponAsset()
 {
+	if (!OwnerCharacterRef.IsValid()) return; 
 	if (WeaponAssetInfo.WeaponMesh.IsValid())
 	{
 		this->SetStaticMesh(WeaponAssetInfo.WeaponMesh.Get());

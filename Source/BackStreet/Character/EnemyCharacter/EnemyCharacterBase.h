@@ -72,6 +72,9 @@ public:
 protected:
 	virtual void KnockDown() override;
 
+	UFUNCTION()
+		virtual void StandUp() override;
+
 // ----- 캐릭터 스탯 및 상태 관련 ---------
 public:
 	//Initialize EnemyCharacter except asset info.

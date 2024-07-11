@@ -302,6 +302,11 @@ void AEnemyCharacterBase::KnockDown()
 	}
 }
 
+void AEnemyCharacterBase::StandUp()
+{
+	Super::StandUp();
+}
+
 void AEnemyCharacterBase::SetInstantHpWidgetVisibility()
 {
 	FloatingHpBar->SetVisibility(true);

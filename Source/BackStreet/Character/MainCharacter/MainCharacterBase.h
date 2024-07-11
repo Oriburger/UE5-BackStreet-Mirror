@@ -179,6 +179,9 @@ public:
 	UFUNCTION()
 		virtual void Die() override;
 
+	UFUNCTION()
+		virtual void StandUp() override;
+
 	//Rotation 조절 방식을 기본 방식인 Movement 방향으로 되돌린다
 	UFUNCTION(BlueprintCallable)
 		void ResetRotationToMovement();
