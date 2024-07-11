@@ -59,7 +59,6 @@ void UWeaponComponentBase::StopAttack()
 	RangedCombatManager->StopAttack();
 	if (IsValid(WeaponTrailParticle))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Trail Test #2"));
 		WeaponTrailParticle->Deactivate();
 	}
 }
@@ -121,6 +120,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 
 void UWeaponComponentBase::InitWeaponAsset()
 {
+	if (!OwnerCharacterRef.IsValid()) return;
 	if (WeaponAssetInfo.WeaponMesh.IsValid())
 	{
 		this->SetStaticMesh(WeaponAssetInfo.WeaponMesh.Get());
@@ -245,5 +245,6 @@ void UWeaponComponentBase::UpdateComboState()
 
 bool UWeaponComponentBase::GetIsFinalCombo()
 {
+	if (!OwnerCharacterRef.IsValid()) return false;
 	return GetCurrentComboCnt() % OwnerCharacterRef.Get()->GetMaxComboCount() == 0;
 }

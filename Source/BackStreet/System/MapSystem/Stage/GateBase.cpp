@@ -35,11 +35,12 @@ void AGateBase::BeginPlay()
 	}
 }
 
-void AGateBase::InitGate(FVector2D NewDirection)
+void AGateBase::InitGate(FVector2D NewDirection, FName StageType)
 {
 	if (bManualMode) return;
 	Direction = NewDirection;
 	bIsGateActive = false;
+	NextStageType = StageType;
 }
 
 void AGateBase::EnterGate()
