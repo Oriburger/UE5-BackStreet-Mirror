@@ -56,10 +56,8 @@ TArray<USoundCue*> UAssetManagerBase::GetSoundList(ESoundAssetType SoundType, in
 	// Read from dataTable
 	TArray<USoundCue*> soundList;
 	FSoundAssetInfoStruct* soundAssetInfoStruct = GetSoundAssetInfo(SoundType, TargetID);
-	UE_LOG(LogTemp, Warning, TEXT("Get Sound List #1"));
 	if (soundAssetInfoStruct)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Get Sound List #2"));
 		soundList = soundAssetInfoStruct->SoundMap.Find(SoundName)->SoundList;
 	}
 

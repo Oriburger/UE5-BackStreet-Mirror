@@ -89,7 +89,6 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 void AEnemyCharacterBase::SetDefaultWeapon()
 {
 	PickWeapon(EnemyStat.DefaultWeaponID);
-	UE_LOG(LogTemp, Warning, TEXT("DefaultWeapon ID : %d"), EnemyStat.DefaultWeaponID);
 	if (IsValid(Controller))
 	{
 		Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();

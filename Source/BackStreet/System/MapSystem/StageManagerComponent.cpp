@@ -2,6 +2,7 @@
 
 
 #include "StageManagerComponent.h"
+#include "StageGeneratorComponent.h"
 #include "../../Character/EnemyCharacter/EnemyCharacterBase.h"
 #include "../../Character/CharacterBase.h"
 #include "../../Character/Component/ItemInventoryComponent.h"
@@ -32,7 +33,7 @@ void UStageManagerComponent::BeginPlay()
 	{
 		Cast<ACharacterBase>(playerCharacter)->OnCharacterDied.AddDynamic(this, &UStageManagerComponent::SetGameIsOver);
 	}
-
+	ChapterManagerRef = Cast<ANewChapterManagerBase>(GetOwner());
 }
 
 void UStageManagerComponent::Initialize(FChapterInfo NewChapterInfo)
@@ -49,10 +50,17 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 
 	//Init new stage
 	CurrentStageInfo = NewStageInfo;
-	//UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
-	//UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
-	//UE_LOG(LogTemp, Warning, TEXT("> Level Name : %s"), *CurrentStageInfo.LevelAssetName.ToString());
-	//UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %d"), CurrentStageInfo.TilePos.X);
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Green, TEXT("=========== Init Stage ============"));
+		GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Green, FString::Printf(TEXT("> Stage Type : %d"), CurrentStageInfo.StageType));
+		GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Green, FString::Printf(TEXT("> Coordinate : %s"), *CurrentStageInfo.Coordinate.ToString()));
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
+	UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
+	UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %s"), *CurrentStageInfo.Coordinate.ToString());
 
 	//Load new level
 	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
@@ -100,7 +108,6 @@ void UStageManagerComponent::CreateLevelInstance(TSoftObjectPtr<UWorld> MainLeve
 	//Start load
 	bool result = false;
 	LoadStatus = (OuterLevel.IsNull() ? 1 : 2);
-
 
 	MainAreaRef = MainAreaRef->LoadLevelInstanceBySoftObjectPtr(GetWorld(), MainLevel, FVector(0.0f)
 					, FRotator::ZeroRotator, result);
@@ -186,6 +193,8 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 		else if (spawnPoint->Tags[1] == FName("Gate"))
 		{
 			CurrentStageInfo.PortalLocationList.Add(spawnPoint->GetActorLocation() + zAxisCalibrationValue);
+			checkf(spawnPoint->Tags.Num() >= 3, TEXT("Portal SpawnPoint의 Tag[2], Direction Tag가 지정되어있지않습니다."));
+			CurrentStageInfo.PortalDirectionTagList.Add(spawnPoint->Tags[2]);
 		}
 	}
 }
@@ -200,8 +209,11 @@ void UStageManagerComponent::SpawnEnemy()
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteTimeAttack
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss) return;
 
-	if (CurrentStageInfo.EnemyCompositionInfo.CompositionList.Num() == 0
-		|| CurrentStageInfo.EnemyCompositionInfo.CompositionList.Num() == 0) return;
+	if (CurrentStageInfo.EnemyCompositionInfo.CompositionList.Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::SpawnEnemy : Not enough enemy composition"));
+		return;
+	}
 
 	//Check data is valid
 	if (CurrentStageInfo.EnemyCompositionInfo.CompositionList.Num() > CurrentStageInfo.EnemySpawnLocationList.Num())
@@ -276,22 +288,43 @@ void UStageManagerComponent::SpawnCraftbox()
 
 void UStageManagerComponent::SpawnPortal(int32 GateCount)
 {
-	if (CurrentStageInfo.PortalLocationList.Num() == 0)
+	if (!ChapterManagerRef.IsValid()) return;
+	if (CurrentStageInfo.PortalLocationList.Num() < GateCount
+		|| CurrentStageInfo.PortalDirectionTagList.Num() < GateCount)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::SpawnPortal -> Can't Find Portal Spawn Point!"));
+		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::SpawnPortal -> Not Enough Portal Spawn Point!"));
 		return;
 	}
 
-	//Temporary code for linear stage system. (GateCount will not be used til BIC)
-	AGateBase* newGate = GetWorld()->SpawnActor<AGateBase>(GateClass, CurrentStageInfo.PortalLocationList[0], FRotator::ZeroRotator);
-	if (IsValid(newGate))
-	{
-		SpawnedActorList.Add(newGate);
-		newGate->InitGate({ 1, 0 });
+	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::SpawnPortal, spawn %d portal"), GateCount);
 
-		//temp
-		newGate->ActivateGate();
-		newGate->OnEnterRequestReceived.BindUFunction(GetOwner(), FName("MoveStage"));
+	UStageGeneratorComponent* stageGeneratorRef = ChapterManagerRef.Get()->StageGeneratorComponent;
+	for (int32 idx = 0; idx < GateCount; idx++)
+	{
+		AGateBase* newGate = GetWorld()->SpawnActor<AGateBase>(GateClass, CurrentStageInfo.PortalLocationList[idx], FRotator::ZeroRotator);
+		if (IsValid(newGate))
+		{
+			SpawnedActorList.Add(newGate);
+			
+			FName directionTag = CurrentStageInfo.PortalDirectionTagList[idx];
+			FVector2D direction = ((directionTag == FName("Up")) ? FVector2D(1, 0)
+								: (directionTag == FName("Down")) ? FVector2D(0, 1) : FVector2D(0));
+			checkf(direction != FVector2D(0), TEXT("Gate spawn point direction tag is invalid"));
+			if (!stageGeneratorRef->GetIsCoordinateInBoundary(CurrentStageInfo.Coordinate + direction)
+				|| ChapterManagerRef.Get()->GetIsStageBlocked(CurrentStageInfo.Coordinate + direction))
+			{
+				newGate->Destroy();
+				continue;
+			}
+			UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::SpawnPortal, spawn %s portal"), *directionTag.ToString());
+
+			EStageCategoryInfo nextStageType = ChapterManagerRef.Get()->GetStageInfoWithCoordinate(CurrentStageInfo.Coordinate + direction).StageType;
+			newGate->InitGate(direction, ChapterManagerRef.Get()->GetStageTypeName(nextStageType));
+
+			//temp
+			newGate->ActivateGate();
+			newGate->OnEnterRequestReceived.BindUFunction(GetOwner(), FName("MoveStage"));
+		}
 	}
 }
 
@@ -301,6 +334,8 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 
 	if (GetLoadIsDone())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame() : Load Done, StartStage"));
+
 		//Clear timer and invalidate
 		GetWorld()->GetTimerManager().ClearTimer(LoadCheckTimerHandle);
 		LoadCheckTimerHandle.Invalidate();
@@ -321,12 +356,15 @@ void UStageManagerComponent::StartStage()
 	OnStageLoadEnd.Broadcast();
 
 	//Update spawn points
+	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::StartStage : Update Spawn Point"));
 	UpdateSpawnPointProperty();
 
 	//Remove loading screen 
+	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::StartStage : Remove loading screen"));
 	RemoveLoadingScreen();
 
 	//spawn enemy and portal
+	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::StartStage : SpawnEnemy"));
 	SpawnEnemy();
 
 	//Move player to start location
@@ -373,7 +411,7 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	//if this is not end stage, then spawn the portal
 	if (!CurrentStageInfo.bIsGameOver && CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss)
 	{
-		SpawnPortal();
+		SpawnPortal(2);
 	}
 
 	if (bStageClear &&
@@ -427,8 +465,6 @@ void UStageManagerComponent::GrantStageRewards()
 		maxGrantCountPerItem = (CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteCombat
 							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 							? 5 : maxGrantCountPerItem;
-
-		UE_LOG(LogTemp, Warning, TEXT("Grant %d"), maxGrantCountPerItem);
 
 		for (int32 id = 1; id <= 3; id++)
 		{ 
