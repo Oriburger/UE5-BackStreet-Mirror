@@ -161,6 +161,9 @@ protected:
 	//Knock down with 
 	virtual void KnockDown();
 
+	//Stand UP
+	virtual void StandUp();
+
 // ------- Character Stat/State ------------------------------
 public:
 	//캐릭터의 상태 정보를 초기화
@@ -256,6 +259,10 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
 		FCharacterStateStruct CharacterState;
 
+	//캐릭터 StandUp
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "bCanStandUp")
+		bool bCanStandUp;
+
 	//Character Item Inventory
 
 	//Gamemode 약 참조
@@ -281,6 +288,9 @@ protected:
 
 	UPROPERTY()
 		FTimerHandle KnockDownDelayTimerHandle;	
+
+	UPROPERTY()
+		FTimerHandle KnockDownAnimMontageHandle;
 
 	UPROPERTY()
 		FTimerHandle AirAtkLocationUpdateHandle;

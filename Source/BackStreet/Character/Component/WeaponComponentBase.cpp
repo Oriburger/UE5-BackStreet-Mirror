@@ -65,7 +65,7 @@ void UWeaponComponentBase::StopAttack()
 
 void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 {
-	//Stat, State ÃÊ±âÈ­ 
+	//Stat, State ì´ˆê¸°í™” 
 	WeaponID = NewWeaponID;
 	WeaponStat.WeaponID = WeaponID;
 
@@ -79,7 +79,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	}
 	WeaponStat = GetWeaponStatInfoWithID(WeaponID);
 
-	//¿¡¼Â ÃÊ±âÈ­
+	//ì—ì…‹ ì´ˆê¸°í™”
 	FWeaponAssetInfoStruct newAssetInfo = GetWeaponAssetInfoWithID(WeaponID);
 	WeaponAssetInfo = newAssetInfo;
 
@@ -120,7 +120,8 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 
 void UWeaponComponentBase::InitWeaponAsset()
 {
-	if (!OwnerCharacterRef.IsValid()) return;
+	if (!OwnerCharacterRef.IsValid()) return; 
+
 	if (WeaponAssetInfo.WeaponMesh.IsValid())
 	{
 		this->SetStaticMesh(WeaponAssetInfo.WeaponMesh.Get());
@@ -195,10 +196,10 @@ FWeaponStatStruct UWeaponComponentBase::GetWeaponStatInfoWithID(int32 TargetWeap
 
 FProjectileStatStruct UWeaponComponentBase::GetProjectileStatInfo(int32 TargetProjectileID)
 {
-	//Ä³½Ã¿¡ ±â·ÏÀÌ µÇ¾îÀÖ´Ù¸é?
+	//ìºì‹œì— ê¸°ë¡ì´ ë˜ì–´ìˆë‹¤ë©´?
 	if (ProjectileStatInfo.ProjectileID == TargetProjectileID) return ProjectileStatInfo;
 
-	//¾ø´Ù¸é »õ·Î ÀĞ¾î¿È
+	//ì—†ë‹¤ë©´ ìƒˆë¡œ ì½ì–´ì˜´
 	else if (ProjectileAssetInfoTable != nullptr && TargetProjectileID != 0)
 	{
 		FProjectileStatStruct* newInfo = nullptr;
@@ -212,10 +213,10 @@ FProjectileStatStruct UWeaponComponentBase::GetProjectileStatInfo(int32 TargetPr
 
 FProjectileAssetInfoStruct UWeaponComponentBase::GetProjectileAssetInfo(int32 TargetProjectileID)
 {
-	//Ä³½Ã¿¡ ±â·ÏÀÌ µÇ¾îÀÖ´Ù¸é?
+	//ìºì‹œì— ê¸°ë¡ì´ ë˜ì–´ìˆë‹¤ë©´?
 	if (ProjectileAssetInfo.ProjectileID == TargetProjectileID) return ProjectileAssetInfo;
 
-	//¾ø´Ù¸é »õ·Î ÀĞ¾î¿È
+	//ì—†ë‹¤ë©´ ìƒˆë¡œ ì½ì–´ì˜´
 	else if (ProjectileAssetInfoTable != nullptr && TargetProjectileID != 0)
 	{
 		FProjectileAssetInfoStruct* newInfo = nullptr;

@@ -569,6 +569,11 @@ void AMainCharacterBase::Die()
 	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 }
 
+void AMainCharacterBase::StandUp()
+{
+	Super::StandUp();
+}
+
 void AMainCharacterBase::RotateToCursor()
 {
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Attack) return;
