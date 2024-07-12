@@ -188,6 +188,8 @@ private:
 	//Time-attack timer
 	FTimerHandle TimeAttackTimerHandle;
 
+	TWeakObjectPtr<ANewChapterManagerBase> ChapterManagerRef;
+
 public:
 	//BP Class, initialize with BP
 	//Gate class to spawn on world
