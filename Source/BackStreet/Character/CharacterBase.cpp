@@ -49,8 +49,6 @@ void ACharacterBase::BeginPlay()
 		AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
 	}
 	LandedDelegate.AddDynamic(this, &ACharacterBase::OnPlayerLanded);
-
-	bCanStandUp = false;
 }
 
 // Called every frame
@@ -192,10 +190,6 @@ void ACharacterBase::KnockDown()
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_KnockedDown;
 
-	//if (AssetHardPtrInfo.KnockdownAnimMontageList.IsEmpty() || !IsValid(AssetHardPtrInfo.KnockdownAnimMontageList[0])) return;
-	//PlayAnimMontage(AssetHardPtrInfo.KnockdownAnimMontageList[0]);
-	//UE_LOG(LogTemp, Warning, TEXT("Final impact"));
-
 	GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
 	KnockDownDelayTimerHandle.Invalidate();
 
@@ -204,17 +198,11 @@ void ACharacterBase::KnockDown()
 	KnockDownDelegate.BindUFunction(this, "StandUp");
 	GetWorldTimerManager().SetTimer(KnockDownAnimMontageHandle, KnockDownDelegate, 1.0f, false, 2.0f);
 	
-	/*
-	if(AssetHardPtrInfo.KnockdownAnimMontageList.IsEmpty() || !IsValid(AssetHardPtrInfo.KnockdownAnimMontageList[0])) return;
-	PlayAnimMontage(AssetHardPtrInfo.KnockdownAnimMontageList[0]);
-
-	FTimerDelegate LayDownDelegate;
-	LayDownDelegate.BindUFunction(this, "LayDown");
-	GetWorldTimerManager().SetTimer(LayDownAnnimMontageHandle, LayDownDelegate, 0.25f, true, 3.0f);*/
 }
 
 void ACharacterBase::StandUp()
 {
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die) return;
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
 	GetWorldTimerManager().ClearTimer(KnockDownAnimMontageHandle);
 }

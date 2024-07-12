@@ -259,10 +259,6 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
 		FCharacterStateStruct CharacterState;
 
-	//캐릭터 StandUp
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "bCanStandUp")
-		bool bCanStandUp;
-
 	//Character Item Inventory
 
 	//Gamemode 약 참조
