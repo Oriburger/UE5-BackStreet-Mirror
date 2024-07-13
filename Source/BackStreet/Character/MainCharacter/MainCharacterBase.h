@@ -206,6 +206,11 @@ private:
 		void StopDashMovement();
 
 //------- Camera Rotation Support Event ------ 
+
+public:
+	UFUNCTION()
+		void SetCameraVerticalAlignmentWithInterp(float TargetPitch, const float InterpSpeed);
+
 protected:
 	UFUNCTION()
 		void SetAutomaticRotateMode();	
@@ -222,6 +227,10 @@ protected:
 		void OnTargetingStateUpdated(bool bIsActivated, APawn* Target);
 
 protected:
+	UFUNCTION()
+		void UpdateCameraPitch(float TargetPitch, float InterpSpeed = 1.0f);	
+
+protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Camera|AutoRotateSupport")
 		bool bIsManualMode = false;
 
@@ -229,7 +238,7 @@ protected:
 		float FaceToFaceLagSpeed = 0.001;
 	
 	UPROPERTY(EditAnywhere, Category = "Camera|AutoRotateSupport")
-		float NoramlLagSpeed = 0.5f;
+		float NoramlLagSpeed = 0.8f;
 
 	UPROPERTY(EditAnywhere, Category = "Camera|AutoRotateSupport")
 		float AutomaticModeSwitchTime = 3.0f;
@@ -335,6 +344,8 @@ private:
 	//초기화 시에는 다시 movement 방향으로 캐릭터의 Rotation Set 
 	FTimerHandle RotationResetTimerHandle;
 
+	FTimerHandle CameraRotationAlignmentHandle;
+	
 	//구르기 딜레이 타이머
 	FTimerHandle RollTimerHandle;
 
