@@ -55,9 +55,6 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 		//set stage type
 		FVector2D stageCoordinate = GetStageCoordinate(stageIdx);
 		UE_LOG(LogTemp, Warning, TEXT("Stage Idx : %d,  stageCoordinate : %s"), stageIdx, *stageCoordinate.ToString());
-			
-		TArray<EStageCategoryInfo> stageTypeList = CurrentChapterInfo.StageTypeListForLevelIdx[stageCoordinate.Y + stageCoordinate.X].StageTypeList;
-		checkf(stageTypeList.Num() > 0, TEXT("Stage type list data is invalid "));
 		
 		if (templateIdx != -1)
 		{
@@ -65,6 +62,8 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 		}
 		else
 		{
+			TArray<EStageCategoryInfo> stageTypeList = CurrentChapterInfo.StageTypeListForLevelIdx[stageCoordinate.Y + stageCoordinate.X].StageTypeList;
+			checkf(stageTypeList.Num() > 0, TEXT("Stage type list data is invalid "));
 			temp.StageType = stageTypeList[UKismetMathLibrary::RandomInteger(stageTypeList.Num())];
 		}
 			
