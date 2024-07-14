@@ -346,7 +346,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	GetWorldTimerManager().SetTimer(HitCounterResetTimerHandle, this, &ACharacterBase::ResetHitCounter, 1.0f, false, 1.0f);
 
 	// Check knock down condition and set knock down event using retriggable timer
-	if (Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetIsFinalCombo())
+	if (Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetWeaponStat().FinalImpactStrength > 0 && Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetIsFinalCombo())
 	{
 		KnockDown();
 		/*
