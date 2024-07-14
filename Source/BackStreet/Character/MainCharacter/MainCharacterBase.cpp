@@ -634,7 +634,7 @@ void AMainCharacterBase::SetAutomaticRotateMode()
 {
 	if (TargetingManagerComponent->GetIsTargetingActivated()) return;
 	
-	SetCameraVerticalAlignmentWithInterp(360.0f, 0.25f);
+	SetCameraVerticalAlignmentWithInterp(GetControlRotation().Pitch <= 90.0f ? 0.0f : 360.0f, 0.25f);
 
 	GetWorld()->GetTimerManager().SetTimer(RotationResetTimerHandle, FTimerDelegate::CreateLambda([&]()
 		{

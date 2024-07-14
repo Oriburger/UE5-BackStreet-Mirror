@@ -82,8 +82,12 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.CraftStageLevelList);
 			break;
 		case EStageCategoryInfo::E_TimeAttack:
+			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.TimeAttackStageLevelList);
+			temp.TimeLimitValue = CurrentChapterInfo.NormalTimeAtkStageTimeOut;
+			break;
 		case EStageCategoryInfo::E_EliteTimeAttack:
 			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.TimeAttackStageLevelList);
+			temp.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
 			break;
 		case EStageCategoryInfo::E_Entry:
 			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.EntryStageLevelList);
