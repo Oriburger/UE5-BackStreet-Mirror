@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "DebuffManagerComponent.generated.h"
 
-DECLARE_DELEGATE_OneParam(FDeleDebuffClear, class ACharacterBase*);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateDebuffAdded, ECharacterDebuffType, DebuffType);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API UDebuffManagerComponent : public UActorComponent
@@ -16,6 +16,14 @@ class BACKSTREET_API UDebuffManagerComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UDebuffManagerComponent();
+
+	//Delegate add event
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateDebuffAdded OnDebuffAdded;
+
+	//Delegate remove event
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateDebuffAdded OnDebuffRemoved;
 
 protected:
 	// Called when the game starts

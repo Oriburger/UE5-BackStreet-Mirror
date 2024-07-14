@@ -53,9 +53,68 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 
 	if (GEngine)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Green, TEXT("=========== Init Stage ============"));
-		GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Green, FString::Printf(TEXT("> Stage Type : %d"), CurrentStageInfo.StageType));
-		GEngine->AddOnScreenDebugMessage(-1, 120.0f, FColor::Green, FString::Printf(TEXT("> Coordinate : %s"), *CurrentStageInfo.Coordinate.ToString()));
+		GEngine->RemoveOnScreenDebugMessage(100);
+		GEngine->AddOnScreenDebugMessage(100, 120.0f, FColor::Green, TEXT("=========== Init Stage ============"));
+		GEngine->AddOnScreenDebugMessage(100, 120.0f, FColor::Green, FString::Printf(TEXT("> Stage Type : %d"), CurrentStageInfo.StageType));
+		GEngine->AddOnScreenDebugMessage(100, 120.0f, FColor::Green, FString::Printf(TEXT("> Coordinate : %s"), *CurrentStageInfo.Coordinate.ToString()));
+		TArray<FStageInfo> stageInfoList = ChapterManagerRef.Get()->GetStageInfoList();
+
+		//for debug / temporary ui 
+		for (int32 i = 0; i < CurrentChapterInfo.GridSize; i++)
+		{
+			FString str = "|";
+			for (int32 j = 0; j < CurrentChapterInfo.GridSize; j++)
+			{
+				bool bIsBlocked = stageInfoList[i * CurrentChapterInfo.GridSize + j].bIsBlocked;
+				EStageCategoryInfo stageType = stageInfoList[i * CurrentChapterInfo.GridSize + j].StageType;
+				
+				str.Append("|");
+
+				if (bIsBlocked)
+				{
+					str.Append("##");
+				}
+				else if (NewStageInfo.Coordinate == FVector2D(j, i))
+				{
+					str.Append("& ");
+				}
+				else
+				{
+					switch (stageType)
+					{
+					case EStageCategoryInfo::E_Boss:
+						str.Append("BO");
+						break;
+					case EStageCategoryInfo::E_Combat:
+						str.Append("NC");
+						break;
+					case EStageCategoryInfo::E_EliteCombat:
+						str.Append("EC");
+						break;
+					case EStageCategoryInfo::E_Craft:
+						str.Append("CR");
+						break;
+					case EStageCategoryInfo::E_TimeAttack:
+						str.Append("NT");
+						break;
+					case EStageCategoryInfo::E_EliteTimeAttack:
+						str.Append("ET");
+						break;
+					case EStageCategoryInfo::E_Entry:
+						str.Append("EN");
+						break;
+					case EStageCategoryInfo::E_Gatcha:
+						str.Append("GT");
+						break;
+					case EStageCategoryInfo::E_MiniGame:
+						str.Append("MG");
+						break;
+					}
+				}
+				str.Append("|");
+			}
+			GEngine->AddOnScreenDebugMessage(100 + i, 120.0f, FColor::Green, str);
+		}
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));

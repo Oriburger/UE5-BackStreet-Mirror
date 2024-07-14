@@ -295,7 +295,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	// ======= Damage & Die event ===============================
-	CharacterState.CurrentHP = CharacterState.CurrentHP - DamageAmount;
+	CharacterState.CurrentHP = CharacterState.CurrentHP - DamageAmount * (1.0f - FMath::Clamp(0.5f * CharacterState.TotalDefense, 0.0f, 0.5f));
 	CharacterState.CurrentHP = FMath::Max(0.0f, CharacterState.CurrentHP);
 	if (CharacterState.CurrentHP == 0.0f)
 	{

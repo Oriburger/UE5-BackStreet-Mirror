@@ -42,7 +42,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UWeaponComponentBase* WeaponComponent;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		class UDebuffManagerComponent* DebuffManagerComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
