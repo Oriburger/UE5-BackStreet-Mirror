@@ -114,7 +114,7 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 		result[GetStageIdx(coordinate)].bIsBlocked = true;
 	}
 
-	return result;
+	return CurrentChapterInfo.StageInfoList = result;
 }
 
 FVector2D UStageGeneratorComponent::GetNextCoordinate(FVector2D Direction, FVector2D CurrCoordinate)
