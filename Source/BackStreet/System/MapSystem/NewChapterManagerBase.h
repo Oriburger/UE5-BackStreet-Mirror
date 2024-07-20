@@ -67,6 +67,17 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FChapterInfo GetCurrentChapterInfo() { return CurrentChapterInfo; }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FStageInfo GetStageInfo(int32 StageIdx);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FStageInfo GetStageInfoWithCoordinate(FVector2D StageCoordinate);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FName GetStageTypeName(EStageCategoryInfo StageType);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsStageBlocked(FVector2D StageCoordinate);
 
 protected:
 	//Assign on blueprint

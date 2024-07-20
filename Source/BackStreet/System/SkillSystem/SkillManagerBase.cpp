@@ -4,8 +4,8 @@
 #include "../SkillSystem/SkillBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Character/CharacterBase.h"
+#include "../../Character/Component/WeaponComponentBase.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
-#include "../../Item/Weapon/WeaponBase.h"
 #include "Kismet/KismetStringLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -136,10 +136,8 @@ FSkillInfoStruct USkillManagerBase::GetCurrSkillInfoByType(ESkillType SkillType)
 	if (SkillUpgradeInfoTable == nullptr) return FSkillInfoStruct();
 	AMainCharacterBase* mainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (!IsValid(mainCharacterRef)) return FSkillInfoStruct();
-	TWeakObjectPtr<class AWeaponBase> weaponRef = mainCharacterRef->GetCurrentWeaponRef();
-	if (!IsValid(weaponRef.Get())) return FSkillInfoStruct();
-	if (!weaponRef->GetWeaponState().SkillInfoMap.Contains(SkillType)) return FSkillInfoStruct();
-	FOwnerSkillInfoStruct* ownerSkillInfo = &weaponRef->WeaponState.SkillInfoMap[SkillType];
+	if (!mainCharacterRef->WeaponComponent->GetWeaponState().SkillInfoMap.Contains(SkillType)) return FSkillInfoStruct();
+	FOwnerSkillInfoStruct* ownerSkillInfo = &mainCharacterRef->WeaponComponent->WeaponState.SkillInfoMap[SkillType];
 	if (ownerSkillInfo->SkillID == 0) return FSkillInfoStruct();
 
 	//기존에 만들어져 있는 스킬 베이스 중 원하는 스킬이 있는지 확인
@@ -204,7 +202,7 @@ uint8 USkillManagerBase::GetCurrSkillLevelByID(int32 SkillID)
 {
 	ESkillType skillType = GetSkillInfoStructBySkillID(SkillID).SkillType;
 	AMainCharacterBase* mainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	TMap<ESkillType, FOwnerSkillInfoStruct> skillInfoMap = mainCharacterRef->GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap;
+	TMap<ESkillType, FOwnerSkillInfoStruct> skillInfoMap = mainCharacterRef->WeaponComponent->GetWeaponState().SkillInfoMap;
 	if(!skillInfoMap.Contains(skillType)) return 0;
 	if(skillInfoMap.Find(skillType)->SkillID != SkillID) return 0;
 	return GetCurrSkillLevelByType(skillType);
@@ -258,9 +256,9 @@ FSkillUpgradeInfoStruct USkillManagerBase::GetSkillUpgradeInfoStructBySkillID(in
 
 void USkillManagerBase::SetSkillBlockState(ACharacterBase* Owner, ESkillType SkillType, bool bNewBlockState)
 {
-	if (!IsValid(Owner) || !IsValid(Owner->GetCurrentWeaponRef())) return;
+	if (!IsValid(Owner) || !IsValid(Owner->WeaponComponent)) return;
 
-	FOwnerSkillInfoStruct* ownerSkillInfo = Owner->GetCurrentWeaponRef()->WeaponState.SkillInfoMap.Find(SkillType);
+	FOwnerSkillInfoStruct* ownerSkillInfo = Owner->WeaponComponent->WeaponState.SkillInfoMap.Find(SkillType);
 	if (ownerSkillInfo)
 	{
 		ownerSkillInfo->bSkillBlocked = bNewBlockState;

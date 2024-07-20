@@ -12,10 +12,8 @@
 #include "../../Item/ItemBase.h"
 #include "../../Item/ItemBoxBase.h"
 #include "../../Item/RewardBoxBase.h"
-#include "../../Item/Weapon/WeaponBase.h"
-#include "../../Item/Weapon/Throw/ThrowWeaponBase.h"
-#include "../../Item/Weapon/WeaponInventoryBase.h"
 #include "../../System/MapSystem/Stage/GateBase.h"
+#include "../Component/WeaponComponentBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/AudioComponent.h"
 #include "Animation/AnimInstance.h"
@@ -176,11 +174,11 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(InputActionInfo.InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
 
 		//Inventory
-		EnhancedInputComponent->BindAction(InputActionInfo.SwitchWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::SwitchToNextWeapon);
-		EnhancedInputComponent->BindAction(InputActionInfo.DropWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::DropWeapon);
+		//EnhancedInputComponent->BindAction(InputActionInfo.SwitchWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::SwitchToNextWeapon);
+		//EnhancedInputComponent->BindAction(InputActionInfo.DropWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::DropWeapon);
 
 		//SubWeapon
-		EnhancedInputComponent->BindAction(InputActionInfo.PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::PickSubWeapon);
+		//EnhancedInputComponent->BindAction(InputActionInfo.PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::PickSubWeapon);
 
 		EnhancedInputComponent->BindAction(LockToTargetAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::LockToTarget);
 	}
@@ -188,77 +186,24 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 void AMainCharacterBase::ReadyToThrow()
 {
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->GetWeaponType() != EWeaponType::E_Throw) return;
-	if (!Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->GetCanThrow()) return; //딜레이 중이라면 반환
-	if (GetCurrentWeaponRef()->WeaponID == 0) return;
-
-	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;
-	SetAimingMode(true);
-	GetWorldTimerManager().SetTimer(AimingTimerHandle, this, &AMainCharacterBase::UpdateAimingState, 0.01f, true);
 }
 
 void AMainCharacterBase::Throw()
 {
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
-
-	ResetActionState();
-	SetAimingMode(false);
-
-	GetWorldTimerManager().ClearTimer(AimingTimerHandle);
-	if (IsValid(GetCurrentWeaponRef()) && GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
-	{
-		Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->Throw();
-	}
 }
 
 void AMainCharacterBase::SetAimingMode(bool bNewState)
 {
-	bIsAiming = bNewState;	
-	GetCharacterMovement()->bOrientRotationToMovement = !bNewState;
-	this->bUseControllerRotationYaw = bNewState;
+	
 }
 
 void AMainCharacterBase::UpdateAimingState()
 {	
-	if (!IsValid(GetCurrentWeaponRef())) return;
-	if (GetCurrentWeaponRef()->GetWeaponType() != EWeaponType::E_Throw) return;
-
-	RotateToCursor();
-	Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->CalculateThrowDirection(GetThrowDestination());
-
-	FPredictProjectilePathResult predictProjectilePathResult = Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->GetProjectilePathPredictResult();
-	
-	//Draw projectile path with spline
-	TArray<FVector> pathPointList;
-	FVector cursorLocation = PlayerControllerRef.Get()->GetCursorDeprojectionWorldLocation();
-	for (auto& pathData : predictProjectilePathResult.PathData)
-	{
-		if (!pathPointList.IsEmpty())
-			pathPointList.Add((pathPointList[pathPointList.Num() - 1] + pathData.Location) / 2);
-		pathPointList.Add(pathData.Location);
-		//UE_LOG(LogTemp, Warning, TEXT("%s, %s"), *cursorLocation.ToString(), *pathData.Location.ToString())
-		if (cursorLocation.Z >= pathData.Location.Z) break;
-	}
-	Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->UpdateProjectilePathSpline(pathPointList);
 }
 
 FVector AMainCharacterBase::GetThrowDestination()
 {
-	FVector cursorWorldLocation = GetController<AMainCharacterController>()->GetCursorDeprojectionWorldLocation();
-	if (cursorWorldLocation == FVector(0.0f)) return FVector(0.0f);
-
-	//커서와 손 위치의 Z값을 일치시킴
-	FVector startLocation = GetMesh()->GetSocketLocation("weapon_r");
-	startLocation = { startLocation.X, startLocation.Y, cursorWorldLocation.Z };
-
-	//그 상태에서 거리를 재서 최대 거리를 벗어나지 않는다면 그대로 커서 위치 반환
-	if (UKismetMathLibrary::Vector_Distance(startLocation, cursorWorldLocation) < MAX_THROW_DISTANCE)
-		return cursorWorldLocation;
-
-	//그렇지 않다면, 최대 거리 만큼 제한하여 반환
-	startLocation += UKismetMathLibrary::Normal(cursorWorldLocation - startLocation) * MAX_THROW_DISTANCE;
-	return startLocation;
+	return FVector();
 }
 
 void AMainCharacterBase::ResetMovementInputValue()
@@ -329,10 +274,8 @@ void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 	if (CharacterState.bIsSprinting) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero()) return;
-	if (IsValid(GetCurrentWeaponRef()))
-	{
-		GetCurrentWeaponRef()->SetResetComboTimer();
-	}
+	
+	WeaponComponent->ResetComboCnt();
 	CharacterState.bIsSprinting = true;
 	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed, 0.75f);
 	SetFieldOfViewWithInterp(105.0f, 0.25f);
@@ -510,13 +453,13 @@ void AMainCharacterBase::TryAttack()
 {
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw) return;
+	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw) return;
 
 	//IndieGo용 임시 코드----------------------------------------------------------
-	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130) return;
+	if (WeaponComponent->WeaponStat.WeaponID == 12130) return;
 	//---------------------------------------------------------------------------------
 
-	if (GetCurrentWeaponRef()->WeaponID == 0)
+	if (WeaponComponent->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
 		return;
@@ -591,9 +534,7 @@ void AMainCharacterBase::TryDownwardAttack()
 }
 
 void AMainCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
-{
-	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
-	
+{	
 	if (GetIsActionActive(ECharacterActionType::E_Attack))
 	{
 		ResetActionState();
@@ -619,16 +560,18 @@ void AMainCharacterBase::Attack()
 void AMainCharacterBase::StopAttack()
 {
 	Super::StopAttack();
-	if (IsValid(GetCurrentWeaponRef()))
-	{
-		GetCurrentWeaponRef()->StopAttack();
-	}
+	WeaponComponent->StopAttack();
 }
 
 void AMainCharacterBase::Die()
 {
 	Super::Die();
 	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
+}
+
+void AMainCharacterBase::StandUp()
+{
+	Super::StandUp();
 }
 
 void AMainCharacterBase::RotateToCursor()
@@ -644,33 +587,6 @@ void AMainCharacterBase::RotateToCursor()
 	return;
 }
 
-void AMainCharacterBase::PickSubWeapon(const FInputActionValue& Value)
-{
-	if (!IsValid(GetCurrentWeaponRef())) return;
-
-	FVector typeVector = Value.Get<FVector>();
-	int32 targetIdx = typeVector.X - 1;
-
-	//If player press current picked sub weapon, switch to the first main weapon.
-	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw && GetSubWeaponInventoryRef()->GetCurrentIdx() == targetIdx)
-	{
-		GetWeaponInventoryRef()->EquipWeaponByIdx(0);
-		GetSubWeaponInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
-		return;
-	}
-
-	//Try switch to subweapon
-	bool result = TrySwitchToSubWeapon(targetIdx);
-	if (result)
-	{
-		//Force UI update with manual calling delegate
-		GetWeaponInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
-	}
-	else
-	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
-	}
-}
 
 TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
 {
@@ -759,30 +675,6 @@ void AMainCharacterBase::ResetRotationToMovement()
 	newRotation.Yaw += 270.0f;
 	GetMesh()->SetWorldRotation(newRotation);
 	GetCharacterMovement()->bOrientRotationToMovement = true;*/
-}
-
-void AMainCharacterBase::SwitchToNextWeapon()
-{
-	//Block switching weapon in particular actions
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill ||
-		CharacterState.CharacterActionState == ECharacterActionType::E_Attack ||
-		CharacterState.CharacterActionState == ECharacterActionType::E_Throw ||
-		CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return;
-	if (!IsValid(GetCurrentWeaponRef())) return;
-
-	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
-	{
-		GetWeaponInventoryRef()->EquipWeaponByIdx(0);
-		GetSubWeaponInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
-		return;
-	}
-
-	Super::SwitchToNextWeapon();
-}
-
-void AMainCharacterBase::DropWeapon()
-{
-	Super::DropWeapon();
 }
 
 void AMainCharacterBase::SetWalkSpeedWithInterp(float NewValue, const float InterpSpeed, const bool bAutoReset)
@@ -879,21 +771,7 @@ bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 
 bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
 {
-	if (!IsValid(GetWeaponInventoryRef()) || !IsValid(GetSubWeaponInventoryRef())) return false;
-	
-	bool result = false; 
-	EWeaponType weaponType = GetWeaponInventoryRef()->GetWeaponType(NewWeaponID);
-	
-	if (weaponType == EWeaponType::E_Throw)
-	{
-		result = GetSubWeaponInventoryRef()->AddWeapon(NewWeaponID);
-	}
-	else if(weaponType != EWeaponType::E_None)
-	{
-		result = GetWeaponInventoryRef()->AddWeapon(NewWeaponID);
-	}
-
-	return result;
+	return Super::PickWeapon(NewWeaponID);
 }
 
 void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)

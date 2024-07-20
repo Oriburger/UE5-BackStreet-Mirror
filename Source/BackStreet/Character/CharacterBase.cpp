@@ -1,13 +1,12 @@
 #include "CharacterBase.h"
 #include "./Component/DebuffManagerComponent.h"
 #include "./Component/TargetingManagerComponent.h"
+#include "./Component/WeaponComponentBase.h"
+#include "../Item/Weapon/Ranged/RangedCombatManager.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../System/SkillSystem/SkillManagerBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/SkillSystem/SkillBase.h"
-#include "../Item/Weapon/WeaponBase.h"
-#include "../Item/Weapon/WeaponInventoryBase.h"
-#include "../Item/Weapon/Ranged/RangedWeaponBase.h"
 #include "Engine/DamageEvents.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -30,6 +29,9 @@ ACharacterBase::ACharacterBase()
 	DebuffManagerComponent = CreateDefaultSubobject<UDebuffManagerComponent>(TEXT("DEBUFF_MANAGER"));
 	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));
 
+	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
+	WeaponComponent->SetupAttachment(GetMesh());
+
 	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
 }
 
@@ -41,30 +43,14 @@ void ACharacterBase::BeginPlay()
 	CharacterID = AssetSoftPtrInfo.CharacterID;
 	InitCharacterState();
 
-	WeaponInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
-	SubWeaponInventoryRef = GetWorld()->SpawnActor<AWeaponInventoryBase>(WeaponInventoryClass, GetActorTransform());
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (GamemodeRef.IsValid())
 	{
 		AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
 	}
-
-	if (IsValid(SubWeaponInventoryRef) && !SubWeaponInventoryRef->IsActorBeingDestroyed())
-	{
-		SubWeaponInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
-		SubWeaponInventoryRef->SetOwner(this);
-		SubWeaponInventoryRef->InitInventory(2);
-	}
-
-	if (IsValid(WeaponInventoryRef) && !WeaponInventoryRef->IsActorBeingDestroyed())
-	{
-		WeaponInventoryRef->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
-		WeaponInventoryRef->SetOwner(this);
-		WeaponInventoryRef->InitInventory(ActorHasTag("Player") ? 1 : 6);
-		InitWeaponActors();
-	}
-
 	LandedDelegate.AddDynamic(this, &ACharacterBase::OnPlayerLanded);
+
+	bCanStandUp = false;
 }
 
 // Called every frame
@@ -206,12 +192,31 @@ void ACharacterBase::KnockDown()
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_KnockedDown;
 
+	//if (AssetHardPtrInfo.KnockdownAnimMontageList.IsEmpty() || !IsValid(AssetHardPtrInfo.KnockdownAnimMontageList[0])) return;
+	//PlayAnimMontage(AssetHardPtrInfo.KnockdownAnimMontageList[0]);
+	//UE_LOG(LogTemp, Warning, TEXT("Final impact"));
+
 	GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
 	KnockDownDelayTimerHandle.Invalidate();
 
-	FTimerDelegate resetActionDelegate;
-	resetActionDelegate.BindUFunction(this, "ResetActionState", false);
-	GetWorldTimerManager().SetTimer(KnockDownDelayTimerHandle, resetActionDelegate, 1.0f, false, 5.0f);
+	
+	FTimerDelegate KnockDownDelegate;
+	KnockDownDelegate.BindUFunction(this, "StandUp");
+	GetWorldTimerManager().SetTimer(KnockDownAnimMontageHandle, KnockDownDelegate, 1.0f, false, 2.0f);
+	
+	/*
+	if(AssetHardPtrInfo.KnockdownAnimMontageList.IsEmpty() || !IsValid(AssetHardPtrInfo.KnockdownAnimMontageList[0])) return;
+	PlayAnimMontage(AssetHardPtrInfo.KnockdownAnimMontageList[0]);
+
+	FTimerDelegate LayDownDelegate;
+	LayDownDelegate.BindUFunction(this, "LayDown");
+	GetWorldTimerManager().SetTimer(LayDownAnnimMontageHandle, LayDownDelegate, 0.25f, true, 3.0f);*/
+}
+
+void ACharacterBase::StandUp()
+{
+	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
+	GetWorldTimerManager().ClearTimer(KnockDownAnimMontageHandle);
 }
 
 void ACharacterBase::InitCharacterState()
@@ -269,13 +274,13 @@ void ACharacterBase::UpdateCharacterState(FCharacterStateStruct NewState)
 
 void ACharacterBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
-	if (!IsValid(GetCurrentWeaponRef()) || WeaponInventoryRef->IsActorBeingDestroyed()) return;
-	GetCurrentWeaponRef()->UpdateWeaponStat(NewStat);
+	WeaponComponent->WeaponStat = NewStat;
 }
 
 void ACharacterBase::ResetActionState(bool bForceReset)
 {
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die) return;
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown) return;
 	if (!bForceReset && (CharacterState.CharacterActionState == ECharacterActionType::E_Stun
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;
 
@@ -284,11 +289,8 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 	//Reset Location Interp Timer Handle
 	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 
-	if (IsValid(GetCurrentWeaponRef()))
-	{
-		FWeaponStatStruct currWeaponStat = this->GetCurrentWeaponRef()->GetWeaponStat();
-		this->GetCurrentWeaponRef()->SetWeaponStat(currWeaponStat);
-	}
+	FWeaponStatStruct currWeaponStat = this->WeaponComponent->GetWeaponStat();
+	this->WeaponComponent->SetWeaponStat(currWeaponStat);
 	StopAttack();
 
 	if (!GetWorldTimerManager().IsTimerActive(AtkIntervalHandle))
@@ -356,7 +358,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	GetWorldTimerManager().SetTimer(HitCounterResetTimerHandle, this, &ACharacterBase::ResetHitCounter, 1.0f, false, 1.0f);
 
 	// Check knock down condition and set knock down event using retriggable timer
-	if (CharacterState.HitCounter >= 7)
+	if (Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetIsFinalCombo())
 	{
 		KnockDown();
 		/*
@@ -365,7 +367,6 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		GetWorldTimerManager().SetTimer(KnockDownDelayTimerHandle, this, &ACharacterBase::KnockDown, 1.0f, false, 0.1f);
 		*/
 	}
-
 	return DamageAmount;
 }
 
@@ -407,26 +408,12 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 
 void ACharacterBase::Die()
 {
-	if (IsValid(WeaponInventoryRef) && !WeaponInventoryRef->IsActorBeingDestroyed())
-	{
-		//캐릭터가 죽으면 3가지 타입의 무기 액터를 순차적으로 반환
-		for (int weaponIdx = 2; weaponIdx >= 0; weaponIdx--)
-		{
-			WeaponActorList[weaponIdx]->Destroy();
-			WeaponInventoryRef->Destroy();
-		}
-	}
 	//Disable Collision
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 
-	if (IsValid(GetCurrentWeaponRef()) && !GetCurrentWeaponRef()->IsActorBeingDestroyed())
-	{
-		GetCurrentWeaponRef()->ClearAllTimerHandle();
-	}
 	//모든 타이머를 제거한다. (타이머 매니저의 것도)
 	ClearAllTimerHandle();
-	DebuffManagerComponent->ClearDebuffManager();
 
 	//무적 처리를 하고, Movement를 비활성화
 	CharacterStat.bIsInvincibility = true;
@@ -448,7 +435,6 @@ void ACharacterBase::Die()
 
 void ACharacterBase::TryAttack()
 {
-	if (!IsValid(GetCurrentWeaponRef())) return;
 	if (GetWorldTimerManager().IsTimerActive(AtkIntervalHandle)) return;
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 
@@ -456,11 +442,11 @@ void ACharacterBase::TryAttack()
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
 
 	int32 nextAnimIdx = 0;
-	const float attackSpeed = FMath::Clamp(CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
+	const float attackSpeed = FMath::Clamp(CharacterStat.DefaultAttackSpeed * WeaponComponent->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
 	//Choose animation which fit battle situation
 	TArray <UAnimMontage*> targetAnimList;
-	switch (GetCurrentWeaponRef()->GetWeaponStat().WeaponType)
+	switch (WeaponComponent->GetWeaponStat().WeaponType)
 	{
 	case EWeaponType::E_Melee:
 		//check melee anim type
@@ -468,10 +454,10 @@ void ACharacterBase::TryAttack()
 		{
 			if (AssetHardPtrInfo.AirAttackAnimMontageList.Num() > 0)
 			{
-				nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.AirAttackAnimMontageList.Num();
+				nextAnimIdx = WeaponComponent->GetCurrentComboCnt() % AssetHardPtrInfo.AirAttackAnimMontageList.Num();
 				targetAnimList = AssetHardPtrInfo.AirAttackAnimMontageList;
 
-				if (GetCurrentWeaponRef()->GetCurrentComboCnt() == AssetHardPtrInfo.AirAttackAnimMontageList.Num())
+				if (WeaponComponent->GetCurrentComboCnt() == AssetHardPtrInfo.AirAttackAnimMontageList.Num())
 				{
 					TryDownwardAttack();
 					return;
@@ -491,21 +477,21 @@ void ACharacterBase::TryAttack()
 
 		else if (AssetHardPtrInfo.MeleeAttackAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.MeleeAttackAnimMontageList.Num();
+			nextAnimIdx = WeaponComponent->GetCurrentComboCnt() % AssetHardPtrInfo.MeleeAttackAnimMontageList.Num();
 			targetAnimList = AssetHardPtrInfo.MeleeAttackAnimMontageList;
 		}
 		break;
 	case EWeaponType::E_Shoot:
 		if (AssetHardPtrInfo.ShootAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.ShootAnimMontageList.Num();
+			nextAnimIdx = WeaponComponent->GetCurrentComboCnt() % AssetHardPtrInfo.ShootAnimMontageList.Num();
 		}
 		targetAnimList = AssetHardPtrInfo.ShootAnimMontageList;
 		break;
 	case EWeaponType::E_Throw:
 		if (AssetHardPtrInfo.ThrowAnimMontageList.Num() > 0)
 		{
-			nextAnimIdx = GetCurrentWeaponRef()->GetCurrentComboCnt() % AssetHardPtrInfo.ThrowAnimMontageList.Num();
+			nextAnimIdx = WeaponComponent->GetCurrentComboCnt() % AssetHardPtrInfo.ThrowAnimMontageList.Num();
 		}
 		targetAnimList = AssetHardPtrInfo.ThrowAnimMontageList;
 		break;
@@ -522,10 +508,9 @@ void ACharacterBase::TryUpperAttack()
 	if (GetCharacterMovement()->IsFalling()) return;
 	if (CharacterState.bIsAirAttacking) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (!IsValid(GetCurrentWeaponRef())) return;
 
 	CharacterState.bIsAirAttacking = true;
-	GetCurrentWeaponRef()->ResetComboCnt();
+	WeaponComponent->ResetComboCnt();
 
 	//LaunchCharcter is called by anim notify on upper attack animation
 
@@ -541,7 +526,7 @@ void ACharacterBase::TryDownwardAttack()
 
 	CharacterState.bIsAirAttacking = false;
 	CharacterState.bIsDownwardAttacking = true;
-	GetCurrentWeaponRef()->ResetComboCnt();
+	WeaponComponent->ResetComboCnt();
 
 	if (IsValid(AssetHardPtrInfo.DownwardAttackAnimMontage))
 	{
@@ -574,10 +559,6 @@ void ACharacterBase::DashAttack()
 	FHitResult hitResult;
 	FCollisionQueryParams collisionQueryParams;
 	collisionQueryParams.AddIgnoredActor(this);
-	if (IsValid(GetCurrentWeaponRef()))
-	{
-		collisionQueryParams.AddIgnoredActor(this);
-	}
 	GetWorld()->LineTraceSingleByChannel(hitResult, HitSceneComponent->GetComponentLocation(), targetLocation, ECollisionChannel::ECC_Camera);
 	targetLocation = hitResult.bBlockingHit ? hitResult.Location : targetLocation;
 
@@ -587,7 +568,6 @@ void ACharacterBase::DashAttack()
 void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
-	if (!IsValid(GetCurrentWeaponRef())) return;
 
 	if (!IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()))
 	{
@@ -598,7 +578,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 
 	if (SkillType != ESkillType::E_Character)
 	{
-		if (GetCurrentWeaponRef()->WeaponID == 0)
+		if (WeaponComponent->WeaponID == 0)
 		{
 			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Does't have any weapon")), FColor::White);
 			return;
@@ -630,9 +610,9 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	}
 	case ESkillType::E_Weapon:
 	{
-		if (SkillID != GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.SkillID) return;
+		if (SkillID != WeaponComponent->WeaponAssetInfo.WeaponSkillInfo.SkillID) return;
 
-		if (GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo.bSkillBlocked)
+		if (WeaponComponent->WeaponAssetInfo.WeaponSkillInfo.bSkillBlocked)
 		{
 			//GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("현재 스킬을 사용할 수 없습니다.")), FColor::White);
 			return;
@@ -640,16 +620,16 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 		else
 		{
 			CharacterState.bCanAttack = false;
-			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &GetCurrentWeaponRef()->WeaponAssetInfo.WeaponSkillInfo);
+			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &WeaponComponent->WeaponAssetInfo.WeaponSkillInfo);
 			return;
 		}
 		break;
 	}
 	case ESkillType::E_Weapon0:
 	{
-		if (GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon0))
+		if (WeaponComponent->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon0))
 		{
-			FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon0];
+			FOwnerSkillInfoStruct skillInfo = WeaponComponent->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon0];
 			UE_LOG(LogTemp, Warning, TEXT("SKILL BLOCK STATE : %d"), (int32)skillInfo.bSkillBlocked);
 			if (CheckCanTrySkill(SkillID, &skillInfo))
 			{
@@ -661,9 +641,9 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	}
 	case ESkillType::E_Weapon1:
 	{
-		if (GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon1))
+		if (WeaponComponent->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon1))
 		{
-			FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon1];
+			FOwnerSkillInfoStruct skillInfo = WeaponComponent->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon1];
 			UE_LOG(LogTemp, Warning, TEXT("SKILL BLOCK STATE : %d"), (int32)skillInfo.bSkillBlocked);
 			if (CheckCanTrySkill(SkillID, &skillInfo))
 			{
@@ -675,9 +655,9 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	}
 	case ESkillType::E_Weapon2:
 	{
-		if (GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon2))
+		if (WeaponComponent->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon2))
 		{
-			FOwnerSkillInfoStruct skillInfo = GetCurrentWeaponRef()->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon2];
+			FOwnerSkillInfoStruct skillInfo = WeaponComponent->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon2];
 			if (CheckCanTrySkill(SkillID, &skillInfo))
 			{
 				CharacterState.bCanAttack = false;
@@ -689,10 +669,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 	}
 
 	//Reset Combo
-	if (IsValid(GetCurrentWeaponRef()))
-	{
-		GetCurrentWeaponRef()->ResetComboCnt();
-	}
+	WeaponComponent->ResetComboCnt();
 }
 
 bool ACharacterBase::CheckCanTrySkill(int32 SkillID, FOwnerSkillInfoStruct* SkillInfo)
@@ -709,29 +686,23 @@ bool ACharacterBase::CheckCanTrySkill(int32 SkillID, FOwnerSkillInfoStruct* Skil
 
 void ACharacterBase::Attack()
 {
-	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
-
-	const float attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
-
-	GetCurrentWeaponRef()->Attack();
+	const float attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * WeaponComponent->WeaponStat.WeaponAtkSpeedRate);
+	WeaponComponent->Attack();
 }
 
 void ACharacterBase::StopAttack()
 {
-	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
-	GetCurrentWeaponRef()->StopAttack();
+	WeaponComponent->StopAttack();
 }
 
 void ACharacterBase::TryReload()
 {
-	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
+	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Shoot
+		&& WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return;
 
-	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponType != EWeaponType::E_Shoot
-		&& GetCurrentWeaponRef()->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return;
+	if (WeaponComponent->RangedCombatManager->GetCanReload()) return;
 
-	if (!Cast<ARangedWeaponBase>(GetCurrentWeaponRef())->GetCanReload()) return;
-
-	float reloadTime = GetCurrentWeaponRef()->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
+	float reloadTime = WeaponComponent->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
 	if (AssetHardPtrInfo.ReloadAnimMontageList.Num() > 0
 		&& IsValid(AssetHardPtrInfo.ReloadAnimMontageList[0]))
 	{
@@ -741,7 +712,7 @@ void ACharacterBase::TryReload()
 	}
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Reload;
-	GetWorldTimerManager().SetTimer(ReloadTimerHandle, Cast<ARangedWeaponBase>(GetCurrentWeaponRef()), &ARangedWeaponBase::Reload, reloadTime, false);
+	GetWorldTimerManager().SetTimer(ReloadTimerHandle, WeaponComponent->RangedCombatManager, &URangedCombatManager::Reload, reloadTime, false);
 }
 
 void ACharacterBase::InitAsset(int32 NewCharacterID)
@@ -883,7 +854,6 @@ void ACharacterBase::InitAsset(int32 NewCharacterID)
 	}
 }
 
-
 void ACharacterBase::SetAsset()
 {
 	//------Asset migrate to hard ref -------------------
@@ -924,6 +894,18 @@ void ACharacterBase::SetAsset()
 	GetMesh()->SetAnimInstanceClass(AssetSoftPtrInfo.AnimBlueprint);
 	GetMesh()->OverrideMaterials.Empty();
 
+	//------ weapon component attachment ----------------------
+	bool result = WeaponComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName("Weapon_R"));
+	if (!result)
+	{
+		GEngine->AddOnScreenDebugMessage(0, 10, FColor::Yellow, FString("Failed"));
+	}
+	FLatentActionInfo latentInfo;
+	latentInfo.CallbackTarget = this;
+	UKismetSystemLibrary::MoveComponentTo(WeaponComponent, FVector(0, 0, 0), FRotator(0, 0, 0)
+		, 0, 0, 0, 0, EMoveComponentAction::Type::Move, latentInfo);
+
+	//----Init other asset------------
 	InitMaterialAsset();
 	InitAnimAsset();
 	InitSoundAsset();
@@ -1093,128 +1075,10 @@ float ACharacterBase::GetTotalStatValue(float& DefaultValue, FStatInfoStruct& Ab
 		+ (AbilityInfo.FixedValue + SkillInfo.FixedValue - DebuffInfo.FixedValue);
 }
 
-bool ACharacterBase::EquipWeapon(AWeaponBase* TargetWeapon)
-{
-	TargetWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, "Weapon_R");
-	TargetWeapon->SetActorRelativeLocation(FVector(0.0f), false);
-	TargetWeapon->SetActorRelativeRotation(FRotator::ZeroRotator, false);
-	TargetWeapon->SetOwnerCharacter(this);
-	CurrentWeaponRef = TargetWeapon;
-	return true;
-}
-
 bool ACharacterBase::PickWeapon(int32 NewWeaponID)
 {
-	if (!IsValid(WeaponInventoryRef)) return false;
-	bool result = WeaponInventoryRef->AddWeapon(NewWeaponID);
-	return result;
-}
-
-void ACharacterBase::SwitchToNextWeapon()
-{
-	if (!IsValid(WeaponInventoryRef)) return;
-	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
-	WeaponInventoryRef->SwitchToNextWeapon();
-}
-
-void ACharacterBase::DropWeapon()
-{
-	if (!IsValid(GetCurrentWeaponRef())) return;
-
-	if (CurrentWeaponRef->GetWeaponType() == EWeaponType::E_Throw)
-	{
-		SubWeaponInventoryRef->RemoveCurrentWeapon();
-		SwitchWeaponActor(EWeaponType::E_Melee);
-		WeaponInventoryRef->EquipWeaponByIdx(0);
-	}
-	else WeaponInventoryRef->RemoveCurrentWeapon();
-
-	SwitchToNextWeapon();
-
-	/*---- 현재 무기를 월드에 버리는 기능은 미구현 -----*/
-}
-
-bool ACharacterBase::TrySwitchToSubWeapon(int32 SubWeaponIdx)
-{
-	if (SubWeaponIdx >= SubWeaponInventoryRef->GetCurrentWeaponCount()) return false;
-
-	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
-		SubWeaponInventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
-	else
-		WeaponInventoryRef->SyncCurrentWeaponInfo(true); //기존 무기 정보를 저장
-	SubWeaponInventoryRef->EquipWeaponByIdx(SubWeaponIdx);
-
+	WeaponComponent->InitWeapon(NewWeaponID);
 	return true;
-}
-
-AWeaponInventoryBase* ACharacterBase::GetWeaponInventoryRef()
-{
-	if (!IsValid(WeaponInventoryRef) || WeaponInventoryRef->IsActorBeingDestroyed()) return nullptr;
-	return WeaponInventoryRef;
-}
-
-AWeaponInventoryBase* ACharacterBase::GetSubWeaponInventoryRef()
-{
-	if (!IsValid(SubWeaponInventoryRef) || SubWeaponInventoryRef->IsActorBeingDestroyed()) return nullptr;
-	return SubWeaponInventoryRef;
-}
-
-AWeaponBase* ACharacterBase::GetCurrentWeaponRef()
-{
-	if (!CurrentWeaponRef.IsValid()) return nullptr;
-	return CurrentWeaponRef.Get();
-}
-
-void ACharacterBase::SwitchWeaponActor(EWeaponType TargetWeaponType)
-{
-	if (!WeaponActorList.IsValidIndex((int32)TargetWeaponType - 1)) return;
-	if (!IsValid(WeaponActorList[(int32)TargetWeaponType - 1]))  return;
-	if (!IsValid(GetCurrentWeaponRef())) return;
-
-	GetCurrentWeaponRef()->SetActorHiddenInGame(true);
-	GetCurrentWeaponRef()->InitWeapon(0);
-	CurrentWeaponRef = WeaponActorList[(int32)TargetWeaponType - 1];
-	GetCurrentWeaponRef()->SetActorHiddenInGame(false);
-}
-
-AWeaponBase* ACharacterBase::SpawnWeaponActor(EWeaponType TargetWeaponType)
-{
-	checkf(WeaponClassList.Num() == 3, TEXT("초기 무기 클래스 지정이 실패했습니다."));
-	TSubclassOf<AWeaponBase> weaponClass = WeaponClassList[(int)TargetWeaponType - 1];
-
-	if (!IsValid(weaponClass))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Weapon Class가 Invalid 합니다."));
-		return nullptr;
-	}
-	FActorSpawnParameters spawnParams;
-	spawnParams.Owner = this;
-	spawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-	const FVector spawnLocation = GetActorLocation();
-	const FRotator spawnRotation = FRotator::ZeroRotator;
-	const FVector spawnScale3D = ActorHasTag("Player") ? FVector(2.0f) : FVector(1.0f / GetCapsuleComponent()->GetComponentScale().X);
-	FTransform spawnTransform = FTransform(spawnRotation, spawnLocation, spawnScale3D);
-	AWeaponBase* newWeapon = Cast<AWeaponBase>(GetWorld()->SpawnActor(weaponClass, &spawnTransform, spawnParams));
-	newWeapon->InitWeapon(0);
-
-	return newWeapon;
-}
-
-void ACharacterBase::InitWeaponActors()
-{
-	if (!WeaponActorList.IsEmpty()) return;
-
-	//근접과 원거리의 무기 액터를 스폰
-	for (int idx = 0; idx < 3; idx++)
-	{
-		WeaponActorList.Add(SpawnWeaponActor((EWeaponType)(idx + 1)));
-		WeaponActorList[idx]->SetOwner(this);
-		checkf(IsValid(WeaponActorList[idx]), TEXT("무기 %d 타입 스폰에 실패했습니다."));
-		EquipWeapon(WeaponActorList[idx]);
-	}
-	EquipWeapon(WeaponActorList[0]);
-	CurrentWeaponRef = WeaponActorList[0];
 }
 
 void ACharacterBase::ClearAllTimerHandle()

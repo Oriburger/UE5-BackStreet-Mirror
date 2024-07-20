@@ -45,7 +45,7 @@ public:
 public:
 	// Initialize Gate
 	UFUNCTION()
-		void InitGate(FVector2D NewDirection = FVector2D(0.0f));
+		void InitGate(FVector2D NewDirection = FVector2D(0.0f), FName StageType = FName(""));
 
 	// Check Gate Is Active and RequsetMoveStage
 	UFUNCTION(BlueprintCallable)
@@ -59,13 +59,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void DeactivateGate();
 
-private:
-	UPROPERTY()
-		bool bIsGateActive;
+protected:
+	//Stage type name for next stage
+	UPROPERTY(BlueprintReadOnly)
+		FName NextStageType;
 
+private:
+	bool bIsGateActive;
 	//Gate's direction to move on n*n grid chapter
-	UPROPERTY()
-		FVector2D Direction;
+	FVector2D Direction;
 
 //-------- ±× ¿Ü-----------------------
 private:

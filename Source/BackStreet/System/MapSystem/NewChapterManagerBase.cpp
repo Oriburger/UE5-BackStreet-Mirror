@@ -29,19 +29,25 @@ void ANewChapterManagerBase::BeginPlay()
 
 void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 {
+	UE_LOG(LogTemp, Warning, TEXT("ANewChapterManagerBase::StartChapter(%d)"), NewChapterID);
+
 	//init chapter with generate stage infos
 	bIsChapterFinished = false;
 	InitChapter(NewChapterID);
 	CurrentStageLocation = FVector2D(0.0f);
 	StageInfoList = StageGeneratorComponent->Generate();
 
+
 	//init the first stage and start game
 	if (StageInfoList.IsValidIndex(0))
 	{
-		StageManagerComponent->InitStage(StageInfoList[0]);
+		int32 stageIdx = StageGeneratorComponent->GetStageIdx(CurrentStageLocation);
+		StageManagerComponent->InitStage(StageInfoList[stageIdx]);
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("LoL"));
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ANewChapterManagerBase::StartChapter, Invalid Stage Data %d"), StageInfoList.Num());
+	}
 
 	//(Temporary code) set input mode game only and hide mouse cursor
 	APlayerController* playerControllerRef = UGameplayStatics::GetPlayerController(GetWorld(), 0);
@@ -50,8 +56,6 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 		FInputModeGameOnly gameOnlyData;
 		playerControllerRef->SetInputMode(gameOnlyData);
 		playerControllerRef->bShowMouseCursor = false;
-
-		UE_LOG(LogTemp, Warning, TEXT("LoL2"));
 
 		//Add combat widet to screen
 		AddCombatWidget();
@@ -84,10 +88,11 @@ void ANewChapterManagerBase::ResetChapter()
 
 void ANewChapterManagerBase::MoveStage(FVector2D direction)
 {
-	if (!StageInfoList.IsValidIndex(CurrentStageLocation.X + direction.X)) return;
+	int32 stageIdx = StageGeneratorComponent->GetStageIdx(CurrentStageLocation + direction); 
+	if (!StageInfoList.IsValidIndex(stageIdx)) return;
+	UE_LOG(LogTemp, Warning, TEXT("ANewChapterManagerBase::MoveStage,  %s  --(%s)-->  %s"), *CurrentStageLocation.ToString(), *direction.ToString(), *(CurrentStageLocation + direction).ToString())
 	CurrentStageLocation = CurrentStageLocation + direction;
-
-	StageManagerComponent->InitStage(StageInfoList[CurrentStageLocation.X]);
+	StageManagerComponent->InitStage(StageInfoList[stageIdx]);
 }
 
 void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
@@ -110,8 +115,9 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 {
 	if (bIsChapterFinished) return;
-	if (!StageInfoList.IsValidIndex(CurrentStageLocation.X)) return;
-	StageInfoList[CurrentStageLocation.X] = StageInfo;
+	int32 stageIdx = StageGeneratorComponent->GetStageIdx(StageInfo.Coordinate);
+	if (!StageInfoList.IsValidIndex(stageIdx)) return;
+	StageInfoList[stageIdx] = StageInfo;
 
 	//Game Over
 	if (StageInfo.bIsGameOver)
@@ -127,6 +133,50 @@ void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 			CreateGameResultWidget(true);
 		}
 	}
+}
+
+FStageInfo ANewChapterManagerBase::GetStageInfo(int32 StageIdx)
+{
+	if (!StageInfoList.IsValidIndex(StageIdx)) return FStageInfo();
+	return StageInfoList[StageIdx];
+}
+
+FStageInfo ANewChapterManagerBase::GetStageInfoWithCoordinate(FVector2D StageCoordinate)
+{
+	return GetStageInfo(StageGeneratorComponent->GetStageIdx(StageCoordinate));
+}
+
+FName ANewChapterManagerBase::GetStageTypeName(EStageCategoryInfo StageType)
+{
+	switch (StageType)
+	{
+	case EStageCategoryInfo::E_Boss:
+		return FName("E_Boss");
+	case EStageCategoryInfo::E_Combat:
+		return FName("E_Combat");
+	case EStageCategoryInfo::E_EliteCombat:
+		return FName("E_EliteCombat");
+	case EStageCategoryInfo::E_Craft:
+		return FName("E_Craft");
+	case EStageCategoryInfo::E_TimeAttack:
+		return FName("E_TimeAttack");
+	case EStageCategoryInfo::E_EliteTimeAttack:
+		return FName("E_EliteTimeAttack");
+	case EStageCategoryInfo::E_Entry:
+		return FName("E_Entry");
+	case EStageCategoryInfo::E_Gatcha:
+		return FName("E_Gatcha");
+	case EStageCategoryInfo::E_MiniGame:
+		return FName("E_MiniGame");
+	}
+	return FName("None");
+}
+
+bool ANewChapterManagerBase::GetIsStageBlocked(FVector2D StageCoordinate)
+{
+	int32 stageIdx = StageGeneratorComponent->GetStageIdx(StageCoordinate);
+	if (!StageInfoList.IsValidIndex(stageIdx)) return false;
+	return StageInfoList[stageIdx].bIsBlocked;
 }
 
 void ANewChapterManagerBase::CreateGameResultWidget(bool bChapterClear)

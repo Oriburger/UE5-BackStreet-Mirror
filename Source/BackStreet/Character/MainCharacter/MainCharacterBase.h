@@ -179,15 +179,12 @@ public:
 	UFUNCTION()
 		virtual void Die() override;
 
+	UFUNCTION()
+		virtual void StandUp() override;
+
 	//Rotation 조절 방식을 기본 방식인 Movement 방향으로 되돌린다
 	UFUNCTION(BlueprintCallable)
 		void ResetRotationToMovement();
-
-	UFUNCTION()
-		virtual void SwitchToNextWeapon() override;
-
-	UFUNCTION()
-		virtual void DropWeapon() override;
 
 	//Targeting system
 	UFUNCTION()
@@ -200,10 +197,6 @@ public:
 	//Rotation 조절 방식을 커서 위치로 한다
 	UFUNCTION(BlueprintCallable)
 		void RotateToCursor();
-
-	//1~4번의 키를 눌러 보조무기를 장착한다.
-	UFUNCTION()
-		void PickSubWeapon(const FInputActionValue& Value);
 
 	UFUNCTION()
 		TArray<AActor*> GetNearInteractionActorList();
@@ -290,8 +283,7 @@ public:
 
 // -------- Inventory --------------
 public:
-	UFUNCTION(BlueprintCallable)
-		virtual bool PickWeapon(int32 NewWeaponID) override;
+	virtual bool PickWeapon(int32 NewWeaponID);
 
 // -------- VFX --------------------
 protected:
@@ -341,33 +333,25 @@ private:
 private:
 	//공격 시, 마우스 커서의 위치로 캐릭터가 바라보는 로직을 초기화하는 타이머
 	//초기화 시에는 다시 movement 방향으로 캐릭터의 Rotation Set 
-	UPROPERTY()
-		FTimerHandle RotationResetTimerHandle;
+	FTimerHandle RotationResetTimerHandle;
 
 	//구르기 딜레이 타이머
-	UPROPERTY()
-		FTimerHandle RollTimerHandle;
+	FTimerHandle RollTimerHandle;
 
 	//WalkSpeed Interpolate timer
-	UPROPERTY()
-		FTimerHandle WalkSpeedInterpTimerHandle;
+	FTimerHandle WalkSpeedInterpTimerHandle;
 
 	//Field Of View Interpolate timer
-	UPROPERTY()
-		FTimerHandle FOVInterpHandle;
+	FTimerHandle FOVInterpHandle;
 
 	//구르기 내 대쉬 딜레이 핸들
-	UPROPERTY()
-		FTimerHandle DashDelayTimerHandle;
+	FTimerHandle DashDelayTimerHandle;
 
 	//버프 나이아가라 이펙트 리셋 타이머
-	UPROPERTY()
-		FTimerHandle BuffEffectResetTimerHandle;
+	FTimerHandle BuffEffectResetTimerHandle;
 
 	//캐릭터 얼굴 효과 (머티리얼 값 변경) 리셋 타이머
-	UPROPERTY()
-		FTimerHandle FacialEffectResetTimerHandle;
+	FTimerHandle FacialEffectResetTimerHandle;
 
-	UPROPERTY()
-		FTimerHandle SwitchCameraRotateModeTimerHandle;
+	FTimerHandle SwitchCameraRotateModeTimerHandle;
 };

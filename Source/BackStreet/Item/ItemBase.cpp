@@ -1,7 +1,5 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "ItemBase.h"
-#include "Weapon/WeaponBase.h"
-#include "Weapon/WeaponInventoryBase.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
@@ -108,9 +106,7 @@ void AItemBase::OnItemPicked(AActor* Causer)
 	if (!IsValid(Causer) || Causer->IsActorBeingDestroyed()) return;
 
 	AMainCharacterBase* playerRef = Cast<AMainCharacterBase>(Causer);
-	AWeaponInventoryBase* playerWeaponInventoryRef = playerRef->GetWeaponInventoryRef();
-	check(IsValid(playerWeaponInventoryRef)); //player가 살아있는데, Inventory가 Invalid하면 안됨
-
+	
 	switch (ItemInfo.ItemType)
 	{
 	case EItemCategoryInfo::E_Weapon:
@@ -123,24 +119,7 @@ void AItemBase::OnItemPicked(AActor* Causer)
 	case EItemCategoryInfo::E_Bullet:
 		if (Causer->ActorHasTag("Player"))
 		{
-			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_BULLET_ID_DIFF_VALUE;
-			//FWeaponStatStruct targetWeaponStat = playerWeaponInventoryRef->GetWeaponStatInfoWithID(targetWeaponID);
-
-			if (playerWeaponInventoryRef->GetWeaponIsContained(targetWeaponID))
-			{
-			//	ensure(playerWeaponInventoryRef->TryAddAmmoToWeapon(targetWeaponID, (int32)ItemInfo.Variable));
-			}
-			else
-			{
-				//if (targetWeaponStat.WeaponType == EWeaponType::E_Throw)
-				{
-				//	ensure(playerRef->PickWeapon(targetWeaponID));
-				}
-				//else
-				{
-					GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName("탄환에 맞는 무기를 소지해주세요"), FColor(255));
-				}
-			}
+			
 		}
 		break;
 	case EItemCategoryInfo::E_StatUp:
@@ -148,6 +127,7 @@ void AItemBase::OnItemPicked(AActor* Causer)
 	case EItemCategoryInfo::E_Mission:
 		break;
 	}
+	
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ItemPickEffect, GetActorLocation());
 	Destroy();
 }

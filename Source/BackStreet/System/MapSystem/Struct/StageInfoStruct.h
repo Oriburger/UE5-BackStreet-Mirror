@@ -60,6 +60,16 @@ public:
 		TArray<FEnemyGroupInfo> CompositionList;
 };
 
+USTRUCT(BlueprintType)
+struct FMultipleStageTypeInfo
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		TArray<EStageCategoryInfo> StageTypeList;
+};
+
 //이동 예정 LJH
 USTRUCT(BlueprintType)
 struct FStageInfo
@@ -75,8 +85,8 @@ public:
 
 	//Map location in 2nd array (현재 선형으로 1차원 X값만 사용)
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		FVector2D TilePos = FVector2D::ZeroVector;
-	
+		FVector2D Coordinate = FVector2D::ZeroVector;
+
 	//Main level of this stage
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TSoftObjectPtr<UWorld> MainLevelAsset;
@@ -99,6 +109,7 @@ public:
 	//Boss Stage only
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FVector BossSpawnLocation = FVector::ZeroVector;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FRotator BossSpawnRotation = FRotator::ZeroRotator;
 
@@ -111,9 +122,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TArray<FVector> PortalLocationList;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TArray<FName> PortalDirectionTagList;
+
 	//Timed-stage only use this value!
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float TimeLimitValue = 0.0f;
+
+	//Is blocked?
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		bool bIsBlocked = false;
 
 	//Is stage visited?
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -133,15 +151,39 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FStageTemplateInfo
+{
+	GENERATED_BODY()
+
+public:
+	//This value's member must be valid. If not, editor will crash by 'check'
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+		TArray<EStageCategoryInfo> StageComposition;
+};
+
+USTRUCT(BlueprintType)
 struct FChapterInfo : public FTableRowBase
 {
 	GENERATED_BODY()
 
-	//======= Gameplay ====================
+//======= Gameplay ====================
 public:
 	//Table Key
 	UPROPERTY(EditDefaultsOnly)
 		int32 ChapterID = 0;
+
+	//grid size for chapter
+	UPROPERTY(EditDefaultsOnly, meta = (UIMin = 1, UIMax = 5))
+		int32 GridSize = 3;
+
+	//blocked stage list, this value determines shape of chapter
+	UPROPERTY(EditDefaultsOnly)
+		TArray<FVector2D> BlockedPosList;
+
+	//Possible stage type per stage level
+	//This list's length is must be fit to stage's count(gridsize * 2 - 1)
+	UPROPERTY(EditDefaultsOnly)
+		TArray<FMultipleStageTypeInfo> StageTypeListForLevelIdx;
 
 	//Time attack's time limit value
 	UPROPERTY(EditDefaultsOnly)
@@ -153,7 +195,11 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		TMap<EStageCategoryInfo, FEnemyCompositionInfo> EnemyCompositionInfoMap;
 
-	//======= Asset =======================
+	//Stage template list. If this value is set, this overrides the above values(blocked~, stage tyep~)
+	UPROPERTY(EditDefaultsOnly, meta = (UIMin = 1, UIMax = 5))
+		TArray<FStageTemplateInfo> StageTemplateList;
+
+//======= Asset =======================
 public:
 	//Entry stage level list
 	UPROPERTY(EditDefaultsOnly)
@@ -174,6 +220,14 @@ public:
 	//Boss stage level list
 	UPROPERTY(EditDefaultsOnly)
 		TArray<TSoftObjectPtr<UWorld>> BossStageLevelList;
+
+	//Minigame stage level list
+	UPROPERTY(EditDefaultsOnly)
+		TArray<TSoftObjectPtr<UWorld>> MinigameStageLevelList;
+
+	//Gatcha stage level list
+	UPROPERTY(EditDefaultsOnly)
+		TArray<TSoftObjectPtr<UWorld>> GatchaStageLevelList;
 
 	//Outer area level asset
 	UPROPERTY(EditDefaultsOnly)
