@@ -79,6 +79,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsStageBlocked(FVector2D StageCoordinate);
 
+	// if you edit this return value, the new result will not be applyed because it is copy value.
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FStageInfo> GetStageInfoList() { return StageInfoList; }
+
 protected:
 	//Assign on blueprint
 	UPROPERTY(EditDefaultsOnly, Category = "Data")

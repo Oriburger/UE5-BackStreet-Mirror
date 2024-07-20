@@ -49,8 +49,6 @@ void ACharacterBase::BeginPlay()
 		AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
 	}
 	LandedDelegate.AddDynamic(this, &ACharacterBase::OnPlayerLanded);
-
-	bCanStandUp = false;
 }
 
 // Called every frame
@@ -192,10 +190,6 @@ void ACharacterBase::KnockDown()
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_KnockedDown;
 
-	//if (AssetHardPtrInfo.KnockdownAnimMontageList.IsEmpty() || !IsValid(AssetHardPtrInfo.KnockdownAnimMontageList[0])) return;
-	//PlayAnimMontage(AssetHardPtrInfo.KnockdownAnimMontageList[0]);
-	//UE_LOG(LogTemp, Warning, TEXT("Final impact"));
-
 	GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
 	KnockDownDelayTimerHandle.Invalidate();
 
@@ -204,17 +198,11 @@ void ACharacterBase::KnockDown()
 	KnockDownDelegate.BindUFunction(this, "StandUp");
 	GetWorldTimerManager().SetTimer(KnockDownAnimMontageHandle, KnockDownDelegate, 1.0f, false, 2.0f);
 	
-	/*
-	if(AssetHardPtrInfo.KnockdownAnimMontageList.IsEmpty() || !IsValid(AssetHardPtrInfo.KnockdownAnimMontageList[0])) return;
-	PlayAnimMontage(AssetHardPtrInfo.KnockdownAnimMontageList[0]);
-
-	FTimerDelegate LayDownDelegate;
-	LayDownDelegate.BindUFunction(this, "LayDown");
-	GetWorldTimerManager().SetTimer(LayDownAnnimMontageHandle, LayDownDelegate, 0.25f, true, 3.0f);*/
 }
 
 void ACharacterBase::StandUp()
 {
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die) return;
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
 	GetWorldTimerManager().ClearTimer(KnockDownAnimMontageHandle);
 }
@@ -307,7 +295,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	// ======= Damage & Die event ===============================
-	CharacterState.CurrentHP = CharacterState.CurrentHP - DamageAmount;
+	CharacterState.CurrentHP = CharacterState.CurrentHP - DamageAmount * (1.0f - FMath::Clamp(0.5f * CharacterState.TotalDefense, 0.0f, 0.5f));
 	CharacterState.CurrentHP = FMath::Max(0.0f, CharacterState.CurrentHP);
 	if (CharacterState.CurrentHP == 0.0f)
 	{
@@ -358,7 +346,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	GetWorldTimerManager().SetTimer(HitCounterResetTimerHandle, this, &ACharacterBase::ResetHitCounter, 1.0f, false, 1.0f);
 
 	// Check knock down condition and set knock down event using retriggable timer
-	if (Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetIsFinalCombo())
+	if (Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetWeaponStat().FinalImpactStrength > 0 && Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetIsFinalCombo())
 	{
 		KnockDown();
 		/*

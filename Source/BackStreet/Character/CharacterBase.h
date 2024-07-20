@@ -42,7 +42,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UWeaponComponentBase* WeaponComponent;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		class UDebuffManagerComponent* DebuffManagerComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -258,10 +258,6 @@ protected:
 	//캐릭터의 현재 상태
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
 		FCharacterStateStruct CharacterState;
-
-	//캐릭터 StandUp
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "bCanStandUp")
-		bool bCanStandUp;
 
 	//Character Item Inventory
 

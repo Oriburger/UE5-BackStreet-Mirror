@@ -55,9 +55,6 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 		//set stage type
 		FVector2D stageCoordinate = GetStageCoordinate(stageIdx);
 		UE_LOG(LogTemp, Warning, TEXT("Stage Idx : %d,  stageCoordinate : %s"), stageIdx, *stageCoordinate.ToString());
-			
-		TArray<EStageCategoryInfo> stageTypeList = CurrentChapterInfo.StageTypeListForLevelIdx[stageCoordinate.Y + stageCoordinate.X].StageTypeList;
-		checkf(stageTypeList.Num() > 0, TEXT("Stage type list data is invalid "));
 		
 		if (templateIdx != -1)
 		{
@@ -65,6 +62,8 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 		}
 		else
 		{
+			TArray<EStageCategoryInfo> stageTypeList = CurrentChapterInfo.StageTypeListForLevelIdx[stageCoordinate.Y + stageCoordinate.X].StageTypeList;
+			checkf(stageTypeList.Num() > 0, TEXT("Stage type list data is invalid "));
 			temp.StageType = stageTypeList[UKismetMathLibrary::RandomInteger(stageTypeList.Num())];
 		}
 			
@@ -83,8 +82,12 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.CraftStageLevelList);
 			break;
 		case EStageCategoryInfo::E_TimeAttack:
+			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.TimeAttackStageLevelList);
+			temp.TimeLimitValue = CurrentChapterInfo.NormalTimeAtkStageTimeOut;
+			break;
 		case EStageCategoryInfo::E_EliteTimeAttack:
 			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.TimeAttackStageLevelList);
+			temp.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
 			break;
 		case EStageCategoryInfo::E_Entry:
 			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.EntryStageLevelList);

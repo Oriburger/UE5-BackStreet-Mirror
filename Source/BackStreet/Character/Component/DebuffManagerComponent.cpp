@@ -116,6 +116,10 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 
 	OwnerCharacterRef.Get()->UpdateCharacterStatAndState(characterStat, characterState);
 
+	GetWorld()->GetTimerManager().SetTimer(timerHandle, timerDelegate, 1.0f, false, DebuffInfo.TotalTime);
+
+	OnDebuffAdded.Broadcast(DebuffInfo.Type);
+
 	timerDelegate.BindUFunction(this, FName("ResetStatDebuffState"), DebuffInfo.Type, DebuffInfo);
 	GetWorld()->GetTimerManager().SetTimer(timerHandle, timerDelegate, 0.1f, false, DebuffInfo.TotalTime);
 
@@ -145,6 +149,8 @@ void UDebuffManagerComponent::ClearDebuffTimer(ECharacterDebuffType DebuffType)
 	GetWorld()->GetTimerManager().ClearTimer(resetHandle);
 	dotDamageHandle.Invalidate();
 	resetHandle.Invalidate();
+
+	OnDebuffRemoved.Broadcast(DebuffType);
 
 	if(ResetValueInfoMap.Contains(DebuffType))
 		ResetValueInfoMap.Remove(DebuffType);
