@@ -173,11 +173,14 @@ public:
 		int32 ChapterID = 0;
 
 	//grid size for chapter
-	UPROPERTY(EditDefaultsOnly, meta = (UIMin = 1, UIMax = 5))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 1, UIMax = 5))
 		int32 GridSize = 3;
 
+	UPROPERTY(BlueprintReadOnly)
+		FVector2D CurrentStageCoordinate;	
+
 	//blocked stage list, this value determines shape of chapter
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<FVector2D> BlockedPosList;
 
 	//Possible stage type per stage level
@@ -198,6 +201,13 @@ public:
 	//Stage template list. If this value is set, this overrides the above values(blocked~, stage tyep~)
 	UPROPERTY(EditDefaultsOnly, meta = (UIMin = 1, UIMax = 5))
 		TArray<FStageTemplateInfo> StageTemplateList;
+
+	UPROPERTY(BlueprintReadOnly)
+		TArray<FStageInfo> StageInfoList;
+		
+//======= Widget ======================
+	UPROPERTY(BlueprintReadOnly)
+		TArray<FVector2D> StageIconTransitionValueList;
 
 //======= Asset =======================
 public:

@@ -618,13 +618,42 @@ void AMainCharacterBase::StopDashMovement()
 	GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
 }
 
+void AMainCharacterBase::SetCameraVerticalAlignmentWithInterp(float TargetPitch, const float InterpSpeed)
+{
+	FTimerDelegate updateFunctionDelegate;
+
+	//Binding the function with specific values
+	updateFunctionDelegate.BindUFunction(this, FName("UpdateCameraPitch"), TargetPitch, InterpSpeed);
+
+	//Calling MyUsefulFunction after 5 seconds without looping
+	GetWorld()->GetTimerManager().ClearTimer(CameraRotationAlignmentHandle);
+	GetWorld()->GetTimerManager().SetTimer(CameraRotationAlignmentHandle, updateFunctionDelegate, 0.01f, true);
+}
+
 void AMainCharacterBase::SetAutomaticRotateMode()
 {
 	if (TargetingManagerComponent->GetIsTargetingActivated()) return;
-	CameraBoom->bEnableCameraRotationLag = true;
-	CameraBoom->SetRelativeRotation(FRotator::ZeroRotator);
-	CameraBoom->bUsePawnControlRotation = false;
-	CameraBoom->bInheritYaw = true;
+	
+	SetCameraVerticalAlignmentWithInterp(GetControlRotation().Pitch <= 90.0f ? 0.0f : 360.0f, 0.25f);
+
+	GetWorld()->GetTimerManager().SetTimer(RotationResetTimerHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			CameraBoom->bEnableCameraRotationLag = true;
+			CameraBoom->SetRelativeRotation(FRotator::ZeroRotator);
+			CameraBoom->bUsePawnControlRotation = false;
+			CameraBoom->bInheritYaw = true;
+		}), 1.0f, false /*반복*/);
+}
+
+void AMainCharacterBase::UpdateCameraPitch(float TargetPitch, float InterpSpeed)
+{
+	FRotator currentRotation = GetControlRotation();
+	if (FMath::IsNearlyEqual(currentRotation.Pitch, TargetPitch, 5.0f))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(CameraRotationAlignmentHandle);
+	}
+	currentRotation.Pitch = FMath::FInterpTo(currentRotation.Pitch, TargetPitch, 0.1f, InterpSpeed);
+	Controller->SetControlRotation(currentRotation);
 }
 
 void AMainCharacterBase::SetManualRotateMode()
