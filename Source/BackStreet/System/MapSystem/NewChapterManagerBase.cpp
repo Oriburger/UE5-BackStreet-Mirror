@@ -34,19 +34,19 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 	//init chapter with generate stage infos
 	bIsChapterFinished = false;
 	InitChapter(NewChapterID);
-	CurrentStageLocation = FVector2D(0.0f);
-	StageInfoList = StageGeneratorComponent->Generate();
-
+	CurrentChapterInfo.CurrentStageCoordinate = FVector2D(0.0f);
+	CurrentChapterInfo.StageInfoList = StageGeneratorComponent->Generate();
+	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
 
 	//init the first stage and start game
-	if (StageInfoList.IsValidIndex(0))
+	if (CurrentChapterInfo.StageInfoList.IsValidIndex(0))
 	{
-		int32 stageIdx = StageGeneratorComponent->GetStageIdx(CurrentStageLocation);
-		StageManagerComponent->InitStage(StageInfoList[stageIdx]);
+		int32 stageIdx = StageGeneratorComponent->GetStageIdx(CurrentChapterInfo.CurrentStageCoordinate);
+		StageManagerComponent->InitStage(CurrentChapterInfo.StageInfoList[stageIdx]);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ANewChapterManagerBase::StartChapter, Invalid Stage Data %d"), StageInfoList.Num());
+		UE_LOG(LogTemp, Warning, TEXT("ANewChapterManagerBase::StartChapter, Invalid Stage Data %d"), CurrentChapterInfo.StageInfoList.Num());
 	}
 
 	//(Temporary code) set input mode game only and hide mouse cursor
@@ -83,16 +83,17 @@ void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 void ANewChapterManagerBase::ResetChapter()
 {
 	//StageInfoList.Empty();
-	//CurrentStageLocation = FVector2D(0.0f);
+	//CurrentStageCoordinate = FVector2D(0.0f);
 }
 
 void ANewChapterManagerBase::MoveStage(FVector2D direction)
 {
-	int32 stageIdx = StageGeneratorComponent->GetStageIdx(CurrentStageLocation + direction); 
-	if (!StageInfoList.IsValidIndex(stageIdx)) return;
-	UE_LOG(LogTemp, Warning, TEXT("ANewChapterManagerBase::MoveStage,  %s  --(%s)-->  %s"), *CurrentStageLocation.ToString(), *direction.ToString(), *(CurrentStageLocation + direction).ToString())
-	CurrentStageLocation = CurrentStageLocation + direction;
-	StageManagerComponent->InitStage(StageInfoList[stageIdx]);
+	int32 stageIdx = StageGeneratorComponent->GetStageIdx(CurrentChapterInfo.CurrentStageCoordinate + direction);
+	if (!CurrentChapterInfo.StageInfoList.IsValidIndex(stageIdx)) return;
+	UE_LOG(LogTemp, Warning, TEXT("ANewChapterManagerBase::MoveStage,  %s  --(%s)-->  %s"), *CurrentChapterInfo.CurrentStageCoordinate.ToString(), *direction.ToString(), *(CurrentChapterInfo.CurrentStageCoordinate + direction).ToString())
+	CurrentChapterInfo.CurrentStageCoordinate = CurrentChapterInfo.CurrentStageCoordinate + direction;
+	StageManagerComponent->InitStage(CurrentChapterInfo.StageInfoList[stageIdx]);
+	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
 }
 
 void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
@@ -109,6 +110,8 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 		CurrentChapterInfo = *newInfo;
 		StageGeneratorComponent->InitGenerator(CurrentChapterInfo);
 		StageManagerComponent->Initialize(CurrentChapterInfo);
+		InitStageIconTranslationList({20, 65});
+		OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
 	}
 }
 
@@ -116,8 +119,9 @@ void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 {
 	if (bIsChapterFinished) return;
 	int32 stageIdx = StageGeneratorComponent->GetStageIdx(StageInfo.Coordinate);
-	if (!StageInfoList.IsValidIndex(stageIdx)) return;
-	StageInfoList[stageIdx] = StageInfo;
+	if (!CurrentChapterInfo.StageInfoList.IsValidIndex(stageIdx)) return;
+	CurrentChapterInfo.StageInfoList[stageIdx] = StageInfo;
+	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
 
 	//Game Over
 	if (StageInfo.bIsGameOver)
@@ -135,10 +139,25 @@ void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 	}
 }
 
+void ANewChapterManagerBase::InitStageIconTranslationList(FVector2D Threshold)
+{
+	TArray<FVector2D> newList; 
+	for (int32 idx = 0; idx < FMath::Pow(CurrentChapterInfo.GridSize, 2.0f); idx++)
+	{
+		FVector2D newValue;
+
+		newValue.X = FMath::RandRange(-Threshold.X, Threshold.X);
+		newValue.Y = FMath::RandRange(-Threshold.Y, Threshold.Y);
+
+		newList.Add(newValue);
+	}
+	SetStageIconTranslationList(newList);
+}
+
 FStageInfo ANewChapterManagerBase::GetStageInfo(int32 StageIdx)
 {
-	if (!StageInfoList.IsValidIndex(StageIdx)) return FStageInfo();
-	return StageInfoList[StageIdx];
+	if (!CurrentChapterInfo.StageInfoList.IsValidIndex(StageIdx)) return FStageInfo();
+	return CurrentChapterInfo.StageInfoList[StageIdx];
 }
 
 FStageInfo ANewChapterManagerBase::GetStageInfoWithCoordinate(FVector2D StageCoordinate)
@@ -175,8 +194,8 @@ FName ANewChapterManagerBase::GetStageTypeName(EStageCategoryInfo StageType)
 bool ANewChapterManagerBase::GetIsStageBlocked(FVector2D StageCoordinate)
 {
 	int32 stageIdx = StageGeneratorComponent->GetStageIdx(StageCoordinate);
-	if (!StageInfoList.IsValidIndex(stageIdx)) return false;
-	return StageInfoList[stageIdx].bIsBlocked;
+	if (!CurrentChapterInfo.StageInfoList.IsValidIndex(stageIdx)) return false;
+	return CurrentChapterInfo.StageInfoList[stageIdx].bIsBlocked;
 }
 
 void ANewChapterManagerBase::CreateGameResultWidget(bool bChapterClear)
