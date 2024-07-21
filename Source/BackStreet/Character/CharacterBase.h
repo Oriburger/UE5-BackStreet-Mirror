@@ -48,6 +48,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UTargetingManagerComponent* TargetingManagerComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class USkillManagerComponent* SkillManagerComponent;
+
 // ------- Character Action ±âº» ------- 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
