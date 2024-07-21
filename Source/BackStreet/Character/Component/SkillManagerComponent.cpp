@@ -4,6 +4,7 @@
 #include "SkillManagerComponent.h"
 #include "../CharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
+#include "../../System/SkillSystem/SkillBase.h"
 
 // Sets default values for this component's properties
 USkillManagerComponent::USkillManagerComponent()
@@ -18,7 +19,6 @@ USkillManagerComponent::USkillManagerComponent()
 void USkillManagerComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
 	InitSkillManager();
 }
 
@@ -26,6 +26,42 @@ void USkillManagerComponent::InitSkillManager()
 {
 	//Initialize the owner character ref
 	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
+	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	SkillStatTable = GameModeRef.Get()->SkillStatTable;
+	checkf(IsValid(SkillStatTable), TEXT("Failed to get SkillStatDataTable"));
 }
+
+bool USkillManagerComponent::TrySkill(int32 SkillID)
+{
+	if (!SkillMap.Contains(SkillID)) return false;
+	ASkillBase* skillBase = SkillMap.Find(SkillID)->Get();
+	if (skillBase->SkillState.SkillLevelStruct.SkillLevel == 0) return false;
+	if (!skillBase->SkillState.bSkillBlocked) return false;
+
+	OwnerCharacterRef->SetActionState(ECharacterActionType::E_Skill);
+	skillBase->ActivateSkill();
+
+	return true;
+}
+
+bool USkillManagerComponent::AddSkill(int32 SkillID)
+{
+	if (SkillMap.Contains(SkillID)) return false;
+	FString rowName = FString::FromInt(SkillID);
+	FSkillStatStruct skillStat = *SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
+	TWeakObjectPtr<ASkillBase> skillBase = Cast<ASkillBase>(GetWorld()->SpawnActor(skillStat.SkillBaseClassRef));
+	SkillMap.Add(SkillID, skillBase);
+	skillBase->InitSkill(skillStat, this);
+	return true;
+}
+
+bool USkillManagerComponent::RemoveSkill(int32 SkillID)
+{
+	if (!SkillMap.Contains(SkillID)) return true;
+	SkillMap.Remove(SkillID);
+	return true;
+}
+
+
 
 

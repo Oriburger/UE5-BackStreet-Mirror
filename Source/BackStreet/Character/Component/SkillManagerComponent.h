@@ -6,7 +6,6 @@
 #include "Components/ActorComponent.h"
 #include "SkillManagerComponent.generated.h"
 
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API USkillManagerComponent : public UActorComponent
 {
@@ -20,13 +19,33 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-//======= private fucntions =====================
 private:
 	UFUNCTION()
-		void InitSkillManager();
+	void InitSkillManager();
 
+//======= User Basic Function =======================
+public:
+	UFUNCTION(BlueprintCallable)
+		bool TrySkill(int32 SkillID);
+
+	UFUNCTION(BlueprintCallable)
+		bool AddSkill(int32 SkillID);
+
+	UFUNCTION(BlueprintCallable)
+		bool RemoveSkill(int32 SkillID);
+
+//======= DataTable ==========================
+protected:
+	UPROPERTY(VisibleDefaultsOnly, Category = "Gamplay|Data")
+		UDataTable* SkillStatTable;
 //====== Property ===========================
+public:
+	TMap<int32, TWeakObjectPtr<ASkillBase>> SkillMap;
+
 private:
+	//GameMode Soft Ref
+	TWeakObjectPtr<class ABackStreetGameModeBase> GameModeRef;
+
 	//owner character ref
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 };

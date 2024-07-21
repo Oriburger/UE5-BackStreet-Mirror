@@ -112,6 +112,51 @@ public:
 		uint8 SkillLevel = 0;
 };
 
+USTRUCT(BlueprintType)
+struct FSkillStateStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool bSkillBlocked = true;
+
+	UPROPERTY(BlueprintReadWrite)
+		uint8 SkillLevel = 0;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool bHidenInGame = true;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		FSkillLevelStruct SkillLevelStruct;
+};
+
+USTRUCT(BlueprintType)
+struct FSkillStatStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		int32 SkillID = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		FName SkillName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		FName SkillDescription;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		ESkillType SkillType = ESkillType::E_None;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TSubclassOf<class ASkillBase> SkillBaseClassRef;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool bSkillLifeSpanWithCauser = true;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		FSkillAssetStruct SkillAssetStruct;
+};
 
 USTRUCT(BlueprintType)
 struct FSkillInfoStruct : public FTableRowBase

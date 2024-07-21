@@ -118,6 +118,9 @@ public:
 		UDataTable* SkillInfoTable;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|SkillManager")
+		UDataTable* SkillStatTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|SkillManager")
 		UDataTable* SkillUpgradeInfoTable;
 
 //------ 그 외 프로퍼티 ---------------

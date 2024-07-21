@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "SkillBase.h"
-#include "SkillManagerBase.h"
 #include "../AssetSystem/AssetManagerBase.h"
+#include "../../Character/Component/SkillManagerComponent.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Character/CharacterBase.h"
 #include "Engine/AssetManager.h"
@@ -20,25 +20,29 @@ ASkillBase::ASkillBase()
 	SetRootComponent(DefaultSceneRoot);
 }
 
-// Called when the game starts or when spawned
 void ASkillBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	SkillManagerRef = GamemodeRef.Get()->GetGlobalSkillManagerBaseRef();
+	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	AssetManagerBaseRef = GameModeRef.Get()->GetGlobalAssetManagerBaseRef();
+	SkillStatTable = GameModeRef.Get()->SkillStatTable;
 }
 
-void ASkillBase::InitSkill(FSkillInfoStruct NewSkillInfo)
+void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent* NewSkillManagerComponent)
 {
-	SkillInfo = NewSkillInfo;
-	SkillInfo.bHidenInGame = true; 
-	AssetManagerBaseRef =GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
+	SkillStat = NewSkillStat;
+	SkillManagerComponentRef = NewSkillManagerComponent;
+	FString rowName = FString::FromInt(SkillStat.SkillID);
+	SkillStat = *SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
+
+	SkillState.bHidenInGame = true; 
 
 	//If SkillActor's life span is sync with causer, then destroy with causer 
-	if (SkillInfo.bSkillLifeSpanWithCauser)
+	if (SkillStat.bSkillLifeSpanWithCauser)
 	{
-		SkillInfo.Causer->OnCharacterDied.AddDynamic(this, &ASkillBase::DestroySkill);
+		Cast<ACharacterBase>(SkillManagerComponentRef->GetOwner())
+			->OnCharacterDied.AddDynamic(this, &ASkillBase::DestroySkill);
 	}
 }
 
@@ -47,7 +51,7 @@ void ASkillBase::ActivateSkill_Implementation()
 	SetActorHiddenInGame(false);
 	
 	//Set cooltime timer
-	FSkillLevelStruct skillLevelInfo = SkillInfo.SkillLevelStruct;
+	FSkillLevelStruct skillLevelInfo = SkillState.SkillLevelStruct;
 	if (skillLevelInfo.bIsLevelValid && skillLevelInfo.CoolTime > 0.0f)
 	{
 		SetSkillBlockedTimer(skillLevelInfo.CoolTime);
@@ -59,14 +63,14 @@ void ASkillBase::DeactivateSkill()
 	FTransform skillTransform;
 	skillTransform.SetLocation({0,0,-400});
 	SetActorTransform(skillTransform);
-	SkillInfo.bHidenInGame = true;
+	SkillState.bHidenInGame = true;
 	SetActorHiddenInGame(true);
 }
 
 void ASkillBase::DestroySkill()
 {
-	checkf(IsValid(SkillManagerRef.Get()), TEXT("Failed to get SkillBase class"));
-	SkillManagerRef.Get()->RemoveSkillInSkillBaseMap(SkillInfo.Causer.Get());
+	checkf(IsValid(SkillManagerComponentRef.Get()), TEXT("Failed to get SkillBase class"));
+	SkillManagerComponentRef.Get()->RemoveSkill(SkillStat.SkillID);
 	Destroy();
 }
 
@@ -74,13 +78,13 @@ void ASkillBase::PlaySingleSound(FName SoundName)
 {
 	if (AssetManagerBaseRef.IsValid())
 	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Skill, SkillInfo.SkillID, SoundName);
+		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Skill, SkillStat.SkillID, SoundName);
 	}
 }
 
 float ASkillBase::PlayAnimMontage(ACharacter* Target, FName AnimName)
 {
-	FSkillAnimInfoStruct* skillAnimInfo = SkillInfo.SkillAssetStruct.AnimInfoMap.Find(AnimName);
+	FSkillAnimInfoStruct* skillAnimInfo = SkillStat.SkillAssetStruct.AnimInfoMap.Find(AnimName);
 	UAnimMontage* anim = skillAnimInfo->AnimMontage;
 	float animPlayTime = Target->PlayAnimMontage(anim, skillAnimInfo->AnimPlayRate);
 	return animPlayTime;
@@ -88,8 +92,8 @@ float ASkillBase::PlayAnimMontage(ACharacter* Target, FName AnimName)
 
 UNiagaraSystem* ASkillBase::GetNiagaraEffect(FName EffectName)
 {
-	if(!SkillInfo.SkillAssetStruct.EffectMap.Contains(EffectName)) return nullptr;
-	return SkillInfo.SkillAssetStruct.EffectMap.Find(EffectName)->Effect;
+	if(!SkillStat.SkillAssetStruct.EffectMap.Contains(EffectName)) return nullptr;
+	return SkillStat.SkillAssetStruct.EffectMap.Find(EffectName)->Effect;
 }
 
 float ASkillBase::GetSkillRemainingCoolTime()
@@ -105,13 +109,13 @@ void ASkillBase::SetSkillBlockedTimer(float Delay)
 	SkillCoolTimeHandle.Invalidate();
 
 	//Set new timer that is going to call the function "ResetSkillBlockdTimer"
-	SkillManagerRef.Get()->SetSkillBlockState(SkillInfo.Causer.Get(), SkillInfo.SkillType, true);
+	SkillState.bSkillBlocked = true;
 	GetWorldTimerManager().SetTimer(SkillCoolTimeHandle, this, &ASkillBase::ResetSkillBlockedTimer
 									, Delay, false);
 }
 
 void ASkillBase::ResetSkillBlockedTimer()
 {
-	if (!SkillInfo.Causer.IsValid()) return;
-	SkillManagerRef.Get()->SetSkillBlockState(SkillInfo.Causer.Get(), SkillInfo.SkillType, false);
+	if (!IsValid(SkillManagerComponentRef->GetOwner())) return;
+	SkillState.bSkillBlocked = false;
 }

@@ -28,7 +28,7 @@ public:
 //======= User Basic Function =======================
 public:	
 	UFUNCTION()
-		void InitSkill(FSkillInfoStruct NewSkillInfo);
+		void InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent* NewSkillManagerComponent);
 
 	//Must link with parent function in Blueprint
 	UFUNCTION(BlueprintNativeEvent)
@@ -54,16 +54,23 @@ protected:
 		UNiagaraSystem* GetNiagaraEffect(FName EffectName);
 
 public:	
-	//Skill Info
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		FSkillInfoStruct SkillInfo;
+		FSkillStatStruct SkillStat;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		FSkillStateStruct SkillState;
+
+protected:
+	UPROPERTY(VisibleDefaultsOnly, Category = "Gamplay|Data")
+		UDataTable* SkillStatTable;
+
 //-------- ETC. (Ref)-------------------------------
 protected:
 	//GameMode Soft Ref
-	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+	TWeakObjectPtr<class ABackStreetGameModeBase> GameModeRef;
 
-	//SkillManager Soft Ref
-	TWeakObjectPtr<class USkillManagerBase> SkillManagerRef;
+	//SkillManagerComponent Soft Ref
+	TWeakObjectPtr<class USkillManagerComponent> SkillManagerComponentRef;
 
 	//AssetManager Soft Ref
 	TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
