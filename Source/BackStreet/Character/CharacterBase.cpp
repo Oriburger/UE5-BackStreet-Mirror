@@ -5,7 +5,6 @@
 #include "./Component/SkillManagerComponent.h"
 #include "../Item/Weapon/Ranged/RangedCombatManager.h"
 #include "../Global/BackStreetGameModeBase.h"
-#include "../System/SkillSystem/SkillManagerBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/SkillSystem/SkillBase.h"
 #include "Engine/DamageEvents.h"
@@ -29,7 +28,6 @@ ACharacterBase::ACharacterBase()
 
 	DebuffManagerComponent = CreateDefaultSubobject<UDebuffManagerComponent>(TEXT("DEBUFF_MANAGER"));
 	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));
-	SkillManagerComponent = CreateDefaultSubobject<USkillManagerComponent>(TEXT("SKILL_MANAGER"));
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
 	WeaponComponent->SetupAttachment(GetMesh());
@@ -559,10 +557,10 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 {
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 
-	if (!IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()))
+	if (!IsValid(SkillManagerComponent))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to get SkillmanagerBase"));
-		ensure(IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()));
+		ensure(IsValid(SkillManagerComponent));
 		return;
 	}
 
@@ -593,7 +591,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 		else
 		{
 			CharacterState.bCanAttack = false;
-			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &AssetSoftPtrInfo.CharacterSkillInfoMap[SkillID]);
+			SkillManagerComponent->TrySkill(SkillID);
 			return;
 		}
 		break;
@@ -610,7 +608,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 		else
 		{
 			CharacterState.bCanAttack = false;
-			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &WeaponComponent->WeaponAssetInfo.WeaponSkillInfo);
+			SkillManagerComponent->TrySkill(SkillID);
 			return;
 		}
 		break;
@@ -624,7 +622,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 			if (CheckCanTrySkill(SkillID, &skillInfo))
 			{
 				CharacterState.bCanAttack = false;
-				GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
+				SkillManagerComponent->TrySkill(SkillID);
 				break;
 			}
 		}
@@ -638,7 +636,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 			if (CheckCanTrySkill(SkillID, &skillInfo))
 			{
 				CharacterState.bCanAttack = false;
-				GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
+				SkillManagerComponent->TrySkill(SkillID);
 				break;
 			}
 		}
@@ -651,7 +649,7 @@ void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
 			if (CheckCanTrySkill(SkillID, &skillInfo))
 			{
 				CharacterState.bCanAttack = false;
-				GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
+				SkillManagerComponent->TrySkill(SkillID);
 				break;
 			}
 		}

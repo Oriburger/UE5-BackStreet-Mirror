@@ -8,7 +8,6 @@
 #include "../../System/AbilitySystem/AbilityManagerBase.h"
 #include "../../System/CraftingSystem/CraftBoxBase.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
-#include "../../System/SkillSystem/SkillManagerBase.h"
 #include "../../Item/ItemBase.h"
 #include "../../Item/ItemBoxBase.h"
 #include "../../Item/RewardBoxBase.h"

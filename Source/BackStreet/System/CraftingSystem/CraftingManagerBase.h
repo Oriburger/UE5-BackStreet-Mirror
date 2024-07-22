@@ -109,9 +109,6 @@ public:
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
 	UPROPERTY()
-		TWeakObjectPtr<class USkillManagerBase> SkillManagerRef;
-
-	UPROPERTY()
 		TWeakObjectPtr<class AMainCharacterBase> MainCharacterRef;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)

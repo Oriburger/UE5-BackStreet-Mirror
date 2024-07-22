@@ -61,9 +61,6 @@ public:
 		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class USkillManagerBase* GetGlobalSkillManagerBaseRef() { return SkillManagerBase; }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UCraftingManagerBase* GetGlobalCraftingManagerBaseRef() { return CraftingManagerBase; }
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
@@ -129,9 +126,6 @@ public:
 		class ANewChapterManagerBase* GetChapterManagerRef() { return ChapterManagerRef; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class USkillManagerBase* GetSkillManagerRef() { return SkillManagerBase; }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UUserWidget* GetCombatWidgetRef();
 
 protected:
@@ -139,10 +133,7 @@ protected:
 		class AMainCharacterBase* PlayerCharacterRef;
 
 	UPROPERTY()
-		class UAssetManagerBase* AssetManagerBase;
-
-	UPROPERTY()
-		class USkillManagerBase* SkillManagerBase;
+		class UAssetManagerBase* AssetManagerBase; 
 
 	UPROPERTY()
 		class UCraftingManagerBase* CraftingManagerBase;
