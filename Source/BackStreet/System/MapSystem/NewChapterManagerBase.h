@@ -8,6 +8,7 @@
 #include "NewChapterManagerBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateChapterClear);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateChapterInfoUpdate, FChapterInfo, ChapterInfo);
 
 UCLASS()
 class BACKSTREET_API ANewChapterManagerBase : public AActor
@@ -18,6 +19,9 @@ class BACKSTREET_API ANewChapterManagerBase : public AActor
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateChapterClear OnChapterCleared;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateChapterInfoUpdate OnChapterInfoUpdated;
 
 //======== Basic ===============
 public:
@@ -63,9 +67,15 @@ protected:
 	UFUNCTION()
 		void OnStageFinished(FStageInfo StageInfo);
 
+	UFUNCTION(BlueprintCallable)
+		void InitStageIconTranslationList(FVector2D Threshold);
+
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FChapterInfo GetCurrentChapterInfo() { return CurrentChapterInfo; }
+
+	UFUNCTION(BlueprintCallable)
+		void SetStageIconTranslationList(TArray<FVector2D> NewList) { CurrentChapterInfo.StageIconTransitionValueList = NewList; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FStageInfo GetStageInfo(int32 StageIdx);
@@ -81,7 +91,10 @@ public:
 
 	// if you edit this return value, the new result will not be applyed because it is copy value.
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<FStageInfo> GetStageInfoList() { return StageInfoList; }
+		TArray<FStageInfo> GetStageInfoList() { return CurrentChapterInfo.StageInfoList; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FVector2D GetCurrentLocation() { return CurrentChapterInfo.CurrentStageCoordinate;  }
 
 protected:
 	//Assign on blueprint
@@ -93,13 +106,9 @@ private:
 
 	FChapterInfo CurrentChapterInfo;
 
-	FVector2D CurrentStageLocation;
-
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
 	TWeakObjectPtr<class AMainCharacterBase> PlayerRef;
-
-	TArray<FStageInfo> StageInfoList;
 
 	bool bIsChapterFinished = false;
 
