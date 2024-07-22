@@ -36,10 +36,10 @@ void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent
 	FString rowName = FString::FromInt(SkillStat.SkillID);
 	SkillStat = *SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
 
-	SkillState.bHidenInGame = true; 
+	SkillState.bIsHidden = true;
 
 	//If SkillActor's life span is sync with causer, then destroy with causer 
-	if (SkillStat.bSkillLifeSpanWithCauser)
+	if (SkillStat.bIsLifeSpanWithCauser)
 	{
 		Cast<ACharacterBase>(SkillManagerComponentRef->GetOwner())
 			->OnCharacterDied.AddDynamic(this, &ASkillBase::DestroySkill);
@@ -63,7 +63,7 @@ void ASkillBase::DeactivateSkill()
 	FTransform skillTransform;
 	skillTransform.SetLocation({0,0,-400});
 	SetActorTransform(skillTransform);
-	SkillState.bHidenInGame = true;
+	SkillState.bIsHidden = true;
 	SetActorHiddenInGame(true);
 }
 
@@ -109,7 +109,7 @@ void ASkillBase::SetSkillBlockedTimer(float Delay)
 	SkillCoolTimeHandle.Invalidate();
 
 	//Set new timer that is going to call the function "ResetSkillBlockdTimer"
-	SkillState.bSkillBlocked = true;
+	SkillState.bIsBlocked = true;
 	GetWorldTimerManager().SetTimer(SkillCoolTimeHandle, this, &ASkillBase::ResetSkillBlockedTimer
 									, Delay, false);
 }
@@ -117,5 +117,5 @@ void ASkillBase::SetSkillBlockedTimer(float Delay)
 void ASkillBase::ResetSkillBlockedTimer()
 {
 	if (!IsValid(SkillManagerComponentRef->GetOwner())) return;
-	SkillState.bSkillBlocked = false;
+	SkillState.bIsBlocked = false;
 }

@@ -33,11 +33,13 @@ void USkillManagerComponent::InitSkillManager()
 
 bool USkillManagerComponent::TrySkill(int32 SkillID)
 {
-	if (!SkillMap.Contains(SkillID)) return false;
-	ASkillBase* skillBase = SkillMap.Find(SkillID)->Get();
-	if (skillBase->SkillState.SkillLevelStruct.SkillLevel == 0) return false;
-	if (!skillBase->SkillState.bSkillBlocked) return false;
-
+	ASkillBase* skillBase = GetSkillBaseByID(SkillID);
+	if(skillBase == nullptr) return false;
+	if (!skillBase->SkillState.bIsBlocked) return false;
+	if (skillBase->SkillState.SkillLevelStruct.bIsLevelValid)
+	{
+		if(skillBase->SkillState.SkillLevelStruct.SkillLevel == 0) return false;
+	}
 	OwnerCharacterRef->SetActionState(ECharacterActionType::E_Skill);
 	skillBase->ActivateSkill();
 
@@ -60,6 +62,20 @@ bool USkillManagerComponent::RemoveSkill(int32 SkillID)
 	if (!SkillMap.Contains(SkillID)) return true;
 	SkillMap.Remove(SkillID);
 	return true;
+}
+
+TArray<int32> USkillManagerComponent::GetOwnSkillID()
+{
+	if(SkillMap.IsEmpty()) return TArray<int32>();
+	TArray<int32> keys;
+	SkillMap.GetKeys(keys);
+	return keys;
+}
+
+ASkillBase* USkillManagerComponent::GetSkillBaseByID(int32 SkillID)
+{
+	if (!SkillMap.Contains(SkillID)) return nullptr;
+	return SkillMap.Find(SkillID)->Get();
 }
 
 

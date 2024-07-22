@@ -118,13 +118,11 @@ struct FSkillStateStruct : public FTableRowBase
 public:
 	GENERATED_USTRUCT_BODY()
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		bool bSkillBlocked = true;
+		bool bIsBlocked = true;
 
+	//스킬을 월드에서 보일지 여부
 	UPROPERTY(BlueprintReadWrite)
-		uint8 SkillLevel = 0;
-
-	UPROPERTY(BlueprintReadWrite)
-		bool bHidenInGame = true;
+		bool bIsHidden = true;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FSkillLevelStruct SkillLevelStruct;
@@ -152,7 +150,7 @@ public:
 		TSubclassOf<class ASkillBase> SkillBaseClassRef;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		bool bSkillLifeSpanWithCauser = true;
+		bool bIsLifeSpanWithCauser = true;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FSkillAssetStruct SkillAssetStruct;
@@ -177,7 +175,7 @@ public:
 		ESkillType SkillType = ESkillType::E_None;
 
 	UPROPERTY(BlueprintReadWrite)
-		bool bHidenInGame = true;
+		bool bHiddenInGame = true;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		bool bSkillLifeSpanWithCauser = true;

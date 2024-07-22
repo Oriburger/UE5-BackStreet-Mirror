@@ -34,6 +34,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool RemoveSkill(int32 SkillID);
 
+	UFUNCTION(BlueprintCallable)
+		TArray<int32> GetOwnSkillID();
+
+	UFUNCTION(BlueprintCallable)
+		ASkillBase* GetSkillBaseByID(int32 SkillID);
+
 //======= DataTable ==========================
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gamplay|Data")
