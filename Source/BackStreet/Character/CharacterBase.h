@@ -74,9 +74,7 @@ public:
 		void DashAttack();
 
 	///Input에 Binding 되어 스킬공격을 시도 (AnimMontage를 호출)
-	virtual void TrySkill(ESkillType SkillType, int32 SkillID);
-
-	bool CheckCanTrySkill(int32 SkillID, FOwnerSkillInfoStruct* SkillInfo);
+	virtual bool TrySkill(int32 SkillID);
 
 	//AnimNotify에 Binding 되어 실제 공격을 수행
 	virtual void Attack();

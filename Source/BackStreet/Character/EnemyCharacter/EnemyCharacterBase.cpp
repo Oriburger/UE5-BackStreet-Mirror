@@ -151,20 +151,9 @@ void AEnemyCharacterBase::TryAttack()
 	Super::TryAttack();
 }
 
-void AEnemyCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
+bool AEnemyCharacterBase::TrySkill(int32 SkillID)
 {
-	check(WeaponComponent != nullptr);
-
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Skill
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-
-	if (WeaponComponent->WeaponID == 0)
-	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("The Skill Is Not Available")), FColor::White);
-		return;
-	}
-
-	Super::TrySkill(SkillType, SkillID);
+	return Super::TrySkill(SkillID);
 }
 
 void AEnemyCharacterBase::Attack()

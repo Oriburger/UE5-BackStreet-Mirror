@@ -16,6 +16,19 @@ enum class ESkillType : uint8
 };
 
 USTRUCT(BlueprintType)
+struct FSkillWeaponStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool bIsRequiredWeapon = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<int32> AvailableWeaponIDList;
+};
+
+USTRUCT(BlueprintType)
 struct FSkillEffectInfoStruct : public FTableRowBase
 {
 public:
@@ -144,9 +157,6 @@ public:
 		FName SkillDescription;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		ESkillType SkillType = ESkillType::E_None;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		TSubclassOf<class ASkillBase> SkillBaseClassRef;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -154,6 +164,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FSkillAssetStruct SkillAssetStruct;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		FSkillWeaponStruct SkillWeaponStruct;
 };
 
 USTRUCT(BlueprintType)

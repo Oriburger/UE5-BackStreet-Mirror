@@ -12,7 +12,7 @@ class BACKSTREET_API ASkillBase : public AActor
 {
 	GENERATED_BODY()
 
-//------ Global, Component -------------------
+//======= Global, Component =======================
 public:
 	// Sets default values for this actor's properties
 	ASkillBase();
@@ -42,7 +42,7 @@ public:
 	UFUNCTION()
 		void DestroySkill();
 
-//--------- DataTable, Asset ----------------------
+//======= DataTable, Asset =======================
 protected:
 	UFUNCTION(BlueprintCallable)
 		void PlaySingleSound(FName SoundName);
@@ -64,7 +64,7 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gamplay|Data")
 		UDataTable* SkillStatTable;
 
-//-------- ETC. (Ref)-------------------------------
+//======= ETC. (Ref) =======================
 protected:
 	//GameMode Soft Ref
 	TWeakObjectPtr<class ABackStreetGameModeBase> GameModeRef;
@@ -75,7 +75,7 @@ protected:
 	//AssetManager Soft Ref
 	TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
 
-//-------- Timer --------------------------------------------
+//======= Timer =======================
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetSkillRemainingCoolTime();

@@ -532,19 +532,16 @@ void AMainCharacterBase::TryDownwardAttack()
 	}
 }
 
-void AMainCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
+bool AMainCharacterBase::TrySkill(int32 SkillID)
 {	
 	if (GetIsActionActive(ECharacterActionType::E_Attack))
 	{
 		ResetActionState();
 	}
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return false;
 
-	Super::TrySkill(SkillType, SkillID);
-
-	//Try Skill and adjust rotation to cursor position
-	//RotateToCursor();
+	return Super::TrySkill(SkillID);
 }
 
 void AMainCharacterBase::Attack()

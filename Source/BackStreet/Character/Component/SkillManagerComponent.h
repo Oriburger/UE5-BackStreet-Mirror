@@ -40,6 +40,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		ASkillBase* GetSkillBaseByID(int32 SkillID);
 
+	UFUNCTION(BlueprintCallable)
+		bool IsSkillValid(int32 SkillID);
+
 //======= DataTable ==========================
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gamplay|Data")

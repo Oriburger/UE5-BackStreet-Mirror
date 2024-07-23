@@ -69,8 +69,10 @@ void ASkillBase::DeactivateSkill()
 
 void ASkillBase::DestroySkill()
 {
-	checkf(IsValid(SkillManagerComponentRef.Get()), TEXT("Failed to get SkillBase class"));
-	SkillManagerComponentRef.Get()->RemoveSkill(SkillStat.SkillID);
+	if(IsValid(SkillManagerComponentRef.Get()))
+	{
+		SkillManagerComponentRef.Get()->RemoveSkill(SkillStat.SkillID);
+	}
 	Destroy();
 }
 

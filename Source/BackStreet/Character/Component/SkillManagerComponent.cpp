@@ -78,6 +78,12 @@ ASkillBase* USkillManagerComponent::GetSkillBaseByID(int32 SkillID)
 	return SkillMap.Find(SkillID)->Get();
 }
 
+bool USkillManagerComponent::IsSkillValid(int32 SkillID)
+{
+	if (!SkillMap.Contains(SkillID)) return false;
+	return true;
+}
+
 
 
 
