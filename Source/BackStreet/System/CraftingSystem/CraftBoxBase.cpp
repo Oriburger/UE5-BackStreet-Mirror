@@ -36,7 +36,7 @@ ACraftBoxBase::ACraftBoxBase()
 void ACraftBoxBase::BeginPlay()
 {
     Super::BeginPlay();
-    OnPlayerOpenBegin.AddDynamic(this, &ACraftBoxBase::EnterUI);
+    //OnPlayerOpenBegin.AddDynamic(this, &ACraftBoxBase::EnterUI);
 }
 
 void ACraftBoxBase::VisibleGuideTextRender(AActor* Causer)

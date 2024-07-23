@@ -7,6 +7,7 @@
 #include "../../System/SaveSystem/BackStreetGameInstance.h"
 #include "../../System/AbilitySystem/AbilityManagerBase.h"
 #include "../../System/CraftingSystem/CraftBoxBase.h"
+#include "../../System/CraftingSystem/CraftingManagerComponent.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
 #include "../../Item/ItemBase.h"
 #include "../../Item/ItemBoxBase.h"
@@ -413,7 +414,8 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 	}
 	else if (TargetActor->ActorHasTag("CraftingBox"))
 	{
-		Cast<ACraftBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
+
+		//Cast<ACraftBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
 	}
 	else if (TargetActor->ActorHasTag("Gate"))
 	{

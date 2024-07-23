@@ -181,9 +181,6 @@ public:
 		FRotator SlashRotation = FRotator::ZeroRotator;
 
 //-----Weapon Skill------
-	//WeaponSkill Info
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
-		TMap<ESkillType, FOwnerSkillInfoStruct> SkillInfoMap;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FRangedWeaponStateStruct RangedWeaponState;
@@ -261,10 +258,6 @@ public:
 	//메시의 초기 크기 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		FVector InitialScale = FVector::ZeroVector;
-
-	//WeaponSkill Info
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		FOwnerSkillInfoStruct WeaponSkillInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UParticleSystem> DestroyEffectParticle;

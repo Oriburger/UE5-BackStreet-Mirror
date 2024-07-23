@@ -60,9 +60,6 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class UCraftingManagerBase* GetGlobalCraftingManagerBaseRef() { return CraftingManagerBase; }
-
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void UpdateMiniMapUI();
 
@@ -134,9 +131,6 @@ protected:
 
 	UPROPERTY()
 		class UAssetManagerBase* AssetManagerBase; 
-
-	UPROPERTY()
-		class UCraftingManagerBase* CraftingManagerBase;
 
 	UPROPERTY()
 		class ANewChapterManagerBase* ChapterManagerRef;

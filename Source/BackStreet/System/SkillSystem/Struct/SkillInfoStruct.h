@@ -200,3 +200,60 @@ public:
 	UPROPERTY()
 	bool bIsStateValid = false;
 };
+
+
+// 레거시 코드==================================
+USTRUCT(BlueprintType)
+struct FSkillLevelStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	bool bIsLevelValid = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	uint8 SkillLevel = 0;
+
+	//Cool Time List By Skill Level
+	UPROPERTY(BlueprintReadWrite)
+	float CoolTime = 0.0f;
+
+	//Skill Variable 
+	UPROPERTY(BlueprintReadWrite)
+	TMap<FName, float> SkillVariableMap;
+};
+
+USTRUCT(BlueprintType)
+struct FSkillInfoStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	int32 SkillID = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	FName SkillName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	FName SkillDescription;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	ESkillType SkillType = ESkillType::E_None;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bHidenInGame = true;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	bool bSkillLifeSpanWithCauser = true;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	FSkillLevelStruct SkillLevelStruct;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	FSkillAssetStruct SkillAssetStruct;
+
+	//Skill causer character reference
+	UPROPERTY(BlueprintReadWrite)
+	TWeakObjectPtr<class ACharacterBase> Causer;
+};

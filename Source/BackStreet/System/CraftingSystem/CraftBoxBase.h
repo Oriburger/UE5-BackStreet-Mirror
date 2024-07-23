@@ -6,16 +6,16 @@
 #include "GameFramework/Actor.h"
 #include "CraftBoxBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDeleOpenCraftingBox, AActor*, Owner);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDeleOpenCraftingBox, AActor*, Owner);
 
 UCLASS()
 class BACKSTREET_API ACraftBoxBase : public AActor
 {
 	GENERATED_BODY()
 // ----- Delegate ---------------------------
-public:
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDeleOpenCraftingBox OnPlayerOpenBegin;
+//public:
+//	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+//		FDeleOpenCraftingBox OnPlayerOpenBegin;
 
 // ----- Global, Component ------------------
 public:	

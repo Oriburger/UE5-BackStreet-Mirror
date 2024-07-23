@@ -31,9 +31,6 @@ void ABackStreetGameModeBase::InitialzeGame()
 	//------ Initialize Chapter Manager ------------
 	ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
 
-	//----- Crafting Manager √ ±‚»≠ -------
-	CraftingManagerBase = NewObject<UCraftingManagerBase>(this, UCraftingManagerBase::StaticClass(), FName("CraftingManagerBase"));
-	CraftingManagerBase->InitCraftingManager(this);
 }
 
 void ABackStreetGameModeBase::StartGame(int32 ChapterID)
