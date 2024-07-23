@@ -34,8 +34,16 @@
 	{
 		"Name": "5003",
 		"SkillID": 5003,
-		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/MainCharacter/BPS_WeaknessAnalysis_AttackDown.BPS_WeaknessAnalysis_AttackDown_C'",
+		"SkillBaseClassRef": "None",
 		"SkillType": "E_Weapon1",
+		"bSkillBlocked": false,
+		"SkillLevel": 0
+	},
+	{
+		"Name": "5004",
+		"SkillID": 5004,
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/MainCharacter/BPS_MultipleSlash.BPS_MultipleSlash_C'",
+		"SkillType": "E_Weapon0",
 		"bSkillBlocked": false,
 		"SkillLevel": 0
 	}
