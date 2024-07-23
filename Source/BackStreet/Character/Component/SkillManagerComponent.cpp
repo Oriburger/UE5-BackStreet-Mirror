@@ -33,12 +33,12 @@ void USkillManagerComponent::InitSkillManager()
 
 bool USkillManagerComponent::TrySkill(int32 SkillID)
 {
-	ASkillBase* skillBase = GetSkillBaseByID(SkillID);
+	ASkillBase* skillBase = GetSkillBase(SkillID);
 	if(skillBase == nullptr) return false;
 	if (!skillBase->SkillState.bIsBlocked) return false;
-	if (skillBase->SkillState.SkillLevelStruct.bIsLevelValid)
+	if (skillBase->SkillStat.SkillLevelStatStruct.bIsLevelValid)
 	{
-		if(skillBase->SkillState.SkillLevelStruct.SkillLevel == 0) return false;
+		if(skillBase->SkillState.SkillLevelStateStruct.SkillLevel == 0) return false;
 	}
 	OwnerCharacterRef->SetActionState(ECharacterActionType::E_Skill);
 	skillBase->ActivateSkill();
@@ -53,6 +53,20 @@ bool USkillManagerComponent::AddSkill(int32 SkillID)
 	FSkillStatStruct skillStat = *SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
 	TWeakObjectPtr<ASkillBase> skillBase = Cast<ASkillBase>(GetWorld()->SpawnActor(skillStat.SkillBaseClassRef));
 	SkillMap.Add(SkillID, skillBase);
+	if (skillBase->SkillStat.SkillWeaponStruct.SkillType != ESkillType::E_None)
+	{
+		ESkillType skillType = skillBase->SkillStat.SkillWeaponStruct.SkillType;
+		if (SkillInventoryMap.Contains(skillType))
+		{
+			SkillInventoryMap.Find(skillType)->SkillIDList.AddUnique(SkillID);
+		}
+		else
+		{
+			FSkillInventoryContainer inventory;
+			inventory.SkillIDList.AddUnique(SkillID);
+			SkillInventoryMap.Add(skillType, FSkillInventoryContainer{ inventory });
+		}
+	}
 	skillBase->InitSkill(skillStat, this);
 	return true;
 }
@@ -60,6 +74,15 @@ bool USkillManagerComponent::AddSkill(int32 SkillID)
 bool USkillManagerComponent::RemoveSkill(int32 SkillID)
 {
 	if (!SkillMap.Contains(SkillID)) return true;
+	ASkillBase* skillBase = SkillMap.Find(SkillID)->Get();
+	if (skillBase->SkillStat.SkillWeaponStruct.SkillType != ESkillType::E_None)
+	{
+		ESkillType skillType = skillBase->SkillStat.SkillWeaponStruct.SkillType;
+		if (SkillInventoryMap.Contains(skillType))
+		{
+			SkillInventoryMap.Find(skillType)->SkillIDList.Remove(SkillID);
+		}
+	}
 	SkillMap.Remove(SkillID);
 	return true;
 }
@@ -72,7 +95,7 @@ TArray<int32> USkillManagerComponent::GetOwnSkillID()
 	return keys;
 }
 
-ASkillBase* USkillManagerComponent::GetSkillBaseByID(int32 SkillID)
+ASkillBase* USkillManagerComponent::GetSkillBase(int32 SkillID)
 {
 	if (!SkillMap.Contains(SkillID)) return nullptr;
 	return SkillMap.Find(SkillID)->Get();
@@ -82,6 +105,33 @@ bool USkillManagerComponent::IsSkillValid(int32 SkillID)
 {
 	if (!SkillMap.Contains(SkillID)) return false;
 	return true;
+}
+
+FSkillStatStruct USkillManagerComponent::GetSkillStat(int32 SkillID)
+{
+	ASkillBase* skillBase = GetSkillBase(SkillID);
+	checkf(IsValid(skillBase), TEXT("Failed Find Skill"));
+	return skillBase->SkillStat;
+}
+
+FSkillStateStruct USkillManagerComponent::GetSkillState(int32 SkillID)
+{
+	ASkillBase* skillBase = GetSkillBase(SkillID);
+	checkf(IsValid(skillBase), TEXT("Failed Find Skill"));
+	return skillBase->SkillState;
+}
+
+TArray<uint8> USkillManagerComponent::GetRequiredMatAmount(int32 SkillID, uint8 NewSkillLevel)
+{
+	ASkillBase* skillBase = GetSkillBase(SkillID);
+	checkf(IsValid(skillBase), TEXT("Failed Find Skill"));
+	return skillBase->SkillStat.SkillLevelStatStruct.RequiredMaterialsByLevel[NewSkillLevel].RequiredMaterial;
+}
+
+TArray<FSkillInventoryContainer> USkillManagerComponent::GetObtainableSkillList(int32 WeaponID)
+{
+
+	return TArray<FSkillInventoryContainer>();
 }
 
 

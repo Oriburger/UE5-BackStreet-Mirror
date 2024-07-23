@@ -37,6 +37,7 @@ void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent
 	SkillStat = *SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
 
 	SkillState.bIsHidden = true;
+	SkillState.bIsStateValid = true;
 
 	//If SkillActor's life span is sync with causer, then destroy with causer 
 	if (SkillStat.bIsLifeSpanWithCauser)
@@ -51,7 +52,7 @@ void ASkillBase::ActivateSkill_Implementation()
 	SetActorHiddenInGame(false);
 	
 	//Set cooltime timer
-	FSkillLevelStruct skillLevelInfo = SkillState.SkillLevelStruct;
+	FSkillLevelStatStruct skillLevelInfo = SkillStat.SkillLevelStatStruct;
 	if (skillLevelInfo.bIsLevelValid && skillLevelInfo.CoolTime > 0.0f)
 	{
 		SetSkillBlockedTimer(skillLevelInfo.CoolTime);

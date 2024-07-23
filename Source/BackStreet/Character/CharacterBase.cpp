@@ -557,6 +557,7 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 {
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return false;
 
+	//스킬 매니저 있는지 확인
 	if (!IsValid(SkillManagerComponent))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to get SkillmanagerBase"));
@@ -570,18 +571,18 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Skill is not Valid")), FColor::White);
 		return false;
 	}
-	//무기가 스킬을 사용하는 건지 여부 확인
-	if (SkillManagerComponent->GetSkillBaseByID(SkillID)->SkillStat.SkillWeaponStruct.bIsRequiredWeapon)
+	//스킬이 연관된 무기와 현재 장비중인 무기가 일치하는지 확인
+	ASkillBase* skillBase = SkillManagerComponent->GetSkillBase(SkillID);
+	if (skillBase->SkillStat.SkillWeaponStruct.bIsWeaponRequired)
 	{
-		if (!SkillManagerComponent->GetSkillBaseByID(SkillID)->
-			SkillStat.SkillWeaponStruct.AvailableWeaponIDList.Contains(WeaponComponent->WeaponID))
+		if (!skillBase->SkillStat.SkillWeaponStruct.AvailableWeaponIDList.Contains(WeaponComponent->WeaponID))
 		{
 			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Does't have any weapon")), FColor::White);
 			return false;
 		}
 	}
 
-	if(SkillManagerComponent->GetSkillBaseByID(SkillID)->SkillState.bIsBlocked) return false;
+	if(skillBase->SkillState.bIsBlocked) return false;
 	else
 	{
 		CharacterState.bCanAttack = false;

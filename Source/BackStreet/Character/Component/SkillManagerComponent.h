@@ -34,22 +34,40 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool RemoveSkill(int32 SkillID);
 
+//======== Getter ============================
+public:
 	UFUNCTION(BlueprintCallable)
 		TArray<int32> GetOwnSkillID();
 
 	UFUNCTION(BlueprintCallable)
-		ASkillBase* GetSkillBaseByID(int32 SkillID);
+		ASkillBase* GetSkillBase(int32 SkillID);
 
 	UFUNCTION(BlueprintCallable)
 		bool IsSkillValid(int32 SkillID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FSkillStatStruct  GetSkillStat(int32 SkillID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FSkillStateStruct  GetSkillState(int32 SkillID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<uint8> GetRequiredMatAmount(int32 SkillID, uint8 NewSkillLevel);
+
+	UFUNCTION()
+		TArray<FSkillInventoryContainer> GetObtainableSkillList(int32 WeaponID);
 
 //======= DataTable ==========================
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gamplay|Data")
 		UDataTable* SkillStatTable;
 //====== Property ===========================
-public:
+private:
+	//가진 SkillBase에 대한 정보를 모두 담은 SkillMap
 	TMap<int32, TWeakObjectPtr<ASkillBase>> SkillMap;
+
+	//스킬의 타입에 따라 분류된 SkillID정보를 담은 인벤토리 맵
+	TMap<ESkillType, FSkillInventoryContainer > SkillInventoryMap;
 
 private:
 	//GameMode Soft Ref
