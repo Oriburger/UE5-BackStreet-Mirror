@@ -70,14 +70,6 @@ void ASkillBase::DestroySkill()
 	Destroy();
 }
 
-void ASkillBase::SetCharacterInvincibility(ACharacterBase* TargetCharacter, bool NewState)
-{
-	if (!IsValid(TargetCharacter)) return;
-	FCharacterStatStruct newStat = TargetCharacter->GetCharacterStat();
-	newStat.bIsInvincibility = NewState;
-	TargetCharacter->UpdateCharacterStat(newStat);
-}
-
 void ASkillBase::PlaySingleSound(FName SoundName)
 {
 	if (AssetManagerBaseRef.IsValid())

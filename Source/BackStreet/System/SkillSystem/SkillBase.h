@@ -42,10 +42,6 @@ public:
 	UFUNCTION()
 		void DestroySkill();
 
-protected:
-	UFUNCTION(BlueprintCallable)
-		void SetCharacterInvincibility(class ACharacterBase* TargetCharacter, bool NewState);
-
 //--------- DataTable, Asset ----------------------
 protected:
 	UFUNCTION(BlueprintCallable)
