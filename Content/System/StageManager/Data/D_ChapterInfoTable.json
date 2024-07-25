@@ -3,6 +3,11 @@
 		"Name": "1",
 		"ChapterID": 1,
 		"GridSize": 5,
+		"CurrentStageCoordinate":
+		{
+			"X": 0,
+			"Y": 0
+		},
 		"BlockedPosList": [
 			{
 				"X": 0,
@@ -673,17 +678,21 @@
 				]
 			}
 		],
+		"StageInfoList": [],
+		"StageIconTransitionValueList": [],
 		"EntryStageLevelList": [
 			"/Game/Map/Chapter01/Chapter01_Entry.Chapter01_Entry"
 		],
 		"CombatStageLevelList": [
 			"/Game/Map/Chapter01/Chapter01_Combat01.Chapter01_Combat01",
-			"/Game/Map/Chapter01/Chapter01_Combat03.Chapter01_Combat03"
-		],
-		"TimeAttackStageLevelList": [
 			"/Game/Map/Chapter01/Chapter01_Combat02.Chapter01_Combat02",
-			"/Game/Map/Chapter01/Chapter01_Combat04.Chapter01_Combat04"
+			"/Game/Map/Chapter01/Chapter01_Combat03.Chapter01_Combat03",
+			"/Game/Map/Chapter01/Chapter01_Combat04.Chapter01_Combat04",
+			"/Game/Map/Chapter01/Chapter01_Combat05.Chapter01_Combat05",
+			"/Game/Map/Chapter01/Chapter01_Combat06.Chapter01_Combat06",
+			"/Game/Map/Chapter01/Chapter01_Combat07.Chapter01_Combat07"
 		],
+		"TimeAttackStageLevelList": [],
 		"CraftStageLevelList": [
 			"/Game/Map/Chapter01/Chapter01_Craft.Chapter01_Craft"
 		],
