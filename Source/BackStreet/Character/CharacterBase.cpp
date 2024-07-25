@@ -571,8 +571,8 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Skill is not Valid")), FColor::White);
 		return false;
 	}
-	//스킬이 연관된 무기와 현재 장비중인 무기가 일치하는지 확인
-	ASkillBase* skillBase = SkillManagerComponent->GetSkillBase(SkillID);
+	//스킬을 지닐 수 있는 무기와 현재 장비중인 무기가 일치하는지 확인
+	ASkillBase* skillBase = SkillManagerComponent->GetOwnSkillBase(SkillID);
 	if (skillBase->SkillStat.SkillWeaponStruct.bIsWeaponRequired)
 	{
 		if (!skillBase->SkillStat.SkillWeaponStruct.AvailableWeaponIDList.Contains(WeaponComponent->WeaponID))

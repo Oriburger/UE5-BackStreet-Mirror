@@ -34,28 +34,31 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool RemoveSkill(int32 SkillID);
 
+	UFUNCTION(BlueprintCallable)
+		void UpdateObtainableSkillMap();
+
 //======== Getter ============================
 public:
 	UFUNCTION(BlueprintCallable)
-		TArray<int32> GetOwnSkillID();
+		FSkillStatStruct GetSkillInfo(int32 SkillID);
 
 	UFUNCTION(BlueprintCallable)
-		ASkillBase* GetSkillBase(int32 SkillID);
+		ASkillBase* GetOwnSkillBase(int32 SkillID);
 
 	UFUNCTION(BlueprintCallable)
 		bool IsSkillValid(int32 SkillID);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillStatStruct  GetSkillStat(int32 SkillID);
+		FSkillStatStruct  GetOwnSkillStat(int32 SkillID);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillStateStruct  GetSkillState(int32 SkillID);
+		FSkillStateStruct  GetOwnSkillState(int32 SkillID);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<uint8> GetRequiredMatAmount(int32 SkillID, uint8 NewSkillLevel);
 
-	UFUNCTION()
-		TArray<FSkillInventoryContainer> GetObtainableSkillList(int32 WeaponID);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TMap<ESkillType, FSkillListContainer> GetObtainableSkillMap() { return ObtainableSkillMap; }
 
 //======= DataTable ==========================
 protected:
@@ -63,11 +66,20 @@ protected:
 		UDataTable* SkillStatTable;
 //====== Property ===========================
 private:
-	//가진 SkillBase에 대한 정보를 모두 담은 SkillMap
+	//현재 가지고 있는 스킬을 SkillID에 따라 분류한 Map (SkillBase접근용)
 	TMap<int32, TWeakObjectPtr<ASkillBase>> SkillMap;
 
-	//스킬의 타입에 따라 분류된 SkillID정보를 담은 인벤토리 맵
-	TMap<ESkillType, FSkillInventoryContainer > SkillInventoryMap;
+	//현재 가지고 있는 스킬을 SkillType에 따라 분류한 Map (조합스테이지용)
+	TMap<ESkillType, FSkillListContainer > SkillInventoryMap;
+
+	//플레어어가 획득할 수 있는 스킬을 SkillType에 따라 분류한 Map(조합 스테이지용)
+	TMap<ESkillType, FSkillListContainer>ObtainableSkillMap;
+public:
+	//플레어어가 획득하기 위하여 찜해둔 스킬 리스트(조합 스테이지용)
+	TArray<int32> KeepSkillList;
+
+	//스킬제작UI에서 이미 제시되었던 스킬 리스트(조합 스테이지용)
+	TArray<int32> DisplayedSkillList;
 
 private:
 	//GameMode Soft Ref

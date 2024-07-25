@@ -12,7 +12,7 @@
 UCraftingManagerBase::UCraftingManagerBase()
 {
 }
-//
+
 //void UCraftingManagerBase::InitCraftingManager(ABackStreetGameModeBase* NewGamemodeRef)
 //{
 //	if (!IsValid(NewGamemodeRef)) return;
@@ -37,7 +37,7 @@ UCraftingManagerBase::UCraftingManagerBase()
 //		return;
 //	}
 //}
-//
+
 //void UCraftingManagerBase::AddSkill(int32 NewSkillID)
 //{
 //	/*

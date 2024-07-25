@@ -23,7 +23,7 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FSkillInventoryContainer : public FTableRowBase
+struct FSkillListContainer : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
@@ -146,6 +146,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<int32> AvailableWeaponIDList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 RandomWeight = 0;
 };
 
 USTRUCT(BlueprintType)

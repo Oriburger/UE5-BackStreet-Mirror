@@ -145,6 +145,10 @@ public:
 //----- 원거리 Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FRangedWeaponStatStruct RangedWeaponStat;
+
+//-----	스킬 Stat		--------
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<ESkillType> SkillTypeList = { ESkillType::E_None, ESkillType::E_None, ESkillType::E_None };
 };
 
 USTRUCT(BlueprintType)
