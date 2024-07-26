@@ -127,5 +127,18 @@
 				"VariableByLevel": [ 0, 16, 14, 12 ]
 			}
 		}
+	},
+	{
+		"Name": "5004",
+		"SkillID": 5004,
+		"WeaponID": 11120,
+		"MaxLevel": 1,
+		"RequiredMaterialMap":
+		{
+		},
+		"CoolTimeByLevel": [],
+		"SkillVariableMap":
+		{
+		}
 	}
 ]

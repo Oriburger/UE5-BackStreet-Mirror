@@ -82,6 +82,7 @@ TArray<AActor*> UMeleeCombatManager::CheckMeleeAttackTargetWithSphereTrace()
 
 void UMeleeCombatManager::MeleeAttack()
 {
+	if (!WeaponComponentRef.IsValid()) return;
 	FHitResult hitResult;
 	bool bIsFinalCombo = WeaponComponentRef.Get()->GetIsFinalCombo();
 	bool bIsMeleeTraceSucceed = false;
