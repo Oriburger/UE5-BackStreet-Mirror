@@ -24,6 +24,30 @@ enum class EWeaponType : uint8
 	E_Shoot				UMETA(DisplayName = "Shoot")
 
 };
+USTRUCT(BlueprintType)
+struct FUpgradableStatInfoContainer : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	//업그레이드 스탯
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TArray<uint8> RequiredMaterial;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float StatAdder = 0;
+};
+
+USTRUCT(BlueprintType)
+struct FUpgradableStatInfoByLevelContainer : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	//업그레이드 스탯
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TArray<FUpgradableStatInfoContainer> RequiredMaterialByLevel;
+};
 
 USTRUCT(BlueprintType)
 struct FDebuffInfoStruct
@@ -140,7 +164,7 @@ public:
 
 //----- CraftingStat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bIsDefaultWeapon = false;
+		TArray<FUpgradableStatInfoByLevelContainer> UpgradableStatInfoList;
 
 //----- 원거리 Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -190,7 +214,8 @@ public:
 		FRangedWeaponStateStruct RangedWeaponState;
 
 //-----Weapon Upgraded Stat
-	//Upgraded Stat(in combat area)List 0:Attack, 1:AttackSpeed, 2:finalImpact
+	//Upgraded State(in combat area)List 
+	//0:Attack, 1:AttackSpeed, 2:finalImpact
 	UPROPERTY(BlueprintReadWrite)
 		TArray<uint8> UpgradedStatList = { 0,0,0 };
 };

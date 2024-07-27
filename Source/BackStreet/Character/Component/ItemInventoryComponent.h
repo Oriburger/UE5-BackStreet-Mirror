@@ -5,6 +5,7 @@
 #include "../../Global/BackStreet.h"
 #include "Components/ActorComponent.h"
 #include "ItemInventoryComponent.generated.h"
+#define MAX_CRAFTING_ITEM_IDX 3
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateUpdateItem);
 

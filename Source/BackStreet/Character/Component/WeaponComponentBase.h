@@ -5,7 +5,7 @@
 #include "../../Global/BackStreet.h"
 #include "Components/StaticMeshComponent.h"
 #include "WeaponComponentBase.generated.h"
-
+#define MAX_WEAPON_UPGRADABLE_STAT_IDX 3
 /**
  * 
  */
@@ -127,6 +127,10 @@ public:
 	UFUNCTION()
 		float CalculateTotalDamage(FCharacterStateStruct TargetState);
 
+// ======		Upgrade		================
+public:	
+	UFUNCTION(BlueprintCallable)
+	bool UpgradeStat(TArray<uint8> NewLevelList);
 //-------- Combo ------------------------------------
 public:
 	//increase combo count

@@ -191,17 +191,20 @@ struct FSkillStateStruct : public FTableRowBase
 public:
 	GENERATED_USTRUCT_BODY()
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	bool bIsBlocked = true;
+		bool bIsBlocked = true;
 
 	//스킬을 월드에서 보일지 여부
 	UPROPERTY(BlueprintReadWrite)
-	bool bIsHidden = true;
+		bool bIsHidden = true;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	FSkillLevelStateStruct SkillLevelStateStruct;
+		FSkillLevelStateStruct SkillLevelStateStruct;
 
 	UPROPERTY()
-	bool bIsStateValid = false;
+		bool bIsStateValid = false;
+
+	UPROPERTY()
+		bool bIsEquiped = false;
 };
 
 
@@ -212,18 +215,18 @@ struct FSkillLevelStruct : public FTableRowBase
 public:
 	GENERATED_USTRUCT_BODY()
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	bool bIsLevelValid = false;
+		bool bIsLevelValid = false;
 
 	UPROPERTY(BlueprintReadWrite)
-	uint8 SkillLevel = 0;
+		uint8 SkillLevel = 0;
 
 	//Cool Time List By Skill Level
 	UPROPERTY(BlueprintReadWrite)
-	float CoolTime = 0.0f;
+		float CoolTime = 0.0f;
 
 	//Skill Variable 
 	UPROPERTY(BlueprintReadWrite)
-	TMap<FName, float> SkillVariableMap;
+		TMap<FName, float> SkillVariableMap;
 };
 
 USTRUCT(BlueprintType)
@@ -233,30 +236,30 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	int32 SkillID = 0;
+		int32 SkillID = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	FName SkillName;
+		FName SkillName;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	FName SkillDescription;
+		FName SkillDescription;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	ESkillType SkillType = ESkillType::E_None;
+		ESkillType SkillType = ESkillType::E_None;
 
 	UPROPERTY(BlueprintReadWrite)
-	bool bHidenInGame = true;
+		bool bHidenInGame = true;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	bool bSkillLifeSpanWithCauser = true;
+		bool bSkillLifeSpanWithCauser = true;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	FSkillLevelStruct SkillLevelStruct;
+		FSkillLevelStruct SkillLevelStruct;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	FSkillAssetStruct SkillAssetStruct;
+		FSkillAssetStruct SkillAssetStruct;
 
 	//Skill causer character reference
 	UPROPERTY(BlueprintReadWrite)
-	TWeakObjectPtr<class ACharacterBase> Causer;
+		TWeakObjectPtr<class ACharacterBase> Causer;
 };

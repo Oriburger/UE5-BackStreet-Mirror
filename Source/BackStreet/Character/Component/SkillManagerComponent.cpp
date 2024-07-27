@@ -5,6 +5,7 @@
 #include "../CharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SkillSystem/SkillBase.h"
+#include "../../Character/MainCharacter/MainCharacterBase.h"	
 #include "../../Character/Component/WeaponComponentBase.h"
 
 // Sets default values for this component's properties
@@ -30,6 +31,16 @@ void USkillManagerComponent::InitSkillManager()
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	SkillStatTable = GameModeRef.Get()->SkillStatTable;
 	checkf(IsValid(SkillStatTable), TEXT("Failed to get SkillStatDataTable"));
+	Cast<AMainCharacterBase>(OwnerCharacterRef)->OnWeaponUpdated.AddDynamic(this, &USkillManagerComponent::InitEquipSkillMap);
+}
+
+void USkillManagerComponent::InitEquipSkillMap()
+{
+	for (ESkillType skillType : OwnerCharacterRef->WeaponComponent->GetWeaponStat().SkillTypeList)
+	{
+		EquipedSkillMap.Add(skillType, 0);
+	}
+	return;
 }
 
 bool USkillManagerComponent::TrySkill(int32 SkillID)
@@ -87,6 +98,21 @@ bool USkillManagerComponent::RemoveSkill(int32 SkillID)
 	}
 	SkillMap.Remove(SkillID);
 	UpdateObtainableSkillMap();
+	return true;
+}
+
+bool USkillManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
+{
+	if (!SkillMap.Contains(SkillID)) return false;
+	ASkillBase*skillBase = SkillMap.Find(SkillID)->Get();
+	skillBase->SkillState.SkillLevelStateStruct.SkillLevel = NewLevel;
+	skillBase->SkillState.SkillLevelStateStruct.SkillVariableMap = skillBase->SkillStat.SkillLevelStatStruct.VariableByLevel[NewLevel].SkillVariableMap;
+	//쿨타임이 레벨에 따라 달라지는 경우 수정
+	if (skillBase->SkillState.SkillLevelStateStruct.SkillVariableMap.Contains("CoolTime"))
+	{
+		skillBase->SkillStat.SkillLevelStatStruct.CoolTime = 
+		*skillBase->SkillStat.SkillLevelStatStruct.VariableByLevel[NewLevel].SkillVariableMap.Find("CoolTime");
+	}
 	return true;
 }
 
@@ -148,6 +174,16 @@ void USkillManagerComponent::UpdateObtainableSkillMap()
 
 	ObtainableSkillMap = obtainableSkillMap;
 	return;
+}
+
+bool USkillManagerComponent::EquipSkill(int32 NewSkillID)
+{
+	if(!IsSkillValid(NewSkillID)) return false;
+	else
+	{
+		EquipedSkillMap.Add(GetSkillInfo(NewSkillID).SkillWeaponStruct.SkillType, NewSkillID);
+		return true;
+	}
 }
 
 FSkillStatStruct USkillManagerComponent::GetSkillInfo(int32 SkillID)

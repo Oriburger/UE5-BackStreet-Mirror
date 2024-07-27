@@ -238,6 +238,15 @@ float UWeaponComponentBase::CalculateTotalDamage(FCharacterStateStruct TargetSta
 		+ (!WeaponStat.bFixDamageApply ? 0.0f : WeaponStat.FixedDamageAmount);
 }
 
+bool UWeaponComponentBase::UpgradeStat(TArray<uint8> NewLevelList)
+{
+	for (uint8 idx = 0; idx < MAX_WEAPON_UPGRADABLE_STAT_IDX; idx++)
+	{
+		WeaponState.UpgradedStatList[idx] = NewLevelList[idx];
+	}
+	return true;
+}
+
 void UWeaponComponentBase::UpdateComboState()
 {
 	WeaponState.ComboCount = (WeaponState.ComboCount + 1);

@@ -23,6 +23,9 @@ private:
 	UFUNCTION()
 	void InitSkillManager();
 
+	UFUNCTION()
+	void InitEquipSkillMap();
+
 //======= User Basic Function =======================
 public:
 	UFUNCTION(BlueprintCallable)
@@ -35,7 +38,13 @@ public:
 		bool RemoveSkill(int32 SkillID);
 
 	UFUNCTION(BlueprintCallable)
+		bool UpgradeSkill(int32 SkillID, uint8 NewLevel);
+
+	UFUNCTION(BlueprintCallable)
 		void UpdateObtainableSkillMap();
+
+	UFUNCTION(BlueprintCallable)
+		bool EquipSkill(int32 NewSkillID);
 
 //======== Getter ============================
 public:
@@ -74,6 +83,9 @@ private:
 
 	//플레어어가 획득할 수 있는 스킬을 SkillType에 따라 분류한 Map(조합 스테이지용)
 	TMap<ESkillType, FSkillListContainer>ObtainableSkillMap;
+
+	//현재 플레이어가 장착한 스킬 Map
+	TMap<ESkillType, int32> EquipedSkillMap;
 public:
 	//플레어어가 획득하기 위하여 찜해둔 스킬 리스트(조합 스테이지용)
 	TArray<int32> KeepSkillList;
