@@ -42,6 +42,12 @@ public:
 	UFUNCTION()
 		void DestroySkill();
 
+	UFUNCTION(BlueprintCallable, Blueprintpure)
+		ACharacterBase* GetOwnerCharacterRef();
+
+	UFUNCTION(BlueprintCallable, Blueprintpure)
+		FSkillAssetStruct GetSkillAssetStruct() {return SkillStat.SkillAssetStruct;}
+
 //======= DataTable, Asset =======================
 protected:
 	UFUNCTION(BlueprintCallable)
@@ -74,6 +80,9 @@ protected:
 
 	//AssetManager Soft Ref
 	TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
+
+	//OwnerCharacter Soft Ref
+	TWeakObjectPtr<class ACharacterBase> OwnerCharacterBaseRef;
 
 //======= Timer =======================
 public:

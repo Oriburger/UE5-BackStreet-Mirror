@@ -38,12 +38,11 @@ void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent
 
 	SkillState.bIsHidden = true;
 	SkillState.bIsStateValid = true;
-
+	OwnerCharacterBaseRef = Cast<ACharacterBase>(SkillManagerComponentRef->GetOwner());
 	//If SkillActor's life span is sync with causer, then destroy with causer 
 	if (SkillStat.bIsLifeSpanWithCauser)
 	{
-		Cast<ACharacterBase>(SkillManagerComponentRef->GetOwner())
-			->OnCharacterDied.AddDynamic(this, &ASkillBase::DestroySkill);
+		OwnerCharacterBaseRef->OnCharacterDied.AddDynamic(this, &ASkillBase::DestroySkill);
 	}
 }
 
@@ -75,6 +74,12 @@ void ASkillBase::DestroySkill()
 		SkillManagerComponentRef.Get()->RemoveSkill(SkillStat.SkillID);
 	}
 	Destroy();
+}
+
+ACharacterBase* ASkillBase::GetOwnerCharacterRef()
+{
+	if(!IsValid(OwnerCharacterBaseRef.Get())) return nullptr;
+	return OwnerCharacterBaseRef.Get();
 }
 
 void ASkillBase::PlaySingleSound(FName SoundName)
