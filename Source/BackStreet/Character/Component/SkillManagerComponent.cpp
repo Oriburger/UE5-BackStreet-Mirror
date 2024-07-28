@@ -31,13 +31,14 @@ void USkillManagerComponent::InitSkillManager()
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	SkillStatTable = GameModeRef.Get()->SkillStatTable;
 	checkf(IsValid(SkillStatTable), TEXT("Failed to get SkillStatDataTable"));
-	Cast<AMainCharacterBase>(OwnerCharacterRef)->OnWeaponUpdated.AddDynamic(this, &USkillManagerComponent::InitEquipSkillMap);
+	Cast<AMainCharacterBase>(OwnerCharacterRef)->OnWeaponUpdated.AddDynamic(this, &USkillManagerComponent::InitSkillMap);
 }
 
-void USkillManagerComponent::InitEquipSkillMap()
+void USkillManagerComponent::InitSkillMap()
 {
 	for (ESkillType skillType : OwnerCharacterRef->WeaponComponent->GetWeaponStat().SkillTypeList)
 	{
+		SkillInventoryMap.Add(skillType, FSkillListContainer());
 		EquipedSkillMap.Add(skillType, 0);
 	}
 	return;
@@ -45,8 +46,8 @@ void USkillManagerComponent::InitEquipSkillMap()
 
 bool USkillManagerComponent::TrySkill(int32 SkillID)
 {
+	if (!IsSkillValid(SkillID)) return false;
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	if(skillBase == nullptr) return false;
 	if (!skillBase->SkillState.bIsBlocked) return false;
 	if (skillBase->SkillStat.SkillLevelStatStruct.bIsLevelValid)
 	{
@@ -60,23 +61,30 @@ bool USkillManagerComponent::TrySkill(int32 SkillID)
 
 bool USkillManagerComponent::AddSkill(int32 SkillID)
 {
-	if (SkillMap.Contains(SkillID)) return false;
+	if (IsSkillValid(SkillID)) return false;
 	FString rowName = FString::FromInt(SkillID);
 	FSkillStatStruct skillStat = *SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
-	TWeakObjectPtr<ASkillBase> skillBase = Cast<ASkillBase>(GetWorld()->SpawnActor(skillStat.SkillBaseClassRef));
-	SkillMap.Add(SkillID, skillBase);
-	if (skillBase->SkillStat.SkillWeaponStruct.SkillType != ESkillType::E_None)
+	ASkillBase* skillBase = Cast<ASkillBase>(GetWorld()->SpawnActor(skillStat.SkillBaseClassRef));
+	if (skillBase->SkillStat.SkillWeaponStruct.SkillType == ESkillType::E_None) return false;
+
+	ESkillType skillType = skillBase->SkillStat.SkillWeaponStruct.SkillType;
+
+	//SkillInventoryMap에 추가
+	SkillInventoryMap.Find(skillType)->SkillBaseList.AddUnique(skillBase);
+
+	//EquipedSkillMap에 장착되어 있는 스킬이 없다면 추가
+	if (EquipedSkillMap.Find(GetSkillInfo(SkillID).SkillWeaponStruct.SkillType) == 0)
 	{
-		ESkillType skillType = skillBase->SkillStat.SkillWeaponStruct.SkillType;
-		if (SkillInventoryMap.Contains(skillType))
+		EquipSkill(SkillID);
+	}
+
+	//KeepSkillList에 등록되어 있다면 삭제
+	for (int32 keepSkill : KeepSkillList)
+	{
+		if (SkillID == keepSkill)
 		{
-			SkillInventoryMap.Find(skillType)->SkillIDList.AddUnique(SkillID);
-		}
-		else
-		{
-			FSkillListContainer inventory;
-			inventory.SkillIDList.AddUnique(SkillID);
-			SkillInventoryMap.Add(skillType, FSkillListContainer{ inventory });
+			KeepSkillList.Remove(keepSkill);
+			break;
 		}
 	}
 	skillBase->InitSkill(skillStat, this);
@@ -86,25 +94,30 @@ bool USkillManagerComponent::AddSkill(int32 SkillID)
 
 bool USkillManagerComponent::RemoveSkill(int32 SkillID)
 {
-	if (!SkillMap.Contains(SkillID)) return true;
-	ASkillBase* skillBase = SkillMap.Find(SkillID)->Get();
+	if (!IsSkillValid(SkillID)) return true;
+	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
 	if (skillBase->SkillStat.SkillWeaponStruct.SkillType != ESkillType::E_None)
 	{
 		ESkillType skillType = skillBase->SkillStat.SkillWeaponStruct.SkillType;
+		//EquipedSkillMap에 존재한다면 삭제
+		if (EquipedSkillMap.Contains(skillType))
+		{
+			EquipedSkillMap.Add(skillType, 0);
+		}
+		//SkillInventoryMap에서 삭제
 		if (SkillInventoryMap.Contains(skillType))
 		{
-			SkillInventoryMap.Find(skillType)->SkillIDList.Remove(SkillID);
+			SkillInventoryMap.Find(skillType)->SkillBaseList.Remove(skillBase);
 		}
 	}
-	SkillMap.Remove(SkillID);
 	UpdateObtainableSkillMap();
 	return true;
 }
 
 bool USkillManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 {
-	if (!SkillMap.Contains(SkillID)) return false;
-	ASkillBase*skillBase = SkillMap.Find(SkillID)->Get();
+	if (!IsSkillValid(SkillID)) return false;
+	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
 	skillBase->SkillState.SkillLevelStateStruct.SkillLevel = NewLevel;
 	skillBase->SkillState.SkillLevelStateStruct.SkillVariableMap = skillBase->SkillStat.SkillLevelStatStruct.VariableByLevel[NewLevel].SkillVariableMap;
 	//쿨타임이 레벨에 따라 달라지는 경우 수정
@@ -124,8 +137,8 @@ void USkillManagerComponent::UpdateObtainableSkillMap()
 	static const FString ContextString(TEXT("GENERAL"));
 	TArray<FSkillStatStruct*> allRows;
 	SkillStatTable->GetAllRows(ContextString, allRows);
-	TMap<ESkillType, FSkillListContainer> obtainableSkillMap;
-	FSkillListContainer list1, list2, list3;
+	TMap<ESkillType, FObtainableSkillListContainer> obtainableSkillMap;
+	FObtainableSkillListContainer list1, list2, list3;
 	obtainableSkillMap.Add(skillTypeList[0], list1);
 	obtainableSkillMap.Add(skillTypeList[1], list2);
 	obtainableSkillMap.Add(skillTypeList[2], list3);
@@ -146,8 +159,12 @@ void USkillManagerComponent::UpdateObtainableSkillMap()
 	for (ESkillType skillType : skillTypeList)
 	{
 		if (!SkillInventoryMap.Contains(skillType)) continue;
-		TArray<int32> inventorySkillList = SkillInventoryMap.Find(skillType)->SkillIDList;
-		for (int32 skillID : inventorySkillList)
+		TArray<int32> inventorySkillListByType;
+		for (TWeakObjectPtr<ASkillBase> skillBase : SkillInventoryMap.Find(skillType)->SkillBaseList)
+		{
+			inventorySkillListByType.Add(skillBase->SkillStat.SkillID);
+		}
+		for (int32 skillID : inventorySkillListByType)
 		{
 			if (obtainableSkillMap[skillType].SkillIDList.Contains(skillID))
 			{
@@ -192,15 +209,27 @@ FSkillStatStruct USkillManagerComponent::GetSkillInfo(int32 SkillID)
 	return *SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
 }
 
+ESkillType USkillManagerComponent::GetSkillTypeInfo(int32 SkillID)
+{
+	return GetSkillInfo(SkillID).SkillWeaponStruct.SkillType;
+}
+
 ASkillBase* USkillManagerComponent::GetOwnSkillBase(int32 SkillID)
 {
-	if (!SkillMap.Contains(SkillID)) return nullptr;
-	return SkillMap.Find(SkillID)->Get();
+	if (!SkillInventoryMap.Contains(GetSkillTypeInfo(SkillID))) return nullptr;
+	for (TWeakObjectPtr<ASkillBase> skillBase : SkillInventoryMap.Find(GetSkillTypeInfo(SkillID))->SkillBaseList)
+	{
+		if (skillBase->SkillStat.SkillID == SkillID)
+		{
+			return skillBase.Get();
+		}
+	}
+	return nullptr;
 }
 
 bool USkillManagerComponent::IsSkillValid(int32 SkillID)
 {
-	if (!SkillMap.Contains(SkillID)) return false;
+	if(GetOwnSkillBase(SkillID)==nullptr) return false;
 	return true;
 }
 

@@ -29,7 +29,17 @@ public:
 	GENERATED_USTRUCT_BODY()
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<int32> SkillIDList;
+	TArray<class ASkillBase*> SkillBaseList;
+};
+
+USTRUCT(BlueprintType)
+struct FObtainableSkillListContainer : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TArray<int32> SkillIDList;
 };
 
 USTRUCT(BlueprintType)

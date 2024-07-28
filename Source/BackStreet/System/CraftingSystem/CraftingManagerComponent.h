@@ -41,6 +41,12 @@ public:
 	UFUNCTION()
 		void SetDisplayingSkillList();
 
+	UFUNCTION()
+		void KeepSkill(int32 SkillID);
+
+	UFUNCTION()
+		void UnkeepSkill(int32 SkillID);
+
 //=======	Upgrade Skill Function	======================	
 	UFUNCTION(BlueprintCallable)
 		bool UpgradeSkill(int32 SkillID, uint8 NewLevel);
