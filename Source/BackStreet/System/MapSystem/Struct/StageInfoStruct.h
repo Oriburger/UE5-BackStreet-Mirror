@@ -70,6 +70,16 @@ public:
 		TArray<EStageCategoryInfo> StageTypeList;
 };
 
+USTRUCT(BlueprintType)
+struct FStageRewardInfo
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintReadWrite, Category = "Gameplay")
+		TMap<int32, int32> RewardInfoMap;
+};
+
 //이동 예정 LJH
 USTRUCT(BlueprintType)
 struct FStageInfo

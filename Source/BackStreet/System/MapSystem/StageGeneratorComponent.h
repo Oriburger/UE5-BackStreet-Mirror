@@ -50,6 +50,10 @@ public:
 protected:
 	UFUNCTION(BlueprintCallable)
 		TSoftObjectPtr<UWorld> GetRandomWorld(TArray<TSoftObjectPtr<UWorld>>& WorldList);
+
+	//Return the randomly shuffled list of world for each stage
+	UFUNCTION(BlueprintCallable)
+		TArray<TSoftObjectPtr<UWorld> > GetShuffledWorldList();
 	
 private:
 	FChapterInfo CurrentChapterInfo;

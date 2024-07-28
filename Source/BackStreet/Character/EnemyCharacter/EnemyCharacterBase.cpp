@@ -100,12 +100,6 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 
 	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterStat.bIsInvincibility) return 0.0f;
 	
-	if (AssetManagerBaseRef.IsValid())
-	{
-		ACharacterBase* damageCauser = Cast<ACharacterBase>(DamageCauser);
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, WeaponComponent->GetWeaponStat().WeaponID, "HitImpact");
-	}
-	
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 	SetInstantHpWidgetVisibility();
 	if (CharacterState.CurrentHP <= 0.0f)

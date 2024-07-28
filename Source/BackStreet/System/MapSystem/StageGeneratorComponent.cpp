@@ -50,7 +50,14 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 
 	UE_LOG(LogTemp, Warning, TEXT("UStageGeneratorComponent::Generate(), template idx : %d"), templateIdx);
 
-	for (int32 stageIdx = 0; stageIdx < FMath::Pow(CurrentChapterInfo.GridSize, 2.0f); stageIdx++)
+
+	TArray<TSoftObjectPtr<UWorld> > shuffledCombatWorldList = GetShuffledWorldList();
+
+	//this is not total stage count in grid, but vertical stage count.
+	const int32 stageCount = FMath::Pow(CurrentChapterInfo.GridSize, 2.0f);
+	int32 nextCombatWorldIdx = 0;
+
+	for (int32 stageIdx = 0; stageIdx < stageCount; stageIdx++)
 	{
 		//set stage type
 		FVector2D stageCoordinate = GetStageCoordinate(stageIdx);
@@ -66,7 +73,7 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 			checkf(stageTypeList.Num() > 0, TEXT("Stage type list data is invalid "));
 			temp.StageType = stageTypeList[UKismetMathLibrary::RandomInteger(stageTypeList.Num())];
 		}
-			
+
 		//set stage coordinate and level
 		temp.Coordinate = GetStageCoordinate(stageIdx);
 		switch (temp.StageType)
@@ -74,20 +81,26 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 		case EStageCategoryInfo::E_Boss:
 			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.BossStageLevelList);
 			break;
+		case EStageCategoryInfo::E_TimeAttack:
+			//temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.TimeAttackStageLevelList);
+			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
+			temp.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
+			temp.MainLevelAsset = shuffledCombatWorldList[nextCombatWorldIdx];
+			break;
+		case EStageCategoryInfo::E_EliteTimeAttack:
+			//temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.TimeAttackStageLevelList);
+			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
+			temp.TimeLimitValue = CurrentChapterInfo.NormalTimeAtkStageTimeOut;
+			temp.MainLevelAsset = shuffledCombatWorldList[nextCombatWorldIdx];
+			break;
 		case EStageCategoryInfo::E_Combat:
 		case EStageCategoryInfo::E_EliteCombat:
-			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.CombatStageLevelList);
+			//temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.CombatStageLevelList);
+			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
+			temp.MainLevelAsset = shuffledCombatWorldList[nextCombatWorldIdx];
 			break;
 		case EStageCategoryInfo::E_Craft:
 			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.CraftStageLevelList);
-			break;
-		case EStageCategoryInfo::E_TimeAttack:
-			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.TimeAttackStageLevelList);
-			temp.TimeLimitValue = CurrentChapterInfo.NormalTimeAtkStageTimeOut;
-			break;
-		case EStageCategoryInfo::E_EliteTimeAttack:
-			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.TimeAttackStageLevelList);
-			temp.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
 			break;
 		case EStageCategoryInfo::E_Entry:
 			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.EntryStageLevelList);
@@ -113,7 +126,6 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 	{
 		result[GetStageIdx(coordinate)].bIsBlocked = true;
 	}
-
 	return CurrentChapterInfo.StageInfoList = result;
 }
 
@@ -147,4 +159,13 @@ TSoftObjectPtr<UWorld> UStageGeneratorComponent::GetRandomWorld(TArray<TSoftObje
 	checkf(!WorldList.IsEmpty(), TEXT("WorldList Is Empty"));
 	int32 idx = UKismetMathLibrary::RandomInteger(WorldList.Num());
 	return WorldList[idx];
+}
+
+TArray<TSoftObjectPtr<UWorld>> UStageGeneratorComponent::GetShuffledWorldList()
+{
+	//Temporary code for BIC -----
+	CurrentChapterInfo.CombatStageLevelList.Sort([this](const TSoftObjectPtr<UWorld> item1, const TSoftObjectPtr<UWorld> item2) {
+		return FMath::FRand() < 0.5f;
+	});
+	return CurrentChapterInfo.CombatStageLevelList;
 }
