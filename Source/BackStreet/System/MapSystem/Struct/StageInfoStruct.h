@@ -10,10 +10,9 @@ enum class EStageCategoryInfo : uint8
 	E_Lobby					UMETA(DisplayName = "Lobby"),
 
 	E_Entry					UMETA(DisplayName = "Entry"),
-	E_Combat				UMETA(DisplayName = "Combat"),
+	E_Exterminate			UMETA(DisplayName = "Exterminate"),
 	E_TimeAttack			UMETA(DisplayName = "TimeAttack"),
-	E_EliteCombat			UMETA(DisplayName = "EliteCombat"),
-	E_EliteTimeAttack		UMETA(DisplayName = "EliteTimeAttack"),
+	E_Combat				UMETA(DisplayName = "Combat"),
 	E_Boss					UMETA(DisplayName = "Boss"),
 
 	E_Craft					UMETA(DisplayName = "Craft"),
