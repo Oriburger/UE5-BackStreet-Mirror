@@ -51,65 +51,6 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	//Init new stage
 	CurrentStageInfo = NewStageInfo;
 
-	if (GEngine)
-	{
-		GEngine->RemoveOnScreenDebugMessage(100);
-		TArray<FStageInfo> stageInfoList = ChapterManagerRef.Get()->GetStageInfoList();
-
-		//for debug / temporary ui 
-		for (int32 i = 0; i < CurrentChapterInfo.GridSize; i++)
-		{
-			FString str = "|";
-			for (int32 j = 0; j < CurrentChapterInfo.GridSize; j++)
-			{
-				bool bIsBlocked = stageInfoList[i * CurrentChapterInfo.GridSize + j].bIsBlocked;
-				EStageCategoryInfo stageType = stageInfoList[i * CurrentChapterInfo.GridSize + j].StageType;
-				
-				str.Append("|");
-
-				if (bIsBlocked)
-				{
-					str.Append("##");
-				}
-				else if (NewStageInfo.Coordinate == FVector2D(j, i))
-				{
-					str.Append("& ");
-				}
-				else
-				{
-					switch (stageType)
-					{
-					case EStageCategoryInfo::E_Boss:
-						str.Append("BO");
-						break;
-					case EStageCategoryInfo::E_Exterminate:
-						str.Append("NC");
-						break;
-					case EStageCategoryInfo::E_Combat:
-						str.Append("EC");
-						break;
-					case EStageCategoryInfo::E_Craft:
-						str.Append("CR");
-						break;
-					case EStageCategoryInfo::E_TimeAttack:
-						str.Append("NT");
-						break;
-					case EStageCategoryInfo::E_Entry:
-						str.Append("EN");
-						break;
-					case EStageCategoryInfo::E_Gatcha:
-						str.Append("GT");
-						break;
-					case EStageCategoryInfo::E_MiniGame:
-						str.Append("MG");
-						break;
-					}
-				}
-				str.Append("|");
-			}
-		}
-	}
-
 	UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
 	UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
 	UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %s"), *CurrentStageInfo.Coordinate.ToString());
@@ -245,7 +186,7 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 		else if (spawnPoint->Tags[1] == FName("Gate"))
 		{
 			CurrentStageInfo.PortalLocationList.Add(spawnPoint->GetActorLocation() + zAxisCalibrationValue);
-			checkf(spawnPoint->Tags.Num() >= 3, TEXT("Portal SpawnPointÀÇ Tag[2], Direction Tag°¡ ÁöÁ¤µÇ¾îÀÖÁö¾Ê½À´Ï´Ù."));
+			checkf(spawnPoint->Tags.Num() >= 3, TEXT("Portal SpawnPointì˜ Tag[2], Direction Tagê°€ ì§€ì •ë˜ì–´ìžˆì§€ì•ŠìŠµë‹ˆë‹¤."));
 			CurrentStageInfo.PortalDirectionTagList.Add(spawnPoint->Tags[2]);
 		}
 	}
@@ -316,7 +257,7 @@ void UStageManagerComponent::SpawnEnemy()
 	//--------------Spawn boss character to world -----------------------------
 	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Boss)
 	{
-		checkf(IsValid(CurrentChapterInfo.BossCharacterClass), TEXT("UStageManagerComponent::ÇöÀç Ã©ÅÍ¿¡ º¸½º°¡ ÁöÁ¤µÇ¾îÀÖÁö ¾Ê½À´Ï´Ù. "));
+		checkf(IsValid(CurrentChapterInfo.BossCharacterClass), TEXT("UStageManagerComponent::í˜„ìž¬ ì±•í„°ì— ë³´ìŠ¤ê°€ ì§€ì •ë˜ì–´ìžˆì§€ ì•ŠìŠµë‹ˆë‹¤. "));
 		
 		AEnemyCharacterBase* boss = GetWorld()->SpawnActor<AEnemyCharacterBase>(CurrentChapterInfo.BossCharacterClass
 			, CurrentStageInfo.BossSpawnLocation, CurrentStageInfo.BossSpawnRotation);
