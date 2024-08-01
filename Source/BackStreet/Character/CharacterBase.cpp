@@ -886,7 +886,7 @@ void ACharacterBase::SetAsset()
 	bool result = WeaponComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName("Weapon_R"));
 	if (!result)
 	{
-		GEngine->AddOnScreenDebugMessage(0, 10, FColor::Yellow, FString("Failed"));
+		//GEngine->AddOnScreenDebugMessage(0, 10, FColor::Yellow, FString("Failed"));
 	}
 	FLatentActionInfo latentInfo;
 	latentInfo.CallbackTarget = this;

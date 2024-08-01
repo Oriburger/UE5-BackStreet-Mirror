@@ -54,9 +54,6 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	if (GEngine)
 	{
 		GEngine->RemoveOnScreenDebugMessage(100);
-		GEngine->AddOnScreenDebugMessage(100, 120.0f, FColor::Green, TEXT("=========== Init Stage ============"));
-		GEngine->AddOnScreenDebugMessage(100, 120.0f, FColor::Green, FString::Printf(TEXT("> Stage Type : %d"), CurrentStageInfo.StageType));
-		GEngine->AddOnScreenDebugMessage(100, 120.0f, FColor::Green, FString::Printf(TEXT("> Coordinate : %s"), *CurrentStageInfo.Coordinate.ToString()));
 		TArray<FStageInfo> stageInfoList = ChapterManagerRef.Get()->GetStageInfoList();
 
 		//for debug / temporary ui 
@@ -85,10 +82,10 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 					case EStageCategoryInfo::E_Boss:
 						str.Append("BO");
 						break;
-					case EStageCategoryInfo::E_Combat:
+					case EStageCategoryInfo::E_Exterminate:
 						str.Append("NC");
 						break;
-					case EStageCategoryInfo::E_EliteCombat:
+					case EStageCategoryInfo::E_Combat:
 						str.Append("EC");
 						break;
 					case EStageCategoryInfo::E_Craft:
@@ -96,9 +93,6 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 						break;
 					case EStageCategoryInfo::E_TimeAttack:
 						str.Append("NT");
-						break;
-					case EStageCategoryInfo::E_EliteTimeAttack:
-						str.Append("ET");
 						break;
 					case EStageCategoryInfo::E_Entry:
 						str.Append("EN");
@@ -113,7 +107,6 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 				}
 				str.Append("|");
 			}
-			GEngine->AddOnScreenDebugMessage(100 + i, 120.0f, FColor::Green, str);
 		}
 	}
 
@@ -262,10 +255,9 @@ void UStageManagerComponent::SpawnEnemy()
 {
 	//Basic condition (stage type check and data count check
 	if (CurrentStageInfo.StageType != EStageCategoryInfo::E_Entry
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Combat
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Exterminate
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_TimeAttack
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteCombat
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteTimeAttack
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Combat
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss) return;
 
 	if (CurrentStageInfo.EnemyCompositionInfo.CompositionList.Num() == 0)
@@ -436,8 +428,7 @@ void UStageManagerComponent::StartStage()
 	}
 
 	//Start timer if stage type if timeattack
-	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
+	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack)
 	{
 		FTimerDelegate stageOverDelegate;
 		stageOverDelegate.BindUFunction(this, FName("FinishStage"), false);
@@ -475,8 +466,8 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 
 	if (bStageClear &&
 		(CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteCombat))
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat))
 	{
 		//Stage Clear UI Update using delegate
 		OnStageCleared.Broadcast();
@@ -484,8 +475,7 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 		//Stage Reward
 		GrantStageRewards();
 	}
-	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
+	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack)
 	{
 		if (bStageClear)
 		{
@@ -518,11 +508,10 @@ void UStageManagerComponent::GrantStageRewards()
 		int32 maxGrantCountPerItem = 0;
 
 		maxGrantCountPerItem = (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
-							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat
+							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate
 							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack)
 							? 3 : maxGrantCountPerItem;
-		maxGrantCountPerItem = (CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteCombat
-							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
+		maxGrantCountPerItem = (CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat)
 							? 5 : maxGrantCountPerItem;
 
 		for (int32 id = 1; id <= 3; id++)
@@ -549,17 +538,15 @@ void UStageManagerComponent::UpdateEnemyCountAndCheckClear()
 bool UStageManagerComponent::CheckStageClearStatus()
 {
 	//Basic condition (stage type check)
-	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat
+	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate
 	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
 	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
 	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Boss
-	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteCombat
-	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
+	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat)
 	{
 		return RemainingEnemyCount == 0;
 	}
-	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
-	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
+	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack)
 	{
 		bool bIsTimeLeft = GetRemainingTime() == 0.0f;
 		return RemainingEnemyCount == 0 && bIsTimeLeft;
