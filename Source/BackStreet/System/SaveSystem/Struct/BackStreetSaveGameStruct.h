@@ -17,7 +17,7 @@ public:
 		FCharacterStatStruct PlayerStat;
 	
 	UPROPERTY(BlueprintReadWrite)
-		TMap<int32, FItemDataStruct> ItemMap;
+		TMap<int32, FItemInfoDataStruct> ItemMap;
 
 
 	//======= SaveData of Character Skin(Costume) =====================
