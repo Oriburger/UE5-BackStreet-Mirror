@@ -56,7 +56,7 @@ public:
 // ------ 기본 Info ---------------------------
 protected:
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
-		FItemInfoStruct ItemInfo;
+		FItemInfoDataStruct ItemInfo;
 
 // ------ 아이템 기본 로직-------------------------------------
 public:	
@@ -84,7 +84,7 @@ protected:
 		void InitializeItemMesh();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FItemInfoStruct GetItemInfoWithID(const int32 ItemID);
+		FItemInfoDataStruct GetItemInfoWithID(const int32 ItemID);
 
 // ------ Projectile 로직 ------------------------------------
 public:

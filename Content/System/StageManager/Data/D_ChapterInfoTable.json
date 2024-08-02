@@ -175,6 +175,77 @@
 				]
 			}
 		},
+		"StageRewardInfoList":
+		{
+			"RewardInfoMap":
+			{
+			},
+			"RewardCandidateInfoList": [
+				{
+					"RewardItemIDList": [ 1, 2, 3 ],
+					"RewardItemProbabilityList": [ 1, 1, 1 ]
+				},
+				{
+					"RewardItemIDList": [],
+					"RewardItemProbabilityList": []
+				}
+			]
+		},
+		"StageRewardInfoMap":
+		{
+			"E_Entry":
+			{
+				"RewardInfoMap":
+				{
+				},
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemIDList": [ 1, 2, 3 ],
+						"RewardItemProbabilityList": [ 1, 1, 1 ]
+					}
+				]
+			},
+			"E_Combat":
+			{
+				"RewardInfoMap":
+				{
+				},
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemIDList": [ 1, 2, 3 ],
+						"RewardItemProbabilityList": [ 1, 1, 1 ]
+					}
+				]
+			},
+			"E_Exterminate":
+			{
+				"RewardInfoMap":
+				{
+				},
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemIDList": [ 1, 2, 3 ],
+						"RewardItemProbabilityList": [ 1, 1, 1 ]
+					}
+				]
+			},
+			"E_TimeAttack":
+			{
+				"RewardInfoMap":
+				{
+				},
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemIDList": [ 1, 2, 3 ],
+						"RewardItemProbabilityList": [ 1, 1, 1 ]
+					},
+					{
+						"RewardItemIDList": [ 1, 0, 0 ],
+						"RewardItemProbabilityList": [ 0.69999998807907104, 0.20000000298023224, 0.10000000149011612 ]
+					}
+				]
+			}
+		},
 		"StageTemplateList": [
 			{
 				"StageComposition": [

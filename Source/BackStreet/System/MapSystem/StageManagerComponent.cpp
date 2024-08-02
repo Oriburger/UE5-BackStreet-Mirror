@@ -443,27 +443,45 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 void UStageManagerComponent::GrantStageRewards()
 {
 	AMainCharacterBase* playerCharacter = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (IsValid(playerCharacter))
+
+	if (!IsValid(playerCharacter)) return;
+
+	FStageRewardInfoList* rewardInfoList = CurrentChapterInfo.StageRewardInfoMap.Find(CurrentStageInfo.StageType);
+	if (rewardInfoList)
 	{
-		//@@@@@@@@@@@@@ Hard coding for BIC @@@@@@@@@@@@@@@@@@
-		int32 maxGrantCountPerItem = 0;
+		for (auto& rewardCandidateInfo : rewardInfoList->RewardCandidateInfoList)
+		{
+			if (rewardCandidateInfo.RewardItemIDList.Num() != rewardCandidateInfo.RewardItemProbabilityList.Num()) continue;
 
-		maxGrantCountPerItem = (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
-							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate
-							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack)
-							? 3 : maxGrantCountPerItem;
-		maxGrantCountPerItem = (CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat)
-							? 5 : maxGrantCountPerItem;
-
-		for (int32 id = 1; id <= 3; id++)
-		{ 
-			int32 grantCnt = UKismetMathLibrary::RandomInteger(maxGrantCountPerItem + 1);
-			if (grantCnt > 0)
+			// calculate total probability
+			float totalProbability = 0.0f;
+			for (float probability : rewardCandidateInfo.RewardItemProbabilityList)
 			{
-				playerCharacter->ItemInventory->AddItem(id, grantCnt);
+				totalProbability += probability;
+			}
+
+			// generate random value
+			float randomValue = FMath::FRandRange(0.0f, totalProbability);
+
+			// select reward by cumulative probability
+			float cumulativeProbability = 0.0f;
+			for (int32 candidateIdx = 0; candidateIdx < rewardCandidateInfo.RewardItemIDList.Num(); ++candidateIdx)
+			{
+				cumulativeProbability += rewardCandidateInfo.RewardItemProbabilityList[candidateIdx];
+
+				if (randomValue <= cumulativeProbability)
+				{
+					// selected reward item id
+					int32 selectedRewardItemID = rewardCandidateInfo.RewardItemIDList[candidateIdx];
+
+					//add item to inventory
+					playerCharacter->ItemInventory->AddItem(selectedRewardItemID, 1);
+
+					UE_LOG(LogTemp, Warning, TEXT("Reward Granted %d!@@@@@@@@@@"), selectedRewardItemID);
+					break;
+				}
 			}
 		}
-			
 	}
 }
 

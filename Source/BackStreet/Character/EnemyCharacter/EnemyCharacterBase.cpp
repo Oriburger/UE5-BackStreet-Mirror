@@ -196,39 +196,26 @@ void AEnemyCharacterBase::SpawnDeathItems()
 
 	TArray<AItemBase*> spawnedItemList;
 
-	if (dropInfo.SpawnItemTypeList.IsValidIndex(0) 
-		&& dropInfo.SpawnItemTypeList[0] == EItemCategoryInfo::E_Mission)
+	while (totalSpawnItemCount)
 	{
-		/*AItemBase* newItem = GamemodeRef->SpawnItemToWorld(SpawnItemIDList[0], GetActorLocation() + FMath::VRand() * 10.0f);
-		if (IsValid(newItem))
+		if (++trySpawnCount > totalSpawnItemCount * 3) break; //스폰할 아이템 개수의 3배만큼 시도
+
+		const int32 itemIdx = UKismetMathLibrary::RandomIntegerInRange(0, dropInfo.SpawnItemIDList.Num() - 1);
+		if (!dropInfo.SpawnItemTypeList.IsValidIndex(itemIdx)
+			|| !dropInfo.ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
+
+		const uint8 itemType = (uint8)dropInfo.SpawnItemTypeList[itemIdx];
+		const int32 itemID = dropInfo.SpawnItemIDList[itemIdx];
+		const float spawnProbability = dropInfo.ItemSpawnProbabilityList[itemIdx];
+
+		if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
 		{
-			spawnedItemList.Add(newItem);
-			//newItem->Dele_MissionItemSpawned.BindUFunction(target, FName("TryAddMissionItem"));
-		}*/
-	}
-	else
-	{
-		while (totalSpawnItemCount)
-		{
-			if (++trySpawnCount > totalSpawnItemCount * 3) break; //스폰할 아이템 개수의 3배만큼 시도
+			AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 10.0f);
 
-			const int32 itemIdx = UKismetMathLibrary::RandomIntegerInRange(0, dropInfo.SpawnItemIDList.Num() - 1);
-			if (!dropInfo.SpawnItemTypeList.IsValidIndex(itemIdx)
-				|| !dropInfo.ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
-
-			const uint8 itemType = (uint8)dropInfo.SpawnItemTypeList[itemIdx];
-			const int32 itemID = dropInfo.SpawnItemIDList[itemIdx];
-			const float spawnProbability = dropInfo.ItemSpawnProbabilityList[itemIdx];
-
-			if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
+			if (IsValid(newItem))
 			{
-				AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 10.0f);
-
-				if (IsValid(newItem))
-				{
-					spawnedItemList.Add(newItem);
-					totalSpawnItemCount -= 1;
-				}
+				spawnedItemList.Add(newItem);
+				totalSpawnItemCount -= 1;
 			}
 		}
 	}

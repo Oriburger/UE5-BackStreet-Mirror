@@ -37,10 +37,10 @@ void UItemInventoryComponent::InitInventory()
 	}
 
 	static const FString ContextString(TEXT("GENERAL"));
-	TArray<FItemDataStruct*> allRows;
+	TArray<FItemInfoDataStruct*> allRows;
 	ItemTable->GetAllRows(ContextString, allRows);
 
-	for (FItemDataStruct* row : allRows)
+	for (FItemInfoDataStruct* row : allRows)
 	{
 		if (row)
 		{
@@ -52,7 +52,7 @@ void UItemInventoryComponent::InitInventory()
 void UItemInventoryComponent::SetItemInventoryFromSaveData()
 {
 	AMainCharacterBase* playerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	ItemMap = playerCharacterRef->SavedData.PlayerSaveGameData.ItemMap;
+	//ItemMap = playerCharacterRef->SavedData.PlayerSaveGameData.ItemMap;
 }
 
 void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
@@ -69,7 +69,7 @@ void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
 	OnUpdateItem.Broadcast();
 }
 
-void UItemInventoryComponent::GetItemData(int32 ItemID, FItemDataStruct& ItemData)
+void UItemInventoryComponent::GetItemData(int32 ItemID, FItemInfoDataStruct& ItemData)
 {
 	if (ItemMap.Contains(ItemID))
 	{
