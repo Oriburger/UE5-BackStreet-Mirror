@@ -186,7 +186,7 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 		else if (spawnPoint->Tags[1] == FName("Gate"))
 		{
 			CurrentStageInfo.PortalLocationList.Add(spawnPoint->GetActorLocation() + zAxisCalibrationValue);
-			checkf(spawnPoint->Tags.Num() >= 3, TEXT("Portal SpawnPointÀÇ Tag[2], Direction Tag°¡ ÁöÁ¤µÇ¾îÀÖÁö¾Ê½À´Ï´Ù."));
+			checkf(spawnPoint->Tags.Num() >= 3, TEXT("Portal SpawnPointì˜ Tag[2], Direction Tagê°€ ì§€ì •ë˜ì–´ìžˆì§€ì•ŠìŠµë‹ˆë‹¤."));
 			CurrentStageInfo.PortalDirectionTagList.Add(spawnPoint->Tags[2]);
 		}
 	}
@@ -257,7 +257,7 @@ void UStageManagerComponent::SpawnEnemy()
 	//--------------Spawn boss character to world -----------------------------
 	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Boss)
 	{
-		checkf(IsValid(CurrentChapterInfo.BossCharacterClass), TEXT("UStageManagerComponent::ÇöÀç Ã©ÅÍ¿¡ º¸½º°¡ ÁöÁ¤µÇ¾îÀÖÁö ¾Ê½À´Ï´Ù. "));
+		checkf(IsValid(CurrentChapterInfo.BossCharacterClass), TEXT("UStageManagerComponent::í˜„ìž¬ ì±•í„°ì— ë³´ìŠ¤ê°€ ì§€ì •ë˜ì–´ìžˆì§€ ì•ŠìŠµë‹ˆë‹¤. "));
 		
 		AEnemyCharacterBase* boss = GetWorld()->SpawnActor<AEnemyCharacterBase>(CurrentChapterInfo.BossCharacterClass
 			, CurrentStageInfo.BossSpawnLocation, CurrentStageInfo.BossSpawnRotation);
