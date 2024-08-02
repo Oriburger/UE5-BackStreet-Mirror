@@ -51,65 +51,6 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	//Init new stage
 	CurrentStageInfo = NewStageInfo;
 
-	if (GEngine)
-	{
-		GEngine->RemoveOnScreenDebugMessage(100);
-		TArray<FStageInfo> stageInfoList = ChapterManagerRef.Get()->GetStageInfoList();
-
-		//for debug / temporary ui 
-		for (int32 i = 0; i < CurrentChapterInfo.GridSize; i++)
-		{
-			FString str = "|";
-			for (int32 j = 0; j < CurrentChapterInfo.GridSize; j++)
-			{
-				bool bIsBlocked = stageInfoList[i * CurrentChapterInfo.GridSize + j].bIsBlocked;
-				EStageCategoryInfo stageType = stageInfoList[i * CurrentChapterInfo.GridSize + j].StageType;
-				
-				str.Append("|");
-
-				if (bIsBlocked)
-				{
-					str.Append("##");
-				}
-				else if (NewStageInfo.Coordinate == FVector2D(j, i))
-				{
-					str.Append("& ");
-				}
-				else
-				{
-					switch (stageType)
-					{
-					case EStageCategoryInfo::E_Boss:
-						str.Append("BO");
-						break;
-					case EStageCategoryInfo::E_Exterminate:
-						str.Append("NC");
-						break;
-					case EStageCategoryInfo::E_Combat:
-						str.Append("EC");
-						break;
-					case EStageCategoryInfo::E_Craft:
-						str.Append("CR");
-						break;
-					case EStageCategoryInfo::E_TimeAttack:
-						str.Append("NT");
-						break;
-					case EStageCategoryInfo::E_Entry:
-						str.Append("EN");
-						break;
-					case EStageCategoryInfo::E_Gatcha:
-						str.Append("GT");
-						break;
-					case EStageCategoryInfo::E_MiniGame:
-						str.Append("MG");
-						break;
-					}
-				}
-				str.Append("|");
-			}
-		}
-	}
-
 	UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
 	UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
 	UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %s"), *CurrentStageInfo.Coordinate.ToString());
@@ -502,27 +443,45 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 void UStageManagerComponent::GrantStageRewards()
 {
 	AMainCharacterBase* playerCharacter = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (IsValid(playerCharacter))
+
+	if (!IsValid(playerCharacter)) return;
+
+	FStageRewardInfoList* rewardInfoList = CurrentChapterInfo.StageRewardInfoMap.Find(CurrentStageInfo.StageType);
+	if (rewardInfoList)
 	{
-		//@@@@@@@@@@@@@ Hard coding for BIC @@@@@@@@@@@@@@@@@@
-		int32 maxGrantCountPerItem = 0;
+		for (auto& rewardCandidateInfo : rewardInfoList->RewardCandidateInfoList)
+		{
+			if (rewardCandidateInfo.RewardItemIDList.Num() != rewardCandidateInfo.RewardItemProbabilityList.Num()) continue;
 
-		maxGrantCountPerItem = (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
-							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate
-							|| CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack)
-							? 3 : maxGrantCountPerItem;
-		maxGrantCountPerItem = (CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat)
-							? 5 : maxGrantCountPerItem;
-
-		for (int32 id = 1; id <= 3; id++)
-		{ 
-			int32 grantCnt = UKismetMathLibrary::RandomInteger(maxGrantCountPerItem + 1);
-			if (grantCnt > 0)
+			// calculate total probability
+			float totalProbability = 0.0f;
+			for (float probability : rewardCandidateInfo.RewardItemProbabilityList)
 			{
-				playerCharacter->ItemInventory->AddItem(id, grantCnt);
+				totalProbability += probability;
+			}
+
+			// generate random value
+			float randomValue = FMath::FRandRange(0.0f, totalProbability);
+
+			// select reward by cumulative probability
+			float cumulativeProbability = 0.0f;
+			for (int32 candidateIdx = 0; candidateIdx < rewardCandidateInfo.RewardItemIDList.Num(); ++candidateIdx)
+			{
+				cumulativeProbability += rewardCandidateInfo.RewardItemProbabilityList[candidateIdx];
+
+				if (randomValue <= cumulativeProbability)
+				{
+					// selected reward item id
+					int32 selectedRewardItemID = rewardCandidateInfo.RewardItemIDList[candidateIdx];
+
+					//add item to inventory
+					playerCharacter->ItemInventory->AddItem(selectedRewardItemID, 1);
+
+					UE_LOG(LogTemp, Warning, TEXT("Reward Granted %d!@@@@@@@@@@"), selectedRewardItemID);
+					break;
+				}
 			}
 		}
-			
 	}
 }
 

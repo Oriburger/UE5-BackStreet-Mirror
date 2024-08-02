@@ -116,16 +116,6 @@ void AItemBase::OnItemPicked(AActor* Causer)
 			if (!playerRef->PickWeapon(targetWeaponID)) return;
 		}
 		break;
-	case EItemCategoryInfo::E_Bullet:
-		if (Causer->ActorHasTag("Player"))
-		{
-			
-		}
-		break;
-	case EItemCategoryInfo::E_StatUp:
-		break;
-	case EItemCategoryInfo::E_Mission:
-		break;
 	}
 	
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ItemPickEffect, GetActorLocation());
@@ -153,18 +143,18 @@ void AItemBase::InitializeItemMesh()
 	}
 }
 
-FItemInfoStruct AItemBase::GetItemInfoWithID(const int32 ItemID)
+FItemInfoDataStruct AItemBase::GetItemInfoWithID(const int32 ItemID)
 {
 	if (ItemDataInfoTable != nullptr && ItemID != 0)
 	{
-		FItemInfoStruct* newInfo = nullptr;
+		FItemInfoDataStruct* newInfo = nullptr;
 		FString rowName = FString::FromInt(ItemID);
 
-		newInfo = ItemDataInfoTable->FindRow<FItemInfoStruct>(FName(rowName), rowName);
+		newInfo = ItemDataInfoTable->FindRow<FItemInfoDataStruct>(FName(rowName), rowName);
 
 		if (newInfo != nullptr) return *newInfo;
 	}
-	return FItemInfoStruct(); 
+	return FItemInfoDataStruct(); 
 }
 
 void AItemBase::SetLaunchDirection(FVector NewDirection)
