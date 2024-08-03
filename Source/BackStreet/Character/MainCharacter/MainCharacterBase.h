@@ -14,7 +14,6 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialAttack);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialMove);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialZoom);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialRoll);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTakeDamage);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateWeaponUpdated);
 
 UCLASS()
@@ -34,9 +33,6 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTutorialRoll OnRoll;
-
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateTakeDamage OnTakeDamage;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateWeaponUpdated OnWeaponUpdated;
