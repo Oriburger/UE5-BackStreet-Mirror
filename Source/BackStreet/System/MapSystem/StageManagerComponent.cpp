@@ -415,6 +415,19 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 
 		//Stage Reward
 		GrantStageRewards();
+
+		//=========Temporary code for bic===========================
+		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate)
+		{
+			ACharacterBase* playerRef = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+			if(IsValid(playerRef))	
+			{
+				float healValue = playerRef->GetCharacterStat().DefaultHP * 0.1f;
+				UE_LOG(LogTemp, Warning, TEXT("Take Heal %.2lf"), healValue);
+				playerRef->TakeHeal(healValue);
+			}
+		}
 	}
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack)
 	{

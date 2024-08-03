@@ -5,6 +5,7 @@
 #include "CharacterBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateCharacterDie);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTakeDamage);
 
 UCLASS()
 class BACKSTREET_API ACharacterBase : public ACharacter
@@ -12,6 +13,10 @@ class BACKSTREET_API ACharacterBase : public ACharacter
 	GENERATED_BODY()
 
 	friend class AWeaponInventoryBase;
+
+public:
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTakeDamage OnTakeDamage;
 
 //----- Global / Component ----------
 public:
