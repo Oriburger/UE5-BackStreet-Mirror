@@ -32,7 +32,7 @@ void UCraftingManagerComponent::InitCraftingManager()
 	bIsSkillCreated = false;
 }
 
-bool UCraftingManagerComponent::IsMatEnough()
+bool UCraftingManagerComponent::GetIsMatEnough()
 {
 	TArray<uint8> currMatList = MainCharacterRef->ItemInventory->GetCraftingItemAmount();
 	for (uint8 requiredMatIdx = 0 ; requiredMatIdx < RequiredMatList.Num(); requiredMatIdx++)
@@ -68,7 +68,7 @@ bool UCraftingManagerComponent::AddSkill(int32 NewSkillID)
 {	
 	//재료 충분한지 확인
 	UpdateRequiredMatForSU(NewSkillID, 1);
-	if (!IsMatEnough())return false;
+	if (!GetIsMatEnough())return false;
 	
 	//스킬 추가
 	bool bIsAddSkillSucceed = SkillManagerRef->AddSkill(NewSkillID);
@@ -157,7 +157,7 @@ bool UCraftingManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 {
 	//재료 충분한지 확인
 	UpdateRequiredMatForSU(SkillID, NewLevel);
-	if(!IsMatEnough())return false;
+	if(!GetIsMatEnough())return false;
 
 	//스킬 추가
 	bool bIsAddSkillSucceed = SkillManagerRef->UpgradeSkill(SkillID, NewLevel);
@@ -191,7 +191,7 @@ bool UCraftingManagerComponent::UpgradeWeapon(TArray<uint8> NewLevelList)
 {
 	//재료 충분한지 확인
 	UpdateRequiredMatForWU(NewLevelList);
-	if (!IsMatEnough())return false;
+	if (!GetIsMatEnough())return false;
 
 	//재료 소모
 	ConsumeMat();
@@ -203,7 +203,8 @@ TArray<uint8> UCraftingManagerComponent::UpdateRequiredMatForWU(TArray<uint8> Ne
 {
 	RequiredMatList.Empty();
 	UWeaponComponentBase* weaponRef = MainCharacterRef->WeaponComponent;
-	TArray<uint8> currLevelList = weaponRef->WeaponState.UpgradedStatList;
+	TArray<uint8> currLevelList;
+	weaponRef->WeaponState.UpgradedStatMap.GenerateValueArray(currLevelList);
 
 	for (uint8 idx = 0; idx < MAX_WEAPON_UPGRADABLE_STAT_IDX; idx++)
 	{

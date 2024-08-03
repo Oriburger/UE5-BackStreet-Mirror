@@ -190,9 +190,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FSkillWeaponStruct SkillWeaponStruct;
-
-	UPROPERTY()
-		bool bIsStatValid = false;
 };
 
 USTRUCT(BlueprintType)

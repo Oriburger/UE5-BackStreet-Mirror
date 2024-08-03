@@ -28,7 +28,7 @@ protected:
 //=======	Common Function		========================
 public:
 	UFUNCTION()
-		bool IsMatEnough();
+		bool GetIsMatEnough();
 
 	UFUNCTION()
 		bool ConsumeMat();

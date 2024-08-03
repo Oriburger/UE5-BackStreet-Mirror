@@ -24,6 +24,17 @@ enum class EWeaponType : uint8
 	E_Shoot				UMETA(DisplayName = "Shoot")
 
 };
+
+UENUM(BlueprintType)
+enum class EWeaponStatType : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_Attack				UMETA(DisplayName = "Attack"),
+	E_AttackSpeed		UMETA(DisplayName = "AttackSpeed"),
+	E_FinalAttack		UMETA(DisplayName = "FinalAttack")
+
+};
+
 USTRUCT(BlueprintType)
 struct FUpgradableStatInfoContainer : public FTableRowBase
 {
@@ -214,10 +225,9 @@ public:
 		FRangedWeaponStateStruct RangedWeaponState;
 
 //-----Weapon Upgraded Stat
-	//Upgraded State(in combat area)List 
-	//0:Attack, 1:AttackSpeed, 2:finalImpact
+	//Upgraded State(in combat area)
 	UPROPERTY(BlueprintReadWrite)
-		TArray<uint8> UpgradedStatList = { 0,0,0 };
+	TMap<EWeaponStatType, uint8> UpgradedStatMap;
 };
 
 USTRUCT(BlueprintType)

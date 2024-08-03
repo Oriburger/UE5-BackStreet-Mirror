@@ -34,7 +34,9 @@ void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent
 	SkillStat = NewSkillStat;
 	SkillManagerComponentRef = NewSkillManagerComponent;
 	FString rowName = FString::FromInt(SkillStat.SkillID);
-	SkillStat = *SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
+	FSkillStatStruct* skillStat = SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
+	checkf(skillStat != nullptr, TEXT("SkillStat is not valid"));
+	SkillStat = *skillStat;
 
 	SkillState.bIsHidden = true;
 	SkillState.bIsStateValid = true;
@@ -92,7 +94,9 @@ void ASkillBase::PlaySingleSound(FName SoundName)
 
 float ASkillBase::PlayAnimMontage(ACharacter* Target, FName AnimName)
 {
+	if(!SkillStat.SkillAssetStruct.AnimInfoMap.Contains(AnimName)) return 0.0f;
 	FSkillAnimInfoStruct* skillAnimInfo = SkillStat.SkillAssetStruct.AnimInfoMap.Find(AnimName);
+	checkf(skillAnimInfo != nullptr, TEXT("SkillAnimAsset is not valid"));
 	UAnimMontage* anim = skillAnimInfo->AnimMontage;
 	float animPlayTime = Target->PlayAnimMontage(anim, skillAnimInfo->AnimPlayRate);
 	return animPlayTime;
