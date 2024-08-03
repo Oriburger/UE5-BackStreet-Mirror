@@ -51,14 +51,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool UpgradeSkill(int32 SkillID, uint8 NewLevel);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		TArray<uint8>UpdateRequiredMatForSU(int32 SkillID, uint8 NewLevel);
 //=======	Upgrade Weapon Function	====================	
 	UFUNCTION(BlueprintCallable)
 		bool UpgradeWeapon(TArray<uint8> NewLevelList);
 		
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		TArray<uint8>UpdateRequiredMatForWU(TArray<uint8> NewLevelList);
+
+	UFUNCTION(BlueprintCallable)
+		bool GetIsStatLevelValid(TArray<uint8> NewLevelList);
 //=======	CommonProperty		========================
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

@@ -192,6 +192,7 @@ bool UCraftingManagerComponent::UpgradeWeapon(TArray<uint8> NewLevelList)
 	//재료 충분한지 확인
 	UpdateRequiredMatForWU(NewLevelList);
 	if (!GetIsMatEnough())return false;
+	if(!GetIsStatLevelValid(NewLevelList))return false;
 
 	//재료 소모
 	ConsumeMat();
@@ -217,4 +218,14 @@ TArray<uint8> UCraftingManagerComponent::UpdateRequiredMatForWU(TArray<uint8> Ne
 		}
 	}
 	return RequiredMatList;
+}
+
+bool UCraftingManagerComponent::GetIsStatLevelValid(TArray<uint8> NewLevelList)
+{
+	UWeaponComponentBase* weaponRef = MainCharacterRef->WeaponComponent;
+	for (int32 typeIdx = 0; typeIdx < NewLevelList.Num(); typeIdx++)
+	{
+		if(weaponRef->WeaponStat.LimitedUpgradeLevelMap[static_cast<EWeaponStatType>(typeIdx +1)]<NewLevelList[typeIdx]) return false;
+	}
+	return true;
 }
