@@ -87,14 +87,8 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 			temp.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
 			temp.MainLevelAsset = shuffledCombatWorldList[nextCombatWorldIdx];
 			break;
-		case EStageCategoryInfo::E_EliteTimeAttack:
-			//temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.TimeAttackStageLevelList);
-			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
-			temp.TimeLimitValue = CurrentChapterInfo.NormalTimeAtkStageTimeOut;
-			temp.MainLevelAsset = shuffledCombatWorldList[nextCombatWorldIdx];
-			break;
+		case EStageCategoryInfo::E_Exterminate:
 		case EStageCategoryInfo::E_Combat:
-		case EStageCategoryInfo::E_EliteCombat:
 			//temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.CombatStageLevelList);
 			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
 			temp.MainLevelAsset = shuffledCombatWorldList[nextCombatWorldIdx];
@@ -113,9 +107,9 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 			break;
 		}
 
-		if (temp.StageType == EStageCategoryInfo::E_Boss || temp.StageType == EStageCategoryInfo::E_Combat
-			|| temp.StageType == EStageCategoryInfo::E_EliteCombat || temp.StageType == EStageCategoryInfo::E_TimeAttack
-			|| temp.StageType == EStageCategoryInfo::E_EliteTimeAttack || temp.StageType == EStageCategoryInfo::E_Entry)
+		if (temp.StageType == EStageCategoryInfo::E_Boss || temp.StageType == EStageCategoryInfo::E_Exterminate
+			|| temp.StageType == EStageCategoryInfo::E_Combat || temp.StageType == EStageCategoryInfo::E_TimeAttack
+			|| temp.StageType == EStageCategoryInfo::E_Entry)
 		{
 			checkf(CurrentChapterInfo.EnemyCompositionInfoMap.Contains(temp.StageType), TEXT("EnemyCompositionInfoMap is empty"));
 			temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(temp.StageType);

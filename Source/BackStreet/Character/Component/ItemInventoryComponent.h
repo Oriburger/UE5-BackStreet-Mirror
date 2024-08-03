@@ -21,7 +21,7 @@ public:
 		void InitInventory();
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-	FDelegateUpdateItem OnUpdateItem;
+		FDelegateUpdateItem OnUpdateItem;
 
 protected:
 	// Called when the game starts
@@ -41,7 +41,7 @@ public:
 		void RemoveItem(int32 ItemID, uint8 ItemCnt);
 
 	UFUNCTION(BlueprintCallable)
-		void GetItemData(int32 ItemID, FItemDataStruct& ItemData);
+		void GetItemData(int32 ItemID, FItemInfoDataStruct& ItemData);
 
 	UFUNCTION(BlueprintCallable)
 		TArray<uint8> GetCraftingItemAmount();
@@ -54,7 +54,7 @@ private:
 public:
 	// Item List
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TMap<int32, FItemDataStruct> ItemMap;
+		TMap<int32, FItemInfoDataStruct> ItemMap;
 
 	//owner character ref
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
