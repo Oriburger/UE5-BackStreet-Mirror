@@ -7,8 +7,8 @@
 #include "../../System/SaveSystem/BackStreetGameInstance.h"
 #include "../../System/AbilitySystem/AbilityManagerBase.h"
 #include "../../System/CraftingSystem/CraftBoxBase.h"
+#include "../../System/CraftingSystem/CraftingManagerComponent.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
-#include "../../System/SkillSystem/SkillManagerBase.h"
 #include "../../Item/ItemBase.h"
 #include "../../Item/ItemBoxBase.h"
 #include "../../Item/RewardBoxBase.h"
@@ -414,7 +414,8 @@ void AMainCharacterBase::Investigate(AActor* TargetActor)
 	}
 	else if (TargetActor->ActorHasTag("CraftingBox"))
 	{
-		Cast<ACraftBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
+
+		//Cast<ACraftBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
 	}
 	else if (TargetActor->ActorHasTag("Gate"))
 	{
@@ -533,19 +534,16 @@ void AMainCharacterBase::TryDownwardAttack()
 	}
 }
 
-void AMainCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
+bool AMainCharacterBase::TrySkill(int32 SkillID)
 {	
 	if (GetIsActionActive(ECharacterActionType::E_Attack))
 	{
 		ResetActionState();
 	}
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return false;
 
-	Super::TrySkill(SkillType, SkillID);
-
-	//Try Skill and adjust rotation to cursor position
-	//RotateToCursor();
+	return Super::TrySkill(SkillID);
 }
 
 void AMainCharacterBase::Attack()
@@ -800,7 +798,12 @@ bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 
 bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
 {
-	return Super::PickWeapon(NewWeaponID);
+	if(!Super::PickWeapon(NewWeaponID)) return false;
+	else 
+	{
+		OnWeaponUpdated.Broadcast();
+		return true;
+	}
 }
 
 void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)

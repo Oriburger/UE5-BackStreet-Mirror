@@ -79,6 +79,10 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	}
 	WeaponStat = GetWeaponStatInfoWithID(WeaponID);
 
+	WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_Attack, 0);
+	WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_AttackSpeed, 0);
+	WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_FinalAttack, 0);
+
 	//에셋 초기화
 	FWeaponAssetInfoStruct newAssetInfo = GetWeaponAssetInfoWithID(WeaponID);
 	WeaponAssetInfo = newAssetInfo;
@@ -236,6 +240,16 @@ float UWeaponComponentBase::CalculateTotalDamage(FCharacterStateStruct TargetSta
 	return WeaponStat.WeaponDamage * (1 + FMath::Max(-1, ownerState.TotalAttack - TargetState.TotalDefense))
 		* (1 + WeaponStat.bCriticalApply * WeaponStat.CriticalDamageRate)
 		+ (!WeaponStat.bFixDamageApply ? 0.0f : WeaponStat.FixedDamageAmount);
+}
+
+bool UWeaponComponentBase::UpgradeStat(TArray<uint8> NewLevelList)
+{
+	for (uint8 idx = 0; idx < MAX_WEAPON_UPGRADABLE_STAT_IDX; idx++)
+	{
+		EWeaponStatType weaponStatType = StaticCast<EWeaponStatType>(idx+1);
+		WeaponState.UpgradedStatMap[weaponStatType] = NewLevelList[idx];
+	}
+	return true;
 }
 
 void UWeaponComponentBase::UpdateComboState()

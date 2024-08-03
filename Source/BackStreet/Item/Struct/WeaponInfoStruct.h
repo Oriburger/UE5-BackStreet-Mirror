@@ -25,6 +25,41 @@ enum class EWeaponType : uint8
 
 };
 
+UENUM(BlueprintType)
+enum class EWeaponStatType : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_Attack				UMETA(DisplayName = "Attack"),
+	E_AttackSpeed		UMETA(DisplayName = "AttackSpeed"),
+	E_FinalAttack		UMETA(DisplayName = "FinalAttack")
+
+};
+
+USTRUCT(BlueprintType)
+struct FUpgradableStatInfoContainer : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	//업그레이드 스탯
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TArray<uint8> RequiredMaterial;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float StatAdder = 0;
+};
+
+USTRUCT(BlueprintType)
+struct FUpgradableStatInfoByLevelContainer : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+	//업그레이드 스탯
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TArray<FUpgradableStatInfoContainer> RequiredMaterialByLevel;
+};
+
 USTRUCT(BlueprintType)
 struct FDebuffInfoStruct
 {
@@ -140,11 +175,15 @@ public:
 
 //----- CraftingStat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bIsDefaultWeapon = false;
+		TMap<EWeaponStatType, FUpgradableStatInfoByLevelContainer> UpgradableStatInfoMap;
 
 //----- 원거리 Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FRangedWeaponStatStruct RangedWeaponStat;
+
+//-----	스킬 Stat		--------
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<ESkillType> SkillTypeList = { ESkillType::E_None, ESkillType::E_None, ESkillType::E_None };
 };
 
 USTRUCT(BlueprintType)
@@ -181,17 +220,14 @@ public:
 		FRotator SlashRotation = FRotator::ZeroRotator;
 
 //-----Weapon Skill------
-	//WeaponSkill Info
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
-		TMap<ESkillType, FOwnerSkillInfoStruct> SkillInfoMap;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FRangedWeaponStateStruct RangedWeaponState;
 
 //-----Weapon Upgraded Stat
-	//Upgraded Stat(in combat area)List 0:Attack, 1:AttackSpeed, 2:finalImpact
+	//Upgraded State(in combat area)
 	UPROPERTY(BlueprintReadWrite)
-		TArray<uint8> UpgradedStatList = { 0,0,0 };
+	TMap<EWeaponStatType, uint8> UpgradedStatMap;
 };
 
 USTRUCT(BlueprintType)
@@ -261,10 +297,6 @@ public:
 	//메시의 초기 크기 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		FVector InitialScale = FVector::ZeroVector;
-
-	//WeaponSkill Info
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		FOwnerSkillInfoStruct WeaponSkillInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UParticleSystem> DestroyEffectParticle;

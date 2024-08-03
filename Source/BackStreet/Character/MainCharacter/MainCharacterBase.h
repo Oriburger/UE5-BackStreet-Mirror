@@ -14,6 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialAttack);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialMove);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialZoom);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialRoll);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateWeaponUpdated);
 
 UCLASS()
 class BACKSTREET_API AMainCharacterBase : public ACharacterBase
@@ -32,6 +33,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTutorialRoll OnRoll;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateWeaponUpdated OnWeaponUpdated;
 
 //-------- Global -----------------
 public:
@@ -54,13 +58,13 @@ protected:
 		void OnCapsuleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp
 						, FVector NormalImpulse, const FHitResult& Hit);
 
-// ------- ÄÄÆ÷³ÍÆ® ----------
+// ------- ì»´í¬ë„ŒíŠ¸ ----------
 public:
-	//ÇÃ·¹ÀÌ¾î ¸ŞÀÎ Ä«¸Ş¶ó ºÕ
+	//í”Œë ˆì´ì–´ ë©”ì¸ ì¹´ë©”ë¼ ë¶
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		USpringArmComponent* CameraBoom;
 
-	//ÇÃ·¹ÀÌ¾îÀÇ ¸ŞÀÎ Ä«¸Ş¶ó
+	//í”Œë ˆì´ì–´ì˜ ë©”ì¸ ì¹´ë©”ë¼
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		UCameraComponent* FollowingCamera;
 		
@@ -130,7 +134,7 @@ public:
 	UFUNCTION()
 		void StopSprint(const FInputActionValue& Value);
 
-	//±¸¸£±â¸¦ ½ÃµµÇÑ´Ù.
+	//êµ¬ë¥´ê¸°ë¥¼ ì‹œë„í•œë‹¤.
 	UFUNCTION()
 		void Roll();
 
@@ -138,15 +142,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void Dash();
 
-	//Ä«¸Ş¶ó BoomÀÇ ±æÀÌ¸¦ ´ÃÀÌ°Å³ª ÁÙÀÎ´Ù.
+	//ì¹´ë©”ë¼ Boomì˜ ê¸¸ì´ë¥¼ ëŠ˜ì´ê±°ë‚˜ ì¤„ì¸ë‹¤.
 	UFUNCTION()
 		void ZoomIn(const FInputActionValue& Value);
 
-	//ÁÖº¯¿¡ »óÈ£ÀÛ¿ë °¡´ÉÇÑ ¾×ÅÍ¸¦ Á¶»çÇÑ´Ù.
+	//ì£¼ë³€ì— ìƒí˜¸ì‘ìš© ê°€ëŠ¥í•œ ì•¡í„°ë¥¼ ì¡°ì‚¬í•œë‹¤.
 	UFUNCTION()
 		void TryInvestigate();
 
-	//ÇØ´ç ¾×ÅÍ¿Í »óÈ£ÀÛ¿ëÇÑ´Ù.
+	//í•´ë‹¹ ì•¡í„°ì™€ ìƒí˜¸ì‘ìš©í•œë‹¤.
 	UFUNCTION(BlueprintCallable)
 		void Investigate(AActor* TargetActor);
 
@@ -163,7 +167,7 @@ public:
 		virtual void TryDownwardAttack() override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void TrySkill(ESkillType SkillType, int32 SkillID) override;
+		virtual bool TrySkill(int32 SkillID) override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
@@ -177,7 +181,7 @@ public:
 	UFUNCTION()
 		virtual void StandUp() override;
 
-	//Rotation Á¶Àı ¹æ½ÄÀ» ±âº» ¹æ½ÄÀÎ Movement ¹æÇâÀ¸·Î µÇµ¹¸°´Ù
+	//Rotation ì¡°ì ˆ ë°©ì‹ì„ ê¸°ë³¸ ë°©ì‹ì¸ Movement ë°©í–¥ìœ¼ë¡œ ë˜ëŒë¦°ë‹¤
 	UFUNCTION(BlueprintCallable)
 		void ResetRotationToMovement();
 
@@ -189,7 +193,7 @@ public:
 		virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 			, AController* EventInstigator, AActor* DamageCauser) override;
 
-	//Rotation Á¶Àı ¹æ½ÄÀ» Ä¿¼­ À§Ä¡·Î ÇÑ´Ù
+	//Rotation ì¡°ì ˆ ë°©ì‹ì„ ì»¤ì„œ ìœ„ì¹˜ë¡œ í•œë‹¤
 	UFUNCTION(BlueprintCallable)
 		void RotateToCursor();
 
@@ -258,7 +262,7 @@ private:
 	UFUNCTION()
 		void UpdateFieldOfView(const float TargetValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
 
-// ------- SaveData °ü·Ã --------------------
+// ------- SaveData ê´€ë ¨ --------------------
 protected:
 	UFUNCTION()
 		void SetCharacterStatFromSaveData();
@@ -267,13 +271,13 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "SaveData")
 		FSaveData SavedData;
 
-// ------- ¾îºô¸®Æ¼ / µğ¹öÇÁ ---------------
+// ------- ì–´ë¹Œë¦¬í‹° / ë””ë²„í”„ ---------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UAbilityManagerBase* GetAbilityManagerRef() { return AbilityManagerRef; }
 
 public: 
-	//µğ¹öÇÁ »óÅÂ¸¦ ÁöÁ¤
+	//ë””ë²„í”„ ìƒíƒœë¥¼ ì§€ì •
 	virtual	bool TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer);
 
 	UFUNCTION(BlueprintCallable)
@@ -307,7 +311,7 @@ private:
 	UFUNCTION()
 		void DeactivateBuffEffect();
 
-	//Ä³¸¯ÅÍ°¡ µ¥¹ÌÁö¸¦ ÀÔÀ» ½Ã, »¡°£ Pulse È¿°ú¿Í Ç¥Á¤ ÅØ½ºÃÄ È¿°ú¸¦ Àû¿ë
+	//ìºë¦­í„°ê°€ ë°ë¯¸ì§€ë¥¼ ì…ì„ ì‹œ, ë¹¨ê°„ Pulse íš¨ê³¼ì™€ í‘œì • í…ìŠ¤ì³ íš¨ê³¼ë¥¼ ì ìš©
 	UFUNCTION()
 		void SetFacialDamageEffect();
 
@@ -319,7 +323,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Sound")
 		class UAudioComponent* AudioComponent;
 
-// ------- ±× ¿Ü -----------
+// ------- ê·¸ ì™¸ -----------
 public:
 	virtual void ClearAllTimerHandle() override;
 
@@ -330,18 +334,18 @@ private:
 	UPROPERTY()
 		class UAbilityManagerBase* AbilityManagerRef;
 
-	//ÇÃ·¹ÀÌ¾î ÄÁÆ®·Ñ·¯ ¾à ÂüÁ¶
+	//í”Œë ˆì´ì–´ ì»¨íŠ¸ë¡¤ëŸ¬ ì•½ ì°¸ì¡°
 	TWeakObjectPtr<class AMainCharacterController> PlayerControllerRef;
 
 // ----- Timer Handle ---------------------
 private:
-	//°ø°İ ½Ã, ¸¶¿ì½º Ä¿¼­ÀÇ À§Ä¡·Î Ä³¸¯ÅÍ°¡ ¹Ù¶óº¸´Â ·ÎÁ÷À» ÃÊ±âÈ­ÇÏ´Â Å¸ÀÌ¸Ó
-	//ÃÊ±âÈ­ ½Ã¿¡´Â ´Ù½Ã movement ¹æÇâÀ¸·Î Ä³¸¯ÅÍÀÇ Rotation Set 
+	//ê³µê²© ì‹œ, ë§ˆìš°ìŠ¤ ì»¤ì„œì˜ ìœ„ì¹˜ë¡œ ìºë¦­í„°ê°€ ë°”ë¼ë³´ëŠ” ë¡œì§ì„ ì´ˆê¸°í™”í•˜ëŠ” íƒ€ì´ë¨¸
+	//ì´ˆê¸°í™” ì‹œì—ëŠ” ë‹¤ì‹œ movement ë°©í–¥ìœ¼ë¡œ ìºë¦­í„°ì˜ Rotation Set 
 	FTimerHandle RotationResetTimerHandle;
 
 	FTimerHandle CameraRotationAlignmentHandle;
 	
-	//±¸¸£±â µô·¹ÀÌ Å¸ÀÌ¸Ó
+	//êµ¬ë¥´ê¸° ë”œë ˆì´ íƒ€ì´ë¨¸
 	FTimerHandle RollTimerHandle;
 
 	//WalkSpeed Interpolate timer
@@ -350,13 +354,13 @@ private:
 	//Field Of View Interpolate timer
 	FTimerHandle FOVInterpHandle;
 
-	//±¸¸£±â ³» ´ë½¬ µô·¹ÀÌ ÇÚµé
+	//êµ¬ë¥´ê¸° ë‚´ ëŒ€ì‰¬ ë”œë ˆì´ í•¸ë“¤
 	FTimerHandle DashDelayTimerHandle;
 
-	//¹öÇÁ ³ªÀÌ¾Æ°¡¶ó ÀÌÆåÆ® ¸®¼Â Å¸ÀÌ¸Ó
+	//ë²„í”„ ë‚˜ì´ì•„ê°€ë¼ ì´í™íŠ¸ ë¦¬ì…‹ íƒ€ì´ë¨¸
 	FTimerHandle BuffEffectResetTimerHandle;
 
-	//Ä³¸¯ÅÍ ¾ó±¼ È¿°ú (¸ÓÆ¼¸®¾ó °ª º¯°æ) ¸®¼Â Å¸ÀÌ¸Ó
+	//ìºë¦­í„° ì–¼êµ´ íš¨ê³¼ (ë¨¸í‹°ë¦¬ì–¼ ê°’ ë³€ê²½) ë¦¬ì…‹ íƒ€ì´ë¨¸
 	FTimerHandle FacialEffectResetTimerHandle;
 
 	FTimerHandle SwitchCameraRotateModeTimerHandle;
