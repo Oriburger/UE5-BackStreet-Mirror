@@ -206,13 +206,13 @@ TArray<uint8> UCraftingManagerComponent::UpdateRequiredMatForWU(TArray<uint8> Ne
 	TArray<uint8> currLevelList;
 	weaponRef->WeaponState.UpgradedStatMap.GenerateValueArray(currLevelList);
 
-	for (uint8 idx = 0; idx < MAX_WEAPON_UPGRADABLE_STAT_IDX; idx++)
+	for (uint8 statType = 0; statType < MAX_WEAPON_UPGRADABLE_STAT_IDX; statType++)
 	{
-		for (uint8 idx2 = 0; idx2 < MAX_CRAFTING_ITEM_IDX; idx2++)
+		for (uint8 itemIdx = 0; itemIdx < MAX_CRAFTING_ITEM_IDX; itemIdx++)
 		{
-			for (uint8 currLevel = currLevelList[idx] + 1; currLevel <= NewLevelList[idx2]; currLevel++)
+			for (uint8 currLevel = currLevelList[statType] + 1; currLevel <= NewLevelList[itemIdx]; currLevel++)
 			{
-				RequiredMatList[idx2] += weaponRef->WeaponStat.UpgradableStatInfoList[idx].RequiredMaterialByLevel[NewLevelList[idx2]].RequiredMaterial[idx2];
+				RequiredMatList[statType] += weaponRef->WeaponStat.UpgradableStatInfoMap[StaticCast<EWeaponStatType>(statType)].RequiredMaterialByLevel[NewLevelList[itemIdx]].RequiredMaterial[itemIdx];
 			}
 		}
 	}

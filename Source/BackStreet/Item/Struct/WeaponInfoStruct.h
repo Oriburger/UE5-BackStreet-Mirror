@@ -175,7 +175,7 @@ public:
 
 //----- CraftingStat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<FUpgradableStatInfoByLevelContainer> UpgradableStatInfoList;
+		TMap<EWeaponStatType, FUpgradableStatInfoByLevelContainer> UpgradableStatInfoMap;
 
 //----- ¿ø°Å¸® Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
