@@ -47,6 +47,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		float StatAdder = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool bCanUpgradeLevel = false;
 };
 
 USTRUCT(BlueprintType)
@@ -176,14 +179,6 @@ public:
 		FDebuffInfoStruct DebuffInfo;
 
 //----- CraftingStat ------
-	//현재 플레이어가 전투영역에서 업그레이드 가능한 최대 레벨
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TMap<EWeaponStatType, uint8> LimitedUpgradeLevelMap;
-	
-	//영구강화 등으로 업그레이드 가능한 최대 레벨 상한선
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TMap<EWeaponStatType, uint8> MaxUpgradeLevelMap;
-
 	//레벨별 스탯 강화 수치 및 요구 재료
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TMap<EWeaponStatType, FUpgradableStatInfoByLevelContainer> UpgradableStatInfoMap;

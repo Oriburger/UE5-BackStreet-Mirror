@@ -225,7 +225,7 @@ bool UCraftingManagerComponent::GetIsStatLevelValid(TArray<uint8> NewLevelList)
 	UWeaponComponentBase* weaponRef = MainCharacterRef->WeaponComponent;
 	for (int32 typeIdx = 0; typeIdx < NewLevelList.Num(); typeIdx++)
 	{
-		if(weaponRef->WeaponStat.LimitedUpgradeLevelMap[static_cast<EWeaponStatType>(typeIdx +1)]<NewLevelList[typeIdx]) return false;
+		if(weaponRef->GetLimitedStatLevel(static_cast<EWeaponStatType>(typeIdx +1))<NewLevelList[typeIdx]) return false;
 	}
 	return true;
 }

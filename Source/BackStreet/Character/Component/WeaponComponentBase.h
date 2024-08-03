@@ -123,6 +123,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetWeaponState(FWeaponStateStruct NewState) { WeaponState = NewState; }
 
+	UFUNCTION(BlueprintCallable)
+		uint8 GetLimitedStatLevel(EWeaponStatType WeaponStatType);
+
+	UFUNCTION(BlueprintCallable)
+		uint8 GetMaxStatLevel(EWeaponStatType WeaponStatType);
+
 	//Calculate total damage to target character
 	UFUNCTION()
 		float CalculateTotalDamage(FCharacterStateStruct TargetState);
