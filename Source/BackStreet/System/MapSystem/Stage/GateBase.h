@@ -27,7 +27,7 @@ protected:
 
 public: 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		UBoxComponent* OverlapVolume;
+		class UInteractiveCollisionComponent* OverlapVolume;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* Mesh;

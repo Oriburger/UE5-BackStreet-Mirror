@@ -3,6 +3,7 @@
 #include "../Global/BackStreetGameModeBase.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
+#include "InteractiveCollisionComponent.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -39,7 +40,7 @@ AItemBase::AItemBase()
 	ParticleComponent->SetupAttachment(MeshComponent);
 	ParticleComponent->bAutoActivate = false;
 
-	ItemTriggerVolume = CreateDefaultSubobject<USphereComponent>("SPHERE_COLLISION");
+	ItemTriggerVolume = CreateDefaultSubobject<UInteractiveCollisionComponent>("SPHERE_COLLISION");
 	ItemTriggerVolume->SetupAttachment(RootComponent);
 	ItemTriggerVolume->SetRelativeScale3D(FVector(5.0f));
 	ItemTriggerVolume->SetCollisionProfileName("ItemTrigger", true);
@@ -58,6 +59,8 @@ void AItemBase::BeginPlay()
 
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 	OnPlayerBeginPickUp.BindUFunction(this, FName("OnItemPicked"));
+	ItemTriggerVolume->OnInteractionBegin.AddDynamic(this, &AItemBase::OnItemPicked);
+
 
 	ActivateItem();
 }
@@ -101,16 +104,14 @@ void AItemBase::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* O
 	//UI Deactivate
 }
 
-void AItemBase::OnItemPicked(AActor* Causer)
+void AItemBase::OnItemPicked()
 {
-	if (!IsValid(Causer) || Causer->IsActorBeingDestroyed()) return;
-
-	AMainCharacterBase* playerRef = Cast<AMainCharacterBase>(Causer);
+	AMainCharacterBase* playerRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	
 	switch (ItemInfo.ItemType)
 	{
 	case EItemCategoryInfo::E_Weapon:
-		if (Causer->ActorHasTag("Player"))
+		if (playerRef->ActorHasTag("Player"))
 		{
 			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
 			if (!playerRef->PickWeapon(targetWeaponID)) return;
