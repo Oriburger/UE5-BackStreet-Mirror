@@ -3,6 +3,7 @@
 
 #include "GateBase.h"
 #include "../../../Global/BackStreetGameModeBase.h"
+#include "../../../Item/InteractiveCollisionComponent.h"
 #include "../../AssetSystem/AssetManagerBase.h"
 #include "Math/Color.h"
 #include "Kismet/GameplayStatics.h"
@@ -15,7 +16,7 @@ AGateBase::AGateBase()
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	
-	OverlapVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("OverlapVolume"));
+	OverlapVolume = CreateDefaultSubobject<UInteractiveCollisionComponent>(TEXT("OverlapVolume"));
 	OverlapVolume->SetupAttachment(RootComponent);
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
@@ -33,6 +34,7 @@ void AGateBase::BeginPlay()
 	{
 		AssetManagerRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
 	}
+	OverlapVolume->OnInteractionBegin.AddDynamic(this, &AGateBase::EnterGate);
 }
 
 void AGateBase::InitGate(FVector2D NewDirection, FName StageType)

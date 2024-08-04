@@ -376,6 +376,7 @@ void ACharacterBase::TakeHeal(float HealAmount, bool bIsTimerEvent, uint8 BuffDe
 {
 	CharacterState.CurrentHP += HealAmount;
 	CharacterState.CurrentHP = FMath::Min(CharacterStat.DefaultHP, CharacterState.CurrentHP);
+	OnTakeDamage.Broadcast();
 	return;
 }
 
