@@ -17,7 +17,7 @@ ACraftBoxBase::ACraftBoxBase()
 
     // Create the trigger box component
     RootComponent = OverlapVolume = CreateDefaultSubobject<UInteractiveCollisionComponent>(TEXT("INTERACTIVE_COLLISION"));
-    OverlapVolume->SetRelativeScale3D(FVector(7.0f));
+    OverlapVolume->SetRelativeScale3D(FVector(1.0f));
     
     Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_MESH"));
     Mesh->SetupAttachment(RootComponent);
