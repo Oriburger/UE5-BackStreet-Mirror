@@ -26,7 +26,7 @@ protected:
 
 public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		class USphereComponent* OverlapVolume;
+		class UInteractiveCollisionComponent* OverlapVolume;
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* Mesh;
@@ -37,7 +37,7 @@ public:
 // ------ 기본 로직 -----------------------------
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-		void EnterUI(AActor* Causer);
+		void EnterUI();
 
 	UFUNCTION(BlueprintCallable)
 		void VisibleGuideTextRender(AActor* Causer);

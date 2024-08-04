@@ -146,10 +146,6 @@ public:
 	UFUNCTION()
 		void TryInvestigate();
 
-	//해당 액터와 상호작용한다.
-	UFUNCTION(BlueprintCallable)
-		void Investigate(AActor* TargetActor);
-
 	UFUNCTION()
 		virtual void TryReload() override;
 
@@ -194,7 +190,7 @@ public:
 		void RotateToCursor();
 
 	UFUNCTION()
-		TArray<AActor*> GetNearInteractionActorList();
+		TArray<class UInteractiveCollisionComponent*> GetNearInteractionComponentList();
 
 private:
 	UFUNCTION()

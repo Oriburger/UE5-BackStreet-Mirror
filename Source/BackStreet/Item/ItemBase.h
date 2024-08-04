@@ -42,7 +42,7 @@ public:
 		class UStaticMeshComponent* OutlineMeshComponent;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), BlueprintReadWrite)
-		class USphereComponent* ItemTriggerVolume;
+		class UInteractiveCollisionComponent* ItemTriggerVolume;
 
 	UPROPERTY(EditDefaultsOnly)
 		class UWidgetComponent* InfoWidgetComponent;
@@ -77,7 +77,7 @@ public:
 	
 	//캐릭터가 Pick이벤트를 호출했다면
 	UFUNCTION()
-		void OnItemPicked(AActor* Causer);
+		void OnItemPicked();
 
 protected:
 	UFUNCTION()
