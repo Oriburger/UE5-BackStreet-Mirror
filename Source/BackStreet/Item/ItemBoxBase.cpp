@@ -4,6 +4,7 @@
 #include "ItemBoxBase.h"
 #include "ItemBase.h"
 #include "../Global/BackStreetGameModeBase.h"
+#include "InteractiveCollisionComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Math/RandomStream.h"
@@ -15,7 +16,7 @@ AItemBoxBase::AItemBoxBase()
 	PrimaryActorTick.bCanEverTick = false;
 	SetActorTickEnabled(false);
 
-	RootComponent = OverlapVolume = CreateDefaultSubobject<USphereComponent>("SPHERE_COLLISION");
+	RootComponent = OverlapVolume = CreateDefaultSubobject<UInteractiveCollisionComponent>("BOX_COLLISION");
 	//OverlapVolume->SetupAttachment(RootComponent);
 	OverlapVolume->SetRelativeScale3D(FVector(5.0f));
 	OverlapVolume->SetCollisionProfileName("ItemTrigger", true);
@@ -34,8 +35,7 @@ void AItemBoxBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OnPlayerOpenBegin.AddDynamic(this, &AItemBoxBase::OnItemBoxOpened);
-	//OverlapVolume->OnComponentBeginOverlap.AddDynamic(this, &AItemBoxBase::OnOverlapBegins);
+	OverlapVolume->OnInteractionBegin.AddDynamic(this, &AItemBoxBase::OnItemBoxOpened);
 	MeshComponent->OnComponentHit.AddDynamic(this, &AItemBoxBase::OnMeshHit);
 
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
@@ -46,9 +46,8 @@ void AItemBoxBase::InitItemBox(bool _bIncludeMissionItem)
 	bIncludeMissionItem = _bIncludeMissionItem;
 }
 
-void AItemBoxBase::OnItemBoxOpened(AActor* Causer)
+void AItemBoxBase::OnItemBoxOpened()
 {
-	if (!IsValid(Causer) || !Causer->ActorHasTag("Player")) return;
 	if (MinSpawnItemCount > MaxSpawnItemCount) //정보 기입이 제대로 이뤄지지 않음
 	{
 		UE_LOG(LogTemp, Warning, TEXT("AItemBoxBase::OnItemBoxOpened) SpawnCount Info가 올바르지 않습니다."));
@@ -58,7 +57,7 @@ void AItemBoxBase::OnItemBoxOpened(AActor* Causer)
 	int32 spawnItemCount = UKismetMathLibrary::RandomIntegerInRange(MinSpawnItemCount, MaxSpawnItemCount);
 	TArray<AItemBase*> spawnedItemList = SpawnItems(spawnItemCount);
 
-	for (auto& itemRef : spawnedItemList)
+	for (AItemBase*& itemRef : spawnedItemList)
 	{
 		if (!IsValid(itemRef)) continue;
 		LaunchItem(itemRef);

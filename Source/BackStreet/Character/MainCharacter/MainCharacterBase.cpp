@@ -12,6 +12,7 @@
 #include "../../Item/ItemBase.h"
 #include "../../Item/ItemBoxBase.h"
 #include "../../Item/RewardBoxBase.h"
+#include "../../Item/InteractiveCollisionComponent.h"
 #include "../../System/MapSystem/Stage/GateBase.h"
 #include "../Component/WeaponComponentBase.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -370,55 +371,17 @@ void AMainCharacterBase::ZoomIn(const FInputActionValue& Value)
 
 void AMainCharacterBase::TryInvestigate()
 {
-	TArray<AActor*> nearActorList = GetNearInteractionActorList();
+	TArray<UInteractiveCollisionComponent*> nearCompoenentList = GetNearInteractionComponentList();
 
-	if (nearActorList.Num())
+	if (nearCompoenentList.Num())
 	{
 		if (AssetHardPtrInfo.InvestigateAnimMontageList.Num() > 0
 			&& IsValid(AssetHardPtrInfo.InvestigateAnimMontageList[0]))
 		{
 			PlayAnimMontage(AssetHardPtrInfo.InvestigateAnimMontageList[0]);
 		}
-		Investigate(nearActorList[0]);
+		nearCompoenentList[0]->Interact();
 		ResetActionState();
-	}
-}
-
-void AMainCharacterBase::Investigate(AActor* TargetActor)
-{
-	if (!IsValid(TargetActor)) return;
-
-	if (TargetActor->ActorHasTag("Item"))
-	{
-		Cast<AItemBase>(TargetActor)->OnPlayerBeginPickUp.ExecuteIfBound(this);
-		if (AssetManagerBaseRef.IsValid())
-		{
-			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "EquipWeapon");
-		}
-	}
-	else if (TargetActor->ActorHasTag("ItemBox"))
-	{
-		Cast<AItemBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
-		if (AssetManagerBaseRef.IsValid())
-		{
-			AssetManagerBaseRef.Get()->PlayRandomSound(this, ESoundAssetType::E_Character, 0, "OpenItemBox");
-		}
-	}
-	else if (TargetActor->ActorHasTag("RewardBox"))
-	{
-		Cast<ARewardBoxBase>(TargetActor)->OnPlayerBeginInteract.Broadcast(this);
-		if (AssetManagerBaseRef.IsValid())
-		{
-			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "OpenAbilityBox");
-		}
-	}
-	else if (TargetActor->ActorHasTag("CraftingBox"))
-	{
-		Cast<ACraftBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
-	}
-	else if (TargetActor->ActorHasTag("Gate"))
-	{
-		Cast<AGateBase>(TargetActor)->EnterGate(); 
 	}
 }
 
@@ -588,12 +551,10 @@ void AMainCharacterBase::RotateToCursor()
 }
 
 
-TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
+TArray<UInteractiveCollisionComponent*> AMainCharacterBase::GetNearInteractionComponentList()
 {
-	TArray<AActor*> totalItemList;
-	TArray<UClass*> targetClassList = {AItemBase::StaticClass(), AItemBoxBase::StaticClass()
-									 , ARewardBoxBase::StaticClass(), ACraftBoxBase::StaticClass()
-									 , AGateBase::StaticClass()};
+	TArray<UInteractiveCollisionComponent*> returnList;
+	TArray<UClass*> targetClassList = { UInteractiveCollisionComponent::StaticClass() };
 	TEnumAsByte<EObjectTypeQuery> itemObjectType = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel3);
 	FVector overlapBeginPos = GetActorLocation() + GetMesh()->GetForwardVector() * 70.0f + GetMesh()->GetUpVector() * -45.0f;
 	
@@ -601,14 +562,20 @@ TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
 	{
 		bool result = false;
 
+		TArray<UPrimitiveComponent*> resultList;
 		for (UClass* targetClass : targetClassList)
 		{
-			result = (result || UKismetSystemLibrary::SphereOverlapActors(GetWorld(), overlapBeginPos, sphereRadius
-													, { itemObjectType }, targetClass, {}, totalItemList));
-			if (totalItemList.Num() > 0) return totalItemList; //찾는 즉시 반환
+			result = (result || UKismetSystemLibrary::SphereOverlapComponents(GetWorld(), overlapBeginPos, sphereRadius
+						, { itemObjectType }, targetClass, {}, resultList));
+			if (resultList.Num() > 0)
+			{
+				for (UPrimitiveComponent*& component : resultList)
+					returnList.Add(Cast<UInteractiveCollisionComponent>(component));
+				return returnList; //찾는 즉시 반환
+			}
 		}
 	}
-	return totalItemList;
+	return {};
 }
 
 void AMainCharacterBase::StopDashMovement()

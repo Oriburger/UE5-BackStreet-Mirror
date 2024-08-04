@@ -3,6 +3,7 @@
 
 #include "CraftBoxBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
+#include "../../Item/InteractiveCollisionComponent.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "Components/SphereComponent.h"
 #include "Components/TextRenderComponent.h"
@@ -15,9 +16,8 @@ ACraftBoxBase::ACraftBoxBase()
     SetActorTickEnabled(false);
 
     // Create the trigger box component
-    RootComponent = OverlapVolume = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERE_COLLISION"));
+    RootComponent = OverlapVolume = CreateDefaultSubobject<UInteractiveCollisionComponent>(TEXT("SPHERE_COLLISION"));
     OverlapVolume->SetRelativeScale3D(FVector(7.0f));
-    OverlapVolume->SetCollisionProfileName("ItemTrigger", true);
     
     Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_MESH"));
     Mesh->SetupAttachment(RootComponent);
@@ -36,7 +36,7 @@ ACraftBoxBase::ACraftBoxBase()
 void ACraftBoxBase::BeginPlay()
 {
     Super::BeginPlay();
-    OnPlayerOpenBegin.AddDynamic(this, &ACraftBoxBase::EnterUI);
+    OverlapVolume->OnInteractionBegin.AddDynamic(this, &ACraftBoxBase::EnterUI);
 }
 
 void ACraftBoxBase::VisibleGuideTextRender(AActor* Causer)
