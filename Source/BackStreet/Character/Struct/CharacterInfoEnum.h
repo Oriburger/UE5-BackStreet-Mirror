@@ -4,14 +4,18 @@
 UENUM(BlueprintType)
 enum class ECharacterAbilityType : uint8
 {
-	E_None				UMETA(DisplayName = "None"),
-	E_MaxHP				UMETA(DisplayName = "MaxHP"),
-	E_AutoHeal			UMETA(DisplayName = "AutoHeal"),
-	E_AttackUp			UMETA(DisplayName = "AttackUp"),
-	E_DefenseUp			UMETA(DisplayName = "DefenseUp"),
-	E_MoveSpeedUp		UMETA(DisplayName = "MoveSpeedUp"),
-	E_AtkSpeedUp		UMETA(DisplayName = "AttackSpeedUp"),
-	E_MultipleShot		UMETA(DisplayName = "MultipleShot")
+	E_None						UMETA(DisplayName = "None"),
+	E_MaxHP						UMETA(DisplayName = "MaxHP"),
+	E_AutoHeal					UMETA(DisplayName = "AutoHeal"),
+	E_AttackUp					UMETA(DisplayName = "AttackUp"),
+	E_DefenseUp					UMETA(DisplayName = "DefenseUp"),
+	E_MoveSpeedUp				UMETA(DisplayName = "MoveSpeedUp"),
+	E_AtkSpeedUp				UMETA(DisplayName = "AttackSpeedUp"),
+	E_MultipleShot				UMETA(DisplayName = "MultipleShot"),
+	E_LargeWishList				UMETA(DisplayName = "LargeWishList"),
+	E_ExtraTime					UMETA(DisplayName = "ExtraTime"),
+	E_LuckyMaterial				UMETA(DisplayName = "LuckyMaterial"),
+	E_InfiniteSkillMaterial		UMETA(DisplayName = "InfiniteSkillMaterial"),
 };
 
 UENUM(BlueprintType)
