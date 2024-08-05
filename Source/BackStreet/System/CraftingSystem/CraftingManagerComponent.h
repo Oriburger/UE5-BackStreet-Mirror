@@ -6,6 +6,14 @@
 #include "Components/ActorComponent.h"
 #include "CraftingManagerComponent.generated.h"
 
+UENUM(BlueprintType)
+enum class EKeepMat : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_Screw				UMETA(DisplayName = "Screw"),
+	E_Spring				UMETA(DisplayName = "Spring"),
+	E_Gear				UMETA(DisplayName = "Gear"),
+};
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API UCraftingManagerComponent : public UActorComponent
@@ -27,24 +35,27 @@ protected:
 //WeaponUpgrade == WU
 //=======	Common Function		========================
 public:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsMatEnough();
 
 	UFUNCTION()
 		bool ConsumeMat();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsKeepSkillAvailable();
+
 //=======	Select Skill Function	========================		
 public:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		bool AddSkill(int32 NewSkillID);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void SetDisplayingSkillList();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void KeepSkill(int32 SkillID);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void UnkeepSkill(int32 SkillID);
 
 //=======	Upgrade Skill Function	======================	
@@ -68,8 +79,8 @@ public:
 		bool bIsSkillCreated = false;
 
 	//만능재료 사용 안함 = 0, 나사 = 1, 스프링 = 2, 기어 = 3
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		uint8 KeepMatIdx = 0;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		EKeepMat KeepMat = EKeepMat::E_None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<uint8> RequiredMatList;

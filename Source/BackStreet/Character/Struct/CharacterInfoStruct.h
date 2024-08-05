@@ -128,6 +128,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 100.0f, UIMax = 1000.0f))
 		float DefaultMoveSpeed = 400.0f;
+
+//=======	Player Crafting Stat	===================
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,  Category = "Gameplay")
+		uint8 MaxKeepingSkillCount = 1;
 };
 
 USTRUCT(BlueprintType)

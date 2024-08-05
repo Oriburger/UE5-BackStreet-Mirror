@@ -38,7 +38,7 @@ bool UCraftingManagerComponent::GetIsMatEnough()
 	for (uint8 requiredMatIdx = 0 ; requiredMatIdx < RequiredMatList.Num(); requiredMatIdx++)
 	{
 		//만능재료 사용 시 충족 여부 확인
-		if (KeepMatIdx == requiredMatIdx && 
+		if (static_cast<uint8>(KeepMat) == requiredMatIdx && 
 			currMatList[4] < RequiredMatList[requiredMatIdx]) return false;
 		//일반재료 사용 시 충족 여부 확인
 		if(currMatList[requiredMatIdx] < RequiredMatList[requiredMatIdx]) return false;
@@ -51,7 +51,7 @@ bool UCraftingManagerComponent::ConsumeMat()
 	for (uint8 idx = 0; idx < MAX_CRAFTING_ITEM_IDX; idx++)
 	{
 		//만능재료 사용 시
-		if (KeepMatIdx == idx)
+		if (static_cast<uint8>(KeepMat) == idx)
 		{
 			MainCharacterRef->ItemInventory->RemoveItem(4, RequiredMatList[idx]);
 		}
@@ -62,6 +62,12 @@ bool UCraftingManagerComponent::ConsumeMat()
 		}
 	}
 	return false;
+}
+
+bool UCraftingManagerComponent::GetIsKeepSkillAvailable()
+{
+	if(SkillManagerRef->KeepSkillList.Num()>MainCharacterRef->GetCharacterStat().MaxKeepingSkillCount	) return false;
+	return true;
 }
 
 bool UCraftingManagerComponent::AddSkill(int32 NewSkillID)
