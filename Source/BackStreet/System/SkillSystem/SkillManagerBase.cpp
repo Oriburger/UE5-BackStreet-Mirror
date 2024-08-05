@@ -138,6 +138,7 @@ FSkillInfoStruct USkillManagerBase::GetCurrSkillInfoByType(ESkillType SkillType)
 	if (!IsValid(mainCharacterRef)) return FSkillInfoStruct();
 	if (!mainCharacterRef->WeaponComponent->GetWeaponState().SkillInfoMap.Contains(SkillType)) return FSkillInfoStruct();
 	FOwnerSkillInfoStruct* ownerSkillInfo = &mainCharacterRef->WeaponComponent->WeaponState.SkillInfoMap[SkillType];
+	if (ownerSkillInfo == nullptr) return;
 	if (ownerSkillInfo->SkillID == 0) return FSkillInfoStruct();
 
 	//기존에 만들어져 있는 스킬 베이스 중 원하는 스킬이 있는지 확인
