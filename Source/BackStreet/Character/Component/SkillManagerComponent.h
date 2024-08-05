@@ -6,6 +6,10 @@
 #include "Components/ActorComponent.h"
 #include "SkillManagerComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateEquiped, int32, SkillID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillUpdated, int32, SkillID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillActivated, int32, SkillID);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API USkillManagerComponent : public UActorComponent
 {
@@ -14,6 +18,14 @@ class BACKSTREET_API USkillManagerComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	USkillManagerComponent();
+
+
+public:
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateSkillUpdated OnSkillUpdated;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateSkillActivated OnSkillActivated;
 
 protected:
 	// Called when the game starts

@@ -55,6 +55,7 @@ bool USkillManagerComponent::TrySkill(int32 SkillID)
 	}
 	OwnerCharacterRef->SetActionState(ECharacterActionType::E_Skill);
 	skillBase->ActivateSkill();
+	OnSkillActivated.Broadcast(SkillID);
 
 	return true;
 }
@@ -92,6 +93,7 @@ bool USkillManagerComponent::AddSkill(int32 SkillID)
 		}
 	}
 	skillBase->InitSkill(*skillStat, this);
+	UpgradeSkill(SkillID, 1);
 	UpdateObtainableSkillMap();
 	return true;
 }
@@ -114,6 +116,7 @@ bool USkillManagerComponent::RemoveSkill(int32 SkillID)
 			SkillInventoryMap.Find(skillType)->SkillBaseList.Remove(skillBase);
 		}
 	}
+	OnSkillUpdated.Broadcast(SkillID);
 	UpdateObtainableSkillMap();
 	return true;
 }
@@ -131,6 +134,7 @@ bool USkillManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 		skillBase->SkillStat.SkillLevelStatStruct.CoolTime = 
 		*skillBase->SkillStat.SkillLevelStatStruct.VariableByLevel[NewLevel].SkillVariableMap.Find("CoolTime");
 	}
+	OnSkillUpdated.Broadcast(SkillID);
 	return true;
 }
 
