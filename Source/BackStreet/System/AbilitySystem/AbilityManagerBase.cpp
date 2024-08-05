@@ -154,6 +154,18 @@ bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct Target
 		case ECharacterAbilityType::E_MultipleShot:
 			characterStat.ProjectileCountPerAttack += targetVariable;
 			break;
+		case ECharacterAbilityType::E_LargeWishList:
+			characterStat.MaxKeepingSkillCount += targetVariable;
+			break;
+		case ECharacterAbilityType::E_ExtraTime:
+			characterStat.ExtraStageTime += targetVariable;
+			break;
+		case ECharacterAbilityType::E_LuckyMaterial:
+			characterStat.ExtraPercentageUnivMaterial += targetVariable;
+			break;
+		case ECharacterAbilityType::E_InfiniteSkillMaterial:
+			characterStat.bInfiniteSkillMaterial = (bool)targetVariable;
+			break;
 		}	
 	}
 	OwnerCharacterRef.Get()->UpdateCharacterStatAndState(characterStat, characterState);

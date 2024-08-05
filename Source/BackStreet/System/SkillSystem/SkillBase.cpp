@@ -98,6 +98,7 @@ float ASkillBase::PlayAnimMontage(ACharacter* Target, FName AnimName)
 	FSkillAnimInfoStruct* skillAnimInfo = SkillStat.SkillAssetStruct.AnimInfoMap.Find(AnimName);
 	checkf(skillAnimInfo != nullptr, TEXT("SkillAnimAsset is not valid"));
 	UAnimMontage* anim = skillAnimInfo->AnimMontage;
+	if (!IsValid(anim)) return 0.0f;
 	float animPlayTime = Target->PlayAnimMontage(anim, skillAnimInfo->AnimPlayRate);
 	return animPlayTime;
 }
