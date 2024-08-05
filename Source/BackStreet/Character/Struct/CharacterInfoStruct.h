@@ -100,33 +100,50 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0, UIMax = 2500))
 		int32 CharacterID = 0;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+//======= Weapon Stat ======================
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 		bool bIsInvincibility = false;
 
 	//무한 내구도 / 무한 탄약 (Enemy 기본 스탯)
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "Weapon")
 		bool bInfinite = false;
 
 	//Projectile Count Per Attack
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1, UIMax = 1))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1, UIMax = 1), Category = "Weapon")
 		int32 ProjectileCountPerAttack = 1;
 
+//======= Weapon Stat ======================
+	//for time-attack stage
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		float ExtraStageTime = 0.0f;
+
+	//Extra wish list in skill
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		int32 MaxKeepingSkillCount = 0;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		bool bInfiniteSkillMaterial = false;
+
+	//Extra percentage for universal material
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		float ExtraPercentageUnivMaterial = false;
+
 //======= Default Stat ======================
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 1.0f, UIMax = 1000.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 1.0f, UIMax = 1000.0f), Category = "Default")
 		float DefaultHP = 100.0f;
 
 	//Multipiler Value
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f), Category = "Default")
 		float DefaultAttack = 1.0f;
 
 	//Multipiler Value
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f), Category = "Default")
 		float DefaultDefense = 1.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f), Category = "Default")
 		float DefaultAttackSpeed = 10.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 100.0f, UIMax = 1000.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 100.0f, UIMax = 1000.0f), Category = "Default")
 		float DefaultMoveSpeed = 400.0f;
 };
 
