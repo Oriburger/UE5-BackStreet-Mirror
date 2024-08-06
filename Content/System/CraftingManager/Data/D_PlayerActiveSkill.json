@@ -42,7 +42,7 @@
 	{
 		"Name": "5004",
 		"SkillID": 5004,
-		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/MainCharacter/BPS_MultipleSlash.BPS_MultipleSlash_C'",
+		"SkillBaseClassRef": "/Script/Engine.BlueprintGeneratedClass'/Game/System/SkillManager/Blueprint/SkillBase/MainCharacter/BPS_Flash.BPS_Flash_C'",
 		"SkillType": "E_Weapon0",
 		"bSkillBlocked": false,
 		"SkillLevel": 0
