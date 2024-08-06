@@ -26,7 +26,8 @@ void UCraftingManagerComponent::BeginPlay()
 void UCraftingManagerComponent::InitCraftingManager()
 {
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	OwnerActorRef = Cast<ACraftBoxBase>(GetOwner());
+	OwnerActorRef = GetOwner();
+	OwnerActorRef->Tags.Add("CraftingBox");
 	MainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	SkillManagerRef = MainCharacterRef->SkillManagerComponent;
 	bIsSkillCreated = false;

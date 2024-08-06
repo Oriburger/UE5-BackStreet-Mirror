@@ -223,6 +223,7 @@ bool USkillManagerComponent::EquipSkill(int32 NewSkillID)
 FSkillStatStruct USkillManagerComponent::GetSkillInfo(int32 SkillID)
 {
 	FString rowName = FString::FromInt(SkillID);
+	checkf(IsValid(SkillStatTable), TEXT("SkillStatTable is not valid"));
 	FSkillStatStruct* skillStat = SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
 	checkf(skillStat != nullptr, TEXT("SkillStat is not valid"));
 	return *skillStat;

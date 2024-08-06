@@ -93,7 +93,7 @@ public:
 private:
 	TWeakObjectPtr<class ABackStreetGameModeBase> GameModeRef;
 
-	TWeakObjectPtr<class ACraftBoxBase> OwnerActorRef;
+	TWeakObjectPtr<class AActor> OwnerActorRef;
 
 	TWeakObjectPtr<class AMainCharacterBase> MainCharacterRef;
 
