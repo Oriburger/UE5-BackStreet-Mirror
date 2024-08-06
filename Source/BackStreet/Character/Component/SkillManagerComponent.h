@@ -7,7 +7,7 @@
 #include "SkillManagerComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateEquiped, int32, SkillID);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillUpdated, int32, SkillID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateSkillUpdated);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillActivated, int32, SkillID);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -87,6 +87,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TMap<ESkillType, FObtainableSkillListContainer> GetObtainableSkillMap() { return ObtainableSkillMap; }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TMap<ESkillType, int32> GetEquipedSkillMap() { return EquipedSkillMap; }
+
 //======= DataTable ==========================
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gamplay|Data")
@@ -99,11 +102,10 @@ private:
 	//플레어어가 획득할 수 있는 스킬을 SkillType에 따라 분류한 Map(조합 스테이지용)
 	TMap<ESkillType, FObtainableSkillListContainer>ObtainableSkillMap;
 
-public:
 	//현재 플레이어가 장착한 스킬 Map
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<ESkillType, int32> EquipedSkillMap;
-	
+	TMap<ESkillType, int32> EquipedSkillMap;
+
+public:
 	//플레어어가 획득하기 위하여 찜해둔 스킬 리스트(조합 스테이지용)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		TArray<int32> KeepSkillList;

@@ -68,7 +68,6 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	//Stat, State 초기화 
 	WeaponID = NewWeaponID;
 	WeaponStat.WeaponID = WeaponID;
-
 	if (NewWeaponID == 0)
 	{
 		WeaponStat = FWeaponStatStruct();
@@ -120,6 +119,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &UWeaponComponentBase::InitWeaponAsset));
 	}
+	OnWeaponUpdated.Broadcast();
 }
 
 void UWeaponComponentBase::InitWeaponAsset()

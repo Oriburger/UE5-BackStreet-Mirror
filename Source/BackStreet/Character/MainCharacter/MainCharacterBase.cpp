@@ -760,11 +760,7 @@ bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
 {
 	if (!Super::PickWeapon(NewWeaponID)) return false;
-	else
-	{
-		OnWeaponUpdated.Broadcast();
-		return true;
-	}
+	return true;
 }
 
 void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)

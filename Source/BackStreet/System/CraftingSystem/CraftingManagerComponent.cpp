@@ -34,6 +34,7 @@ void UCraftingManagerComponent::InitCraftingManager()
 
 bool UCraftingManagerComponent::GetIsMatEnough()
 {
+	if(MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
 	TArray<uint8> currMatList = MainCharacterRef->ItemInventory->GetCraftingItemAmount();
 	for (uint8 requiredMatIdx = 0 ; requiredMatIdx < RequiredMatList.Num(); requiredMatIdx++)
 	{
@@ -48,6 +49,7 @@ bool UCraftingManagerComponent::GetIsMatEnough()
 
 bool UCraftingManagerComponent::ConsumeMat()
 {
+	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
 	for (uint8 idx = 0; idx < MAX_CRAFTING_ITEM_IDX; idx++)
 	{
 		//만능재료 사용 시
@@ -61,7 +63,7 @@ bool UCraftingManagerComponent::ConsumeMat()
 			MainCharacterRef->ItemInventory->RemoveItem(idx + 1, RequiredMatList[idx]);
 		}
 	}
-	return false;
+	return true;
 }
 
 bool UCraftingManagerComponent::GetIsKeepSkillAvailable()
@@ -178,6 +180,7 @@ bool UCraftingManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 
 TArray<uint8> UCraftingManagerComponent::UpdateRequiredMatForSU(int32 SkillID, uint8 NewLevel)
 {
+	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial && NewLevel ==1) return { 0,0,0 };
 	RequiredMatList.Empty();
 	uint8 currSkillLevel = SkillManagerRef->GetOwnSkillState(SkillID).SkillLevelStateStruct.SkillLevel;
 	
@@ -186,7 +189,7 @@ TArray<uint8> UCraftingManagerComponent::UpdateRequiredMatForSU(int32 SkillID, u
 		uint8 totalAmt = 0;
 		for (uint8 currLevel = currSkillLevel + 1; currLevel <= NewLevel; currLevel++)
 		{
-			totalAmt += SkillManagerRef->GetSkillInfo(SkillID).SkillLevelStatStruct.RequiredMaterialsByLevel[currLevel].RequiredMaterial[idx];
+			totalAmt += SkillManagerRef->GetSkillInfo(SkillID).SkillLevelStatStruct.LevelInfo[currLevel].RequiredMaterial[idx];
 		}
 		RequiredMatList.Add(totalAmt);
 	}

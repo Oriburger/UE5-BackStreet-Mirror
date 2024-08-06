@@ -119,13 +119,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		int32 WeaponID = 0;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FName WeaponName;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FName Description;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		EWeaponType WeaponType = EWeaponType::E_None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)

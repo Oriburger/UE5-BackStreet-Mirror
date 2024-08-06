@@ -103,19 +103,10 @@ public:
 		UDataTable* ItemInfoTable;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|CraftingManager")
-		UDataTable* PlayerActiveSkillTable;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|CraftingManager")
 		UDataTable* StatUpgradeInfoTable;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|SkillManager")
-		UDataTable* SkillInfoTable;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|SkillManager")
 		UDataTable* SkillStatTable;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|SkillManager")
-		UDataTable* SkillUpgradeInfoTable;
 
 //------ 그 외 프로퍼티 ---------------
 public:

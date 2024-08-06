@@ -10,16 +10,20 @@ enum class ESkillType : uint8
 	E_None				UMETA(DisplayName = "None"),
 	E_Mobility			UMETA(DisplayName = "E_Mobility"), //이동기
 	E_Debuff				UMETA(DisplayName = "E_Debuff	"),  //디버프기
-	E_Sword				UMETA(DisplayName = "E_Sword")   //검 전용기
+	E_Sword				UMETA(DisplayName = "E_Sword"),   //검 전용기
+	E_Enemy				UMETA(DisplayName = "E_Enemy"),   //적 전용기
 };
 USTRUCT(BlueprintType)
-struct FSkillRequiredMaterialContainer : public FTableRowBase
+struct FSkillLevelInfoContainer : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<FName, float> SkillVariableMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TArray<uint8> RequiredMaterial;
+		TArray<uint8> RequiredMaterial;
 };
 
 USTRUCT(BlueprintType)
@@ -43,16 +47,6 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FSkillVariableMapContainer : public FTableRowBase
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TMap<FName, float> SkillVariableMap;
-};
-
-USTRUCT(BlueprintType)
 struct FSkillLevelStatStruct : public FTableRowBase
 {
 public:
@@ -64,12 +58,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		float CoolTime = 0;
 
-	//레벨별 변하는 변수 정보
-	UPROPERTY(BlueprintReadWrite)
-		TArray<FSkillVariableMapContainer> VariableByLevel;
-
+	//레벨별 변수 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TArray<FSkillRequiredMaterialContainer> RequiredMaterialsByLevel;
+		TArray<FSkillLevelInfoContainer> LevelInfo;
 };
 
 USTRUCT(BlueprintType)
@@ -198,20 +189,17 @@ struct FSkillStateStruct : public FTableRowBase
 public:
 	GENERATED_USTRUCT_BODY()
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		bool bIsBlocked = true;
+		bool bIsBlocked = false;
 
 	//스킬을 월드에서 보일지 여부
 	UPROPERTY(BlueprintReadWrite)
-		bool bIsHidden = true;
+		bool bIsHidden = false;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FSkillLevelStateStruct SkillLevelStateStruct;
 
 	UPROPERTY()
 		bool bIsStateValid = false;
-
-	UPROPERTY()
-		bool bIsEquiped = false;
 };
 
 

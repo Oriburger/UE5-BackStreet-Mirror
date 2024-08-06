@@ -31,11 +31,13 @@ void USkillManagerComponent::InitSkillManager()
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	SkillStatTable = GameModeRef.Get()->SkillStatTable;
 	checkf(IsValid(SkillStatTable), TEXT("Failed to get SkillStatDataTable"));
-	Cast<AMainCharacterBase>(OwnerCharacterRef)->OnWeaponUpdated.AddDynamic(this, &USkillManagerComponent::InitSkillMap);
+	OwnerCharacterRef->WeaponComponent->OnWeaponUpdated.AddDynamic(this, &USkillManagerComponent::InitSkillMap);
 }
 
 void USkillManagerComponent::InitSkillMap()
 {
+	SkillInventoryMap.Reset();
+	EquipedSkillMap.Reset();
 	for (ESkillType skillType : OwnerCharacterRef->WeaponComponent->GetWeaponStat().SkillTypeList)
 	{
 		SkillInventoryMap.Add(skillType, FSkillListContainer());
@@ -48,7 +50,7 @@ bool USkillManagerComponent::TrySkill(int32 SkillID)
 {
 	if (!IsSkillValid(SkillID)) return false;
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	if (!skillBase->SkillState.bIsBlocked) return false;
+	if (skillBase->SkillState.bIsBlocked) return false;
 	if (skillBase->SkillStat.SkillLevelStatStruct.bIsLevelValid)
 	{
 		if(skillBase->SkillState.SkillLevelStateStruct.SkillLevel == 0) return false;
@@ -56,7 +58,6 @@ bool USkillManagerComponent::TrySkill(int32 SkillID)
 	OwnerCharacterRef->SetActionState(ECharacterActionType::E_Skill);
 	skillBase->ActivateSkill();
 	OnSkillActivated.Broadcast(SkillID);
-
 	return true;
 }
 
@@ -69,6 +70,7 @@ bool USkillManagerComponent::AddSkill(int32 SkillID)
 
 	ASkillBase* skillBase = Cast<ASkillBase>(GetWorld()->SpawnActor(skillStat->SkillBaseClassRef));
 	if(!IsValid(skillBase)) return false;
+	skillBase->InitSkill(*skillStat, this);
 	if (skillBase->SkillStat.SkillWeaponStruct.SkillType == ESkillType::E_None) return false;
 
 	ESkillType skillType = skillBase->SkillStat.SkillWeaponStruct.SkillType;
@@ -76,10 +78,13 @@ bool USkillManagerComponent::AddSkill(int32 SkillID)
 	//SkillInventoryMap에 추가
 	if(!SkillInventoryMap.Contains(skillType)) false;
 	SkillInventoryMap.Find(skillType)->SkillBaseList.AddUnique(skillBase);
-
+	
 	//EquipedSkillMap에 장착되어 있는 스킬이 없다면 추가
-	if (EquipedSkillMap.Find(GetSkillInfo(SkillID).SkillWeaponStruct.SkillType) == 0)
+	UE_LOG(LogTemp, Log, TEXT("skilltype : %d"), skillType);
+	UE_LOG(LogTemp, Log, TEXT("skilltype : %d"), EquipedSkillMap.Find(skillType));
+	if (EquipedSkillMap.Find(skillType) == 0)
 	{
+		UE_LOG(LogTemp, Log, TEXT("skillID : %d"), EquipedSkillMap.Find(skillType));
 		EquipSkill(SkillID);
 	}
 
@@ -92,8 +97,11 @@ bool USkillManagerComponent::AddSkill(int32 SkillID)
 			break;
 		}
 	}
-	skillBase->InitSkill(*skillStat, this);
-	UpgradeSkill(SkillID, 1);
+
+	if (skillBase->SkillStat.SkillLevelStatStruct.bIsLevelValid)
+	{
+		UpgradeSkill(SkillID, 1);
+	}
 	UpdateObtainableSkillMap();
 	return true;
 }
@@ -116,7 +124,7 @@ bool USkillManagerComponent::RemoveSkill(int32 SkillID)
 			SkillInventoryMap.Find(skillType)->SkillBaseList.Remove(skillBase);
 		}
 	}
-	OnSkillUpdated.Broadcast(SkillID);
+	OnSkillUpdated.Broadcast();
 	UpdateObtainableSkillMap();
 	return true;
 }
@@ -127,14 +135,14 @@ bool USkillManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
 	if(!IsValid(skillBase)) return false;
 	skillBase->SkillState.SkillLevelStateStruct.SkillLevel = NewLevel;
-	skillBase->SkillState.SkillLevelStateStruct.SkillVariableMap = skillBase->SkillStat.SkillLevelStatStruct.VariableByLevel[NewLevel].SkillVariableMap;
+	skillBase->SkillState.SkillLevelStateStruct.SkillVariableMap = skillBase->SkillStat.SkillLevelStatStruct.LevelInfo[NewLevel].SkillVariableMap;
 	//쿨타임이 레벨에 따라 달라지는 경우 수정
 	if (skillBase->SkillState.SkillLevelStateStruct.SkillVariableMap.Contains("CoolTime"))
 	{
 		skillBase->SkillStat.SkillLevelStatStruct.CoolTime = 
-		*skillBase->SkillStat.SkillLevelStatStruct.VariableByLevel[NewLevel].SkillVariableMap.Find("CoolTime");
+		*skillBase->SkillStat.SkillLevelStatStruct.LevelInfo[NewLevel].SkillVariableMap.Find("CoolTime");
 	}
-	OnSkillUpdated.Broadcast(SkillID);
+	OnSkillUpdated.Broadcast();
 	return true;
 }
 
@@ -262,5 +270,5 @@ TArray<uint8> USkillManagerComponent::GetRequiredMatAmount(int32 SkillID, uint8 
 {
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
 	checkf(IsValid(skillBase), TEXT("Failed Find Skill"));
-	return skillBase->SkillStat.SkillLevelStatStruct.RequiredMaterialsByLevel[NewSkillLevel].RequiredMaterial;
+	return skillBase->SkillStat.SkillLevelStatStruct.LevelInfo[NewSkillLevel].RequiredMaterial;
 }
