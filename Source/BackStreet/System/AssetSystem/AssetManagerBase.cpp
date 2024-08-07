@@ -66,7 +66,7 @@ TArray<USoundCue*> UAssetManagerBase::GetSoundList(ESoundAssetType SoundType, in
 
 FSoundAssetInfoStruct* UAssetManagerBase::GetSystemSoundMapWithID(int32 TargetID)
 {	
-	if (!SystemSoundAssetTable || TargetID == 0) return nullptr; 
+	if (!SystemSoundAssetTable) return nullptr; 
 
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
@@ -78,7 +78,7 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetSystemSoundMapWithID(int32 TargetID
 
 FSoundAssetInfoStruct* UAssetManagerBase::GetWeaponSoundMapWithID(int32 TargetID)
 {
-	if (!WeaponSoundAssetTable || TargetID == 0) return nullptr;
+	if (!WeaponSoundAssetTable) return nullptr;
 
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
@@ -90,7 +90,7 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetWeaponSoundMapWithID(int32 TargetID
 
 FSoundAssetInfoStruct* UAssetManagerBase::GetCharacterSoundMapWithID(int32 TargetID)
 {
-	if (!CharacterSoundAssetTable || TargetID == 0) return nullptr;
+	if (!CharacterSoundAssetTable) return nullptr;
 
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
@@ -127,8 +127,7 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetPropSoundMapWithID(int32 TargetID)
 void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName, float VolumeMultiplierOverride, float PitchMultiplier, float StartTime)
 {
 	FSoundAssetInfoStruct* soundAssetInfo = GetSoundAssetInfo(SoundType, TargetID);
-	checkf(soundAssetInfo != nullptr, TEXT("SoundAssetInfo is not valid"));
-	if (!soundAssetInfo->SoundMap.Contains(SoundName)) return; 
+	if (soundAssetInfo == nullptr || !soundAssetInfo->SoundMap.Contains(SoundName)) return;
 
 	TArray<USoundCue*> soundList = soundAssetInfo->SoundMap.Find(SoundName)->SoundList;
 	TArray<float> volumeList = soundAssetInfo->SoundMap.Find(SoundName)->SoundVolumeList;
