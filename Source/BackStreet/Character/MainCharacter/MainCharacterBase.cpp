@@ -35,11 +35,18 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CAMERA_BOOM"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->bUsePawnControlRotation = true;
-	CameraBoom->TargetArmLength = 1400.0f;
-	CameraBoom->bInheritPitch = false;
+	CameraBoom->TargetArmLength = 500.0f;
+	CameraBoom->bInheritPitch = true;
 	CameraBoom->bInheritRoll = false;
-	CameraBoom->bInheritYaw = false;
+	CameraBoom->bInheritYaw = true;
+	CameraBoom->bEnableCameraLag = true;
+	CameraBoom->bEnableCameraRotationLag = true;
+	CameraBoom->CameraRotationLagSpeed = 0.5f;
+	CameraBoom->CameraLagMaxDistance = 1000.0f;
+	CameraBoom->SetRelativeLocation({ 0.0f, 30.0f, 80.0f });
 	CameraBoom->SetWorldRotation({ -45.0f, 0.0f, 0.0f });
+
+	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 110.0f, 120.0f));
 
 	FollowingCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FOLLOWING_CAMERA"));
 	FollowingCamera->SetupAttachment(CameraBoom);
@@ -59,10 +66,12 @@ AMainCharacterBase::AMainCharacterBase()
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
 
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
+	GetCapsuleComponent()->SetCapsuleRadius(41.0f);
 
 	this->bUseControllerRotationYaw = false;
-	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
-	GetCharacterMovement()->RotationRate = { 0.0f, 0.0f, 750.0f };
+	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+	GetCharacterMovement()->JumpZVelocity = 1000.0f;
+	GetCharacterMovement()->RotationRate = { 0.0f, 1000.0f, 0.0f };
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->GravityScale = 2.5f;
 

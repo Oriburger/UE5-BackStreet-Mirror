@@ -38,6 +38,7 @@ void USkillManagerComponent::InitSkillMap()
 {
 	SkillInventoryMap.Reset();
 	EquipedSkillMap.Reset();
+
 	for (ESkillType skillType : OwnerCharacterRef->WeaponComponent->GetWeaponStat().SkillTypeList)
 	{
 		SkillInventoryMap.Add(skillType, FSkillListContainer());
@@ -69,21 +70,36 @@ bool USkillManagerComponent::TrySkill(int32 SkillID)
 bool USkillManagerComponent::AddSkill(int32 SkillID)
 {
 	if (IsSkillValid(SkillID)) return false;
+
+	UE_LOG(LogTemp, Warning, TEXT("Add Skill #1 $d"), SkillID);
+
 	FString rowName = FString::FromInt(SkillID);
 	FSkillStatStruct* skillStat = SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
 	checkf(skillStat != nullptr, TEXT("SkillStat is not valid"));
+
+	UE_LOG(LogTemp, Warning, TEXT("Add Skill #2"));
 
 	ASkillBase* skillBase = Cast<ASkillBase>(GetWorld()->SpawnActor(skillStat->SkillBaseClassRef));
 	if(!IsValid(skillBase)) return false;
 	skillBase->InitSkill(*skillStat, this);
 	if (skillBase->SkillStat.SkillWeaponStruct.SkillType == ESkillType::E_None) return false;
 
+	UE_LOG(LogTemp, Warning, TEXT("Add Skill #3"));
+
 	ESkillType skillType = skillBase->SkillStat.SkillWeaponStruct.SkillType;
+
+	UE_LOG(LogTemp, Warning, TEXT("Add Skill #4"));
 
 	//SkillInventoryMap에 추가
 	if(!SkillInventoryMap.Contains(skillType)) false;
-	SkillInventoryMap.Find(skillType)->SkillBaseList.AddUnique(skillBase);
+	FSkillListContainer* skillListContainer = SkillInventoryMap.Find(skillType); 
+	if (skillListContainer)
+	{
+		skillListContainer->SkillBaseList.AddUnique(skillBase);
+	}
 	
+	UE_LOG(LogTemp, Warning, TEXT("Add Skill #5"));
+
 	//EquipedSkillMap에 장착되어 있는 스킬이 없다면 추가
 	UE_LOG(LogTemp, Log, TEXT("skilltype : %d"), skillType);
 	UE_LOG(LogTemp, Log, TEXT("skilltype : %d"), EquipedSkillMap.Find(skillType));
@@ -233,10 +249,14 @@ bool USkillManagerComponent::EquipSkill(int32 NewSkillID)
 FSkillStatStruct USkillManagerComponent::GetSkillInfo(int32 SkillID)
 {
 	FString rowName = FString::FromInt(SkillID);
-	checkf(IsValid(SkillStatTable), TEXT("SkillStatTable is not valid"));
-	FSkillStatStruct* skillStat = SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
-	checkf(skillStat != nullptr, TEXT("SkillStat is not valid"));
-	return *skillStat;
+	//checkf(IsValid(SkillStatTable), TEXT("SkillStatTable is not valid"));
+	if (SkillStatTable)
+	{
+		FSkillStatStruct* skillStat = SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
+		checkf(skillStat != nullptr, TEXT("SkillStat is not valid"));
+		return *skillStat;
+	}
+	return FSkillStatStruct();
 }
 
 ESkillType USkillManagerComponent::GetSkillTypeInfo(int32 SkillID)

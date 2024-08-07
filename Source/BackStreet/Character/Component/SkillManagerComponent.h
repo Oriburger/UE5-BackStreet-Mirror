@@ -91,8 +91,9 @@ public:
 
 //======= DataTable ==========================
 protected:
-	UPROPERTY(VisibleDefaultsOnly, Category = "Gamplay|Data")
+	UPROPERTY(EditDefaultsOnly, Category = "Gamplay|Data")
 		UDataTable* SkillStatTable;
+
 //====== Property ===========================
 private:
 	//현재 가지고 있는 스킬을 SkillType에 따라 분류한 Map
