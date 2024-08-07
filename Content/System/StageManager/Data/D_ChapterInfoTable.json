@@ -685,6 +685,6 @@
 			"/Game/Map/Chapter01/Chapter01_OuterArea02.Chapter01_OuterArea02",
 			"/Game/Map/Chapter01/Chapter01_OuterArea03.Chapter01_OuterArea03"
 		],
-		"BossCharacterClass": "/Script/Engine.BlueprintGeneratedClass'/Game/Character/EnemyCharacter/Blueprint/BP_BossEnemy.BP_BossEnemy_C'"
+		"BossCharacterClass": "/Script/Engine.BlueprintGeneratedClass'/Game/Character/EnemyCharacter/Blueprint/BP_BossCharacter.BP_BossCharacter_C'"
 	}
 ]
