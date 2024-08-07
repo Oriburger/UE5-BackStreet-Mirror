@@ -39,7 +39,7 @@ protected:
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		class USphereComponent* OverlapVolume;
+		class UInteractiveCollisionComponent* OverlapVolume;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* Mesh;
@@ -69,7 +69,7 @@ protected:
 
 	//플레이어에게 어빌리티를 주는 것을 시도한다.
 	UFUNCTION()
-		void AddAbilityToPlayer(class AMainCharacterBase* PlayerCharacterRef);
+		void AddAbilityToPlayer();
 
 	//무작위의 어빌리티 타입을 갖고온다.
 	UFUNCTION(BlueprintCallable)

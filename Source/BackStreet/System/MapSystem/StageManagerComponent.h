@@ -190,6 +190,8 @@ private:
 
 	TWeakObjectPtr<ANewChapterManagerBase> ChapterManagerRef;
 
+	TWeakObjectPtr<class ACharacterBase> PlayerRef;
+
 public:
 	//BP Class, initialize with BP
 	//Gate class to spawn on world

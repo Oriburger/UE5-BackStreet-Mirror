@@ -34,6 +34,7 @@ void UStageManagerComponent::BeginPlay()
 		Cast<ACharacterBase>(playerCharacter)->OnCharacterDied.AddDynamic(this, &UStageManagerComponent::SetGameIsOver);
 	}
 	ChapterManagerRef = Cast<ANewChapterManagerBase>(GetOwner());
+	PlayerRef = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 }
 
 void UStageManagerComponent::Initialize(FChapterInfo NewChapterInfo)
@@ -373,7 +374,9 @@ void UStageManagerComponent::StartStage()
 	{
 		FTimerDelegate stageOverDelegate;
 		stageOverDelegate.BindUFunction(this, FName("FinishStage"), false);
-		GetOwner()->GetWorldTimerManager().SetTimer(TimeAttackTimerHandle, stageOverDelegate, 1.0f, false, CurrentStageInfo.TimeLimitValue);
+
+		float extraTime = !PlayerRef.IsValid() ? 0.0f : PlayerRef.Get()->GetCharacterStat().ExtraStageTime;
+		GetOwner()->GetWorldTimerManager().SetTimer(TimeAttackTimerHandle, stageOverDelegate, 1.0f, false, CurrentStageInfo.TimeLimitValue + extraTime);
 		
 		//UI Event
 		OnTimeAttackStageBegin.Broadcast();

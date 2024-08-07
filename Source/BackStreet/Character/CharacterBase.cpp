@@ -32,6 +32,8 @@ ACharacterBase::ACharacterBase()
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
 	WeaponComponent->SetupAttachment(GetMesh());
 
+	SkillManagerComponent = CreateDefaultSubobject<USkillManagerComponent>(TEXT("SKILL_MANAGER"));
+
 	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
 }
 

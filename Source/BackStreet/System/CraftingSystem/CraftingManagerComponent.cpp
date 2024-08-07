@@ -26,7 +26,8 @@ void UCraftingManagerComponent::BeginPlay()
 void UCraftingManagerComponent::InitCraftingManager()
 {
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	OwnerActorRef = Cast<ACraftBoxBase>(GetOwner());
+	OwnerActorRef = GetOwner();
+	OwnerActorRef->Tags.Add("CraftingBox");
 	MainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	SkillManagerRef = MainCharacterRef->SkillManagerComponent;
 	bIsSkillCreated = false;
@@ -34,11 +35,12 @@ void UCraftingManagerComponent::InitCraftingManager()
 
 bool UCraftingManagerComponent::GetIsMatEnough()
 {
+	if(MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
 	TArray<uint8> currMatList = MainCharacterRef->ItemInventory->GetCraftingItemAmount();
 	for (uint8 requiredMatIdx = 0 ; requiredMatIdx < RequiredMatList.Num(); requiredMatIdx++)
 	{
 		//만능재료 사용 시 충족 여부 확인
-		if (KeepMatIdx == requiredMatIdx && 
+		if (static_cast<uint8>(KeepMat) == requiredMatIdx && 
 			currMatList[4] < RequiredMatList[requiredMatIdx]) return false;
 		//일반재료 사용 시 충족 여부 확인
 		if(currMatList[requiredMatIdx] < RequiredMatList[requiredMatIdx]) return false;
@@ -48,10 +50,11 @@ bool UCraftingManagerComponent::GetIsMatEnough()
 
 bool UCraftingManagerComponent::ConsumeMat()
 {
+	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
 	for (uint8 idx = 0; idx < MAX_CRAFTING_ITEM_IDX; idx++)
 	{
 		//만능재료 사용 시
-		if (KeepMatIdx == idx)
+		if (static_cast<uint8>(KeepMat) == idx)
 		{
 			MainCharacterRef->ItemInventory->RemoveItem(4, RequiredMatList[idx]);
 		}
@@ -61,7 +64,13 @@ bool UCraftingManagerComponent::ConsumeMat()
 			MainCharacterRef->ItemInventory->RemoveItem(idx + 1, RequiredMatList[idx]);
 		}
 	}
-	return false;
+	return true;
+}
+
+bool UCraftingManagerComponent::GetIsKeepSkillAvailable()
+{
+	if(SkillManagerRef->KeepSkillList.Num()>MainCharacterRef->GetCharacterStat().MaxKeepingSkillCount	) return false;
+	return true;
 }
 
 bool UCraftingManagerComponent::AddSkill(int32 NewSkillID)
@@ -172,6 +181,7 @@ bool UCraftingManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 
 TArray<uint8> UCraftingManagerComponent::UpdateRequiredMatForSU(int32 SkillID, uint8 NewLevel)
 {
+	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial && NewLevel ==1) return { 0,0,0 };
 	RequiredMatList.Empty();
 	uint8 currSkillLevel = SkillManagerRef->GetOwnSkillState(SkillID).SkillLevelStateStruct.SkillLevel;
 	
@@ -180,7 +190,7 @@ TArray<uint8> UCraftingManagerComponent::UpdateRequiredMatForSU(int32 SkillID, u
 		uint8 totalAmt = 0;
 		for (uint8 currLevel = currSkillLevel + 1; currLevel <= NewLevel; currLevel++)
 		{
-			totalAmt += SkillManagerRef->GetSkillInfo(SkillID).SkillLevelStatStruct.RequiredMaterialsByLevel[currLevel].RequiredMaterial[idx];
+			totalAmt += SkillManagerRef->GetSkillInfo(SkillID).SkillLevelStatStruct.LevelInfo[currLevel].RequiredMaterial[idx];
 		}
 		RequiredMatList.Add(totalAmt);
 	}
@@ -192,6 +202,7 @@ bool UCraftingManagerComponent::UpgradeWeapon(TArray<uint8> NewLevelList)
 	//재료 충분한지 확인
 	UpdateRequiredMatForWU(NewLevelList);
 	if (!GetIsMatEnough())return false;
+	if(!GetIsStatLevelValid(NewLevelList))return false;
 
 	//재료 소모
 	ConsumeMat();
@@ -217,4 +228,14 @@ TArray<uint8> UCraftingManagerComponent::UpdateRequiredMatForWU(TArray<uint8> Ne
 		}
 	}
 	return RequiredMatList;
+}
+
+bool UCraftingManagerComponent::GetIsStatLevelValid(TArray<uint8> NewLevelList)
+{
+	UWeaponComponentBase* weaponRef = MainCharacterRef->WeaponComponent;
+	for (int32 typeIdx = 0; typeIdx < NewLevelList.Num(); typeIdx++)
+	{
+		if(weaponRef->GetLimitedStatLevel(static_cast<EWeaponStatType>(typeIdx +1))<NewLevelList[typeIdx]) return false;
+	}
+	return true;
 }

@@ -6,6 +6,10 @@
 #include "Components/ActorComponent.h"
 #include "SkillManagerComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateEquiped, int32, SkillID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateSkillUpdated);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillActivated, int32, SkillID);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API USkillManagerComponent : public UActorComponent
 {
@@ -14,6 +18,13 @@ class BACKSTREET_API USkillManagerComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	USkillManagerComponent();
+
+public:
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateSkillUpdated OnSkillUpdated;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateSkillActivated OnSkillActivated;
 
 protected:
 	// Called when the game starts
@@ -75,6 +86,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TMap<ESkillType, FObtainableSkillListContainer> GetObtainableSkillMap() { return ObtainableSkillMap; }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TMap<ESkillType, int32> GetEquipedSkillMap() { return EquipedSkillMap; }
+
 //======= DataTable ==========================
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gamplay|Data")
@@ -85,13 +99,14 @@ private:
 	TMap<ESkillType, FSkillListContainer> SkillInventoryMap;
 
 	//플레어어가 획득할 수 있는 스킬을 SkillType에 따라 분류한 Map(조합 스테이지용)
-	TMap<ESkillType, FObtainableSkillListContainer>ObtainableSkillMap;
+	TMap<ESkillType, FObtainableSkillListContainer> ObtainableSkillMap;
 
-public:
 	//현재 플레이어가 장착한 스킬 Map
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<ESkillType, int32> EquipedSkillMap;
-	
+	TMap<ESkillType, int32> EquipedSkillMap;
+
+
+//@@@@@@이런 정보들은 정보 은닉 지켜주세요, private로 전환 바랍니다@@@@@@@@@@@
+public:
 	//플레어어가 획득하기 위하여 찜해둔 스킬 리스트(조합 스테이지용)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		TArray<int32> KeepSkillList;

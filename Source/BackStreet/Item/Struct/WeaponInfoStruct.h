@@ -47,6 +47,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		float StatAdder = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool bCanUpgradeLevel = false;
 };
 
 USTRUCT(BlueprintType)
@@ -116,18 +119,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		int32 WeaponID = 0;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FName WeaponName;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FName Description;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		EWeaponType WeaponType = EWeaponType::E_None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		UTexture2D* WeaponImage;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool bIsWeaponOpen = false;
 //----- 공통 Stat -------
 	//Weapon Attack Speed Rate
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -174,6 +179,7 @@ public:
 		FDebuffInfoStruct DebuffInfo;
 
 //----- CraftingStat ------
+	//레벨별 스탯 강화 수치 및 요구 재료
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TMap<EWeaponStatType, FUpgradableStatInfoByLevelContainer> UpgradableStatInfoMap;
 

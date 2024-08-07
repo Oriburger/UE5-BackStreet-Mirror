@@ -6,9 +6,9 @@
 #include "Components/StaticMeshComponent.h"
 #include "WeaponComponentBase.generated.h"
 #define MAX_WEAPON_UPGRADABLE_STAT_IDX 3
-/**
- * 
- */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateWeaponUpdated);
+
 UCLASS()
 class BACKSTREET_API UWeaponComponentBase : public UStaticMeshComponent
 {
@@ -19,6 +19,10 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+public:
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateWeaponUpdated OnWeaponUpdated;
 
 //------- VFX --------------------------------
 public:
@@ -122,6 +126,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void SetWeaponState(FWeaponStateStruct NewState) { WeaponState = NewState; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		uint8 GetLimitedStatLevel(EWeaponStatType WeaponStatType);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		uint8 GetMaxStatLevel(EWeaponStatType WeaponStatType);
 
 	//Calculate total damage to target character
 	UFUNCTION()

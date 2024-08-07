@@ -68,7 +68,6 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	//Stat, State 초기화 
 	WeaponID = NewWeaponID;
 	WeaponStat.WeaponID = WeaponID;
-
 	if (NewWeaponID == 0)
 	{
 		WeaponStat = FWeaponStatStruct();
@@ -120,6 +119,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &UWeaponComponentBase::InitWeaponAsset));
 	}
+	OnWeaponUpdated.Broadcast();
 }
 
 void UWeaponComponentBase::InitWeaponAsset()
@@ -232,6 +232,22 @@ FProjectileAssetInfoStruct UWeaponComponentBase::GetProjectileAssetInfo(int32 Ta
 	return FProjectileAssetInfoStruct();
 }
 
+
+uint8 UWeaponComponentBase::GetLimitedStatLevel(EWeaponStatType WeaponStatType)
+{
+	checkf(WeaponStat.UpgradableStatInfoMap.Contains(WeaponStatType), TEXT("WeaponType is not valid"));
+	for (uint8 level = 0; level < WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel.Num(); level++)
+	{
+		if(!WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel[level].bCanUpgradeLevel) return level-1;
+	}
+	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel.Num()-1;
+}
+
+uint8 UWeaponComponentBase::GetMaxStatLevel(EWeaponStatType WeaponStatType)
+{
+	checkf(WeaponStat.UpgradableStatInfoMap.Contains(WeaponStatType), TEXT("WeaponType is not valid"));
+	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel.Num() - 1;
+}
 
 float UWeaponComponentBase::CalculateTotalDamage(FCharacterStateStruct TargetState)
 {
