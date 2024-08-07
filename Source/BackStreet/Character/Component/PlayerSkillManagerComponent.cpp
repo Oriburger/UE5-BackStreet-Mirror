@@ -45,34 +45,23 @@ bool UPlayerSkillManagerComponent::TrySkill(int32 SkillID)
 
 bool UPlayerSkillManagerComponent::AddSkill(int32 SkillID)
 {
-	UE_LOG(LogTemp, Warning, TEXT("AddSkill #1 %d"), SkillID);
 	if (!Super::AddSkill(SkillID)) return false;
-	UE_LOG(LogTemp, Warning, TEXT("AddSkill #2"));
-
 	FString rowName = FString::FromInt(SkillID);
 	FSkillStatStruct* skillStat = SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
 	checkf(skillStat != nullptr, TEXT("SkillStat is not valid"));
-
-	UE_LOG(LogTemp, Warning, TEXT("AddSkill #3"));
 
 	ASkillBase* skillBase = Cast<ASkillBase>(GetWorld()->SpawnActor(skillStat->SkillBaseClassRef));
 	if (!IsValid(skillBase)) return false;
 	skillBase->InitSkill(*skillStat, this);
 
-	UE_LOG(LogTemp, Warning, TEXT("AddSkill #4"));
-
 	if (skillBase->SkillStat.SkillWeaponStruct.SkillType == ESkillType::E_None) return false;
-
 	ESkillType skillType = skillBase->SkillStat.SkillWeaponStruct.SkillType;
-
-	UE_LOG(LogTemp, Warning, TEXT("AddSkill #5"));
 
 	//SkillInventoryMap¿¡ Ãß°¡
 	if (!SkillInventoryMap.Contains(skillType)) false;
 	FSkillListContainer* skillListContainer = SkillInventoryMap.Find(skillType);
 	if (skillListContainer)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AddSkill #6"));
 		skillListContainer->SkillBaseList.AddUnique(skillBase);
 	}
 
@@ -81,7 +70,6 @@ bool UPlayerSkillManagerComponent::AddSkill(int32 SkillID)
 	UE_LOG(LogTemp, Log, TEXT("skilltype : %d"), *EquipedSkillMap.Find(skillType));
 	if (*EquipedSkillMap.Find(skillType) == 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AddSkill #7"));
 		EquipSkill(SkillID);
 	}
 
