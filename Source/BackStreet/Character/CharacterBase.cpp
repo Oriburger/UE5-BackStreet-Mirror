@@ -2,9 +2,9 @@
 #include "./Component/DebuffManagerComponent.h"
 #include "./Component/TargetingManagerComponent.h"
 #include "./Component/WeaponComponentBase.h"
+#include "./Component/SkillManagerComponent.h"
 #include "../Item/Weapon/Ranged/RangedCombatManager.h"
 #include "../Global/BackStreetGameModeBase.h"
-#include "../System/SkillSystem/SkillManagerBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/SkillSystem/SkillBase.h"
 #include "Engine/DamageEvents.h"
@@ -31,6 +31,8 @@ ACharacterBase::ACharacterBase()
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
 	WeaponComponent->SetupAttachment(GetMesh());
+
+	SkillManagerComponent = CreateDefaultSubobject<USkillManagerComponent>(TEXT("SKILL_MANAGER"));
 
 	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
 }
@@ -554,123 +556,44 @@ void ACharacterBase::DashAttack()
 	SetLocationWithInterp(targetLocation, 2.5f);
 }
 
-void ACharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
+bool ACharacterBase::TrySkill(int32 SkillID)
 {
-	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
+	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return false;
 
-	if (!IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()))
+	//스킬 매니저 있는지 확인
+	if (!IsValid(SkillManagerComponent))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to get SkillmanagerBase"));
-		ensure(IsValid(GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()));
-		return;
-	}
-
-	if (SkillType != ESkillType::E_Character)
-	{
-		if (WeaponComponent->WeaponID == 0)
-		{
-			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Does't have any weapon")), FColor::White);
-			return;
-		}
-	}
-
-	switch (SkillType)
-	{
-	case ESkillType::E_None: return;
-	case ESkillType::E_Character:
-	{
-		if (!AssetSoftPtrInfo.CharacterSkillInfoMap.Contains(SkillID))
-		{
-			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Character does't have skill")), FColor::White);
-			return;
-		}
-		if (AssetSoftPtrInfo.CharacterSkillInfoMap.Find(SkillID)->bSkillBlocked)
-		{
-			//GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("현재 스킬을 사용할 수 없습니다.")), FColor::White);
-			return;
-		}
-		else
-		{
-			CharacterState.bCanAttack = false;
-			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &AssetSoftPtrInfo.CharacterSkillInfoMap[SkillID]);
-			return;
-		}
-		break;
-	}
-	case ESkillType::E_Weapon:
-	{
-		if (SkillID != WeaponComponent->WeaponAssetInfo.WeaponSkillInfo.SkillID) return;
-
-		if (WeaponComponent->WeaponAssetInfo.WeaponSkillInfo.bSkillBlocked)
-		{
-			//GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("현재 스킬을 사용할 수 없습니다.")), FColor::White);
-			return;
-		}
-		else
-		{
-			CharacterState.bCanAttack = false;
-			GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &WeaponComponent->WeaponAssetInfo.WeaponSkillInfo);
-			return;
-		}
-		break;
-	}
-	case ESkillType::E_Weapon0:
-	{
-		if (WeaponComponent->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon0))
-		{
-			FOwnerSkillInfoStruct skillInfo = WeaponComponent->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon0];
-			UE_LOG(LogTemp, Warning, TEXT("SKILL BLOCK STATE : %d"), (int32)skillInfo.bSkillBlocked);
-			if (CheckCanTrySkill(SkillID, &skillInfo))
-			{
-				CharacterState.bCanAttack = false;
-				GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
-				break;
-			}
-		}
-	}
-	case ESkillType::E_Weapon1:
-	{
-		if (WeaponComponent->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon1))
-		{
-			FOwnerSkillInfoStruct skillInfo = WeaponComponent->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon1];
-			UE_LOG(LogTemp, Warning, TEXT("SKILL BLOCK STATE : %d"), (int32)skillInfo.bSkillBlocked);
-			if (CheckCanTrySkill(SkillID, &skillInfo))
-			{
-				CharacterState.bCanAttack = false;
-				GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
-				break;
-			}
-		}
-	}
-	case ESkillType::E_Weapon2:
-	{
-		if (WeaponComponent->GetWeaponState().SkillInfoMap.Contains(ESkillType::E_Weapon2))
-		{
-			FOwnerSkillInfoStruct skillInfo = WeaponComponent->GetWeaponState().SkillInfoMap[ESkillType::E_Weapon2];
-			if (CheckCanTrySkill(SkillID, &skillInfo))
-			{
-				CharacterState.bCanAttack = false;
-				GamemodeRef.Get()->GetGlobalSkillManagerBaseRef()->TrySkill(this, &skillInfo);
-				break;
-			}
-		}
-	}
-	}
-
-	//Reset Combo
-	WeaponComponent->ResetComboCnt();
-}
-
-bool ACharacterBase::CheckCanTrySkill(int32 SkillID, FOwnerSkillInfoStruct* SkillInfo)
-{
-	if (SkillID != SkillInfo->SkillID) return false;
-
-	if (SkillInfo->bSkillBlocked)
-	{
-		//GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("현재 스킬을 사용할 수 없습니다.")), FColor::White);
+		ensure(IsValid(SkillManagerComponent));
 		return false;
 	}
-	return true;
+
+	//스킬을 보유중인지 확인
+	if (!SkillManagerComponent->IsSkillValid(SkillID))
+	{
+		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Skill is not Valid")), FColor::White);
+		return false;
+	}
+	//스킬을 지닐 수 있는 무기와 현재 장비중인 무기가 일치하는지 확인
+	ASkillBase* skillBase = SkillManagerComponent->GetOwnSkillBase(SkillID);
+	if (skillBase->SkillStat.SkillWeaponStruct.bIsWeaponRequired)
+	{
+		if (!skillBase->SkillStat.SkillWeaponStruct.AvailableWeaponIDList.Contains(WeaponComponent->WeaponID))
+		{
+			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Does't have any weapon")), FColor::White);
+			return false;
+		}
+	}
+
+	if(skillBase->SkillState.bIsBlocked) return false;
+	else
+	{
+		CharacterState.bCanAttack = false;
+		SkillManagerComponent->TrySkill(SkillID);
+		//Reset Combo
+		WeaponComponent->ResetComboCnt();
+		return true;
+	}
 }
 
 void ACharacterBase::Attack()

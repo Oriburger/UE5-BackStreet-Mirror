@@ -2,9 +2,7 @@
 
 #include "BackStreetGameModeBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
-#include "../System/SkillSystem/SkillManagerBase.h"
 #include "../System/MapSystem/NewChapterManagerBase.h"
-#include "../System/CraftingSystem/CraftingManagerBase.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
 #include "../Item/ItemBase.h"
@@ -32,14 +30,6 @@ void ABackStreetGameModeBase::InitialzeGame()
 	//------ Initialize Chapter Manager ------------
 	ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
 
-	//------ Initialize Global Skill Manager --------
-	SkillManagerBase = NewObject<USkillManagerBase>(this, USkillManagerBase::StaticClass(), FName("SkillManagerBase"));
-	SkillManagerBase->InitSkillManagerBase(this);
-
-
-	//----- Crafting Manager √ ±‚»≠ -------
-	CraftingManagerBase = NewObject<UCraftingManagerBase>(this, UCraftingManagerBase::StaticClass(), FName("CraftingManagerBase"));
-	CraftingManagerBase->InitCraftingManager(this);
 }
 
 void ABackStreetGameModeBase::StartGame(int32 ChapterID)

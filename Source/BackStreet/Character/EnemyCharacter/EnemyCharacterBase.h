@@ -54,7 +54,7 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void TrySkill(ESkillType SkillType, int32 SkillID) override;
+		virtual bool TrySkill(int32 SkillID) override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;

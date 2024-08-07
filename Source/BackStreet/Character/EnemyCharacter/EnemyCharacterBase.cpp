@@ -2,9 +2,9 @@
 #include "EnemyCharacterBase.h"
 #include "../Component/TargetingManagerComponent.h"
 #include "../Component/WeaponComponentBase.h"
+#include "../Component/SkillManagerComponent.h"
 #include "../MainCharacter/MainCharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
-#include "../../System/SkillSystem/SkillManagerBase.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
 #include "../../System/AISystem/AIControllerBase.h"
 #include "../../Item/ItemBase.h"
@@ -76,6 +76,11 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		CharacterState.CurrentHP = EnemyStat.CharacterStat.DefaultHP;
 		SetDefaultWeapon();
 	}
+	SkillManagerComponent->ClearAllSkill();
+	for (int32& skillID : EnemyStat.EnemySkillIDList)
+	{
+		SkillManagerComponent->AddSkill(skillID);
+	}
 
 	InitFloatingHpWidget();
 	InitTargetingSupportingWidget();
@@ -146,20 +151,9 @@ void AEnemyCharacterBase::TryAttack()
 	Super::TryAttack();
 }
 
-void AEnemyCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
+bool AEnemyCharacterBase::TrySkill(int32 SkillID)
 {
-	check(WeaponComponent != nullptr);
-
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Skill
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-
-	if (WeaponComponent->WeaponID == 0)
-	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("The Skill Is Not Available")), FColor::White);
-		return;
-	}
-
-	Super::TrySkill(SkillType, SkillID);
+	return Super::TrySkill(SkillID);
 }
 
 void AEnemyCharacterBase::Attack()
