@@ -65,7 +65,7 @@ void AEnemyCharacterBase::InitAsset(int32 NewCharacterID)
 
 void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 {
-	// Read from dataTable
+	//Read from dataTable
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
 	AssetSoftPtrInfo.CharacterID = CharacterID = NewCharacterID;
@@ -81,7 +81,7 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		SetDefaultWeapon();
 	}
 
-	/*if (NewCharacterID != 0)
+	if (NewCharacterID != 0)
 	{
 		SkillManagerComponent->ClearAllSkill();
 		for (int32& skillID : EnemyStat.EnemySkillIDList)
@@ -92,7 +92,7 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 				UE_LOG(LogTemp, Warning, TEXT("Add Skill %d --- %d"), skillID, (int32)result);
 			}
 		}
-	}*/
+	}
 
 	InitFloatingHpWidget();
 	InitTargetingSupportingWidget();

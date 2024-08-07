@@ -45,8 +45,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void ClearAllSkill() override;
 
+//======= Property =============================
+private:
+	TMap<int32, class ASkillBase*> OwnedSkillInfoMap;
+
 //======= Getter ================================
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		virtual bool IsSkillValid(int32 SkillID) override;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		virtual ASkillBase* GetOwnSkillBase(int32 SkillID) override;
 };

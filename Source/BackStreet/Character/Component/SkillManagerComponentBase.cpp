@@ -115,7 +115,9 @@ ASkillBase* USkillManagerComponentBase::GetOwnSkillBase(int32 SkillID)
 
 bool USkillManagerComponentBase::IsSkillValid(int32 SkillID)
 {
+	UE_LOG(LogTemp, Warning, TEXT("IsSkillValid #1"));
 	if (GetOwnSkillBase(SkillID) == nullptr) return false;
+	UE_LOG(LogTemp, Warning, TEXT("IsSkillValid #2"));
 	return true;
 }
 
