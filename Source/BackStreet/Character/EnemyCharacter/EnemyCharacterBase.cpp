@@ -2,6 +2,7 @@
 #include "EnemyCharacterBase.h"
 #include "../Component/TargetingManagerComponent.h"
 #include "../Component/WeaponComponentBase.h"
+#include "../Component/SkillManagerComponent.h"
 #include "../MainCharacter/MainCharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
@@ -74,6 +75,11 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		CharacterStat.bInfinite = true;
 		CharacterState.CurrentHP = EnemyStat.CharacterStat.DefaultHP;
 		SetDefaultWeapon();
+	}
+	SkillManagerComponent->ClearAllSkill();
+	for (int32& skillID : EnemyStat.EnemySkillIDList)
+	{
+		SkillManagerComponent->AddSkill(skillID);
 	}
 
 	InitFloatingHpWidget();

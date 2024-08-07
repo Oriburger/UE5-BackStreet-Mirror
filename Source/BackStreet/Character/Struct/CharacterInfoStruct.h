@@ -312,6 +312,9 @@ struct FEnemyStatStruct : public FTableRowBase
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FEnemyDropInfoStruct DropInfo;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Skill")
+		TArray<int32> EnemySkillIDList; 
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
 		float DefaultAttackSpeed = 0.0f;
 };
