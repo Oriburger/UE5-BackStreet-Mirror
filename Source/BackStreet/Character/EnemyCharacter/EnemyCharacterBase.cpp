@@ -2,7 +2,8 @@
 #include "EnemyCharacterBase.h"
 #include "../Component/TargetingManagerComponent.h"
 #include "../Component/WeaponComponentBase.h"
-#include "../Component/SkillManagerComponent.h"
+#include "../Component/SkillManagerComponentBase.h"
+#include "../Component/EnemySkillManagerComponent.h"
 #include "../MainCharacter/MainCharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
@@ -32,6 +33,9 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	TargetingSupportWidget->SetRelativeScale3D(FVector(0.15f));
 	TargetingSupportWidget->SetDrawSize({ 500.0f, 500.0f });
 	TargetingSupportWidget->SetVisibility(false);
+
+	SkillManagerComponent = CreateDefaultSubobject<UEnemySkillManagerComponent>(TEXT("SKILL_MANAGER_"));
+	SkillManagerComponentRef = SkillManagerComponent;
 
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -76,11 +80,19 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		CharacterState.CurrentHP = EnemyStat.CharacterStat.DefaultHP;
 		SetDefaultWeapon();
 	}
-	SkillManagerComponent->ClearAllSkill();
-	for (int32& skillID : EnemyStat.EnemySkillIDList)
+
+	/*if (NewCharacterID != 0)
 	{
-		SkillManagerComponent->AddSkill(skillID);
-	}
+		SkillManagerComponent->ClearAllSkill();
+		for (int32& skillID : EnemyStat.EnemySkillIDList)
+		{
+			if (skillID != 0)
+			{
+				bool result = SkillManagerComponent->AddSkill(skillID);
+				UE_LOG(LogTemp, Warning, TEXT("Add Skill %d --- %d"), skillID, (int32)result);
+			}
+		}
+	}*/
 
 	InitFloatingHpWidget();
 	InitTargetingSupportingWidget();

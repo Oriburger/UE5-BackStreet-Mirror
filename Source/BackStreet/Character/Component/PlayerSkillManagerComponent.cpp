@@ -1,41 +1,32 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "SkillManagerComponent.h"
+#include "PlayerSkillManagerComponent.h"
 #include "../CharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SkillSystem/SkillBase.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"	
 #include "../../Character/Component/WeaponComponentBase.h"
 
-// Sets default values for this component's properties
-USkillManagerComponent::USkillManagerComponent()
+UPlayerSkillManagerComponent::UPlayerSkillManagerComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
 }
 
-
-// Called when the game starts
-void USkillManagerComponent::BeginPlay()
+void UPlayerSkillManagerComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	InitSkillManager();
 }
 
-void USkillManagerComponent::InitSkillManager()
+void UPlayerSkillManagerComponent::InitSkillManager()
 {
-	//Initialize the owner character ref
-	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
-	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	SkillStatTable = GameModeRef.Get()->SkillStatTable;
-	checkf(IsValid(SkillStatTable), TEXT("Failed to get SkillStatDataTable"));
-	OwnerCharacterRef->WeaponComponent->OnWeaponUpdated.AddDynamic(this, &USkillManagerComponent::InitSkillMap);
+	Super::InitSkillManager();
 }
 
-void USkillManagerComponent::InitSkillMap()
+void UPlayerSkillManagerComponent::InitSkillMap()
 {
+	Super::InitSkillMap();
+	if (!OwnerCharacterRef.IsValid()) return;
+
 	SkillInventoryMap.Reset();
 	EquipedSkillMap.Reset();
 
@@ -47,65 +38,50 @@ void USkillManagerComponent::InitSkillMap()
 	return;
 }
 
-bool USkillManagerComponent::TrySkill(int32 SkillID)
+bool UPlayerSkillManagerComponent::TrySkill(int32 SkillID)
 {
-	if (!IsSkillValid(SkillID)) return false;
-	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	if (!IsValid(skillBase))
-	{
-		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponent::TrySkill(%d) : Skill Base Not Found"), SkillID);
-		return false;
-	}
-	if (skillBase->SkillState.bIsBlocked) return false;
-	if (skillBase->SkillStat.SkillLevelStatStruct.bIsLevelValid)
-	{
-		if(skillBase->SkillState.SkillLevelStateStruct.SkillLevel == 0) return false;
-	}
-	OwnerCharacterRef->SetActionState(ECharacterActionType::E_Skill);
-	skillBase->ActivateSkill();
-	OnSkillActivated.Broadcast(SkillID);
-	return true;
+	return Super::TrySkill(SkillID);
 }
 
-bool USkillManagerComponent::AddSkill(int32 SkillID)
+bool UPlayerSkillManagerComponent::AddSkill(int32 SkillID)
 {
-	if (IsSkillValid(SkillID)) return false;
-
-	UE_LOG(LogTemp, Warning, TEXT("Add Skill #1 $d"), SkillID);
+	UE_LOG(LogTemp, Warning, TEXT("AddSkill #1 %d"), SkillID);
+	if (!Super::AddSkill(SkillID)) return false;
+	UE_LOG(LogTemp, Warning, TEXT("AddSkill #2"));
 
 	FString rowName = FString::FromInt(SkillID);
 	FSkillStatStruct* skillStat = SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
 	checkf(skillStat != nullptr, TEXT("SkillStat is not valid"));
 
-	UE_LOG(LogTemp, Warning, TEXT("Add Skill #2"));
+	UE_LOG(LogTemp, Warning, TEXT("AddSkill #3"));
 
 	ASkillBase* skillBase = Cast<ASkillBase>(GetWorld()->SpawnActor(skillStat->SkillBaseClassRef));
-	if(!IsValid(skillBase)) return false;
+	if (!IsValid(skillBase)) return false;
 	skillBase->InitSkill(*skillStat, this);
-	if (skillBase->SkillStat.SkillWeaponStruct.SkillType == ESkillType::E_None) return false;
 
-	UE_LOG(LogTemp, Warning, TEXT("Add Skill #3"));
+	UE_LOG(LogTemp, Warning, TEXT("AddSkill #4"));
+
+	if (skillBase->SkillStat.SkillWeaponStruct.SkillType == ESkillType::E_None) return false;
 
 	ESkillType skillType = skillBase->SkillStat.SkillWeaponStruct.SkillType;
 
-	UE_LOG(LogTemp, Warning, TEXT("Add Skill #4"));
+	UE_LOG(LogTemp, Warning, TEXT("AddSkill #5"));
 
 	//SkillInventoryMap에 추가
-	if(!SkillInventoryMap.Contains(skillType)) false;
-	FSkillListContainer* skillListContainer = SkillInventoryMap.Find(skillType); 
+	if (!SkillInventoryMap.Contains(skillType)) false;
+	FSkillListContainer* skillListContainer = SkillInventoryMap.Find(skillType);
 	if (skillListContainer)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("AddSkill #6"));
 		skillListContainer->SkillBaseList.AddUnique(skillBase);
 	}
-	
-	UE_LOG(LogTemp, Warning, TEXT("Add Skill #5"));
 
 	//EquipedSkillMap에 장착되어 있는 스킬이 없다면 추가
 	UE_LOG(LogTemp, Log, TEXT("skilltype : %d"), skillType);
-	UE_LOG(LogTemp, Log, TEXT("skilltype : %d"), EquipedSkillMap.Find(skillType));
+	UE_LOG(LogTemp, Log, TEXT("skilltype : %d"), *EquipedSkillMap.Find(skillType));
 	if (*EquipedSkillMap.Find(skillType) == 0)
 	{
-		UE_LOG(LogTemp, Log, TEXT("skillID : %d"), EquipedSkillMap.Find(skillType));
+		UE_LOG(LogTemp, Warning, TEXT("AddSkill #7"));
 		EquipSkill(SkillID);
 	}
 
@@ -118,7 +94,6 @@ bool USkillManagerComponent::AddSkill(int32 SkillID)
 			break;
 		}
 	}
-
 	if (skillBase->SkillStat.SkillLevelStatStruct.bIsLevelValid)
 	{
 		UpgradeSkill(SkillID, 1);
@@ -127,13 +102,13 @@ bool USkillManagerComponent::AddSkill(int32 SkillID)
 	return true;
 }
 
-bool USkillManagerComponent::RemoveSkill(int32 SkillID)
+bool UPlayerSkillManagerComponent::RemoveSkill(int32 SkillID)
 {
 	if (!IsSkillValid(SkillID)) return true;
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
 	if (!IsValid(skillBase))
 	{
-		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponent::RemoveSkill(%d) : Skill Base Not Found"), SkillID);
+		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::RemoveSkill(%d) : Skill Base Not Found"), SkillID);
 		return false;
 	}
 	if (skillBase->SkillStat.SkillWeaponStruct.SkillType != ESkillType::E_None)
@@ -155,24 +130,12 @@ bool USkillManagerComponent::RemoveSkill(int32 SkillID)
 	return true;
 }
 
-bool USkillManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
+bool UPlayerSkillManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 {
-	if (!IsSkillValid(SkillID)) return false;
-	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	if(!IsValid(skillBase)) return false;
-	skillBase->SkillState.SkillLevelStateStruct.SkillLevel = NewLevel;
-	skillBase->SkillState.SkillLevelStateStruct.SkillVariableMap = skillBase->SkillStat.SkillLevelStatStruct.LevelInfo[NewLevel].SkillVariableMap;
-	//쿨타임이 레벨에 따라 달라지는 경우 수정
-	if (skillBase->SkillState.SkillLevelStateStruct.SkillVariableMap.Contains("CoolTime"))
-	{
-		skillBase->SkillStat.SkillLevelStatStruct.CoolTime = 
-		*skillBase->SkillStat.SkillLevelStatStruct.LevelInfo[NewLevel].SkillVariableMap.Find("CoolTime");
-	}
-	OnSkillUpdated.Broadcast();
-	return true;
+	return Super::UpgradeSkill(SkillID, NewLevel);
 }
 
-void USkillManagerComponent::UpdateObtainableSkillMap()
+void UPlayerSkillManagerComponent::UpdateObtainableSkillMap()
 {
 	if (OwnerCharacterRef->WeaponComponent->WeaponID == 0) return;
 	TArray<ESkillType> skillTypeList = OwnerCharacterRef->WeaponComponent->GetWeaponStat().SkillTypeList;
@@ -236,9 +199,9 @@ void USkillManagerComponent::UpdateObtainableSkillMap()
 	return;
 }
 
-bool USkillManagerComponent::EquipSkill(int32 NewSkillID)
+bool UPlayerSkillManagerComponent::EquipSkill(int32 NewSkillID)
 {
-	if(!IsSkillValid(NewSkillID)) return false;
+	if (!IsSkillValid(NewSkillID)) return false;
 	else
 	{
 		EquipedSkillMap.Add(GetSkillInfo(NewSkillID).SkillWeaponStruct.SkillType, NewSkillID);
@@ -246,30 +209,17 @@ bool USkillManagerComponent::EquipSkill(int32 NewSkillID)
 	}
 }
 
-void USkillManagerComponent::ClearAllSkill()
+void UPlayerSkillManagerComponent::ClearAllSkill()
 {
 	InitSkillMap();
 }
 
-FSkillStatStruct USkillManagerComponent::GetSkillInfo(int32 SkillID)
+bool UPlayerSkillManagerComponent::IsSkillValid(int32 SkillID)
 {
-	FString rowName = FString::FromInt(SkillID);
-	//checkf(IsValid(SkillStatTable), TEXT("SkillStatTable is not valid"));
-	if (SkillStatTable)
-	{
-		FSkillStatStruct* skillStat = SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
-		checkf(skillStat != nullptr, TEXT("SkillStat is not valid"));
-		return *skillStat;
-	}
-	return FSkillStatStruct();
+	return Super::IsSkillValid(SkillID);
 }
 
-ESkillType USkillManagerComponent::GetSkillTypeInfo(int32 SkillID)
-{
-	return GetSkillInfo(SkillID).SkillWeaponStruct.SkillType;
-}
-
-ASkillBase* USkillManagerComponent::GetOwnSkillBase(int32 SkillID)
+ASkillBase* UPlayerSkillManagerComponent::GetOwnSkillBase(int32 SkillID)
 {
 	if (!SkillInventoryMap.Contains(GetSkillTypeInfo(SkillID))) return nullptr;
 	for (TWeakObjectPtr<ASkillBase> skillBase : SkillInventoryMap.Find(GetSkillTypeInfo(SkillID))->SkillBaseList)
@@ -282,27 +232,7 @@ ASkillBase* USkillManagerComponent::GetOwnSkillBase(int32 SkillID)
 	return nullptr;
 }
 
-bool USkillManagerComponent::IsSkillValid(int32 SkillID)
-{
-	if(GetOwnSkillBase(SkillID)==nullptr) return false;
-	return true;
-}
-
-FSkillStatStruct USkillManagerComponent::GetOwnSkillStat(int32 SkillID)
-{
-	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	checkf(IsValid(skillBase), TEXT("Failed Find Skill"));
-	return skillBase->SkillStat;
-}
-
-FSkillStateStruct USkillManagerComponent::GetOwnSkillState(int32 SkillID)
-{
-	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	checkf(IsValid(skillBase), TEXT("Failed Find Skill"));
-	return skillBase->SkillState;
-}
-
-TArray<uint8> USkillManagerComponent::GetRequiredMatAmount(int32 SkillID, uint8 NewSkillLevel)
+TArray<uint8> UPlayerSkillManagerComponent::GetRequiredMatAmount(int32 SkillID, uint8 NewSkillLevel)
 {
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
 	checkf(IsValid(skillBase), TEXT("Failed Find Skill"));

@@ -67,6 +67,9 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		class UItemInventoryComponent* ItemInventory;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UPlayerSkillManagerComponent* SkillManagerComponent;
+
 // ------- Throw Test -----------
 
 	UFUNCTION()
