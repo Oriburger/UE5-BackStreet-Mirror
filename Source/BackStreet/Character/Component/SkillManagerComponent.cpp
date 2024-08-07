@@ -103,7 +103,7 @@ bool USkillManagerComponent::AddSkill(int32 SkillID)
 	//EquipedSkillMap에 장착되어 있는 스킬이 없다면 추가
 	UE_LOG(LogTemp, Log, TEXT("skilltype : %d"), skillType);
 	UE_LOG(LogTemp, Log, TEXT("skilltype : %d"), EquipedSkillMap.Find(skillType));
-	if (EquipedSkillMap.Find(skillType) == 0)
+	if (*EquipedSkillMap.Find(skillType) == 0)
 	{
 		UE_LOG(LogTemp, Log, TEXT("skillID : %d"), EquipedSkillMap.Find(skillType));
 		EquipSkill(SkillID);
