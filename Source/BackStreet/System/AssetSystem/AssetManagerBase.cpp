@@ -66,7 +66,7 @@ TArray<USoundCue*> UAssetManagerBase::GetSoundList(ESoundAssetType SoundType, in
 
 FSoundAssetInfoStruct* UAssetManagerBase::GetSystemSoundMapWithID(int32 TargetID)
 {	
-	if (!SystemSoundAssetTable) return nullptr; 
+	if (!SystemSoundAssetTable || TargetID == 0) return nullptr; 
 
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
@@ -78,7 +78,7 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetSystemSoundMapWithID(int32 TargetID
 
 FSoundAssetInfoStruct* UAssetManagerBase::GetWeaponSoundMapWithID(int32 TargetID)
 {
-	if (!WeaponSoundAssetTable) return nullptr;
+	if (!WeaponSoundAssetTable || TargetID == 0) return nullptr;
 
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
@@ -90,7 +90,7 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetWeaponSoundMapWithID(int32 TargetID
 
 FSoundAssetInfoStruct* UAssetManagerBase::GetCharacterSoundMapWithID(int32 TargetID)
 {
-	if (!CharacterSoundAssetTable) return nullptr;
+	if (!CharacterSoundAssetTable || TargetID == 0) return nullptr;
 
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
