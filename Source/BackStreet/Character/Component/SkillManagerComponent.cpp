@@ -50,6 +50,11 @@ bool USkillManagerComponent::TrySkill(int32 SkillID)
 {
 	if (!IsSkillValid(SkillID)) return false;
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
+	if (!IsValid(skillBase))
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponent::TrySkill(%d) : Skill Base Not Found"), SkillID);
+		return false;
+	}
 	if (skillBase->SkillState.bIsBlocked) return false;
 	if (skillBase->SkillStat.SkillLevelStatStruct.bIsLevelValid)
 	{
@@ -110,6 +115,11 @@ bool USkillManagerComponent::RemoveSkill(int32 SkillID)
 {
 	if (!IsSkillValid(SkillID)) return true;
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
+	if (!IsValid(skillBase))
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponent::RemoveSkill(%d) : Skill Base Not Found"), SkillID);
+		return false;
+	}
 	if (skillBase->SkillStat.SkillWeaponStruct.SkillType != ESkillType::E_None)
 	{
 		ESkillType skillType = skillBase->SkillStat.SkillWeaponStruct.SkillType;

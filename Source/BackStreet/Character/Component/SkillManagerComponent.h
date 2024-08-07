@@ -19,7 +19,6 @@ public:
 	// Sets default values for this component's properties
 	USkillManagerComponent();
 
-
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateSkillUpdated OnSkillUpdated;
@@ -100,11 +99,13 @@ private:
 	TMap<ESkillType, FSkillListContainer> SkillInventoryMap;
 
 	//플레어어가 획득할 수 있는 스킬을 SkillType에 따라 분류한 Map(조합 스테이지용)
-	TMap<ESkillType, FObtainableSkillListContainer>ObtainableSkillMap;
+	TMap<ESkillType, FObtainableSkillListContainer> ObtainableSkillMap;
 
 	//현재 플레이어가 장착한 스킬 Map
 	TMap<ESkillType, int32> EquipedSkillMap;
 
+
+//@@@@@@이런 정보들은 정보 은닉 지켜주세요, private로 전환 바랍니다@@@@@@@@@@@
 public:
 	//플레어어가 획득하기 위하여 찜해둔 스킬 리스트(조합 스테이지용)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
