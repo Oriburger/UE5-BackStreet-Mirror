@@ -60,12 +60,6 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class USkillManagerBase* GetGlobalSkillManagerBaseRef() { return SkillManagerBase; }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class UCraftingManagerBase* GetGlobalCraftingManagerBaseRef() { return CraftingManagerBase; }
-
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void UpdateMiniMapUI();
 
@@ -109,24 +103,15 @@ public:
 		UDataTable* ItemInfoTable;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|CraftingManager")
-		UDataTable* PlayerActiveSkillTable;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|CraftingManager")
 		UDataTable* StatUpgradeInfoTable;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|SkillManager")
-		UDataTable* SkillInfoTable;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|SkillManager")
-		UDataTable* SkillUpgradeInfoTable;
+		UDataTable* SkillStatTable;
 
 //------ 그 외 프로퍼티 ---------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class ANewChapterManagerBase* GetChapterManagerRef() { return ChapterManagerRef; }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class USkillManagerBase* GetSkillManagerRef() { return SkillManagerBase; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UUserWidget* GetCombatWidgetRef();
@@ -136,13 +121,7 @@ protected:
 		class AMainCharacterBase* PlayerCharacterRef;
 
 	UPROPERTY()
-		class UAssetManagerBase* AssetManagerBase;
-
-	UPROPERTY()
-		class USkillManagerBase* SkillManagerBase;
-
-	UPROPERTY()
-		class UCraftingManagerBase* CraftingManagerBase;
+		class UAssetManagerBase* AssetManagerBase; 
 
 	UPROPERTY()
 		class ANewChapterManagerBase* ChapterManagerRef;

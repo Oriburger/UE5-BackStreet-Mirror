@@ -12,7 +12,7 @@ class BACKSTREET_API ASkillBase : public AActor
 {
 	GENERATED_BODY()
 
-//------ Global, Component -------------------
+//======= Global, Component =======================
 public:
 	// Sets default values for this actor's properties
 	ASkillBase();
@@ -28,7 +28,7 @@ public:
 //======= User Basic Function =======================
 public:	
 	UFUNCTION()
-		void InitSkill(FSkillInfoStruct NewSkillInfo);
+		void InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent* NewSkillManagerComponent);
 
 	//Must link with parent function in Blueprint
 	UFUNCTION(BlueprintNativeEvent)
@@ -42,7 +42,13 @@ public:
 	UFUNCTION()
 		void DestroySkill();
 
-//--------- DataTable, Asset ----------------------
+	UFUNCTION(BlueprintCallable, Blueprintpure)
+		ACharacterBase* GetOwnerCharacterRef();
+
+	UFUNCTION(BlueprintCallable, Blueprintpure)
+		FSkillAssetStruct GetSkillAssetStruct() {return SkillStat.SkillAssetStruct;}
+
+//======= DataTable, Asset =======================
 protected:
 	UFUNCTION(BlueprintCallable)
 		void PlaySingleSound(FName SoundName);
@@ -54,21 +60,31 @@ protected:
 		UNiagaraSystem* GetNiagaraEffect(FName EffectName);
 
 public:	
-	//Skill Info
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		FSkillInfoStruct SkillInfo;
-//-------- ETC. (Ref)-------------------------------
+		FSkillStatStruct SkillStat;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		FSkillStateStruct SkillState;
+
+protected:
+	UPROPERTY(VisibleDefaultsOnly, Category = "Gamplay|Data")
+		UDataTable* SkillStatTable;
+
+//======= ETC. (Ref) =======================
 protected:
 	//GameMode Soft Ref
-	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+	TWeakObjectPtr<class ABackStreetGameModeBase> GameModeRef;
 
-	//SkillManager Soft Ref
-	TWeakObjectPtr<class USkillManagerBase> SkillManagerRef;
+	//SkillManagerComponent Soft Ref
+	TWeakObjectPtr<class USkillManagerComponent> SkillManagerComponentRef;
 
 	//AssetManager Soft Ref
 	TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
 
-//-------- Timer --------------------------------------------
+	//OwnerCharacter Soft Ref
+	TWeakObjectPtr<class ACharacterBase> OwnerCharacterBaseRef;
+
+//======= Timer =======================
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetSkillRemainingCoolTime();
