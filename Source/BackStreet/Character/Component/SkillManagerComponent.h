@@ -57,6 +57,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool EquipSkill(int32 NewSkillID);
 
+	UFUNCTION(BlueprintCallable)
+		void ClearAllSkill();
+
 //======== Getter ============================
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)

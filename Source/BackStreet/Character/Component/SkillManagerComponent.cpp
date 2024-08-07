@@ -246,6 +246,11 @@ bool USkillManagerComponent::EquipSkill(int32 NewSkillID)
 	}
 }
 
+void USkillManagerComponent::ClearAllSkill()
+{
+	InitSkillMap();
+}
+
 FSkillStatStruct USkillManagerComponent::GetSkillInfo(int32 SkillID)
 {
 	FString rowName = FString::FromInt(SkillID);
