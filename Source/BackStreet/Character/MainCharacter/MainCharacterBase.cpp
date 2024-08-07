@@ -739,11 +739,11 @@ bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* C
 	
 	ActivateDebuffNiagara((uint8)DebuffInfo.Type);
 
-	GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
+	FTimerDelegate timerDelegate; 
+
+	timerDelegate.BindUFunction(this, "DeactivateBuffEffect");
 	BuffEffectResetTimerHandle.Invalidate();
-	GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
-		DeactivateBuffEffect();
-	}), DebuffInfo.TotalTime, false);
+	GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, timerDelegate, DebuffInfo.TotalTime, false);
 
 	return true;
 }
@@ -774,6 +774,7 @@ bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
 
 void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)
 {
+	if (!IsValid(BuffNiagaraEmitter)) return;
 	TArray<UNiagaraSystem*>& targetEmitterList = AssetHardPtrInfo.DebuffNiagaraEffectList;
 
 	if (targetEmitterList.IsValidIndex(DebuffType) && targetEmitterList[DebuffType] != nullptr)
@@ -787,6 +788,7 @@ void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)
 
 void AMainCharacterBase::DeactivateBuffEffect()
 {
+	if (!IsValid(BuffNiagaraEmitter)) return;
 	BuffNiagaraEmitter->SetAsset(nullptr, false);
 	BuffNiagaraEmitter->Deactivate(); 
 }
