@@ -5,7 +5,8 @@
 #include "CraftBoxBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
-#include "../../Character/Component/SkillManagerComponent.h"
+#include "../../Character/Component/SkillManagerComponentBase.h"
+#include "../../Character/Component/PlayerSkillManagerComponent.h"
 #include "../../Character/Component/WeaponComponentBase.h"
 #include "../../Character/Component/ItemInventoryComponent.h"
 

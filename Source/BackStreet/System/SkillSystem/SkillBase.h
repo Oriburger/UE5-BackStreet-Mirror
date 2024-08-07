@@ -3,7 +3,6 @@
 #pragma once
 
 #include "../../Global/BackStreet.h"
-#include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "SkillBase.generated.h"
 
@@ -28,7 +27,7 @@ public:
 //======= User Basic Function =======================
 public:	
 	UFUNCTION()
-		void InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent* NewSkillManagerComponent);
+		void InitSkill(FSkillStatStruct NewSkillStat, class USkillManagerComponentBase* NewSkillManagerComponent);
 
 	//Must link with parent function in Blueprint
 	UFUNCTION(BlueprintNativeEvent)
@@ -76,7 +75,7 @@ protected:
 	TWeakObjectPtr<class ABackStreetGameModeBase> GameModeRef;
 
 	//SkillManagerComponent Soft Ref
-	TWeakObjectPtr<class USkillManagerComponent> SkillManagerComponentRef;
+	TWeakObjectPtr<class USkillManagerComponentBase> SkillManagerComponentRef;
 
 	//AssetManager Soft Ref
 	TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;

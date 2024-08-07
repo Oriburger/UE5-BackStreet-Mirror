@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "SkillBase.h"
 #include "../AssetSystem/AssetManagerBase.h"
-#include "../../Character/Component/SkillManagerComponent.h"
+#include "../../Character/Component/SkillManagerComponentBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Character/CharacterBase.h"
 #include "Engine/AssetManager.h"
@@ -29,7 +29,7 @@ void ASkillBase::BeginPlay()
 	SkillStatTable = GameModeRef.Get()->SkillStatTable;
 }
 
-void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent* NewSkillManagerComponent)
+void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponentBase* NewSkillManagerComponent)
 {
 	SkillStat = NewSkillStat;
 	SkillManagerComponentRef = NewSkillManagerComponent;

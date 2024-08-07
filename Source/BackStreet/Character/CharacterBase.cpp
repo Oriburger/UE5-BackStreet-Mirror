@@ -2,7 +2,7 @@
 #include "./Component/DebuffManagerComponent.h"
 #include "./Component/TargetingManagerComponent.h"
 #include "./Component/WeaponComponentBase.h"
-#include "./Component/SkillManagerComponent.h"
+#include "./Component/SkillManagerComponentBase.h"
 #include "../Item/Weapon/Ranged/RangedCombatManager.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
@@ -31,8 +31,6 @@ ACharacterBase::ACharacterBase()
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
 	WeaponComponent->SetupAttachment(GetMesh());
-
-	SkillManagerComponent = CreateDefaultSubobject<USkillManagerComponent>(TEXT("SKILL_MANAGER"));
 
 	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
 }
@@ -561,21 +559,21 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return false;
 
 	//스킬 매니저 있는지 확인
-	if (!IsValid(SkillManagerComponent))
+	if (!SkillManagerComponentRef.IsValid())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to get SkillmanagerBase"));
-		ensure(IsValid(SkillManagerComponent));
+		ensure(SkillManagerComponentRef.IsValid());
 		return false;
 	}
 
 	//스킬을 보유중인지 확인
-	if (!SkillManagerComponent->IsSkillValid(SkillID))
+	if (!SkillManagerComponentRef.Get()->IsSkillValid(SkillID))
 	{
 		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Skill is not Valid")), FColor::White);
 		return false;
 	}
 	//스킬을 지닐 수 있는 무기와 현재 장비중인 무기가 일치하는지 확인
-	ASkillBase* skillBase = SkillManagerComponent->GetOwnSkillBase(SkillID);
+	ASkillBase* skillBase = SkillManagerComponentRef.Get()->GetOwnSkillBase(SkillID);
 	if (skillBase->SkillStat.SkillWeaponStruct.bIsWeaponRequired)
 	{
 		if (!skillBase->SkillStat.SkillWeaponStruct.AvailableWeaponIDList.Contains(WeaponComponent->WeaponID))
@@ -589,7 +587,7 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 	else
 	{
 		CharacterState.bCanAttack = false;
-		SkillManagerComponent->TrySkill(SkillID);
+		SkillManagerComponentRef.Get()->TrySkill(SkillID);
 		//Reset Combo
 		WeaponComponent->ResetComboCnt();
 		return true;

@@ -3,6 +3,8 @@
 #include "MainCharacterController.h"
 #include "../Component/TargetingManagerComponent.h"
 #include "../Component/ItemInventoryComponent.h"
+#include "../Component/SkillManagerComponentBase.h"
+#include "../Component/PlayerSkillManagerComponent.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SaveSystem/BackStreetGameInstance.h"
 #include "../../System/AbilitySystem/AbilityManagerBase.h"
@@ -47,6 +49,9 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom->SetWorldRotation({ -45.0f, 0.0f, 0.0f });
 
 	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 110.0f, 120.0f));
+
+	SkillManagerComponent = CreateDefaultSubobject<UPlayerSkillManagerComponent>(TEXT("SKILL_MANAGER_"));
+	SkillManagerComponentRef = SkillManagerComponent;
 
 	FollowingCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FOLLOWING_CAMERA"));
 	FollowingCamera->SetupAttachment(CameraBoom);
