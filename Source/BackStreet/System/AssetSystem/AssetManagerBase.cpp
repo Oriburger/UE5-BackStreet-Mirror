@@ -56,7 +56,7 @@ TArray<USoundCue*> UAssetManagerBase::GetSoundList(ESoundAssetType SoundType, in
 	// Read from dataTable
 	TArray<USoundCue*> soundList;
 	FSoundAssetInfoStruct* soundAssetInfoStruct = GetSoundAssetInfo(SoundType, TargetID);
-	if (soundAssetInfoStruct)
+	if (soundAssetInfoStruct && soundAssetInfoStruct->SoundMap.Contains(SoundName))
 	{
 		soundList = soundAssetInfoStruct->SoundMap.Find(SoundName)->SoundList;
 	}
