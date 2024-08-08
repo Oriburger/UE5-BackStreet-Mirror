@@ -456,7 +456,7 @@ void ACharacterBase::TryAttack()
 		else if (CharacterState.bIsAirAttacking || GetCharacterMovement()->IsFalling())
 		{
 			ResetAirAtkLocationUpdateTimer();
-			if (IsValid(TargetingManagerComponent->GetTargetedCharacter()))
+			if (IsValid(TargetingManagerComponent) && IsValid(TargetingManagerComponent->GetTargetedCharacter()))
 			{
 				TargetingManagerComponent->GetTargetedCharacter()->ResetAirAtkLocationUpdateTimer();
 			}
