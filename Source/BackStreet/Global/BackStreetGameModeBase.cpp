@@ -1,11 +1,14 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "BackStreetGameModeBase.h"
+#include "../Widget/BackStreetWidgetBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/MapSystem/NewChapterManagerBase.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
 #include "../Item/ItemBase.h"
+#include "SlateBasics.h"
+#include "Runtime/UMG/Public/UMG.h"
 #include "../Item/Weapon/Throw/ProjectileBase.h"
 
 ABackStreetGameModeBase::ABackStreetGameModeBase()
@@ -23,12 +26,13 @@ void ABackStreetGameModeBase::BeginPlay()
 	//----- Asset Manager √ ±‚»≠ -------
 	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
 	AssetManagerBase->InitAssetManager(this);
+
+	//------ Initialize Chapter Manager ------------
+	ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
 }
 
 void ABackStreetGameModeBase::InitialzeGame()
 {
-	//------ Initialize Chapter Manager ------------
-	ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
 
 }
 
@@ -101,8 +105,44 @@ void ABackStreetGameModeBase::UpdateCharacterStat(ACharacterBase* TargetCharacte
 	}
 }
 
-UUserWidget* ABackStreetGameModeBase::GetCombatWidgetRef()
+void ABackStreetGameModeBase::ToggleMenuWidget()
 {
-	if (!IsValid(ChapterManagerRef)) return nullptr;
-	return ChapterManagerRef->GetCombatWidgetRef();
+	if (!IsValid(MenuWidgetRef))
+	{
+		MenuWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), MenuWidgetClass));
+	}
+	if (!IsValid(CombatWidgetRef))
+	{
+		CombatWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), CombatWidgetClass));
+	}
+
+	if (IsValid(MenuWidgetRef) && IsValid(CombatWidgetRef))
+	{
+		if (CombatWidgetRef->IsInViewport())
+		{
+			// Show menu and hide Combat HUD
+			CombatWidgetRef->RemoveFromParent();
+			CombatWidgetRef = nullptr;
+			MenuWidgetRef->AddToViewport();
+			UE_LOG(LogTemp, Warning, TEXT("Combat -> Menu "));
+		}
+		else
+		{
+			// Hide menu and show Combat HUD
+			MenuWidgetRef->RemoveFromParent();
+			MenuWidgetRef = nullptr;
+			CombatWidgetRef->AddToViewport();
+			UE_LOG(LogTemp, Warning, TEXT("Menu -> Combat"));
+		}
+	}
+}
+
+void ABackStreetGameModeBase::CreateDefaultWidgets()
+{
+	CombatWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), CombatWidgetClass));
+	if (IsValid(CombatWidgetRef))
+	{
+		CombatWidgetRef->AddToViewport();
+	}
+	MenuWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), MenuWidgetClass));
 }

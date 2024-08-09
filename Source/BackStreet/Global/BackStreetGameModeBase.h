@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+	// Copyright Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -52,26 +52,12 @@ public:
 
 	UFUNCTION()
 		AItemBase* SpawnItemToWorld(int32 ItemID, FVector SpawnLocation);
-		bool IsLobbyStage();
 
 	UFUNCTION()
 		void UpdateCharacterStat(class ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }
-
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-		void UpdateMiniMapUI();
-
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-		void SetMiniMapUI();
-
-	UFUNCTION(BlueprintImplementableEvent)
-		void UpdateWaveInfoUI(int32 CurrWave,int32 EndWave);
-
-	UFUNCTION(BlueprintImplementableEvent)
-		void PlayUIAnimation(FName AnimationName);
-
 
 // ----- Class Info ------------------------------------ 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Class")
@@ -108,13 +94,38 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|SkillManager")
 		UDataTable* SkillStatTable;
 
+//------ 위젯 ------------------------
+public:
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<class UBackStreetWidgetBase> CombatWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<class UBackStreetWidgetBase> MenuWidgetClass;
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class UBackStreetWidgetBase* GetCombatWidgetRef() { return CombatWidgetRef; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class UBackStreetWidgetBase* GetMenuWidgetRef() { return MenuWidgetRef; }
+
+	UFUNCTION(BlueprintCallable)
+		void ToggleMenuWidget();
+
+	//create combat ui and menu ui
+	UFUNCTION(BlueprintCallable)
+		void CreateDefaultWidgets();
+
+private:
+	//For combat hud widget
+	class UBackStreetWidgetBase* CombatWidgetRef;
+
+	class UBackStreetWidgetBase* MenuWidgetRef; 
+
 //------ 그 외 프로퍼티 ---------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class ANewChapterManagerBase* GetChapterManagerRef() { return ChapterManagerRef; }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class UUserWidget* GetCombatWidgetRef();
 
 protected:
 	UPROPERTY()
