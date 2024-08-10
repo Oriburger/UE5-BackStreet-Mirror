@@ -34,7 +34,9 @@ void UPlayerSkillManagerComponent::InitSkillMap()
 	{
 		SkillInventoryMap.Add(skillType, FSkillListContainer());
 		EquipedSkillMap.Add(skillType, 0);
+		ObtainableSkillMap.Add(skillType, FObtainableSkillListContainer());
 	}
+	UpdateObtainableSkillMap();
 	return;
 }
 

@@ -110,7 +110,7 @@ void UCraftingManagerComponent::SetDisplayingSkillList()
 	{
 		DisplayingSkillMap.Add(skillType,0);
 	}
-
+	UE_LOG(LogTemp, Log, TEXT("1"));
 	//찜 되어있는 스킬 타입이 있는지 확인
 	TArray<int32> keepSkillList = SkillManagerRef->KeepSkillList;
 	for (int32 keepSkill : keepSkillList)
@@ -123,13 +123,14 @@ void UCraftingManagerComponent::SetDisplayingSkillList()
 			}
 		}
 	}
-
+	UE_LOG(LogTemp, Log, TEXT("2"));
 	//찜 안되어 있는 스킬 타입은 랜덤으로 가중치 고려하여 선택
 	for (ESkillType skillType : skillTypeList)
 	{
-		if(DisplayingSkillMap.Find(skillType)!=0) continue;
+		if(*DisplayingSkillMap.Find(skillType)!=0) continue;
 		else 
 		{
+			UE_LOG(LogTemp, Log, TEXT("3"));
 			TMap<ESkillType, FObtainableSkillListContainer>obtainableSkillMap = SkillManagerRef->GetObtainableSkillMap();
 			checkf(obtainableSkillMap.Contains(skillType), TEXT("ObtainableSkillMap is something wrong"));
 			//가중치 랜덤 로직
@@ -143,6 +144,7 @@ void UCraftingManagerComponent::SetDisplayingSkillList()
 			for (int32 skillID : obtainableSkillMap[skillType].SkillIDList)
 			{
 				tempWeight += SkillManagerRef->GetSkillInfo(skillID).SkillWeaponStruct.RandomWeight;
+				UE_LOG(LogTemp, Log, TEXT("4"));
 				if (tempWeight >= pivot)
 				{
 					DisplayingSkillMap.Add(skillType, skillID);

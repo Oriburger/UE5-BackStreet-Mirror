@@ -75,19 +75,19 @@ public:
 		bool GetIsStatLevelValid(TArray<uint8> NewLevelList);
 //=======	CommonProperty		========================
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
 		bool bIsSkillCreated = false;
 
 	//만능재료 사용 안함 = 0, 나사 = 1, 스프링 = 2, 기어 = 3
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite)
 		EKeepMat KeepMat = EKeepMat::E_None;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
 		TArray<uint8> RequiredMatList;
 //=======	SkillSelectProperty		========================
 public:
 	//스킬 제작UI에 노출될 스킬 <SkillType, SkillID>
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
 		TMap<ESkillType, int32>DisplayingSkillMap;
 
 private:
