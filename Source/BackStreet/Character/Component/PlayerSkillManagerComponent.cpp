@@ -224,7 +224,7 @@ ASkillBase* UPlayerSkillManagerComponent::GetOwnSkillBase(int32 SkillID)
 
 TArray<uint8> UPlayerSkillManagerComponent::GetRequiredMatAmount(int32 SkillID, uint8 NewSkillLevel)
 {
-	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	checkf(IsValid(skillBase), TEXT("Failed Find Skill"));
-	return skillBase->SkillStat.SkillLevelStatStruct.LevelInfo[NewSkillLevel].RequiredMaterial;
+	FSkillStatStruct skillInfo = GetSkillInfo(SkillID);
+	checkf(skillInfo.SkillID == 0, TEXT("Failed Find Skill"));
+	return skillInfo.SkillLevelStatStruct.LevelInfo[NewSkillLevel].RequiredMaterial;
 }

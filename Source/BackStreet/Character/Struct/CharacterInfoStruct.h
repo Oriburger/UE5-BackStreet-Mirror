@@ -138,7 +138,7 @@ public:
 
 	//Extra wish list in skill
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
-		int32 MaxKeepingSkillCount = 0;
+		int32 MaxKeepingSkillCount = 1;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
 		bool bInfiniteSkillMaterial = false;

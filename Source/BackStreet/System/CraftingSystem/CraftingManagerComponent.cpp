@@ -42,7 +42,7 @@ bool UCraftingManagerComponent::GetIsMatEnough()
 	{
 		//만능재료 사용 시 충족 여부 확인
 		if (static_cast<uint8>(KeepMat) == requiredMatIdx && 
-			currMatList[4] < RequiredMatList[requiredMatIdx]) return false;
+			currMatList[3] < RequiredMatList[requiredMatIdx]) return false;
 		//일반재료 사용 시 충족 여부 확인
 		if(currMatList[requiredMatIdx] < RequiredMatList[requiredMatIdx]) return false;
 	}
@@ -110,7 +110,6 @@ void UCraftingManagerComponent::SetDisplayingSkillList()
 	{
 		DisplayingSkillMap.Add(skillType,0);
 	}
-	UE_LOG(LogTemp, Log, TEXT("1"));
 	//찜 되어있는 스킬 타입이 있는지 확인
 	TArray<int32> keepSkillList = SkillManagerRef->KeepSkillList;
 	for (int32 keepSkill : keepSkillList)
@@ -123,14 +122,12 @@ void UCraftingManagerComponent::SetDisplayingSkillList()
 			}
 		}
 	}
-	UE_LOG(LogTemp, Log, TEXT("2"));
 	//찜 안되어 있는 스킬 타입은 랜덤으로 가중치 고려하여 선택
 	for (ESkillType skillType : skillTypeList)
 	{
 		if(*DisplayingSkillMap.Find(skillType)!=0) continue;
 		else 
 		{
-			UE_LOG(LogTemp, Log, TEXT("3"));
 			TMap<ESkillType, FObtainableSkillListContainer>obtainableSkillMap = SkillManagerRef->GetObtainableSkillMap();
 			checkf(obtainableSkillMap.Contains(skillType), TEXT("ObtainableSkillMap is something wrong"));
 			//가중치 랜덤 로직
@@ -144,7 +141,6 @@ void UCraftingManagerComponent::SetDisplayingSkillList()
 			for (int32 skillID : obtainableSkillMap[skillType].SkillIDList)
 			{
 				tempWeight += SkillManagerRef->GetSkillInfo(skillID).SkillWeaponStruct.RandomWeight;
-				UE_LOG(LogTemp, Log, TEXT("4"));
 				if (tempWeight >= pivot)
 				{
 					DisplayingSkillMap.Add(skillType, skillID);
@@ -184,16 +180,22 @@ bool UCraftingManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 
 TArray<uint8> UCraftingManagerComponent::UpdateRequiredMatForSU(int32 SkillID, uint8 NewLevel)
 {
-	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial && NewLevel ==1) return { 0,0,0 };
+	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial && NewLevel == 1) return { 0,0,0 };
 	RequiredMatList.Empty();
-	uint8 currSkillLevel = SkillManagerRef->GetOwnSkillState(SkillID).SkillLevelStateStruct.SkillLevel;
+	uint8 currSkillLevel = 0;
+	if(NewLevel > 1)
+	{
+		currSkillLevel = SkillManagerRef->GetOwnSkillState(SkillID).SkillLevelStateStruct.SkillLevel;
+	}
 	
 	for (uint8 idx = 0; idx < MAX_CRAFTING_ITEM_IDX; idx++)
 	{
 		uint8 totalAmt = 0;
-		for (uint8 currLevel = currSkillLevel + 1; currLevel <= NewLevel; currLevel++)
+		checkf(NewLevel >= currSkillLevel + 1, TEXT("Current Level is Higher than New Level"));
+		uint8 tempLevel = 0;
+		for (tempLevel = currSkillLevel + 1; tempLevel <= NewLevel; tempLevel++)
 		{
-			totalAmt += SkillManagerRef->GetSkillInfo(SkillID).SkillLevelStatStruct.LevelInfo[currLevel].RequiredMaterial[idx];
+			totalAmt += SkillManagerRef->GetSkillInfo(SkillID).SkillLevelStatStruct.LevelInfo[tempLevel].RequiredMaterial[idx];
 		}
 		RequiredMatList.Add(totalAmt);
 	}
