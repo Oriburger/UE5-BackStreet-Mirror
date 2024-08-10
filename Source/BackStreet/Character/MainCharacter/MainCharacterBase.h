@@ -67,6 +67,9 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		class UItemInventoryComponent* ItemInventory;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UPlayerSkillManagerComponent* SkillManagerComponent;
+
 // ------- Throw Test -----------
 
 	UFUNCTION()
@@ -159,7 +162,7 @@ public:
 		virtual void TryDownwardAttack() override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void TrySkill(ESkillType SkillType, int32 SkillID) override;
+		virtual bool TrySkill(int32 SkillID) override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;

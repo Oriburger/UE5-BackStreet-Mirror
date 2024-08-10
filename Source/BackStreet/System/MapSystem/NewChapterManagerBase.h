@@ -114,32 +114,19 @@ private:
 
 //========= Widget =====================
 public:
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		UUserWidget* GetCombatWidgetRef() { return CombatWidgetRef; }
-
 	//Result widget
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
-		TSubclassOf<UUserWidget> ChapterClearWidgetClass;
+		TSubclassOf<class UBackStreetWidgetBase> ChapterClearWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
-		TSubclassOf<UUserWidget> GameOverWidgetClass;
-
-	UPROPERTY(EditDefaultsOnly, Category = "UI")
-		TSubclassOf<UUserWidget> CombatWidgetClass;
+		TSubclassOf<class UBackStreetWidgetBase> GameOverWidgetClass;
 
 protected:
 	UFUNCTION()
 		void CreateGameResultWidget(bool bChapterClear);
 
-	//Add Combat UI
-	UFUNCTION()
-		void AddCombatWidget();
-
 private:
-	UUserWidget* GameResultWidgetRef;
-
-	//For combat hud widget
-	UUserWidget* CombatWidgetRef;
+	class UBackStreetWidgetBase* GameResultWidgetRef;
 
 //======== Timer ==========================
 protected:
