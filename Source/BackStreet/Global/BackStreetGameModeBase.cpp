@@ -33,7 +33,10 @@ void ABackStreetGameModeBase::BeginPlay()
 
 void ABackStreetGameModeBase::InitialzeGame()
 {
-
+	if (!IsValid(ChapterManagerRef))
+	{
+		ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
+	}
 }
 
 void ABackStreetGameModeBase::StartGame(int32 ChapterID)
