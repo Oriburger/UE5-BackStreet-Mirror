@@ -26,13 +26,11 @@ void ABackStreetGameModeBase::BeginPlay()
 	//----- Asset Manager √ ±‚»≠ -------
 	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
 	AssetManagerBase->InitAssetManager(this);
-
-	//------ Initialize Chapter Manager ------------
-	ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
 }
 
 void ABackStreetGameModeBase::InitialzeGame()
 {
+	//------ Initialize Chapter Manager ------------
 	if (!IsValid(ChapterManagerRef))
 	{
 		ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
