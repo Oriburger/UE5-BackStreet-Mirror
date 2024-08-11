@@ -51,6 +51,8 @@ public:
 public:
 	virtual bool IsSkillValid(int32 SkillID);
 
+	virtual bool IsSkilUpgradable(int32 SkillID, uint8 NewLevel);
+
 	virtual ASkillBase* GetOwnSkillBase(int32 SkillID);
 
 public:

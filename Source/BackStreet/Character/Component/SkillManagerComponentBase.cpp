@@ -121,6 +121,15 @@ bool USkillManagerComponentBase::IsSkillValid(int32 SkillID)
 	return true;
 }
 
+bool USkillManagerComponentBase::IsSkilUpgradable(int32 SkillID, uint8 NewLevel)
+{
+	//최대 레벨보다 크면 업그레이드 불가
+	if(GetOwnSkillStat(SkillID).SkillLevelStatStruct.LevelInfo.Num()-1 < NewLevel) return false;
+	//현재 레벨과 같거나 작은경우 업그레이드 불가
+	if(GetOwnSkillState(SkillID).SkillLevelStateStruct.SkillLevel >= NewLevel) return false;
+	return true;
+}
+
 FSkillStatStruct USkillManagerComponentBase::GetOwnSkillStat(int32 SkillID)
 {
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);

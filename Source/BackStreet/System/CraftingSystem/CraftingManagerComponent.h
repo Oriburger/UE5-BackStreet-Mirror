@@ -62,13 +62,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool UpgradeSkill(int32 SkillID, uint8 NewLevel);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<uint8>UpdateRequiredMatForSU(int32 SkillID, uint8 NewLevel);
 //=======	Upgrade Weapon Function	====================	
 	UFUNCTION(BlueprintCallable)
 		bool UpgradeWeapon(TArray<uint8> NewLevelList);
 		
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<uint8>UpdateRequiredMatForWU(TArray<uint8> NewLevelList);
 
 	UFUNCTION(BlueprintCallable)
