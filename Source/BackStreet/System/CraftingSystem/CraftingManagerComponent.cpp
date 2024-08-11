@@ -41,8 +41,8 @@ bool UCraftingManagerComponent::GetIsMatEnough()
 	for (uint8 requiredMatIdx = 0 ; requiredMatIdx < RequiredMatList.Num(); requiredMatIdx++)
 	{
 		//만능재료 사용 시 충족 여부 확인
-		if (static_cast<uint8>(KeepMat) == requiredMatIdx && 
-			currMatList[3] < RequiredMatList[requiredMatIdx]) return false;
+		if (static_cast<uint8>(KeepMat) == requiredMatIdx + 1&& 
+			currMatList[3] > RequiredMatList[requiredMatIdx]) return true;
 		//일반재료 사용 시 충족 여부 확인
 		if(currMatList[requiredMatIdx] < RequiredMatList[requiredMatIdx]) return false;
 	}
@@ -55,7 +55,7 @@ bool UCraftingManagerComponent::ConsumeMat()
 	for (uint8 idx = 0; idx < MAX_CRAFTING_ITEM_IDX; idx++)
 	{
 		//만능재료 사용 시
-		if (static_cast<uint8>(KeepMat) == idx)
+		if (static_cast<uint8>(KeepMat) == idx+1)
 		{
 			MainCharacterRef->ItemInventory->RemoveItem(4, RequiredMatList[idx]);
 		}
