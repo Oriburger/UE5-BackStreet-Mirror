@@ -215,7 +215,6 @@ void UStageManagerComponent::SpawnEnemy()
 		UE_LOG(LogGameMode, Warning, TEXT("Spawn point num is less than enemy composition list num."));
 		UE_LOG(LogGameMode, Warning, TEXT("There can be collapse among enemy characters."));
 	}
-
 	//Init enemy count to zero
 	RemainingEnemyCount = 0;
 
