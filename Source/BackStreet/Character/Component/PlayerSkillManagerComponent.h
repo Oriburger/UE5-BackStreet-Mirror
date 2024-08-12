@@ -58,6 +58,9 @@ public:
 		virtual bool IsSkillValid(int32 SkillID) override;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
+		virtual bool IsSkilUpgradable(int32 SkillID, uint8 NewLevel) override;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		virtual ASkillBase* GetOwnSkillBase(int32 SkillID) override;
 
 public:

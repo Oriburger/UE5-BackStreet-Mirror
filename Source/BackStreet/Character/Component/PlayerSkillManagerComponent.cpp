@@ -34,7 +34,9 @@ void UPlayerSkillManagerComponent::InitSkillMap()
 	{
 		SkillInventoryMap.Add(skillType, FSkillListContainer());
 		EquipedSkillMap.Add(skillType, 0);
+		ObtainableSkillMap.Add(skillType, FObtainableSkillListContainer());
 	}
+	UpdateObtainableSkillMap();
 	return;
 }
 
@@ -207,6 +209,11 @@ bool UPlayerSkillManagerComponent::IsSkillValid(int32 SkillID)
 	return Super::IsSkillValid(SkillID);
 }
 
+bool UPlayerSkillManagerComponent::IsSkilUpgradable(int32 SkillID, uint8 NewLevel)
+{
+	return Super::IsSkilUpgradable(SkillID, NewLevel);
+}
+
 ASkillBase* UPlayerSkillManagerComponent::GetOwnSkillBase(int32 SkillID)
 {
 	if (!SkillInventoryMap.Contains(GetSkillTypeInfo(SkillID))) return nullptr;
@@ -222,7 +229,7 @@ ASkillBase* UPlayerSkillManagerComponent::GetOwnSkillBase(int32 SkillID)
 
 TArray<uint8> UPlayerSkillManagerComponent::GetRequiredMatAmount(int32 SkillID, uint8 NewSkillLevel)
 {
-	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	checkf(IsValid(skillBase), TEXT("Failed Find Skill"));
-	return skillBase->SkillStat.SkillLevelStatStruct.LevelInfo[NewSkillLevel].RequiredMaterial;
+	FSkillStatStruct skillInfo = GetSkillInfo(SkillID);
+	checkf(skillInfo.SkillID != 0, TEXT("Failed Find Skill"));
+	return skillInfo.SkillLevelStatStruct.LevelInfo[NewSkillLevel].RequiredMaterial;
 }
