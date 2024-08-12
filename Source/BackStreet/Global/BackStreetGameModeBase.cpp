@@ -26,14 +26,15 @@ void ABackStreetGameModeBase::BeginPlay()
 	//----- Asset Manager √ ±‚»≠ -------
 	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
 	AssetManagerBase->InitAssetManager(this);
-
-	//------ Initialize Chapter Manager ------------
-	ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
 }
 
 void ABackStreetGameModeBase::InitialzeGame()
 {
-
+	//------ Initialize Chapter Manager ------------
+	if (!IsValid(ChapterManagerRef))
+	{
+		ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
+	}
 }
 
 void ABackStreetGameModeBase::StartGame(int32 ChapterID)
@@ -122,7 +123,6 @@ void ABackStreetGameModeBase::ToggleMenuWidget()
 		{
 			// Show menu and hide Combat HUD
 			CombatWidgetRef->RemoveFromParent();
-			CombatWidgetRef = nullptr;
 			MenuWidgetRef->AddToViewport();
 			UE_LOG(LogTemp, Warning, TEXT("Combat -> Menu "));
 		}
@@ -130,7 +130,6 @@ void ABackStreetGameModeBase::ToggleMenuWidget()
 		{
 			// Hide menu and show Combat HUD
 			MenuWidgetRef->RemoveFromParent();
-			MenuWidgetRef = nullptr;
 			CombatWidgetRef->AddToViewport();
 			UE_LOG(LogTemp, Warning, TEXT("Menu -> Combat"));
 		}
