@@ -32,6 +32,7 @@ void UCraftingManagerComponent::InitCraftingManager()
 	MainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	SkillManagerRef = MainCharacterRef->SkillManagerComponent;
 	bIsSkillCreated = false;
+	bIsDisplayingSkillListSet = false;
 }
 
 bool UCraftingManagerComponent::GetIsMatEnough()
@@ -149,6 +150,7 @@ void UCraftingManagerComponent::SetDisplayingSkillList()
 			}
 		}
 	}
+	bIsDisplayingSkillListSet = true;
 }
 
 void UCraftingManagerComponent::KeepSkill(int32 SkillID)

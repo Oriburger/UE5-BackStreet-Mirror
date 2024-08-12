@@ -89,6 +89,7 @@ bool UPlayerSkillManagerComponent::AddSkill(int32 SkillID)
 		UpgradeSkill(SkillID, 1);
 	}
 	UpdateObtainableSkillMap();
+	OnSkillUpdated.Broadcast();
 	return true;
 }
 
@@ -115,14 +116,16 @@ bool UPlayerSkillManagerComponent::RemoveSkill(int32 SkillID)
 			SkillInventoryMap.Find(skillType)->SkillBaseList.Remove(skillBase);
 		}
 	}
-	OnSkillUpdated.Broadcast();
 	UpdateObtainableSkillMap();
+	OnSkillUpdated.Broadcast();
 	return true;
 }
 
 bool UPlayerSkillManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 {
-	return Super::UpgradeSkill(SkillID, NewLevel);
+	bool bIsUpgraded = Super::UpgradeSkill(SkillID, NewLevel);
+	OnSkillUpdated.Broadcast();
+	return bIsUpgraded;
 }
 
 void UPlayerSkillManagerComponent::UpdateObtainableSkillMap()
@@ -184,8 +187,8 @@ void UPlayerSkillManagerComponent::UpdateObtainableSkillMap()
 			}
 		}
 	}
-
 	ObtainableSkillMap = obtainableSkillMap;
+	OnSkillUpdated.Broadcast();
 	return;
 }
 
@@ -195,6 +198,7 @@ bool UPlayerSkillManagerComponent::EquipSkill(int32 NewSkillID)
 	else
 	{
 		EquipedSkillMap.Add(GetSkillInfo(NewSkillID).SkillWeaponStruct.SkillType, NewSkillID);
+		OnSkillUpdated.Broadcast();
 		return true;
 	}
 }
@@ -202,6 +206,7 @@ bool UPlayerSkillManagerComponent::EquipSkill(int32 NewSkillID)
 void UPlayerSkillManagerComponent::ClearAllSkill()
 {
 	InitSkillMap();
+	OnSkillUpdated.Broadcast();
 }
 
 bool UPlayerSkillManagerComponent::IsSkillValid(int32 SkillID)
