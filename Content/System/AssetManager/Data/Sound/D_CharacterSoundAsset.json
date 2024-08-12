@@ -73,20 +73,19 @@
 		"SoundTarget": "1001",
 		"SoundMap":
 		{
+			"Hit":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Robot_Noise_LightA.SC_Robot_Noise_LightA'"
+				],
+				"SoundVolumeList": [ 1 ]
+			},
 			"FootStep":
 			{
 				"SoundList": [
-					"None",
-					"None"
+					"/Script/Engine.SoundCue'/Game/Character/MainCharacter/Sound/SC_FootStep.SC_FootStep'"
 				],
-				"SoundVolumeList": [ 0.75, 0.75 ]
-			},
-			"Smash":
-			{
-				"SoundList": [
-					"None"
-				],
-				"SoundVolumeList": [ 3.2000000476837158 ]
+				"SoundVolumeList": [ 0.20000000298023224 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -98,20 +97,19 @@
 		"SoundTarget": "1002",
 		"SoundMap":
 		{
+			"Hit":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Robot_Noise_LightA.SC_Robot_Noise_LightA'"
+				],
+				"SoundVolumeList": [ 1 ]
+			},
 			"FootStep":
 			{
 				"SoundList": [
-					"None",
-					"None"
+					"/Script/Engine.SoundCue'/Game/Character/MainCharacter/Sound/SC_FootStep.SC_FootStep'"
 				],
-				"SoundVolumeList": [ 0.75, 0.75 ]
-			},
-			"Smash":
-			{
-				"SoundList": [
-					"None"
-				],
-				"SoundVolumeList": [ 3.2000000476837158 ]
+				"SoundVolumeList": [ 0.20000000298023224 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -126,10 +124,9 @@
 			"FootStep":
 			{
 				"SoundList": [
-					"None",
-					"None"
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Robot_Noise_LightA.SC_Robot_Noise_LightA'"
 				],
-				"SoundVolumeList": [ 0.75, 0.75 ]
+				"SoundVolumeList": [ 1 ]
 			},
 			"Smash":
 			{
@@ -148,20 +145,19 @@
 		"SoundTarget": "1100",
 		"SoundMap":
 		{
+			"Hit":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Robot_Noise_HeavyA_Cue.SC_Robot_Noise_HeavyA_Cue'"
+				],
+				"SoundVolumeList": [ 1 ]
+			},
 			"FootStep":
 			{
 				"SoundList": [
-					"None",
-					"None"
+					"/Script/Engine.SoundCue'/Game/Character/MainCharacter/Sound/SC_FootStep.SC_FootStep'"
 				],
-				"SoundVolumeList": [ 0.75, 0.75 ]
-			},
-			"Smash":
-			{
-				"SoundList": [
-					"None"
-				],
-				"SoundVolumeList": [ 3.2000000476837158 ]
+				"SoundVolumeList": [ 0.5 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -173,20 +169,19 @@
 		"SoundTarget": "1101",
 		"SoundMap":
 		{
+			"Hit":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Robot_Noise_HeavyA_Cue.SC_Robot_Noise_HeavyA_Cue'"
+				],
+				"SoundVolumeList": [ 1 ]
+			},
 			"FootStep":
 			{
 				"SoundList": [
-					"None",
-					"None"
+					"/Script/Engine.SoundCue'/Game/Character/MainCharacter/Sound/SC_FootStep.SC_FootStep'"
 				],
-				"SoundVolumeList": [ 0.75, 0.75 ]
-			},
-			"Smash":
-			{
-				"SoundList": [
-					"None"
-				],
-				"SoundVolumeList": [ 3.2000000476837158 ]
+				"SoundVolumeList": [ 0.20000000298023224 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -198,20 +193,19 @@
 		"SoundTarget": "1102",
 		"SoundMap":
 		{
+			"Hit":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Robot_Noise_HeavyA_Cue.SC_Robot_Noise_HeavyA_Cue'"
+				],
+				"SoundVolumeList": [ 1 ]
+			},
 			"FootStep":
 			{
 				"SoundList": [
-					"None",
-					"None"
+					"/Script/Engine.SoundCue'/Game/Character/MainCharacter/Sound/SC_FootStep.SC_FootStep'"
 				],
-				"SoundVolumeList": [ 0.75, 0.75 ]
-			},
-			"Smash":
-			{
-				"SoundList": [
-					"None"
-				],
-				"SoundVolumeList": [ 3.2000000476837158 ]
+				"SoundVolumeList": [ 0.20000000298023224 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -226,10 +220,16 @@
 			"FootStep":
 			{
 				"SoundList": [
-					"None",
-					"None"
+					"/Script/Engine.SoundCue'/Game/Character/MainCharacter/Sound/SC_FootStep.SC_FootStep'"
 				],
-				"SoundVolumeList": [ 0.75, 0.75 ]
+				"SoundVolumeList": [ 0.10000000149011612 ]
+			},
+			"Hit":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Robot_Noise_HeavyA_Cue.SC_Robot_Noise_HeavyA_Cue'"
+				],
+				"SoundVolumeList": [ 1 ]
 			}
 		},
 		"SoundAssetDescription": "None"

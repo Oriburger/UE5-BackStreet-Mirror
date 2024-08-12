@@ -5,6 +5,8 @@
 #include "StageGeneratorComponent.h"
 #include "StageManagerComponent.h"
 #include "SlateBasics.h"
+#include "../../Global/BackStreetGameModeBase.h"
+#include "../../Widget/BackStreetWidgetBase.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "Runtime/UMG/Public/UMG.h"
 
@@ -25,6 +27,7 @@ void ANewChapterManagerBase::BeginPlay()
 	Super::BeginPlay();
 
 	StageManagerComponent->OnStageFinished.AddDynamic(this, &ANewChapterManagerBase::OnStageFinished);
+	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 }
 
 void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
@@ -47,18 +50,6 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ANewChapterManagerBase::StartChapter, Invalid Stage Data %d"), CurrentChapterInfo.StageInfoList.Num());
-	}
-
-	//(Temporary code) set input mode game only and hide mouse cursor
-	APlayerController* playerControllerRef = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	if (IsValid(playerControllerRef))
-	{
-		FInputModeGameOnly gameOnlyData;
-		playerControllerRef->SetInputMode(gameOnlyData);
-		playerControllerRef->bShowMouseCursor = false;
-
-		//Add combat widet to screen
-		AddCombatWidget();
 	}
 }
 
@@ -198,19 +189,10 @@ bool ANewChapterManagerBase::GetIsStageBlocked(FVector2D StageCoordinate)
 
 void ANewChapterManagerBase::CreateGameResultWidget(bool bChapterClear)
 {
-	GameResultWidgetRef = CreateWidget(GetWorld(), bChapterClear ? ChapterClearWidgetClass : GameOverWidgetClass);
+	GameResultWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), bChapterClear ? ChapterClearWidgetClass : GameOverWidgetClass));
 	if (IsValid(GameResultWidgetRef))
 	{
 		GameResultWidgetRef->AddToViewport();
-	}
-}
-
-void ANewChapterManagerBase::AddCombatWidget()
-{
-	CombatWidgetRef = CreateWidget(GetWorld(), CombatWidgetClass);
-	if (IsValid(CombatWidgetRef))
-	{
-		CombatWidgetRef->AddToViewport();
 	}
 }
 

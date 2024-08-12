@@ -105,10 +105,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
 		FVector InitialCapsuleComponentScale = FVector::ZeroVector;
 
-	//CharacterSkillList
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		TMap<int32, FOwnerSkillInfoStruct> CharacterSkillInfoMap;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		UAnimBlueprintGeneratedClass* AnimBlueprint;
 
