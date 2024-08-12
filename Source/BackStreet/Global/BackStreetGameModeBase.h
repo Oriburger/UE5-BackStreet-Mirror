@@ -104,7 +104,10 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable)
-		void ReturnToCombatWidget();
+		void SwitchToCombatWidget();
+
+	UFUNCTION(BlueprintCallable)
+		void SwitchToMenuWidget();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UBackStreetWidgetBase* GetCombatWidgetRef();
@@ -112,18 +115,17 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UBackStreetWidgetBase* GetMenuWidgetRef();
 
-	UFUNCTION(BlueprintCallable)
-		void ToggleMenuWidget();
-
 	//create combat ui and menu ui
 	UFUNCTION(BlueprintCallable)
 		void CreateDefaultWidgets();
 
-private:
+protected:
 	//For combat hud widget
-	class UBackStreetWidgetBase* CombatWidgetRef;
+	UPROPERTY()
+		class UBackStreetWidgetBase* CombatWidgetRef;
 
-	class UBackStreetWidgetBase* MenuWidgetRef; 
+	UPROPERTY()
+		class UBackStreetWidgetBase* MenuWidgetRef; 
 
 //------ 그 외 프로퍼티 ---------------
 public:
