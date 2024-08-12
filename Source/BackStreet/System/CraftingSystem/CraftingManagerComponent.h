@@ -28,15 +28,18 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	//UPROPERTY()
+	//	int32 SuperMaterialIdx = 3
+
 protected:
 	UFUNCTION()
-	void InitCraftingManager();
+		void InitCraftingManager();
 //SkillUpgrade == SU
 //WeaponUpgrade == WU
 //=======	Common Function		========================
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsMatEnough();
+		bool GetIsMatEnough(); //--> GetIsMaterialEnough
 
 	UFUNCTION()
 		bool ConsumeMat();
@@ -50,7 +53,7 @@ public:
 		bool AddSkill(int32 NewSkillID);
 
 	UFUNCTION(BlueprintCallable)
-		void SetDisplayingSkillList();
+		void SetDisplayingSkillList(); 
 
 	UFUNCTION(BlueprintCallable)
 		void KeepSkill(int32 SkillID);
@@ -63,16 +66,18 @@ public:
 		bool UpgradeSkill(int32 SkillID, uint8 NewLevel);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<uint8>UpdateRequiredMatForSU(int32 SkillID, uint8 NewLevel);
+		TArray<uint8>UpdateRequiredMatForSU(int32 SkillID, uint8 NewLevel); //--> UpdateSkillUpgradeRequiredInfo
+
 //=======	Upgrade Weapon Function	====================	
 	UFUNCTION(BlueprintCallable)
 		bool UpgradeWeapon(TArray<uint8> NewLevelList);
 		
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<uint8>UpdateRequiredMatForWU(TArray<uint8> NewLevelList);
+		TArray<uint8> UpdateRequiredMatForWU(TArray<uint8> NewLevelList); //--> UpdateWeaponUpgradeRequiredInfo
 
 	UFUNCTION(BlueprintCallable)
 		bool GetIsStatLevelValid(TArray<uint8> NewLevelList);
+
 //=======	CommonProperty		========================
 public:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
@@ -80,15 +85,16 @@ public:
 
 	//만능재료 사용 안함 = 0, 나사 = 1, 스프링 = 2, 기어 = 3
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite)
-		EKeepMat KeepMat = EKeepMat::E_None;
+		EKeepMat KeepMat = EKeepMat::E_None;  //--> KeptMaterialType //EKeepMat도 수정바람 
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
-		TArray<uint8> RequiredMatList;
+		TArray<uint8> RequiredMatList;   //--> RequiredMaterialList 
+
 //=======	SkillSelectProperty		========================
 public:
 	//스킬 제작UI에 노출될 스킬 <SkillType, SkillID>
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
-		TMap<ESkillType, int32>DisplayingSkillMap;
+		TMap<ESkillType, int32> DisplayingSkillMap;
 
 private:
 	TWeakObjectPtr<class ABackStreetGameModeBase> GameModeRef;
