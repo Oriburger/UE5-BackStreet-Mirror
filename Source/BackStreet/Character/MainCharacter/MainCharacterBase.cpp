@@ -227,6 +227,7 @@ void AMainCharacterBase::ResetMovementInputValue()
 
 void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (GetCharacterMovement()->IsFalling()) return;
 	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
 
@@ -256,6 +257,8 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 
 void AMainCharacterBase::Look(const FInputActionValue& Value)
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
+
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
@@ -278,6 +281,7 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 
 void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	//CharacterState.CharacterActionState = ECharacterActionType::E_Jump;
 	Jump();
@@ -285,6 +289,7 @@ void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 
 void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.bIsSprinting) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero()) return;
@@ -306,6 +311,7 @@ void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 
 void AMainCharacterBase::Roll()
 {	
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Attack)) return;
 	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
 
@@ -364,6 +370,7 @@ void AMainCharacterBase::Roll()
 
 void AMainCharacterBase::Dash()
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (IsActorBeingDestroyed()) return;
 	LaunchCharacter(FVector(0.0f, 0.0f, 500.0f), false, false);
 	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, this, &AMainCharacterBase::StopDashMovement, 0.075f, false);
@@ -384,6 +391,7 @@ void AMainCharacterBase::ZoomIn(const FInputActionValue& Value)
 
 void AMainCharacterBase::TryInvestigate()
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	TArray<UInteractiveCollisionComponent*> nearCompoenentList = GetNearInteractionComponentList();
 
 	if (nearCompoenentList.Num())
@@ -427,6 +435,7 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 
 void AMainCharacterBase::TryAttack()
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw) return;
