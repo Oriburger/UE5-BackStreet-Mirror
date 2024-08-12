@@ -106,31 +106,49 @@ void ABackStreetGameModeBase::UpdateCharacterStat(ACharacterBase* TargetCharacte
 	}
 }
 
+void ABackStreetGameModeBase::ReturnToCombatWidget()
+{
+	UBackStreetWidgetBase* combatWidgetRef = GetCombatWidgetRef();
+	
+	if (IsValid(combatWidgetRef))
+	{
+		combatWidgetRef->AddToViewport();
+		combatWidgetRef->SetFocusToWidget(combatWidgetRef, false, true, false);
+		combatWidgetRef->AddToViewport();
+	}
+}
+
+UBackStreetWidgetBase* ABackStreetGameModeBase::GetCombatWidgetRef()
+{
+	if (IsValid(CombatWidgetRef)) return CombatWidgetRef;
+	return CombatWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), CombatWidgetClass));;
+}
+
+UBackStreetWidgetBase* ABackStreetGameModeBase::GetMenuWidgetRef()
+{
+	if (IsValid(MenuWidgetRef)) return MenuWidgetRef;
+	return MenuWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), MenuWidgetClass));
+}
+
 void ABackStreetGameModeBase::ToggleMenuWidget()
 {
-	if (!IsValid(MenuWidgetRef))
-	{
-		MenuWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), MenuWidgetClass));
-	}
-	if (!IsValid(CombatWidgetRef))
-	{
-		CombatWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), CombatWidgetClass));
-	}
+	UBackStreetWidgetBase* combatWidgetRef = GetCombatWidgetRef();
+	UBackStreetWidgetBase* menuWidgetRef = GetMenuWidgetRef();
 
-	if (IsValid(MenuWidgetRef) && IsValid(CombatWidgetRef))
+	if (IsValid(menuWidgetRef) && IsValid(combatWidgetRef))
 	{
-		if (CombatWidgetRef->IsInViewport())
+		if (combatWidgetRef->IsInViewport())
 		{
 			// Show menu and hide Combat HUD
-			CombatWidgetRef->RemoveFromParent();
-			MenuWidgetRef->AddToViewport();
+			combatWidgetRef->RemoveFromParent();
+			menuWidgetRef->AddToViewport();
 			UE_LOG(LogTemp, Warning, TEXT("Combat -> Menu "));
 		}
 		else
 		{
 			// Hide menu and show Combat HUD
-			MenuWidgetRef->RemoveFromParent();
-			CombatWidgetRef->AddToViewport();
+			menuWidgetRef->RemoveFromParent();
+			combatWidgetRef->AddToViewport();
 			UE_LOG(LogTemp, Warning, TEXT("Menu -> Combat"));
 		}
 	}
@@ -138,10 +156,6 @@ void ABackStreetGameModeBase::ToggleMenuWidget()
 
 void ABackStreetGameModeBase::CreateDefaultWidgets()
 {
-	CombatWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), CombatWidgetClass));
-	if (IsValid(CombatWidgetRef))
-	{
-		CombatWidgetRef->AddToViewport();
-	}
+	ReturnToCombatWidget();
 	MenuWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), MenuWidgetClass));
 }

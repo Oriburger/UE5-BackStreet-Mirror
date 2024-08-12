@@ -18,9 +18,13 @@ class BACKSTREET_API UBackStreetWidgetBase : public UUserWidget
 protected:
 	virtual void NativeConstruct() override;
 
+public:
 	//IT MUST BE OVERRIDEN WITH ANIMATION
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void RemoveFromParentWithAnimation(class UWidgetAnimation* TargetAnimtaion, bool bIsReverse = false, float PlayRate = 1.0f);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void SetFocusToWidget(UBackStreetWidgetBase* WidgetToFocus, bool bIsGameAndUI, bool bIsGameOnly, bool bShowCursor);
 
 //--------- Getter -------------------------------
 protected:

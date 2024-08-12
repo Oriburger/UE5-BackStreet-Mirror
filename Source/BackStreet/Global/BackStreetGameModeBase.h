@@ -103,11 +103,14 @@ public:
 		TSubclassOf<class UBackStreetWidgetBase> MenuWidgetClass;
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class UBackStreetWidgetBase* GetCombatWidgetRef() { return CombatWidgetRef; }
+	UFUNCTION(BlueprintCallable)
+		void ReturnToCombatWidget();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class UBackStreetWidgetBase* GetMenuWidgetRef() { return MenuWidgetRef; }
+		class UBackStreetWidgetBase* GetCombatWidgetRef();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class UBackStreetWidgetBase* GetMenuWidgetRef();
 
 	UFUNCTION(BlueprintCallable)
 		void ToggleMenuWidget();
