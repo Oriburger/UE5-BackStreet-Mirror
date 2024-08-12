@@ -83,6 +83,9 @@ public:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
 		bool bIsSkillCreated = false;
 
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
+		bool bIsDisplayingSkillListSet = false;
+
 	//만능재료 사용 안함 = 0, 나사 = 1, 스프링 = 2, 기어 = 3
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite)
 		EKeepMat KeepMat = EKeepMat::E_None;  //--> KeptMaterialType //EKeepMat도 수정바람 
