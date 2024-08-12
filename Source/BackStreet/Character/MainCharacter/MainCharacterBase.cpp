@@ -3,12 +3,13 @@
 #include "MainCharacterController.h"
 #include "../Component/TargetingManagerComponent.h"
 #include "../Component/ItemInventoryComponent.h"
+#include "../Component/SkillManagerComponentBase.h"
+#include "../Component/PlayerSkillManagerComponent.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SaveSystem/BackStreetGameInstance.h"
 #include "../../System/AbilitySystem/AbilityManagerBase.h"
 #include "../../System/CraftingSystem/CraftBoxBase.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
-#include "../../System/SkillSystem/SkillManagerBase.h"
 #include "../../Item/ItemBase.h"
 #include "../../Item/ItemBoxBase.h"
 #include "../../Item/RewardBoxBase.h"
@@ -36,11 +37,21 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CAMERA_BOOM"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->bUsePawnControlRotation = true;
-	CameraBoom->TargetArmLength = 1400.0f;
-	CameraBoom->bInheritPitch = false;
+	CameraBoom->TargetArmLength = 500.0f;
+	CameraBoom->bInheritPitch = true;
 	CameraBoom->bInheritRoll = false;
-	CameraBoom->bInheritYaw = false;
+	CameraBoom->bInheritYaw = true;
+	CameraBoom->bEnableCameraLag = true;
+	CameraBoom->bEnableCameraRotationLag = true;
+	CameraBoom->CameraRotationLagSpeed = 0.5f;
+	CameraBoom->CameraLagMaxDistance = 1000.0f;
+	CameraBoom->SetRelativeLocation({ 0.0f, 30.0f, 80.0f });
 	CameraBoom->SetWorldRotation({ -45.0f, 0.0f, 0.0f });
+
+	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 110.0f, 120.0f));
+
+	SkillManagerComponent = CreateDefaultSubobject<UPlayerSkillManagerComponent>(TEXT("SKILL_MANAGER_"));
+	SkillManagerComponentRef = SkillManagerComponent;
 
 	FollowingCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FOLLOWING_CAMERA"));
 	FollowingCamera->SetupAttachment(CameraBoom);
@@ -60,10 +71,12 @@ AMainCharacterBase::AMainCharacterBase()
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
 
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
+	GetCapsuleComponent()->SetCapsuleRadius(41.0f);
 
 	this->bUseControllerRotationYaw = false;
-	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
-	GetCharacterMovement()->RotationRate = { 0.0f, 0.0f, 750.0f };
+	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+	GetCharacterMovement()->JumpZVelocity = 1000.0f;
+	GetCharacterMovement()->RotationRate = { 0.0f, 1000.0f, 0.0f };
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->GravityScale = 2.5f;
 
@@ -418,10 +431,6 @@ void AMainCharacterBase::TryAttack()
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw) return;
 
-	//IndieGo용 임시 코드----------------------------------------------------------
-	if (WeaponComponent->WeaponStat.WeaponID == 12130) return;
-	//---------------------------------------------------------------------------------
-
 	if (WeaponComponent->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
@@ -496,19 +505,16 @@ void AMainCharacterBase::TryDownwardAttack()
 	}
 }
 
-void AMainCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
+bool AMainCharacterBase::TrySkill(int32 SkillID)
 {	
 	if (GetIsActionActive(ECharacterActionType::E_Attack))
 	{
 		ResetActionState();
 	}
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return false;
 
-	Super::TrySkill(SkillType, SkillID);
-
-	//Try Skill and adjust rotation to cursor position
-	//RotateToCursor();
+	return Super::TrySkill(SkillID);
 }
 
 void AMainCharacterBase::Attack()
@@ -767,7 +773,8 @@ bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 
 bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
 {
-	return Super::PickWeapon(NewWeaponID);
+	if (!Super::PickWeapon(NewWeaponID)) return false;
+	return true;
 }
 
 void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)

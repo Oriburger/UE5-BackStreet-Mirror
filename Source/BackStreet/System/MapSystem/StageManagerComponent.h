@@ -10,7 +10,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateStageEnd, FStageInfo, Stage
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateStageClear);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadBegin);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadEnd);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadDone);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeAttackBegin);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeAttackEnd);
@@ -36,7 +36,7 @@ public:
 		FDelegateLoadBegin OnStageLoadBegin;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateLoadEnd OnStageLoadEnd;
+		FDelegateLoadDone OnStageLoadDone;
 	
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTimeAttackBegin OnTimeAttackStageBegin;

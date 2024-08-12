@@ -68,7 +68,6 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	//Stat, State 초기화 
 	WeaponID = NewWeaponID;
 	WeaponStat.WeaponID = WeaponID;
-
 	if (NewWeaponID == 0)
 	{
 		WeaponStat = FWeaponStatStruct();
@@ -78,6 +77,10 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 		return;
 	}
 	WeaponStat = GetWeaponStatInfoWithID(WeaponID);
+
+	WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_Attack, 0);
+	WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_AttackSpeed, 0);
+	WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_FinalAttack, 0);
 
 	//에셋 초기화
 	FWeaponAssetInfoStruct newAssetInfo = GetWeaponAssetInfoWithID(WeaponID);
@@ -116,6 +119,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &UWeaponComponentBase::InitWeaponAsset));
 	}
+	OnWeaponUpdated.Broadcast();
 }
 
 void UWeaponComponentBase::InitWeaponAsset()
@@ -229,6 +233,22 @@ FProjectileAssetInfoStruct UWeaponComponentBase::GetProjectileAssetInfo(int32 Ta
 }
 
 
+uint8 UWeaponComponentBase::GetLimitedStatLevel(EWeaponStatType WeaponStatType)
+{
+	checkf(WeaponStat.UpgradableStatInfoMap.Contains(WeaponStatType), TEXT("WeaponType is not valid"));
+	for (uint8 level = 0; level < WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel.Num(); level++)
+	{
+		if(!WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel[level].bCanUpgradeLevel) return level-1;
+	}
+	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel.Num()-1;
+}
+
+uint8 UWeaponComponentBase::GetMaxStatLevel(EWeaponStatType WeaponStatType)
+{
+	checkf(WeaponStat.UpgradableStatInfoMap.Contains(WeaponStatType), TEXT("WeaponType is not valid"));
+	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel.Num() - 1;
+}
+
 float UWeaponComponentBase::CalculateTotalDamage(FCharacterStateStruct TargetState)
 {
 	if (!OwnerCharacterRef.IsValid()) return 0.0f;
@@ -236,6 +256,16 @@ float UWeaponComponentBase::CalculateTotalDamage(FCharacterStateStruct TargetSta
 	return WeaponStat.WeaponDamage * (1 + FMath::Max(-1, ownerState.TotalAttack - TargetState.TotalDefense))
 		* (1 + WeaponStat.bCriticalApply * WeaponStat.CriticalDamageRate)
 		+ (!WeaponStat.bFixDamageApply ? 0.0f : WeaponStat.FixedDamageAmount);
+}
+
+bool UWeaponComponentBase::UpgradeStat(TArray<uint8> NewLevelList)
+{
+	for (uint8 idx = 0; idx < MAX_WEAPON_UPGRADABLE_STAT_IDX; idx++)
+	{
+		EWeaponStatType weaponStatType = StaticCast<EWeaponStatType>(idx+1);
+		WeaponState.UpgradedStatMap[weaponStatType] = NewLevelList[idx];
+	}
+	return true;
 }
 
 void UWeaponComponentBase::UpdateComboState()

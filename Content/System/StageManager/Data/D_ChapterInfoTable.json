@@ -117,15 +117,15 @@
 					{
 						"EnemySet":
 						{
-							"1100": 2,
+							"1100": 1,
 							"1002": 2
 						}
 					},
 					{
 						"EnemySet":
 						{
-							"1110": 1,
-							"1001": 3
+							"1100": 1,
+							"1001": 2
 						}
 					}
 				]
@@ -151,15 +151,15 @@
 					{
 						"EnemySet":
 						{
-							"1002": 3,
+							"1002": 2,
 							"1110": 1
 						}
 					},
 					{
 						"EnemySet":
 						{
-							"1110": 2,
-							"1100": 2
+							"1110": 1,
+							"1100": 1
 						}
 					}
 				]
@@ -685,6 +685,6 @@
 			"/Game/Map/Chapter01/Chapter01_OuterArea02.Chapter01_OuterArea02",
 			"/Game/Map/Chapter01/Chapter01_OuterArea03.Chapter01_OuterArea03"
 		],
-		"BossCharacterClass": "/Script/Engine.BlueprintGeneratedClass'/Game/Character/EnemyCharacter/Blueprint/BP_BossEnemy.BP_BossEnemy_C'"
+		"BossCharacterClass": "/Script/Engine.BlueprintGeneratedClass'/Game/Character/EnemyCharacter/Blueprint/BP_BossCharacter.BP_BossCharacter_C'"
 	}
 ]

@@ -76,6 +76,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		UTexture2D* ItemImage;
 
+	//Item Icon Image
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		UTexture2D* DeactiveItemImage;
+
 //=============State =================
 	
 	//Item Amount which can not edit in datatable

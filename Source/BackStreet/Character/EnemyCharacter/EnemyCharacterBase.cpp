@@ -2,9 +2,10 @@
 #include "EnemyCharacterBase.h"
 #include "../Component/TargetingManagerComponent.h"
 #include "../Component/WeaponComponentBase.h"
+#include "../Component/SkillManagerComponentBase.h"
+#include "../Component/EnemySkillManagerComponent.h"
 #include "../MainCharacter/MainCharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
-#include "../../System/SkillSystem/SkillManagerBase.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
 #include "../../System/AISystem/AIControllerBase.h"
 #include "../../Item/ItemBase.h"
@@ -32,6 +33,9 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	TargetingSupportWidget->SetRelativeScale3D(FVector(0.15f));
 	TargetingSupportWidget->SetDrawSize({ 500.0f, 500.0f });
 	TargetingSupportWidget->SetVisibility(false);
+
+	SkillManagerComponent = CreateDefaultSubobject<UEnemySkillManagerComponent>(TEXT("SKILL_MANAGER_"));
+	SkillManagerComponentRef = SkillManagerComponent;
 
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -61,7 +65,7 @@ void AEnemyCharacterBase::InitAsset(int32 NewCharacterID)
 
 void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 {
-	// Read from dataTable
+	//Read from dataTable
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
 	AssetSoftPtrInfo.CharacterID = CharacterID = NewCharacterID;
@@ -75,6 +79,19 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		CharacterStat.bInfinite = true;
 		CharacterState.CurrentHP = EnemyStat.CharacterStat.DefaultHP;
 		SetDefaultWeapon();
+	}
+
+	if (NewCharacterID != 0)
+	{
+		SkillManagerComponent->ClearAllSkill();
+		for (int32& skillID : EnemyStat.EnemySkillIDList)
+		{
+			if (skillID != 0)
+			{
+				bool result = SkillManagerComponent->AddSkill(skillID);
+				UE_LOG(LogTemp, Warning, TEXT("Add Skill %d --- %d"), skillID, (int32)result);
+			}
+		}
 	}
 
 	InitFloatingHpWidget();
@@ -146,20 +163,9 @@ void AEnemyCharacterBase::TryAttack()
 	Super::TryAttack();
 }
 
-void AEnemyCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
+bool AEnemyCharacterBase::TrySkill(int32 SkillID)
 {
-	check(WeaponComponent != nullptr);
-
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Skill
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-
-	if (WeaponComponent->WeaponID == 0)
-	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("The Skill Is Not Available")), FColor::White);
-		return;
-	}
-
-	Super::TrySkill(SkillType, SkillID);
+	return Super::TrySkill(SkillID);
 }
 
 void AEnemyCharacterBase::Attack()

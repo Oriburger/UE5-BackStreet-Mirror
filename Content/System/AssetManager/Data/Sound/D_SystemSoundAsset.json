@@ -42,7 +42,7 @@
 				"SoundList": [
 					"/Script/Engine.SoundCue'/Game/System/Sound/BGM/SC_Chapter01_Drone_BossStage.SC_Chapter01_Drone_BossStage'"
 				],
-				"SoundVolumeList": [ 0.75 ]
+				"SoundVolumeList": [ 0.60000002384185791 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -68,10 +68,10 @@
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
-			"Win":
+			"StageClear":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/UI/Sound/SC_Win.SC_Win'"
+					"/Script/Engine.SoundCue'/Game/System/Sound/ETC/SC_StageClear.SC_StageClear'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
