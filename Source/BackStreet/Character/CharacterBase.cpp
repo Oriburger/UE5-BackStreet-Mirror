@@ -330,7 +330,10 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		{
 			Cast<ACharacterBase>(DamageCauser)->SetActorRotation(newRotation);
 			newRotation.Yaw += 180.0f;
-			SetActorRotation(newRotation);
+			if (!DamageCauser->ActorHasTag("Boss"))
+			{
+				SetActorRotation(newRotation);
+			}
 		}
 	}
 
