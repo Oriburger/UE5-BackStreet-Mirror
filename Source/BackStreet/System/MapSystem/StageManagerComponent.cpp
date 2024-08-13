@@ -463,6 +463,7 @@ void UStageManagerComponent::GrantStageRewards()
 	if (!IsValid(playerCharacter)) return;
 
 	FStageRewardInfoList* rewardInfoList = CurrentChapterInfo.StageRewardInfoMap.Find(CurrentStageInfo.StageType);
+	TArray<int32> rewardItemIDList;
 	if (rewardInfoList)
 	{
 		for (auto& rewardCandidateInfo : rewardInfoList->RewardCandidateInfoList)
@@ -492,6 +493,7 @@ void UStageManagerComponent::GrantStageRewards()
 
 					//add item to inventory
 					playerCharacter->ItemInventory->AddItem(selectedRewardItemID, 1);
+					rewardItemIDList.Add(selectedRewardItemID);
 
 					UE_LOG(LogTemp, Warning, TEXT("Reward Granted %d!@@@@@@@@@@"), selectedRewardItemID);
 					break;
@@ -499,6 +501,7 @@ void UStageManagerComponent::GrantStageRewards()
 			}
 		}
 	}
+	OnRewardGranted.Broadcast(rewardItemIDList);
 }
 
 void UStageManagerComponent::UpdateEnemyCountAndCheckClear()
