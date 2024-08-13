@@ -7,6 +7,7 @@
 #include "StageManagerComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateStageEnd, FStageInfo, StageInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateRewardGrant, TArray<int32>, RewardID);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateStageClear);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadBegin);
@@ -28,6 +29,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateStageClear OnStageCleared; 
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateRewardGrant OnRewardGranted;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTimeOver OnTimeIsOver;

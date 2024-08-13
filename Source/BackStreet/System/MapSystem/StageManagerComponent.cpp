@@ -345,7 +345,6 @@ void UStageManagerComponent::StartStage()
 	CurrentStageInfo.bIsVisited = true;
 
 	//Load End
-	GEngine->AddOnScreenDebugMessage(1, 10.0f, FColor::Green, "Broadcast");
 	OnStageLoadDone.Broadcast();
 
 	//Update spawn points
@@ -462,43 +461,43 @@ void UStageManagerComponent::GrantStageRewards()
 
 	if (!IsValid(playerCharacter)) return;
 
-	FStageRewardInfoList* rewardInfoList = CurrentChapterInfo.StageRewardInfoMap.Find(CurrentStageInfo.StageType);
-	if (rewardInfoList)
-	{
-		for (auto& rewardCandidateInfo : rewardInfoList->RewardCandidateInfoList)
+		FStageRewardInfoList* rewardInfoList = CurrentChapterInfo.StageRewardInfoMap.Find(CurrentStageInfo.StageType);
+		if (rewardInfoList)
 		{
-			if (rewardCandidateInfo.RewardItemIDList.Num() != rewardCandidateInfo.RewardItemProbabilityList.Num()) continue;
-
-			// calculate total probability
-			float totalProbability = 0.0f;
-			for (float probability : rewardCandidateInfo.RewardItemProbabilityList)
+			for (auto& rewardCandidateInfo : rewardInfoList->RewardCandidateInfoList)
 			{
-				totalProbability += probability;
-			}
+				if (rewardCandidateInfo.RewardItemIDList.Num() != rewardCandidateInfo.RewardItemProbabilityList.Num()) continue;
 
-			// generate random value
-			float randomValue = FMath::FRandRange(0.0f, totalProbability);
-
-			// select reward by cumulative probability
-			float cumulativeProbability = 0.0f;
-			for (int32 candidateIdx = 0; candidateIdx < rewardCandidateInfo.RewardItemIDList.Num(); ++candidateIdx)
-			{
-				cumulativeProbability += rewardCandidateInfo.RewardItemProbabilityList[candidateIdx];
-
-				if (randomValue <= cumulativeProbability)
+				// calculate total probability
+				float totalProbability = 0.0f;
+				for (float probability : rewardCandidateInfo.RewardItemProbabilityList)
 				{
-					// selected reward item id
-					int32 selectedRewardItemID = rewardCandidateInfo.RewardItemIDList[candidateIdx];
+					totalProbability += probability;
+				}
 
-					//add item to inventory
-					playerCharacter->ItemInventory->AddItem(selectedRewardItemID, 1);
+				// generate random value
+				float randomValue = FMath::FRandRange(0.0f, totalProbability);
 
-					UE_LOG(LogTemp, Warning, TEXT("Reward Granted %d!@@@@@@@@@@"), selectedRewardItemID);
-					break;
+				// select reward by cumulative probability
+				float cumulativeProbability = 0.0f;
+				for (int32 candidateIdx = 0; candidateIdx < rewardCandidateInfo.RewardItemIDList.Num(); ++candidateIdx)
+				{
+					cumulativeProbability += rewardCandidateInfo.RewardItemProbabilityList[candidateIdx];
+
+					if (randomValue <= cumulativeProbability)
+					{
+						// selected reward item id
+						int32 selectedRewardItemID = rewardCandidateInfo.RewardItemIDList[candidateIdx];
+
+						//add item to inventory
+						playerCharacter->ItemInventory->AddItem(selectedRewardItemID, 1);
+
+						UE_LOG(LogTemp, Warning, TEXT("Reward Granted %d!@@@@@@@@@@"), selectedRewardItemID);
+						break;
+					}
 				}
 			}
 		}
-	}
 }
 
 void UStageManagerComponent::UpdateEnemyCountAndCheckClear()
