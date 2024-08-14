@@ -7,7 +7,7 @@
 #include "StageManagerComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateStageEnd, FStageInfo, StageInfo);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateRewardGrant, TArray<int32>, RewardID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateRewardGrant, const TArray<int32>&, RewardID);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateStageClear);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadBegin);
@@ -17,18 +17,18 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeAttackBegin);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeAttackEnd);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTimeOver);
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BACKSTREET_API UStageManagerComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-//======== Delegate ============
+	//======== Delegate ============
 public:
 	UPROPERTY()
-		FDelegateStageEnd OnStageFinished;	
+		FDelegateStageEnd OnStageFinished;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateStageClear OnStageCleared; 
+		FDelegateStageClear OnStageCleared;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateRewardGrant OnRewardGranted;
