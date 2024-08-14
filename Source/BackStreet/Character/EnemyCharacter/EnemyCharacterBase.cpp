@@ -151,9 +151,12 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	}
 
 	//Set Rotation To Causer
-	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), DamageCauser->GetActorLocation());
-	newRotation.Pitch = newRotation.Roll = 0.0f;
-	SetActorRotation(newRotation);
+	if (!DamageCauser->ActorHasTag("Boss"))
+	{
+		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), DamageCauser->GetActorLocation());
+		newRotation.Pitch = newRotation.Roll = 0.0f;
+		SetActorRotation(newRotation);
+	}
 
 	return damageAmount;
 }
