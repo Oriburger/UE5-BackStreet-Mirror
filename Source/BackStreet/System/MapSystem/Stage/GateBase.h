@@ -44,8 +44,8 @@ public:
 //----------- ÇÙ½É ·ÎÁ÷ ---------------
 public:
 	// Initialize Gate
-	UFUNCTION()
-		void InitGate(FVector2D NewDirection = FVector2D(0.0f), FName StageType = FName(""));
+	UFUNCTION(BlueprintNativeEvent)
+		void InitGate(FVector2D NewDirection, EStageCategoryInfo StageType);
 
 	// Check Gate Is Active and RequsetMoveStage
 	UFUNCTION(BlueprintCallable)
@@ -62,7 +62,7 @@ public:
 protected:
 	//Stage type name for next stage
 	UPROPERTY(BlueprintReadOnly)
-		FName NextStageType;
+		EStageCategoryInfo NextStageType;
 
 private:
 	bool bIsGateActive;

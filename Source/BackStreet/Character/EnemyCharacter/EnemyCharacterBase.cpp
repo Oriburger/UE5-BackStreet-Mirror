@@ -307,7 +307,7 @@ void AEnemyCharacterBase::SetInstantHpWidgetVisibility()
 	//Set new timer
 	FTimerDelegate disappearEvent;
 	disappearEvent.BindUFunction(FloatingHpBar, FName("SetVisibility"), false);
-	GetWorldTimerManager().SetTimer(HpWidgetAutoDisappearTimer, disappearEvent, 5.0f, false);
+	GetWorldTimerManager().SetTimer(HpWidgetAutoDisappearTimer, disappearEvent, 10.0f, false);
 }
 
 void AEnemyCharacterBase::ClearAllTimerHandle()
