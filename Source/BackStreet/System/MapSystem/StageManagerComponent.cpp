@@ -345,7 +345,6 @@ void UStageManagerComponent::StartStage()
 	CurrentStageInfo.bIsVisited = true;
 
 	//Load End
-	GEngine->AddOnScreenDebugMessage(1, 10.0f, FColor::Green, "Broadcast");
 	OnStageLoadDone.Broadcast();
 
 	//Update spawn points
