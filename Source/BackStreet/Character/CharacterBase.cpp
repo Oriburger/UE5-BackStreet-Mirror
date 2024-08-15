@@ -532,7 +532,7 @@ void ACharacterBase::TryDashAttack()
 	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
 	if (GetCharacterMovement()->IsFalling()) return;
 	if (!IsValid(AssetHardPtrInfo.DashAttackAnimMontage)) return;
-	if (GetVelocity().Length() <= CharacterState.TotalMoveSpeed * 0.5f) return;
+	if (GetVelocity().Length() <= CharacterState.TotalMoveSpeed * 0.75f) return;
 
 	// Set action state
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
