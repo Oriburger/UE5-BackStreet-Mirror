@@ -270,7 +270,7 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown) return;
 	if (!bForceReset && (CharacterState.CharacterActionState == ECharacterActionType::E_Stun
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;	
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
 
@@ -330,7 +330,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		{
 			Cast<ACharacterBase>(DamageCauser)->SetActorRotation(newRotation);
 			newRotation.Yaw += 180.0f;
-			if (!DamageCauser->ActorHasTag("Boss"))
+			if (!ActorHasTag("Boss"))
 			{
 				SetActorRotation(newRotation);
 			}
@@ -532,7 +532,7 @@ void ACharacterBase::TryDashAttack()
 	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
 	if (GetCharacterMovement()->IsFalling()) return;
 	if (!IsValid(AssetHardPtrInfo.DashAttackAnimMontage)) return;
-	if (GetVelocity().Length() <= CharacterState.TotalMoveSpeed * 0.9f) return;
+	if (GetVelocity().Length() <= CharacterState.TotalMoveSpeed * 0.5f) return;
 
 	// Set action state
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
@@ -544,7 +544,7 @@ void ACharacterBase::TryDashAttack()
 void ACharacterBase::DashAttack()
 {
 	//init local parameter
-	const float dashLength = 200.0f;
+	const float dashLength = 250.0f;
 	FVector targetLocation = GetActorLocation() + GetVelocity().GetSafeNormal() * dashLength;
 
 	//check if there are any obstacle (wall, prop, enemy etc.)
@@ -553,6 +553,9 @@ void ACharacterBase::DashAttack()
 	collisionQueryParams.AddIgnoredActor(this);
 	GetWorld()->LineTraceSingleByChannel(hitResult, HitSceneComponent->GetComponentLocation(), targetLocation, ECollisionChannel::ECC_Camera);
 	targetLocation = hitResult.bBlockingHit ? hitResult.Location : targetLocation;
+
+	//Hard coding for BIC
+	CharacterStat.DefaultAttack /= 1.5f;
 
 	SetLocationWithInterp(targetLocation, 2.5f);
 }
