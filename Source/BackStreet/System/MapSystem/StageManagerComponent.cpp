@@ -35,6 +35,7 @@ void UStageManagerComponent::BeginPlay()
 	}
 	ChapterManagerRef = Cast<ANewChapterManagerBase>(GetOwner());
 	PlayerRef = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	OnStageLoadBegin.AddDynamic(Cast<AMainCharacterBase>(PlayerRef.Get()), &AMainCharacterBase::ResetCameraRotation);
 }
 
 void UStageManagerComponent::Initialize(FChapterInfo NewChapterInfo)

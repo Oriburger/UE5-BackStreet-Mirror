@@ -272,9 +272,7 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 		// set timer for automatic rotate mode 
 		if (LookAxisVector.Length() <= 0.5f)
 		{
-			GetWorldTimerManager().ClearTimer(SwitchCameraRotateModeTimerHandle);
-			SwitchCameraRotateModeTimerHandle.Invalidate();
-			GetWorldTimerManager().SetTimer(SwitchCameraRotateModeTimerHandle, this, &AMainCharacterBase::SetAutomaticRotateMode, AutomaticModeSwitchTime);
+			SetAutomaticRotateModeTimer();
 		}
 	}
 }
@@ -610,6 +608,22 @@ void AMainCharacterBase::SetCameraVerticalAlignmentWithInterp(float TargetPitch,
 	//Calling MyUsefulFunction after 5 seconds without looping
 	GetWorld()->GetTimerManager().ClearTimer(CameraRotationAlignmentHandle);
 	GetWorld()->GetTimerManager().SetTimer(CameraRotationAlignmentHandle, updateFunctionDelegate, 0.01f, true);
+}
+
+void AMainCharacterBase::ResetCameraRotation()
+{
+	GEngine->AddOnScreenDebugMessage(0, 10.0f, FColor::Red, "ResetCameraRotation");
+	SetManualRotateMode();
+	FRotator newRotation = CameraBoom->GetRelativeRotation();
+	newRotation.Yaw = newRotation.Roll = 0.0f;
+	CameraBoom->SetRelativeRotation(newRotation);
+}
+
+void AMainCharacterBase::SetAutomaticRotateModeTimer()
+{
+	GetWorldTimerManager().ClearTimer(SwitchCameraRotateModeTimerHandle);
+	SwitchCameraRotateModeTimerHandle.Invalidate();
+	GetWorldTimerManager().SetTimer(SwitchCameraRotateModeTimerHandle, this, &AMainCharacterBase::SetAutomaticRotateMode, AutomaticModeSwitchTime);
 }
 
 void AMainCharacterBase::SetAutomaticRotateMode()
