@@ -143,7 +143,7 @@ public:
 		FRotator PlayerStartRotation = FRotator::ZeroRotator;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		TArray<FVector> PortalLocationList;
+		TArray<FTransform> PortalTransformList;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TArray<FName> PortalDirectionTagList;

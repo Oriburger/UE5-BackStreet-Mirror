@@ -35,6 +35,7 @@ void UStageManagerComponent::BeginPlay()
 	}
 	ChapterManagerRef = Cast<ANewChapterManagerBase>(GetOwner());
 	PlayerRef = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	OnStageLoadBegin.AddDynamic(Cast<AMainCharacterBase>(PlayerRef.Get()), &AMainCharacterBase::ResetCameraRotation);
 }
 
 void UStageManagerComponent::Initialize(FChapterInfo NewChapterInfo)
@@ -186,7 +187,7 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 		}
 		else if (spawnPoint->Tags[1] == FName("Gate"))
 		{
-			CurrentStageInfo.PortalLocationList.Add(spawnPoint->GetActorLocation() + zAxisCalibrationValue);
+			CurrentStageInfo.PortalTransformList.Add(spawnPoint->GetActorTransform());
 			checkf(spawnPoint->Tags.Num() >= 3, TEXT("Portal SpawnPoint의 Tag[2], Direction Tag가 지정되어있지않습니다."));
 			CurrentStageInfo.PortalDirectionTagList.Add(spawnPoint->Tags[2]);
 		}
@@ -281,19 +282,20 @@ void UStageManagerComponent::SpawnCraftbox()
 void UStageManagerComponent::SpawnPortal(int32 GateCount)
 {
 	if (!ChapterManagerRef.IsValid()) return;
-	if (CurrentStageInfo.PortalLocationList.Num() < GateCount
+	if (CurrentStageInfo.PortalTransformList.Num() < GateCount
 		|| CurrentStageInfo.PortalDirectionTagList.Num() < GateCount)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::SpawnPortal -> Not Enough Portal Spawn Point!"));
 		return;
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::SpawnPortal, spawn %d portal"), GateCount);
-
 	UStageGeneratorComponent* stageGeneratorRef = ChapterManagerRef.Get()->StageGeneratorComponent;
 	for (int32 idx = 0; idx < GateCount; idx++)
 	{
-		AGateBase* newGate = GetWorld()->SpawnActor<AGateBase>(GateClass, CurrentStageInfo.PortalLocationList[idx], FRotator::ZeroRotator);
+		const FVector spawnLocation = CurrentStageInfo.PortalTransformList[idx].GetLocation();
+		const FRotator spawnRotation = CurrentStageInfo.PortalTransformList[idx].GetRotation().Rotator();
+
+		AGateBase* newGate = GetWorld()->SpawnActor<AGateBase>(GateClass, spawnLocation, spawnRotation);
 		if (IsValid(newGate))
 		{
 			SpawnedActorList.Add(newGate);
@@ -308,10 +310,9 @@ void UStageManagerComponent::SpawnPortal(int32 GateCount)
 				newGate->Destroy();
 				continue;
 			}
-			UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::SpawnPortal, spawn %s portal"), *directionTag.ToString());
 
 			EStageCategoryInfo nextStageType = ChapterManagerRef.Get()->GetStageInfoWithCoordinate(CurrentStageInfo.Coordinate + direction).StageType;
-			newGate->InitGate(direction, ChapterManagerRef.Get()->GetStageTypeName(nextStageType));
+			newGate->InitGate(direction, nextStageType);
 
 			//temp
 			newGate->ActivateGate();
@@ -345,7 +346,6 @@ void UStageManagerComponent::StartStage()
 	CurrentStageInfo.bIsVisited = true;
 
 	//Load End
-	GEngine->AddOnScreenDebugMessage(1, 10.0f, FColor::Green, "Broadcast");
 	OnStageLoadDone.Broadcast();
 
 	//Update spawn points
@@ -463,6 +463,7 @@ void UStageManagerComponent::GrantStageRewards()
 	if (!IsValid(playerCharacter)) return;
 
 	FStageRewardInfoList* rewardInfoList = CurrentChapterInfo.StageRewardInfoMap.Find(CurrentStageInfo.StageType);
+	TArray<int32> rewardItemIDList;
 	if (rewardInfoList)
 	{
 		for (auto& rewardCandidateInfo : rewardInfoList->RewardCandidateInfoList)
@@ -492,6 +493,7 @@ void UStageManagerComponent::GrantStageRewards()
 
 					//add item to inventory
 					playerCharacter->ItemInventory->AddItem(selectedRewardItemID, 1);
+					rewardItemIDList.Add(selectedRewardItemID);
 
 					UE_LOG(LogTemp, Warning, TEXT("Reward Granted %d!@@@@@@@@@@"), selectedRewardItemID);
 					break;
@@ -499,6 +501,7 @@ void UStageManagerComponent::GrantStageRewards()
 			}
 		}
 	}
+	OnRewardGranted.Broadcast(rewardItemIDList);
 }
 
 void UStageManagerComponent::UpdateEnemyCountAndCheckClear()

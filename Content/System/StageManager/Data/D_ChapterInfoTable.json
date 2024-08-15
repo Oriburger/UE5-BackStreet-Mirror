@@ -35,7 +35,7 @@
 			}
 		],
 		"StageTypeListForLevelIdx": [],
-		"EliteTimeAtkStageTimeOut": 120,
+		"EliteTimeAtkStageTimeOut": 80,
 		"NormalTimeAtkStageTimeOut": 90,
 		"EnemyCompositionInfoMap":
 		{
@@ -212,7 +212,7 @@
 						"RewardItemProbabilityList": [ 1, 1, 1 ]
 					},
 					{
-						"RewardItemIDList": [ 4, 5, 6, 7 ],
+						"RewardItemIDList": [ 5, 6, 7, 8 ],
 						"RewardItemProbabilityList": [ 0.60000002384185791, 0.25, 0.10000000149011612, 0.05000000074505806 ]
 					}
 				]
