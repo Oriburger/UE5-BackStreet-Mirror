@@ -35,7 +35,7 @@
 			}
 		],
 		"StageTypeListForLevelIdx": [],
-		"EliteTimeAtkStageTimeOut": 120,
+		"EliteTimeAtkStageTimeOut": 80,
 		"NormalTimeAtkStageTimeOut": 90,
 		"EnemyCompositionInfoMap":
 		{
