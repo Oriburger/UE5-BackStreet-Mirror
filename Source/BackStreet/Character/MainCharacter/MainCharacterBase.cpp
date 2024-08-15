@@ -612,7 +612,6 @@ void AMainCharacterBase::SetCameraVerticalAlignmentWithInterp(float TargetPitch,
 
 void AMainCharacterBase::ResetCameraRotation()
 {
-	GEngine->AddOnScreenDebugMessage(0, 10.0f, FColor::Red, "ResetCameraRotation");
 	SetManualRotateMode();
 	FRotator newRotation = CameraBoom->GetRelativeRotation();
 	newRotation.Yaw = newRotation.Roll = 0.0f;
