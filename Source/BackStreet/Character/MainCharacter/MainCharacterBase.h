@@ -205,7 +205,13 @@ public:
 	UFUNCTION()
 		void SetCameraVerticalAlignmentWithInterp(float TargetPitch, const float InterpSpeed);
 
+	UFUNCTION()
+		void ResetCameraRotation();
+
 protected:
+	UFUNCTION()
+		void SetAutomaticRotateModeTimer();
+
 	UFUNCTION()
 		void SetAutomaticRotateMode();	
 
