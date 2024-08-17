@@ -562,7 +562,13 @@ void ACharacterBase::DashAttack()
 
 bool ACharacterBase::TrySkill(int32 SkillID)
 {
-	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return false;
+	if (!CharacterState.bCanAttack) return false;
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Stun
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Die
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return false;
+
 
 	//스킬 매니저 있는지 확인
 	if (!SkillManagerComponentRef.IsValid())
@@ -593,6 +599,7 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 	else
 	{
 		CharacterState.bCanAttack = false;
+		SetActionState(ECharacterActionType::E_Skill);
 		SkillManagerComponentRef.Get()->TrySkill(SkillID);
 		//Reset Combo
 		WeaponComponent->ResetComboCnt();
