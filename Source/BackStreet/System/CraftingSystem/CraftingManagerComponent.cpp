@@ -193,7 +193,7 @@ TArray<uint8> UCraftingManagerComponent::UpdateRequiredMatForSU(int32 SkillID, u
 	for (uint8 idx = 0; idx < MAX_CRAFTING_ITEM_IDX; idx++)
 	{
 		uint8 totalAmt = 0;
-		checkf(NewLevel >= currSkillLevel + 1, TEXT("Current Level is Higher than New Level"));
+		checkf(NewLevel >= currSkillLevel + 1, TEXT("NewLevel(%d) is Not Valid. CurrLevel(%d)"),NewLevel, currSkillLevel);
 		uint8 tempLevel = 0;
 		for (tempLevel = currSkillLevel + 1; tempLevel <= NewLevel; tempLevel++)
 		{
