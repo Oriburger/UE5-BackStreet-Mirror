@@ -554,9 +554,6 @@ void ACharacterBase::DashAttack()
 	GetWorld()->LineTraceSingleByChannel(hitResult, HitSceneComponent->GetComponentLocation(), targetLocation, ECollisionChannel::ECC_Camera);
 	targetLocation = hitResult.bBlockingHit ? hitResult.Location : targetLocation;
 
-	//Hard coding for BIC
-	CharacterStat.DefaultAttack /= 1.5f;
-
 	SetLocationWithInterp(targetLocation, 2.5f);
 }
 
