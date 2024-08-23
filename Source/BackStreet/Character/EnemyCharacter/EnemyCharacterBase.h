@@ -28,6 +28,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+// ------- 컴포넌트 ----------
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|UI")
 		class UWidgetComponent* FloatingHpBar;
@@ -35,6 +36,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|UI")
 		class UWidgetComponent* TargetingSupportWidget;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UEnemySkillManagerComponent* SkillManagerComponent;
+
+// ----- Asset & Stat ---------------------
 	UFUNCTION(BlueprintCallable)
 		virtual void InitAsset(int32 NewCharacterID) override;	
 
@@ -54,7 +59,7 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void TrySkill(ESkillType SkillType, int32 SkillID) override;
+		virtual bool TrySkill(int32 SkillID) override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
@@ -72,13 +77,8 @@ public:
 protected:
 	virtual void KnockDown() override;
 
-//-------- Inventory -------------
-public:
-	UFUNCTION(BlueprintCallable)
-		virtual bool PickWeapon(int32 NewWeaponID) override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual void SwitchToNextWeapon() override;
+	UFUNCTION()
+		virtual void StandUp() override;
 
 // ----- 캐릭터 스탯 및 상태 관련 ---------
 public:

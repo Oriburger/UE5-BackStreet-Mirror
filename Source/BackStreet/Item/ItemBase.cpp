@@ -1,10 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "ItemBase.h"
-#include "Weapon/WeaponBase.h"
-#include "Weapon/WeaponInventoryBase.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
+#include "InteractiveCollisionComponent.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -41,7 +40,7 @@ AItemBase::AItemBase()
 	ParticleComponent->SetupAttachment(MeshComponent);
 	ParticleComponent->bAutoActivate = false;
 
-	ItemTriggerVolume = CreateDefaultSubobject<USphereComponent>("SPHERE_COLLISION");
+	ItemTriggerVolume = CreateDefaultSubobject<UInteractiveCollisionComponent>("SPHERE_COLLISION");
 	ItemTriggerVolume->SetupAttachment(RootComponent);
 	ItemTriggerVolume->SetRelativeScale3D(FVector(5.0f));
 	ItemTriggerVolume->SetCollisionProfileName("ItemTrigger", true);
@@ -60,6 +59,8 @@ void AItemBase::BeginPlay()
 
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 	OnPlayerBeginPickUp.BindUFunction(this, FName("OnItemPicked"));
+	ItemTriggerVolume->OnInteractionBegin.AddDynamic(this, &AItemBase::OnItemPicked);
+
 
 	ActivateItem();
 }
@@ -103,51 +104,21 @@ void AItemBase::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* O
 	//UI Deactivate
 }
 
-void AItemBase::OnItemPicked(AActor* Causer)
+void AItemBase::OnItemPicked()
 {
-	if (!IsValid(Causer) || Causer->IsActorBeingDestroyed()) return;
-
-	AMainCharacterBase* playerRef = Cast<AMainCharacterBase>(Causer);
-	AWeaponInventoryBase* playerWeaponInventoryRef = playerRef->GetWeaponInventoryRef();
-	check(IsValid(playerWeaponInventoryRef)); //player가 살아있는데, Inventory가 Invalid하면 안됨
-
+	AMainCharacterBase* playerRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	
 	switch (ItemInfo.ItemType)
 	{
 	case EItemCategoryInfo::E_Weapon:
-		if (Causer->ActorHasTag("Player"))
+		if (playerRef->ActorHasTag("Player"))
 		{
 			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
 			if (!playerRef->PickWeapon(targetWeaponID)) return;
 		}
 		break;
-	case EItemCategoryInfo::E_Bullet:
-		if (Causer->ActorHasTag("Player"))
-		{
-			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_BULLET_ID_DIFF_VALUE;
-			//FWeaponStatStruct targetWeaponStat = playerWeaponInventoryRef->GetWeaponStatInfoWithID(targetWeaponID);
-
-			if (playerWeaponInventoryRef->GetWeaponIsContained(targetWeaponID))
-			{
-			//	ensure(playerWeaponInventoryRef->TryAddAmmoToWeapon(targetWeaponID, (int32)ItemInfo.Variable));
-			}
-			else
-			{
-				//if (targetWeaponStat.WeaponType == EWeaponType::E_Throw)
-				{
-				//	ensure(playerRef->PickWeapon(targetWeaponID));
-				}
-				//else
-				{
-					GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName("탄환에 맞는 무기를 소지해주세요"), FColor(255));
-				}
-			}
-		}
-		break;
-	case EItemCategoryInfo::E_StatUp:
-		break;
-	case EItemCategoryInfo::E_Mission:
-		break;
 	}
+	
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ItemPickEffect, GetActorLocation());
 	Destroy();
 }
@@ -173,18 +144,18 @@ void AItemBase::InitializeItemMesh()
 	}
 }
 
-FItemInfoStruct AItemBase::GetItemInfoWithID(const int32 ItemID)
+FItemInfoDataStruct AItemBase::GetItemInfoWithID(const int32 ItemID)
 {
 	if (ItemDataInfoTable != nullptr && ItemID != 0)
 	{
-		FItemInfoStruct* newInfo = nullptr;
+		FItemInfoDataStruct* newInfo = nullptr;
 		FString rowName = FString::FromInt(ItemID);
 
-		newInfo = ItemDataInfoTable->FindRow<FItemInfoStruct>(FName(rowName), rowName);
+		newInfo = ItemDataInfoTable->FindRow<FItemInfoDataStruct>(FName(rowName), rowName);
 
 		if (newInfo != nullptr) return *newInfo;
 	}
-	return FItemInfoStruct(); 
+	return FItemInfoDataStruct(); 
 }
 
 void AItemBase::SetLaunchDirection(FVector NewDirection)

@@ -42,7 +42,7 @@ public:
 		class UStaticMeshComponent* OutlineMeshComponent;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), BlueprintReadWrite)
-		class USphereComponent* ItemTriggerVolume;
+		class UInteractiveCollisionComponent* ItemTriggerVolume;
 
 	UPROPERTY(EditDefaultsOnly)
 		class UWidgetComponent* InfoWidgetComponent;
@@ -56,7 +56,7 @@ public:
 // ------ 기본 Info ---------------------------
 protected:
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
-		FItemInfoStruct ItemInfo;
+		FItemInfoDataStruct ItemInfo;
 
 // ------ 아이템 기본 로직-------------------------------------
 public:	
@@ -77,14 +77,14 @@ public:
 	
 	//캐릭터가 Pick이벤트를 호출했다면
 	UFUNCTION()
-		void OnItemPicked(AActor* Causer);
+		void OnItemPicked();
 
 protected:
 	UFUNCTION()
 		void InitializeItemMesh();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FItemInfoStruct GetItemInfoWithID(const int32 ItemID);
+		FItemInfoDataStruct GetItemInfoWithID(const int32 ItemID);
 
 // ------ Projectile 로직 ------------------------------------
 public:

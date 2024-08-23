@@ -1,14 +1,14 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "EnemyCharacterBase.h"
 #include "../Component/TargetingManagerComponent.h"
+#include "../Component/WeaponComponentBase.h"
+#include "../Component/SkillManagerComponentBase.h"
+#include "../Component/EnemySkillManagerComponent.h"
 #include "../MainCharacter/MainCharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
-#include "../../System/SkillSystem/SkillManagerBase.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
 #include "../../System/AISystem/AIControllerBase.h"
 #include "../../Item/ItemBase.h"
-#include "../../Item/Weapon/WeaponInventoryBase.h"
-#include "../../Item/Weapon/WeaponBase.h"
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -33,6 +33,9 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	TargetingSupportWidget->SetRelativeScale3D(FVector(0.15f));
 	TargetingSupportWidget->SetDrawSize({ 500.0f, 500.0f });
 	TargetingSupportWidget->SetVisibility(false);
+
+	SkillManagerComponent = CreateDefaultSubobject<UEnemySkillManagerComponent>(TEXT("SKILL_MANAGER_"));
+	SkillManagerComponentRef = SkillManagerComponent;
 
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -62,12 +65,11 @@ void AEnemyCharacterBase::InitAsset(int32 NewCharacterID)
 
 void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 {
-	// Read from dataTable
+	//Read from dataTable
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
 	AssetSoftPtrInfo.CharacterID = CharacterID = NewCharacterID;
 	
-
 	if (newStat != nullptr)
 	{
 		EnemyStat = *newStat;
@@ -77,6 +79,19 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		CharacterStat.bInfinite = true;
 		CharacterState.CurrentHP = EnemyStat.CharacterStat.DefaultHP;
 		SetDefaultWeapon();
+	}
+
+	if (NewCharacterID != 0)
+	{
+		SkillManagerComponent->ClearAllSkill();
+		for (int32& skillID : EnemyStat.EnemySkillIDList)
+		{
+			if (skillID != 0)
+			{
+				bool result = SkillManagerComponent->AddSkill(skillID);
+				UE_LOG(LogTemp, Warning, TEXT("Add Skill %d --- %d"), skillID, (int32)result);
+			}
+		}
 	}
 
 	InitFloatingHpWidget();
@@ -90,13 +105,10 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 
 void AEnemyCharacterBase::SetDefaultWeapon()
 {
-	if (IsValid(GetWeaponInventoryRef()))
+	PickWeapon(EnemyStat.DefaultWeaponID);
+	if (IsValid(Controller))
 	{
-		bool result = GetWeaponInventoryRef()->AddWeapon(EnemyStat.DefaultWeaponID);
-		if (result && IsValid(Controller))
-		{
-			Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();
-		}
+		Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();
 	}
 }
 
@@ -105,12 +117,6 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterStat.bIsInvincibility) return 0.0f;
-	
-	if (AssetManagerBaseRef.IsValid())
-	{
-		ACharacterBase* damageCauser = Cast<ACharacterBase>(DamageCauser);
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, damageCauser->GetCurrentWeaponRef()->GetWeaponStat().WeaponID, "HitImpact");
-	}
 	
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 	SetInstantHpWidgetVisibility();
@@ -145,9 +151,12 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	}
 
 	//Set Rotation To Causer
-	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), DamageCauser->GetActorLocation());
-	newRotation.Pitch = newRotation.Roll = 0.0f;
-	SetActorRotation(newRotation);
+	if (!DamageCauser->ActorHasTag("Boss"))
+	{
+		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), DamageCauser->GetActorLocation());
+		newRotation.Pitch = newRotation.Roll = 0.0f;
+		SetActorRotation(newRotation);
+	}
 
 	return damageAmount;
 }
@@ -157,20 +166,9 @@ void AEnemyCharacterBase::TryAttack()
 	Super::TryAttack();
 }
 
-void AEnemyCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
+bool AEnemyCharacterBase::TrySkill(int32 SkillID)
 {
-	check(GetCurrentWeaponRef() != nullptr);
-
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Skill
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-
-	if (GetCurrentWeaponRef()->WeaponID == 0)
-	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("The Skill Is Not Available")), FColor::White);
-		return;
-	}
-
-	Super::TrySkill(SkillType, SkillID);
+	return Super::TrySkill(SkillID);
 }
 
 void AEnemyCharacterBase::Attack()
@@ -178,8 +176,7 @@ void AEnemyCharacterBase::Attack()
 	Super::Attack();
 
 	float attackSpeed = 0.5f;
-	if(IsValid(GetCurrentWeaponRef()))
-		attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * GetCurrentWeaponRef()->GetWeaponStat().WeaponAtkSpeedRate);
+	attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * WeaponComponent->GetWeaponStat().WeaponAtkSpeedRate);
 
 	GetWorldTimerManager().SetTimer(AtkIntervalHandle, this, &ACharacterBase::ResetAtkIntervalTimer
 		, 1.0f, false, FMath::Max(0.0f, 1.5f - attackSpeed));
@@ -220,39 +217,26 @@ void AEnemyCharacterBase::SpawnDeathItems()
 
 	TArray<AItemBase*> spawnedItemList;
 
-	if (dropInfo.SpawnItemTypeList.IsValidIndex(0) 
-		&& dropInfo.SpawnItemTypeList[0] == EItemCategoryInfo::E_Mission)
+	while (totalSpawnItemCount)
 	{
-		/*AItemBase* newItem = GamemodeRef->SpawnItemToWorld(SpawnItemIDList[0], GetActorLocation() + FMath::VRand() * 10.0f);
-		if (IsValid(newItem))
+		if (++trySpawnCount > totalSpawnItemCount * 3) break; //스폰할 아이템 개수의 3배만큼 시도
+
+		const int32 itemIdx = UKismetMathLibrary::RandomIntegerInRange(0, dropInfo.SpawnItemIDList.Num() - 1);
+		if (!dropInfo.SpawnItemTypeList.IsValidIndex(itemIdx)
+			|| !dropInfo.ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
+
+		const uint8 itemType = (uint8)dropInfo.SpawnItemTypeList[itemIdx];
+		const int32 itemID = dropInfo.SpawnItemIDList[itemIdx];
+		const float spawnProbability = dropInfo.ItemSpawnProbabilityList[itemIdx];
+
+		if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
 		{
-			spawnedItemList.Add(newItem);
-			//newItem->Dele_MissionItemSpawned.BindUFunction(target, FName("TryAddMissionItem"));
-		}*/
-	}
-	else
-	{
-		while (totalSpawnItemCount)
-		{
-			if (++trySpawnCount > totalSpawnItemCount * 3) break; //스폰할 아이템 개수의 3배만큼 시도
+			AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 10.0f);
 
-			const int32 itemIdx = UKismetMathLibrary::RandomIntegerInRange(0, dropInfo.SpawnItemIDList.Num() - 1);
-			if (!dropInfo.SpawnItemTypeList.IsValidIndex(itemIdx)
-				|| !dropInfo.ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
-
-			const uint8 itemType = (uint8)dropInfo.SpawnItemTypeList[itemIdx];
-			const int32 itemID = dropInfo.SpawnItemIDList[itemIdx];
-			const float spawnProbability = dropInfo.ItemSpawnProbabilityList[itemIdx];
-
-			if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
+			if (IsValid(newItem))
 			{
-				AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 10.0f);
-
-				if (IsValid(newItem))
-				{
-					spawnedItemList.Add(newItem);
-					totalSpawnItemCount -= 1;
-				}
+				spawnedItemList.Add(newItem);
+				totalSpawnItemCount -= 1;
 			}
 		}
 	}
@@ -307,6 +291,11 @@ void AEnemyCharacterBase::KnockDown()
 	}
 }
 
+void AEnemyCharacterBase::StandUp()
+{
+	Super::StandUp();
+}
+
 void AEnemyCharacterBase::SetInstantHpWidgetVisibility()
 {
 	FloatingHpBar->SetVisibility(true);
@@ -318,7 +307,7 @@ void AEnemyCharacterBase::SetInstantHpWidgetVisibility()
 	//Set new timer
 	FTimerDelegate disappearEvent;
 	disappearEvent.BindUFunction(FloatingHpBar, FName("SetVisibility"), false);
-	GetWorldTimerManager().SetTimer(HpWidgetAutoDisappearTimer, disappearEvent, 5.0f, false);
+	GetWorldTimerManager().SetTimer(HpWidgetAutoDisappearTimer, disappearEvent, 10.0f, false);
 }
 
 void AEnemyCharacterBase::ClearAllTimerHandle()
@@ -330,14 +319,4 @@ void AEnemyCharacterBase::ClearAllTimerHandle()
 	TurnTimeOutTimerHandle.Invalidate();
 	HitTimeOutTimerHandle.Invalidate();
 	DamageAIDelayTimer.Invalidate();
-}
-
-bool AEnemyCharacterBase::PickWeapon(int32 NewWeaponID)
-{
-	return Super::PickWeapon(NewWeaponID);
-}
-
-void AEnemyCharacterBase::SwitchToNextWeapon()
-{
-	return Super::SwitchToNextWeapon();
 }

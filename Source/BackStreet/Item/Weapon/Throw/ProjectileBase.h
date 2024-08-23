@@ -12,9 +12,6 @@ class BACKSTREET_API AProjectileBase : public AActor
 {
 	GENERATED_BODY()
 
-	friend class ARangedWeaponBase;
-	friend class AThrowWeaponBase;
-
 //------ Global, Component -------------------
 public:	
 	// Sets default values for this actor's properties
@@ -62,6 +59,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
 		int32 ProjectileID;
 
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
+		struct FProjectileStatStruct ProjectileStat;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
+		struct FProjectileStateStruct ProjectileState;
+
 protected:
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|VFX")
 		UParticleSystem* HitParticle;
@@ -71,12 +74,6 @@ protected:
 
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|VFX")
 		class UNiagaraSystem* ExplosionParticle;
-
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
-		struct FProjectileStatStruct ProjectileStat;
-
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Stat")
-		struct FProjectileStateStruct ProjectileState;
 
 //------ 기본 함수  ------------------
 public:

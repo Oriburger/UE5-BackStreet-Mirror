@@ -2,9 +2,9 @@
 
 
 #include "ProjectileBase.h"
-#include "../WeaponBase.h"
 #include "../../../Global/BackStreetGameModeBase.h"
 #include "../../../Character/CharacterBase.h"
+#include "../../../Character/Component/WeaponComponentBase.h"
 #include "../../../System/AssetSystem/AssetManagerBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
@@ -184,9 +184,9 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		}
 		else
 		{
-			const float totalDamage = Cast<AWeaponBase>(GetOwner())->CalculateTotalDamage(Cast<ACharacterBase>(OtherActor)->GetCharacterState());
+			const float totalDamage = Cast<ACharacterBase>(GetOwner())->WeaponComponent->CalculateTotalDamage(Cast<ACharacterBase>(OtherActor)->GetCharacterState());
 			UGameplayStatics::ApplyDamage(OtherActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
-			DestroyWithEffect(SweepResult.Location, true);
+			DestroyWithEffect(SweepResult.Location, !Cast<ACharacterBase>(OtherActor)->GetCharacterStat().bIsInvincibility);
 		}
 	}
 }

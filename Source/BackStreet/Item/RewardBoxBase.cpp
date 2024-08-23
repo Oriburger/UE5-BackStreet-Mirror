@@ -5,6 +5,7 @@
 #include "../System/AbilitySystem/AbilityManagerBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
 #include "../Character/Struct/CharacterInfoEnum.h"
+#include "../Item/InteractiveCollisionComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
 
@@ -15,7 +16,7 @@ ARewardBoxBase::ARewardBoxBase()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	RootComponent = OverlapVolume = CreateDefaultSubobject<USphereComponent>("SPHERE_COLLISION");
+	RootComponent = OverlapVolume = CreateDefaultSubobject<UInteractiveCollisionComponent>("SPHERE_COLLISION");
 	OverlapVolume->SetRelativeScale3D(FVector(5.0f));
 	OverlapVolume->SetCollisionProfileName("ItemTrigger", true);
 	OverlapVolume->SetSimulatePhysics(true);
@@ -42,7 +43,7 @@ void ARewardBoxBase::BeginPlay()
 	//if (AbilityType == ECharacterAbilityType::E_None) SelectRandomAbilityIdx();
 	OverlapVolume->OnComponentBeginOverlap.AddDynamic(this, &ARewardBoxBase::OnPlayerBeginOverlap);
 	OverlapVolume->OnComponentEndOverlap.AddDynamic(this, &ARewardBoxBase::OnPlayerEndOverlap);
-	OnPlayerBeginInteract.AddDynamic(this, &ARewardBoxBase::AddAbilityToPlayer);
+	OverlapVolume->OnInteractionBegin.AddDynamic(this, &ARewardBoxBase::AddAbilityToPlayer);
 
 	InitializeWidgetComponent();
 }
@@ -68,11 +69,12 @@ void ARewardBoxBase::OnPlayerEndOverlap(UPrimitiveComponent* OverlappedComponent
 	ActivateWidgetComponent(true);
 }
 
-void ARewardBoxBase::AddAbilityToPlayer(AMainCharacterBase* PlayerCharacterRef)
+void ARewardBoxBase::AddAbilityToPlayer()
 {
-	if (!IsValid(PlayerCharacterRef)) return;
+	AMainCharacterBase* playerRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (!IsValid(playerRef)) return;
 
-	const bool result = PlayerCharacterRef->TryAddNewAbility(AbilityID);
+	const bool result = playerRef->TryAddNewAbility(AbilityID);
 	if (result)
 	{
 		if (DestroyEffectParticle)

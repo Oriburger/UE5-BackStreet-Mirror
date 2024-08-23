@@ -56,10 +56,8 @@ TArray<USoundCue*> UAssetManagerBase::GetSoundList(ESoundAssetType SoundType, in
 	// Read from dataTable
 	TArray<USoundCue*> soundList;
 	FSoundAssetInfoStruct* soundAssetInfoStruct = GetSoundAssetInfo(SoundType, TargetID);
-	UE_LOG(LogTemp, Warning, TEXT("Get Sound List #1"));
-	if (soundAssetInfoStruct)
+	if (soundAssetInfoStruct && soundAssetInfoStruct->SoundMap.Contains(SoundName))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Get Sound List #2"));
 		soundList = soundAssetInfoStruct->SoundMap.Find(SoundName)->SoundList;
 	}
 
@@ -73,6 +71,7 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetSystemSoundMapWithID(int32 TargetID
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAssetInfo = SystemSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
+	checkf(soundAssetInfo != nullptr, TEXT("SoundAssetInfo is not valid"));
 	
 	return soundAssetInfo;
 }
@@ -84,6 +83,7 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetWeaponSoundMapWithID(int32 TargetID
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAssetInfo = WeaponSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
+	checkf(soundAssetInfo != nullptr, TEXT("SoundAssetInfo is not valid"));
 
 	return soundAssetInfo;
 }
@@ -95,6 +95,7 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetCharacterSoundMapWithID(int32 Targe
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAssetInfo = CharacterSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
+	checkf(soundAssetInfo != nullptr, TEXT("SoundAssetInfo is not valid"));
 
 	return soundAssetInfo;
 }
@@ -106,7 +107,8 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetSkillSoundMapWithID(int32 TargetID)
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAssetInfo = SkillSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
-	
+	checkf(soundAssetInfo != nullptr, TEXT("SoundAssetInfo is not valid"));
+
 	return soundAssetInfo;
 }
 
@@ -117,6 +119,7 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetPropSoundMapWithID(int32 TargetID)
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAssetInfo = PropSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
+	checkf(soundAssetInfo != nullptr, TEXT("SoundAssetInfo is not valid"));
 
 	return soundAssetInfo;
 }
@@ -124,8 +127,7 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetPropSoundMapWithID(int32 TargetID)
 void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName, float VolumeMultiplierOverride, float PitchMultiplier, float StartTime)
 {
 	FSoundAssetInfoStruct* soundAssetInfo = GetSoundAssetInfo(SoundType, TargetID);
-	if (soundAssetInfo == nullptr) return;
-	if (!soundAssetInfo->SoundMap.Contains(SoundName)) return; 
+	if (soundAssetInfo == nullptr || !soundAssetInfo->SoundMap.Contains(SoundName)) return;
 
 	TArray<USoundCue*> soundList = soundAssetInfo->SoundMap.Find(SoundName)->SoundList;
 	TArray<float> volumeList = soundAssetInfo->SoundMap.Find(SoundName)->SoundVolumeList;
@@ -154,6 +156,7 @@ void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, ESoundAssetType Sou
 void UAssetManagerBase::PlayRandomSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName, float VolumeMultiplierOverride, float PitchMultiplier, float StartTime)
 {
 	FSoundAssetInfoStruct* soundAssetInfo = GetSoundAssetInfo(SoundType, TargetID);
+	checkf(soundAssetInfo != nullptr, TEXT("SoundAssetInfo is not valid"));
 	if (!soundAssetInfo->SoundMap.Contains(SoundName)) return;
 
 	TArray<USoundCue*> soundList = soundAssetInfo->SoundMap.Find(SoundName)->SoundList;
@@ -178,6 +181,7 @@ void UAssetManagerBase::PlayRandomSound(AActor* TargetActor, ESoundAssetType Sou
 UAudioComponent* UAssetManagerBase::SpawnSound2D(ESoundAssetType SoundType, int32 TargetID, FName SoundName)
 {
 	FSoundAssetInfoStruct* soundAssetInfo = GetSoundAssetInfo(SoundType, TargetID);
+	checkf(soundAssetInfo != nullptr, TEXT("SoundAssetInfo is not valid"));
 	if (!soundAssetInfo->SoundMap.Contains(SoundName)) return nullptr;
 
 	TArray<USoundCue*> soundList = soundAssetInfo->SoundMap.Find(SoundName)->SoundList;

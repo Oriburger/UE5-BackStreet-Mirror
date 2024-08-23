@@ -3,6 +3,7 @@
 
 #include "StageGeneratorComponent.h"
 #include "NewChapterManagerBase.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values for this component's properties
 UStageGeneratorComponent::UStageGeneratorComponent()
@@ -30,65 +31,135 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 {
 	if (CurrentChapterInfo.ChapterID == 0) return TArray<FStageInfo>();
 
+	UE_LOG(LogTemp, Warning, TEXT("UStageGeneratorComponent::Generate() -------"));
+
 	//####### 선형 임시코드 ####### 
 	TArray<FStageInfo> result;
 	
 	FStageInfo temp;
 	temp.OuterLevelAsset = CurrentChapterInfo.OuterStageLevelList[0];
 
+	int32 templateIdx = -1;
+	FStageTemplateInfo stageTemplateInfo;
+	if (CurrentChapterInfo.StageTemplateList.Num() > 0)
+	{
+		templateIdx = UKismetMathLibrary::RandomInteger(CurrentChapterInfo.StageTemplateList.Num());
+		stageTemplateInfo = CurrentChapterInfo.StageTemplateList[templateIdx];
+		checkf(stageTemplateInfo.StageComposition.Num() == FMath::Pow(CurrentChapterInfo.GridSize, 2.0f), TEXT("UStageGeneratorComponent::Generate(), invalid template data"));
+	}
 
-	/* ------ Boss Debug
-	temp.StageType = EStageCategoryInfo::E_Boss;
-	temp.TilePos = { 6, 0 };
-	temp.MainLevelAsset = CurrentChapterInfo.BossStageLevelList[0];
-	temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(EStageCategoryInfo::E_Boss);
-	result.Add(temp);
-	*/
+	UE_LOG(LogTemp, Warning, TEXT("UStageGeneratorComponent::Generate(), template idx : %d"), templateIdx);
 
 
-	temp.StageType = EStageCategoryInfo::E_Entry;
-	temp.TilePos = { 0, 0 };
-	temp.MainLevelAsset = CurrentChapterInfo.EntryStageLevelList[0];
-	temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(EStageCategoryInfo::E_Entry);
-	result.Add(temp);
+	TArray<TSoftObjectPtr<UWorld> > shuffledCombatWorldList = GetShuffledWorldList();
 
-	temp.StageType = EStageCategoryInfo::E_Combat;
-	temp.TilePos = { 1, 0 };
-	temp.MainLevelAsset = CurrentChapterInfo.CombatStageLevelList[0];
-	temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(EStageCategoryInfo::E_Combat);
-	result.Add(temp);
+	//this is not total stage count in grid, but vertical stage count.
+	const int32 stageCount = FMath::Pow(CurrentChapterInfo.GridSize, 2.0f);
+	int32 nextCombatWorldIdx = 0;
 
-	temp.StageType = EStageCategoryInfo::E_TimeAttack;
-	temp.TilePos = { 2, 0 };
-	temp.MainLevelAsset = CurrentChapterInfo.TimeAttackStageLevelList[0];
-	temp.TimeLimitValue = CurrentChapterInfo.NormalTimeAtkStageTimeOut;
-	temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(EStageCategoryInfo::E_TimeAttack);
-	result.Add(temp);
+	for (int32 stageIdx = 0; stageIdx < stageCount; stageIdx++)
+	{
+		//set stage type
+		FVector2D stageCoordinate = GetStageCoordinate(stageIdx);
+		UE_LOG(LogTemp, Warning, TEXT("Stage Idx : %d,  stageCoordinate : %s"), stageIdx, *stageCoordinate.ToString());
+		
+		if (templateIdx != -1)
+		{
+			temp.StageType = stageTemplateInfo.StageComposition[stageIdx];
+		}
+		else
+		{
+			TArray<EStageCategoryInfo> stageTypeList = CurrentChapterInfo.StageTypeListForLevelIdx[stageCoordinate.Y + stageCoordinate.X].StageTypeList;
+			checkf(stageTypeList.Num() > 0, TEXT("Stage type list data is invalid "));
+			temp.StageType = stageTypeList[UKismetMathLibrary::RandomInteger(stageTypeList.Num())];
+		}
 
-	temp.StageType = EStageCategoryInfo::E_Craft;
-	temp.TilePos = { 3, 0 };
-	temp.MainLevelAsset = CurrentChapterInfo.CraftStageLevelList[0];
-	result.Add(temp);
+		//set stage coordinate and level
+		temp.Coordinate = GetStageCoordinate(stageIdx);
+		switch (temp.StageType)
+		{
+		case EStageCategoryInfo::E_Boss:
+			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.BossStageLevelList);
+			break;
+		case EStageCategoryInfo::E_TimeAttack:
+			//temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.TimeAttackStageLevelList);
+			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
+			temp.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
+			temp.MainLevelAsset = shuffledCombatWorldList[nextCombatWorldIdx];
+			break;
+		case EStageCategoryInfo::E_Exterminate:
+		case EStageCategoryInfo::E_Combat:
+			//temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.CombatStageLevelList);
+			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
+			temp.MainLevelAsset = shuffledCombatWorldList[nextCombatWorldIdx];
+			break;
+		case EStageCategoryInfo::E_Craft:
+			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.CraftStageLevelList);
+			break;
+		case EStageCategoryInfo::E_Entry:
+			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.EntryStageLevelList);
+			break;
+		case EStageCategoryInfo::E_Gatcha:
+			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.GatchaStageLevelList);
+			break;
+		case EStageCategoryInfo::E_MiniGame:
+			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.MinigameStageLevelList);
+			break;
+		}
 
-	temp.StageType = EStageCategoryInfo::E_EliteCombat;
-	temp.TilePos = { 4, 0 };
-	temp.MainLevelAsset = CurrentChapterInfo.CombatStageLevelList[1];
-	temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(EStageCategoryInfo::E_EliteCombat);
-	result.Add(temp);
+		if (temp.StageType == EStageCategoryInfo::E_Boss || temp.StageType == EStageCategoryInfo::E_Exterminate
+			|| temp.StageType == EStageCategoryInfo::E_Combat || temp.StageType == EStageCategoryInfo::E_TimeAttack
+			|| temp.StageType == EStageCategoryInfo::E_Entry)
+		{
+			checkf(CurrentChapterInfo.EnemyCompositionInfoMap.Contains(temp.StageType), TEXT("EnemyCompositionInfoMap is empty"));
+			temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(temp.StageType);
+		}
+		result.Add(temp);
+	}
+	for (FVector2D& coordinate : CurrentChapterInfo.BlockedPosList)
+	{
+		result[GetStageIdx(coordinate)].bIsBlocked = true;
+	}
+	return CurrentChapterInfo.StageInfoList = result;
+}
 
-	temp.StageType = EStageCategoryInfo::E_EliteTimeAttack;
-	temp.TilePos = { 5, 0 };
-	temp.MainLevelAsset = CurrentChapterInfo.TimeAttackStageLevelList[1];
-	temp.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
-	temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(EStageCategoryInfo::E_EliteTimeAttack);
-	result.Add(temp);
+FVector2D UStageGeneratorComponent::GetNextCoordinate(FVector2D Direction, FVector2D CurrCoordinate)
+{
+	CurrCoordinate.Y += Direction.Y;
+	CurrCoordinate.X += Direction.X;
 	
-	temp.StageType = EStageCategoryInfo::E_Boss;
-	temp.TilePos = { 6, 0 };
-	temp.MainLevelAsset = CurrentChapterInfo.BossStageLevelList[0];
-	temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(EStageCategoryInfo::E_Boss);
-	result.Add(temp);
-	
+	if (GetIsCoordinateInBoundary(CurrCoordinate))
+	{
+		return CurrCoordinate;
+	}
+	return FVector2D(-1);
+}
 
-	return result;
+FVector2D UStageGeneratorComponent::GetStageCoordinate(int32 StageIdx)
+{
+	if (CurrentChapterInfo.GridSize <= 0 || StageIdx < 0) return FVector2D();
+	return FVector2D(StageIdx % CurrentChapterInfo.GridSize, StageIdx / CurrentChapterInfo.GridSize);
+}
+
+bool UStageGeneratorComponent::GetIsCoordinateInBoundary(FVector2D Coordinate)
+{
+	if (Coordinate.Y >= 0 && Coordinate.Y < CurrentChapterInfo.GridSize
+		&& Coordinate.X >= 0 && Coordinate.X < CurrentChapterInfo.GridSize) return true;
+	return false;
+}
+
+TSoftObjectPtr<UWorld> UStageGeneratorComponent::GetRandomWorld(TArray<TSoftObjectPtr<UWorld>>& WorldList)
+{
+	checkf(!WorldList.IsEmpty(), TEXT("WorldList Is Empty"));
+	int32 idx = UKismetMathLibrary::RandomInteger(WorldList.Num());
+	return WorldList[idx];
+}
+
+TArray<TSoftObjectPtr<UWorld>> UStageGeneratorComponent::GetShuffledWorldList()
+{
+	//Temporary code for BIC -----
+	CurrentChapterInfo.CombatStageLevelList.Sort([this](const TSoftObjectPtr<UWorld> item1, const TSoftObjectPtr<UWorld> item2) {
+		return FMath::FRand() < 0.5f;
+	});
+	return CurrentChapterInfo.CombatStageLevelList;
 }

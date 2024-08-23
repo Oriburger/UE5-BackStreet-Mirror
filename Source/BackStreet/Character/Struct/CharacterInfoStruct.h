@@ -36,58 +36,77 @@ public:
 USTRUCT(BlueprintType)
 struct FPlayerInputActionInfo
 {
+//------------------Basic---------------------------------------------------------------------------
 public:
 	GENERATED_USTRUCT_BODY()
 
 	// Move Input Action
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Basic")
 		class UInputAction* MoveAction;
 
 	// Roll Input Action
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Basic")
 		class UInputAction* RollAction;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	// Look Input Action
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Basic")
+		class UInputAction* LookAction;
+
+//------------------Combat---------------------------------------------------------------------------
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
 		class UInputAction* AttackAction;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
 		class UInputAction* ReloadAction;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
 		class UInputAction* UpperAttackAction;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
 		class UInputAction* ThrowReadyAction;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
 		class UInputAction* ThrowAction;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+//------------------Action---------------------------------------------------------------------------
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* InvestigateAction;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* SwitchWeaponAction;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* DropWeaponAction;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* PickSubWeaponAction;
 
 	// Jump Input Action
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* JumpAction;
 
-	// Look Input Action
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* LookAction;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* SprintAction;
 
-	// Crouch Input Action
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		//	class UInputAction* CrouchAction;
+//------------------UI---------------------------------------------------------------------------
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
+		class UInputAction* PlayerInfoUIAction;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
+		class UInputAction* ConfirmUIAction;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
+		class UInputAction* CancelUIAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
+		class UInputAction* MoveUIAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
+		class UInputAction* SwitchTabUIAction;
 };
 
 USTRUCT(BlueprintType)
@@ -100,33 +119,50 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0, UIMax = 2500))
 		int32 CharacterID = 0;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+//======= Weapon Stat ======================
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 		bool bIsInvincibility = false;
 
 	//무한 내구도 / 무한 탄약 (Enemy 기본 스탯)
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "Weapon")
 		bool bInfinite = false;
 
 	//Projectile Count Per Attack
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1, UIMax = 1))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1, UIMax = 1), Category = "Weapon")
 		int32 ProjectileCountPerAttack = 1;
 
+//======= Weapon Stat ======================
+	//for time-attack stage
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		float ExtraStageTime = 0.0f;
+
+	//Extra wish list in skill
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		int32 MaxKeepingSkillCount = 1;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		bool bInfiniteSkillMaterial = false;
+
+	//Extra percentage for universal material
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		float ExtraPercentageUnivMaterial = false;
+
 //======= Default Stat ======================
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 1.0f, UIMax = 1000.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 1.0f, UIMax = 1000.0f), Category = "Default")
 		float DefaultHP = 100.0f;
 
 	//Multipiler Value
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f), Category = "Default")
 		float DefaultAttack = 1.0f;
 
 	//Multipiler Value
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 10.0f), Category = "Default")
 		float DefaultDefense = 1.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f), Category = "Default")
 		float DefaultAttackSpeed = 10.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 100.0f, UIMax = 1000.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 100.0f, UIMax = 1000.0f), Category = "Default")
 		float DefaultMoveSpeed = 400.0f;
 };
 
@@ -282,6 +318,9 @@ struct FEnemyStatStruct : public FTableRowBase
 	//Info data of dropping item when enemy dies
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FEnemyDropInfoStruct DropInfo;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Skill")
+		TArray<int32> EnemySkillIDList; 
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.2f, UIMax = 1.0f))
 		float DefaultAttackSpeed = 0.0f;

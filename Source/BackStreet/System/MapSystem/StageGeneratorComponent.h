@@ -6,7 +6,6 @@
 #include "Components/ActorComponent.h"
 #include "StageGeneratorComponent.generated.h"
 
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API UStageGeneratorComponent : public UActorComponent
 {
@@ -31,12 +30,31 @@ public:
 	UFUNCTION()
 		TArray<FStageInfo> Generate();
 
-//======== Property ===============
+//======== Stage 1st to 2nd ==============
 public:
-	//n*n grid, not working yet
-	UPROPERTY(EditDefaultsOnly)
-		int32 StageCount = 5; 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FVector2D GetNextCoordinate(FVector2D Direction, FVector2D CurrCoordinate);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetStageCount() { return CurrentChapterInfo.GridSize * 2 - 1; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetStageIdx(FVector2D Location) { return CurrentChapterInfo.GridSize * Location.Y + Location.X; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FVector2D GetStageCoordinate(int32 StageIdx);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsCoordinateInBoundary(FVector2D Coordinate);
+
+protected:
+	UFUNCTION(BlueprintCallable)
+		TSoftObjectPtr<UWorld> GetRandomWorld(TArray<TSoftObjectPtr<UWorld>>& WorldList);
+
+	//Return the randomly shuffled list of world for each stage
+	UFUNCTION(BlueprintCallable)
+		TArray<TSoftObjectPtr<UWorld> > GetShuffledWorldList();
+	
 private:
 	FChapterInfo CurrentChapterInfo;
 };

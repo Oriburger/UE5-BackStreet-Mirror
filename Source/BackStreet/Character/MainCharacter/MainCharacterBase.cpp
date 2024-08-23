@@ -3,19 +3,19 @@
 #include "MainCharacterController.h"
 #include "../Component/TargetingManagerComponent.h"
 #include "../Component/ItemInventoryComponent.h"
+#include "../Component/SkillManagerComponentBase.h"
+#include "../Component/PlayerSkillManagerComponent.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SaveSystem/BackStreetGameInstance.h"
 #include "../../System/AbilitySystem/AbilityManagerBase.h"
 #include "../../System/CraftingSystem/CraftBoxBase.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
-#include "../../System/SkillSystem/SkillManagerBase.h"
 #include "../../Item/ItemBase.h"
 #include "../../Item/ItemBoxBase.h"
 #include "../../Item/RewardBoxBase.h"
-#include "../../Item/Weapon/WeaponBase.h"
-#include "../../Item/Weapon/Throw/ThrowWeaponBase.h"
-#include "../../Item/Weapon/WeaponInventoryBase.h"
+#include "../../Item/InteractiveCollisionComponent.h"
 #include "../../System/MapSystem/Stage/GateBase.h"
+#include "../Component/WeaponComponentBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/AudioComponent.h"
 #include "Animation/AnimInstance.h"
@@ -37,11 +37,21 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CAMERA_BOOM"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->bUsePawnControlRotation = true;
-	CameraBoom->TargetArmLength = 1400.0f;
-	CameraBoom->bInheritPitch = false;
+	CameraBoom->TargetArmLength = 500.0f;
+	CameraBoom->bInheritPitch = true;
 	CameraBoom->bInheritRoll = false;
-	CameraBoom->bInheritYaw = false;
+	CameraBoom->bInheritYaw = true;
+	CameraBoom->bEnableCameraLag = true;
+	CameraBoom->bEnableCameraRotationLag = true;
+	CameraBoom->CameraRotationLagSpeed = 0.5f;
+	CameraBoom->CameraLagMaxDistance = 1000.0f;
+	CameraBoom->SetRelativeLocation({ 0.0f, 30.0f, 80.0f });
 	CameraBoom->SetWorldRotation({ -45.0f, 0.0f, 0.0f });
+
+	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 110.0f, 120.0f));
+
+	SkillManagerComponent = CreateDefaultSubobject<UPlayerSkillManagerComponent>(TEXT("SKILL_MANAGER_"));
+	SkillManagerComponentRef = SkillManagerComponent;
 
 	FollowingCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FOLLOWING_CAMERA"));
 	FollowingCamera->SetupAttachment(CameraBoom);
@@ -61,10 +71,12 @@ AMainCharacterBase::AMainCharacterBase()
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
 
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
+	GetCapsuleComponent()->SetCapsuleRadius(41.0f);
 
 	this->bUseControllerRotationYaw = false;
-	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
-	GetCharacterMovement()->RotationRate = { 0.0f, 0.0f, 750.0f };
+	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+	GetCharacterMovement()->JumpZVelocity = 1000.0f;
+	GetCharacterMovement()->RotationRate = { 0.0f, 1000.0f, 0.0f };
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->GravityScale = 2.5f;
 
@@ -176,11 +188,11 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(InputActionInfo.InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
 
 		//Inventory
-		EnhancedInputComponent->BindAction(InputActionInfo.SwitchWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::SwitchToNextWeapon);
-		EnhancedInputComponent->BindAction(InputActionInfo.DropWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::DropWeapon);
+		//EnhancedInputComponent->BindAction(InputActionInfo.SwitchWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::SwitchToNextWeapon);
+		//EnhancedInputComponent->BindAction(InputActionInfo.DropWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::DropWeapon);
 
 		//SubWeapon
-		EnhancedInputComponent->BindAction(InputActionInfo.PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::PickSubWeapon);
+		//EnhancedInputComponent->BindAction(InputActionInfo.PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::PickSubWeapon);
 
 		EnhancedInputComponent->BindAction(LockToTargetAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::LockToTarget);
 	}
@@ -188,77 +200,24 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 void AMainCharacterBase::ReadyToThrow()
 {
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->GetWeaponType() != EWeaponType::E_Throw) return;
-	if (!Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->GetCanThrow()) return; //딜레이 중이라면 반환
-	if (GetCurrentWeaponRef()->WeaponID == 0) return;
-
-	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;
-	SetAimingMode(true);
-	GetWorldTimerManager().SetTimer(AimingTimerHandle, this, &AMainCharacterBase::UpdateAimingState, 0.01f, true);
 }
 
 void AMainCharacterBase::Throw()
 {
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
-
-	ResetActionState();
-	SetAimingMode(false);
-
-	GetWorldTimerManager().ClearTimer(AimingTimerHandle);
-	if (IsValid(GetCurrentWeaponRef()) && GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
-	{
-		Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->Throw();
-	}
 }
 
 void AMainCharacterBase::SetAimingMode(bool bNewState)
 {
-	bIsAiming = bNewState;	
-	GetCharacterMovement()->bOrientRotationToMovement = !bNewState;
-	this->bUseControllerRotationYaw = bNewState;
+	
 }
 
 void AMainCharacterBase::UpdateAimingState()
 {	
-	if (!IsValid(GetCurrentWeaponRef())) return;
-	if (GetCurrentWeaponRef()->GetWeaponType() != EWeaponType::E_Throw) return;
-
-	RotateToCursor();
-	Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->CalculateThrowDirection(GetThrowDestination());
-
-	FPredictProjectilePathResult predictProjectilePathResult = Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->GetProjectilePathPredictResult();
-	
-	//Draw projectile path with spline
-	TArray<FVector> pathPointList;
-	FVector cursorLocation = PlayerControllerRef.Get()->GetCursorDeprojectionWorldLocation();
-	for (auto& pathData : predictProjectilePathResult.PathData)
-	{
-		if (!pathPointList.IsEmpty())
-			pathPointList.Add((pathPointList[pathPointList.Num() - 1] + pathData.Location) / 2);
-		pathPointList.Add(pathData.Location);
-		//UE_LOG(LogTemp, Warning, TEXT("%s, %s"), *cursorLocation.ToString(), *pathData.Location.ToString())
-		if (cursorLocation.Z >= pathData.Location.Z) break;
-	}
-	Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->UpdateProjectilePathSpline(pathPointList);
 }
 
 FVector AMainCharacterBase::GetThrowDestination()
 {
-	FVector cursorWorldLocation = GetController<AMainCharacterController>()->GetCursorDeprojectionWorldLocation();
-	if (cursorWorldLocation == FVector(0.0f)) return FVector(0.0f);
-
-	//커서와 손 위치의 Z값을 일치시킴
-	FVector startLocation = GetMesh()->GetSocketLocation("weapon_r");
-	startLocation = { startLocation.X, startLocation.Y, cursorWorldLocation.Z };
-
-	//그 상태에서 거리를 재서 최대 거리를 벗어나지 않는다면 그대로 커서 위치 반환
-	if (UKismetMathLibrary::Vector_Distance(startLocation, cursorWorldLocation) < MAX_THROW_DISTANCE)
-		return cursorWorldLocation;
-
-	//그렇지 않다면, 최대 거리 만큼 제한하여 반환
-	startLocation += UKismetMathLibrary::Normal(cursorWorldLocation - startLocation) * MAX_THROW_DISTANCE;
-	return startLocation;
+	return FVector();
 }
 
 void AMainCharacterBase::ResetMovementInputValue()
@@ -268,6 +227,7 @@ void AMainCharacterBase::ResetMovementInputValue()
 
 void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (GetCharacterMovement()->IsFalling()) return;
 	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
 
@@ -297,6 +257,8 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 
 void AMainCharacterBase::Look(const FInputActionValue& Value)
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
+
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
@@ -310,15 +272,14 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 		// set timer for automatic rotate mode 
 		if (LookAxisVector.Length() <= 0.5f)
 		{
-			GetWorldTimerManager().ClearTimer(SwitchCameraRotateModeTimerHandle);
-			SwitchCameraRotateModeTimerHandle.Invalidate();
-			GetWorldTimerManager().SetTimer(SwitchCameraRotateModeTimerHandle, this, &AMainCharacterBase::SetAutomaticRotateMode, AutomaticModeSwitchTime);
+			SetAutomaticRotateModeTimer();
 		}
 	}
 }
 
 void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	//CharacterState.CharacterActionState = ECharacterActionType::E_Jump;
 	Jump();
@@ -326,13 +287,12 @@ void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 
 void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.bIsSprinting) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero()) return;
-	if (IsValid(GetCurrentWeaponRef()))
-	{
-		GetCurrentWeaponRef()->SetResetComboTimer();
-	}
+	
+	WeaponComponent->ResetComboCnt();
 	CharacterState.bIsSprinting = true;
 	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed, 0.75f);
 	SetFieldOfViewWithInterp(105.0f, 0.25f);
@@ -349,6 +309,7 @@ void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 
 void AMainCharacterBase::Roll()
 {	
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Attack)) return;
 	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
 
@@ -407,6 +368,7 @@ void AMainCharacterBase::Roll()
 
 void AMainCharacterBase::Dash()
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (IsActorBeingDestroyed()) return;
 	LaunchCharacter(FVector(0.0f, 0.0f, 500.0f), false, false);
 	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, this, &AMainCharacterBase::StopDashMovement, 0.075f, false);
@@ -427,55 +389,18 @@ void AMainCharacterBase::ZoomIn(const FInputActionValue& Value)
 
 void AMainCharacterBase::TryInvestigate()
 {
-	TArray<AActor*> nearActorList = GetNearInteractionActorList();
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
+	TArray<UInteractiveCollisionComponent*> nearCompoenentList = GetNearInteractionComponentList();
 
-	if (nearActorList.Num())
+	if (nearCompoenentList.Num())
 	{
 		if (AssetHardPtrInfo.InvestigateAnimMontageList.Num() > 0
 			&& IsValid(AssetHardPtrInfo.InvestigateAnimMontageList[0]))
 		{
 			PlayAnimMontage(AssetHardPtrInfo.InvestigateAnimMontageList[0]);
 		}
-		Investigate(nearActorList[0]);
+		nearCompoenentList[0]->Interact();
 		ResetActionState();
-	}
-}
-
-void AMainCharacterBase::Investigate(AActor* TargetActor)
-{
-	if (!IsValid(TargetActor)) return;
-
-	if (TargetActor->ActorHasTag("Item"))
-	{
-		Cast<AItemBase>(TargetActor)->OnPlayerBeginPickUp.ExecuteIfBound(this);
-		if (AssetManagerBaseRef.IsValid())
-		{
-			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "EquipWeapon");
-		}
-	}
-	else if (TargetActor->ActorHasTag("ItemBox"))
-	{
-		Cast<AItemBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
-		if (AssetManagerBaseRef.IsValid())
-		{
-			AssetManagerBaseRef.Get()->PlayRandomSound(this, ESoundAssetType::E_Character, 0, "OpenItemBox");
-		}
-	}
-	else if (TargetActor->ActorHasTag("RewardBox"))
-	{
-		Cast<ARewardBoxBase>(TargetActor)->OnPlayerBeginInteract.Broadcast(this);
-		if (AssetManagerBaseRef.IsValid())
-		{
-			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "OpenAbilityBox");
-		}
-	}
-	else if (TargetActor->ActorHasTag("CraftingBox"))
-	{
-		Cast<ACraftBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
-	}
-	else if (TargetActor->ActorHasTag("Gate"))
-	{
-		Cast<AGateBase>(TargetActor)->EnterGate(); 
 	}
 }
 
@@ -508,15 +433,12 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 
 void AMainCharacterBase::TryAttack()
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw) return;
+	if (!CharacterState.bCanAttack || WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw) return;
 
-	//IndieGo용 임시 코드----------------------------------------------------------
-	if (GetCurrentWeaponRef()->GetWeaponStat().WeaponID == 12130) return;
-	//---------------------------------------------------------------------------------
-
-	if (GetCurrentWeaponRef()->WeaponID == 0)
+	if (WeaponComponent->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
 		return;
@@ -590,21 +512,19 @@ void AMainCharacterBase::TryDownwardAttack()
 	}
 }
 
-void AMainCharacterBase::TrySkill(ESkillType SkillType, int32 SkillID)
-{
-	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->IsActorBeingDestroyed()) return;
-	
-	if (GetIsActionActive(ECharacterActionType::E_Attack))
+bool AMainCharacterBase::TrySkill(int32 SkillID)
+{	
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Attack)
 	{
-		ResetActionState();
+		StopAttack();
 	}
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Stun
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Die
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return false;
 
-	Super::TrySkill(SkillType, SkillID);
-
-	//Try Skill and adjust rotation to cursor position
-	//RotateToCursor();
+	return Super::TrySkill(SkillID);
 }
 
 void AMainCharacterBase::Attack()
@@ -619,16 +539,18 @@ void AMainCharacterBase::Attack()
 void AMainCharacterBase::StopAttack()
 {
 	Super::StopAttack();
-	if (IsValid(GetCurrentWeaponRef()))
-	{
-		GetCurrentWeaponRef()->StopAttack();
-	}
+	WeaponComponent->StopAttack();
 }
 
 void AMainCharacterBase::Die()
 {
 	Super::Die();
 	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
+}
+
+void AMainCharacterBase::StandUp()
+{
+	Super::StandUp();
 }
 
 void AMainCharacterBase::RotateToCursor()
@@ -644,40 +566,11 @@ void AMainCharacterBase::RotateToCursor()
 	return;
 }
 
-void AMainCharacterBase::PickSubWeapon(const FInputActionValue& Value)
+
+TArray<UInteractiveCollisionComponent*> AMainCharacterBase::GetNearInteractionComponentList()
 {
-	if (!IsValid(GetCurrentWeaponRef())) return;
-
-	FVector typeVector = Value.Get<FVector>();
-	int32 targetIdx = typeVector.X - 1;
-
-	//If player press current picked sub weapon, switch to the first main weapon.
-	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw && GetSubWeaponInventoryRef()->GetCurrentIdx() == targetIdx)
-	{
-		GetWeaponInventoryRef()->EquipWeaponByIdx(0);
-		GetSubWeaponInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
-		return;
-	}
-
-	//Try switch to subweapon
-	bool result = TrySwitchToSubWeapon(targetIdx);
-	if (result)
-	{
-		//Force UI update with manual calling delegate
-		GetWeaponInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
-	}
-	else
-	{
-		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
-	}
-}
-
-TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
-{
-	TArray<AActor*> totalItemList;
-	TArray<UClass*> targetClassList = {AItemBase::StaticClass(), AItemBoxBase::StaticClass()
-									 , ARewardBoxBase::StaticClass(), ACraftBoxBase::StaticClass()
-									 , AGateBase::StaticClass()};
+	TArray<UInteractiveCollisionComponent*> returnList;
+	TArray<UClass*> targetClassList = { UInteractiveCollisionComponent::StaticClass() };
 	TEnumAsByte<EObjectTypeQuery> itemObjectType = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel3);
 	FVector overlapBeginPos = GetActorLocation() + GetMesh()->GetForwardVector() * 70.0f + GetMesh()->GetUpVector() * -45.0f;
 	
@@ -685,14 +578,20 @@ TArray<AActor*> AMainCharacterBase::GetNearInteractionActorList()
 	{
 		bool result = false;
 
+		TArray<UPrimitiveComponent*> resultList;
 		for (UClass* targetClass : targetClassList)
 		{
-			result = (result || UKismetSystemLibrary::SphereOverlapActors(GetWorld(), overlapBeginPos, sphereRadius
-													, { itemObjectType }, targetClass, {}, totalItemList));
-			if (totalItemList.Num() > 0) return totalItemList; //찾는 즉시 반환
+			result = (result || UKismetSystemLibrary::SphereOverlapComponents(GetWorld(), overlapBeginPos, sphereRadius
+						, { itemObjectType }, targetClass, {}, resultList));
+			if (resultList.Num() > 0)
+			{
+				for (UPrimitiveComponent*& component : resultList)
+					returnList.Add(Cast<UInteractiveCollisionComponent>(component));
+				return returnList; //찾는 즉시 반환
+			}
 		}
 	}
-	return totalItemList;
+	return {};
 }
 
 void AMainCharacterBase::StopDashMovement()
@@ -702,13 +601,57 @@ void AMainCharacterBase::StopDashMovement()
 	GetCharacterMovement()->Velocity = direction * (speed + 1000.0f);
 }
 
+void AMainCharacterBase::SetCameraVerticalAlignmentWithInterp(float TargetPitch, const float InterpSpeed)
+{
+	FTimerDelegate updateFunctionDelegate;
+
+	//Binding the function with specific values
+	updateFunctionDelegate.BindUFunction(this, FName("UpdateCameraPitch"), TargetPitch, InterpSpeed);
+
+	//Calling MyUsefulFunction after 5 seconds without looping
+	GetWorld()->GetTimerManager().ClearTimer(CameraRotationAlignmentHandle);
+	GetWorld()->GetTimerManager().SetTimer(CameraRotationAlignmentHandle, updateFunctionDelegate, 0.01f, true);
+}
+
+void AMainCharacterBase::ResetCameraRotation()
+{
+	SetManualRotateMode();
+	FRotator newRotation = CameraBoom->GetRelativeRotation();
+	newRotation.Yaw = newRotation.Roll = 0.0f;
+	CameraBoom->SetRelativeRotation(newRotation);
+}
+
+void AMainCharacterBase::SetAutomaticRotateModeTimer()
+{
+	GetWorldTimerManager().ClearTimer(SwitchCameraRotateModeTimerHandle);
+	SwitchCameraRotateModeTimerHandle.Invalidate();
+	GetWorldTimerManager().SetTimer(SwitchCameraRotateModeTimerHandle, this, &AMainCharacterBase::SetAutomaticRotateMode, AutomaticModeSwitchTime);
+}
+
 void AMainCharacterBase::SetAutomaticRotateMode()
 {
 	if (TargetingManagerComponent->GetIsTargetingActivated()) return;
-	CameraBoom->bEnableCameraRotationLag = true;
-	CameraBoom->SetRelativeRotation(FRotator::ZeroRotator);
-	CameraBoom->bUsePawnControlRotation = false;
-	CameraBoom->bInheritYaw = true;
+	
+	SetCameraVerticalAlignmentWithInterp(GetControlRotation().Pitch <= 90.0f ? 0.0f : 360.0f, 0.25f);
+
+	GetWorld()->GetTimerManager().SetTimer(RotationResetTimerHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			CameraBoom->bEnableCameraRotationLag = true;
+			CameraBoom->SetRelativeRotation(FRotator::ZeroRotator);
+			CameraBoom->bUsePawnControlRotation = false;
+			CameraBoom->bInheritYaw = true;
+		}), 1.0f, false /*반복*/);
+}
+
+void AMainCharacterBase::UpdateCameraPitch(float TargetPitch, float InterpSpeed)
+{
+	FRotator currentRotation = GetControlRotation();
+	if (FMath::IsNearlyEqual(currentRotation.Pitch, TargetPitch, 5.0f))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(CameraRotationAlignmentHandle);
+	}
+	currentRotation.Pitch = FMath::FInterpTo(currentRotation.Pitch, TargetPitch, 0.1f, InterpSpeed);
+	Controller->SetControlRotation(currentRotation);
 }
 
 void AMainCharacterBase::SetManualRotateMode()
@@ -759,30 +702,6 @@ void AMainCharacterBase::ResetRotationToMovement()
 	newRotation.Yaw += 270.0f;
 	GetMesh()->SetWorldRotation(newRotation);
 	GetCharacterMovement()->bOrientRotationToMovement = true;*/
-}
-
-void AMainCharacterBase::SwitchToNextWeapon()
-{
-	//Block switching weapon in particular actions
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill ||
-		CharacterState.CharacterActionState == ECharacterActionType::E_Attack ||
-		CharacterState.CharacterActionState == ECharacterActionType::E_Throw ||
-		CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return;
-	if (!IsValid(GetCurrentWeaponRef())) return;
-
-	if (GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
-	{
-		GetWeaponInventoryRef()->EquipWeaponByIdx(0);
-		GetSubWeaponInventoryRef()->OnInventoryItemIsUpdated.Broadcast(-1, false, FInventoryItemInfoStruct());
-		return;
-	}
-
-	Super::SwitchToNextWeapon();
-}
-
-void AMainCharacterBase::DropWeapon()
-{
-	Super::DropWeapon();
 }
 
 void AMainCharacterBase::SetWalkSpeedWithInterp(float NewValue, const float InterpSpeed, const bool bAutoReset)
@@ -850,11 +769,11 @@ bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* C
 	
 	ActivateDebuffNiagara((uint8)DebuffInfo.Type);
 
-	GetWorld()->GetTimerManager().ClearTimer(BuffEffectResetTimerHandle);
+	FTimerDelegate timerDelegate; 
+
+	timerDelegate.BindUFunction(this, "DeactivateBuffEffect");
 	BuffEffectResetTimerHandle.Invalidate();
-	GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, FTimerDelegate::CreateLambda([&]() {
-		DeactivateBuffEffect();
-	}), DebuffInfo.TotalTime, false);
+	GetWorld()->GetTimerManager().SetTimer(BuffEffectResetTimerHandle, timerDelegate, DebuffInfo.TotalTime, false);
 
 	return true;
 }
@@ -879,25 +798,13 @@ bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 
 bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
 {
-	if (!IsValid(GetWeaponInventoryRef()) || !IsValid(GetSubWeaponInventoryRef())) return false;
-	
-	bool result = false; 
-	EWeaponType weaponType = GetWeaponInventoryRef()->GetWeaponType(NewWeaponID);
-	
-	if (weaponType == EWeaponType::E_Throw)
-	{
-		result = GetSubWeaponInventoryRef()->AddWeapon(NewWeaponID);
-	}
-	else if(weaponType != EWeaponType::E_None)
-	{
-		result = GetWeaponInventoryRef()->AddWeapon(NewWeaponID);
-	}
-
-	return result;
+	if (!Super::PickWeapon(NewWeaponID)) return false;
+	return true;
 }
 
 void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)
 {
+	if (!IsValid(BuffNiagaraEmitter)) return;
 	TArray<UNiagaraSystem*>& targetEmitterList = AssetHardPtrInfo.DebuffNiagaraEffectList;
 
 	if (targetEmitterList.IsValidIndex(DebuffType) && targetEmitterList[DebuffType] != nullptr)
@@ -911,6 +818,7 @@ void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)
 
 void AMainCharacterBase::DeactivateBuffEffect()
 {
+	if (!IsValid(BuffNiagaraEmitter)) return;
 	BuffNiagaraEmitter->SetAsset(nullptr, false);
 	BuffNiagaraEmitter->Deactivate(); 
 }

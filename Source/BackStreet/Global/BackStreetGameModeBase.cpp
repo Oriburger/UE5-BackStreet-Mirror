@@ -1,17 +1,15 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "BackStreetGameModeBase.h"
+#include "../Widget/BackStreetWidgetBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
-#include "../System/SkillSystem/SkillManagerBase.h"
 #include "../System/MapSystem/NewChapterManagerBase.h"
-#include "../System/CraftingSystem/CraftingManagerBase.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
 #include "../Item/ItemBase.h"
-#include "../Item/Weapon/WeaponBase.h"
+#include "SlateBasics.h"
+#include "Runtime/UMG/Public/UMG.h"
 #include "../Item/Weapon/Throw/ProjectileBase.h"
-#include "../Item/Weapon/Ranged/RangedWeaponBase.h"
-#include "../Item/Weapon/Melee/MeleeWeaponBase.h"
 
 ABackStreetGameModeBase::ABackStreetGameModeBase()
 {
@@ -33,16 +31,10 @@ void ABackStreetGameModeBase::BeginPlay()
 void ABackStreetGameModeBase::InitialzeGame()
 {
 	//------ Initialize Chapter Manager ------------
-	ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
-
-	//------ Initialize Global Skill Manager --------
-	SkillManagerBase = NewObject<USkillManagerBase>(this, USkillManagerBase::StaticClass(), FName("SkillManagerBase"));
-	SkillManagerBase->InitSkillManagerBase(this);
-
-
-	//----- Crafting Manager √ ±‚»≠ -------
-	CraftingManagerBase = NewObject<UCraftingManagerBase>(this, UCraftingManagerBase::StaticClass(), FName("CraftingManagerBase"));
-	CraftingManagerBase->InitCraftingManager(this);
+	if (!IsValid(ChapterManagerRef))
+	{
+		ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
+	}
 }
 
 void ABackStreetGameModeBase::StartGame(int32 ChapterID)
@@ -114,8 +106,46 @@ void ABackStreetGameModeBase::UpdateCharacterStat(ACharacterBase* TargetCharacte
 	}
 }
 
-UUserWidget* ABackStreetGameModeBase::GetCombatWidgetRef()
+void ABackStreetGameModeBase::SwitchToCombatWidget()
 {
-	if (!IsValid(ChapterManagerRef)) return nullptr;
-	return ChapterManagerRef->GetCombatWidgetRef();
+	UBackStreetWidgetBase* combatWidgetRef = GetCombatWidgetRef();
+	if (IsValid(combatWidgetRef))
+	{
+		if (!combatWidgetRef->IsInViewport())
+		{
+			combatWidgetRef->AddToViewport();
+		}
+		combatWidgetRef->SetFocusToWidget(combatWidgetRef, false, true, false);
+	}
+}
+
+void ABackStreetGameModeBase::SwitchToMenuWidget()
+{
+	UBackStreetWidgetBase* menuWidgetRef = GetMenuWidgetRef();
+	if (IsValid(menuWidgetRef))
+	{
+		if (!menuWidgetRef->IsInViewport())
+		{
+			menuWidgetRef->AddToViewport();
+		}
+		menuWidgetRef->SetFocusToWidget(menuWidgetRef, true, false, true);
+	}
+}
+
+UBackStreetWidgetBase* ABackStreetGameModeBase::GetCombatWidgetRef()
+{
+	if (IsValid(CombatWidgetRef)) return CombatWidgetRef;
+	return CombatWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), CombatWidgetClass));;
+}
+
+UBackStreetWidgetBase* ABackStreetGameModeBase::GetMenuWidgetRef()
+{
+	if (IsValid(MenuWidgetRef)) return MenuWidgetRef;
+	return MenuWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), MenuWidgetClass));
+}
+
+void ABackStreetGameModeBase::CreateDefaultWidgets()
+{
+	SwitchToCombatWidget();
+	MenuWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), MenuWidgetClass));
 }

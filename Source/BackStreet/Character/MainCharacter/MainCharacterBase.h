@@ -14,7 +14,6 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialAttack);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialMove);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialZoom);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialRoll);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTakeDamage);
 
 UCLASS()
 class BACKSTREET_API AMainCharacterBase : public ACharacterBase
@@ -33,10 +32,6 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTutorialRoll OnRoll;
-
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateTakeDamage OnTakeDamage;
-
 
 //-------- Global -----------------
 public:
@@ -71,6 +66,9 @@ public:
 		
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		class UItemInventoryComponent* ItemInventory;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UPlayerSkillManagerComponent* SkillManagerComponent;
 
 // ------- Throw Test -----------
 
@@ -151,10 +149,6 @@ public:
 	UFUNCTION()
 		void TryInvestigate();
 
-	//해당 액터와 상호작용한다.
-	UFUNCTION(BlueprintCallable)
-		void Investigate(AActor* TargetActor);
-
 	UFUNCTION()
 		virtual void TryReload() override;
 
@@ -168,7 +162,7 @@ public:
 		virtual void TryDownwardAttack() override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void TrySkill(ESkillType SkillType, int32 SkillID) override;
+		virtual bool TrySkill(int32 SkillID) override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
@@ -179,15 +173,12 @@ public:
 	UFUNCTION()
 		virtual void Die() override;
 
+	UFUNCTION()
+		virtual void StandUp() override;
+
 	//Rotation 조절 방식을 기본 방식인 Movement 방향으로 되돌린다
 	UFUNCTION(BlueprintCallable)
 		void ResetRotationToMovement();
-
-	UFUNCTION()
-		virtual void SwitchToNextWeapon() override;
-
-	UFUNCTION()
-		virtual void DropWeapon() override;
 
 	//Targeting system
 	UFUNCTION()
@@ -201,19 +192,26 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void RotateToCursor();
 
-	//1~4번의 키를 눌러 보조무기를 장착한다.
 	UFUNCTION()
-		void PickSubWeapon(const FInputActionValue& Value);
-
-	UFUNCTION()
-		TArray<AActor*> GetNearInteractionActorList();
+		TArray<class UInteractiveCollisionComponent*> GetNearInteractionComponentList();
 
 private:
 	UFUNCTION()
 		void StopDashMovement();
 
 //------- Camera Rotation Support Event ------ 
+
+public:
+	UFUNCTION()
+		void SetCameraVerticalAlignmentWithInterp(float TargetPitch, const float InterpSpeed);
+
+	UFUNCTION()
+		void ResetCameraRotation();
+
 protected:
+	UFUNCTION()
+		void SetAutomaticRotateModeTimer();
+
 	UFUNCTION()
 		void SetAutomaticRotateMode();	
 
@@ -229,6 +227,10 @@ protected:
 		void OnTargetingStateUpdated(bool bIsActivated, APawn* Target);
 
 protected:
+	UFUNCTION()
+		void UpdateCameraPitch(float TargetPitch, float InterpSpeed = 1.0f);	
+
+protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Camera|AutoRotateSupport")
 		bool bIsManualMode = false;
 
@@ -236,7 +238,7 @@ protected:
 		float FaceToFaceLagSpeed = 0.001;
 	
 	UPROPERTY(EditAnywhere, Category = "Camera|AutoRotateSupport")
-		float NoramlLagSpeed = 0.5f;
+		float NoramlLagSpeed = 0.8f;
 
 	UPROPERTY(EditAnywhere, Category = "Camera|AutoRotateSupport")
 		float AutomaticModeSwitchTime = 3.0f;
@@ -290,8 +292,7 @@ public:
 
 // -------- Inventory --------------
 public:
-	UFUNCTION(BlueprintCallable)
-		virtual bool PickWeapon(int32 NewWeaponID) override;
+	virtual bool PickWeapon(int32 NewWeaponID);
 
 // -------- VFX --------------------
 protected:
@@ -341,33 +342,27 @@ private:
 private:
 	//공격 시, 마우스 커서의 위치로 캐릭터가 바라보는 로직을 초기화하는 타이머
 	//초기화 시에는 다시 movement 방향으로 캐릭터의 Rotation Set 
-	UPROPERTY()
-		FTimerHandle RotationResetTimerHandle;
+	FTimerHandle RotationResetTimerHandle;
 
+	FTimerHandle CameraRotationAlignmentHandle;
+	
 	//구르기 딜레이 타이머
-	UPROPERTY()
-		FTimerHandle RollTimerHandle;
+	FTimerHandle RollTimerHandle;
 
 	//WalkSpeed Interpolate timer
-	UPROPERTY()
-		FTimerHandle WalkSpeedInterpTimerHandle;
+	FTimerHandle WalkSpeedInterpTimerHandle;
 
 	//Field Of View Interpolate timer
-	UPROPERTY()
-		FTimerHandle FOVInterpHandle;
+	FTimerHandle FOVInterpHandle;
 
 	//구르기 내 대쉬 딜레이 핸들
-	UPROPERTY()
-		FTimerHandle DashDelayTimerHandle;
+	FTimerHandle DashDelayTimerHandle;
 
 	//버프 나이아가라 이펙트 리셋 타이머
-	UPROPERTY()
-		FTimerHandle BuffEffectResetTimerHandle;
+	FTimerHandle BuffEffectResetTimerHandle;
 
 	//캐릭터 얼굴 효과 (머티리얼 값 변경) 리셋 타이머
-	UPROPERTY()
-		FTimerHandle FacialEffectResetTimerHandle;
+	FTimerHandle FacialEffectResetTimerHandle;
 
-	UPROPERTY()
-		FTimerHandle SwitchCameraRotateModeTimerHandle;
+	FTimerHandle SwitchCameraRotateModeTimerHandle;
 };

@@ -31,7 +31,7 @@ protected:
 
 public:	
 	UPROPERTY(EditDefaultsOnly)
-		class USphereComponent* OverlapVolume;
+		class UInteractiveCollisionComponent* OverlapVolume;
 
 	UPROPERTY(EditDefaultsOnly)
 		class UStaticMeshComponent* MeshComponent;
@@ -46,7 +46,7 @@ public:
 		void InitItemBox(bool _bIncludeMissionItem);
 
 	UFUNCTION()
-		void OnItemBoxOpened(AActor* Causer);
+		void OnItemBoxOpened();
 
 	UFUNCTION()
 		void OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp

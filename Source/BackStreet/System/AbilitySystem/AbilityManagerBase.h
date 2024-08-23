@@ -19,6 +19,16 @@ public:
 		bool bIsPercentage  = false;
 };
 
+UENUM(BlueprintType)
+enum class EAbilityTierType : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_Common			UMETA(DisplayName = "Common"),
+	E_Rare				UMETA(DisplayName = "Rare"),
+	E_Legendary			UMETA(DisplayName = "Legendary"),
+	E_Mythic			UMETA(DisplayName = "Mythic"),
+};
+
 USTRUCT(BlueprintType)
 struct FAbilityInfoStruct : public FTableRowBase
 {
@@ -26,7 +36,7 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	//어빌리티의 ID
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0, UIMax = 10))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0, UIMax = 10))
 		int32 AbilityId = 0;
 
 	//Ability Type (Multiple Type / this value is for updating stat)
@@ -38,20 +48,28 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FName AbilityName;
 
+	//Ability's Tier
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		EAbilityTierType AbilityTier;
+
 	//어빌리티 설명
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FName AbilityDescription;
+
+	//어빌리티 설명
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FName AbilityDetailDescription;
 
 	//어빌리티의 아이콘
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		UTexture2D* AbilityIcon;
 		
 	//반복적인 연산이 필요한지? (도트 힐) , 현재 미사용
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsRepetitive = false;
 
 	//Callback 함수명
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FName FuncName; 
 		
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -68,6 +86,8 @@ public:
 		return AbilityId == other.AbilityId;
 	}
 };
+
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityInfoList, const TArray<FAbilityInfoStruct>&, AbilityInfoList);
 
 UCLASS()
@@ -114,6 +134,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetMaxAbilityCount() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FAbilityInfoStruct> GetAbilityInfoList() { return ActiveAbilityInfoList;  }
 
 protected:
 	UFUNCTION()

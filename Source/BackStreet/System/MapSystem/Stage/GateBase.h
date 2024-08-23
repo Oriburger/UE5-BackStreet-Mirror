@@ -27,7 +27,7 @@ protected:
 
 public: 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		UBoxComponent* OverlapVolume;
+		class UInteractiveCollisionComponent* OverlapVolume;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* Mesh;
@@ -44,8 +44,8 @@ public:
 //----------- 핵심 로직 ---------------
 public:
 	// Initialize Gate
-	UFUNCTION()
-		void InitGate(FVector2D NewDirection = FVector2D(0.0f));
+	UFUNCTION(BlueprintNativeEvent)
+		void InitGate(FVector2D NewDirection, EStageCategoryInfo StageType);
 
 	// Check Gate Is Active and RequsetMoveStage
 	UFUNCTION(BlueprintCallable)
@@ -59,13 +59,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void DeactivateGate();
 
-private:
-	UPROPERTY()
-		bool bIsGateActive;
+protected:
+	//Stage type name for next stage
+	UPROPERTY(BlueprintReadOnly)
+		EStageCategoryInfo NextStageType;
 
+private:
+	bool bIsGateActive;
 	//Gate's direction to move on n*n grid chapter
-	UPROPERTY()
-		FVector2D Direction;
+	FVector2D Direction;
 
 //-------- 그 외-----------------------
 private:

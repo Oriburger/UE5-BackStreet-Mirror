@@ -5,6 +5,7 @@
 #include "CharacterBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateCharacterDie);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTakeDamage);
 
 UCLASS()
 class BACKSTREET_API ACharacterBase : public ACharacter
@@ -12,6 +13,10 @@ class BACKSTREET_API ACharacterBase : public ACharacter
 	GENERATED_BODY()
 
 	friend class AWeaponInventoryBase;
+
+public:
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateTakeDamage OnTakeDamage;
 
 //----- Global / Component ----------
 public:
@@ -39,11 +44,17 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		USceneComponent* HitSceneComponent;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UWeaponComponentBase* WeaponComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		class UDebuffManagerComponent* DebuffManagerComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UTargetingManagerComponent* TargetingManagerComponent;
+
+public:
+	TWeakObjectPtr<class USkillManagerComponentBase> SkillManagerComponentRef;
 
 // ------- Character Action 기본 ------- 
 public:
@@ -68,9 +79,7 @@ public:
 		void DashAttack();
 
 	///Input에 Binding 되어 스킬공격을 시도 (AnimMontage를 호출)
-	virtual void TrySkill(ESkillType SkillType, int32 SkillID);
-
-	bool CheckCanTrySkill(int32 SkillID, FOwnerSkillInfoStruct* SkillInfo);
+	virtual bool TrySkill(int32 SkillID);
 
 	//AnimNotify에 Binding 되어 실제 공격을 수행
 	virtual void Attack();
@@ -158,6 +167,9 @@ protected:
 	//Knock down with 
 	virtual void KnockDown();
 
+	//Stand UP
+	virtual void StandUp();
+
 // ------- Character Stat/State ------------------------------
 public:
 	//캐릭터의 상태 정보를 초기화
@@ -202,66 +214,8 @@ private:
 
 // ------ 무기 관련 -------------------------------------------
 public:
-	UFUNCTION()
-		bool EquipWeapon(class AWeaponBase* TargetWeapon);
-
-	//무기를 집는다. 인벤토리가 꽉 찼다면 false를 반환
-	virtual bool PickWeapon(int32 NewWeaponID);
-
-	//다음 무기로 전환한다. 전환에 실패하면 false를 반환
-	virtual void SwitchToNextWeapon();
-
-	//무기를 Drop한다. (월드에서 아예 사라진다.)
-	virtual void DropWeapon();
-
-	UFUNCTION()
-		bool TrySwitchToSubWeapon(int32 SubWeaponIdx);
-
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class AWeaponInventoryBase* GetWeaponInventoryRef();
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class AWeaponInventoryBase* GetSubWeaponInventoryRef();
-
-	//무기 Ref를 반환
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class AWeaponBase* GetCurrentWeaponRef();
-
-protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Class")
-		TSubclassOf<class AWeaponInventoryBase> WeaponInventoryClass;
-
-	UFUNCTION()
-		void SwitchWeaponActor(EWeaponType TargetWeaponType);
-
-private:
-	UPROPERTY()
-		class AWeaponInventoryBase* WeaponInventoryRef;
-
-	UPROPERTY()
-		class AWeaponInventoryBase* SubWeaponInventoryRef;
-
-	//0번째 : 들고 있는 무기 / 1번째, 숨겨져 있는 다른 타임의무기
-	UPROPERTY()
-		TArray<class AWeaponBase*> WeaponActorList;
-
-protected:
-	UPROPERTY()
-		TWeakObjectPtr<class AWeaponBase> CurrentWeaponRef;
-
-	//0번째 : 근접 무기 / 1번째 : 원거리 무기
-	//하나의 WeaponBase로 통일을 한다면 이렇게 하지 않아도 될텐데..
-
-	UPROPERTY(EditDefaultsOnly, Category="Class")
-		TArray<TSubclassOf<class AWeaponBase>> WeaponClassList; 
-
-private:
-	//초기 무기 액터들을 스폰하고 초기화 한다.
-	void InitWeaponActors();
-
-	//무기 액터를 스폰
-	AWeaponBase* SpawnWeaponActor(EWeaponType TargetWeaponType);
-
+		bool PickWeapon(int32 NewWeaponID);
 // ---- Asset -------------------
 public:
 	//Init asset using softref data table
@@ -336,6 +290,9 @@ protected:
 
 	UPROPERTY()
 		FTimerHandle KnockDownDelayTimerHandle;	
+
+	UPROPERTY()
+		FTimerHandle KnockDownAnimMontageHandle;
 
 	UPROPERTY()
 		FTimerHandle AirAtkLocationUpdateHandle;

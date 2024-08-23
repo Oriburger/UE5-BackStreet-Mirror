@@ -6,9 +6,9 @@
 #include "ItemInfoStruct.generated.h"
 
 UENUM(BlueprintType)
-enum class EItemType : uint8
+enum class EItemLifeType : uint8
 {
-	E_None					UMETA(DisplayName = "None"),
+	E_None				UMETA(DisplayName = "None"),
 	E_Permanant			UMETA(DisplayName = "Permanant"),
 	E_Temporary			UMETA(DisplayName = "Temporary"),
 };
@@ -18,14 +18,15 @@ enum class EItemCategoryInfo : uint8
 {
 	E_None					UMETA(DisplayName = "None"),
 	E_Weapon				UMETA(DisplayName = "Weapon"),
-	E_Bullet				UMETA(DisplayName = "Bullet"),
-	E_StatUp				UMETA(DisplayName = "Ability"),
-	E_Mission				UMETA(DisplayName = "Mission"),
+	E_Ability				UMETA(DisplayName = "Ability"),
+	E_Craft					UMETA(DisplayName = "Craft"),
+	E_Research				UMETA(DisplayName = "Research"),
+	E_GatchaTicket			UMETA(DisplayName = "GatchaTicket"),
 };
 
 //아이템 박스 스폰 관련 정보를 담은 구조체
 USTRUCT(BlueprintType)
-struct FItemInfoStruct : public FTableRowBase
+struct FItemInfoDataStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
@@ -38,9 +39,20 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FName ItemName;
 
+	//Is item has actual appearance with actor? 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		bool bIsActorItem = false;	
+
+	//Item life type
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		EItemLifeType ItemLifeType = EItemLifeType::E_None;
+
+	//Item Type
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		EItemCategoryInfo ItemType = EItemCategoryInfo::E_None;
 
+//=============Asset Info =================
+// 
 	//스폰할 아이템 스태틱 메시 정보 저장
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		TSoftObjectPtr<UStaticMesh> ItemMesh;
@@ -60,12 +72,19 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
 		TSoftObjectPtr<UMaterialInstance> OutlineMaterial;
 
-	//특정 아이템을 위한 변수 (총알, 미션 등)
+	//Item Icon Image
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		float Variable = 0.0f;
+		UTexture2D* ItemImage;
 
-	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
-//		FSound
+	//Item Icon Image
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		UTexture2D* DeactiveItemImage;
+
+//=============State =================
+	
+	//Item Amount which can not edit in datatable
+	UPROPERTY(BlueprintReadOnly)
+		uint8 ItemAmount = 0;
 };
 
 //아이템 박스 스폰 관련 정보를 담은 구조체
@@ -105,39 +124,40 @@ public:
 		FWeaponStateStruct WeaponState;
 };
 
-//for "Not Actor Item"
-USTRUCT(BlueprintType)
-struct FItemDataStruct : public FTableRowBase
-{
-public:
-	GENERATED_USTRUCT_BODY()
 
-	//Item ID
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		int32 ItemID = 0;
-
-	//Item name
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		FName ItemName;
-
-	//Item type
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		EItemType ItemType = EItemType::E_None;
-
-	//Attainable Chapter
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		uint8 AttainableChapter = 0;
-
-	//Item Description
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		FName ItemDescription;
-
-	//Item Icon Image
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		UTexture2D* ItemImage;
-
-	//Item Amount which can not edit in datatable
-	UPROPERTY(BlueprintReadOnly)
-		uint8 ItemAmount = 0;
-
-};
+//-----------삭제대기--------------------------
+////for "Not Actor Item"
+//USTRUCT(BlueprintType)
+//struct FItemDataStruct : public FTableRowBase
+//{
+//public:
+//	GENERATED_USTRUCT_BODY()
+//
+//	//Item ID
+//	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+//		int32 ItemID = 0;
+//
+//	//Item name
+//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+//		FName ItemName;
+//
+//	//Item type
+//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+//		EItemLifeType ItemType = EItemLifeType::E_None;
+//
+//	//Attainable Chapter
+//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+//		uint8 AttainableChapter = 0;
+//
+//	//Item Description
+//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+//		FName ItemDescription;
+//
+//	//Item Icon Image
+//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+//		UTexture2D* ItemImage;
+//
+//	//Item Amount which can not edit in datatable
+//	UPROPERTY(BlueprintReadOnly)
+//		uint8 ItemAmount = 0;
+//};
