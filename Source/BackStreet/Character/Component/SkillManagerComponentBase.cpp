@@ -50,7 +50,6 @@ bool USkillManagerComponentBase::TrySkill(int32 SkillID)
 	{
 		if (skillBase->SkillState.SkillLevelStateStruct.SkillLevel == 0) return false;
 	}
-	OwnerCharacterRef->SetActionState(ECharacterActionType::E_Skill);
 	skillBase->ActivateSkill();
 	OnSkillActivated.Broadcast(SkillID);
 	return true;
@@ -69,13 +68,9 @@ bool USkillManagerComponentBase::RemoveSkill(int32 SkillID)
 
 bool USkillManagerComponentBase::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 {
-	UE_LOG(LogTemp, Warning, TEXT("UpgradeSkill #1 %d %d"), SkillID, NewLevel);
 	if (!IsSkillValid(SkillID)) return false;
-	UE_LOG(LogTemp, Warning, TEXT("UpgradeSkill #2"));
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	UE_LOG(LogTemp, Warning, TEXT("UpgradeSkill #3"));
 	if (!IsValid(skillBase)) return false;
-	UE_LOG(LogTemp, Warning, TEXT("UpgradeSkill #4"));
 	skillBase->SkillState.SkillLevelStateStruct.SkillLevel = NewLevel;
 	skillBase->SkillState.SkillLevelStateStruct.SkillVariableMap = skillBase->SkillStat.SkillLevelStatStruct.LevelInfo[NewLevel].SkillVariableMap;
 	//쿨타임이 레벨에 따라 달라지는 경우 수정

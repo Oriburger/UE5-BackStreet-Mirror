@@ -436,7 +436,7 @@ void AMainCharacterBase::TryAttack()
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw) return;
+	if (!CharacterState.bCanAttack || WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw) return;
 
 	if (WeaponComponent->WeaponID == 0)
 	{
@@ -514,12 +514,15 @@ void AMainCharacterBase::TryDownwardAttack()
 
 bool AMainCharacterBase::TrySkill(int32 SkillID)
 {	
-	if (GetIsActionActive(ECharacterActionType::E_Attack))
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Attack)
 	{
-		ResetActionState();
+		StopAttack();
 	}
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return false;
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Stun
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Die
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return false;
 
 	return Super::TrySkill(SkillID);
 }
@@ -612,7 +615,6 @@ void AMainCharacterBase::SetCameraVerticalAlignmentWithInterp(float TargetPitch,
 
 void AMainCharacterBase::ResetCameraRotation()
 {
-	GEngine->AddOnScreenDebugMessage(0, 10.0f, FColor::Red, "ResetCameraRotation");
 	SetManualRotateMode();
 	FRotator newRotation = CameraBoom->GetRelativeRotation();
 	newRotation.Yaw = newRotation.Roll = 0.0f;

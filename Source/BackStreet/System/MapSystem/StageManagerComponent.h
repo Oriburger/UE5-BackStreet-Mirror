@@ -117,6 +117,9 @@ protected:
 	UFUNCTION()
 		bool GetLoadIsDone() { return LoadStatus == 0; }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetVisitedCraftStageCount() { return VisitedCraftstageCount; }
+
 private:
 	UFUNCTION()
 		void UpdateLoadStatusCount() { LoadStatus -= 1; }
@@ -143,6 +146,9 @@ private:
 
 	//For instant loading widget
 	UUserWidget* LoadingWidgetRef;
+
+	//How many craft stages were visited?
+	int32 VisitedCraftstageCount = 0;
 
 //======== Gameplay Function ===============
 public:

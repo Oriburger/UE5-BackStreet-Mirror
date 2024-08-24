@@ -270,7 +270,7 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown) return;
 	if (!bForceReset && (CharacterState.CharacterActionState == ECharacterActionType::E_Stun
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;	
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
 
@@ -330,7 +330,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		{
 			Cast<ACharacterBase>(DamageCauser)->SetActorRotation(newRotation);
 			newRotation.Yaw += 180.0f;
-			if (!DamageCauser->ActorHasTag("Boss"))
+			if (!ActorHasTag("Boss"))
 			{
 				SetActorRotation(newRotation);
 			}
@@ -532,7 +532,7 @@ void ACharacterBase::TryDashAttack()
 	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
 	if (GetCharacterMovement()->IsFalling()) return;
 	if (!IsValid(AssetHardPtrInfo.DashAttackAnimMontage)) return;
-	if (GetVelocity().Length() <= CharacterState.TotalMoveSpeed * 0.9f) return;
+	if (GetVelocity().Length() <= CharacterState.TotalMoveSpeed * 0.75f) return;
 
 	// Set action state
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
@@ -544,7 +544,7 @@ void ACharacterBase::TryDashAttack()
 void ACharacterBase::DashAttack()
 {
 	//init local parameter
-	const float dashLength = 200.0f;
+	const float dashLength = 250.0f;
 	FVector targetLocation = GetActorLocation() + GetVelocity().GetSafeNormal() * dashLength;
 
 	//check if there are any obstacle (wall, prop, enemy etc.)
@@ -559,7 +559,13 @@ void ACharacterBase::DashAttack()
 
 bool ACharacterBase::TrySkill(int32 SkillID)
 {
-	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return false;
+	if (!CharacterState.bCanAttack) return false;
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Stun
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Die
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return false;
+
 
 	//스킬 매니저 있는지 확인
 	if (!SkillManagerComponentRef.IsValid())
@@ -590,6 +596,7 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 	else
 	{
 		CharacterState.bCanAttack = false;
+		SetActionState(ECharacterActionType::E_Skill);
 		SkillManagerComponentRef.Get()->TrySkill(SkillID);
 		//Reset Combo
 		WeaponComponent->ResetComboCnt();
