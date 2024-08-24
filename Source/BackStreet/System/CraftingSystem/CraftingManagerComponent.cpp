@@ -38,14 +38,14 @@ void UCraftingManagerComponent::InitCraftingManager()
 bool UCraftingManagerComponent::GetIsMatEnough()
 {
 	if(MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
-	TArray<uint8> currMatList = MainCharacterRef->ItemInventory->GetCraftingItemAmount();
+	TMap<ECraftingItemType, uint8> currItemMap = MainCharacterRef->ItemInventory->GetCraftingItemAmount();
 	for (uint8 requiredMatIdx = 0 ; requiredMatIdx < RequiredMatList.Num(); requiredMatIdx++)
 	{
 		//만능재료 사용 시 충족 여부 확인
 		if (static_cast<uint8>(KeepMat) == requiredMatIdx + 1&& 
-			currMatList[3] > RequiredMatList[requiredMatIdx]) return true;
+			currItemMap[ECraftingItemType::E_Wrench] > RequiredMatList[requiredMatIdx]) return true;
 		//일반재료 사용 시 충족 여부 확인
-		if(currMatList[requiredMatIdx] < RequiredMatList[requiredMatIdx]) return false;
+		if(currItemMap[MainCharacterRef->ItemInventory->ConvertItemIDToCraftingItemType(requiredMatIdx+1)] < RequiredMatList[requiredMatIdx]) return false;
 	}
 	return true;
 }
