@@ -50,7 +50,7 @@ bool UCraftingManagerComponent::GetIsItemEnough()
 	return true;
 }
 
-bool UCraftingManagerComponent::ConsumeMat()
+bool UCraftingManagerComponent::ConsumeItem()
 {
 	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
 	for (uint8 idx = 0; idx < MAX_CRAFTING_ITEM_IDX; idx++)
@@ -69,7 +69,7 @@ bool UCraftingManagerComponent::ConsumeMat()
 	return true;
 }
 
-bool UCraftingManagerComponent::GetIsKeepSkillAvailable()
+bool UCraftingManagerComponent::GetIsSkillKeepingAvailable()
 {
 	if(SkillManagerRef->KeepSkillList.Num()>MainCharacterRef->GetCharacterStat().MaxKeepingSkillCount	) return false;
 	return true;
@@ -87,7 +87,7 @@ bool UCraftingManagerComponent::AddSkill(int32 NewSkillID)
 	else
 	{
 		//재료 소모
-		ConsumeMat();
+		ConsumeItem();
 		//스킬 제작UI에서 노출 되었던 스킬 리스트에 등록
 		TArray<int32> displayedSkillIDList;
 		DisplayingSkillMap.GenerateValueArray(displayedSkillIDList);
@@ -175,7 +175,7 @@ bool UCraftingManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 	else
 	{
 		//재료 소모
-		ConsumeMat();
+		ConsumeItem();
 		return true;
 	}
 }
@@ -212,7 +212,7 @@ bool UCraftingManagerComponent::UpgradeWeapon(TArray<uint8> NewLevelList)
 	if(!GetIsStatLevelValid(NewLevelList))return false;
 
 	//재료 소모
-	ConsumeMat();
+	ConsumeItem();
 
 	return MainCharacterRef->WeaponComponent->UpgradeStat(NewLevelList);
 }

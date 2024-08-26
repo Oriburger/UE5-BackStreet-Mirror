@@ -32,7 +32,7 @@ protected:
 	//	int32 SuperMaterialIdx = 3
 
 protected:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void InitCraftingManager();
 
 //=======	Common Function		========================
@@ -41,10 +41,10 @@ public:
 		bool GetIsItemEnough(); //--> GetIsMaterialEnough
 
 	UFUNCTION()
-		bool ConsumeMat();
+		bool ConsumeItem();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsKeepSkillAvailable();
+		bool GetIsSkillKeepingAvailable();
 
 //=======	Select Skill Function	========================		
 public:
