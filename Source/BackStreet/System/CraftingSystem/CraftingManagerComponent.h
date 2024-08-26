@@ -66,14 +66,14 @@ public:
 		bool UpgradeSkill(int32 SkillID, uint8 NewLevel);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<uint8>UpdateRequiredMatForSU(int32 SkillID, uint8 NewLevel); //--> UpdateSkillUpgradeRequiredInfo
+		TArray<uint8>UpdateSkillUpgradeRequiredItemList(int32 SkillID, uint8 NewLevel); //--> UpdateSkillUpgradeRequiredInfo
 
 //=======	Upgrade Weapon Function	====================	
 	UFUNCTION(BlueprintCallable)
 		bool UpgradeWeapon(TArray<uint8> NewLevelList);
 		
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<uint8> UpdateRequiredMatForWU(TArray<uint8> NewLevelList); //--> UpdateWeaponUpgradeRequiredInfo
+		TArray<uint8> UpdateWeaponUpgradeRequiredItemList(TArray<uint8> NewLevelList); //--> UpdateWeaponUpgradeRequiredInfo
 
 	UFUNCTION(BlueprintCallable)
 		bool GetIsStatLevelValid(TArray<uint8> NewLevelList);
