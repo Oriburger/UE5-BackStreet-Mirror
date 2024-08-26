@@ -42,7 +42,7 @@ bool UCraftingManagerComponent::GetIsItemEnough()
 	for (uint8 requiredItemIdx = 0 ; requiredItemIdx < RequiredItemList.Num(); requiredItemIdx++)
 	{
 		//만능재료 사용 시 충족 여부 확인
-		if (static_cast<uint8>(KeepMat) == requiredItemIdx + 1&&
+		if (static_cast<uint8>(KeptItem) == requiredItemIdx + 1&&
 			currItemMap[ECraftingItemType::E_Wrench] > RequiredItemList[requiredItemIdx]) return true;
 		//일반재료 사용 시 충족 여부 확인
 		if(currItemMap[MainCharacterRef->ItemInventory->ConvertItemIDToCraftingItemType(requiredItemIdx+1)] < RequiredItemList[requiredItemIdx]) return false;
@@ -56,7 +56,7 @@ bool UCraftingManagerComponent::ConsumeItem()
 	for (uint8 idx = 0; idx < MAX_CRAFTING_ITEM_IDX; idx++)
 	{
 		//만능재료 사용 시
-		if (static_cast<uint8>(KeepMat) == idx+1)
+		if (static_cast<uint8>(KeptItem) == idx+1)
 		{
 			MainCharacterRef->ItemInventory->RemoveItem(4, RequiredItemList[idx]);
 		}
