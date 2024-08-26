@@ -35,17 +35,17 @@ void UCraftingManagerComponent::InitCraftingManager()
 	bIsDisplayingSkillListSet = false;
 }
 
-bool UCraftingManagerComponent::GetIsMatEnough()
+bool UCraftingManagerComponent::GetIsItemEnough()
 {
 	if(MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
 	TMap<ECraftingItemType, uint8> currItemMap = MainCharacterRef->ItemInventory->GetCraftingItemAmount();
-	for (uint8 requiredItemIdx = 0 ; requiredItemIdx < RequiredMatList.Num(); requiredItemIdx++)
+	for (uint8 requiredItemIdx = 0 ; requiredItemIdx < RequiredItemList.Num(); requiredItemIdx++)
 	{
 		//만능재료 사용 시 충족 여부 확인
 		if (static_cast<uint8>(KeepMat) == requiredItemIdx + 1&&
-			currItemMap[ECraftingItemType::E_Wrench] > RequiredMatList[requiredItemIdx]) return true;
+			currItemMap[ECraftingItemType::E_Wrench] > RequiredItemList[requiredItemIdx]) return true;
 		//일반재료 사용 시 충족 여부 확인
-		if(currItemMap[MainCharacterRef->ItemInventory->ConvertItemIDToCraftingItemType(requiredItemIdx+1)] < RequiredMatList[requiredItemIdx]) return false;
+		if(currItemMap[MainCharacterRef->ItemInventory->ConvertItemIDToCraftingItemType(requiredItemIdx+1)] < RequiredItemList[requiredItemIdx]) return false;
 	}
 	return true;
 }
@@ -58,12 +58,12 @@ bool UCraftingManagerComponent::ConsumeMat()
 		//만능재료 사용 시
 		if (static_cast<uint8>(KeepMat) == idx+1)
 		{
-			MainCharacterRef->ItemInventory->RemoveItem(4, RequiredMatList[idx]);
+			MainCharacterRef->ItemInventory->RemoveItem(4, RequiredItemList[idx]);
 		}
 		//기본재료 사용 시
 		else
 		{
-			MainCharacterRef->ItemInventory->RemoveItem(idx + 1, RequiredMatList[idx]);
+			MainCharacterRef->ItemInventory->RemoveItem(idx + 1, RequiredItemList[idx]);
 		}
 	}
 	return true;
@@ -79,7 +79,7 @@ bool UCraftingManagerComponent::AddSkill(int32 NewSkillID)
 {	
 	//재료 충분한지 확인
 	UpdateSkillUpgradeRequiredItemList(NewSkillID, 1);
-	if (!GetIsMatEnough())return false;
+	if (!GetIsItemEnough())return false;
 	
 	//스킬 추가
 	bool bIsAddSkillSucceed = SkillManagerRef->AddSkill(NewSkillID);
@@ -167,7 +167,7 @@ bool UCraftingManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 {
 	//재료 충분한지 확인
 	UpdateSkillUpgradeRequiredItemList(SkillID, NewLevel);
-	if(!GetIsMatEnough())return false;
+	if(!GetIsItemEnough())return false;
 
 	//스킬 추가
 	bool bIsAddSkillSucceed = SkillManagerRef->UpgradeSkill(SkillID, NewLevel);
@@ -183,7 +183,7 @@ bool UCraftingManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 TArray<uint8> UCraftingManagerComponent::UpdateSkillUpgradeRequiredItemList(int32 SkillID, uint8 NewLevel)
 {
 	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial && NewLevel == 1) return { 0,0,0 };
-	RequiredMatList.Empty();
+	RequiredItemList.Empty();
 	uint8 currSkillLevel = 0;
 	if(NewLevel > 1)
 	{
@@ -199,16 +199,16 @@ TArray<uint8> UCraftingManagerComponent::UpdateSkillUpgradeRequiredItemList(int3
 		{
 			totalAmt += SkillManagerRef->GetSkillInfo(SkillID).SkillLevelStatStruct.LevelInfo[tempLevel].RequiredMaterial[idx];
 		}
-		RequiredMatList.Add(totalAmt);
+		RequiredItemList.Add(totalAmt);
 	}
-	return RequiredMatList;
+	return RequiredItemList;
 }
 
 bool UCraftingManagerComponent::UpgradeWeapon(TArray<uint8> NewLevelList)
 {
 	//재료 충분한지 확인
 	UpdateWeaponUpgradeRequiredItemList(NewLevelList);
-	if (!GetIsMatEnough())return false;
+	if (!GetIsItemEnough())return false;
 	if(!GetIsStatLevelValid(NewLevelList))return false;
 
 	//재료 소모
@@ -219,7 +219,7 @@ bool UCraftingManagerComponent::UpgradeWeapon(TArray<uint8> NewLevelList)
 
 TArray<uint8> UCraftingManagerComponent::UpdateWeaponUpgradeRequiredItemList(TArray<uint8> NewLevelList)
 {
-	RequiredMatList.Empty();
+	RequiredItemList.Empty();
 	UWeaponComponentBase* weaponRef = MainCharacterRef->WeaponComponent;
 	TArray<uint8> currLevelList;
 	weaponRef->WeaponState.UpgradedStatMap.GenerateValueArray(currLevelList);
@@ -230,11 +230,11 @@ TArray<uint8> UCraftingManagerComponent::UpdateWeaponUpgradeRequiredItemList(TAr
 		{
 			for (uint8 currLevel = currLevelList[statType] + 1; currLevel <= NewLevelList[itemIdx]; currLevel++)
 			{
-				RequiredMatList[statType] += weaponRef->WeaponStat.UpgradableStatInfoMap[StaticCast<EWeaponStatType>(statType)].RequiredMaterialByLevel[NewLevelList[itemIdx]].RequiredMaterial[itemIdx];
+				RequiredItemList[statType] += weaponRef->WeaponStat.UpgradableStatInfoMap[StaticCast<EWeaponStatType>(statType)].RequiredMaterialByLevel[NewLevelList[itemIdx]].RequiredMaterial[itemIdx];
 			}
 		}
 	}
-	return RequiredMatList;
+	return RequiredItemList;
 }
 
 bool UCraftingManagerComponent::GetIsStatLevelValid(TArray<uint8> NewLevelList)

@@ -34,12 +34,11 @@ protected:
 protected:
 	UFUNCTION()
 		void InitCraftingManager();
-//SkillUpgrade == SU
-//WeaponUpgrade == WU
+
 //=======	Common Function		========================
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsMatEnough(); //--> GetIsMaterialEnough
+		bool GetIsItemEnough(); //--> GetIsMaterialEnough
 
 	UFUNCTION()
 		bool ConsumeMat();
@@ -91,7 +90,7 @@ public:
 		EKeepMat KeepMat = EKeepMat::E_None;  //--> KeptMaterialType //EKeepMat도 수정바람 
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
-		TArray<uint8> RequiredMatList;   //--> RequiredMaterialList 
+		TArray<uint8> RequiredItemList;   //--> RequiredMaterialList 
 
 //=======	SkillSelectProperty		========================
 public:
