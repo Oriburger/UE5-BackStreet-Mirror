@@ -135,6 +135,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetMaxAbilityCount() const;
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FAbilityInfoStruct> GetAbilityInfoList() { return ActiveAbilityInfoList;  }
+
 protected:
 	UFUNCTION()
 		bool TryUpdateCharacterStat(const FAbilityInfoStruct TargetAbilityInfo, bool bIsReset = false);

@@ -36,6 +36,7 @@ public:
 USTRUCT(BlueprintType)
 struct FPlayerInputActionInfo
 {
+//------------------Basic---------------------------------------------------------------------------
 public:
 	GENERATED_USTRUCT_BODY()
 
@@ -47,6 +48,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Basic")
 		class UInputAction* RollAction;
 
+	// Look Input Action
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Basic")
+		class UInputAction* LookAction;
+
+//------------------Combat---------------------------------------------------------------------------
+public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
 		class UInputAction* AttackAction;
 
@@ -62,6 +69,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
 		class UInputAction* ThrowAction;
 
+//------------------Action---------------------------------------------------------------------------
+public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* InvestigateAction;
 
@@ -78,17 +87,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* JumpAction;
 
-	// Look Input Action
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Basic")
-		class UInputAction* LookAction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* SprintAction;
 
-	// Crouch Input Action
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		//	class UInputAction* CrouchAction;
-
+//------------------UI---------------------------------------------------------------------------
+public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
 		class UInputAction* PlayerInfoUIAction;
 	
@@ -100,6 +104,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
 		class UInputAction* MoveUIAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
+		class UInputAction* SwitchTabUIAction;
 };
 
 USTRUCT(BlueprintType)
@@ -131,7 +138,7 @@ public:
 
 	//Extra wish list in skill
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
-		int32 MaxKeepingSkillCount = 0;
+		int32 MaxKeepingSkillCount = 1;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
 		bool bInfiniteSkillMaterial = false;

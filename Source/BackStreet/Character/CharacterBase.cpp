@@ -2,7 +2,7 @@
 #include "./Component/DebuffManagerComponent.h"
 #include "./Component/TargetingManagerComponent.h"
 #include "./Component/WeaponComponentBase.h"
-#include "./Component/SkillManagerComponent.h"
+#include "./Component/SkillManagerComponentBase.h"
 #include "../Item/Weapon/Ranged/RangedCombatManager.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
@@ -31,8 +31,6 @@ ACharacterBase::ACharacterBase()
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
 	WeaponComponent->SetupAttachment(GetMesh());
-
-	SkillManagerComponent = CreateDefaultSubobject<USkillManagerComponent>(TEXT("SKILL_MANAGER"));
 
 	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
 }
@@ -272,7 +270,7 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown) return;
 	if (!bForceReset && (CharacterState.CharacterActionState == ECharacterActionType::E_Stun
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;	
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
 
@@ -332,7 +330,10 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		{
 			Cast<ACharacterBase>(DamageCauser)->SetActorRotation(newRotation);
 			newRotation.Yaw += 180.0f;
-			SetActorRotation(newRotation);
+			if (!ActorHasTag("Boss"))
+			{
+				SetActorRotation(newRotation);
+			}
 		}
 	}
 
@@ -458,7 +459,7 @@ void ACharacterBase::TryAttack()
 		else if (CharacterState.bIsAirAttacking || GetCharacterMovement()->IsFalling())
 		{
 			ResetAirAtkLocationUpdateTimer();
-			if (IsValid(TargetingManagerComponent->GetTargetedCharacter()))
+			if (IsValid(TargetingManagerComponent) && IsValid(TargetingManagerComponent->GetTargetedCharacter()))
 			{
 				TargetingManagerComponent->GetTargetedCharacter()->ResetAirAtkLocationUpdateTimer();
 			}
@@ -531,7 +532,7 @@ void ACharacterBase::TryDashAttack()
 	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
 	if (GetCharacterMovement()->IsFalling()) return;
 	if (!IsValid(AssetHardPtrInfo.DashAttackAnimMontage)) return;
-	if (GetVelocity().Length() <= CharacterState.TotalMoveSpeed * 0.9f) return;
+	if (GetVelocity().Length() <= CharacterState.TotalMoveSpeed * 0.75f) return;
 
 	// Set action state
 	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
@@ -543,7 +544,7 @@ void ACharacterBase::TryDashAttack()
 void ACharacterBase::DashAttack()
 {
 	//init local parameter
-	const float dashLength = 200.0f;
+	const float dashLength = 250.0f;
 	FVector targetLocation = GetActorLocation() + GetVelocity().GetSafeNormal() * dashLength;
 
 	//check if there are any obstacle (wall, prop, enemy etc.)
@@ -558,24 +559,30 @@ void ACharacterBase::DashAttack()
 
 bool ACharacterBase::TrySkill(int32 SkillID)
 {
-	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return false;
+	if (!CharacterState.bCanAttack) return false;
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Stun
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Die
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return false;
+
 
 	//스킬 매니저 있는지 확인
-	if (!IsValid(SkillManagerComponent))
+	if (!SkillManagerComponentRef.IsValid())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to get SkillmanagerBase"));
-		ensure(IsValid(SkillManagerComponent));
+		ensure(SkillManagerComponentRef.IsValid());
 		return false;
 	}
 
 	//스킬을 보유중인지 확인
-	if (!SkillManagerComponent->IsSkillValid(SkillID))
+	if (!SkillManagerComponentRef.Get()->IsSkillValid(SkillID))
 	{
 		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Skill is not Valid")), FColor::White);
 		return false;
 	}
 	//스킬을 지닐 수 있는 무기와 현재 장비중인 무기가 일치하는지 확인
-	ASkillBase* skillBase = SkillManagerComponent->GetOwnSkillBase(SkillID);
+	ASkillBase* skillBase = SkillManagerComponentRef.Get()->GetOwnSkillBase(SkillID);
 	if (skillBase->SkillStat.SkillWeaponStruct.bIsWeaponRequired)
 	{
 		if (!skillBase->SkillStat.SkillWeaponStruct.AvailableWeaponIDList.Contains(WeaponComponent->WeaponID))
@@ -589,7 +596,8 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 	else
 	{
 		CharacterState.bCanAttack = false;
-		SkillManagerComponent->TrySkill(SkillID);
+		SetActionState(ECharacterActionType::E_Skill);
+		SkillManagerComponentRef.Get()->TrySkill(SkillID);
 		//Reset Combo
 		WeaponComponent->ResetComboCnt();
 		return true;

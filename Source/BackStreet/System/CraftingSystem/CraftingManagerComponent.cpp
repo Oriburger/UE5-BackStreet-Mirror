@@ -5,7 +5,8 @@
 #include "CraftBoxBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
-#include "../../Character/Component/SkillManagerComponent.h"
+#include "../../Character/Component/SkillManagerComponentBase.h"
+#include "../../Character/Component/PlayerSkillManagerComponent.h"
 #include "../../Character/Component/WeaponComponentBase.h"
 #include "../../Character/Component/ItemInventoryComponent.h"
 
@@ -31,19 +32,20 @@ void UCraftingManagerComponent::InitCraftingManager()
 	MainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	SkillManagerRef = MainCharacterRef->SkillManagerComponent;
 	bIsSkillCreated = false;
+	bIsDisplayingSkillListSet = false;
 }
 
 bool UCraftingManagerComponent::GetIsMatEnough()
 {
 	if(MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
-	TArray<uint8> currMatList = MainCharacterRef->ItemInventory->GetCraftingItemAmount();
+	TMap<ECraftingItemType, uint8> currItemMap = MainCharacterRef->ItemInventory->GetCraftingItemAmount();
 	for (uint8 requiredMatIdx = 0 ; requiredMatIdx < RequiredMatList.Num(); requiredMatIdx++)
 	{
 		//만능재료 사용 시 충족 여부 확인
-		if (static_cast<uint8>(KeepMat) == requiredMatIdx && 
-			currMatList[4] < RequiredMatList[requiredMatIdx]) return false;
+		if (static_cast<uint8>(KeepMat) == requiredMatIdx + 1&& 
+			currItemMap[ECraftingItemType::E_Wrench] > RequiredMatList[requiredMatIdx]) return true;
 		//일반재료 사용 시 충족 여부 확인
-		if(currMatList[requiredMatIdx] < RequiredMatList[requiredMatIdx]) return false;
+		if(currItemMap[MainCharacterRef->ItemInventory->ConvertItemIDToCraftingItemType(requiredMatIdx+1)] < RequiredMatList[requiredMatIdx]) return false;
 	}
 	return true;
 }
@@ -54,7 +56,7 @@ bool UCraftingManagerComponent::ConsumeMat()
 	for (uint8 idx = 0; idx < MAX_CRAFTING_ITEM_IDX; idx++)
 	{
 		//만능재료 사용 시
-		if (static_cast<uint8>(KeepMat) == idx)
+		if (static_cast<uint8>(KeepMat) == idx+1)
 		{
 			MainCharacterRef->ItemInventory->RemoveItem(4, RequiredMatList[idx]);
 		}
@@ -109,7 +111,6 @@ void UCraftingManagerComponent::SetDisplayingSkillList()
 	{
 		DisplayingSkillMap.Add(skillType,0);
 	}
-
 	//찜 되어있는 스킬 타입이 있는지 확인
 	TArray<int32> keepSkillList = SkillManagerRef->KeepSkillList;
 	for (int32 keepSkill : keepSkillList)
@@ -122,11 +123,10 @@ void UCraftingManagerComponent::SetDisplayingSkillList()
 			}
 		}
 	}
-
 	//찜 안되어 있는 스킬 타입은 랜덤으로 가중치 고려하여 선택
 	for (ESkillType skillType : skillTypeList)
 	{
-		if(DisplayingSkillMap.Find(skillType)!=0) continue;
+		if(*DisplayingSkillMap.Find(skillType)!=0) continue;
 		else 
 		{
 			TMap<ESkillType, FObtainableSkillListContainer>obtainableSkillMap = SkillManagerRef->GetObtainableSkillMap();
@@ -150,6 +150,7 @@ void UCraftingManagerComponent::SetDisplayingSkillList()
 			}
 		}
 	}
+	bIsDisplayingSkillListSet = true;
 }
 
 void UCraftingManagerComponent::KeepSkill(int32 SkillID)
@@ -181,16 +182,22 @@ bool UCraftingManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 
 TArray<uint8> UCraftingManagerComponent::UpdateRequiredMatForSU(int32 SkillID, uint8 NewLevel)
 {
-	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial && NewLevel ==1) return { 0,0,0 };
+	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial && NewLevel == 1) return { 0,0,0 };
 	RequiredMatList.Empty();
-	uint8 currSkillLevel = SkillManagerRef->GetOwnSkillState(SkillID).SkillLevelStateStruct.SkillLevel;
+	uint8 currSkillLevel = 0;
+	if(NewLevel > 1)
+	{
+		currSkillLevel = SkillManagerRef->GetOwnSkillState(SkillID).SkillLevelStateStruct.SkillLevel;
+	}
 	
 	for (uint8 idx = 0; idx < MAX_CRAFTING_ITEM_IDX; idx++)
 	{
 		uint8 totalAmt = 0;
-		for (uint8 currLevel = currSkillLevel + 1; currLevel <= NewLevel; currLevel++)
+		checkf(NewLevel >= currSkillLevel + 1, TEXT("NewLevel(%d) is Not Valid. CurrLevel(%d)"),NewLevel, currSkillLevel);
+		uint8 tempLevel = 0;
+		for (tempLevel = currSkillLevel + 1; tempLevel <= NewLevel; tempLevel++)
 		{
-			totalAmt += SkillManagerRef->GetSkillInfo(SkillID).SkillLevelStatStruct.LevelInfo[currLevel].RequiredMaterial[idx];
+			totalAmt += SkillManagerRef->GetSkillInfo(SkillID).SkillLevelStatStruct.LevelInfo[tempLevel].RequiredMaterial[idx];
 		}
 		RequiredMatList.Add(totalAmt);
 	}

@@ -3,6 +3,8 @@
 #include "MainCharacterController.h"
 #include "../Component/TargetingManagerComponent.h"
 #include "../Component/ItemInventoryComponent.h"
+#include "../Component/SkillManagerComponentBase.h"
+#include "../Component/PlayerSkillManagerComponent.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SaveSystem/BackStreetGameInstance.h"
 #include "../../System/AbilitySystem/AbilityManagerBase.h"
@@ -47,6 +49,9 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom->SetWorldRotation({ -45.0f, 0.0f, 0.0f });
 
 	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 110.0f, 120.0f));
+
+	SkillManagerComponent = CreateDefaultSubobject<UPlayerSkillManagerComponent>(TEXT("SKILL_MANAGER_"));
+	SkillManagerComponentRef = SkillManagerComponent;
 
 	FollowingCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FOLLOWING_CAMERA"));
 	FollowingCamera->SetupAttachment(CameraBoom);
@@ -222,6 +227,7 @@ void AMainCharacterBase::ResetMovementInputValue()
 
 void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (GetCharacterMovement()->IsFalling()) return;
 	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
 
@@ -251,6 +257,8 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 
 void AMainCharacterBase::Look(const FInputActionValue& Value)
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
+
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
@@ -264,15 +272,14 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 		// set timer for automatic rotate mode 
 		if (LookAxisVector.Length() <= 0.5f)
 		{
-			GetWorldTimerManager().ClearTimer(SwitchCameraRotateModeTimerHandle);
-			SwitchCameraRotateModeTimerHandle.Invalidate();
-			GetWorldTimerManager().SetTimer(SwitchCameraRotateModeTimerHandle, this, &AMainCharacterBase::SetAutomaticRotateMode, AutomaticModeSwitchTime);
+			SetAutomaticRotateModeTimer();
 		}
 	}
 }
 
 void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	//CharacterState.CharacterActionState = ECharacterActionType::E_Jump;
 	Jump();
@@ -280,6 +287,7 @@ void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 
 void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.bIsSprinting) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero()) return;
@@ -301,6 +309,7 @@ void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 
 void AMainCharacterBase::Roll()
 {	
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Attack)) return;
 	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
 
@@ -359,6 +368,7 @@ void AMainCharacterBase::Roll()
 
 void AMainCharacterBase::Dash()
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (IsActorBeingDestroyed()) return;
 	LaunchCharacter(FVector(0.0f, 0.0f, 500.0f), false, false);
 	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, this, &AMainCharacterBase::StopDashMovement, 0.075f, false);
@@ -379,6 +389,7 @@ void AMainCharacterBase::ZoomIn(const FInputActionValue& Value)
 
 void AMainCharacterBase::TryInvestigate()
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	TArray<UInteractiveCollisionComponent*> nearCompoenentList = GetNearInteractionComponentList();
 
 	if (nearCompoenentList.Num())
@@ -422,9 +433,10 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 
 void AMainCharacterBase::TryAttack()
 {
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw) return;
+	if (!CharacterState.bCanAttack || WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw) return;
 
 	if (WeaponComponent->WeaponID == 0)
 	{
@@ -502,12 +514,15 @@ void AMainCharacterBase::TryDownwardAttack()
 
 bool AMainCharacterBase::TrySkill(int32 SkillID)
 {	
-	if (GetIsActionActive(ECharacterActionType::E_Attack))
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Attack)
 	{
-		ResetActionState();
+		StopAttack();
 	}
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return false;
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Stun
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Die
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return false;
 
 	return Super::TrySkill(SkillID);
 }
@@ -596,6 +611,21 @@ void AMainCharacterBase::SetCameraVerticalAlignmentWithInterp(float TargetPitch,
 	//Calling MyUsefulFunction after 5 seconds without looping
 	GetWorld()->GetTimerManager().ClearTimer(CameraRotationAlignmentHandle);
 	GetWorld()->GetTimerManager().SetTimer(CameraRotationAlignmentHandle, updateFunctionDelegate, 0.01f, true);
+}
+
+void AMainCharacterBase::ResetCameraRotation()
+{
+	SetManualRotateMode();
+	FRotator newRotation = CameraBoom->GetRelativeRotation();
+	newRotation.Yaw = newRotation.Roll = 0.0f;
+	CameraBoom->SetRelativeRotation(newRotation);
+}
+
+void AMainCharacterBase::SetAutomaticRotateModeTimer()
+{
+	GetWorldTimerManager().ClearTimer(SwitchCameraRotateModeTimerHandle);
+	SwitchCameraRotateModeTimerHandle.Invalidate();
+	GetWorldTimerManager().SetTimer(SwitchCameraRotateModeTimerHandle, this, &AMainCharacterBase::SetAutomaticRotateMode, AutomaticModeSwitchTime);
 }
 
 void AMainCharacterBase::SetAutomaticRotateMode()

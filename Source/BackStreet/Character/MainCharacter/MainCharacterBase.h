@@ -67,6 +67,9 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		class UItemInventoryComponent* ItemInventory;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UPlayerSkillManagerComponent* SkillManagerComponent;
+
 // ------- Throw Test -----------
 
 	UFUNCTION()
@@ -202,7 +205,13 @@ public:
 	UFUNCTION()
 		void SetCameraVerticalAlignmentWithInterp(float TargetPitch, const float InterpSpeed);
 
+	UFUNCTION()
+		void ResetCameraRotation();
+
 protected:
+	UFUNCTION()
+		void SetAutomaticRotateModeTimer();
+
 	UFUNCTION()
 		void SetAutomaticRotateMode();	
 

@@ -2,7 +2,8 @@
 #include "EnemyCharacterBase.h"
 #include "../Component/TargetingManagerComponent.h"
 #include "../Component/WeaponComponentBase.h"
-#include "../Component/SkillManagerComponent.h"
+#include "../Component/SkillManagerComponentBase.h"
+#include "../Component/EnemySkillManagerComponent.h"
 #include "../MainCharacter/MainCharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
@@ -33,6 +34,9 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	TargetingSupportWidget->SetDrawSize({ 500.0f, 500.0f });
 	TargetingSupportWidget->SetVisibility(false);
 
+	SkillManagerComponent = CreateDefaultSubobject<UEnemySkillManagerComponent>(TEXT("SKILL_MANAGER_"));
+	SkillManagerComponentRef = SkillManagerComponent;
+
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
@@ -61,7 +65,7 @@ void AEnemyCharacterBase::InitAsset(int32 NewCharacterID)
 
 void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 {
-	// Read from dataTable
+	//Read from dataTable
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
 	AssetSoftPtrInfo.CharacterID = CharacterID = NewCharacterID;
@@ -76,10 +80,18 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		CharacterState.CurrentHP = EnemyStat.CharacterStat.DefaultHP;
 		SetDefaultWeapon();
 	}
-	SkillManagerComponent->ClearAllSkill();
-	for (int32& skillID : EnemyStat.EnemySkillIDList)
+
+	if (NewCharacterID != 0)
 	{
-		SkillManagerComponent->AddSkill(skillID);
+		SkillManagerComponent->ClearAllSkill();
+		for (int32& skillID : EnemyStat.EnemySkillIDList)
+		{
+			if (skillID != 0)
+			{
+				bool result = SkillManagerComponent->AddSkill(skillID);
+				UE_LOG(LogTemp, Warning, TEXT("Add Skill %d --- %d"), skillID, (int32)result);
+			}
+		}
 	}
 
 	InitFloatingHpWidget();
@@ -139,9 +151,12 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	}
 
 	//Set Rotation To Causer
-	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), DamageCauser->GetActorLocation());
-	newRotation.Pitch = newRotation.Roll = 0.0f;
-	SetActorRotation(newRotation);
+	if (!DamageCauser->ActorHasTag("Boss"))
+	{
+		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), DamageCauser->GetActorLocation());
+		newRotation.Pitch = newRotation.Roll = 0.0f;
+		SetActorRotation(newRotation);
+	}
 
 	return damageAmount;
 }
@@ -292,7 +307,7 @@ void AEnemyCharacterBase::SetInstantHpWidgetVisibility()
 	//Set new timer
 	FTimerDelegate disappearEvent;
 	disappearEvent.BindUFunction(FloatingHpBar, FName("SetVisibility"), false);
-	GetWorldTimerManager().SetTimer(HpWidgetAutoDisappearTimer, disappearEvent, 5.0f, false);
+	GetWorldTimerManager().SetTimer(HpWidgetAutoDisappearTimer, disappearEvent, 10.0f, false);
 }
 
 void AEnemyCharacterBase::ClearAllTimerHandle()

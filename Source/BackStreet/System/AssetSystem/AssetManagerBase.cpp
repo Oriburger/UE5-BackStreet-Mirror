@@ -56,7 +56,7 @@ TArray<USoundCue*> UAssetManagerBase::GetSoundList(ESoundAssetType SoundType, in
 	// Read from dataTable
 	TArray<USoundCue*> soundList;
 	FSoundAssetInfoStruct* soundAssetInfoStruct = GetSoundAssetInfo(SoundType, TargetID);
-	if (soundAssetInfoStruct)
+	if (soundAssetInfoStruct && soundAssetInfoStruct->SoundMap.Contains(SoundName))
 	{
 		soundList = soundAssetInfoStruct->SoundMap.Find(SoundName)->SoundList;
 	}
@@ -127,8 +127,7 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetPropSoundMapWithID(int32 TargetID)
 void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName, float VolumeMultiplierOverride, float PitchMultiplier, float StartTime)
 {
 	FSoundAssetInfoStruct* soundAssetInfo = GetSoundAssetInfo(SoundType, TargetID);
-	checkf(soundAssetInfo != nullptr, TEXT("SoundAssetInfo is not valid"));
-	if (!soundAssetInfo->SoundMap.Contains(SoundName)) return; 
+	if (soundAssetInfo == nullptr || !soundAssetInfo->SoundMap.Contains(SoundName)) return;
 
 	TArray<USoundCue*> soundList = soundAssetInfo->SoundMap.Find(SoundName)->SoundList;
 	TArray<float> volumeList = soundAssetInfo->SoundMap.Find(SoundName)->SoundVolumeList;

@@ -33,7 +33,7 @@ public:
 	GENERATED_USTRUCT_BODY()
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<class ASkillBase*> SkillBaseList;
+		TArray<class ASkillBase*> SkillBaseList;
 };
 
 USTRUCT(BlueprintType)

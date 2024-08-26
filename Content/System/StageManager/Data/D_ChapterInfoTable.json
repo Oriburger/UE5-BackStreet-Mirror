@@ -35,7 +35,7 @@
 			}
 		],
 		"StageTypeListForLevelIdx": [],
-		"EliteTimeAtkStageTimeOut": 120,
+		"EliteTimeAtkStageTimeOut": 80,
 		"NormalTimeAtkStageTimeOut": 90,
 		"EnemyCompositionInfoMap":
 		{
@@ -117,15 +117,15 @@
 					{
 						"EnemySet":
 						{
-							"1100": 2,
+							"1100": 1,
 							"1002": 2
 						}
 					},
 					{
 						"EnemySet":
 						{
-							"1110": 1,
-							"1001": 3
+							"1100": 1,
+							"1001": 2
 						}
 					}
 				]
@@ -151,15 +151,15 @@
 					{
 						"EnemySet":
 						{
-							"1002": 3,
+							"1002": 2,
 							"1110": 1
 						}
 					},
 					{
 						"EnemySet":
 						{
-							"1110": 2,
-							"1100": 2
+							"1110": 1,
+							"1100": 1
 						}
 					}
 				]
@@ -212,7 +212,7 @@
 						"RewardItemProbabilityList": [ 1, 1, 1 ]
 					},
 					{
-						"RewardItemIDList": [ 4, 5, 6, 7 ],
+						"RewardItemIDList": [ 5, 6, 7, 8 ],
 						"RewardItemProbabilityList": [ 0.60000002384185791, 0.25, 0.10000000149011612, 0.05000000074505806 ]
 					}
 				]
@@ -273,14 +273,14 @@
 					"E_None",
 					"E_None",
 					"E_TimeAttack",
-					"E_TimeAttack",
+					"E_Combat",
 					"E_Boss"
 				]
 			},
 			{
 				"StageComposition": [
 					"E_Entry",
-					"E_TimeAttack",
+					"E_Combat",
 					"E_TimeAttack",
 					"E_None",
 					"E_None",
@@ -309,14 +309,14 @@
 			{
 				"StageComposition": [
 					"E_Entry",
-					"E_TimeAttack",
+					"E_Combat",
 					"E_TimeAttack",
 					"E_None",
 					"E_None",
 					"E_Combat",
 					"E_TimeAttack",
 					"E_Combat",
-					"E_TimeAttack",
+					"E_Exterminate",
 					"E_None",
 					"E_Craft",
 					"E_Exterminate",
@@ -330,124 +330,8 @@
 					"E_Craft",
 					"E_None",
 					"E_None",
-					"E_TimeAttack",
-					"E_TimeAttack",
-					"E_Boss"
-				]
-			},
-			{
-				"StageComposition": [
-					"E_Entry",
-					"E_TimeAttack",
-					"E_TimeAttack",
-					"E_None",
-					"E_None",
-					"E_Exterminate",
-					"E_TimeAttack",
 					"E_Combat",
 					"E_TimeAttack",
-					"E_None",
-					"E_Craft",
-					"E_TimeAttack",
-					"E_TimeAttack",
-					"E_Combat",
-					"E_Exterminate",
-					"E_None",
-					"E_Gatcha",
-					"E_Craft",
-					"E_Combat",
-					"E_Craft",
-					"E_None",
-					"E_None",
-					"E_TimeAttack",
-					"E_Combat",
-					"E_Boss"
-				]
-			},
-			{
-				"StageComposition": [
-					"E_Entry",
-					"E_Combat",
-					"E_Combat",
-					"E_None",
-					"E_None",
-					"E_TimeAttack",
-					"E_Craft",
-					"E_Exterminate",
-					"E_Exterminate",
-					"E_None",
-					"E_Combat",
-					"E_TimeAttack",
-					"E_Exterminate",
-					"E_Craft",
-					"E_Combat",
-					"E_None",
-					"E_TimeAttack",
-					"E_Gatcha",
-					"E_Exterminate",
-					"E_TimeAttack",
-					"E_None",
-					"E_None",
-					"E_TimeAttack",
-					"E_Craft",
-					"E_Boss"
-				]
-			},
-			{
-				"StageComposition": [
-					"E_Entry",
-					"E_Exterminate",
-					"E_Exterminate",
-					"E_None",
-					"E_None",
-					"E_TimeAttack",
-					"E_Craft",
-					"E_TimeAttack",
-					"E_Exterminate",
-					"E_None",
-					"E_Exterminate",
-					"E_TimeAttack",
-					"E_Combat",
-					"E_Craft",
-					"E_Exterminate",
-					"E_None",
-					"E_Exterminate",
-					"E_TimeAttack",
-					"E_Gatcha",
-					"E_TimeAttack",
-					"E_None",
-					"E_None",
-					"E_Combat",
-					"E_Craft",
-					"E_Boss"
-				]
-			},
-			{
-				"StageComposition": [
-					"E_Entry",
-					"E_TimeAttack",
-					"E_TimeAttack",
-					"E_None",
-					"E_None",
-					"E_TimeAttack",
-					"E_Craft",
-					"E_Combat",
-					"E_TimeAttack",
-					"E_None",
-					"E_TimeAttack",
-					"E_Exterminate",
-					"E_TimeAttack",
-					"E_Craft",
-					"E_Gatcha",
-					"E_None",
-					"E_TimeAttack",
-					"E_Combat",
-					"E_TimeAttack",
-					"E_Exterminate",
-					"E_None",
-					"E_None",
-					"E_Combat",
-					"E_Craft",
 					"E_Boss"
 				]
 			},
@@ -459,6 +343,122 @@
 					"E_None",
 					"E_None",
 					"E_Exterminate",
+					"E_TimeAttack",
+					"E_Combat",
+					"E_TimeAttack",
+					"E_None",
+					"E_Craft",
+					"E_Combat",
+					"E_Exterminate",
+					"E_Combat",
+					"E_Exterminate",
+					"E_None",
+					"E_Gatcha",
+					"E_Craft",
+					"E_Combat",
+					"E_Craft",
+					"E_None",
+					"E_None",
+					"E_TimeAttack",
+					"E_Combat",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_Combat",
+					"E_Combat",
+					"E_None",
+					"E_None",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_Exterminate",
+					"E_Exterminate",
+					"E_None",
+					"E_Combat",
+					"E_TimeAttack",
+					"E_Exterminate",
+					"E_Craft",
+					"E_Combat",
+					"E_None",
+					"E_TimeAttack",
+					"E_Gatcha",
+					"E_Exterminate",
+					"E_TimeAttack",
+					"E_None",
+					"E_None",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_Exterminate",
+					"E_Combat",
+					"E_None",
+					"E_None",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_TimeAttack",
+					"E_Exterminate",
+					"E_None",
+					"E_Exterminate",
+					"E_TimeAttack",
+					"E_Combat",
+					"E_Craft",
+					"E_Exterminate",
+					"E_None",
+					"E_Exterminate",
+					"E_TimeAttack",
+					"E_Gatcha",
+					"E_TimeAttack",
+					"E_None",
+					"E_None",
+					"E_Combat",
+					"E_Craft",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_TimeAttack",
+					"E_Combat",
+					"E_None",
+					"E_None",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_Combat",
+					"E_TimeAttack",
+					"E_None",
+					"E_TimeAttack",
+					"E_Exterminate",
+					"E_Exterminate",
+					"E_Craft",
+					"E_Gatcha",
+					"E_None",
+					"E_TimeAttack",
+					"E_Combat",
+					"E_TimeAttack",
+					"E_Exterminate",
+					"E_None",
+					"E_None",
+					"E_Combat",
+					"E_Craft",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_Exterminate",
+					"E_TimeAttack",
+					"E_None",
+					"E_None",
+					"E_Exterminate",
 					"E_Craft",
 					"E_Exterminate",
 					"E_Combat",
@@ -472,7 +472,7 @@
 					"E_Combat",
 					"E_Gatcha",
 					"E_Combat",
-					"E_TimeAttack",
+					"E_Combat",
 					"E_None",
 					"E_None",
 					"E_TimeAttack",
@@ -490,7 +490,7 @@
 					"E_Combat",
 					"E_Craft",
 					"E_Exterminate",
-					"E_TimeAttack",
+					"E_Combat",
 					"E_None",
 					"E_TimeAttack",
 					"E_Exterminate",
@@ -501,40 +501,11 @@
 					"E_TimeAttack",
 					"E_Gatcha",
 					"E_Combat",
-					"E_TimeAttack",
-					"E_None",
-					"E_None",
-					"E_TimeAttack",
-					"E_Craft",
-					"E_Boss"
-				]
-			},
-			{
-				"StageComposition": [
-					"E_Entry",
-					"E_TimeAttack",
-					"E_Craft",
-					"E_None",
-					"E_None",
-					"E_Combat",
-					"E_TimeAttack",
-					"E_Combat",
-					"E_Combat",
-					"E_None",
-					"E_TimeAttack",
 					"E_Exterminate",
-					"E_TimeAttack",
-					"E_Combat",
-					"E_Combat",
 					"E_None",
-					"E_Gatcha",
-					"E_Craft",
+					"E_None",
 					"E_TimeAttack",
 					"E_Craft",
-					"E_None",
-					"E_None",
-					"E_Exterminate",
-					"E_TimeAttack",
 					"E_Boss"
 				]
 			},
@@ -551,12 +522,12 @@
 					"E_Combat",
 					"E_None",
 					"E_TimeAttack",
-					"E_Gatcha",
-					"E_TimeAttack",
+					"E_Exterminate",
 					"E_Combat",
-					"E_TimeAttack",
+					"E_Combat",
+					"E_Combat",
 					"E_None",
-					"E_TimeAttack",
+					"E_Gatcha",
 					"E_Craft",
 					"E_TimeAttack",
 					"E_Craft",
@@ -576,7 +547,36 @@
 					"E_None",
 					"E_Combat",
 					"E_TimeAttack",
+					"E_Combat",
+					"E_Combat",
+					"E_None",
+					"E_Exterminate",
+					"E_Gatcha",
 					"E_TimeAttack",
+					"E_Combat",
+					"E_TimeAttack",
+					"E_None",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_None",
+					"E_None",
+					"E_Exterminate",
+					"E_Combat",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_None",
+					"E_None",
+					"E_Combat",
+					"E_TimeAttack",
+					"E_Exterminate",
 					"E_Exterminate",
 					"E_None",
 					"E_Exterminate",
@@ -591,7 +591,7 @@
 					"E_Craft",
 					"E_None",
 					"E_None",
-					"E_Exterminate",
+					"E_Combat",
 					"E_Exterminate",
 					"E_Boss"
 				]
@@ -604,9 +604,9 @@
 					"E_None",
 					"E_None",
 					"E_TimeAttack",
-					"E_TimeAttack",
 					"E_Exterminate",
-					"E_TimeAttack",
+					"E_Exterminate",
+					"E_Combat",
 					"E_None",
 					"E_Combat",
 					"E_TimeAttack",
@@ -649,7 +649,7 @@
 					"E_Craft",
 					"E_None",
 					"E_None",
-					"E_Combat",
+					"E_Exterminate",
 					"E_Combat",
 					"E_Boss"
 				]
@@ -685,6 +685,6 @@
 			"/Game/Map/Chapter01/Chapter01_OuterArea02.Chapter01_OuterArea02",
 			"/Game/Map/Chapter01/Chapter01_OuterArea03.Chapter01_OuterArea03"
 		],
-		"BossCharacterClass": "/Script/Engine.BlueprintGeneratedClass'/Game/Character/EnemyCharacter/Blueprint/BP_BossEnemy.BP_BossEnemy_C'"
+		"BossCharacterClass": "/Script/Engine.BlueprintGeneratedClass'/Game/Character/EnemyCharacter/Blueprint/BP_BossCharacter.BP_BossCharacter_C'"
 	}
 ]
