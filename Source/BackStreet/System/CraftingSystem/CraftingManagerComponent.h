@@ -38,7 +38,7 @@ protected:
 //=======	Common Function		========================
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsItemEnough(); //--> GetIsMaterialEnough
+		bool GetIsItemEnough();
 
 	UFUNCTION()
 		bool ConsumeItem();
@@ -65,14 +65,14 @@ public:
 		bool UpgradeSkill(int32 SkillID, uint8 NewLevel);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<uint8>UpdateSkillUpgradeRequiredItemList(int32 SkillID, uint8 NewLevel); //--> UpdateSkillUpgradeRequiredInfo
+		TArray<uint8>UpdateSkillUpgradeRequiredItemList(int32 SkillID, uint8 NewLevel);
 
 //=======	Upgrade Weapon Function	====================	
 	UFUNCTION(BlueprintCallable)
 		bool UpgradeWeapon(TArray<uint8> NewLevelList);
 		
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<uint8> UpdateWeaponUpgradeRequiredItemList(TArray<uint8> NewLevelList); //--> UpdateWeaponUpgradeRequiredInfo
+		TArray<uint8> UpdateWeaponUpgradeRequiredItemList(TArray<uint8> NewLevelList);
 
 	UFUNCTION(BlueprintCallable)
 		bool GetIsStatLevelValid(TArray<uint8> NewLevelList);
@@ -87,10 +87,10 @@ public:
 
 	//만능재료 사용 안함 = 0, 나사 = 1, 스프링 = 2, 기어 = 3
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite)
-		EKeepMat KeptItem = EKeepMat::E_None;  //--> KeptMaterialType //EKeepMat도 수정바람 
+		EKeepMat KeptItem = EKeepMat::E_None; 
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
-		TArray<uint8> RequiredItemList;   //--> RequiredMaterialList 
+		TArray<uint8> RequiredItemList;
 
 //=======	SkillSelectProperty		========================
 public:
