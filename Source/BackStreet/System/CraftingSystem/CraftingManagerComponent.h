@@ -46,6 +46,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsSkillKeepingAvailable();
 
+	UFUNCTION(BlueprintCallable)
+		void KeepItem(EKeepMat NewKeptItem);
+
+	UFUNCTION(BlueprintCallable)
+		void UnKeepItem();
+
 //=======	Select Skill Function	========================		
 public:
 	UFUNCTION(BlueprintCallable)

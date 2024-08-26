@@ -75,6 +75,16 @@ bool UCraftingManagerComponent::GetIsSkillKeepingAvailable()
 	return true;
 }
 
+void UCraftingManagerComponent::KeepItem(EKeepMat NewKeptItem)
+{
+	KeptItem = NewKeptItem;
+}
+
+void UCraftingManagerComponent::UnKeepItem()
+{
+	KeptItem = EKeepMat::E_None;
+}
+
 bool UCraftingManagerComponent::AddSkill(int32 NewSkillID)
 {	
 	//재료 충분한지 확인
@@ -220,17 +230,26 @@ bool UCraftingManagerComponent::UpgradeWeapon(TArray<uint8> NewLevelList)
 TArray<uint8> UCraftingManagerComponent::UpdateWeaponUpgradeRequiredItemList(TArray<uint8> NewLevelList)
 {
 	RequiredItemList.Empty();
+	RequiredItemList = {0,0,0};
 	UWeaponComponentBase* weaponRef = MainCharacterRef->WeaponComponent;
 	TArray<uint8> currLevelList;
-	weaponRef->WeaponState.UpgradedStatMap.GenerateValueArray(currLevelList);
+	TArray<EWeaponStatType> statMapKeyList;
+	weaponRef->WeaponState.UpgradedStatMap.GetKeys(statMapKeyList);
+	for (EWeaponStatType key : statMapKeyList)
+	{
+		currLevelList.Add(weaponRef->WeaponState.UpgradedStatMap[key]);
+	}
 
 	for (uint8 statType = 0; statType < MAX_WEAPON_UPGRADABLE_STAT_IDX; statType++)
 	{
-		for (uint8 itemIdx = 0; itemIdx < MAX_CRAFTING_ITEM_IDX; itemIdx++)
+		if (NewLevelList[statType] > currLevelList[statType])
 		{
-			for (uint8 currLevel = currLevelList[statType] + 1; currLevel <= NewLevelList[itemIdx]; currLevel++)
+			for (uint8 itemIdx = 0; itemIdx < MAX_CRAFTING_ITEM_IDX; itemIdx++)
 			{
-				RequiredItemList[statType] += weaponRef->WeaponStat.UpgradableStatInfoMap[StaticCast<EWeaponStatType>(statType)].RequiredMaterialByLevel[NewLevelList[itemIdx]].RequiredMaterial[itemIdx];
+				for (uint8 tempLevel = currLevelList[statType] + 1; tempLevel <= NewLevelList[statType]; tempLevel++)
+				{
+					RequiredItemList[statType] += weaponRef->WeaponStat.UpgradableStatInfoMap[static_cast<EWeaponStatType>(statType + 1)].RequiredMaterialByLevel[tempLevel].RequiredMaterial[itemIdx];
+				}
 			}
 		}
 	}

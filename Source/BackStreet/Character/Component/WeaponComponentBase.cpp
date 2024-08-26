@@ -263,7 +263,7 @@ bool UWeaponComponentBase::UpgradeStat(TArray<uint8> NewLevelList)
 	for (uint8 idx = 0; idx < MAX_WEAPON_UPGRADABLE_STAT_IDX; idx++)
 	{
 		EWeaponStatType weaponStatType = StaticCast<EWeaponStatType>(idx+1);
-		WeaponState.UpgradedStatMap[weaponStatType] = NewLevelList[idx];
+		WeaponState.UpgradedStatMap.Add(weaponStatType, NewLevelList[idx]);
 	}
 	return true;
 }

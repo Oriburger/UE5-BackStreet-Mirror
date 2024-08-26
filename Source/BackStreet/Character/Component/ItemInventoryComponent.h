@@ -41,10 +41,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void RemoveItem(int32 ItemID, uint8 ItemCnt);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		void GetItemData(int32 ItemID, FItemInfoDataStruct& ItemData);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TMap<ECraftingItemType, uint8> GetCraftingItemAmount();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -52,6 +52,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 ConvertCraftingItemTypeToItemID(ECraftingItemType CraftingItemType){ return static_cast<int32>(CraftingItemType); }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsItemEnough(int32 ItemID, uint8 NeedItemAmount);
 
 //====== Property ===========================
 private:
