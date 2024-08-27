@@ -43,9 +43,12 @@ bool UCraftingManagerComponent::GetIsItemEnough()
 	{
 		//만능재료 사용 시 충족 여부 확인
 		if (static_cast<uint8>(KeptItem) == requiredItemIdx + 1&&
-			currItemMap[ECraftingItemType::E_Wrench] > RequiredItemList[requiredItemIdx]) return true;
+			currItemMap[ECraftingItemType::E_Wrench] >= RequiredItemList[requiredItemIdx]);
 		//일반재료 사용 시 충족 여부 확인
-		if(currItemMap[MainCharacterRef->ItemInventory->ConvertItemIDToCraftingItemType(requiredItemIdx+1)] < RequiredItemList[requiredItemIdx]) return false;
+		else
+		{
+			if (currItemMap[MainCharacterRef->ItemInventory->ConvertItemIDToCraftingItemType(requiredItemIdx + 1)] < RequiredItemList[requiredItemIdx]) return false;
+		}
 	}
 	return true;
 }
@@ -248,7 +251,7 @@ TArray<uint8> UCraftingManagerComponent::UpdateWeaponUpgradeRequiredItemList(TAr
 			{
 				for (uint8 tempLevel = currLevelList[statType] + 1; tempLevel <= NewLevelList[statType]; tempLevel++)
 				{
-					RequiredItemList[statType] += weaponRef->WeaponStat.UpgradableStatInfoMap[static_cast<EWeaponStatType>(statType + 1)].RequiredMaterialByLevel[tempLevel].RequiredMaterial[itemIdx];
+					RequiredItemList[statType] += weaponRef->WeaponStat.UpgradableStatInfoMap[static_cast<EWeaponStatType>(statType + 1)].StatInfoByLevel[tempLevel].RequiredMaterial[itemIdx];
 				}
 			}
 		}

@@ -236,17 +236,17 @@ FProjectileAssetInfoStruct UWeaponComponentBase::GetProjectileAssetInfo(int32 Ta
 uint8 UWeaponComponentBase::GetLimitedStatLevel(EWeaponStatType WeaponStatType)
 {
 	checkf(WeaponStat.UpgradableStatInfoMap.Contains(WeaponStatType), TEXT("WeaponType is not valid"));
-	for (uint8 level = 0; level < WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel.Num(); level++)
+	for (uint8 level = 0; level < WeaponStat.UpgradableStatInfoMap[WeaponStatType].StatInfoByLevel.Num(); level++)
 	{
-		if(!WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel[level].bCanUpgradeLevel) return level-1;
+		if(!WeaponStat.UpgradableStatInfoMap[WeaponStatType].StatInfoByLevel[level].bCanUpgradeLevel) return level-1;
 	}
-	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel.Num()-1;
+	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].StatInfoByLevel.Num()-1;
 }
 
 uint8 UWeaponComponentBase::GetMaxStatLevel(EWeaponStatType WeaponStatType)
 {
 	checkf(WeaponStat.UpgradableStatInfoMap.Contains(WeaponStatType), TEXT("WeaponType is not valid"));
-	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel.Num() - 1;
+	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].StatInfoByLevel.Num() - 1;
 }
 
 float UWeaponComponentBase::CalculateTotalDamage(FCharacterStateStruct TargetState)
@@ -265,6 +265,9 @@ bool UWeaponComponentBase::UpgradeStat(TArray<uint8> NewLevelList)
 		EWeaponStatType weaponStatType = StaticCast<EWeaponStatType>(idx+1);
 		WeaponState.UpgradedStatMap.Add(weaponStatType, NewLevelList[idx]);
 	}
+	WeaponStat.WeaponDamage = WeaponStat.UpgradableStatInfoMap[EWeaponStatType::E_Attack].StatInfoByLevel[NewLevelList[0]].StatAdder;
+	WeaponStat.WeaponAtkSpeedRate = WeaponStat.UpgradableStatInfoMap[EWeaponStatType::E_AttackSpeed].StatInfoByLevel[NewLevelList[1]].StatAdder;
+	WeaponStat.FinalImpactStrength = WeaponStat.UpgradableStatInfoMap[EWeaponStatType::E_FinalAttack].StatInfoByLevel[NewLevelList[2]].StatAdder;
 	return true;
 }
 

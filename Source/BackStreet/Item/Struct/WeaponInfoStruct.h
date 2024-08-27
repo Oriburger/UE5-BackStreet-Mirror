@@ -60,7 +60,7 @@ public:
 	//업그레이드 스탯
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TArray<FUpgradableStatInfoContainer> RequiredMaterialByLevel;
+	TArray<FUpgradableStatInfoContainer> StatInfoByLevel;
 };
 
 USTRUCT(BlueprintType)
