@@ -295,8 +295,18 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	// ======= Damage & Die event ===============================
+	const float& totalHealthValue = CharacterState.TotalHP;
+	float oldClampedHealthValue = CharacterState.CurrentHP;
+	float newClampedHealthValue = 0.0f;
+
 	CharacterState.CurrentHP = CharacterState.CurrentHP - DamageAmount * (1.0f - FMath::Clamp(0.5f * CharacterState.TotalDefense, 0.0f, 0.5f));
-	CharacterState.CurrentHP = FMath::Max(0.0f, CharacterState.CurrentHP);
+	newClampedHealthValue = CharacterState.CurrentHP = FMath::Max(0.0f, CharacterState.CurrentHP);
+	
+	oldClampedHealthValue = UKismetMathLibrary::MapRangeClamped(oldClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
+	newClampedHealthValue = UKismetMathLibrary::MapRangeClamped(newClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
+
+	OnHealthChanged.Broadcast(oldClampedHealthValue, newClampedHealthValue);
+
 	if (CharacterState.CurrentHP == 0.0f)
 	{
 		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
@@ -377,9 +387,18 @@ void ACharacterBase::SetActionState(ECharacterActionType Type)
 
 void ACharacterBase::TakeHeal(float HealAmount, bool bIsTimerEvent, uint8 BuffDebuffType)
 {
+	const float& totalHealthValue = CharacterState.TotalHP;
+	float oldClampedHealthValue = CharacterState.CurrentHP;
+	float newClampedHealthValue = 0.0f;
 	CharacterState.CurrentHP += HealAmount;
-	CharacterState.CurrentHP = FMath::Min(CharacterStat.DefaultHP, CharacterState.CurrentHP);
+	newClampedHealthValue = CharacterState.CurrentHP = FMath::Min(CharacterStat.DefaultHP, CharacterState.CurrentHP);
 	OnTakeDamage.Broadcast();
+	
+	oldClampedHealthValue = UKismetMathLibrary::MapRangeClamped(oldClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
+	newClampedHealthValue = UKismetMathLibrary::MapRangeClamped(newClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
+
+	OnHealthChanged.Broadcast(oldClampedHealthValue, newClampedHealthValue);
+
 	return;
 }
 
