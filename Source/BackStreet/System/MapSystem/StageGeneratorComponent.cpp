@@ -2,6 +2,7 @@
 
 
 #include "StageGeneratorComponent.h"
+#include "../../Global/BackStreetGameModeBase.h"
 #include "NewChapterManagerBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -20,6 +21,8 @@ UStageGeneratorComponent::UStageGeneratorComponent()
 void UStageGeneratorComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 }
 
 void UStageGeneratorComponent::InitGenerator(FChapterInfo NewChapterInfo)
@@ -36,8 +39,8 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 	//####### 선형 임시코드 ####### 
 	TArray<FStageInfo> result;
 	
-	FStageInfo temp;
-	temp.OuterLevelAsset = CurrentChapterInfo.OuterStageLevelList[0];
+	FStageInfo stageInfo;
+	stageInfo.OuterLevelAsset = CurrentChapterInfo.OuterStageLevelList[0];
 
 	int32 templateIdx = -1;
 	FStageTemplateInfo stageTemplateInfo;
@@ -49,7 +52,6 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 	}
 	UE_LOG(LogTemp, Warning, TEXT("UStageGeneratorComponent::Generate(), template idx : %d"), templateIdx);
 
-
 	TArray<TSoftObjectPtr<UWorld> > shuffledCombatWorldList = GetShuffledWorldList();
 
 	//this is not total stage count in grid, but vertical stage count.
@@ -58,62 +60,77 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 
 	for (int32 stageIdx = 0; stageIdx < stageCount; stageIdx++)
 	{
-		//set stage type
+		//1. set stage type
 		FVector2D stageCoordinate = GetStageCoordinate(stageIdx);
 		UE_LOG(LogTemp, Warning, TEXT("Stage Idx : %d,  stageCoordinate : %s"), stageIdx, *stageCoordinate.ToString());
 		
 		if (templateIdx != -1)
 		{
-			temp.StageType = stageTemplateInfo.StageComposition[stageIdx];
+			stageInfo.StageType = stageTemplateInfo.StageComposition[stageIdx];
 		}
 		else
 		{
 			TArray<EStageCategoryInfo> stageTypeList = CurrentChapterInfo.StageTypeListForLevelIdx[stageCoordinate.Y + stageCoordinate.X].StageTypeList;
 			checkf(stageTypeList.Num() > 0, TEXT("Stage type list data is invalid "));
-			temp.StageType = stageTypeList[UKismetMathLibrary::RandomInteger(stageTypeList.Num())];
+			stageInfo.StageType = stageTypeList[UKismetMathLibrary::RandomInteger(stageTypeList.Num())];
 		}
 
-		//set stage coordinate and level
-		temp.Coordinate = GetStageCoordinate(stageIdx);
-		switch (temp.StageType)
+		//2. set stage coordinate and level
+		stageInfo.Coordinate = GetStageCoordinate(stageIdx);
+
+		//3. set default icon
+		if (CurrentChapterInfo.StageIconInfoMap.Contains(stageInfo.StageType))
 		{
-		case EStageCategoryInfo::E_Boss:
-			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.BossStageLevelList);
-			break;
+			stageInfo.StageIcon = *CurrentChapterInfo.StageIconInfoMap.Find(stageInfo.StageType);
+		}
+
+		//4. set stage's level asset 
+		if (stageInfo.StageType != EStageCategoryInfo::E_None)
+		{
+			checkf(CurrentChapterInfo.StageLevelInfoMap.Contains(stageInfo.StageType), TEXT("StageLevelInfoMap is not valid, type : %d"), (int32)stageInfo.StageType);
+			TMap<EStageCategoryInfo, FLevelSoftObjectPtrList>& infoMap = CurrentChapterInfo.StageLevelInfoMap;
+			stageInfo.MainLevelAsset = GetRandomWorld(infoMap.Find(stageInfo.StageType)->LevelList);
+		}
+
+		//5. set reward and stage's special property
+		switch (stageInfo.StageType)
+		{
 		case EStageCategoryInfo::E_TimeAttack:
-			//temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.TimeAttackStageLevelList);
+		case EStageCategoryInfo::E_EliteTimeAttack:
 			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
-			temp.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
-			temp.MainLevelAsset = shuffledCombatWorldList[nextCombatWorldIdx];
+			stageInfo.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
+			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType);
+			if (stageInfo.RewardInfoList.Num() > 0)
+			{
+				stageInfo.StageIcon = GetRewardItemIcon(stageInfo.RewardInfoList[0].ItemID).Get();
+			}
 			break;
 		case EStageCategoryInfo::E_Exterminate:
-		case EStageCategoryInfo::E_Combat:
-			//temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.CombatStageLevelList);
+		case EStageCategoryInfo::E_EliteExterminate:
+		case EStageCategoryInfo::E_Escort:
+		case EStageCategoryInfo::E_EliteEscort:
 			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
-			temp.MainLevelAsset = shuffledCombatWorldList[nextCombatWorldIdx];
-			break;
-		case EStageCategoryInfo::E_Craft:
-			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.CraftStageLevelList);
+			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType);
+			if (stageInfo.RewardInfoList.Num() > 0)
+			{
+				stageInfo.StageIcon = GetRewardItemIcon(stageInfo.RewardInfoList[0].ItemID).Get();
+			}
 			break;
 		case EStageCategoryInfo::E_Entry:
-			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.EntryStageLevelList);
-			break;
-		case EStageCategoryInfo::E_Gatcha:
-			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.GatchaStageLevelList);
-			break;
-		case EStageCategoryInfo::E_MiniGame:
-			temp.MainLevelAsset = GetRandomWorld(CurrentChapterInfo.MinigameStageLevelList);
+			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType);
 			break;
 		}
 
-		if (temp.StageType == EStageCategoryInfo::E_Boss || temp.StageType == EStageCategoryInfo::E_Exterminate
-			|| temp.StageType == EStageCategoryInfo::E_Combat || temp.StageType == EStageCategoryInfo::E_TimeAttack
-			|| temp.StageType == EStageCategoryInfo::E_Entry)
+		//6. set enemy composition
+		if (stageInfo.StageType == EStageCategoryInfo::E_Boss || stageInfo.StageType == EStageCategoryInfo::E_Exterminate
+			|| stageInfo.StageType == EStageCategoryInfo::E_EliteExterminate || stageInfo.StageType == EStageCategoryInfo::E_TimeAttack
+			|| stageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack || stageInfo.StageType == EStageCategoryInfo::E_Entry
+			|| stageInfo.StageType == EStageCategoryInfo::E_EliteEscort || stageInfo.StageType == EStageCategoryInfo::E_Escort)
 		{
-			checkf(CurrentChapterInfo.EnemyCompositionInfoMap.Contains(temp.StageType), TEXT("EnemyCompositionInfoMap is empty"));
-			temp.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(temp.StageType);
+			checkf(CurrentChapterInfo.EnemyCompositionInfoMap.Contains(stageInfo.StageType), TEXT("EnemyCompositionInfoMap is empty"));
+			stageInfo.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(stageInfo.StageType);
 		}
-		result.Add(temp);
+		result.Add(stageInfo);
 	}
 
 	//제거 예정
@@ -128,6 +145,71 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 	}
 
 	return CurrentChapterInfo.StageInfoList = result;
+}
+
+TArray<FStageRewardInfo> UStageGeneratorComponent::GetRewardListFromCandidates(EStageCategoryInfo StageType)
+{
+	if (!CurrentChapterInfo.StageRewardCandidateInfoMap.Contains(StageType)) return {};
+
+	FStageRewardCandidateInfoList rewardInfoList = *CurrentChapterInfo.StageRewardCandidateInfoMap.Find(StageType);
+	TArray<FStageRewardInfo> rewardItemInfoList;
+	
+	for (auto& rewardCandidateInfo : rewardInfoList.RewardCandidateInfoList)
+	{
+		if (rewardCandidateInfo.RewardItemIDList.Num() != rewardCandidateInfo.RewardItemProbabilityList.Num()) continue;
+
+		// calculate total probability
+		float totalProbability = 0.0f;
+		for (float probability : rewardCandidateInfo.RewardItemProbabilityList)
+		{
+			totalProbability += probability;
+		}
+
+		// generate random value
+		float randomValue = FMath::FRandRange(0.0f, totalProbability);
+
+		// select reward by cumulative probability
+		float cumulativeProbability = 0.0f;
+		for (int32 candidateIdx = 0; candidateIdx < rewardCandidateInfo.RewardItemIDList.Num(); ++candidateIdx)
+		{
+			cumulativeProbability += rewardCandidateInfo.RewardItemProbabilityList[candidateIdx];
+
+			if (randomValue <= cumulativeProbability)
+			{
+				// selected reward item id
+				int32 selectedRewardItemID = rewardCandidateInfo.RewardItemIDList[candidateIdx];
+
+				//add item to inventory
+				rewardItemInfoList.Add({ selectedRewardItemID, 1 });
+
+				UE_LOG(LogTemp, Warning, TEXT("Reward Granted %d!@@@@@@@@@@"), selectedRewardItemID);
+				break;
+			}
+		}
+	}
+	return rewardItemInfoList;
+}
+
+TSoftObjectPtr<UTexture2D> UStageGeneratorComponent::GetRewardItemIcon(int32 ItemID)
+{
+	if (!GamemodeRef.IsValid()) return nullptr;
+	if (ItemIconCacheMap.Contains(ItemID)) return *ItemIconCacheMap.Find(ItemID);
+
+	UDataTable* itemTable = GamemodeRef.Get()->ItemInfoTable;
+	if (itemTable)
+	{
+		FItemInfoDataStruct* itemInfoPtr = itemTable->FindRow<FItemInfoDataStruct>(FName(FString::FromInt(ItemID)), "");
+		if (itemInfoPtr)
+		{
+			UTexture2D* targetTexture = itemInfoPtr->ItemImage;
+			if (targetTexture)
+			{
+				ItemIconCacheMap.Add({ ItemID, targetTexture });
+				return targetTexture;
+			}
+		}
+	}
+	return nullptr;
 }
 
 FVector2D UStageGeneratorComponent::GetNextCoordinate(FVector2D Direction, FVector2D CurrCoordinate)
@@ -165,8 +247,12 @@ TSoftObjectPtr<UWorld> UStageGeneratorComponent::GetRandomWorld(TArray<TSoftObje
 TArray<TSoftObjectPtr<UWorld>> UStageGeneratorComponent::GetShuffledWorldList()
 {
 	//Temporary code for BIC -----
-	CurrentChapterInfo.CombatStageLevelList.Sort([this](const TSoftObjectPtr<UWorld> item1, const TSoftObjectPtr<UWorld> item2) {
+	checkf(CurrentChapterInfo.StageLevelInfoMap.Contains(EStageCategoryInfo::E_Exterminate), TEXT("StageLevelInfoMap is not valid for exterminate stage"));
+	FLevelSoftObjectPtrList levelInfo = *CurrentChapterInfo.StageLevelInfoMap.Find(EStageCategoryInfo::E_Exterminate);
+	
+	levelInfo.LevelList.Sort([this](const TSoftObjectPtr<UWorld> item1, const TSoftObjectPtr<UWorld> item2) {
 		return FMath::FRand() < 0.5f;
 	});
-	return CurrentChapterInfo.CombatStageLevelList;
+	CurrentChapterInfo.StageLevelInfoMap[EStageCategoryInfo::E_Exterminate] = levelInfo;
+	return levelInfo.LevelList;
 }

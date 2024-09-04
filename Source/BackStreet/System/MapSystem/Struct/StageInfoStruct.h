@@ -11,8 +11,14 @@ enum class EStageCategoryInfo : uint8
 
 	E_Entry					UMETA(DisplayName = "Entry"),
 	E_Exterminate			UMETA(DisplayName = "Exterminate"),
+	E_EliteExterminate		UMETA(DisplayName = "EliteExterminate"),
+
 	E_TimeAttack			UMETA(DisplayName = "TimeAttack"),
-	E_Combat				UMETA(DisplayName = "Combat"),
+	E_EliteTimeAttack		UMETA(DisplayName = "EliteTimeAttack"),
+
+	E_Escort				UMETA(DisplayName = "Escort"),
+	E_EliteEscort			UMETA(DisplayName = "EliteEscort"),
+
 	E_Boss					UMETA(DisplayName = "Boss"),
 
 	E_Craft					UMETA(DisplayName = "Craft"),
@@ -70,6 +76,19 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FStageRewardInfo
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		int32 ItemID;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		int32 ItemCount;
+};
+
+USTRUCT(BlueprintType)
 struct FStageRewardCandidateInfo
 {
 	GENERATED_BODY()
@@ -82,15 +101,24 @@ public:
 		TArray<float> RewardItemProbabilityList;
 };
 
-
 USTRUCT(BlueprintType)
-struct FStageRewardInfoList
+struct FStageRewardCandidateInfoList
 {
 	GENERATED_BODY()
 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
 		TArray<FStageRewardCandidateInfo> RewardCandidateInfoList;
+};
+
+USTRUCT(BlueprintType)
+struct FLevelSoftObjectPtrList
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
+		TArray<TSoftObjectPtr<UWorld>> LevelList;
 };
 
 //이동 예정 LJH
@@ -105,6 +133,9 @@ public:
 	//Stage type (entry, combat, time attack, boss, miniGame, gatcha etc..)
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		EStageCategoryInfo StageType = EStageCategoryInfo::E_None;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		UTexture2D* StageIcon;
 
 	//Map location in 2nd array (현재 선형으로 1차원 X값만 사용)
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -122,6 +153,13 @@ public:
 	//List of enemy's composition to spawn 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FEnemyCompositionInfo EnemyCompositionInfo;
+
+	//It is declared on tarray because of scalability
+	//Temporary Code : stage icon will be replaced with this first member icon
+		//the non-combat stage (such as craft, minigame) is exception.
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TArray<FStageRewardInfo> RewardInfoList;
+
 
 	//==== Dynamic Proptery ====================
 	//Dyanmically update after level load
@@ -225,7 +263,7 @@ public:
 		TMap<EStageCategoryInfo, FEnemyCompositionInfo> EnemyCompositionInfoMap;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
-		TMap<EStageCategoryInfo, FStageRewardInfoList> StageRewardInfoMap;
+		TMap<EStageCategoryInfo, FStageRewardCandidateInfoList> StageRewardCandidateInfoMap;
 
 	//Stage template list. If this value is set, this overrides the above values(blocked~, stage tyep~)
 	UPROPERTY(EditDefaultsOnly, meta = (UIMin = 1, UIMax = 5), Category = "Config")
@@ -235,38 +273,16 @@ public:
 		TArray<FStageInfo> StageInfoList;
 		
 //======= Widget ======================
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widget")
+		TMap<EStageCategoryInfo, UTexture2D*> StageIconInfoMap;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Widget")
 		TArray<FVector2D> StageIconTransitionValueList;
 
 //======= Asset =======================
 public:
-	//Entry stage level list
 	UPROPERTY(EditDefaultsOnly, Category = "Map")
-		TArray<TSoftObjectPtr<UWorld>> EntryStageLevelList;
-
-	//Combat stage level list
-	UPROPERTY(EditDefaultsOnly, Category = "Map")
-		TArray<TSoftObjectPtr<UWorld>> CombatStageLevelList;
-
-	//Time attack stage level list
-	UPROPERTY(EditDefaultsOnly, Category = "Map")
-		TArray<TSoftObjectPtr<UWorld>> TimeAttackStageLevelList;
-
-	//Craft stage level list
-	UPROPERTY(EditDefaultsOnly, Category = "Map")
-		TArray<TSoftObjectPtr<UWorld>> CraftStageLevelList;
-
-	//Boss stage level list
-	UPROPERTY(EditDefaultsOnly, Category = "Map")
-		TArray<TSoftObjectPtr<UWorld>> BossStageLevelList;
-
-	//Minigame stage level list
-	UPROPERTY(EditDefaultsOnly, Category = "Map")
-		TArray<TSoftObjectPtr<UWorld>> MinigameStageLevelList;
-
-	//Gatcha stage level list
-	UPROPERTY(EditDefaultsOnly, Category = "Map")
-		TArray<TSoftObjectPtr<UWorld>> GatchaStageLevelList;
+		TMap<EStageCategoryInfo, FLevelSoftObjectPtrList> StageLevelInfoMap;
 
 	//Outer area level asset
 	UPROPERTY(EditDefaultsOnly, Category = "Map")

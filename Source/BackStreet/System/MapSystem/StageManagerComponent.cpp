@@ -205,9 +205,12 @@ void UStageManagerComponent::SpawnEnemy()
 {
 	//Basic condition (stage type check and data count check
 	if (CurrentStageInfo.StageType != EStageCategoryInfo::E_Entry
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Exterminate
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_TimeAttack
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Combat
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Exterminate
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Escort
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteTimeAttack
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteExterminate
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteEscort
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss) return;
 
 	if (CurrentStageInfo.EnemyCompositionInfo.CompositionList.Num() == 0)
@@ -377,7 +380,8 @@ void UStageManagerComponent::StartStage()
 	}
 
 	//Start timer if stage type if timeattack
-	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack)
+	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 	{
 		FTimerDelegate stageOverDelegate;
 		stageOverDelegate.BindUFunction(this, FName("FinishStage"), false);
@@ -418,7 +422,7 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	if (bStageClear &&
 		(CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
 		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat))
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteExterminate))
 	{
 		//Stage Clear UI Update using delegate
 		OnStageCleared.Broadcast();
@@ -439,7 +443,8 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 			}
 		}
 	}
-	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack)
+	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 	{
 		if (bStageClear)
 		{
@@ -469,46 +474,12 @@ void UStageManagerComponent::GrantStageRewards()
 
 	if (!IsValid(playerCharacter)) return;
 
-	FStageRewardInfoList* rewardInfoList = CurrentChapterInfo.StageRewardInfoMap.Find(CurrentStageInfo.StageType);
-	TArray<int32> rewardItemIDList;
-	if (rewardInfoList)
+	TArray<FStageRewardInfo> rewardInfoList = GetCurrentStageInfo().RewardInfoList;
+	for (FStageRewardInfo& rewardItemInfo : rewardInfoList)
 	{
-		for (auto& rewardCandidateInfo : rewardInfoList->RewardCandidateInfoList)
-		{
-			if (rewardCandidateInfo.RewardItemIDList.Num() != rewardCandidateInfo.RewardItemProbabilityList.Num()) continue;
-
-			// calculate total probability
-			float totalProbability = 0.0f;
-			for (float probability : rewardCandidateInfo.RewardItemProbabilityList)
-			{
-				totalProbability += probability;
-			}
-
-			// generate random value
-			float randomValue = FMath::FRandRange(0.0f, totalProbability);
-
-			// select reward by cumulative probability
-			float cumulativeProbability = 0.0f;
-			for (int32 candidateIdx = 0; candidateIdx < rewardCandidateInfo.RewardItemIDList.Num(); ++candidateIdx)
-			{
-				cumulativeProbability += rewardCandidateInfo.RewardItemProbabilityList[candidateIdx];
-
-				if (randomValue <= cumulativeProbability)
-				{
-					// selected reward item id
-					int32 selectedRewardItemID = rewardCandidateInfo.RewardItemIDList[candidateIdx];
-
-					//add item to inventory
-					playerCharacter->ItemInventory->AddItem(selectedRewardItemID, 1);
-					rewardItemIDList.Add(selectedRewardItemID);
-
-					UE_LOG(LogTemp, Warning, TEXT("Reward Granted %d!@@@@@@@@@@"), selectedRewardItemID);
-					break;
-				}
-			}
-		}
+		playerCharacter->ItemInventory->AddItem(rewardItemInfo.ItemID, rewardItemInfo.ItemCount);
 	}
-	OnRewardGranted.Broadcast(rewardItemIDList);
+	//OnRewardGranted.Broadcast(rewardItemIDList);
 }
 
 void UStageManagerComponent::UpdateEnemyCountAndCheckClear()
@@ -523,15 +494,18 @@ void UStageManagerComponent::UpdateEnemyCountAndCheckClear()
 bool UStageManagerComponent::CheckStageClearStatus()
 {
 	//Basic condition (stage type check)
-	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate
-	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
-	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
+	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
+	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate
+	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteExterminate
+	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Escort
+	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteEscort
 	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Boss
-	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Combat)
+	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteExterminate)
 	{
 		return RemainingEnemyCount == 0;
 	}
-	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack)
+	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 	{
 		bool bIsTimeLeft = GetRemainingTime() == 0.0f;
 		return RemainingEnemyCount == 0 && bIsTimeLeft;

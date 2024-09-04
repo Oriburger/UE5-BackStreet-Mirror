@@ -30,7 +30,18 @@ public:
 	UFUNCTION()
 		TArray<FStageInfo> Generate();
 
-//======== Stage 1st to 2nd ==============
+protected:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FStageRewardInfo> GetRewardListFromCandidates(EStageCategoryInfo StageType);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TSoftObjectPtr<UTexture2D> GetRewardItemIcon(int32 ItemID);
+
+private:
+	UPROPERTY()
+		TMap<int32, TSoftObjectPtr<UTexture2D> > ItemIconCacheMap;
+
+//======== Getter Function ==============
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FVector2D GetNextCoordinate(FVector2D Direction, FVector2D CurrCoordinate);
@@ -57,4 +68,6 @@ protected:
 	
 private:
 	FChapterInfo CurrentChapterInfo;
+
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 };
