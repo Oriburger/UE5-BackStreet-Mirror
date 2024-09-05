@@ -8,8 +8,33 @@
 			"X": 0,
 			"Y": 0
 		},
-		"BlockedPosList": [],
-		"BlockedStageIdxList": [ 2, 3, 4, 5, 8, 9, 10, 11, 14, 15, 16, 17, 20, 21, 22, 23 ],
+		"BlockedPosList": [
+			{
+				"X": 0,
+				"Y": 3
+			},
+			{
+				"X": 0,
+				"Y": 4
+			},
+			{
+				"X": 1,
+				"Y": 4
+			},
+			{
+				"X": 3,
+				"Y": 0
+			},
+			{
+				"X": 4,
+				"Y": 0
+			},
+			{
+				"X": 4,
+				"Y": 1
+			}
+		],
+		"BlockedStageIdxList": [],
 		"StageTypeListForLevelIdx": [],
 		"EliteTimeAtkStageTimeOut": 80,
 		"NormalTimeAtkStageTimeOut": 90,
@@ -280,8 +305,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 1, 2, 3 ],
-						"RewardItemProbabilityList": [ 1, 1, 1 ]
+						"RewardItemIDList": [ 9 ],
+						"RewardItemProbabilityList": [ 1 ]
 					}
 				]
 			},
@@ -289,8 +314,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 1, 2, 3 ],
-						"RewardItemProbabilityList": [ 1, 1, 1 ]
+						"RewardItemIDList": [ 10 ],
+						"RewardItemProbabilityList": [ 1 ]
 					}
 				]
 			},
@@ -298,8 +323,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 1, 2, 3 ],
-						"RewardItemProbabilityList": [ 1, 1, 1 ]
+						"RewardItemIDList": [ 9 ],
+						"RewardItemProbabilityList": [ 1 ]
 					}
 				]
 			},
@@ -307,8 +332,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 1, 2, 3 ],
-						"RewardItemProbabilityList": [ 1, 1, 1 ]
+						"RewardItemIDList": [ 9 ],
+						"RewardItemProbabilityList": [ 1 ]
 					}
 				]
 			}
@@ -317,29 +342,348 @@
 			{
 				"StageComposition": [
 					"E_Entry",
-					"E_Craft",
-					"E_None",
-					"E_None",
-					"E_None",
-					"E_None",
-					"E_Exterminate",
-					"E_TimeAttack",
-					"E_None",
-					"E_None",
-					"E_None",
-					"E_None",
 					"E_EliteExterminate",
 					"E_Craft",
 					"E_None",
 					"E_None",
+					"E_Exterminate",
+					"E_Exterminate",
+					"E_Exterminate",
+					"E_Exterminate",
+					"E_None",
+					"E_TimeAttack",
+					"E_EliteExterminate",
+					"E_TimeAttack",
+					"E_TimeAttack",
+					"E_Exterminate",
+					"E_None",
+					"E_Exterminate",
+					"E_Craft",
+					"E_EliteExterminate",
+					"E_Craft",
 					"E_None",
 					"E_None",
+					"E_Exterminate",
+					"E_TimeAttack",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_EliteExterminate",
+					"E_Craft",
+					"E_None",
+					"E_None",
+					"E_Exterminate",
+					"E_Exterminate",
+					"E_EliteTimeAttack",
+					"E_EliteExterminate",
+					"E_None",
+					"E_TimeAttack",
+					"E_EliteExterminate",
+					"E_TimeAttack",
+					"E_Exterminate",
+					"E_EliteExterminate",
+					"E_None",
+					"E_Exterminate",
+					"E_Craft",
+					"E_EliteExterminate",
+					"E_Craft",
+					"E_None",
+					"E_None",
+					"E_Exterminate",
+					"E_EliteTimeAttack",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
 					"E_EliteTimeAttack",
 					"E_Craft",
 					"E_None",
 					"E_None",
+					"E_Exterminate",
+					"E_EliteExterminate",
+					"E_Exterminate",
+					"E_Exterminate",
+					"E_None",
+					"E_TimeAttack",
+					"E_TimeAttack",
+					"E_EliteTimeAttack",
+					"E_Exterminate",
+					"E_EliteTimeAttack",
+					"E_None",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_TimeAttack",
+					"E_Craft",
 					"E_None",
 					"E_None",
+					"E_EliteTimeAttack",
+					"E_EliteTimeAttack",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_EliteTimeAttack",
+					"E_EliteTimeAttack",
+					"E_None",
+					"E_None",
+					"E_Exterminate",
+					"E_Craft",
+					"E_Exterminate",
+					"E_Exterminate",
+					"E_None",
+					"E_EliteTimeAttack",
+					"E_EliteExterminate",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_Exterminate",
+					"E_None",
+					"E_TimeAttack",
+					"E_EliteTimeAttack",
+					"E_EliteTimeAttack",
+					"E_Craft",
+					"E_None",
+					"E_None",
+					"E_EliteExterminate",
+					"E_EliteExterminate",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_EliteExterminate",
+					"E_EliteExterminate",
+					"E_None",
+					"E_None",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_TimeAttack",
+					"E_Exterminate",
+					"E_None",
+					"E_EliteExterminate",
+					"E_EliteTimeAttack",
+					"E_Exterminate",
+					"E_Craft",
+					"E_EliteTimeAttack",
+					"E_None",
+					"E_EliteExterminate",
+					"E_Exterminate",
+					"E_EliteTimeAttack",
+					"E_Craft",
+					"E_None",
+					"E_None",
+					"E_EliteExterminate",
+					"E_TimeAttack",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_EliteExterminate",
+					"E_Exterminate",
+					"E_None",
+					"E_None",
+					"E_EliteExterminate",
+					"E_Craft",
+					"E_EliteTimeAttack",
+					"E_EliteExterminate",
+					"E_None",
+					"E_EliteExterminate",
+					"E_TimeAttack",
+					"E_EliteTimeAttack",
+					"E_Craft",
+					"E_Exterminate",
+					"E_None",
+					"E_EliteTimeAttack",
+					"E_EliteExterminate",
+					"E_Exterminate",
+					"E_Craft",
+					"E_None",
+					"E_None",
+					"E_EliteTimeAttack",
+					"E_EliteTimeAttack",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_EliteTimeAttack",
+					"E_EliteExterminate",
+					"E_None",
+					"E_None",
+					"E_EliteTimeAttack",
+					"E_Craft",
+					"E_EliteTimeAttack",
+					"E_EliteExterminate",
+					"E_None",
+					"E_Exterminate",
+					"E_Exterminate",
+					"E_Exterminate",
+					"E_Craft",
+					"E_EliteTimeAttack",
+					"E_None",
+					"E_TimeAttack",
+					"E_Exterminate",
+					"E_EliteExterminate",
+					"E_Exterminate",
+					"E_None",
+					"E_None",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_TimeAttack",
+					"E_EliteExterminate",
+					"E_None",
+					"E_None",
+					"E_EliteExterminate",
+					"E_Craft",
+					"E_TimeAttack",
+					"E_Exterminate",
+					"E_None",
+					"E_EliteExterminate",
+					"E_TimeAttack",
+					"E_Exterminate",
+					"E_Craft",
+					"E_TimeAttack",
+					"E_None",
+					"E_EliteExterminate",
+					"E_EliteExterminate",
+					"E_TimeAttack",
+					"E_TimeAttack",
+					"E_None",
+					"E_None",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_EliteTimeAttack",
+					"E_TimeAttack",
+					"E_None",
+					"E_None",
+					"E_EliteExterminate",
+					"E_Craft",
+					"E_Exterminate",
+					"E_TimeAttack",
+					"E_None",
+					"E_TimeAttack",
+					"E_EliteTimeAttack",
+					"E_Exterminate",
+					"E_Craft",
+					"E_EliteExterminate",
+					"E_None",
+					"E_Exterminate",
+					"E_EliteTimeAttack",
+					"E_EliteTimeAttack",
+					"E_EliteTimeAttack",
+					"E_None",
+					"E_None",
+					"E_EliteTimeAttack",
+					"E_Craft",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_Exterminate",
+					"E_EliteExterminate",
+					"E_None",
+					"E_None",
+					"E_EliteExterminate",
+					"E_EliteTimeAttack",
+					"E_TimeAttack",
+					"E_EliteExterminate",
+					"E_None",
+					"E_Craft",
+					"E_EliteExterminate",
+					"E_TimeAttack",
+					"E_EliteExterminate",
+					"E_EliteExterminate",
+					"E_None",
+					"E_Exterminate",
+					"E_Craft",
+					"E_EliteExterminate",
+					"E_Craft",
+					"E_None",
+					"E_None",
+					"E_EliteExterminate",
+					"E_TimeAttack",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_TimeAttack",
+					"E_EliteTimeAttack",
+					"E_None",
+					"E_None",
+					"E_EliteTimeAttack",
+					"E_TimeAttack",
+					"E_EliteTimeAttack",
+					"E_EliteExterminate",
+					"E_None",
+					"E_Craft",
+					"E_EliteTimeAttack",
+					"E_Exterminate",
+					"E_Exterminate",
+					"E_Exterminate",
+					"E_None",
+					"E_EliteExterminate",
+					"E_Craft",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_None",
+					"E_None",
+					"E_TimeAttack",
+					"E_EliteExterminate",
+					"E_Boss"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_TimeAttack",
+					"E_EliteExterminate",
+					"E_None",
+					"E_None",
+					"E_TimeAttack",
+					"E_EliteTimeAttack",
+					"E_Exterminate",
+					"E_EliteExterminate",
+					"E_None",
+					"E_Craft",
+					"E_TimeAttack",
+					"E_Exterminate",
+					"E_TimeAttack",
+					"E_EliteTimeAttack",
+					"E_None",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_None",
+					"E_None",
+					"E_Exterminate",
+					"E_TimeAttack",
 					"E_Boss"
 				]
 			}
