@@ -7,6 +7,7 @@
 #include "../../Character/CharacterBase.h"
 #include "../../Character/Component/ItemInventoryComponent.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
+#include "../../Item/ItemBase.h"
 #include "../AISystem/AIControllerBase.h"
 #include "./Stage/GateBase.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -198,6 +199,10 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 			checkf(spawnPoint->Tags.Num() >= 3, TEXT("Portal SpawnPoint의 Tag[2], Direction Tag가 지정되어있지않습니다."));
 			CurrentStageInfo.PortalDirectionTagList.Add(spawnPoint->Tags[2]);
 		}
+		else if (spawnPoint->Tags[1] == FName("Reward"))
+		{
+			CurrentStageInfo.RewardSpawnLocation = spawnPoint->GetActorLocation();
+		}
 	}
 }
 
@@ -321,8 +326,8 @@ void UStageManagerComponent::SpawnPortal(int32 GateCount)
 				continue;
 			}
 
-			EStageCategoryInfo nextStageType = ChapterManagerRef.Get()->GetStageInfoWithCoordinate(CurrentStageInfo.Coordinate + direction).StageType;
-			newGate->InitGate(direction, nextStageType);
+			FStageInfo nextStageInfo = ChapterManagerRef.Get()->GetStageInfoWithCoordinate(CurrentStageInfo.Coordinate + direction);
+			newGate->InitGate(direction, nextStageInfo);
 
 			//temp
 			newGate->ActivateGate();
@@ -474,12 +479,36 @@ void UStageManagerComponent::GrantStageRewards()
 
 	if (!IsValid(playerCharacter)) return;
 
-	TArray<FStageRewardInfo> rewardInfoList = GetCurrentStageInfo().RewardInfoList;
-	for (FStageRewardInfo& rewardItemInfo : rewardInfoList)
+	TArray<FItemInfoDataStruct> rewardInfoList = GetCurrentStageInfo().RewardInfoList;
+	for (FItemInfoDataStruct& rewardItemInfo : rewardInfoList)
 	{
-		playerCharacter->ItemInventory->AddItem(rewardItemInfo.ItemID, rewardItemInfo.ItemCount);
+		if (rewardItemInfo.bIsActorItem)
+		{
+			SpawnedActorList.Add(SpawnItemActor(rewardItemInfo));
+		}
+		else
+		{
+			playerCharacter->ItemInventory->AddItem(rewardItemInfo.ItemID, rewardItemInfo.ItemAmount);
+		}
 	}
 	//OnRewardGranted.Broadcast(rewardItemIDList);
+}
+
+AActor* UStageManagerComponent::SpawnItemActor(FItemInfoDataStruct ItemInfo)
+{
+	if (ItemInfo.ItemID == 0 || !ItemInfo.bIsActorItem || ItemInfo.ItemClass == nullptr) return nullptr;
+
+	FActorSpawnParameters actorSpawnParameters;
+	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	//Spawn location will be edited.
+	FVector spawnLocation = CurrentStageInfo.RewardSpawnLocation + FVector(0, 0, 100);
+	AItemBase* newItem = Cast<AItemBase>(GetWorld()->SpawnActor(ItemInfo.ItemClass, &spawnLocation, nullptr, actorSpawnParameters));
+	if (IsValid(newItem))
+	{
+		newItem->InitItem(ItemInfo.ItemID, ItemInfo);
+	}
+	return newItem;
 }
 
 void UStageManagerComponent::UpdateEnemyCountAndCheckClear()

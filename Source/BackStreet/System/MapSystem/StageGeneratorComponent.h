@@ -32,14 +32,14 @@ public:
 
 protected:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<FStageRewardInfo> GetRewardListFromCandidates(EStageCategoryInfo StageType);
+		TArray<FItemInfoDataStruct> GetRewardListFromCandidates(EStageCategoryInfo StageType);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TSoftObjectPtr<UTexture2D> GetRewardItemIcon(int32 ItemID);
+		FItemInfoDataStruct GetRewardItemInfo(int32 ItemID);
 
 private:
 	UPROPERTY()
-		TMap<int32, TSoftObjectPtr<UTexture2D> > ItemIconCacheMap;
+		TMap<int32, FItemInfoDataStruct> ItemInfoCacheMap;
 
 //======== Getter Function ==============
 public:

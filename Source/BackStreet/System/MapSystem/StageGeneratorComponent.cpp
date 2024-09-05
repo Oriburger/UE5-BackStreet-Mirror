@@ -102,7 +102,7 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType);
 			if (stageInfo.RewardInfoList.Num() > 0)
 			{
-				stageInfo.StageIcon = GetRewardItemIcon(stageInfo.RewardInfoList[0].ItemID).Get();
+				stageInfo.StageIcon = stageInfo.RewardInfoList[0].ItemImage;
 			}
 			break;
 		case EStageCategoryInfo::E_Exterminate:
@@ -113,7 +113,7 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType);
 			if (stageInfo.RewardInfoList.Num() > 0)
 			{
-				stageInfo.StageIcon = GetRewardItemIcon(stageInfo.RewardInfoList[0].ItemID).Get();
+				stageInfo.StageIcon = stageInfo.RewardInfoList[0].ItemImage;
 			}
 			break;
 		case EStageCategoryInfo::E_Entry:
@@ -147,13 +147,15 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 	return CurrentChapterInfo.StageInfoList = result;
 }
 
-TArray<FStageRewardInfo> UStageGeneratorComponent::GetRewardListFromCandidates(EStageCategoryInfo StageType)
+TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidates(EStageCategoryInfo StageType)
 {
 	if (!CurrentChapterInfo.StageRewardCandidateInfoMap.Contains(StageType)) return {};
 
 	FStageRewardCandidateInfoList rewardInfoList = *CurrentChapterInfo.StageRewardCandidateInfoMap.Find(StageType);
-	TArray<FStageRewardInfo> rewardItemInfoList;
+	TArray<int32> rewardItemIDList;
+	TArray<FItemInfoDataStruct> rewardItemInfoList;
 	
+	//pick several item id by reward candidate infos
 	for (auto& rewardCandidateInfo : rewardInfoList.RewardCandidateInfoList)
 	{
 		if (rewardCandidateInfo.RewardItemIDList.Num() != rewardCandidateInfo.RewardItemProbabilityList.Num()) continue;
@@ -180,20 +182,35 @@ TArray<FStageRewardInfo> UStageGeneratorComponent::GetRewardListFromCandidates(E
 				int32 selectedRewardItemID = rewardCandidateInfo.RewardItemIDList[candidateIdx];
 
 				//add item to inventory
-				rewardItemInfoList.Add({ selectedRewardItemID, 1 });
-
-				UE_LOG(LogTemp, Warning, TEXT("Reward Granted %d!@@@@@@@@@@"), selectedRewardItemID);
+				rewardItemIDList.Add(selectedRewardItemID);
 				break;
 			}
 		}
 	}
+
+	//check duplicate item's count and add reward info list
+	rewardItemIDList.Sort();
+	rewardItemIDList.Add(-1); 
+
+	int32 prevID = -1, count = 0;
+	for (const int32& currID : rewardItemIDList)
+	{
+		if (prevID == -1) prevID = currID, count = 1;
+		else if (prevID != currID)
+		{
+			FItemInfoDataStruct newItemInfo = GetRewardItemInfo(prevID);
+			newItemInfo.ItemAmount = count;
+			rewardItemInfoList.Add(newItemInfo);
+			prevID = currID, count = 1;
+		}	
+	}
 	return rewardItemInfoList;
 }
 
-TSoftObjectPtr<UTexture2D> UStageGeneratorComponent::GetRewardItemIcon(int32 ItemID)
+FItemInfoDataStruct UStageGeneratorComponent::GetRewardItemInfo(int32 ItemID)
 {
-	if (!GamemodeRef.IsValid()) return nullptr;
-	if (ItemIconCacheMap.Contains(ItemID)) return *ItemIconCacheMap.Find(ItemID);
+	if (!GamemodeRef.IsValid()) return FItemInfoDataStruct();
+	if (ItemInfoCacheMap.Contains(ItemID)) return *ItemInfoCacheMap.Find(ItemID);
 
 	UDataTable* itemTable = GamemodeRef.Get()->ItemInfoTable;
 	if (itemTable)
@@ -201,22 +218,17 @@ TSoftObjectPtr<UTexture2D> UStageGeneratorComponent::GetRewardItemIcon(int32 Ite
 		FItemInfoDataStruct* itemInfoPtr = itemTable->FindRow<FItemInfoDataStruct>(FName(FString::FromInt(ItemID)), "");
 		if (itemInfoPtr)
 		{
-			UTexture2D* targetTexture = itemInfoPtr->ItemImage;
-			if (targetTexture)
-			{
-				ItemIconCacheMap.Add({ ItemID, targetTexture });
-				return targetTexture;
-			}
+			ItemInfoCacheMap.Add({ ItemID, *itemInfoPtr });
+			return *itemInfoPtr;
 		}
 	}
-	return nullptr;
+	return FItemInfoDataStruct(); 
 }
 
 FVector2D UStageGeneratorComponent::GetNextCoordinate(FVector2D Direction, FVector2D CurrCoordinate)
 {
 	CurrCoordinate.Y += Direction.Y;
 	CurrCoordinate.X += Direction.X;
-	
 	if (GetIsCoordinateInBoundary(CurrCoordinate))
 	{
 		return CurrCoordinate;

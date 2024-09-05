@@ -76,19 +76,6 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FStageRewardInfo
-{
-	GENERATED_BODY()
-
-public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
-		int32 ItemID;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
-		int32 ItemCount;
-};
-
-USTRUCT(BlueprintType)
 struct FStageRewardCandidateInfo
 {
 	GENERATED_BODY()
@@ -158,7 +145,7 @@ public:
 	//Temporary Code : stage icon will be replaced with this first member icon
 		//the non-combat stage (such as craft, minigame) is exception.
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		TArray<FStageRewardInfo> RewardInfoList;
+		TArray<FItemInfoDataStruct> RewardInfoList;
 
 
 	//==== Dynamic Proptery ====================
@@ -179,6 +166,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FRotator PlayerStartRotation = FRotator::ZeroRotator;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		FVector RewardSpawnLocation = FVector::ZeroVector;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TArray<FTransform> PortalTransformList;
