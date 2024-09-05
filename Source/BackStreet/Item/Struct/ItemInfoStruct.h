@@ -49,10 +49,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FName ItemName;
 
-	//Is item has actual appearance with actor? 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		bool bIsActorItem = false;	
-
 	//Item life type
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		EItemLifeType ItemLifeType = EItemLifeType::E_None;
@@ -60,6 +56,12 @@ public:
 	//Item Type
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		EItemCategoryInfo ItemType = EItemCategoryInfo::E_None;
+
+	//Is item has actual appearance with actor? 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Actor")
+		bool bIsActorItem = false;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Actor")
+		TSubclassOf<class AItemBase> ItemClass;
 
 //=============Asset Info =================
 // 
@@ -133,41 +135,3 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		FWeaponStateStruct WeaponState;
 };
-
-
-//-----------삭제대기--------------------------
-////for "Not Actor Item"
-//USTRUCT(BlueprintType)
-//struct FItemDataStruct : public FTableRowBase
-//{
-//public:
-//	GENERATED_USTRUCT_BODY()
-//
-//	//Item ID
-//	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-//		int32 ItemID = 0;
-//
-//	//Item name
-//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-//		FName ItemName;
-//
-//	//Item type
-//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-//		EItemLifeType ItemType = EItemLifeType::E_None;
-//
-//	//Attainable Chapter
-//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-//		uint8 AttainableChapter = 0;
-//
-//	//Item Description
-//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-//		FName ItemDescription;
-//
-//	//Item Icon Image
-//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-//		UTexture2D* ItemImage;
-//
-//	//Item Amount which can not edit in datatable
-//	UPROPERTY(BlueprintReadOnly)
-//		uint8 ItemAmount = 0;
-//};
