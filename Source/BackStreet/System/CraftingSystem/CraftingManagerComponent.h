@@ -32,20 +32,25 @@ protected:
 	//	int32 SuperMaterialIdx = 3
 
 protected:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void InitCraftingManager();
-//SkillUpgrade == SU
-//WeaponUpgrade == WU
+
 //=======	Common Function		========================
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsMatEnough(); //--> GetIsMaterialEnough
+		bool GetIsItemEnough();
 
 	UFUNCTION()
-		bool ConsumeMat();
+		bool ConsumeItem();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsKeepSkillAvailable();
+		bool GetIsSkillKeepingAvailable();
+
+	UFUNCTION(BlueprintCallable)
+		void KeepItem(EKeepMat NewKeptItem);
+
+	UFUNCTION(BlueprintCallable)
+		void UnKeepItem();
 
 //=======	Select Skill Function	========================		
 public:
@@ -66,14 +71,14 @@ public:
 		bool UpgradeSkill(int32 SkillID, uint8 NewLevel);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<uint8>UpdateRequiredMatForSU(int32 SkillID, uint8 NewLevel); //--> UpdateSkillUpgradeRequiredInfo
+		TArray<uint8>UpdateSkillUpgradeRequiredItemList(int32 SkillID, uint8 NewLevel);
 
 //=======	Upgrade Weapon Function	====================	
 	UFUNCTION(BlueprintCallable)
 		bool UpgradeWeapon(TArray<uint8> NewLevelList);
 		
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<uint8> UpdateRequiredMatForWU(TArray<uint8> NewLevelList); //--> UpdateWeaponUpgradeRequiredInfo
+		TArray<uint8> UpdateWeaponUpgradeRequiredItemList(TArray<uint8> NewLevelList);
 
 	UFUNCTION(BlueprintCallable)
 		bool GetIsStatLevelValid(TArray<uint8> NewLevelList);
@@ -88,10 +93,10 @@ public:
 
 	//만능재료 사용 안함 = 0, 나사 = 1, 스프링 = 2, 기어 = 3
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite)
-		EKeepMat KeepMat = EKeepMat::E_None;  //--> KeptMaterialType //EKeepMat도 수정바람 
+		EKeepMat KeptItem = EKeepMat::E_None; 
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
-		TArray<uint8> RequiredMatList;   //--> RequiredMaterialList 
+		TArray<uint8> RequiredItemList;
 
 //=======	SkillSelectProperty		========================
 public:
