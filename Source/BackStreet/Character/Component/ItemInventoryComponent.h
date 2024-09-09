@@ -8,6 +8,8 @@
 #define MAX_CRAFTING_ITEM_IDX 3
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateUpdateItem);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateAddItem, const FItemInfoDataStruct&, NewItemInfo, const int32, AddCount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateRemoveItem, const FItemInfoDataStruct&, NewItemInfo, const int32, LeftCount);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API UItemInventoryComponent : public UActorComponent
@@ -21,8 +23,15 @@ public:
 	UFUNCTION()
 		void InitInventory();
 
+	//OnItemUpdated로 수정바람@@ - 240905 @ljh
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateUpdateItem OnUpdateItem;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateAddItem OnItemAdded; 
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateRemoveItem OnItemRemoved;
 
 protected:
 	// Called when the game starts

@@ -45,7 +45,7 @@ public:
 public:
 	// Initialize Gate
 	UFUNCTION(BlueprintNativeEvent)
-		void InitGate(FVector2D NewDirection, EStageCategoryInfo StageType);
+		void InitGate(FVector2D NewDirection, FStageInfo StageInfo);
 
 	// Check Gate Is Active and RequsetMoveStage
 	UFUNCTION(BlueprintCallable)
