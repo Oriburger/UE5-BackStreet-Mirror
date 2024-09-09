@@ -98,4 +98,12 @@ TMap<ECraftingItemType, uint8> UItemInventoryComponent::GetCraftingItemAmount()
 	return currItemAmountMap;
 }
 
+bool UItemInventoryComponent::GetIsItemEnough(int32 ItemID, uint8 NeedItemAmount)
+{
+	if (!ItemMap.Contains(ItemID)) return false;
+
+	if(ItemMap[ItemID].ItemAmount<NeedItemAmount) return false;
+	return true;
+}
+
 
