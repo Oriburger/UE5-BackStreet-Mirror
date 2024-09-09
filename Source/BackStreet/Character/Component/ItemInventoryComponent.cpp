@@ -5,6 +5,7 @@
 #include "../CharacterBase.h"
 #include "../MainCharacter/MainCharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
+#define MAX_ITEM_COUNT_THRESHOLD 99
 
 // Sets default values for this component's properties
 UItemInventoryComponent::UItemInventoryComponent()
@@ -58,15 +59,17 @@ void UItemInventoryComponent::SetItemInventoryFromSaveData()
 void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
 {
 	if (!ItemMap.Contains(ItemID)) return;
-	ItemMap[ItemID].ItemAmount += ItemCnt;
+	ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, ItemMap[ItemID].ItemAmount + ItemCnt);
 	OnUpdateItem.Broadcast();
+	OnItemAdded.Broadcast(ItemMap[ItemID], ItemCnt);
 }
 
 void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
 {
 	if (!ItemMap.Contains(ItemID)) return;
-	ItemMap[ItemID].ItemAmount -= ItemCnt;
+	ItemMap[ItemID].ItemAmount = FMath::Max(0, ItemMap[ItemID].ItemAmount - ItemCnt);
 	OnUpdateItem.Broadcast();
+	OnItemRemoved.Broadcast(ItemMap[ItemID], ItemMap[ItemID].ItemAmount);
 }
 
 void UItemInventoryComponent::GetItemData(int32 ItemID, FItemInfoDataStruct& ItemData)
