@@ -33,6 +33,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	UPROPERTY()
+		class USceneComponent* DefaultSceneRoot;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UStaticMeshComponent* MeshComponent;
 
