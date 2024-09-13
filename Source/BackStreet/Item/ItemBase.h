@@ -9,8 +9,8 @@
 #define MAX_WEAPON_TYPE 6
 #define MAX_PROJECTILE_TYPE 2
 
-DECLARE_DELEGATE_OneParam(FDeleSpawnMissionItem, class AItemBase*);
 DECLARE_DELEGATE_OneParam(FDelePickItem, AActor*);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateItemInitialized, FItemInfoDataStruct, ItemInfo);
 
 UCLASS()
 class BACKSTREET_API AItemBase : public AActor
@@ -21,7 +21,8 @@ class BACKSTREET_API AItemBase : public AActor
 public:
 	FDelePickItem OnPlayerBeginPickUp;
 
-	FDeleSpawnMissionItem Dele_MissionItemSpawned;
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateItemInitialized OnItemInitialized;
 
 // ------ Global, Component ---------------------------------------------
 public:
@@ -32,9 +33,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		class USphereComponent* RootCollisionVolume;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UStaticMeshComponent* MeshComponent;
 
@@ -44,8 +42,8 @@ public:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), BlueprintReadWrite)
 		class UInteractiveCollisionComponent* ItemTriggerVolume;
 
-	UPROPERTY(EditDefaultsOnly)
-		class UWidgetComponent* InfoWidgetComponent;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UWidgetComponent* IconWidgetComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UNiagaraComponent* ParticleComponent;
@@ -62,7 +60,7 @@ protected:
 public:	
 	// 외부에서 Init하기위해 Call
 	UFUNCTION(BlueprintCallable)
-		void InitItem(int32 NewItemID);
+		void InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride = FItemInfoDataStruct());
 
 	//아이템 초기 효과를 출력하고 활성화 시킨다. (타임라인 활용)
 	UFUNCTION(BlueprintImplementableEvent)
@@ -76,7 +74,7 @@ public:
 		void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	
 	//캐릭터가 Pick이벤트를 호출했다면
-	UFUNCTION()
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void OnItemPicked();
 
 protected:
@@ -104,8 +102,14 @@ protected:
 		UNiagaraSystem* ItemPickEffect;
 
 // ------ 참조 프로퍼티 ---------------------------------------------
+protected:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class AMainCharacterBase* GetPlayerRef() { return PlayerRef.Get(); }
+
 private:
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+	
+	TWeakObjectPtr<class AMainCharacterBase> PlayerRef;
 
 protected:
 	TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
