@@ -174,6 +174,9 @@ private:
 	UFUNCTION()
 		void GrantStageRewards();
 
+	UFUNCTION()
+		AActor* SpawnItemActor(FItemInfoDataStruct ItemInfo);
+
 	//Bind to enemy character death delegate
 	UFUNCTION()
 		void UpdateEnemyCountAndCheckClear();

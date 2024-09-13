@@ -20,21 +20,18 @@ AItemBase::AItemBase()
 	this->Tags.Add(FName("Item"));
 
 	PrimaryActorTick.bCanEverTick = false;
-	RootComponent = RootCollisionVolume = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERE_COLLISION_ROOT"));
-	RootCollisionVolume->SetCollisionProfileName("Item", true);
-
-	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_MESH"));
+	RootComponent = MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_MESH"));
 	MeshComponent->SetupAttachment(RootComponent);
+	MeshComponent->SetCollisionProfileName("Item", true);
 
 	OutlineMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_OUTLINE_MESH"));
 	OutlineMeshComponent->SetupAttachment(MeshComponent);
 
-	InfoWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("ITEM_INFO_WIDGET"));
-	InfoWidgetComponent->SetupAttachment(MeshComponent);
-	InfoWidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 50.0f));
-	InfoWidgetComponent->SetWorldRotation(FRotator(0.0f, 180.0f, 0.0f));
-	InfoWidgetComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	InfoWidgetComponent->SetVisibility(false);
+	IconWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("ITEM_INFO_WIDGET"));
+	IconWidgetComponent->SetupAttachment(MeshComponent);
+	IconWidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 50.0f));
+	IconWidgetComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	IconWidgetComponent->SetVisibility(false);
 
 	ParticleComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ITEM_NIAGARA_COMPONENT"));
 	ParticleComponent->SetupAttachment(MeshComponent);
@@ -60,14 +57,14 @@ void AItemBase::BeginPlay()
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 	OnPlayerBeginPickUp.BindUFunction(this, FName("OnItemPicked"));
 	ItemTriggerVolume->OnInteractionBegin.AddDynamic(this, &AItemBase::OnItemPicked);
-
+	PlayerRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 	ActivateItem();
 }
 
-void AItemBase::InitItem(int32 NewItemID)
+void AItemBase::InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride)
 {
-	ItemInfo = GetItemInfoWithID(NewItemID);
+	ItemInfo = InfoOverride.ItemID == 0 ? GetItemInfoWithID(NewItemID) : InfoOverride;
 
 	if (ItemInfo.ItemID == 0) return;
 
@@ -86,8 +83,7 @@ void AItemBase::InitItem(int32 NewItemID)
 			streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &AItemBase::InitializeItemMesh));
 		}
 	}
-	//ItemInfo.ItemName
-	//ItemInfo.OutlineColor
+	OnItemInitialized.Broadcast(ItemInfo);
 }
 
 void AItemBase::OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -95,6 +91,7 @@ void AItemBase::OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor
 	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Player")) return;
 	
 	//UI Activate
+	PlayerRef = Cast<AMainCharacterBase>(OtherActor);
 }
 
 void AItemBase::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -102,9 +99,10 @@ void AItemBase::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* O
 	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Player")) return;
 
 	//UI Deactivate
+	PlayerRef = Cast<AMainCharacterBase>(OtherActor);
 }
 
-void AItemBase::OnItemPicked()
+void AItemBase::OnItemPicked_Implementation()
 {
 	AMainCharacterBase* playerRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	
@@ -118,7 +116,6 @@ void AItemBase::OnItemPicked()
 		}
 		break;
 	}
-	
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ItemPickEffect, GetActorLocation());
 	Destroy();
 }
@@ -142,6 +139,7 @@ void AItemBase::InitializeItemMesh()
 		if(!IsValid(ItemInfo.OutlineMaterial.Get())) break;
 		OutlineMeshComponent->SetMaterial(matIdx, ItemInfo.OutlineMaterial.Get());
 	}
+	OnItemInitialized.Broadcast(ItemInfo);
 }
 
 FItemInfoDataStruct AItemBase::GetItemInfoWithID(const int32 ItemID)
