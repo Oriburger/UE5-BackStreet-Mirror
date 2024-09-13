@@ -47,7 +47,6 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 		stageTemplateInfo = CurrentChapterInfo.StageTemplateList[templateIdx];
 		checkf(stageTemplateInfo.StageComposition.Num() == FMath::Pow(CurrentChapterInfo.GridSize, 2.0f), TEXT("UStageGeneratorComponent::Generate(), invalid template data"));
 	}
-
 	UE_LOG(LogTemp, Warning, TEXT("UStageGeneratorComponent::Generate(), template idx : %d"), templateIdx);
 
 
@@ -116,10 +115,18 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 		}
 		result.Add(temp);
 	}
+
+	//제거 예정
 	for (FVector2D& coordinate : CurrentChapterInfo.BlockedPosList)
 	{
 		result[GetStageIdx(coordinate)].bIsBlocked = true;
 	}
+
+	for (int32 idx : CurrentChapterInfo.BlockedStageIdxList)
+	{
+		result[idx].bIsBlocked = true;
+	}
+
 	return CurrentChapterInfo.StageInfoList = result;
 }
 

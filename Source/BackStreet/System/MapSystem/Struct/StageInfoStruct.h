@@ -206,6 +206,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		TArray<FVector2D> BlockedPosList;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		TArray<int32> BlockedStageIdxList;
+
 	//Possible stage type per stage level
 	//This list's length is must be fit to stage's count(gridsize * 2 - 1)
 	UPROPERTY(EditDefaultsOnly, Category = "Config")
