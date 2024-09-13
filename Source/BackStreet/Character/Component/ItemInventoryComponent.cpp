@@ -77,23 +77,33 @@ void UItemInventoryComponent::GetItemData(int32 ItemID, FItemInfoDataStruct& Ite
 	}
 }
 
-TArray<uint8> UItemInventoryComponent::GetCraftingItemAmount()
+TMap<ECraftingItemType, uint8> UItemInventoryComponent::GetCraftingItemAmount()
 {
-	TArray<uint8> currItemAmountList;
-	//하드코딩 BIC이후 변경예정
-	for (int32 itemID = 1; itemID <= 4; itemID++)
+	TMap<ECraftingItemType, uint8> currItemAmountMap;
+	TArray< ECraftingItemType> craftingItemTypeList = {ECraftingItemType::E_Screw, ECraftingItemType::E_Spring , ECraftingItemType::E_Gear , ECraftingItemType::E_Wrench };
+
+	for (ECraftingItemType type : craftingItemTypeList)
 	{
+		int32 itemID = ConvertCraftingItemTypeToItemID(type);
 		if (ItemMap.Contains(itemID))
 		{
 			uint8 itemAmount = ItemMap[itemID].ItemAmount;
-			currItemAmountList.Add(itemAmount);
+			currItemAmountMap.Add(type, itemAmount);
 		}
 		else
 		{
-			currItemAmountList.Add(0);
+			currItemAmountMap.Add(type, 0);
 		}
 	}
-	return currItemAmountList;
+	return currItemAmountMap;
+}
+
+bool UItemInventoryComponent::GetIsItemEnough(int32 ItemID, uint8 NeedItemAmount)
+{
+	if (!ItemMap.Contains(ItemID)) return false;
+
+	if(ItemMap[ItemID].ItemAmount<NeedItemAmount) return false;
+	return true;
 }
 
 
