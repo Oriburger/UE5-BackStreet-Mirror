@@ -116,17 +116,17 @@ private:
 public:
 	//Result widget
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
-		TSubclassOf<class UBackStreetWidgetBase> ChapterClearWidgetClass;
+		TSubclassOf<class UUserWidget> ChapterClearWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
-		TSubclassOf<class UBackStreetWidgetBase> GameOverWidgetClass;
+		TSubclassOf<class UUserWidget> GameOverWidgetClass;
 
 protected:
 	UFUNCTION()
 		void CreateGameResultWidget(bool bChapterClear);
 
 private:
-	class UBackStreetWidgetBase* GameResultWidgetRef;
+	class UUserWidget* GameResultWidgetRef;
 
 //======== Timer ==========================
 protected:

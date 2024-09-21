@@ -6,7 +6,6 @@
 #include "StageManagerComponent.h"
 #include "SlateBasics.h"
 #include "../../Global/BackStreetGameModeBase.h"
-#include "../../Widget/BackStreetWidgetBase.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "Runtime/UMG/Public/UMG.h"
 
@@ -189,7 +188,7 @@ bool ANewChapterManagerBase::GetIsStageBlocked(FVector2D StageCoordinate)
 
 void ANewChapterManagerBase::CreateGameResultWidget(bool bChapterClear)
 {
-	GameResultWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), bChapterClear ? ChapterClearWidgetClass : GameOverWidgetClass));
+	GameResultWidgetRef = CreateWidget(GetWorld(), bChapterClear ? ChapterClearWidgetClass : GameOverWidgetClass);
 	if (IsValid(GameResultWidgetRef))
 	{
 		GameResultWidgetRef->AddToViewport();
