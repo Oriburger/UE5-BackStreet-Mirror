@@ -23,6 +23,10 @@
 			"SupportedTargetPlatforms": [
 				"Win64"
 			]
+		},
+		{
+			"Name": "CommonUI",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
