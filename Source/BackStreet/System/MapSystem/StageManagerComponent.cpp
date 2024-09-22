@@ -536,7 +536,7 @@ bool UStageManagerComponent::CheckStageClearStatus()
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
 		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 	{
-		bool bIsTimeLeft = GetRemainingTime() == 0.0f;
+		bool bIsTimeLeft = GetRemainingTime() > 0.0f;
 		return RemainingEnemyCount == 0 && bIsTimeLeft;
 	}
 

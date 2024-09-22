@@ -20,11 +20,12 @@ AItemBase::AItemBase()
 	this->Tags.Add(FName("Item"));
 
 	PrimaryActorTick.bCanEverTick = false;
-	RootComponent = DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DEFAULT_SCENE_ROOT"));
+	DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DEFAULT_SCENE_ROOT"));
 	DefaultSceneRoot->SetupAttachment(RootComponent);
+	SetRootComponent(DefaultSceneRoot);
 		
-	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_MESH"));
-	MeshComponent->SetupAttachment(RootComponent);
+	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_STATIC_MESH"));
+	MeshComponent->SetupAttachment(DefaultSceneRoot);
 	MeshComponent->SetCollisionProfileName("Item", true);
 
 	OutlineMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_OUTLINE_MESH"));
