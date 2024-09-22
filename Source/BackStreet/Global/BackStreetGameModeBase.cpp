@@ -7,6 +7,7 @@
 #include "../Character/MainCharacter/MainCharacterBase.h"
 #include "../Item/ItemBase.h"
 #include "SlateBasics.h"
+#include "CommonActivatableWidget.h"
 #include "Runtime/UMG/Public/UMG.h"
 #include "../Item/Weapon/Throw/ProjectileBase.h"
 
@@ -114,7 +115,10 @@ void ABackStreetGameModeBase::SwitchToCombatWidget()
 		{
 			combatWidgetRef->AddToViewport();
 		}
-		//combatWidgetRef->SetFocusToWidget(combatWidgetRef, false, true, false);
+		if (Cast<UCommonActivatableWidget>(combatWidgetRef))
+		{
+			//Cast<UCommonActivatableWidget>(combatWidgetRef)->ActivateWidget();
+		}
 	}
 }
 
@@ -127,7 +131,10 @@ void ABackStreetGameModeBase::SwitchToMenuWidget()
 		{
 			menuWidgetRef->AddToViewport();
 		}
-		//menuWidgetRef->SetFocusToWidget(menuWidgetRef, true, false, true);
+		if (Cast<UCommonActivatableWidget>(menuWidgetRef))
+		{
+			Cast<UCommonActivatableWidget>(menuWidgetRef)->ActivateWidget();
+		}
 	}
 }
 
