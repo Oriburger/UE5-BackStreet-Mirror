@@ -120,10 +120,8 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 	SetInstantHpWidgetVisibility();
-	if (CharacterState.CurrentHP <= 0.0f)
-	{
-		FloatingHpBar->SetVisibility(false);
-	}
+	
+	FloatingHpBar->SetVisibility(CharacterState.CurrentHP > 0.0f);
 
 	if (DamageCauser->ActorHasTag("Player"))
 	{

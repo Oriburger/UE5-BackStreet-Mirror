@@ -20,8 +20,12 @@ AItemBase::AItemBase()
 	this->Tags.Add(FName("Item"));
 
 	PrimaryActorTick.bCanEverTick = false;
-	RootComponent = MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_MESH"));
-	MeshComponent->SetupAttachment(RootComponent);
+	DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DEFAULT_SCENE_ROOT"));
+	DefaultSceneRoot->SetupAttachment(RootComponent);
+	SetRootComponent(DefaultSceneRoot);
+		
+	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_STATIC_MESH"));
+	MeshComponent->SetupAttachment(DefaultSceneRoot);
 	MeshComponent->SetCollisionProfileName("Item", true);
 
 	OutlineMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_OUTLINE_MESH"));
@@ -126,7 +130,7 @@ void AItemBase::InitializeItemMesh()
 	
 	MeshComponent->SetStaticMesh(ItemInfo.ItemMesh.Get());
 	MeshComponent->SetRelativeLocation(ItemInfo.InitialLocation);
-	MeshComponent->SetWorldRotation(ItemInfo.InitialRotation);
+	MeshComponent->SetRelativeRotation(ItemInfo.InitialRotation);
 	MeshComponent->SetRelativeScale3D(ItemInfo.InitialScale);
 
 	OutlineMeshComponent->SetStaticMesh(ItemInfo.ItemMesh.Get());
