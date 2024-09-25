@@ -106,9 +106,15 @@ void ABackStreetGameModeBase::UpdateCharacterStat(ACharacterBase* TargetCharacte
 	}
 }
 
-void ABackStreetGameModeBase::SwitchToCombatWidget()
+UCommonUserWidget* ABackStreetGameModeBase::GetMainHUDRef()
 {
-	UCommonUserWidget* combatWidgetRef = GetCombatWidgetRef();
+	if (IsValid(MainHUDRef)) return MainHUDRef;
+	return MainHUDRef = Cast<UCommonUserWidget>(CreateWidget(GetWorld(), MainHUDClass));
+}
+
+void ABackStreetGameModeBase::CreateDefaultHUD()
+{
+	UCommonUserWidget* combatWidgetRef = GetMainHUDRef();
 	if (IsValid(combatWidgetRef))
 	{
 		if (!combatWidgetRef->IsInViewport())
@@ -120,38 +126,4 @@ void ABackStreetGameModeBase::SwitchToCombatWidget()
 			//Cast<UCommonActivatableWidget>(combatWidgetRef)->ActivateWidget();
 		}
 	}
-}
-
-void ABackStreetGameModeBase::SwitchToMenuWidget()
-{
-	UCommonUserWidget* menuWidgetRef = GetMenuWidgetRef();
-	if (IsValid(menuWidgetRef))
-	{
-		if (!menuWidgetRef->IsInViewport())
-		{
-			menuWidgetRef->AddToViewport();
-		}
-		if (Cast<UCommonActivatableWidget>(menuWidgetRef))
-		{
-			Cast<UCommonActivatableWidget>(menuWidgetRef)->ActivateWidget();
-		}
-	}
-}
-
-UCommonUserWidget* ABackStreetGameModeBase::GetCombatWidgetRef()
-{
-	if (IsValid(CombatWidgetRef)) return CombatWidgetRef;
-	return CombatWidgetRef = Cast<UCommonUserWidget>(CreateWidget(GetWorld(), CombatWidgetClass));;
-}
-
-UCommonUserWidget* ABackStreetGameModeBase::GetMenuWidgetRef()
-{
-	if (IsValid(MenuWidgetRef)) return MenuWidgetRef;
-	return MenuWidgetRef = Cast<UCommonUserWidget>(CreateWidget(GetWorld(), MenuWidgetClass));
-}
-
-void ABackStreetGameModeBase::CreateDefaultWidgets()
-{
-	SwitchToCombatWidget();
-	MenuWidgetRef = Cast<UCommonUserWidget>(CreateWidget(GetWorld(), MenuWidgetClass));
 }
