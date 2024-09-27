@@ -37,12 +37,12 @@ void AGateBase::BeginPlay()
 	OverlapVolume->OnInteractionBegin.AddDynamic(this, &AGateBase::EnterGate);
 }
 
-void AGateBase::InitGate_Implementation(FVector2D NewDirection, EStageCategoryInfo StageType)
+void AGateBase::InitGate_Implementation(FVector2D NewDirection, FStageInfo StageInfo)
 {
 	if (bManualMode) return;
 	Direction = NewDirection;
 	bIsGateActive = false;
-	NextStageType = StageType;
+	NextStageType = StageInfo.StageType;
 }
 
 void AGateBase::EnterGate()

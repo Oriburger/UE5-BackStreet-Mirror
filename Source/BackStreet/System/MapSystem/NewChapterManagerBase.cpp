@@ -163,12 +163,18 @@ FName ANewChapterManagerBase::GetStageTypeName(EStageCategoryInfo StageType)
 		return FName("E_Boss");
 	case EStageCategoryInfo::E_Exterminate:
 		return FName("E_Exterminate");
-	case EStageCategoryInfo::E_Combat:
+	case EStageCategoryInfo::E_EliteExterminate:
 		return FName("E_Combat");
 	case EStageCategoryInfo::E_Craft:
 		return FName("E_Craft");
 	case EStageCategoryInfo::E_TimeAttack:
 		return FName("E_TimeAttack");
+	case EStageCategoryInfo::E_EliteTimeAttack:
+		return FName("E_EliteTimeAttack");
+	case EStageCategoryInfo::E_Escort:
+		return FName("E_Escort");
+	case EStageCategoryInfo::E_EliteEscort:
+		return FName("E_EliteEscort");
 	case EStageCategoryInfo::E_Entry:
 		return FName("E_Entry");
 	case EStageCategoryInfo::E_Gatcha:

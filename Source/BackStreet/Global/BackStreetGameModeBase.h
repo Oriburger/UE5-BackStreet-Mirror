@@ -60,6 +60,7 @@ public:
 		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }
 
 // ----- Class Info ------------------------------------ 
+public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Class")
 		TArray<TSubclassOf<UCameraShakeBase> > CameraShakeEffectList;
 	
