@@ -30,6 +30,9 @@
 #include "../System/AssetSystem/Struct/AssetInfoStruct.h"
 
 
+/* ----- Plugin ------------ */
+#include "CommonUserWidget.h"
+
 #define MAX_CHAPTER_COUNT 1
 #define MAX_ITEM_SPAWN 7
 #define MIN_ITEM_SPAWN 5

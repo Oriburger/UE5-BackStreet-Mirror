@@ -30,7 +30,7 @@ void UCraftingManagerComponent::InitCraftingManager()
 	OwnerActorRef = GetOwner();
 	OwnerActorRef->Tags.Add("CraftingBox");
 	MainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	SkillManagerRef = MainCharacterRef->SkillManagerComponent;
+	SkillManagerRef = MainCharacterRef.IsValid() ? MainCharacterRef->SkillManagerComponent : nullptr;
 	bIsSkillCreated = false;
 	bIsDisplayingSkillListSet = false;
 }
@@ -74,6 +74,7 @@ bool UCraftingManagerComponent::ConsumeItem()
 
 bool UCraftingManagerComponent::GetIsSkillKeepingAvailable()
 {
+	if (!SkillManagerRef.IsValid()) return false;
 	if(SkillManagerRef->KeepSkillList.Num()>MainCharacterRef->GetCharacterStat().MaxKeepingSkillCount	) return false;
 	return true;
 }
@@ -90,6 +91,7 @@ void UCraftingManagerComponent::UnKeepItem()
 
 bool UCraftingManagerComponent::AddSkill(int32 NewSkillID)
 {	
+	if (!SkillManagerRef.IsValid()) return false;
 	//재료 충분한지 확인
 	UpdateSkillUpgradeRequiredItemList(NewSkillID, 1);
 	if (!GetIsItemEnough())return false;
@@ -117,6 +119,7 @@ bool UCraftingManagerComponent::AddSkill(int32 NewSkillID)
 
 void UCraftingManagerComponent::SetDisplayingSkillList()
 {
+	if (!SkillManagerRef.IsValid()) return;
 	DisplayingSkillMap.Reset();
 	TArray<ESkillType> skillTypeList = MainCharacterRef->WeaponComponent->WeaponStat.SkillTypeList;
 	//DisplayingSkillMap 초기화
@@ -168,11 +171,13 @@ void UCraftingManagerComponent::SetDisplayingSkillList()
 
 void UCraftingManagerComponent::KeepSkill(int32 SkillID)
 {
+	if (!SkillManagerRef.IsValid()) return;
 	SkillManagerRef->KeepSkillList.Add(SkillID);
 }
 
 void UCraftingManagerComponent::UnkeepSkill(int32 SkillID)
 {
+	if (!SkillManagerRef.IsValid()) return;
 	SkillManagerRef->KeepSkillList.Remove(SkillID);
 }
 
@@ -195,6 +200,7 @@ bool UCraftingManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 
 TArray<uint8> UCraftingManagerComponent::UpdateSkillUpgradeRequiredItemList(int32 SkillID, uint8 NewLevel)
 {
+	if (!SkillManagerRef.IsValid()) return { 0, 0, 0};
 	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial && NewLevel == 1) return { 0,0,0 };
 	RequiredItemList.Empty();
 	uint8 currSkillLevel = 0;

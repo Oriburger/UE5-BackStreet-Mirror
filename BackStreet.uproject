@@ -12,7 +12,8 @@
 				"Engine",
 				"AIModule",
 				"CoreUObject",
-				"UMG"
+				"UMG",
+				"CommonUI"
 			]
 		}
 	],
@@ -30,6 +31,10 @@
 		},
 		{
 			"Name": "MovieRenderPipeline",
+			"Enabled": true
+		},
+		{
+			"Name": "CommonUI",
 			"Enabled": true
 		}
 	],

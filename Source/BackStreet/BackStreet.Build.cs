@@ -9,7 +9,7 @@ public class BackStreet : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AIModule", "Niagara"
-															, "GameplayTasks", "UMG", "LevelSequence", "MovieScene", "EnhancedInput"});
+															, "GameplayTasks", "UMG", "LevelSequence", "MovieScene", "EnhancedInput", "CommonUI", "CommonInput"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 

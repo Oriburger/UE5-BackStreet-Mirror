@@ -98,35 +98,20 @@ public:
 //------ 위젯 ------------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
-		TSubclassOf<class UBackStreetWidgetBase> CombatWidgetClass;
-
-	UPROPERTY(EditDefaultsOnly, Category = "UI")
-		TSubclassOf<class UBackStreetWidgetBase> MenuWidgetClass;
+		TSubclassOf<class UCommonUserWidget> MainHUDClass;
 
 public:
-	UFUNCTION(BlueprintCallable)
-		void SwitchToCombatWidget();
-
-	UFUNCTION(BlueprintCallable)
-		void SwitchToMenuWidget();
-
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class UBackStreetWidgetBase* GetCombatWidgetRef();
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class UBackStreetWidgetBase* GetMenuWidgetRef();
+		class UCommonUserWidget* GetMainHUDRef();
 
 	//create combat ui and menu ui
 	UFUNCTION(BlueprintCallable)
-		void CreateDefaultWidgets();
+		void CreateDefaultHUD();
 
 protected:
 	//For combat hud widget
 	UPROPERTY()
-		class UBackStreetWidgetBase* CombatWidgetRef;
-
-	UPROPERTY()
-		class UBackStreetWidgetBase* MenuWidgetRef; 
+		class UCommonUserWidget* MainHUDRef;
 
 //------ 그 외 프로퍼티 ---------------
 public:
