@@ -35,6 +35,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UNiagaraSystem* HitEffectParticleLarge;
 
+	// TEST 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		TArray<FRotator> HitImpactRotationList;
+
 //------- Basic property, Action -------------------
 public:
 	//process attack 

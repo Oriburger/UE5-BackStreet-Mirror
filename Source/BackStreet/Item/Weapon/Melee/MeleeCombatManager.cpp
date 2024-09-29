@@ -159,8 +159,14 @@ void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, bool b
 	{
 		if (IsValid(WeaponComponentRef.Get()->HitEffectParticleLarge))
 		{
+			//재형님 테스트 위한 임시 코드
+			int32 idx = WeaponComponentRef.Get()->GetCurrentComboCnt() % OwnerCharacterRef.Get()->GetMaxComboCount();
+			idx = WeaponComponentRef.Get()->HitImpactRotationList.IsValidIndex(idx) ? idx : -1;
+			FRotator spawnRotation = idx != -1 ? FRotator::ZeroRotator : WeaponComponentRef.Get()->HitImpactRotationList[idx];
+
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponComponentRef.Get()->HitEffectParticleLarge, emitterSpawnTransform.GetLocation()
-				, WeaponComponentRef.Get()->WeaponState.SlashRotation + randomRotator, emitterSpawnTransform.GetScale3D());
+			// , WeaponComponentRef.Get()->WeaponState.SlashRotation + randomRotator, emitterSpawnTransform.GetScale3D());
+		       , spawnRotation, emitterSpawnTransform.GetScale3D());
 		}
 		if (AssetManagerRef.IsValid())
 		{
