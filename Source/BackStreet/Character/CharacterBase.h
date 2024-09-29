@@ -6,6 +6,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateCharacterDie);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTakeDamage);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateHealthChange, float, OldValue, float, NewValue);
 
 UCLASS()
 class BACKSTREET_API ACharacterBase : public ACharacter
@@ -17,6 +18,9 @@ class BACKSTREET_API ACharacterBase : public ACharacter
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTakeDamage OnTakeDamage;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateHealthChange OnHealthChanged;
 
 //----- Global / Component ----------
 public:

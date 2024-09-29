@@ -10,9 +10,26 @@
 		"SoundAssetDescription": "None"
 	},
 	{
-		"Name": "5001",
+		"Name": "10102",
 		"SoundType": "E_Skill",
-		"TargetID": 5001,
+		"TargetID": 10102,
+		"SoundTarget": "Teleport",
+		"SoundMap":
+		{
+			"Teleport":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Teleport_Cue.SC_Teleport_Cue'"
+				],
+				"SoundVolumeList": [ 1 ]
+			}
+		},
+		"SoundAssetDescription": "None"
+	},
+	{
+		"Name": "10201",
+		"SoundType": "E_Skill",
+		"TargetID": 10201,
 		"SoundTarget": "WeaknessAnalysis",
 		"SoundMap":
 		{
@@ -23,16 +40,6 @@
 				],
 				"SoundVolumeList": [ 0.75 ]
 			}
-		},
-		"SoundAssetDescription": "None"
-	},
-	{
-		"Name": "11100",
-		"SoundType": "E_None",
-		"TargetID": 0,
-		"SoundTarget": "None",
-		"SoundMap":
-		{
 		},
 		"SoundAssetDescription": "None"
 	},

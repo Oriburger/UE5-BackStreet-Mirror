@@ -24,6 +24,16 @@ enum class EItemCategoryInfo : uint8
 	E_GatchaTicket			UMETA(DisplayName = "GatchaTicket"),
 };
 
+UENUM(BlueprintType)
+enum class ECraftingItemType : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_Screw				UMETA(DisplayName = "Screw"),
+	E_Spring				UMETA(DisplayName = "Spring"),
+	E_Gear				UMETA(DisplayName = "Gear"),
+	E_Wrench			UMETA(DisplayName = "Wrench"),
+};
+
 //아이템 박스 스폰 관련 정보를 담은 구조체
 USTRUCT(BlueprintType)
 struct FItemInfoDataStruct : public FTableRowBase

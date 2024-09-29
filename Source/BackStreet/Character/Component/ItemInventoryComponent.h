@@ -45,7 +45,13 @@ public:
 		void GetItemData(int32 ItemID, FItemInfoDataStruct& ItemData);
 
 	UFUNCTION(BlueprintCallable)
-		TArray<uint8> GetCraftingItemAmount();
+		TMap<ECraftingItemType, uint8> GetCraftingItemAmount();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		ECraftingItemType ConvertItemIDToCraftingItemType(int32 ItemID) { return static_cast<ECraftingItemType>(ItemID); }
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 ConvertCraftingItemTypeToItemID(ECraftingItemType CraftingItemType){ return static_cast<int32>(CraftingItemType); }
 
 //====== Property ===========================
 private:

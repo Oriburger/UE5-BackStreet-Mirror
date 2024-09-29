@@ -41,6 +41,7 @@ void UStageManagerComponent::BeginPlay()
 void UStageManagerComponent::Initialize(FChapterInfo NewChapterInfo)
 {
 	CurrentChapterInfo = NewChapterInfo;
+	VisitedCraftstageCount = 0;
 }
 
 void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
@@ -56,6 +57,12 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
 	UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
 	UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %s"), *CurrentStageInfo.Coordinate.ToString());
+
+	//Update visited craft stage count
+	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft)
+	{
+		VisitedCraftstageCount += 1;
+	}
 
 	//Load new level
 	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
