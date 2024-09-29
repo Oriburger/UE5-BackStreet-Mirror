@@ -279,6 +279,6 @@ void UWeaponComponentBase::UpdateComboState()
 
 bool UWeaponComponentBase::GetIsFinalCombo()
 {
-	if (!OwnerCharacterRef.IsValid()) return false;
+	if (!OwnerCharacterRef.IsValid() || OwnerCharacterRef.Get()->GetMaxComboCount() == 0) return false;
 	return GetCurrentComboCnt() % OwnerCharacterRef.Get()->GetMaxComboCount() == 0;
 }
