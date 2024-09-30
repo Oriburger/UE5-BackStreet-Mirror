@@ -68,10 +68,10 @@ public:
 
 //=======	Upgrade Skill Function	======================	
 	UFUNCTION(BlueprintCallable)
-		bool UpgradeSkill(int32 SkillID, uint8 NewLevel);
+		bool UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<uint8>UpdateSkillUpgradeRequiredItemList(int32 SkillID, uint8 NewLevel);
+		TArray<uint8> UpdateSkillUpgradeRequiredItemList(int32 SkillID, uint8 NewLevel);
 
 //=======	Upgrade Weapon Function	====================	
 	UFUNCTION(BlueprintCallable)

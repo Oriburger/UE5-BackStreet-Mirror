@@ -86,7 +86,7 @@ bool UPlayerSkillManagerComponent::AddSkill(int32 SkillID)
 	}
 	if (skillBase->SkillStat.SkillLevelStatStruct.bIsLevelValid)
 	{
-		UpgradeSkill(SkillID, 1);
+		UpgradeSkill(SkillID, ESkillUpgradeType::E_CoolTime, 1);
 	}
 	UpdateObtainableSkillMap();
 	OnSkillUpdated.Broadcast();
@@ -121,9 +121,9 @@ bool UPlayerSkillManagerComponent::RemoveSkill(int32 SkillID)
 	return true;
 }
 
-bool UPlayerSkillManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
+bool UPlayerSkillManagerComponent::UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel)
 {
-	bool bIsUpgraded = Super::UpgradeSkill(SkillID, NewLevel);
+	bool bIsUpgraded = Super::UpgradeSkill(SkillID, UpgradeTarget, NewLevel);
 	OnSkillUpdated.Broadcast();
 	return bIsUpgraded;
 }
