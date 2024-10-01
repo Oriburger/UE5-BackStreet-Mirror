@@ -219,7 +219,7 @@ TArray<uint8> UCraftingManagerComponent::UpdateSkillUpgradeRequiredItemList(int3
 			totalAmt += SkillManagerRef->GetSkillInfo(SkillID).SkillLevelStatStruct.LevelInfo[tempLevel].RequiredMaterial[idx];
 		}
 		RequiredItemList.Add(totalAmt);
-	}
+	} 
 	return RequiredItemList;
 }
 
