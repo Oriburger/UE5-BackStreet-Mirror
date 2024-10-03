@@ -43,7 +43,7 @@ public:
 
 	virtual bool RemoveSkill(int32 SkillID);
 
-	virtual bool UpgradeSkill(int32 SkillID, uint8 NewLevel);
+	virtual bool UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel);
 
 	virtual void ClearAllSkill();
 

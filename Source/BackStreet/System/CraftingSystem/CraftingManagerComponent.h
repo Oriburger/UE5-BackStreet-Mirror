@@ -11,7 +11,7 @@ enum class EKeepMat : uint8
 {
 	E_None				UMETA(DisplayName = "None"),
 	E_Screw				UMETA(DisplayName = "Screw"),
-	E_Spring				UMETA(DisplayName = "Spring"),
+	E_Spring			UMETA(DisplayName = "Spring"),
 	E_Gear				UMETA(DisplayName = "Gear"),
 };
 
@@ -68,10 +68,10 @@ public:
 
 //=======	Upgrade Skill Function	======================	
 	UFUNCTION(BlueprintCallable)
-		bool UpgradeSkill(int32 SkillID, uint8 NewLevel);
+		bool UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel);
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<uint8>UpdateSkillUpgradeRequiredItemList(int32 SkillID, uint8 NewLevel);
+	UFUNCTION(BlueprintCallable)
+		TArray<uint8> UpdateSkillUpgradeRequiredItemList(int32 SkillID, uint8 NewLevel);
 
 //=======	Upgrade Weapon Function	====================	
 	UFUNCTION(BlueprintCallable)

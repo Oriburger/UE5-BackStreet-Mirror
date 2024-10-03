@@ -181,14 +181,14 @@ void UCraftingManagerComponent::UnkeepSkill(int32 SkillID)
 	SkillManagerRef->KeepSkillList.Remove(SkillID);
 }
 
-bool UCraftingManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
+bool UCraftingManagerComponent::UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel)
 {
 	//재료 충분한지 확인
 	UpdateSkillUpgradeRequiredItemList(SkillID, NewLevel);
 	if(!GetIsItemEnough())return false;
 
 	//스킬 추가
-	bool bIsAddSkillSucceed = SkillManagerRef->UpgradeSkill(SkillID, NewLevel);
+	bool bIsAddSkillSucceed = SkillManagerRef->UpgradeSkill(SkillID, UpgradeTarget, NewLevel);
 	if (!bIsAddSkillSucceed) return false;
 	else
 	{
@@ -219,7 +219,7 @@ TArray<uint8> UCraftingManagerComponent::UpdateSkillUpgradeRequiredItemList(int3
 			totalAmt += SkillManagerRef->GetSkillInfo(SkillID).SkillLevelStatStruct.LevelInfo[tempLevel].RequiredMaterial[idx];
 		}
 		RequiredItemList.Add(totalAmt);
-	}
+	} 
 	return RequiredItemList;
 }
 

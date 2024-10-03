@@ -66,7 +66,7 @@ bool USkillManagerComponentBase::RemoveSkill(int32 SkillID)
 	return true;
 }
 
-bool USkillManagerComponentBase::UpgradeSkill(int32 SkillID, uint8 NewLevel)
+bool USkillManagerComponentBase::UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel)
 {
 	if (!IsSkillValid(SkillID)) return false;
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
@@ -74,11 +74,12 @@ bool USkillManagerComponentBase::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 	skillBase->SkillState.SkillLevelStateStruct.SkillLevel = NewLevel;
 	skillBase->SkillState.SkillLevelStateStruct.SkillVariableMap = skillBase->SkillStat.SkillLevelStatStruct.LevelInfo[NewLevel].SkillVariableMap;
 	//쿨타임이 레벨에 따라 달라지는 경우 수정
-	if (skillBase->SkillState.SkillLevelStateStruct.SkillVariableMap.Contains("CoolTime"))
+	if (skillBase->SkillState.SkillLevelStateStruct.SkillVariableMap.Contains(ESkillUpgradeType::E_CoolTime))
 	{
 		skillBase->SkillStat.SkillLevelStatStruct.CoolTime =
-			*skillBase->SkillStat.SkillLevelStatStruct.LevelInfo[NewLevel].SkillVariableMap.Find("CoolTime");
+			*skillBase->SkillStat.SkillLevelStatStruct.LevelInfo[NewLevel].SkillVariableMap.Find(ESkillUpgradeType::E_CoolTime);
 	}
+	
 	OnSkillUpdated.Broadcast();
 	return true;
 }

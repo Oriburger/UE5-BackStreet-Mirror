@@ -9,10 +9,24 @@ enum class ESkillType : uint8
 {
 	E_None				UMETA(DisplayName = "None"),
 	E_Mobility			UMETA(DisplayName = "E_Mobility"), //이동기
-	E_Debuff				UMETA(DisplayName = "E_Debuff	"),  //디버프기
+	E_Debuff			UMETA(DisplayName = "E_Debuff"),  //디버프기
 	E_Sword				UMETA(DisplayName = "E_Sword"),   //검 전용기
 	E_Enemy				UMETA(DisplayName = "E_Enemy"),   //적 전용기
 };
+
+UENUM(BlueprintType)
+enum class ESkillUpgradeType : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_AttackPower		UMETA(DisplayName = "E_Mobility"),
+	E_Debuff			UMETA(DisplayName = "E_Debuff"),
+	E_AttackRange		UMETA(DisplayName = "E_AttackRange"),
+	E_AttackCount		UMETA(DisplayName = "E_AttackCount"),
+	E_Explosion			UMETA(DisplayName = "E_Explosion"),
+	E_CoolTime			UMETA(DisplayName = "E_CoolTime")
+};
+
+
 USTRUCT(BlueprintType)
 struct FSkillLevelInfoContainer : public FTableRowBase
 {
@@ -20,7 +34,7 @@ public:
 	GENERATED_USTRUCT_BODY()
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<FName, float> SkillVariableMap;
+		TMap<ESkillUpgradeType, float> SkillVariableMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		TArray<uint8> RequiredMaterial;
@@ -74,7 +88,7 @@ public:
 
 	//Skill Variable 
 	UPROPERTY(BlueprintReadWrite)
-		TMap<FName, float> SkillVariableMap;
+		TMap<ESkillUpgradeType, float> SkillVariableMap;
 };
 
 USTRUCT(BlueprintType)
@@ -219,7 +233,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		float CoolTime = 0.0f;
 
-	//Skill Variable 
+	//Skill Variable
 	UPROPERTY(BlueprintReadWrite)
 		TMap<FName, float> SkillVariableMap;
 };
