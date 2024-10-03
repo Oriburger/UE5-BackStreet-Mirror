@@ -117,13 +117,13 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterStat.bIsInvincibility) return 0.0f;
-	
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill) return damageAmount;
 
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 	SetInstantHpWidgetVisibility();
 	
 	FloatingHpBar->SetVisibility(CharacterState.CurrentHP > 0.0f);
+
+	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill) return damageAmount;
 
 	if (DamageCauser->ActorHasTag("Player"))
 	{

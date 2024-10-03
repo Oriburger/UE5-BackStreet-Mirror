@@ -155,7 +155,10 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 	CharacterState.bIsAirAttacking = false;
 	CharacterState.bIsDownwardAttacking = false;
 
-	ResetActionState();
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
+	{
+		ResetActionState();
+	}
 
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die)
 	{
