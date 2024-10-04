@@ -65,10 +65,29 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsItemEnough(int32 ItemID, uint8 NeedItemAmount);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FItemInfoDataStruct GetMainWeaponInfoData();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FItemInfoDataStruct GetSubWeaponInfoData();
+	
 //====== Property ===========================
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		int32 MaxItemCount = 100; 
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		int32 MaxSubWeaponCount = 1;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		int32 MaxMainWeaponCount = 1;
+
 private:
-	UPROPERTY()
 		UDataTable* ItemTable;
+
+		int32 CurrSubWeaponCount = 0;
+
+		int32 CurrMainWeaponCount = 0;
 
 public:
 	// Item List

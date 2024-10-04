@@ -187,37 +187,97 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//Interaction
 		EnhancedInputComponent->BindAction(InputActionInfo.InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
 
-		//Inventory
-		//EnhancedInputComponent->BindAction(InputActionInfo.SwitchWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::SwitchToNextWeapon);
-		//EnhancedInputComponent->BindAction(InputActionInfo.DropWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::DropWeapon);
-
 		//SubWeapon
-		//EnhancedInputComponent->BindAction(InputActionInfo.PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::PickSubWeapon);
+		EnhancedInputComponent->BindAction(InputActionInfo.PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::SwitchWeapon);
 
 		EnhancedInputComponent->BindAction(LockToTargetAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::LockToTarget);
 	}
 }
 
+
+void AMainCharacterBase::SwitchWeapon()
+{
+	UE_LOG(LogTemp, Warning, TEXT("SubWeapon #1"));
+	if (!IsValid(ItemInventory)) return; 
+	UE_LOG(LogTemp, Warning, TEXT("SubWeapon #2"));
+	FItemInfoDataStruct subWeaponData = ItemInventory->GetSubWeaponInfoData();
+	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
+	UE_LOG(LogTemp, Warning, TEXT("SubWeapon #3 %d %d"), subWeaponData.ItemID, mainWeaponData.ItemID);
+	if (subWeaponData.ItemID == 0 || mainWeaponData.ItemID == 0)
+	{
+		//워닝 메시지
+
+		UE_LOG(LogTemp, Warning, TEXT("SubWeapon #4"));
+		return;
+	}
+
+	//무기 상태 저장 관련 코드는 추후 추가 예정
+	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Melee)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SubWeapon #5"));
+		WeaponComponent->InitWeapon(subWeaponData.ItemID - 20000); //temp code
+	}
+	else if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SubWeapon #6"));
+		WeaponComponent->InitWeapon(mainWeaponData.ItemID - 20000); //temp code
+	}
+}
+
 void AMainCharacterBase::ReadyToThrow()
 {
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+//	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->GetWeaponType() != EWeaponType::E_Throw) return;
+	//if (!Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->GetCanThrow()) return; //딜레이 중이라면 반환
+//	if (GetCurrentWeaponRef()->WeaponID == 0) return;
+
+	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;
+	SetAimingMode(true);
+	GetWorldTimerManager().SetTimer(AimingTimerHandle, this, &AMainCharacterBase::UpdateAimingState, 0.01f, true);
 }
 
 void AMainCharacterBase::Throw()
 {
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
+
+	ResetActionState();
+	SetAimingMode(false);
+
+	GetWorldTimerManager().ClearTimer(AimingTimerHandle);
+	//if (IsValid(GetCurrentWeaponRef()) && GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
+	{//
+		//Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->Throw();
+	}
 }
 
 void AMainCharacterBase::SetAimingMode(bool bNewState)
 {
-	
+	bIsAiming = bNewState;
+//	GetCharacterMovement()->bOrientRotationToMovement = !bNewState;
+	//this->bUseControllerRotationYaw = bNewState;
 }
 
 void AMainCharacterBase::UpdateAimingState()
-{	
+{
+	/// 노 상관
 }
 
 FVector AMainCharacterBase::GetThrowDestination()
 {
-	return FVector();
+	FVector cursorWorldLocation = GetController<AMainCharacterController>()->GetCursorDeprojectionWorldLocation();
+	if (cursorWorldLocation == FVector(0.0f)) return FVector(0.0f);
+
+	//커서와 손 위치의 Z값을 일치시킴
+	FVector startLocation = GetMesh()->GetSocketLocation("weapon_r");
+	startLocation = { startLocation.X, startLocation.Y, cursorWorldLocation.Z };
+
+	//그 상태에서 거리를 재서 최대 거리를 벗어나지 않는다면 그대로 커서 위치 반환
+	if (UKismetMathLibrary::Vector_Distance(startLocation, cursorWorldLocation) < MAX_THROW_DISTANCE)
+		return cursorWorldLocation;
+
+	//그렇지 않다면, 최대 거리 만큼 제한하여 반환
+	startLocation += UKismetMathLibrary::Normal(cursorWorldLocation - startLocation) * MAX_THROW_DISTANCE;
+	return startLocation;
 }
 
 void AMainCharacterBase::ResetMovementInputValue()

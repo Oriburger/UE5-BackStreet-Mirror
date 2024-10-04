@@ -58,7 +58,25 @@ void UItemInventoryComponent::SetItemInventoryFromSaveData()
 
 void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Add Item #1"));
 	if (!ItemMap.Contains(ItemID)) return;
+	UE_LOG(LogTemp, Warning, TEXT("Add Item #2"));
+	if (ItemMap[ItemID].ItemType == EItemCategoryInfo::E_SubWeapon)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Add Item #2.1"));
+		if (CurrSubWeaponCount >= MaxSubWeaponCount)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Add Item #2.2"));
+			//¿ö´× ¸Þ½ÃÁö
+			return;
+		}
+		CurrSubWeaponCount += 1;
+	}
+	else if (ItemMap[ItemID].ItemType == EItemCategoryInfo::E_Weapon)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Add Item #3"));
+		CurrMainWeaponCount += 1;
+	}
 	ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, ItemMap[ItemID].ItemAmount + ItemCnt);
 	OnUpdateItem.Broadcast();
 	OnItemAdded.Broadcast(ItemMap[ItemID], ItemCnt);
@@ -67,6 +85,14 @@ void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
 void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
 {
 	if (!ItemMap.Contains(ItemID)) return;
+	if (ItemMap[ItemID].ItemType == EItemCategoryInfo::E_SubWeapon)
+	{
+		CurrSubWeaponCount = FMath::Max(0, CurrSubWeaponCount - 1);
+	}
+	else if (ItemMap[ItemID].ItemType == EItemCategoryInfo::E_Weapon)
+	{
+		CurrMainWeaponCount = FMath::Max(0, CurrMainWeaponCount - 1);
+	}
 	ItemMap[ItemID].ItemAmount = FMath::Max(0, ItemMap[ItemID].ItemAmount - ItemCnt);
 	OnUpdateItem.Broadcast();
 	OnItemRemoved.Broadcast(ItemMap[ItemID], ItemMap[ItemID].ItemAmount);
@@ -107,6 +133,34 @@ bool UItemInventoryComponent::GetIsItemEnough(int32 ItemID, uint8 NeedItemAmount
 
 	if(ItemMap[ItemID].ItemAmount<NeedItemAmount) return false;
 	return true;
+}
+
+FItemInfoDataStruct UItemInventoryComponent::GetMainWeaponInfoData()
+{
+	TArray<int32> keyList;
+	ItemMap.GenerateKeyArray(keyList);
+
+	for (int32& key : keyList)
+	{
+		if (ItemMap[key].ItemType == EItemCategoryInfo::E_Weapon && ItemMap[key].ItemAmount > 0)
+			return ItemMap[key];
+	}
+
+	return FItemInfoDataStruct();
+}
+
+FItemInfoDataStruct UItemInventoryComponent::GetSubWeaponInfoData()
+{
+	TArray<int32> keyList;
+	ItemMap.GenerateKeyArray(keyList);
+
+	for (int32& key : keyList)
+	{
+		if (ItemMap[key].ItemType == EItemCategoryInfo::E_SubWeapon && ItemMap[key].ItemAmount > 0)
+			return ItemMap[key];
+	}
+
+	return FItemInfoDataStruct();
 }
 
 

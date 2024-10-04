@@ -71,6 +71,9 @@ public:
 		class UPlayerSkillManagerComponent* SkillManagerComponent;
 
 // ------- Throw Test -----------
+	
+	UFUNCTION(BlueprintCallable)
+		void SwitchWeapon();
 
 	UFUNCTION()
 		void ReadyToThrow();
