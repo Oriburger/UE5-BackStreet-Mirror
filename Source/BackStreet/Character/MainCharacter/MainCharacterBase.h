@@ -63,7 +63,11 @@ public:
 	//플레이어의 메인 카메라
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		UCameraComponent* FollowingCamera;
-		
+
+	//Player SpirngArm for RangedWeapon Aim
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	USpringArmComponent* RangedAimBoom;
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		class UItemInventoryComponent* ItemInventory;
 
@@ -146,7 +150,10 @@ public:
 
 	//카메라 Boom의 길이를 늘이거나 줄인다.
 	UFUNCTION()
-		void ZoomIn(const FInputActionValue& Value);
+		void ZoomIn();
+
+	UFUNCTION()
+		void ZoomOut();
 
 	//주변에 상호작용 가능한 액터를 조사한다.
 	UFUNCTION()
