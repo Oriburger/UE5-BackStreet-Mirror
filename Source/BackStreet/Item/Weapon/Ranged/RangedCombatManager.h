@@ -27,7 +27,7 @@ public:
 //------ Ranged 오버라이더블 ----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
-		bool TryFireProjectile();
+		bool TryFireProjectile(FRotator FireRotationOverride = FRotator::ZeroRotator);
 
 	//장전을 시도. 현재 상태에 따른 성공 여부를 반환
 	UFUNCTION(BlueprintCallable)
@@ -40,7 +40,7 @@ public:
 //------ Basic ---------------------------------
 protected:
 	UFUNCTION(BlueprintCallable)
-		class AProjectileBase* CreateProjectile();
+		class AProjectileBase* CreateProjectile(FRotator FireRotationOverride = FRotator::ZeroRotator);
 
 //------- Getter / Setter ---------------------------
 public:

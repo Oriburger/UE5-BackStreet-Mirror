@@ -13,6 +13,7 @@
 #include "../../Item/ItemBase.h"
 #include "../../Item/ItemBoxBase.h"
 #include "../../Item/RewardBoxBase.h"
+#include "../../Item/Weapon/Ranged/RangedCombatManager.h"
 #include "../../Item/InteractiveCollisionComponent.h"
 #include "../../System/MapSystem/Stage/GateBase.h"
 #include "../Component/WeaponComponentBase.h"
@@ -218,47 +219,53 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 void AMainCharacterBase::ZoomIn()
 {
-	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("E_Throw"));
-	}
-	else 
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Not E_Throw"));
-	}
+/* ------------------------------ Exception Handling ------------------------------------ */
 
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (!IsValid(ItemInventory)) return;
+	if (WeaponComponent->WeaponStat.WeaponType != EWeaponType::E_Throw) return;			// WeaponType !E_Throw exception handling
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;	// ActionType !E_Idle exception handling
+	if (!IsValid(ItemInventory)) return;												// Iteminventory is not Valid
 	FItemInfoDataStruct subWeaponData = ItemInventory->GetSubWeaponInfoData();
 	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
-	if (subWeaponData.ItemID == 0) return;
+	if (subWeaponData.ItemID == 0) return;												// subWeaponData is Empty
+
+/* -------------------------------------------------------------------------------------- */
 
 	FLatentActionInfo LatentInfo;
 	LatentInfo.CallbackTarget = this;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	bUseControllerRotationYaw = true;
 
-	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;
+	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;				// Set ActionType to E_Throw
+
+/*------------- FollowingCamera attach to RangedAimBoom Component using Interp ---------- */
+
 	FollowingCamera->AttachToComponent(RangedAimBoom, FAttachmentTransformRules::KeepWorldTransform);
 	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
+
+/* -------------------------------------------------------------------------------------- */
+
 }
 
 void AMainCharacterBase::ZoomOut()
 {
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;	 //ActionType !E_Throw exception handling
 
 	FLatentActionInfo LatentInfo;
 	LatentInfo.CallbackTarget = this;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
 
-	UE_LOG(LogTemp, Warning, TEXT("ZoomOut"));
+/*------------- FollowingCamera attach to CameraBoom Component using Interp ------------- */
 
-	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
 	FollowingCamera->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
 	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
+
+/* -------------------------------------------------------------------------------------- */
+
+	Throw();
+	//SwitchWeapon();
 }
 
 void AMainCharacterBase::SwitchWeapon()
@@ -300,13 +307,7 @@ void AMainCharacterBase::Throw()
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
 	ResetActionState();
-	SetAimingMode(false);
-
-	GetWorldTimerManager().ClearTimer(AimingTimerHandle);
-	//if (IsValid(GetCurrentWeaponRef()) && GetCurrentWeaponRef()->GetWeaponType() == EWeaponType::E_Throw)
-	{//
-		//Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->Throw();
-	}
+	WeaponComponent->RangedCombatManager->TryFireProjectile();
 }
 
 void AMainCharacterBase::SetAimingMode(bool bNewState)

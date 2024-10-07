@@ -34,7 +34,7 @@ void URangedCombatManager::StopAttack()
 	Super::Attack();
 }
 
-bool URangedCombatManager::TryFireProjectile()
+bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 {
 	if (!OwnerCharacterRef.IsValid()) return false;
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo
@@ -50,6 +50,7 @@ bool URangedCombatManager::TryFireProjectile()
 		GamemodeRef.Get()->GetWorldTimerManager().SetTimer(AutoReloadTimerHandle, OwnerCharacterRef.Get(), &ACharacterBase::TryReload, 1.0f, false, AUTO_RELOAD_DELAY_VALUE);
 		return false;
 	}
+
 	int32 fireProjectileCnt = OwnerCharacterRef.Get()->GetCharacterStat().ProjectileCountPerAttack;
 	if (!OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
 	{
@@ -60,21 +61,25 @@ bool URangedCombatManager::TryFireProjectile()
 	{
 		WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
 	}
+
+	UE_LOG(LogTemp, Warning, TEXT("RangedCombatManager::TryFireProjectile()"));
 	for (int idx = 1; idx <= fireProjectileCnt; idx++)
 	{
 		FTimerHandle delayHandle;
 
 		GetWorld()->GetTimerManager().SetTimer(delayHandle, FTimerDelegate::CreateLambda([&]() {
-				AProjectileBase* newProjectile = CreateProjectile();
+				AProjectileBase* newProjectile = CreateProjectile(FireRotationOverride);
 				//스폰한 발사체가 Valid 하다면 발사
+
 				if (IsValid(newProjectile))
 				{
+					UE_LOG(LogTemp, Warning, TEXT("RangedCombatManager::TryFireProjectile() #2"));
+
 					newProjectile->ActivateProjectileMovement();
 					SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
 				}
 			}), 0.1f * (float)idx, false);
 	}
-
 	return true;
 }
 
@@ -111,7 +116,7 @@ void URangedCombatManager::AddAmmo(int32 Count)
 		(WeaponComponentRef.Get()->WeaponState.RangedWeaponState.ExtraAmmoCount + Count) % (int32)1e5;
 }
 
-AProjectileBase* URangedCombatManager::CreateProjectile()
+AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOverride)
 {	
 	FWeaponStatStruct weaponStat = WeaponComponentRef.Get()->WeaponStat;
 	FWeaponStateStruct weaponState = WeaponComponentRef.Get()->WeaponState;
@@ -122,14 +127,21 @@ AProjectileBase* URangedCombatManager::CreateProjectile()
 	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	FVector SpawnLocation = OwnerCharacterRef.Get()->GetActorLocation();
-	FRotator SpawnRotation = OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation();
+	FRotator SpawnRotation = FireRotationOverride.IsNearlyZero(0.01) ?
+								OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation()
+								: FireRotationOverride;
+
+	UE_LOG(LogTemp, Warning, TEXT("%s %s"), *SpawnRotation.ToString(), *FireRotationOverride.ToString());
 
 	SpawnLocation = SpawnLocation + OwnerCharacterRef.Get()->GetMesh()->GetForwardVector() * 20.0f;
 	SpawnLocation = SpawnLocation + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 50.0f;
 	SpawnLocation = SpawnLocation + FVector(0.0f, 0.0f, 50.0f);
 
-	SpawnRotation.Pitch = SpawnRotation.Roll = 0.0f;
-	SpawnRotation.Yaw += 90.0f;
+	if (FireRotationOverride != FRotator::ZeroRotator)
+	{
+		SpawnRotation.Pitch = SpawnRotation.Roll = 0.0f;
+		SpawnRotation.Yaw += 90.0f;
+	}
 
 	FTransform SpawnTransform = { SpawnRotation, SpawnLocation, {1.0f, 1.0f, 1.0f} };
 	AProjectileBase* newProjectile = Cast<AProjectileBase>(GetWorld()->SpawnActor(AProjectileBase::StaticClass(), &SpawnTransform, spawmParams));
