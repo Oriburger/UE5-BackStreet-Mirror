@@ -653,7 +653,7 @@ void ACharacterBase::TryReload()
 			PlayAnimMontage(reloadAnim);
 	}
 
-	CharacterState.CharacterActionState = ECharacterActionType::E_Reload;
+	//CharacterState.CharacterActionState = ECharacterActionType::E_Reload;
 	GetWorldTimerManager().SetTimer(ReloadTimerHandle, WeaponComponent->RangedCombatManager, &URangedCombatManager::Reload, reloadTime, false);
 }
 
@@ -661,17 +661,13 @@ void ACharacterBase::InitAsset(int32 NewCharacterID)
 {
 	AssetSoftPtrInfo = GetAssetSoftInfoWithID(NewCharacterID);
 	AssetHardPtrInfo = FCharacterAssetHardInfo();
-	//SetCharacterAnimAssetInfoData(CharacterID);
-
+	
 	if (!AssetSoftPtrInfo.CharacterMeshSoftPtr.IsNull())
 	{
 		TArray<FSoftObjectPath> AssetToStream;
 
 		// Mesh 관련
 		AssetToStream.AddUnique(AssetSoftPtrInfo.CharacterMeshSoftPtr.ToSoftObjectPath());
-
-		// Animation 관련
-		//AssetToStream.AddUnique(AssetSoftPtrInfo.AnimBlueprint.ToSoftObjectPath());
 
 		if (!AssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList.IsEmpty())
 		{
@@ -965,14 +961,7 @@ void ACharacterBase::InitVFXAsset()
 	}
 }
 
-void ACharacterBase::InitSoundAsset()
-{
-	//	TArray<USoundCue*> soundList = SoundAssetInfo.SoundMap.Find("FootStep")->SoundList;
-	//	if (!soundList.IsEmpty())
-	//	{
-	//		FootStepSoundList = soundList;
-	//	}	
-}
+void ACharacterBase::InitSoundAsset(){}
 
 void ACharacterBase::InitMaterialAsset()
 {
@@ -984,16 +973,6 @@ void ACharacterBase::InitMaterialAsset()
 			GetMesh()->SetMaterial(matIdx, GetMesh()->CreateDynamicMaterialInstance(matIdx, AssetHardPtrInfo.DynamicMaterialList[matIdx]));
 		}
 	}
-	/*
-
-	if (!AssetSoftPtrInfo.EmotionTextureList.IsEmpty())
-	{
-		for (TSoftObjectPtr<UTexture> tex : AssetSoftPtrInfo.EmotionTextureList)
-		{
-			if (tex.IsValid())
-				EmotionTextureList.AddUnique(tex.Get());
-		}
-	}*/
 }
 
 FCharacterAssetSoftInfo ACharacterBase::GetAssetSoftInfoWithID(const int32 TargetCharacterID)
@@ -1017,8 +996,9 @@ float ACharacterBase::GetTotalStatValue(float& DefaultValue, FStatInfoStruct& Ab
 		+ (AbilityInfo.FixedValue + SkillInfo.FixedValue - DebuffInfo.FixedValue);
 }
 
-bool ACharacterBase::PickWeapon(int32 NewWeaponID)
+bool ACharacterBase::EquipWeapon(int32 NewWeaponID)
 {
+	if (WeaponComponent->WeaponID != 0) return false;
 	WeaponComponent->InitWeapon(NewWeaponID);
 	return true;
 }

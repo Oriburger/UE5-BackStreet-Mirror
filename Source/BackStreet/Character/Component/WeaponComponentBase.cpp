@@ -46,7 +46,6 @@ void UWeaponComponentBase::Attack()
 	}
 	if (IsValid(WeaponTrailParticle))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Trail Test #1"));
 		WeaponTrailParticle->Activate(true);
 	}
 }
@@ -66,8 +65,18 @@ void UWeaponComponentBase::StopAttack()
 void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 {
 	//Stat, State 초기화 
+	int32 oldWeaponID = WeaponID;
 	WeaponID = NewWeaponID;
 	WeaponStat.WeaponID = WeaponID;
+
+	//기존꺼 저장
+	if (oldWeaponID != 0)
+	{
+		WeaponStatCacheMap.Add(oldWeaponID, WeaponStat);
+		WeaponStateCacheMap.Add(oldWeaponID, WeaponState);
+	}
+	
+	//캐싱 로직
 	if (NewWeaponID == 0)
 	{
 		WeaponStat = FWeaponStatStruct();
@@ -76,19 +85,32 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 		this->SetStaticMesh(nullptr);
 		return;
 	}
-	WeaponStat = GetWeaponStatInfoWithID(WeaponID);
-
-	WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_Attack, 0);
-	WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_AttackSpeed, 0);
-	WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_FinalAttack, 0);
-
+	else
+	{
+		//이미 기록이 되어있는 경우? 그대로 덮어씌운다 
+		if (WeaponStatCacheMap.Contains(NewWeaponID)
+			&& WeaponStateCacheMap.Contains(NewWeaponID))
+		{
+			WeaponStat = WeaponStatCacheMap[NewWeaponID];
+			WeaponState = WeaponStateCacheMap[NewWeaponID];
+		}
+		//그렇지 않은 경우 데이터테이블에서 불러온다
+		else
+		{
+			WeaponStat = GetWeaponStatInfoWithID(WeaponID);
+			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_Attack, 0);
+			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_AttackSpeed, 0);
+			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_FinalAttack, 0);
+		}
+	}
+	
 	//에셋 초기화
 	FWeaponAssetInfoStruct newAssetInfo = GetWeaponAssetInfoWithID(WeaponID);
 	WeaponAssetInfo = newAssetInfo;
 
 	if (WeaponID != 0)
 	{
-		if (WeaponStat.WeaponType == EWeaponType::E_Shoot)
+		if (WeaponStat.WeaponType == EWeaponType::E_Shoot || WeaponStat.WeaponType == EWeaponType::E_Throw)
 		{
 			ProjectileStatInfo = GetProjectileStatInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
 			ProjectileAssetInfo = GetProjectileAssetInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);

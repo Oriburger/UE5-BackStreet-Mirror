@@ -23,7 +23,7 @@ class BACKSTREET_API AMainCharacterBase : public ACharacterBase
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTutorialAttack OnAttack;
-
+		
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTutorialMove OnMove;
 
@@ -78,24 +78,18 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 		void SwitchWeapon();
+	
+	UFUNCTION()
+		void ZoomIn();
 
 	UFUNCTION()
-		void ReadyToThrow();
+		void ZoomOut();
 
 	UFUNCTION()
 		void Throw();
 
 	UFUNCTION()
 		void SetAimingMode(bool bNewState);
-
-	UFUNCTION()
-		void UpdateAimingState();
-
-	UFUNCTION()
-		FVector GetThrowDestination();
-
-	UPROPERTY()
-		FTimerHandle AimingTimerHandle;
 
 	UPROPERTY()
 		bool bIsAiming = false;
@@ -147,13 +141,6 @@ public:
 	//Add Impulse to movement when rolling
 	UFUNCTION(BlueprintCallable)
 		void Dash();
-
-	//카메라 Boom의 길이를 늘이거나 줄인다.
-	UFUNCTION()
-		void ZoomIn();
-
-	UFUNCTION()
-		void ZoomOut();
 
 	//주변에 상호작용 가능한 액터를 조사한다.
 	UFUNCTION()
@@ -302,7 +289,7 @@ public:
 
 // -------- Inventory --------------
 public:
-	virtual bool PickWeapon(int32 NewWeaponID);
+	virtual bool EquipWeapon(int32 NewWeaponID);
 
 // -------- VFX --------------------
 protected:

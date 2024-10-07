@@ -105,6 +105,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Weapon|Projectile")
 		FProjectileStatStruct ProjectileStatInfo;
 
+private:
+	//무기 교체 시에 사용할 ID 별 스테이트 저장 맵
+	TMap<int32, FWeaponStatStruct> WeaponStatCacheMap;
+	TMap<int32, FWeaponStateStruct> WeaponStateCacheMap;
+
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsWeaponRangeType() { return WeaponStat.WeaponType == EWeaponType::E_Shoot || WeaponStat.WeaponType == EWeaponType::E_Throw; }

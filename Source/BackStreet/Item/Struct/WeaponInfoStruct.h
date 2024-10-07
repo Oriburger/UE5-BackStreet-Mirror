@@ -32,7 +32,6 @@ enum class EWeaponStatType : uint8
 	E_Attack				UMETA(DisplayName = "Attack"),
 	E_AttackSpeed		UMETA(DisplayName = "AttackSpeed"),
 	E_FinalAttack		UMETA(DisplayName = "FinalAttack")
-
 };
 
 USTRUCT(BlueprintType)

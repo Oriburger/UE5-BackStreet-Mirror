@@ -117,7 +117,7 @@ void AItemBase::OnItemPicked_Implementation()
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Item Ref Weapon #2"));
 			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
-			if (!playerRef->PickWeapon(targetWeaponID)) return;
+			if (!playerRef->EquipWeapon(targetWeaponID)) return;
 		}
 		break;
 	case EItemCategoryInfo::E_SubWeapon:
@@ -125,7 +125,7 @@ void AItemBase::OnItemPicked_Implementation()
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Item Ref SubWeapon #2"));
 			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
-			if (!playerRef->PickWeapon(targetWeaponID)) return;
+			if (!playerRef->EquipWeapon(targetWeaponID)) return;
 		}
 		break;
 	}

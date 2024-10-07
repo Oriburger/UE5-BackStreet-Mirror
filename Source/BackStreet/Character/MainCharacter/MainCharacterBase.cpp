@@ -201,11 +201,6 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(InputActionInfo.ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
 		EnhancedInputComponent->BindAction(InputActionInfo.ZoomAction, ETriggerEvent::Completed, this, &AMainCharacterBase::ZoomOut);
 
-
-		//Throw
-		EnhancedInputComponent->BindAction(InputActionInfo.ThrowReadyAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ReadyToThrow);
-		EnhancedInputComponent->BindAction(InputActionInfo.ThrowAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Throw);
-
 		//Interaction
 		EnhancedInputComponent->BindAction(InputActionInfo.InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
 
@@ -216,10 +211,32 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	}
 }
 
+void AMainCharacterBase::SwitchWeapon()
+{
+	if (!IsValid(ItemInventory) || !GetIsActionActive(ECharacterActionType::E_Idle)) return; 
+	
+	FItemInfoDataStruct subWeaponData = ItemInventory->GetSubWeaponInfoData();
+	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
+	if (subWeaponData.ItemID == 0 || mainWeaponData.ItemID == 0)
+	{
+		//워닝 메시지
+		return;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("sub : %d, main : %d"), subWeaponData.ItemID, mainWeaponData.ItemID);
+
+	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Melee)
+	{
+		WeaponComponent->InitWeapon(subWeaponData.ItemID - 20000); //temp code
+	}
+	else if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw)
+	{
+		WeaponComponent->InitWeapon(mainWeaponData.ItemID - 20000); //temp code
+	}
+}
 
 void AMainCharacterBase::ZoomIn()
 {
-/* ------------------------------ Exception Handling ------------------------------------ */
+	/* ------------------------------ Exception Handling ------------------------------------ */
 
 	if (WeaponComponent->WeaponStat.WeaponType != EWeaponType::E_Throw) return;			// WeaponType !E_Throw exception handling
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;	// ActionType !E_Idle exception handling
@@ -228,7 +245,7 @@ void AMainCharacterBase::ZoomIn()
 	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
 	if (subWeaponData.ItemID == 0) return;												// subWeaponData is Empty
 
-/* -------------------------------------------------------------------------------------- */
+	/* -------------------------------------------------------------------------------------- */
 
 	FLatentActionInfo LatentInfo;
 	LatentInfo.CallbackTarget = this;
@@ -237,13 +254,13 @@ void AMainCharacterBase::ZoomIn()
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;				// Set ActionType to E_Throw
 
-/*------------- FollowingCamera attach to RangedAimBoom Component using Interp ---------- */
+	/*------------- FollowingCamera attach to RangedAimBoom Component using Interp ---------- */
 
 	FollowingCamera->AttachToComponent(RangedAimBoom, FAttachmentTransformRules::KeepWorldTransform);
 	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
 
-/* -------------------------------------------------------------------------------------- */
+	/* -------------------------------------------------------------------------------------- */
 
 }
 
@@ -256,54 +273,21 @@ void AMainCharacterBase::ZoomOut()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
 
-/*------------- FollowingCamera attach to CameraBoom Component using Interp ------------- */
+	/*------------- FollowingCamera attach to CameraBoom Component using Interp ------------- */
 
 	FollowingCamera->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
 	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
 
-/* -------------------------------------------------------------------------------------- */
+	/* -------------------------------------------------------------------------------------- */
 
 	Throw();
 	//SwitchWeapon();
 }
 
-void AMainCharacterBase::SwitchWeapon()
-{
-	if (!IsValid(ItemInventory)) return; 
-	FItemInfoDataStruct subWeaponData = ItemInventory->GetSubWeaponInfoData();
-	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
-	if (subWeaponData.ItemID == 0 || mainWeaponData.ItemID == 0)
-	{
-		//워닝 메시지
-		return;
-	}
-
-	//무기 상태 저장 관련 코드는 추후 추가 예정
-	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Melee)
-	{
-		WeaponComponent->InitWeapon(subWeaponData.ItemID - 20000); //temp code
-	}
-	else if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw)
-	{
-		WeaponComponent->InitWeapon(mainWeaponData.ItemID - 20000); //temp code
-	}
-}
-
-void AMainCharacterBase::ReadyToThrow()
-{
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-//	if (!IsValid(GetCurrentWeaponRef()) || GetCurrentWeaponRef()->GetWeaponType() != EWeaponType::E_Throw) return;
-	//if (!Cast<AThrowWeaponBase>(GetCurrentWeaponRef())->GetCanThrow()) return; //딜레이 중이라면 반환
-//	if (GetCurrentWeaponRef()->WeaponID == 0) return;
-
-	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;
-	SetAimingMode(true);
-	GetWorldTimerManager().SetTimer(AimingTimerHandle, this, &AMainCharacterBase::UpdateAimingState, 0.01f, true);
-}
-
 void AMainCharacterBase::Throw()
 {
+	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
 	ResetActionState();
@@ -313,31 +297,7 @@ void AMainCharacterBase::Throw()
 void AMainCharacterBase::SetAimingMode(bool bNewState)
 {
 	bIsAiming = bNewState;
-//	GetCharacterMovement()->bOrientRotationToMovement = !bNewState;
-	//this->bUseControllerRotationYaw = bNewState;
-}
-
-void AMainCharacterBase::UpdateAimingState()
-{
-	/// 노 상관
-}
-
-FVector AMainCharacterBase::GetThrowDestination()
-{
-	FVector cursorWorldLocation = GetController<AMainCharacterController>()->GetCursorDeprojectionWorldLocation();
-	if (cursorWorldLocation == FVector(0.0f)) return FVector(0.0f);
-
-	//커서와 손 위치의 Z값을 일치시킴
-	FVector startLocation = GetMesh()->GetSocketLocation("weapon_r");
-	startLocation = { startLocation.X, startLocation.Y, cursorWorldLocation.Z };
-
-	//그 상태에서 거리를 재서 최대 거리를 벗어나지 않는다면 그대로 커서 위치 반환
-	if (UKismetMathLibrary::Vector_Distance(startLocation, cursorWorldLocation) < MAX_THROW_DISTANCE)
-		return cursorWorldLocation;
-
-	//그렇지 않다면, 최대 거리 만큼 제한하여 반환
-	startLocation += UKismetMathLibrary::Normal(cursorWorldLocation - startLocation) * MAX_THROW_DISTANCE;
-	return startLocation;
+	//bUseControllerRotationYaw = bNewState;
 }
 
 void AMainCharacterBase::ResetMovementInputValue()
@@ -903,9 +863,9 @@ bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 	return AbilityManagerRef->GetIsAbilityActive(AbilityID);
 }
 
-bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
+bool AMainCharacterBase::EquipWeapon(const int32 NewWeaponID)
 {
-	if (!Super::PickWeapon(NewWeaponID)) return false;
+	bool result = Super::EquipWeapon(NewWeaponID);
 	return true;
 }
 

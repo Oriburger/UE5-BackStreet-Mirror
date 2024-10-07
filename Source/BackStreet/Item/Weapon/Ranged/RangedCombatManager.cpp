@@ -52,33 +52,29 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 	}
 
 	int32 fireProjectileCnt = OwnerCharacterRef.Get()->GetCharacterStat().ProjectileCountPerAttack;
-	if (!OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
+
+	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo 
+		&& !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
 	{
 		fireProjectileCnt = FMath::Min(fireProjectileCnt, WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount);
-	}
-
-	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
-	{
 		WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("RangedCombatManager::TryFireProjectile()"));
 	for (int idx = 1; idx <= fireProjectileCnt; idx++)
 	{
 		FTimerHandle delayHandle;
 
 		GetWorld()->GetTimerManager().SetTimer(delayHandle, FTimerDelegate::CreateLambda([&]() {
-				AProjectileBase* newProjectile = CreateProjectile(FireRotationOverride);
-				//스폰한 발사체가 Valid 하다면 발사
+			AProjectileBase* newProjectile = CreateProjectile(FireRotationOverride);
+			//스폰한 발사체가 Valid 하다면 발사
+			if (IsValid(newProjectile))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("RangedCombatManager::TryFireProjectile() #2"));
 
-				if (IsValid(newProjectile))
-				{
-					UE_LOG(LogTemp, Warning, TEXT("RangedCombatManager::TryFireProjectile() #2"));
-
-					newProjectile->ActivateProjectileMovement();
-					SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
-				}
-			}), 0.1f * (float)idx, false);
+				newProjectile->ActivateProjectileMovement();
+				SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
+			}
+		}), 0.1f * (float)idx, false);
 	}
 	return true;
 }
@@ -127,17 +123,17 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	FVector SpawnLocation = OwnerCharacterRef.Get()->GetActorLocation();
-	FRotator SpawnRotation = FireRotationOverride.IsNearlyZero(0.01) ?
+	FRotator SpawnRotation = FireRotationOverride.IsNearlyZero(0.001f) ?
 								OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation()
 								: FireRotationOverride;
 
-	UE_LOG(LogTemp, Warning, TEXT("%s %s"), *SpawnRotation.ToString(), *FireRotationOverride.ToString());
-
+	//캐릭터의 앞부분에 스폰한다. (추후 소켓으로 변경 필요)
 	SpawnLocation = SpawnLocation + OwnerCharacterRef.Get()->GetMesh()->GetForwardVector() * 20.0f;
 	SpawnLocation = SpawnLocation + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 50.0f;
 	SpawnLocation = SpawnLocation + FVector(0.0f, 0.0f, 50.0f);
 
-	if (FireRotationOverride != FRotator::ZeroRotator)
+	//캐릭터의 Forward 방향으로 맞춰준다.
+	if (FireRotationOverride.IsNearlyZero(0.001f))
 	{
 		SpawnRotation.Pitch = SpawnRotation.Roll = 0.0f;
 		SpawnRotation.Yaw += 90.0f;

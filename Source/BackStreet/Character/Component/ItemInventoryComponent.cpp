@@ -58,23 +58,15 @@ void UItemInventoryComponent::SetItemInventoryFromSaveData()
 
 void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Add Item #1"));
 	if (!ItemMap.Contains(ItemID)) return;
-	UE_LOG(LogTemp, Warning, TEXT("Add Item #2"));
 	if (ItemMap[ItemID].ItemType == EItemCategoryInfo::E_SubWeapon)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Add Item #2.1"));
-		if (CurrSubWeaponCount >= MaxSubWeaponCount)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Add Item #2.2"));
-			//¿ö´× ¸Þ½ÃÁö
-			return;
-		}
+		if (CurrSubWeaponCount >= MaxSubWeaponCount) return;
 		CurrSubWeaponCount += 1;
 	}
 	else if (ItemMap[ItemID].ItemType == EItemCategoryInfo::E_Weapon)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Add Item #3"));
+		if (CurrMainWeaponCount >= MaxMainWeaponCount) return;
 		CurrMainWeaponCount += 1;
 	}
 	ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, ItemMap[ItemID].ItemAmount + ItemCnt);
