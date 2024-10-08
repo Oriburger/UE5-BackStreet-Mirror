@@ -60,7 +60,6 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 		WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Rotation #1 : %s"), *FireRotationOverride.ToString());
 	FireRotationForTimer = FireRotationOverride;
 
 	for (int idx = 1; idx <= fireProjectileCnt; idx++)
@@ -122,14 +121,11 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 	spawmParams.Instigator = OwnerCharacterRef.Get()->GetInstigator();
 	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	UE_LOG(LogTemp, Warning, TEXT("Rotation #2 : %s"), *FireRotationOverride.ToString());
-
 	FVector spawnLocation = OwnerCharacterRef.Get()->WeaponComponent->GetComponentLocation();
 	FRotator spawnRotation = FireRotationOverride.IsNearlyZero(0.001f) ?
 								OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation()
 								: FireRotationOverride;
 
-	UE_LOG(LogTemp, Warning, TEXT("Rotation #3 : %s"), *spawnRotation.ToString());
 
 	//캐릭터의 Forward 방향으로 맞춰준다.
 	if (FireRotationOverride.IsNearlyZero(0.001f))
