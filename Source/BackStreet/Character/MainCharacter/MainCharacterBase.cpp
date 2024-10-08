@@ -236,7 +236,7 @@ void AMainCharacterBase::SwitchWeapon()
 
 void AMainCharacterBase::ZoomIn()
 {
-	/* ------------------------------ Exception Handling ------------------------------------ */
+	//------------------------------ Exception Handling ------------------------------------
 
 	if (WeaponComponent->WeaponStat.WeaponType != EWeaponType::E_Throw) return;			// WeaponType !E_Throw exception handling
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;	// ActionType !E_Idle exception handling
@@ -245,7 +245,7 @@ void AMainCharacterBase::ZoomIn()
 	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
 	if (subWeaponData.ItemID == 0) return;												// subWeaponData is Empty
 
-	/* -------------------------------------------------------------------------------------- */
+	//--------------------------------------------------------------------------------------
 
 	FLatentActionInfo LatentInfo;
 	LatentInfo.CallbackTarget = this;
@@ -254,14 +254,14 @@ void AMainCharacterBase::ZoomIn()
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;				// Set ActionType to E_Throw
 
-	/*------------- FollowingCamera attach to RangedAimBoom Component using Interp ---------- */
+	//------------- FollowingCamera attach to RangedAimBoom Component using Interp ---------- 
 
 	FollowingCamera->AttachToComponent(RangedAimBoom, FAttachmentTransformRules::KeepWorldTransform);
 	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
 
-	/* -------------------------------------------------------------------------------------- */
-
+	//---------------------------------------------------------------------------------------
+	OnZoomBegin.Broadcast();
 }
 
 void AMainCharacterBase::ZoomOut()
@@ -273,16 +273,15 @@ void AMainCharacterBase::ZoomOut()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
 
-	/*------------- FollowingCamera attach to CameraBoom Component using Interp ------------- */
-
+	//------------- FollowingCamera attach to CameraBoom Component using Interp ------------- 
 	FollowingCamera->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
 	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
 
-	/* -------------------------------------------------------------------------------------- */
+	//------------------------------------------------------------------------------------- 
 
 	Throw();
-	//SwitchWeapon();
+	OnZoomEnd.Broadcast();
 }
 
 void AMainCharacterBase::Throw()
@@ -291,13 +290,31 @@ void AMainCharacterBase::Throw()
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
 	ResetActionState();
-	WeaponComponent->RangedCombatManager->TryFireProjectile();
+	FRotator throwRotation = GetAimingRotation(WeaponComponent->GetComponentLocation());
+	WeaponComponent->RangedCombatManager->TryFireProjectile(throwRotation);
 }
 
 void AMainCharacterBase::SetAimingMode(bool bNewState)
 {
 	bIsAiming = bNewState;
 	//bUseControllerRotationYaw = bNewState;
+}
+
+FRotator AMainCharacterBase::GetAimingRotation(FVector BeginLocation)
+{
+	FHitResult lineTraceHitResult; //LineTracing의 결과가 담길 변수
+	FVector traceBeginLocation = FollowingCamera->GetComponentLocation(); //Trace는 카메라에서 시작
+	FVector traceEndLocation = traceBeginLocation + (FollowingCamera->GetForwardVector()) * 200000.0f; //End는 Camera로부터 20000.0f 떨어진 지점까지
+	FCollisionQueryParams traceCollisionQuery = FCollisionQueryParams::DefaultQueryParam;
+	traceCollisionQuery.AddIgnoredActor(this->GetUniqueID());  //플레이어의 카메라가 Hit되지 않도록 방지
+
+	GetWorld()->LineTraceSingleByChannel(lineTraceHitResult, traceBeginLocation, traceEndLocation
+		, ECollisionChannel::ECC_Camera, traceCollisionQuery); //LineTrace 시작
+	
+	//trace가 맞지 않을 경우 trace의 끝 지점을 rotation 연산의 끝 지점으로 지정
+	FVector targetLocation = lineTraceHitResult.bBlockingHit ? lineTraceHitResult.ImpactPoint : traceEndLocation;
+	FRotator beginRotation = UKismetMathLibrary::FindLookAtRotation(BeginLocation, targetLocation);
+	return beginRotation;
 }
 
 void AMainCharacterBase::ResetMovementInputValue()
@@ -327,10 +344,6 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 		AddMovementInput(forwardAxis, MovementInputValue.Y);
 		AddMovementInput(FollowingCamera->GetRightVector(), MovementInputValue.X);
 
-		if (MovementInputValue.Length() > 0 && OnMove.IsBound())
-		{
-			OnMove.Broadcast();
-		}
 		SetRotationLagSpeed(Value.Get<FVector2D>());
 	}
 }
@@ -438,12 +451,7 @@ void AMainCharacterBase::Roll()
 		&& IsValid(AssetHardPtrInfo.RollAnimMontageList[0]))
 	{
 		PlayAnimMontage(AssetHardPtrInfo.RollAnimMontageList[0], 1.0f);
-	}
-
-	if (OnRoll.IsBound())
-	{
-		OnRoll.Broadcast();
-	}		
+	}	
 }
 
 void AMainCharacterBase::Dash()
@@ -597,9 +605,6 @@ bool AMainCharacterBase::TrySkill(int32 SkillID)
 void AMainCharacterBase::Attack()
 {
 	Super::Attack();
-	// 공격 델리게이트 호출
-	if (OnAttack.IsBound())
-		OnAttack.Broadcast();	
 }
 
 

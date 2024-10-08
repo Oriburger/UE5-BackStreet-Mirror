@@ -68,5 +68,11 @@ protected:
 protected:
 	UPROPERTY()
 		FTimerHandle AutoReloadTimerHandle;
+
+private:
+	//타이머 이벤트 전달을 위해서만 사용
+	//델리게이트 바인딩 이후 파라미터를 직접 지정하면
+	//타이머 이벤트 수행 도중에 파라미터가 메모리에서 소멸되기에 널 예외 발생
+	FRotator FireRotationForTimer; 
 };
 

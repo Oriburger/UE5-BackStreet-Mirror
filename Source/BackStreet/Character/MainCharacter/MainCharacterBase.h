@@ -10,10 +10,8 @@
 
 class UInputComponent;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialAttack);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialMove);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialZoom);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialRoll);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateZoomBegin);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateZoomEnd);
 
 UCLASS()
 class BACKSTREET_API AMainCharacterBase : public ACharacterBase
@@ -22,16 +20,10 @@ class BACKSTREET_API AMainCharacterBase : public ACharacterBase
 
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateTutorialAttack OnAttack;
-		
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateTutorialMove OnMove;
+		FDelegateZoomBegin OnZoomBegin;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateTutorialZoom OnZoom;
-
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateTutorialRoll OnRoll;
+		FDelegateZoomBegin OnZoomEnd;
 
 //-------- Global -----------------
 public:
@@ -75,7 +67,7 @@ public:
 		class UPlayerSkillManagerComponent* SkillManagerComponent;
 
 // ------- Throw Test -----------
-	
+public:
 	UFUNCTION(BlueprintCallable)
 		void SwitchWeapon();
 	
@@ -90,6 +82,9 @@ public:
 
 	UFUNCTION()
 		void SetAimingMode(bool bNewState);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FRotator GetAimingRotation(FVector BeginLocation);
 
 	UPROPERTY()
 		bool bIsAiming = false;

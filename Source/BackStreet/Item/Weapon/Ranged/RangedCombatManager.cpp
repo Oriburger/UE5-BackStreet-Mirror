@@ -60,17 +60,17 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 		WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
 	}
 
+	UE_LOG(LogTemp, Warning, TEXT("Rotation #1 : %s"), *FireRotationOverride.ToString());
+	FireRotationForTimer = FireRotationOverride;
+
 	for (int idx = 1; idx <= fireProjectileCnt; idx++)
 	{
 		FTimerHandle delayHandle;
-
 		GetWorld()->GetTimerManager().SetTimer(delayHandle, FTimerDelegate::CreateLambda([&]() {
-			AProjectileBase* newProjectile = CreateProjectile(FireRotationOverride);
+			AProjectileBase* newProjectile = CreateProjectile(FireRotationForTimer);
 			//스폰한 발사체가 Valid 하다면 발사
 			if (IsValid(newProjectile))
 			{
-				UE_LOG(LogTemp, Warning, TEXT("RangedCombatManager::TryFireProjectile() #2"));
-
 				newProjectile->ActivateProjectileMovement();
 				SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
 			}
@@ -122,24 +122,23 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 	spawmParams.Instigator = OwnerCharacterRef.Get()->GetInstigator();
 	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	FVector SpawnLocation = OwnerCharacterRef.Get()->GetActorLocation();
-	FRotator SpawnRotation = FireRotationOverride.IsNearlyZero(0.001f) ?
+	UE_LOG(LogTemp, Warning, TEXT("Rotation #2 : %s"), *FireRotationOverride.ToString());
+
+	FVector spawnLocation = OwnerCharacterRef.Get()->WeaponComponent->GetComponentLocation();
+	FRotator spawnRotation = FireRotationOverride.IsNearlyZero(0.001f) ?
 								OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation()
 								: FireRotationOverride;
 
-	//캐릭터의 앞부분에 스폰한다. (추후 소켓으로 변경 필요)
-	SpawnLocation = SpawnLocation + OwnerCharacterRef.Get()->GetMesh()->GetForwardVector() * 20.0f;
-	SpawnLocation = SpawnLocation + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 50.0f;
-	SpawnLocation = SpawnLocation + FVector(0.0f, 0.0f, 50.0f);
+	UE_LOG(LogTemp, Warning, TEXT("Rotation #3 : %s"), *spawnRotation.ToString());
 
 	//캐릭터의 Forward 방향으로 맞춰준다.
 	if (FireRotationOverride.IsNearlyZero(0.001f))
 	{
-		SpawnRotation.Pitch = SpawnRotation.Roll = 0.0f;
-		SpawnRotation.Yaw += 90.0f;
+		spawnRotation.Pitch = spawnRotation.Roll = 0.0f;
+		spawnRotation.Yaw += 90.0f;
 	}
 
-	FTransform SpawnTransform = { SpawnRotation, SpawnLocation, {1.0f, 1.0f, 1.0f} };
+	FTransform SpawnTransform = { spawnRotation, spawnLocation, {1.0f, 1.0f, 1.0f} };
 	AProjectileBase* newProjectile = Cast<AProjectileBase>(GetWorld()->SpawnActor(AProjectileBase::StaticClass(), &SpawnTransform, spawmParams));
 
 	if (IsValid(newProjectile) && WeaponComponentRef.Get()->ProjectileAssetInfo.ProjectileID != 0)
