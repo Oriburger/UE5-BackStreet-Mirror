@@ -38,7 +38,7 @@ private:
 
 	//spawn various effect (sfx, vfx, camera effect)
 	UFUNCTION()
-		void ActivateMeleeHitEffect(const FVector& Location, bool bImpactEffect = false);
+		void ActivateMeleeHitEffect(const FVector& Location, AActor* AttachTarget = nullptr, bool bImpactEffect = false);
 
 private:
 	TArray<FVector> GetCurrentMeleePointList();

@@ -26,20 +26,6 @@ enum class ESkillUpgradeType : uint8
 	E_CoolTime			UMETA(DisplayName = "E_CoolTime")
 };
 
-
-USTRUCT(BlueprintType)
-struct FSkillLevelInfoContainer : public FTableRowBase
-{
-public:
-	GENERATED_USTRUCT_BODY()
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TMap<ESkillUpgradeType, float> SkillVariableMap;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TArray<uint8> RequiredMaterial;
-};
-
 USTRUCT(BlueprintType)
 struct FSkillListContainer : public FTableRowBase
 {
@@ -57,38 +43,38 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<int32> SkillIDList;
+		TArray<int32> SkillIDList;
 };
 
 USTRUCT(BlueprintType)
-struct FSkillLevelStatStruct : public FTableRowBase
-{
-public:
-	GENERATED_USTRUCT_BODY()
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		bool bIsLevelValid = false;
-
-	//레벨별 쿨타임 변수 정보
-	UPROPERTY(BlueprintReadWrite)
-		float CoolTime = 0;
-
-	//레벨별 변수 정보
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TArray<FSkillLevelInfoContainer> LevelInfo;
-};
-
-USTRUCT(BlueprintType)
-struct FSkillLevelStateStruct : public FTableRowBase
+struct FSkillUpgradeLevelInfo
 {
 public:
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(BlueprintReadWrite)
-		uint8 SkillLevel = 0;
+	UPROPERTY(BlueprintReadOnly)
+		uint8 CurrentLevel = -1;
 
-	//Skill Variable 
-	UPROPERTY(BlueprintReadWrite)
-		TMap<ESkillUpgradeType, float> SkillVariableMap;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TMap<int32, int32> RequiredMaterialMap; //id, cnt
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		float Variable = 0.0f;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool bIsPercentage = true;
+	
+		//uint8 Type = 0; //Optional variable (like debuff type, )
+};
+
+USTRUCT(BlueprintType)
+struct FSkillUpgradeLevelInfoContainer
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<FSkillUpgradeLevelInfo> SkillLevelInfoList;
 };
 
 USTRUCT(BlueprintType)
@@ -154,16 +140,16 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	bool bIsWeaponRequired = false;
+		bool bIsWeaponRequired = false;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	ESkillType SkillType = ESkillType::E_None;
+		ESkillType SkillType = ESkillType::E_None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<int32> AvailableWeaponIDList;
+		TArray<int32> AvailableWeaponIDList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	int32 RandomWeight = 0;
+		int32 RandomWeight = 0;
 };
 
 USTRUCT(BlueprintType)
@@ -188,10 +174,18 @@ public:
 		bool bIsLifeSpanWithCauser = true;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		FSkillAssetStruct SkillAssetStruct;
+		bool bIsLevelValid = false;
+
+	//조합을 위해 필요한 재료 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<int32, int32> CraftMaterial;
+
+	//for upgrade after craft
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TMap<ESkillUpgradeType, FSkillUpgradeLevelInfoContainer> LevelInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		FSkillLevelStatStruct SkillLevelStatStruct;
+		FSkillAssetStruct SkillAssetStruct;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FSkillWeaponStruct SkillWeaponStruct;
@@ -202,6 +196,14 @@ struct FSkillStateStruct : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadWrite)
+		uint8 SkillLevel = 0;
+
+	//Skill Variable 
+	UPROPERTY(BlueprintReadWrite)
+		TMap<ESkillUpgradeType, FSkillUpgradeLevelInfo> SkillUpgradeInfoMap;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		bool bIsBlocked = false;
 
@@ -209,66 +211,6 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		bool bIsHidden = false;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		FSkillLevelStateStruct SkillLevelStateStruct;
-
 	UPROPERTY()
 		bool bIsStateValid = false;
-};
-
-
-// 레거시 코드==================================
-USTRUCT(BlueprintType)
-struct FSkillLevelStruct : public FTableRowBase
-{
-public:
-	GENERATED_USTRUCT_BODY()
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		bool bIsLevelValid = false;
-
-	UPROPERTY(BlueprintReadWrite)
-		uint8 SkillLevel = 0;
-
-	//Cool Time List By Skill Level
-	UPROPERTY(BlueprintReadWrite)
-		float CoolTime = 0.0f;
-
-	//Skill Variable
-	UPROPERTY(BlueprintReadWrite)
-		TMap<FName, float> SkillVariableMap;
-};
-
-USTRUCT(BlueprintType)
-struct FSkillInfoStruct : public FTableRowBase
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		int32 SkillID = 0;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		FName SkillName;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		FName SkillDescription;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		ESkillType SkillType = ESkillType::E_None;
-
-	UPROPERTY(BlueprintReadWrite)
-		bool bHidenInGame = true;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		bool bSkillLifeSpanWithCauser = true;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		FSkillLevelStruct SkillLevelStruct;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		FSkillAssetStruct SkillAssetStruct;
-
-	//Skill causer character reference
-	UPROPERTY(BlueprintReadWrite)
-		TWeakObjectPtr<class ACharacterBase> Causer;
 };
