@@ -274,14 +274,14 @@ void AMainCharacterBase::ZoomOut()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
 
+	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;					// Set ActionType to E_Idle
+
 	//------------- FollowingCamera attach to CameraBoom Component using Interp ------------- 
 	FollowingCamera->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
 	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
 
 	//------------------------------------------------------------------------------------- 
-
-	Throw();
 	OnZoomEnd.Broadcast();
 }
 
@@ -290,7 +290,6 @@ void AMainCharacterBase::Throw()
 	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
-	ResetActionState();
 	FRotator throwRotation = GetAimingRotation(WeaponComponent->GetComponentLocation());
 	WeaponComponent->RangedCombatManager->TryFireProjectile(throwRotation);
 }
@@ -511,8 +510,18 @@ void AMainCharacterBase::TryAttack()
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (!CharacterState.bCanAttack || WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw) return;
+		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle
+		&& CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
+
+	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw)
+	{
+		Throw();
+		return;
+	}
+
+	if (!CharacterState.bCanAttack) return;
+
+	UE_LOG(LogTemp, Warning, TEXT("TryAttack()"));
 
 	if (WeaponComponent->WeaponID == 0)
 	{
