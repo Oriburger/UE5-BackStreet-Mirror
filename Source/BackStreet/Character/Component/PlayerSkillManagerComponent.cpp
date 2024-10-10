@@ -84,7 +84,7 @@ bool UPlayerSkillManagerComponent::AddSkill(int32 SkillID)
 			break;
 		}
 	}
-	if (skillBase->SkillStat.SkillLevelStatStruct.bIsLevelValid)
+	if (skillBase->SkillStat.bIsLevelValid)
 	{
 		UpgradeSkill(SkillID, ESkillUpgradeType::E_CoolTime, 1);
 	}
@@ -214,9 +214,9 @@ bool UPlayerSkillManagerComponent::IsSkillValid(int32 SkillID)
 	return Super::IsSkillValid(SkillID);
 }
 
-bool UPlayerSkillManagerComponent::IsSkilUpgradable(int32 SkillID, uint8 NewLevel)
+bool UPlayerSkillManagerComponent::GetIsSkillUpgradable(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel)
 {
-	return Super::IsSkilUpgradable(SkillID, NewLevel);
+	return Super::GetIsSkillUpgradable(SkillID, UpgradeTarget, NewLevel);
 }
 
 ASkillBase* UPlayerSkillManagerComponent::GetOwnSkillBase(int32 SkillID)
@@ -236,5 +236,14 @@ TArray<uint8> UPlayerSkillManagerComponent::GetRequiredMatAmount(int32 SkillID, 
 {
 	FSkillStatStruct skillInfo = GetSkillInfo(SkillID);
 	checkf(skillInfo.SkillID != 0, TEXT("Failed Find Skill"));
-	return skillInfo.SkillLevelStatStruct.LevelInfo[NewSkillLevel].RequiredMaterial;
+	return {};//skillInfo.LevelInfo[NewSkillLevel].RequiredMaterial;
+}
+
+TMap<int32, int32> UPlayerSkillManagerComponent::GetRequiredMaterialInfo(int32 SkillID, ESkillUpgradeType UpgradeType, uint8 Level)
+{
+	FSkillStatStruct skillInfo = GetSkillInfo(SkillID);
+	checkf(skillInfo.SkillID != 0, TEXT("Failed Find Skill"));
+	if(!skillInfo.LevelInfo.Contains(UpgradeType)) return TMap<int32, int32>();
+	else if(!skillInfo.LevelInfo[UpgradeType].SkillLevelInfoList.IsValidIndex(Level)) return TMap<int32, int32>();
+	return skillInfo.LevelInfo[UpgradeType].SkillLevelInfoList[Level].RequiredMaterialMap;
 }

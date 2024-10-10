@@ -51,7 +51,7 @@ public:
 public:
 	virtual bool IsSkillValid(int32 SkillID);
 
-	virtual bool IsSkilUpgradable(int32 SkillID, uint8 NewLevel);
+	virtual bool GetIsSkillUpgradable(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel);
 
 	virtual ASkillBase* GetOwnSkillBase(int32 SkillID);
 
@@ -68,12 +68,27 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FSkillStateStruct GetOwnSkillState(int32 SkillID);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FSkillUpgradeLevelInfo GetCurrentSkillLevelInfo(int32 SkillID, ESkillUpgradeType Target);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FSkillUpgradeLevelInfo GetSkillUpgradeLevelInfo(int32 SkillID, ESkillUpgradeType Target, int32 TargetLevel);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsUpgradeTargetValid(int32 SkillID, ESkillUpgradeType UpgradeTarget);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsUpgradeLevelValid(int32 SkillID, ESkillUpgradeType UpgradeTarget, int32 TargetLevel);
+
 //======= DataTable =============================================================================
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Gamplay|Data")
 		UDataTable* SkillStatTable;
 
 //======= Ref =========
+private:
+	TMap<int32, FSkillStatStruct> SkillInfoCache;
+
 protected:
 	//GameMode Soft Ref
 	TWeakObjectPtr<class ABackStreetGameModeBase> GameModeRef;

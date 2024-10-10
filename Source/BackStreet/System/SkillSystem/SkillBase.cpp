@@ -29,6 +29,16 @@ void ASkillBase::BeginPlay()
 	SkillStatTable = GameModeRef.Get()->SkillStatTable;
 }
 
+void ASkillBase::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	
+	if (SkillState.SkillUpgradeInfoMap.Contains(ESkillUpgradeType::E_CoolTime))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SKILLBASE CoolTime : %.2lf / bIsBlocked : %d"), SkillState.SkillUpgradeInfoMap[ESkillUpgradeType::E_CoolTime].Variable, (int32)SkillState.bIsBlocked)
+	}
+}
+
 void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponentBase* NewSkillManagerComponent)
 {
 	SkillStat = NewSkillStat;
@@ -40,6 +50,18 @@ void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent
 
 	SkillState.bIsHidden = true;
 	SkillState.bIsStateValid = true;
+	TArray<ESkillUpgradeType> upgradeTypeList;
+	SkillStat.LevelInfo.GenerateKeyArray(upgradeTypeList);
+	for (ESkillUpgradeType& upgradeType : upgradeTypeList)
+	{
+		if (SkillStat.LevelInfo[upgradeType].SkillLevelInfoList.IsEmpty())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("ASkillBase::InitSkill, ID %d) SkillLevelInfoList is empty"), NewSkillStat.SkillID);
+		}
+		FSkillUpgradeLevelInfo newUpgradeInfo = SkillStat.LevelInfo[upgradeType].SkillLevelInfoList[0];
+		SkillState.SkillUpgradeInfoMap.Add(upgradeType, newUpgradeInfo);
+	}
+
 	OwnerCharacterBaseRef = Cast<ACharacterBase>(SkillManagerComponentRef->GetOwner());
 	//If SkillActor's life span is sync with causer, then destroy with causer 
 	if (SkillStat.bIsLifeSpanWithCauser)
@@ -50,13 +72,14 @@ void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent
 
 void ASkillBase::ActivateSkill_Implementation()
 {
+	if (!SkillState.SkillUpgradeInfoMap.Contains(ESkillUpgradeType::E_CoolTime)) return;
 	SetActorHiddenInGame(false);
 	
 	//Set cooltime timer
-	FSkillLevelStatStruct skillLevelInfo = SkillStat.SkillLevelStatStruct;
-	if (skillLevelInfo.bIsLevelValid && skillLevelInfo.CoolTime > 0.0f)
+	FSkillUpgradeLevelInfo coolTimeInfo = SkillState.SkillUpgradeInfoMap[ESkillUpgradeType::E_CoolTime];
+	if (coolTimeInfo.Variable > 0.0f)
 	{
-		SetSkillBlockedTimer(skillLevelInfo.CoolTime);
+		SetSkillBlockedTimer(coolTimeInfo.Variable);
 	}
 }
 
