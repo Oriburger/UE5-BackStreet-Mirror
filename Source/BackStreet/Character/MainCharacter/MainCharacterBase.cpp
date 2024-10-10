@@ -219,6 +219,7 @@ void AMainCharacterBase::SwitchWeapon()
 	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
 	if (subWeaponData.ItemID == 0 || mainWeaponData.ItemID == 0)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("mainItemID == %d, subItemID == %d"), mainWeaponData.ItemID, subWeaponData.ItemID );
 		//워닝 메시지
 		return;
 	}
@@ -871,7 +872,9 @@ bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 bool AMainCharacterBase::EquipWeapon(const int32 NewWeaponID)
 {
 	bool result = Super::EquipWeapon(NewWeaponID);
-	return true;
+
+	//return true;	//bool result 안쓸거면 왜 초기화 함? return은 무조건 true?
+	return result;
 }
 
 void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)
