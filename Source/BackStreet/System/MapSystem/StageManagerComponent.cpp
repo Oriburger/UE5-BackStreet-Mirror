@@ -491,7 +491,6 @@ void UStageManagerComponent::GrantStageRewards()
 			playerCharacter->ItemInventory->AddItem(rewardItemInfo.ItemID, rewardItemInfo.ItemAmount);
 		}
 	}
-	//OnRewardGranted.Broadcast(rewardItemIDList);
 }
 
 AActor* UStageManagerComponent::SpawnItemActor(FItemInfoDataStruct ItemInfo)
