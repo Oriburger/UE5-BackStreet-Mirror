@@ -255,6 +255,8 @@ void AMainCharacterBase::ZoomIn()
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;				// Set ActionType to E_Throw
 
+	bIsAiming = true;																	// Set bIsAiming true
+
 	//------------- FollowingCamera attach to RangedAimBoom Component using Interp ---------- 
 
 	FollowingCamera->AttachToComponent(RangedAimBoom, FAttachmentTransformRules::KeepWorldTransform);
@@ -275,6 +277,8 @@ void AMainCharacterBase::ZoomOut()
 	bUseControllerRotationYaw = false;
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;					// Set ActionType to E_Idle
+
+	bIsAiming = false;
 
 	//------------- FollowingCamera attach to CameraBoom Component using Interp ------------- 
 	FollowingCamera->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
@@ -520,8 +524,6 @@ void AMainCharacterBase::TryAttack()
 	}
 
 	if (!CharacterState.bCanAttack) return;
-
-	UE_LOG(LogTemp, Warning, TEXT("TryAttack()"));
 
 	if (WeaponComponent->WeaponID == 0)
 	{
