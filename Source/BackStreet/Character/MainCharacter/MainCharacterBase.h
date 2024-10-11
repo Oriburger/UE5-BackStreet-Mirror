@@ -58,7 +58,7 @@ public:
 
 	//Player SpirngArm for RangedWeapon Aim
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
-	USpringArmComponent* RangedAimBoom;
+		USpringArmComponent* RangedAimBoom;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		class UItemInventoryComponent* ItemInventory;
@@ -87,7 +87,7 @@ public:
 		FRotator GetAimingRotation(FVector BeginLocation);
 
 	//Set in ZoomIn or ZoomOut, Used in AnimBluePrint to switch the MainCharacter's Aiming animation sequence.
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
 		bool bIsAiming = false;
 
 // ------- Character Input Action ------- 

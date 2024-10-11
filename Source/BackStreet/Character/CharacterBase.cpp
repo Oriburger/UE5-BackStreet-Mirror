@@ -998,8 +998,6 @@ float ACharacterBase::GetTotalStatValue(float& DefaultValue, FStatInfoStruct& Ab
 
 bool ACharacterBase::EquipWeapon(int32 NewWeaponID)
 {
-	UE_LOG(LogTemp, Warning, TEXT("WeaponID = %d"), WeaponComponent->WeaponID);
-	//if (WeaponComponent->WeaponID != 0 ) return false;		막아놓은 이유 설명 필요
 	WeaponComponent->InitWeapon(NewWeaponID);
 	return true;
 }

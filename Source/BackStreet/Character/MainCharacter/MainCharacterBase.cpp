@@ -51,20 +51,15 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom->SetWorldRotation({ -45.0f, 0.0f, 0.0f });
 
 
-	/*--------------------------MainCharacter RangedWeaponAim SpringArm----------------------------------*/
-
 	//MainCharacter RangedWeaponAim SpringArm
 	RangedAimBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("RangedWeaponAim_Boom"));
-	RangedAimBoom->SetupAttachment(RootComponent);				//Inheritance to RootComponent
-	RangedAimBoom->TargetArmLength = 150.0f;					//SpringArm Length
+	RangedAimBoom->SetupAttachment(RootComponent);				
+	RangedAimBoom->TargetArmLength = 150.0f;					
 	RangedAimBoom->bUsePawnControlRotation = true;
 	RangedAimBoom->bInheritPitch = true;
 	RangedAimBoom->bInheritRoll = false;
 	RangedAimBoom->bInheritYaw = true;
-
 	RangedAimBoom->SetRelativeLocation({ 0.0f, 85.0f, 10.0f });	//Set Location
-
-	/*---------------------------------------------------------------------------------------------------*/
 
 	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 110.0f, 120.0f));
 
@@ -197,7 +192,6 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(InputActionInfo.JumpAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StartJump);
 
 		//Zoom In&Out
-		//EnhancedInputComponent->BindAction(InputActionInfo.ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
 		EnhancedInputComponent->BindAction(InputActionInfo.ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
 		EnhancedInputComponent->BindAction(InputActionInfo.ZoomAction, ETriggerEvent::Completed, this, &AMainCharacterBase::ZoomOut);
 
@@ -219,7 +213,6 @@ void AMainCharacterBase::SwitchWeapon()
 	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
 	if (subWeaponData.ItemID == 0 || mainWeaponData.ItemID == 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("mainItemID == %d, subItemID == %d"), mainWeaponData.ItemID, subWeaponData.ItemID );
 		//워닝 메시지
 		return;
 	}
@@ -237,16 +230,14 @@ void AMainCharacterBase::SwitchWeapon()
 
 void AMainCharacterBase::ZoomIn()
 {
-	//------------------------------ Exception Handling ------------------------------------
+	//======================== Exception Handling ==========================
 
-	if (WeaponComponent->WeaponStat.WeaponType != EWeaponType::E_Throw) return;			// WeaponType !E_Throw exception handling
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;	// ActionType !E_Idle exception handling
-	if (!IsValid(ItemInventory)) return;												// Iteminventory is not Valid
+	if (WeaponComponent->WeaponStat.WeaponType != EWeaponType::E_Throw) return;			
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;	
+	if (!IsValid(ItemInventory)) return;												
 	FItemInfoDataStruct subWeaponData = ItemInventory->GetSubWeaponInfoData();
 	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
-	if (subWeaponData.ItemID == 0) return;												// subWeaponData is Empty
-
-	//--------------------------------------------------------------------------------------
+	if (subWeaponData.ItemID == 0) return;												
 
 	FLatentActionInfo LatentInfo;
 	LatentInfo.CallbackTarget = this;
@@ -255,20 +246,20 @@ void AMainCharacterBase::ZoomIn()
 
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 
-	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;				// Set ActionType to E_Throw
+	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;	// Set ActionType to E_Throw
 
-	bIsAiming = true;																	// Set bIsAiming true
+	bIsAiming = true;	// Set bIsAiming true
 
-	CharacterState.bIsSprinting = false;												// Set biIsSprinting false
-	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed * 0.3f, 0.4f);				// Set WalkSpeed => DefaultMoveSpeed * 0.3f
+	CharacterState.bIsSprinting = false;	// Set biIsSprinting false
 
-	//------------- FollowingCamera attach to RangedAimBoom Component using Interp ---------- 
+	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed * 0.3f, 0.4f);	// Set WalkSpeed => DefaultMoveSpeed * 0.3f
+
+	//================== FollowingCamera attach to RangedAimBoom Component using Interp ==================
 
 	FollowingCamera->AttachToComponent(RangedAimBoom, FAttachmentTransformRules::KeepWorldTransform);
 	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
 
-	//---------------------------------------------------------------------------------------
 	OnZoomBegin.Broadcast();
 }
 
@@ -290,12 +281,11 @@ void AMainCharacterBase::ZoomOut()
 	CharacterState.bIsSprinting = true;													// Set biIsSprinting true
 	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed, 0.75f);
 
-	//------------- FollowingCamera attach to CameraBoom Component using Interp ------------- 
+	//================== FollowingCamera attach to CameraBoom Component using Interp ===================
 	FollowingCamera->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
 	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
 
-	//------------------------------------------------------------------------------------- 
 	OnZoomEnd.Broadcast();
 }
 
@@ -372,8 +362,8 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 	if (Controller != nullptr && !TargetingManagerComponent->GetIsTargetingActivated())
 	{
 		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X/2);
-		AddControllerPitchInput(LookAxisVector.Y/2);
+		AddControllerYawInput(LookAxisVector.X / 2.0f);
+		AddControllerPitchInput(LookAxisVector.Y / 2.0f);
 		SetManualRotateMode();
 
 		// set timer for automatic rotate mode 
@@ -388,7 +378,7 @@ void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	//CharacterState.CharacterActionState = ECharacterActionType::E_Jump;
+
 	Jump();
 }
 
@@ -892,10 +882,7 @@ bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 
 bool AMainCharacterBase::EquipWeapon(const int32 NewWeaponID)
 {
-	bool result = Super::EquipWeapon(NewWeaponID);
-
-	//return true;	//bool result 안쓸거면 왜 초기화 함? return은 무조건 true?
-	return result;
+	return Super::EquipWeapon(NewWeaponID);
 }
 
 void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)
