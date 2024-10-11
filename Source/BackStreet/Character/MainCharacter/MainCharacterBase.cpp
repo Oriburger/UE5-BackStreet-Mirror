@@ -265,7 +265,8 @@ void AMainCharacterBase::ZoomIn()
 
 void AMainCharacterBase::ZoomOut()
 {
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;	 //ActionType !E_Throw exception handling
+	//ActionType !E_Throw exception handling
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
 	FLatentActionInfo LatentInfo;
 	LatentInfo.CallbackTarget = this;
@@ -274,11 +275,11 @@ void AMainCharacterBase::ZoomOut()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
-	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;					// Set ActionType to E_Idle
+	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;	// Set ActionType to E_Idle
 
 	bIsAiming = false;
 
-	CharacterState.bIsSprinting = true;													// Set biIsSprinting true
+	CharacterState.bIsSprinting = true;	// Set biIsSprinting true
 	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed, 0.75f);
 
 	//================== FollowingCamera attach to CameraBoom Component using Interp ===================
