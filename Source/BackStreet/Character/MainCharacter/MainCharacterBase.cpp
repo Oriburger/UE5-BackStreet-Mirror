@@ -68,9 +68,6 @@ AMainCharacterBase::AMainCharacterBase()
 
 	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 110.0f, 120.0f));
 
-	SkillManagerComponent = CreateDefaultSubobject<UPlayerSkillManagerComponent>(TEXT("SKILL_MANAGER_"));
-	SkillManagerComponentRef = SkillManagerComponent;
-
 	//MainCharacter Main Camera
 	FollowingCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FOLLOWING_CAMERA"));
 	FollowingCamera->SetupAttachment(CameraBoom);
@@ -88,6 +85,10 @@ AMainCharacterBase::AMainCharacterBase()
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
 
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
+
+	SkillManagerComponent = CreateDefaultSubobject<UPlayerSkillManagerComponent>(TEXT("SKILL_MANAGER_"));
+
+	AbilityManagerComponent = CreateDefaultSubobject<UAbilityManagerComponent>(TEXT("ABILITY_MANAGER"));
 
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
 	GetCapsuleComponent()->SetCapsuleRadius(41.0f);
@@ -118,8 +119,7 @@ void AMainCharacterBase::BeginPlay()
 
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
-	AbilityManagerRef = NewObject<UAbilityManagerBase>(this, UAbilityManagerBase::StaticClass(), FName("AbilityfManager"));
-	AbilityManagerRef->InitAbilityManager(this);
+	AbilityManagerComponent->InitAbilityManager(this);
 	InitCombatUI();
 
 	//UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
@@ -852,20 +852,17 @@ bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* C
 
 bool AMainCharacterBase::TryAddNewAbility(const int32 NewAbilityID)
 {
-	if(!IsValid(AbilityManagerRef)) return false;
-	return AbilityManagerRef->TryAddNewAbility(NewAbilityID);
+	return AbilityManagerComponent->TryAddNewAbility(NewAbilityID);
 }
 
 bool AMainCharacterBase::TryRemoveAbility(const int32 NewAbilityID)
 {
-	if (!IsValid(AbilityManagerRef)) return false;
-	return AbilityManagerRef->TryRemoveAbility(NewAbilityID);
+	return AbilityManagerComponent->TryRemoveAbility(NewAbilityID);
 }
 
 bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 {
-	if (!IsValid(AbilityManagerRef)) return false;
-	return AbilityManagerRef->GetIsAbilityActive(AbilityID);
+	return AbilityManagerComponent->GetIsAbilityActive(AbilityID);
 }
 
 bool AMainCharacterBase::EquipWeapon(const int32 NewWeaponID)

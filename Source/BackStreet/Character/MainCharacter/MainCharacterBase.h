@@ -58,13 +58,16 @@ public:
 
 	//Player SpirngArm for RangedWeapon Aim
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
-	USpringArmComponent* RangedAimBoom;
+		USpringArmComponent* RangedAimBoom;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		class UItemInventoryComponent* ItemInventory;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UPlayerSkillManagerComponent* SkillManagerComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UAbilityManagerComponent* AbilityManagerComponent; 
 
 // ------- Throw Test -----------
 public:
@@ -267,7 +270,7 @@ public:
 // ------- 어빌리티 / 디버프 ---------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class UAbilityManagerBase* GetAbilityManagerRef() { return AbilityManagerRef; }
+		class UAbilityManagerComponent* GetAbilityManagerRef() { return AbilityManagerComponent; }
 
 public: 
 	//디버프 상태를 지정
@@ -323,9 +326,6 @@ public:
 private:
 	UPROPERTY()
 		float TargetFieldOfView = 0.0f;
-
-	UPROPERTY()
-		class UAbilityManagerBase* AbilityManagerRef;
 
 	//플레이어 컨트롤러 약 참조
 	TWeakObjectPtr<class AMainCharacterController> PlayerControllerRef;

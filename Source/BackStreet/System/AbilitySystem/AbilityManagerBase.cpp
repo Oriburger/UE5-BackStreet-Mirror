@@ -5,12 +5,18 @@
 #include "../../Character/CharacterBase.h"
 
 // Sets default values
-UAbilityManagerBase::UAbilityManagerBase()
+UAbilityManagerComponent::UAbilityManagerComponent()
 {
-	
+	PrimaryComponentTick.bCanEverTick = false;	
 }
 
-void UAbilityManagerBase::InitAbilityManager(ACharacterBase* NewCharacter)
+// Called when the game starts
+void UAbilityManagerComponent::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void UAbilityManagerComponent::InitAbilityManager(ACharacterBase* NewCharacter)
 {
 	if (!IsValid(NewCharacter)) return;
 	//UE_LOG(LogTemp, Warning, TEXT("Initialize Ability Manager Success"));
@@ -20,11 +26,11 @@ void UAbilityManagerBase::InitAbilityManager(ACharacterBase* NewCharacter)
 	UDataTable* abilityInfoTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/Character/MainCharacter/Data/D_AbilityInfoDataTable.D_AbilityInfoDataTable'"));
 	if (!InitAbilityInfoListFromTable(abilityInfoTable))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UAbilityManagerBase::InitAbilityManager) DataTable is not found!"));
+		UE_LOG(LogTemp, Warning, TEXT("UAbilityManagerComponent::InitAbilityManager) DataTable is not found!"));
 	}
 }
 
-bool UAbilityManagerBase::TryAddNewAbility(int32 AbilityID)
+bool UAbilityManagerComponent::TryAddNewAbility(int32 AbilityID)
 {
 	if (!OwnerCharacterRef.IsValid()) return false;
 	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
@@ -46,7 +52,7 @@ bool UAbilityManagerBase::TryAddNewAbility(int32 AbilityID)
 	return true;
 }
 
-bool UAbilityManagerBase::TryRemoveAbility(int32 AbilityID)
+bool UAbilityManagerComponent::TryRemoveAbility(int32 AbilityID)
 {
 	if (!OwnerCharacterRef.IsValid()) return false;
 	if (!GetIsAbilityActive(AbilityID)) return false;
@@ -73,12 +79,12 @@ bool UAbilityManagerBase::TryRemoveAbility(int32 AbilityID)
 	return false;
 }
 
-void UAbilityManagerBase::ClearAllAbility()
+void UAbilityManagerComponent::ClearAllAbility()
 {
 	ActiveAbilityInfoList.Empty();
 }
 
-bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct TargetAbilityInfo, bool bIsReset)
+bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct TargetAbilityInfo, bool bIsReset)
 {
 	//Validity 체크 (꺼져있는데 제거를 시도하거나, 켜져있는데 추가를 시도한다면?)
 	if (GetIsAbilityActive(TargetAbilityInfo.AbilityId) != bIsReset) return false;
@@ -173,7 +179,7 @@ bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct Target
 	return true;
 }
 
-bool UAbilityManagerBase::GetIsAbilityActive(int32 AbilityID) const
+bool UAbilityManagerComponent::GetIsAbilityActive(int32 AbilityID) const
 {
 	for (const FAbilityInfoStruct& abilityInfo : ActiveAbilityInfoList)
 	{
@@ -185,18 +191,18 @@ bool UAbilityManagerBase::GetIsAbilityActive(int32 AbilityID) const
 	return false;
 }
 
-int32 UAbilityManagerBase::GetMaxAbilityCount() const
+int32 UAbilityManagerComponent::GetMaxAbilityCount() const
 {
 	return MaxAbilityCount; 
 }
 
-FAbilityInfoStruct UAbilityManagerBase::GetAbilityInfo(int32 AbilityID)
+FAbilityInfoStruct UAbilityManagerComponent::GetAbilityInfo(int32 AbilityID)
 {
 	if(!AbilityInfoList.IsValidIndex(AbilityID)) return FAbilityInfoStruct();
 	return AbilityInfoList[AbilityID];
 }
 
-bool UAbilityManagerBase::InitAbilityInfoListFromTable(const UDataTable* AbilityInfoTable)
+bool UAbilityManagerComponent::InitAbilityInfoListFromTable(const UDataTable* AbilityInfoTable)
 {
 	if (AbilityInfoTable == nullptr) return false;
 
@@ -214,7 +220,7 @@ bool UAbilityManagerBase::InitAbilityInfoListFromTable(const UDataTable* Ability
 	return true;
 }
 
-TArray<ECharacterAbilityType> UAbilityManagerBase::GetActiveAbilityList() const
+TArray<ECharacterAbilityType> UAbilityManagerComponent::GetActiveAbilityList() const
 {
 	TArray<ECharacterAbilityType> returnActiveAbility;
 	for (const FAbilityInfoStruct& abilityInfo : ActiveAbilityInfoList)
@@ -224,7 +230,7 @@ TArray<ECharacterAbilityType> UAbilityManagerBase::GetActiveAbilityList() const
 	return returnActiveAbility;
 }
 
-TArray<FAbilityInfoStruct> UAbilityManagerBase::GetActiveAbilityInfoList() const
+TArray<FAbilityInfoStruct> UAbilityManagerComponent::GetActiveAbilityInfoList() const
 {
 	return ActiveAbilityInfoList;
 }
