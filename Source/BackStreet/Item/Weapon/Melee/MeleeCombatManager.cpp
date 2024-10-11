@@ -103,7 +103,7 @@ void UMeleeCombatManager::MeleeAttack()
 			totalDamage = bIsFinalCombo ? totalDamage * (WeaponComponentRef.Get()->WeaponStat.FinalImpactStrength + 1.0f) : totalDamage;
 
 			//Activate Melee Hit Effect
-			ActivateMeleeHitEffect(target->GetActorLocation(), bIsFinalCombo && WeaponComponentRef.Get()->WeaponStat.FinalImpactStrength > 0.0f);
+			ActivateMeleeHitEffect(target->GetActorLocation(), target, bIsFinalCombo && WeaponComponentRef.Get()->WeaponStat.FinalImpactStrength > 0.0f);
 
 			//Apply Knockback
 			if (!target->ActorHasTag("Boss")
@@ -127,7 +127,7 @@ bool UMeleeCombatManager::CheckMeleeAttackTarget(FHitResult& hitResult, const TA
 	return false;
 }
 
-void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, bool bImpactEffect)
+void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, AActor* AttachTarget, bool bImpactEffect)
 {
 	//Activate Slow Effect (Hit stop)
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player"))
@@ -147,8 +147,16 @@ void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, bool b
 	{
 		if (IsValid(WeaponComponentRef.Get()->HitEffectParticle))
 		{
-			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponComponentRef.Get()->HitEffectParticle, emitterSpawnTransform.GetLocation()
-				, WeaponComponentRef.Get()->WeaponState.SlashRotation + randomRotator, emitterSpawnTransform.GetScale3D());
+			if (IsValid(AttachTarget))
+			{
+				UNiagaraFunctionLibrary::SpawnSystemAttached(WeaponComponentRef.Get()->HitEffectParticle, AttachTarget->GetRootComponent()
+					, FName(""), FVector(), WeaponComponentRef.Get()->WeaponState.SlashRotation, EAttachLocation::KeepRelativeOffset, true);
+			}
+			else
+			{
+				UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponComponentRef.Get()->HitEffectParticle, emitterSpawnTransform.GetLocation()
+					, WeaponComponentRef.Get()->WeaponState.SlashRotation + randomRotator, emitterSpawnTransform.GetScale3D());
+			}
 		}
 		if (AssetManagerRef.IsValid())
 		{
