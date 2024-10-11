@@ -253,9 +253,14 @@ void AMainCharacterBase::ZoomIn()
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	bUseControllerRotationYaw = true;
 
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+
 	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;				// Set ActionType to E_Throw
 
 	bIsAiming = true;																	// Set bIsAiming true
+
+	CharacterState.bIsSprinting = false;												// Set biIsSprinting false
+	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed * 0.3f, 0.4f);				// Set WalkSpeed => DefaultMoveSpeed * 0.3f
 
 	//------------- FollowingCamera attach to RangedAimBoom Component using Interp ---------- 
 
@@ -276,9 +281,14 @@ void AMainCharacterBase::ZoomOut()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
 
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;					// Set ActionType to E_Idle
 
 	bIsAiming = false;
+
+	CharacterState.bIsSprinting = true;													// Set biIsSprinting true
+	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed, 0.75f);
 
 	//------------- FollowingCamera attach to CameraBoom Component using Interp ------------- 
 	FollowingCamera->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
