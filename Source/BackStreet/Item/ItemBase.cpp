@@ -109,13 +109,12 @@ void AItemBase::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* O
 void AItemBase::OnItemPicked_Implementation()
 {
 	AMainCharacterBase* playerRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	UE_LOG(LogTemp, Warning, TEXT("Item Ref #1"));
+	
 	switch (ItemInfo.ItemType)
 	{
 	case EItemCategoryInfo::E_Weapon:
 		if (playerRef->ActorHasTag("Player"))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Item Ref Weapon #2"));
 			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
 			if (!playerRef->EquipWeapon(targetWeaponID)) return;
 		}
@@ -123,7 +122,6 @@ void AItemBase::OnItemPicked_Implementation()
 	case EItemCategoryInfo::E_SubWeapon:
 		if (playerRef->ActorHasTag("Player"))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Item Ref SubWeapon #2"));
 			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
 			if (!playerRef->EquipWeapon(targetWeaponID)) return;
 		}
