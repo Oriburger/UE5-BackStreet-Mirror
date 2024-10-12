@@ -34,7 +34,7 @@ void URangedCombatManager::StopAttack()
 	Super::Attack();
 }
 
-bool URangedCombatManager::TryFireProjectile()
+bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 {
 	if (!OwnerCharacterRef.IsValid()) return false;
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo
@@ -50,31 +50,31 @@ bool URangedCombatManager::TryFireProjectile()
 		GamemodeRef.Get()->GetWorldTimerManager().SetTimer(AutoReloadTimerHandle, OwnerCharacterRef.Get(), &ACharacterBase::TryReload, 1.0f, false, AUTO_RELOAD_DELAY_VALUE);
 		return false;
 	}
+
 	int32 fireProjectileCnt = OwnerCharacterRef.Get()->GetCharacterStat().ProjectileCountPerAttack;
-	if (!OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
+
+	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo 
+		&& !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
 	{
 		fireProjectileCnt = FMath::Min(fireProjectileCnt, WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount);
-	}
-
-	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo && !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
-	{
 		WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
 	}
+
+	FireRotationForTimer = FireRotationOverride;
+
 	for (int idx = 1; idx <= fireProjectileCnt; idx++)
 	{
 		FTimerHandle delayHandle;
-
 		GetWorld()->GetTimerManager().SetTimer(delayHandle, FTimerDelegate::CreateLambda([&]() {
-				AProjectileBase* newProjectile = CreateProjectile();
-				//스폰한 발사체가 Valid 하다면 발사
-				if (IsValid(newProjectile))
-				{
-					newProjectile->ActivateProjectileMovement();
-					SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
-				}
-			}), 0.1f * (float)idx, false);
+			AProjectileBase* newProjectile = CreateProjectile(FireRotationForTimer);
+			//스폰한 발사체가 Valid 하다면 발사
+			if (IsValid(newProjectile))
+			{
+				newProjectile->ActivateProjectileMovement();
+				SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
+			}
+		}), 0.1f * (float)idx, false);
 	}
-
 	return true;
 }
 
@@ -111,7 +111,7 @@ void URangedCombatManager::AddAmmo(int32 Count)
 		(WeaponComponentRef.Get()->WeaponState.RangedWeaponState.ExtraAmmoCount + Count) % (int32)1e5;
 }
 
-AProjectileBase* URangedCombatManager::CreateProjectile()
+AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOverride)
 {	
 	FWeaponStatStruct weaponStat = WeaponComponentRef.Get()->WeaponStat;
 	FWeaponStateStruct weaponState = WeaponComponentRef.Get()->WeaponState;
@@ -121,17 +121,20 @@ AProjectileBase* URangedCombatManager::CreateProjectile()
 	spawmParams.Instigator = OwnerCharacterRef.Get()->GetInstigator();
 	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	FVector SpawnLocation = OwnerCharacterRef.Get()->GetActorLocation();
-	FRotator SpawnRotation = OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation();
+	FVector spawnLocation = OwnerCharacterRef.Get()->WeaponComponent->GetComponentLocation();
+	FRotator spawnRotation = FireRotationOverride.IsNearlyZero(0.001f) ?
+								OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation()
+								: FireRotationOverride;
 
-	SpawnLocation = SpawnLocation + OwnerCharacterRef.Get()->GetMesh()->GetForwardVector() * 20.0f;
-	SpawnLocation = SpawnLocation + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 50.0f;
-	SpawnLocation = SpawnLocation + FVector(0.0f, 0.0f, 50.0f);
 
-	SpawnRotation.Pitch = SpawnRotation.Roll = 0.0f;
-	SpawnRotation.Yaw += 90.0f;
+	//캐릭터의 Forward 방향으로 맞춰준다.
+	if (FireRotationOverride.IsNearlyZero(0.001f))
+	{
+		spawnRotation.Pitch = spawnRotation.Roll = 0.0f;
+		spawnRotation.Yaw += 90.0f;
+	}
 
-	FTransform SpawnTransform = { SpawnRotation, SpawnLocation, {1.0f, 1.0f, 1.0f} };
+	FTransform SpawnTransform = { spawnRotation, spawnLocation, {1.0f, 1.0f, 1.0f} };
 	AProjectileBase* newProjectile = Cast<AProjectileBase>(GetWorld()->SpawnActor(AProjectileBase::StaticClass(), &SpawnTransform, spawmParams));
 
 	if (IsValid(newProjectile) && WeaponComponentRef.Get()->ProjectileAssetInfo.ProjectileID != 0)

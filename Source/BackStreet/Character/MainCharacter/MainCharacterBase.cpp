@@ -13,6 +13,7 @@
 #include "../../Item/ItemBase.h"
 #include "../../Item/ItemBoxBase.h"
 #include "../../Item/RewardBoxBase.h"
+#include "../../Item/Weapon/Ranged/RangedCombatManager.h"
 #include "../../Item/InteractiveCollisionComponent.h"
 #include "../../System/MapSystem/Stage/GateBase.h"
 #include "../Component/WeaponComponentBase.h"
@@ -34,6 +35,7 @@ AMainCharacterBase::AMainCharacterBase()
 	PrimaryActorTick.bCanEverTick = true;
 	//SetActorTickInterval(0.1f);
 
+	//MainCharacter Main Camera SpringArm
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CAMERA_BOOM"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->bUsePawnControlRotation = true;
@@ -42,17 +44,29 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom->bInheritRoll = false;
 	CameraBoom->bInheritYaw = true;
 	CameraBoom->bEnableCameraLag = true;
-	CameraBoom->bEnableCameraRotationLag = true;
+	CameraBoom->bEnableCameraRotationLag = true;	
 	CameraBoom->CameraRotationLagSpeed = 0.5f;
 	CameraBoom->CameraLagMaxDistance = 1000.0f;
 	CameraBoom->SetRelativeLocation({ 0.0f, 30.0f, 80.0f });
 	CameraBoom->SetWorldRotation({ -45.0f, 0.0f, 0.0f });
+
+
+	//MainCharacter RangedWeaponAim SpringArm
+	RangedAimBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("RangedWeaponAim_Boom"));
+	RangedAimBoom->SetupAttachment(RootComponent);				
+	RangedAimBoom->TargetArmLength = 150.0f;					
+	RangedAimBoom->bUsePawnControlRotation = true;
+	RangedAimBoom->bInheritPitch = true;
+	RangedAimBoom->bInheritRoll = false;
+	RangedAimBoom->bInheritYaw = true;
+	RangedAimBoom->SetRelativeLocation({ 0.0f, 85.0f, 10.0f });	//Set Location
 
 	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 110.0f, 120.0f));
 
 	SkillManagerComponent = CreateDefaultSubobject<UPlayerSkillManagerComponent>(TEXT("SKILL_MANAGER_"));
 	SkillManagerComponentRef = SkillManagerComponent;
 
+	//MainCharacter Main Camera
 	FollowingCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FOLLOWING_CAMERA"));
 	FollowingCamera->SetupAttachment(CameraBoom);
 	FollowingCamera->bAutoActivate = true;
@@ -177,47 +191,135 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//Jump
 		EnhancedInputComponent->BindAction(InputActionInfo.JumpAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StartJump);
 
-		//Zoom
-		//EnhancedInputComponent->BindAction(InputActionInfo.ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
-
-		//Throw
-		EnhancedInputComponent->BindAction(InputActionInfo.ThrowReadyAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ReadyToThrow);
-		EnhancedInputComponent->BindAction(InputActionInfo.ThrowAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Throw);
+		//Zoom In&Out
+		EnhancedInputComponent->BindAction(InputActionInfo.ZoomAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ZoomIn);
+		EnhancedInputComponent->BindAction(InputActionInfo.ZoomAction, ETriggerEvent::Completed, this, &AMainCharacterBase::ZoomOut);
 
 		//Interaction
 		EnhancedInputComponent->BindAction(InputActionInfo.InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
 
-		//Inventory
-		//EnhancedInputComponent->BindAction(InputActionInfo.SwitchWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::SwitchToNextWeapon);
-		//EnhancedInputComponent->BindAction(InputActionInfo.DropWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::DropWeapon);
-
 		//SubWeapon
-		//EnhancedInputComponent->BindAction(InputActionInfo.PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::PickSubWeapon);
+		EnhancedInputComponent->BindAction(InputActionInfo.PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::SwitchWeapon);
 
 		EnhancedInputComponent->BindAction(LockToTargetAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::LockToTarget);
 	}
 }
 
-void AMainCharacterBase::ReadyToThrow()
+void AMainCharacterBase::SwitchWeapon()
 {
+	if (!IsValid(ItemInventory) || !GetIsActionActive(ECharacterActionType::E_Idle)) return; 
+	
+	FItemInfoDataStruct subWeaponData = ItemInventory->GetSubWeaponInfoData();
+	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
+	if (subWeaponData.ItemID == 0 || mainWeaponData.ItemID == 0)
+	{
+		//워닝 메시지
+		return;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("sub : %d, main : %d"), subWeaponData.ItemID, mainWeaponData.ItemID);
+
+	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Melee)
+	{
+		WeaponComponent->InitWeapon(subWeaponData.ItemID - 20000); //temp code
+	}
+	else if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw)
+	{
+		WeaponComponent->InitWeapon(mainWeaponData.ItemID - 20000); //temp code
+	}
+}
+
+void AMainCharacterBase::ZoomIn()
+{
+	//======================== Exception Handling ==========================
+
+	if (WeaponComponent->WeaponStat.WeaponType != EWeaponType::E_Throw) return;			
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;	
+	if (!IsValid(ItemInventory)) return;												
+	FItemInfoDataStruct subWeaponData = ItemInventory->GetSubWeaponInfoData();
+	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
+	if (subWeaponData.ItemID == 0) return;												
+
+	FLatentActionInfo LatentInfo;
+	LatentInfo.CallbackTarget = this;
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+	bUseControllerRotationYaw = true;
+
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+
+	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;	// Set ActionType to E_Throw
+
+	bIsAiming = true;	// Set bIsAiming true
+
+	CharacterState.bIsSprinting = false;	// Set biIsSprinting false
+
+	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed * 0.3f, 0.4f);	// Set WalkSpeed => DefaultMoveSpeed * 0.3f
+
+	//================== FollowingCamera attach to RangedAimBoom Component using Interp ==================
+
+	FollowingCamera->AttachToComponent(RangedAimBoom, FAttachmentTransformRules::KeepWorldTransform);
+	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
+		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
+
+	OnZoomBegin.Broadcast();
+}
+
+void AMainCharacterBase::ZoomOut()
+{
+	//ActionType !E_Throw exception handling
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
+
+	FLatentActionInfo LatentInfo;
+	LatentInfo.CallbackTarget = this;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	bUseControllerRotationYaw = false;
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;	// Set ActionType to E_Idle
+
+	bIsAiming = false;
+
+	CharacterState.bIsSprinting = true;	// Set biIsSprinting true
+	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed, 0.75f);
+
+	//================== FollowingCamera attach to CameraBoom Component using Interp ===================
+	FollowingCamera->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
+	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
+		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
+
+	OnZoomEnd.Broadcast();
 }
 
 void AMainCharacterBase::Throw()
 {
+	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return;
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
+
+	FRotator throwRotation = GetAimingRotation(WeaponComponent->GetComponentLocation());
+	WeaponComponent->RangedCombatManager->TryFireProjectile(throwRotation);
 }
 
 void AMainCharacterBase::SetAimingMode(bool bNewState)
 {
-	
+	bIsAiming = bNewState;
+	//bUseControllerRotationYaw = bNewState;
 }
 
-void AMainCharacterBase::UpdateAimingState()
-{	
-}
-
-FVector AMainCharacterBase::GetThrowDestination()
+FRotator AMainCharacterBase::GetAimingRotation(FVector BeginLocation)
 {
-	return FVector();
+	FHitResult lineTraceHitResult; //LineTracing의 결과가 담길 변수
+	FVector traceBeginLocation = FollowingCamera->GetComponentLocation(); //Trace는 카메라에서 시작
+	FVector traceEndLocation = traceBeginLocation + (FollowingCamera->GetForwardVector()) * 200000.0f; //End는 Camera로부터 20000.0f 떨어진 지점까지
+	FCollisionQueryParams traceCollisionQuery = FCollisionQueryParams::DefaultQueryParam;
+	traceCollisionQuery.AddIgnoredActor(this->GetUniqueID());  //플레이어의 카메라가 Hit되지 않도록 방지
+
+	GetWorld()->LineTraceSingleByChannel(lineTraceHitResult, traceBeginLocation, traceEndLocation
+		, ECollisionChannel::ECC_Camera, traceCollisionQuery); //LineTrace 시작
+	
+	//trace가 맞지 않을 경우 trace의 끝 지점을 rotation 연산의 끝 지점으로 지정
+	FVector targetLocation = lineTraceHitResult.bBlockingHit ? lineTraceHitResult.ImpactPoint : traceEndLocation;
+	FRotator beginRotation = UKismetMathLibrary::FindLookAtRotation(BeginLocation, targetLocation);
+	return beginRotation;
 }
 
 void AMainCharacterBase::ResetMovementInputValue()
@@ -247,10 +349,6 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 		AddMovementInput(forwardAxis, MovementInputValue.Y);
 		AddMovementInput(FollowingCamera->GetRightVector(), MovementInputValue.X);
 
-		if (MovementInputValue.Length() > 0 && OnMove.IsBound())
-		{
-			OnMove.Broadcast();
-		}
 		SetRotationLagSpeed(Value.Get<FVector2D>());
 	}
 }
@@ -281,7 +379,7 @@ void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	//CharacterState.CharacterActionState = ECharacterActionType::E_Jump;
+
 	Jump();
 }
 
@@ -358,12 +456,7 @@ void AMainCharacterBase::Roll()
 		&& IsValid(AssetHardPtrInfo.RollAnimMontageList[0]))
 	{
 		PlayAnimMontage(AssetHardPtrInfo.RollAnimMontageList[0], 1.0f);
-	}
-
-	if (OnRoll.IsBound())
-	{
-		OnRoll.Broadcast();
-	}		
+	}	
 }
 
 void AMainCharacterBase::Dash()
@@ -372,19 +465,6 @@ void AMainCharacterBase::Dash()
 	if (IsActorBeingDestroyed()) return;
 	LaunchCharacter(FVector(0.0f, 0.0f, 500.0f), false, false);
 	GetWorldTimerManager().SetTimer(DashDelayTimerHandle, this, &AMainCharacterBase::StopDashMovement, 0.075f, false);
-}
-
-void AMainCharacterBase::ZoomIn(const FInputActionValue& Value)
-{
-	float value = Value.Get<float>();
-	if (value == 0.0f) return;
-	float newLength = CameraBoom->TargetArmLength;
-	newLength = newLength + value * 75.0f;
-	newLength = newLength < MIN_CAMERA_BOOM_LENGTH ? MIN_CAMERA_BOOM_LENGTH : newLength;
-	newLength = newLength > MAX_CAMERA_BOOM_LENGTH ? MAX_CAMERA_BOOM_LENGTH : newLength;
-	CameraBoom->TargetArmLength = newLength;
-	if (OnZoom.IsBound())
-		OnZoom.Broadcast();
 }
 
 void AMainCharacterBase::TryInvestigate()
@@ -435,8 +515,16 @@ void AMainCharacterBase::TryAttack()
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (!CharacterState.bCanAttack || WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw) return;
+		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle
+		&& CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
+
+	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw)
+	{
+		Throw();
+		return;
+	}
+
+	if (!CharacterState.bCanAttack) return;
 
 	if (WeaponComponent->WeaponID == 0)
 	{
@@ -530,9 +618,6 @@ bool AMainCharacterBase::TrySkill(int32 SkillID)
 void AMainCharacterBase::Attack()
 {
 	Super::Attack();
-	// 공격 델리게이트 호출
-	if (OnAttack.IsBound())
-		OnAttack.Broadcast();	
 }
 
 
@@ -796,10 +881,9 @@ bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 	return AbilityManagerRef->GetIsAbilityActive(AbilityID);
 }
 
-bool AMainCharacterBase::PickWeapon(const int32 NewWeaponID)
+bool AMainCharacterBase::EquipWeapon(const int32 NewWeaponID)
 {
-	if (!Super::PickWeapon(NewWeaponID)) return false;
-	return true;
+	return Super::EquipWeapon(NewWeaponID);
 }
 
 void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)

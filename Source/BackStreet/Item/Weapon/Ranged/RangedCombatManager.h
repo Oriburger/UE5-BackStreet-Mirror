@@ -27,7 +27,7 @@ public:
 //------ Ranged 오버라이더블 ----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
-		bool TryFireProjectile();
+		bool TryFireProjectile(FRotator FireRotationOverride = FRotator::ZeroRotator);
 
 	//장전을 시도. 현재 상태에 따른 성공 여부를 반환
 	UFUNCTION(BlueprintCallable)
@@ -40,7 +40,7 @@ public:
 //------ Basic ---------------------------------
 protected:
 	UFUNCTION(BlueprintCallable)
-		class AProjectileBase* CreateProjectile();
+		class AProjectileBase* CreateProjectile(FRotator FireRotationOverride = FRotator::ZeroRotator);
 
 //------- Getter / Setter ---------------------------
 public:
@@ -68,5 +68,11 @@ protected:
 protected:
 	UPROPERTY()
 		FTimerHandle AutoReloadTimerHandle;
+
+private:
+	//타이머 이벤트 전달을 위해서만 사용
+	//델리게이트 바인딩 이후 파라미터를 직접 지정하면
+	//타이머 이벤트 수행 도중에 파라미터가 메모리에서 소멸되기에 널 예외 발생
+	FRotator FireRotationForTimer; 
 };
 

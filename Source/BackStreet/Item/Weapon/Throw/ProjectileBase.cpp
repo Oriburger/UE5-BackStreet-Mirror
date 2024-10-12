@@ -186,7 +186,7 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		{
 			const float totalDamage = Cast<ACharacterBase>(GetOwner())->WeaponComponent->CalculateTotalDamage(Cast<ACharacterBase>(OtherActor)->GetCharacterState());
 			UGameplayStatics::ApplyDamage(OtherActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
-			DestroyWithEffect(SweepResult.Location, !Cast<ACharacterBase>(OtherActor)->GetCharacterStat().bIsInvincibility);
+			DestroyWithEffect(GetActorLocation(), !Cast<ACharacterBase>(OtherActor)->GetCharacterStat().bIsInvincibility);
 		}
 	}
 }

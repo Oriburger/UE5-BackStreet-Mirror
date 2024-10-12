@@ -219,7 +219,7 @@ private:
 // ------ 무기 관련 -------------------------------------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool PickWeapon(int32 NewWeaponID);
+		bool EquipWeapon(int32 NewWeaponID);
 // ---- Asset -------------------
 public:
 	//Init asset using softref data table

@@ -11,15 +11,4 @@ UInteractiveCollisionComponent::UInteractiveCollisionComponent()
 void UInteractiveCollisionComponent::Interact()
 {
 	OnInteractionBegin.Broadcast();
-
-	
-
-	//switch (InteractionType)
-	//{
-	//case EInteractionType::E_CraftBox:
-	//	Cast<ACraftBoxBase>(TargetActor)->OnPlayerOpenBegin.Broadcast(this);
-	//case EInteractionType::E_Portal:
-	//	Cast<AGateBase>(TargetActor)->EnterGate();
-	//	break;
-	//}
 }

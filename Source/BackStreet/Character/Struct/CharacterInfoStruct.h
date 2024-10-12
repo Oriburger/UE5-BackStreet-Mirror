@@ -64,10 +64,10 @@ public:
 		class UInputAction* UpperAttackAction;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
-		class UInputAction* ThrowReadyAction;
+		class UInputAction* ThrowAction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
-		class UInputAction* ThrowAction;
+		class UInputAction* ZoomAction;
 
 //------------------Action---------------------------------------------------------------------------
 public:
