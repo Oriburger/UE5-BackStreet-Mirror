@@ -211,8 +211,7 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 void AMainCharacterBase::SwitchWeapon(bool bSwitchToSubWeapon)
 {
-	if (!IsValid(ItemInventory) || !GetIsActionActive(ECharacterActionType::E_Idle)) return; 
-	
+	if (!IsValid(ItemInventory) || (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Throw))) return;
 	FItemInfoDataStruct subWeaponData = ItemInventory->GetSubWeaponInfoData();
 	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
 	if (subWeaponData.ItemID == 0 || mainWeaponData.ItemID == 0)
@@ -220,7 +219,6 @@ void AMainCharacterBase::SwitchWeapon(bool bSwitchToSubWeapon)
 		//워닝 메시지
 		return;
 	}
-	
 	if (bSwitchToSubWeapon && WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Melee)
 	{
 		WeaponComponent->InitWeapon(subWeaponData.ItemID - 20000); //temp code
@@ -258,6 +256,7 @@ void AMainCharacterBase::ZoomOut()
 	//ActionType !E_Throw exception handling
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
+	UE_LOG(LogTemp, Warning, TEXT("ZoomOUT"));
 	SwitchWeapon(false);
 	SetAimingMode(false);
 	
