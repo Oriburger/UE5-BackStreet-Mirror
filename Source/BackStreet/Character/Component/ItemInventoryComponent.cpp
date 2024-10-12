@@ -25,7 +25,6 @@ void UItemInventoryComponent::BeginPlay()
 
 void UItemInventoryComponent::InitInventory()
 {
-	UE_LOG(LogTemp, Warning, TEXT(""))
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (GamemodeRef.IsValid())
 	{
@@ -41,6 +40,7 @@ void UItemInventoryComponent::InitInventory()
 	TArray<FItemInfoDataStruct*> allRows;
 	ItemTable->GetAllRows(ContextString, allRows);
 
+	ItemMap.Empty();
 	for (FItemInfoDataStruct* row : allRows)
 	{
 		if (row)
@@ -58,7 +58,11 @@ void UItemInventoryComponent::SetItemInventoryFromSaveData()
 
 void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
 {
-	if (!ItemMap.Contains(ItemID)) return;
+	if (!ItemMap.Contains(ItemID))
+	{
+		InitInventory(); //temp code 241012
+		if (!ItemMap.Contains(ItemID)) return;
+	}
 	if (ItemMap[ItemID].ItemType == EItemCategoryInfo::E_SubWeapon)
 	{
 		if (CurrSubWeaponCount >= MaxSubWeaponCount) return;

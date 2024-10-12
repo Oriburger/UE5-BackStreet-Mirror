@@ -81,7 +81,6 @@ AMainCharacterBase::AMainCharacterBase()
 	DirectionNiagaraEmitter->SetRelativeRotation({ 0.0f, 90.0f, 0.0f });
 
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
-
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
 
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
@@ -115,6 +114,10 @@ void AMainCharacterBase::BeginPlay()
 
 	AbilityManagerRef = NewObject<UAbilityManagerBase>(this, UAbilityManagerBase::StaticClass(), FName("AbilityfManager"));
 	AbilityManagerRef->InitAbilityManager(this);
+
+	ItemInventory->InitInventory();
+	InitCharacterState();
+
 	InitCombatUI();
 
 	//UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
@@ -127,8 +130,9 @@ void AMainCharacterBase::BeginPlay()
 	//}
 	//SetCharacterStatFromSaveData();
 	//ItemInventory->SetItemInventoryFromSaveData();
-	InitCharacterState();
-	ItemInventory->InitInventory();
+
+	
+	
 
 	TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
 }
