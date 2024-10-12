@@ -116,14 +116,14 @@ void AItemBase::OnItemPicked_Implementation()
 		if (playerRef->ActorHasTag("Player"))
 		{
 			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
-			if (!playerRef->EquipWeapon(targetWeaponID)) return;
+			playerRef->EquipWeapon(targetWeaponID);
 		}
 		break;
 	case EItemCategoryInfo::E_SubWeapon:
 		if (playerRef->ActorHasTag("Player"))
 		{
 			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
-			if (!playerRef->EquipWeapon(targetWeaponID)) return;
+			playerRef->EquipWeapon(targetWeaponID);
 		}
 		break;
 	}

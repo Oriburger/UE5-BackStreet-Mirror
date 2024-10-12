@@ -69,7 +69,7 @@ public:
 // ------- Throw Test -----------
 public:
 	UFUNCTION(BlueprintCallable)
-		void SwitchWeapon();
+		void SwitchWeapon(bool bSwitchToSubWeapon);
 	
 	UFUNCTION()
 		void ZoomIn();
@@ -78,7 +78,7 @@ public:
 		void ZoomOut();
 
 	UFUNCTION()
-		void Throw();
+		void TryThrow();
 
 	UFUNCTION()
 		void SetAimingMode(bool bNewState);

@@ -64,7 +64,7 @@ public:
 		class UInputAction* UpperAttackAction;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
-		class UInputAction* ThrowAction;
+		class UInputAction* ShootAction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
 		class UInputAction* ZoomAction;
@@ -184,6 +184,9 @@ public:
 	//Is character sprinting?
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bIsSprinting = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		bool bIsAiming = false;
 
 	//캐릭터의 행동 정보
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

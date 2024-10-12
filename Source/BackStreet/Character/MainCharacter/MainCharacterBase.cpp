@@ -199,13 +199,13 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(InputActionInfo.InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
 
 		//SubWeapon
-		EnhancedInputComponent->BindAction(InputActionInfo.PickSubWeaponAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::SwitchWeapon);
+		EnhancedInputComponent->BindAction(InputActionInfo.ShootAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryThrow);
 
 		EnhancedInputComponent->BindAction(LockToTargetAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::LockToTarget);
 	}
 }
 
-void AMainCharacterBase::SwitchWeapon()
+void AMainCharacterBase::SwitchWeapon(bool bSwitchToSubWeapon)
 {
 	if (!IsValid(ItemInventory) || !GetIsActionActive(ECharacterActionType::E_Idle)) return; 
 	
@@ -216,13 +216,12 @@ void AMainCharacterBase::SwitchWeapon()
 		//워닝 메시지
 		return;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("sub : %d, main : %d"), subWeaponData.ItemID, mainWeaponData.ItemID);
-
-	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Melee)
+	
+	if (bSwitchToSubWeapon && WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Melee)
 	{
 		WeaponComponent->InitWeapon(subWeaponData.ItemID - 20000); //temp code
 	}
-	else if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw)
+	else if (!bSwitchToSubWeapon && WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw)
 	{
 		WeaponComponent->InitWeapon(mainWeaponData.ItemID - 20000); //temp code
 	}
@@ -230,32 +229,19 @@ void AMainCharacterBase::SwitchWeapon()
 
 void AMainCharacterBase::ZoomIn()
 {
-	//======================== Exception Handling ==========================
-
-	if (WeaponComponent->WeaponStat.WeaponType != EWeaponType::E_Throw) return;			
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;	
-	if (!IsValid(ItemInventory)) return;												
+	//==== Exception Handling ==========================
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (!IsValid(ItemInventory)) return;
 	FItemInfoDataStruct subWeaponData = ItemInventory->GetSubWeaponInfoData();
 	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
-	if (subWeaponData.ItemID == 0) return;												
+	if (subWeaponData.ItemID == 0) return;
 
+	SwitchWeapon(true);										
+	SetAimingMode(true);
+
+	//==== FollowingCamera attach to RangedAimBoom Component using Interp ==================
 	FLatentActionInfo LatentInfo;
 	LatentInfo.CallbackTarget = this;
-	GetCharacterMovement()->bOrientRotationToMovement = false;
-	bUseControllerRotationYaw = true;
-
-	GetCharacterMovement()->bOrientRotationToMovement = false;
-
-	CharacterState.CharacterActionState = ECharacterActionType::E_Throw;	// Set ActionType to E_Throw
-
-	bIsAiming = true;	// Set bIsAiming true
-
-	CharacterState.bIsSprinting = false;	// Set biIsSprinting false
-
-	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed * 0.3f, 0.4f);	// Set WalkSpeed => DefaultMoveSpeed * 0.3f
-
-	//================== FollowingCamera attach to RangedAimBoom Component using Interp ==================
-
 	FollowingCamera->AttachToComponent(RangedAimBoom, FAttachmentTransformRules::KeepWorldTransform);
 	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
@@ -268,21 +254,12 @@ void AMainCharacterBase::ZoomOut()
 	//ActionType !E_Throw exception handling
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
+	SwitchWeapon(false);
+	SetAimingMode(false);
+	
+	//======FollowingCamera attach to CameraBoom Component using Interp ===================
 	FLatentActionInfo LatentInfo;
 	LatentInfo.CallbackTarget = this;
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	bUseControllerRotationYaw = false;
-
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-
-	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;	// Set ActionType to E_Idle
-
-	bIsAiming = false;
-
-	CharacterState.bIsSprinting = true;	// Set biIsSprinting true
-	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed, 0.75f);
-
-	//================== FollowingCamera attach to CameraBoom Component using Interp ===================
 	FollowingCamera->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
 	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
@@ -290,7 +267,7 @@ void AMainCharacterBase::ZoomOut()
 	OnZoomEnd.Broadcast();
 }
 
-void AMainCharacterBase::Throw()
+void AMainCharacterBase::TryThrow()
 {
 	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
@@ -301,8 +278,14 @@ void AMainCharacterBase::Throw()
 
 void AMainCharacterBase::SetAimingMode(bool bNewState)
 {
-	bIsAiming = bNewState;
-	//bUseControllerRotationYaw = bNewState;
+	GetCharacterMovement()->bOrientRotationToMovement = !bNewState;
+	bUseControllerRotationYaw = bNewState;
+	CharacterState.CharacterActionState = bNewState ? ECharacterActionType::E_Throw : ECharacterActionType::E_Idle;	
+	CharacterState.bIsAiming = bNewState;
+	CharacterState.bIsSprinting = bNewState ? false : CharacterState.bIsSprinting;	
+
+	const float aimMoveSpeed = bNewState ? CharacterStat.DefaultMoveSpeed * 0.3f : CharacterStat.DefaultMoveSpeed;
+	SetWalkSpeedWithInterp(aimMoveSpeed, 0.75f);
 }
 
 FRotator AMainCharacterBase::GetAimingRotation(FVector BeginLocation)
@@ -517,15 +500,7 @@ void AMainCharacterBase::TryAttack()
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
-
-	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw)
-	{
-		Throw();
-		return;
-	}
-
 	if (!CharacterState.bCanAttack) return;
-
 	if (WeaponComponent->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);

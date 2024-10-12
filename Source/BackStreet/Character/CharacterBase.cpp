@@ -998,6 +998,7 @@ float ACharacterBase::GetTotalStatValue(float& DefaultValue, FStatInfoStruct& Ab
 
 bool ACharacterBase::EquipWeapon(int32 NewWeaponID)
 {
+	if (WeaponComponent->WeaponID != 0) return false;
 	WeaponComponent->InitWeapon(NewWeaponID);
 	return true;
 }
