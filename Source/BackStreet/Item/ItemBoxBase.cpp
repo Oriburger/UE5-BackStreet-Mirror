@@ -2,7 +2,7 @@
 
 
 #include "ItemBoxBase.h"
-#include "ItemBase.h"
+
 #include "../Global/BackStreetGameModeBase.h"
 #include "InteractiveCollisionComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -14,78 +14,14 @@ AItemBoxBase::AItemBoxBase()
 { 
 	this->Tags.Add(FName("ItemBox"));
 	PrimaryActorTick.bCanEverTick = false;
-	SetActorTickEnabled(false);
-
-	RootComponent = OverlapVolume = CreateDefaultSubobject<UInteractiveCollisionComponent>("BOX_COLLISION");
-	//OverlapVolume->SetupAttachment(RootComponent);
-	OverlapVolume->SetRelativeScale3D(FVector(5.0f));
-	OverlapVolume->SetCollisionProfileName("ItemTrigger", true);
-		
-	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_MESH"));
-	MeshComponent->SetupAttachment(RootComponent);
-	MeshComponent->SetCollisionProfileName("Item", false);
-	MeshComponent->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-	
-	ParticleComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ITEM_NIAGARA_COMPONENT"));
-	ParticleComponent->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
 void AItemBoxBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	OverlapVolume->OnInteractionBegin.AddDynamic(this, &AItemBoxBase::OnItemBoxOpened);
-	MeshComponent->OnComponentHit.AddDynamic(this, &AItemBoxBase::OnMeshHit);
-
-	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 }
 
-void AItemBoxBase::InitItemBox(bool _bIncludeMissionItem)
-{	
-	bIncludeMissionItem = _bIncludeMissionItem;
-}
-
-void AItemBoxBase::OnItemBoxOpened()
-{
-	if (MinSpawnItemCount > MaxSpawnItemCount) //정보 기입이 제대로 이뤄지지 않음
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AItemBoxBase::OnItemBoxOpened) SpawnCount Info가 올바르지 않습니다."));
-		return;
-	}
-
-	int32 spawnItemCount = UKismetMathLibrary::RandomIntegerInRange(MinSpawnItemCount, MaxSpawnItemCount);
-	TArray<AItemBase*> spawnedItemList = SpawnItems(spawnItemCount);
-
-	for (AItemBase*& itemRef : spawnedItemList)
-	{
-		if (!IsValid(itemRef)) continue;
-		LaunchItem(itemRef);
-	}
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OpenEffectParticle, GetActorLocation(), FRotator::ZeroRotator, FVector(1.5f));
-	
-	if(!ActorHasTag("Tutorial")) Destroy();
-}
-
-void AItemBoxBase::OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Player")) return;
-
-	//UI Activate
-}
-
-void AItemBoxBase::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Player")) return;
-
-	//UI Deactivate
-}
-
-void AItemBoxBase::OnMeshHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
-	const FVector meshLocation = MeshComponent->GetComponentLocation();
-	SetActorLocation(meshLocation, false, nullptr, ETeleportType::TeleportPhysics);
-}
 
 TArray<AItemBase*> AItemBoxBase::SpawnItems(int32 TargetSpawnCount)
 {

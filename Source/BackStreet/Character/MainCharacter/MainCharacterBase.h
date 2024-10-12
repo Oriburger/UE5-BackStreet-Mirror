@@ -86,10 +86,6 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FRotator GetAimingRotation(FVector BeginLocation);
 
-	//Set in ZoomIn or ZoomOut, Used in AnimBluePrint to switch the MainCharacter's Aiming animation sequence.
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
-		bool bIsAiming = false;
-
 // ------- Character Input Action ------- 
 public:
 	// MappingContext

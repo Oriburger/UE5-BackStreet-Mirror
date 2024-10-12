@@ -109,11 +109,9 @@ protected:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class AMainCharacterBase* GetPlayerRef() { return PlayerRef.Get(); }
 
-private:
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 	
 	TWeakObjectPtr<class AMainCharacterBase> PlayerRef;
 
-protected:
 	TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
 };
