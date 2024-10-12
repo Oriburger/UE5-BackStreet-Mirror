@@ -297,6 +297,12 @@ void AMainCharacterBase::Throw()
 
 	FRotator throwRotation = GetAimingRotation(WeaponComponent->GetComponentLocation());
 	WeaponComponent->RangedCombatManager->TryFireProjectile(throwRotation);
+
+	if (AssetHardPtrInfo.ShootAnimMontageList[0] > 0
+		&& IsValid(AssetHardPtrInfo.ShootAnimMontageList[0]))
+	{
+		PlayAnimMontage(AssetHardPtrInfo.ShootAnimMontageList[0], 1.0f);
+	}
 }
 
 void AMainCharacterBase::SetAimingMode(bool bNewState)
@@ -519,8 +525,8 @@ void AMainCharacterBase::TryAttack()
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
 	if (WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw)
-	{
-		Throw();
+	{	
+		Throw();	
 		return;
 	}
 
