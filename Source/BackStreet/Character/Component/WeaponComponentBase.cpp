@@ -144,7 +144,10 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &UWeaponComponentBase::InitWeaponAsset));
 	}
-	OnWeaponUpdated.Broadcast();
+	if (WeaponStat.WeaponType == EWeaponType::E_Melee)
+	{
+		OnMainWeaponUpdated.Broadcast();
+	}
 }
 
 void UWeaponComponentBase::InitWeaponAsset()

@@ -31,7 +31,7 @@ void USkillManagerComponentBase::InitSkillManager()
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	SkillStatTable = GameModeRef.Get()->SkillStatTable;
 	checkf(IsValid(SkillStatTable), TEXT("Failed to get SkillStatDataTable"));
-	OwnerCharacterRef->WeaponComponent->OnWeaponUpdated.AddDynamic(this, &USkillManagerComponentBase::InitSkillMap);
+	OwnerCharacterRef->WeaponComponent->OnMainWeaponUpdated.AddDynamic(this, &USkillManagerComponentBase::InitSkillMap);
 }
 
 void USkillManagerComponentBase::InitSkillMap() {}

@@ -58,20 +58,11 @@ void UItemInventoryComponent::SetItemInventoryFromSaveData()
 
 void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
 {
-	if (!ItemMap.Contains(ItemID))
+	if (!ItemMap.Contains(ItemID)) return;
+	if (ItemMap[ItemID].ItemType == EItemCategoryInfo::E_SubWeapon
+		|| ItemMap[ItemID].ItemType == EItemCategoryInfo::E_Weapon)
 	{
-		InitInventory(); //temp code 241012
-		if (!ItemMap.Contains(ItemID)) return;
-	}
-	if (ItemMap[ItemID].ItemType == EItemCategoryInfo::E_SubWeapon)
-	{
-		if (CurrSubWeaponCount >= MaxSubWeaponCount) return;
-		CurrSubWeaponCount += 1;
-	}
-	else if (ItemMap[ItemID].ItemType == EItemCategoryInfo::E_Weapon)
-	{
-		if (CurrMainWeaponCount >= MaxMainWeaponCount) return;
-		CurrMainWeaponCount += 1;
+		if (ItemMap[ItemID].ItemAmount >= MaxMainWeaponCount) return;
 	}
 	ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, ItemMap[ItemID].ItemAmount + ItemCnt);
 	OnUpdateItem.Broadcast();
@@ -89,6 +80,7 @@ void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
 	{
 		CurrMainWeaponCount = FMath::Max(0, CurrMainWeaponCount - 1);
 	}
+
 	ItemMap[ItemID].ItemAmount = FMath::Max(0, ItemMap[ItemID].ItemAmount - ItemCnt);
 	OnUpdateItem.Broadcast();
 	OnItemRemoved.Broadcast(ItemMap[ItemID], ItemMap[ItemID].ItemAmount);
@@ -112,8 +104,7 @@ TMap<ECraftingItemType, uint8> UItemInventoryComponent::GetCraftingItemAmount()
 		int32 itemID = ConvertCraftingItemTypeToItemID(type);
 		if (ItemMap.Contains(itemID))
 		{
-			uint8 itemAmount = ItemMap[itemID].ItemAmount;
-			currItemAmountMap.Add(type, itemAmount);
+			currItemAmountMap.Add(type, ItemMap[itemID].ItemAmount);
 		}
 		else
 		{

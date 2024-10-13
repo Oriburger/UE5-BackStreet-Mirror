@@ -22,7 +22,7 @@ protected:
 
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateWeaponUpdated OnWeaponUpdated;
+		FDelegateWeaponUpdated OnMainWeaponUpdated;
 
 //------- VFX --------------------------------
 public:
