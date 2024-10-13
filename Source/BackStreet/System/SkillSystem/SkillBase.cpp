@@ -35,7 +35,7 @@ void ASkillBase::Tick(float DeltaSeconds)
 	
 	if (SkillState.SkillUpgradeInfoMap.Contains(ESkillUpgradeType::E_CoolTime))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("SKILLBASE CoolTime : %.2lf / bIsBlocked : %d"), SkillState.SkillUpgradeInfoMap[ESkillUpgradeType::E_CoolTime].Variable, (int32)SkillState.bIsBlocked)
+		//UE_LOG(LogTemp, Warning, TEXT("SKILLBASE CoolTime : %.2lf / bIsBlocked : %d"), SkillState.SkillUpgradeInfoMap[ESkillUpgradeType::E_CoolTime].Variable, (int32)SkillState.bIsBlocked)
 	}
 }
 

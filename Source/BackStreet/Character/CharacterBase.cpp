@@ -615,15 +615,14 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 	}
 
 	if(skillBase->SkillState.bIsBlocked) return false;
-	else
-	{
-		CharacterState.bCanAttack = false;
-		SetActionState(ECharacterActionType::E_Skill);
-		SkillManagerComponentRef.Get()->TrySkill(SkillID);
-		//Reset Combo
-		WeaponComponent->ResetComboCnt();
-		return true;
-	}
+	
+	CharacterState.bCanAttack = false;
+	SetActionState(ECharacterActionType::E_Skill);
+	SkillManagerComponentRef.Get()->TrySkill(SkillID);
+	
+	//Reset Combo
+	WeaponComponent->ResetComboCnt();
+	return true;
 }
 
 void ACharacterBase::Attack()

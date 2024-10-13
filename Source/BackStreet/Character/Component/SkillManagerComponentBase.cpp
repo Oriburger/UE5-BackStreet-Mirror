@@ -48,7 +48,7 @@ bool USkillManagerComponentBase::TrySkill(int32 SkillID)
 	if (skillBase->SkillState.bIsBlocked) return false;
 	if (skillBase->SkillStat.bIsLevelValid)
 	{
-		if (skillBase->SkillState.SkillLevel == 0) return false;
+		//if (skillBase->SkillState.SkillLevel == 0) return false;
 	}
 	skillBase->ActivateSkill();
 	OnSkillActivated.Broadcast(SkillID);
