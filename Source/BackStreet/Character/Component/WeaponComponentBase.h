@@ -109,6 +109,7 @@ private:
 	//무기 교체 시에 사용할 ID 별 스테이트 저장 맵
 	TMap<int32, FWeaponStatStruct> WeaponStatCacheMap;
 	TMap<int32, FWeaponStateStruct> WeaponStateCacheMap;
+	TMap<int32, FWeaponAssetInfoStruct> WeaponAssetCacheMap;
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)

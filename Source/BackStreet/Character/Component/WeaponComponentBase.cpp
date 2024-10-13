@@ -66,14 +66,14 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 {
 	//Stat, State 초기화 
 	int32 oldWeaponID = WeaponID;
-	WeaponID = NewWeaponID;
-	WeaponStat.WeaponID = WeaponID;
+	WeaponStat.WeaponID = WeaponID = NewWeaponID;
 
 	//기존꺼 저장
 	if (oldWeaponID != 0)
 	{
 		WeaponStatCacheMap.Add(oldWeaponID, WeaponStat);
 		WeaponStateCacheMap.Add(oldWeaponID, WeaponState);
+		WeaponAssetCacheMap.Add(oldWeaponID, WeaponAssetInfo);
 	}
 	
 	//캐싱 로직
@@ -81,7 +81,6 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	{
 		WeaponStat = FWeaponStatStruct();
 		WeaponState = FWeaponStateStruct();
-		WeaponAssetInfo = FWeaponAssetInfoStruct();
 		this->SetStaticMesh(nullptr);
 		return;
 	}
@@ -89,10 +88,14 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	{
 		//이미 기록이 되어있는 경우? 그대로 덮어씌운다 
 		if (WeaponStatCacheMap.Contains(NewWeaponID)
-			&& WeaponStateCacheMap.Contains(NewWeaponID))
+			&& WeaponStateCacheMap.Contains(NewWeaponID)
+			&& WeaponAssetCacheMap.Contains(NewWeaponID))
 		{
 			WeaponStat = WeaponStatCacheMap[NewWeaponID];
 			WeaponState = WeaponStateCacheMap[NewWeaponID];
+			WeaponAssetInfo = GetWeaponAssetInfoWithID(WeaponID);
+			InitWeaponAsset();
+			return; 
 		}
 		//그렇지 않은 경우 데이터테이블에서 불러온다
 		else
@@ -195,12 +198,14 @@ void UWeaponComponentBase::InitWeaponAsset()
 
 FWeaponAssetInfoStruct UWeaponComponentBase::GetWeaponAssetInfoWithID(int32 TargetWeaponID)
 {
+	if (WeaponAssetCacheMap.Contains(TargetWeaponID)) return WeaponAssetCacheMap[TargetWeaponID];
 	if (WeaponAssetInfoTable != nullptr && TargetWeaponID != 0)
 	{
 		FWeaponAssetInfoStruct* newInfo = nullptr;
 		FString rowName = FString::FromInt(TargetWeaponID);
 
 		newInfo = WeaponAssetInfoTable->FindRow<FWeaponAssetInfoStruct>(FName(rowName), rowName);
+		WeaponAssetCacheMap.Add(TargetWeaponID, *newInfo);
 		if (newInfo != nullptr) return *newInfo;
 	}
 	return FWeaponAssetInfoStruct();
