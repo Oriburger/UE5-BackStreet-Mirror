@@ -26,7 +26,6 @@
 #include "Animation/AnimMontage.h"
 #define MAX_CAMERA_BOOM_LENGTH 1450.0f
 #define MIN_CAMERA_BOOM_LENGTH 250.0f
-#define MAX_THROW_DISTANCE 1200.0f //AThrowWeaponBase와 통일 (추후 하나의 파일로 통합 예정)
 
 // Sets default values
 AMainCharacterBase::AMainCharacterBase()
@@ -82,6 +81,7 @@ AMainCharacterBase::AMainCharacterBase()
 
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
+	WeaponComponent->OnWeaponStateUpdated.AddDynamic(ItemInventory, &UItemInventoryComponent::OnWeaponStateUpdated);
 
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
 	GetCapsuleComponent()->SetCapsuleRadius(41.0f);
@@ -203,7 +203,7 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(InputActionInfo.InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
 
 		//SubWeapon
-		EnhancedInputComponent->BindAction(InputActionInfo.ShootAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryThrow);
+		EnhancedInputComponent->BindAction(InputActionInfo.ShootAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryShoot);
 
 		EnhancedInputComponent->BindAction(LockToTargetAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::LockToTarget);
 	}
@@ -211,7 +211,7 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 void AMainCharacterBase::SwitchWeapon(bool bSwitchToSubWeapon)
 {
-	if (!IsValid(ItemInventory) || (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Throw))) return;
+	if (!IsValid(ItemInventory) || (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Shoot))) return;
 	FItemInfoDataStruct subWeaponData = ItemInventory->GetSubWeaponInfoData();
 	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
 	if (subWeaponData.ItemID == 0 || mainWeaponData.ItemID == 0)
@@ -223,7 +223,7 @@ void AMainCharacterBase::SwitchWeapon(bool bSwitchToSubWeapon)
 	{
 		WeaponComponent->InitWeapon(subWeaponData.ItemID - 20000); //temp code
 	}
-	else if (!bSwitchToSubWeapon && WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Throw)
+	else if (!bSwitchToSubWeapon && WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Shoot)
 	{
 		WeaponComponent->InitWeapon(mainWeaponData.ItemID - 20000); //temp code
 	}
@@ -253,8 +253,8 @@ void AMainCharacterBase::ZoomIn()
 
 void AMainCharacterBase::ZoomOut()
 {
-	//ActionType !E_Throw exception handling
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
+	//ActionType !E_Shoot exception handling
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Shoot) return;
 
 	UE_LOG(LogTemp, Warning, TEXT("ZoomOUT"));
 	SwitchWeapon(false);
@@ -270,13 +270,13 @@ void AMainCharacterBase::ZoomOut()
 	OnZoomEnd.Broadcast();
 }
 
-void AMainCharacterBase::TryThrow()
+void AMainCharacterBase::TryShoot()
 {
-	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return;
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
+	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Shoot) return;
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Shoot) return;
 
-	FRotator throwRotation = GetAimingRotation(WeaponComponent->GetComponentLocation());
-	WeaponComponent->RangedCombatManager->TryFireProjectile(throwRotation);
+	FRotator shootRotation = GetAimingRotation(WeaponComponent->GetComponentLocation());
+	WeaponComponent->RangedCombatManager->TryFireProjectile(shootRotation);
 
 	if (AssetHardPtrInfo.ShootAnimMontageList[0] > 0
 		&& IsValid(AssetHardPtrInfo.ShootAnimMontageList[0]))
@@ -289,7 +289,7 @@ void AMainCharacterBase::SetAimingMode(bool bNewState)
 {
 	GetCharacterMovement()->bOrientRotationToMovement = !bNewState;
 	bUseControllerRotationYaw = bNewState;
-	CharacterState.CharacterActionState = bNewState ? ECharacterActionType::E_Throw : ECharacterActionType::E_Idle;	
+	CharacterState.CharacterActionState = bNewState ? ECharacterActionType::E_Shoot : ECharacterActionType::E_Idle;	
 	CharacterState.bIsAiming = bNewState;
 	CharacterState.bIsSprinting = bNewState ? false : CharacterState.bIsSprinting;	
 
@@ -508,7 +508,7 @@ void AMainCharacterBase::TryAttack()
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
 		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
+		&& CharacterState.CharacterActionState != ECharacterActionType::E_Shoot) return;
 	if (!CharacterState.bCanAttack) return;
 	if (WeaponComponent->WeaponID == 0)
 	{
@@ -626,7 +626,7 @@ void AMainCharacterBase::RotateToCursor()
 {
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Attack) return;
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
+		&& CharacterState.CharacterActionState != ECharacterActionType::E_Shoot) return;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	FRotator newRotation = GetControlRotation();

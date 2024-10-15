@@ -37,7 +37,7 @@ void UCraftingManagerComponent::InitCraftingManager()
 bool UCraftingManagerComponent::GetIsItemEnough()
 {
 	if(MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
-	TMap<ECraftingItemType, uint8> currItemMap = MainCharacterRef->ItemInventory->GetCraftingItemAmount();
+	TMap<ECraftingItemType, uint8> currItemMap = MainCharacterRef->ItemInventory->GetAllCraftingItemAmount();
 	
 	TArray<int32> itemIdList; RequiredItemInfo.GenerateKeyArray(itemIdList);
 	for (int32 requiredItemId : itemIdList)
@@ -59,7 +59,7 @@ bool UCraftingManagerComponent::GetIsItemEnoughForCraft(int32 SkillID)
 {
 	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
 	TMap<int32, int32> craftMaterialInfo = GetSkillCraftMaterialInfo(SkillID);
-	TMap<ECraftingItemType, uint8> currItemMap = MainCharacterRef->ItemInventory->GetCraftingItemAmount();
+	TMap<ECraftingItemType, uint8> currItemMap = MainCharacterRef->ItemInventory->GetAllCraftingItemAmount();
 	TArray<int32> idList; craftMaterialInfo.GenerateKeyArray(idList);
 
 	for (int32& id : idList) 

@@ -104,6 +104,13 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_Attack, 0);
 			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_AttackSpeed, 0);
 			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_FinalAttack, 0);
+			if (WeaponStat.WeaponType == EWeaponType::E_Shoot)
+			{
+				WeaponState.RangedWeaponState.CurrentAmmoCount = WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine;
+				WeaponState.RangedWeaponState.ExtraAmmoCount = WeaponStat.RangedWeaponStat.MaxTotalAmmo - WeaponState.RangedWeaponState.CurrentAmmoCount;
+				WeaponState.RangedWeaponState.CurrentAmmoCount = FMath::Max(0, WeaponState.RangedWeaponState.CurrentAmmoCount);
+				WeaponState.RangedWeaponState.ExtraAmmoCount = FMath::Max(0, WeaponState.RangedWeaponState.ExtraAmmoCount);
+			}
 		}
 	}
 	
@@ -113,7 +120,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 
 	if (WeaponID != 0)
 	{
-		if (WeaponStat.WeaponType == EWeaponType::E_Shoot || WeaponStat.WeaponType == EWeaponType::E_Throw)
+		if (WeaponStat.WeaponType == EWeaponType::E_Shoot)
 		{
 			ProjectileStatInfo = GetProjectileStatInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
 			ProjectileAssetInfo = GetProjectileAssetInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
@@ -148,6 +155,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	{
 		OnMainWeaponUpdated.Broadcast();
 	}
+	OnWeaponStateUpdated.Broadcast(WeaponID, WeaponStat.WeaponType, WeaponState);
 }
 
 void UWeaponComponentBase::InitWeaponAsset()

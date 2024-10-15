@@ -20,9 +20,7 @@ enum class EWeaponType : uint8
 {
 	E_None				UMETA(DisplayName = "None"),
 	E_Melee				UMETA(DisplayName = "Melee"),
-	E_Throw				UMETA(DisplayName = "Throw"),
 	E_Shoot				UMETA(DisplayName = "Shoot")
-
 };
 
 UENUM(BlueprintType)
@@ -59,7 +57,7 @@ public:
 	//업그레이드 스탯
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TArray<FUpgradableStatInfoContainer> StatInfoByLevel;
+		TArray<FUpgradableStatInfoContainer> StatInfoByLevel;
 };
 
 USTRUCT(BlueprintType)
@@ -204,6 +202,8 @@ public:
 	//별도 탄창에 있는 탄환들의 총합
 	UPROPERTY(BlueprintReadOnly)
 		int32 ExtraAmmoCount = 0;
+
+	inline bool GetIsEmpty() const { return (CurrentAmmoCount + ExtraAmmoCount) == 0; }
 };
 
 USTRUCT(BlueprintType)
@@ -232,7 +232,7 @@ public:
 //-----Weapon Upgraded Stat
 	//Upgraded State(in combat area)
 	UPROPERTY(BlueprintReadWrite)
-	TMap<EWeaponStatType, uint8> UpgradedStatMap;
+		TMap<EWeaponStatType, uint8> UpgradedStatMap;
 };
 
 USTRUCT(BlueprintType)

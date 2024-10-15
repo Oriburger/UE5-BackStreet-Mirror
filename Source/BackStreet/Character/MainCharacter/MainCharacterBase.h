@@ -66,7 +66,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UPlayerSkillManagerComponent* SkillManagerComponent;
 
-// ------- Throw Test -----------
+// ------- SubWeapon -----------
 public:
 	UFUNCTION(BlueprintCallable)
 		void SwitchWeapon(bool bSwitchToSubWeapon);
@@ -78,7 +78,7 @@ public:
 		void ZoomOut();
 
 	UFUNCTION()
-		void TryThrow();
+		void TryShoot();
 
 	UFUNCTION()
 		void SetAimingMode(bool bNewState);

@@ -502,13 +502,6 @@ void ACharacterBase::TryAttack()
 		}
 		targetAnimList = AssetHardPtrInfo.ShootAnimMontageList;
 		break;
-	case EWeaponType::E_Throw:
-		if (AssetHardPtrInfo.ThrowAnimMontageList.Num() > 0)
-		{
-			nextAnimIdx = WeaponComponent->GetCurrentComboCnt() % AssetHardPtrInfo.ThrowAnimMontageList.Num();
-		}
-		targetAnimList = AssetHardPtrInfo.ThrowAnimMontageList;
-		break;
 	}
 	if (targetAnimList.Num() > 0
 		&& IsValid(targetAnimList[nextAnimIdx]))
@@ -639,7 +632,7 @@ void ACharacterBase::StopAttack()
 void ACharacterBase::TryReload()
 {
 	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Shoot
-		&& WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return;
+		&& WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Shoot) return;
 
 	if (WeaponComponent->RangedCombatManager->GetCanReload()) return;
 
@@ -693,14 +686,6 @@ void ACharacterBase::InitAsset(int32 NewCharacterID)
 			for (int32 i = 0; i < AssetSoftPtrInfo.ShootAnimMontageSoftPtrList.Num(); i++)
 			{
 				AssetToStream.AddUnique(AssetSoftPtrInfo.ShootAnimMontageSoftPtrList[i].ToSoftObjectPath());
-			}
-		}
-
-		if (!AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList.IsEmpty())
-		{
-			for (int32 i = 0; i < AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList.Num(); i++)
-			{
-				AssetToStream.AddUnique(AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
@@ -886,13 +871,6 @@ bool ACharacterBase::InitAnimAsset()
 		if (animSoftPtr.IsValid())
 		{
 			AssetHardPtrInfo.ShootAnimMontageList.AddUnique(animSoftPtr.Get());
-		}
-	}
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList)
-	{
-		if (animSoftPtr.IsValid())
-		{
-			AssetHardPtrInfo.ThrowAnimMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
 	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList)

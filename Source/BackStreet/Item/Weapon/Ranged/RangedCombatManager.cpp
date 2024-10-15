@@ -7,6 +7,7 @@
 #include "../../../System/AssetSystem/AssetManagerBase.h"
 #include "../../../Global/BackStreetGameModeBase.h"
 #include "../../../Character/CharacterBase.h"
+#include "../../../Character/Component/ItemInventoryComponent.h"
 #include "../../../Character/MainCharacter/MainCharacterBase.h"
 #include "../../../Character/Component/WeaponComponentBase.h"
 #include "NiagaraFunctionLibrary.h"
@@ -40,11 +41,6 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo
 		&& !OwnerCharacterRef->GetCharacterStat().bInfinite && WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount == 0)
 	{
-		if (OwnerCharacterRef->ActorHasTag("Player"))
-		{
-			GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("탄환이 부족합니다.")), FColor::White);
-		}
-
 		//StopAttack의 ResetActionState로 인해 실행이 되지 않는 현상 방지를 위해
 		//타이머를 통해 일정 시간이 지난 후에 Reload를 시도.
 		GamemodeRef.Get()->GetWorldTimerManager().SetTimer(AutoReloadTimerHandle, OwnerCharacterRef.Get(), &ACharacterBase::TryReload, 1.0f, false, AUTO_RELOAD_DELAY_VALUE);
@@ -59,22 +55,31 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 		fireProjectileCnt = FMath::Min(fireProjectileCnt, WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount);
 		WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
 	}
-
-	FireRotationForTimer = FireRotationOverride;
-
-	for (int idx = 1; idx <= fireProjectileCnt; idx++)
+	
+	AProjectileBase* newProjectile = CreateProjectile(FireRotationOverride);
+	//스폰한 발사체가 Valid 하다면 발사
+	if (IsValid(newProjectile))
 	{
-		FTimerHandle delayHandle;
-		GetWorld()->GetTimerManager().SetTimer(delayHandle, FTimerDelegate::CreateLambda([&]() {
-			AProjectileBase* newProjectile = CreateProjectile(FireRotationForTimer);
-			//스폰한 발사체가 Valid 하다면 발사
-			if (IsValid(newProjectile))
-			{
-				newProjectile->ActivateProjectileMovement();
-				SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
-			}
-		}), 0.1f * (float)idx, false);
+		newProjectile->ActivateProjectileMovement();
+		SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
 	}
+
+	//broadcast delegate
+	const int32 weaponID = WeaponComponentRef.Get()->WeaponID;
+	const EWeaponType weaponType = WeaponComponentRef.Get()->GetWeaponStat().WeaponType;
+	const FWeaponStateStruct weaponState = WeaponComponentRef.Get()->GetWeaponState();
+	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponType, weaponState);
+
+	//탄환을 다 썼을 경우, 모든 탄환을 발사한 이후 아래 로직을 처리한다
+	if (OwnerCharacterRef.Get()->ActorHasTag("Player")
+		&& WeaponComponentRef.Get()->GetWeaponState().RangedWeaponState.GetIsEmpty())
+	{
+		Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->ZoomOut();
+		int32 weaponID = WeaponComponentRef.Get()->GetWeaponStat().WeaponID;
+		Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->SwitchWeapon(false);
+		Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->ItemInventory->RemoveItem(weaponID + 20000, 1);
+	}
+
 	return true;
 }
 
@@ -82,8 +87,8 @@ void URangedCombatManager::Reload()
 {
 	if (!GetCanReload()) return;
 
-	FWeaponStatStruct weaponStat = WeaponComponentRef.Get()->WeaponStat;
-	FWeaponStateStruct weaponState = WeaponComponentRef.Get()->WeaponState;
+	FWeaponStatStruct& weaponStat = WeaponComponentRef.Get()->WeaponStat;
+	FWeaponStateStruct& weaponState = WeaponComponentRef.Get()->WeaponState;
 	int32 addAmmoCnt = FMath::Min(weaponState.RangedWeaponState.ExtraAmmoCount, weaponStat.RangedWeaponStat.MaxAmmoPerMagazine);
 
 	if (addAmmoCnt + weaponState.RangedWeaponState.CurrentAmmoCount > weaponStat.RangedWeaponStat.MaxAmmoPerMagazine)
@@ -92,6 +97,11 @@ void URangedCombatManager::Reload()
 	}
 	weaponState.RangedWeaponState.CurrentAmmoCount += addAmmoCnt;
 	weaponState.RangedWeaponState.ExtraAmmoCount -= addAmmoCnt;
+	
+	//broadcast delegate
+	const int32 weaponID = WeaponComponentRef.Get()->WeaponID;
+	const EWeaponType weaponType = weaponStat.WeaponType;
+	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponType, weaponState);
 
 	//if (OwnerCharacterRef.IsValid())
 	//	OwnerCharacterRef.Get()->ResetActionState(true);
@@ -109,6 +119,12 @@ void URangedCombatManager::AddAmmo(int32 Count)
 	if (WeaponComponentRef.Get()->WeaponState.RangedWeaponState.ExtraAmmoCount >= 1e5) return;
 	WeaponComponentRef.Get()->WeaponState.RangedWeaponState.ExtraAmmoCount = 
 		(WeaponComponentRef.Get()->WeaponState.RangedWeaponState.ExtraAmmoCount + Count) % (int32)1e5;
+	
+	//broadcast delegate
+	const int32 weaponID = WeaponComponentRef.Get()->WeaponID;
+	const EWeaponType weaponType = WeaponComponentRef.Get()->GetWeaponStat().WeaponType;
+	const FWeaponStateStruct weaponState = WeaponComponentRef.Get()->GetWeaponState();
+	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponType, weaponState);
 }
 
 AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOverride)
@@ -122,7 +138,7 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	FVector spawnLocation = OwnerCharacterRef.Get()->WeaponComponent->GetComponentLocation();
-	FRotator spawnRotation = FireRotationOverride.IsNearlyZero(0.001f) ?
+	FRotator spawnRotation = FireRotationOverride.IsNearlyZero(0.01f) ?
 								OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation()
 								: FireRotationOverride;
 

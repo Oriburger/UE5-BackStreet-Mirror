@@ -8,6 +8,7 @@
 #define MAX_WEAPON_UPGRADABLE_STAT_IDX 3
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateWeaponUpdated);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDelegateWeaponStateUpdated, int32, WeaponID, EWeaponType, WeaponType, FWeaponStateStruct, NewState);
 
 UCLASS()
 class BACKSTREET_API UWeaponComponentBase : public UStaticMeshComponent
@@ -21,6 +22,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateWeaponStateUpdated OnWeaponStateUpdated;
+
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateWeaponUpdated OnMainWeaponUpdated;
 
@@ -113,7 +117,7 @@ private:
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsWeaponRangeType() { return WeaponStat.WeaponType == EWeaponType::E_Shoot || WeaponStat.WeaponType == EWeaponType::E_Throw; }
+		bool GetIsWeaponRangeType() { return WeaponStat.WeaponType == EWeaponType::E_Shoot || WeaponStat.WeaponType == EWeaponType::E_Shoot; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FWeaponStatStruct GetWeaponStat() { return WeaponStat; }
@@ -147,6 +151,7 @@ public:
 public:	
 	UFUNCTION(BlueprintCallable)
 	bool UpgradeStat(TArray<uint8> NewLevelList);
+
 //-------- Combo ------------------------------------
 public:
 	//increase combo count

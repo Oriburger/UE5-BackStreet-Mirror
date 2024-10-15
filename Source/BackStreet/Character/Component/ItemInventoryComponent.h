@@ -54,7 +54,10 @@ public:
 		void GetItemData(int32 ItemID, FItemInfoDataStruct& ItemData);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TMap<ECraftingItemType, uint8> GetCraftingItemAmount();
+		TMap<ECraftingItemType, uint8> GetAllCraftingItemAmount();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetItemAmount(int32 ItemID);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		ECraftingItemType ConvertItemIDToCraftingItemType(int32 ItemID) { return static_cast<ECraftingItemType>(ItemID); }
@@ -71,7 +74,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FItemInfoDataStruct GetSubWeaponInfoData();
 	
-//====== Property ===========================
+//====== Weapon ===========================
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		int32 MaxItemCount = 100; 
@@ -81,14 +84,16 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		int32 MaxMainWeaponCount = 1;
-
 private:
+		TMap<int32, FWeaponStateStruct> WeaponStateMap;
+
 		UDataTable* ItemTable;
 
 		int32 CurrSubWeaponCount = 0;
 
 		int32 CurrMainWeaponCount = 0;
 
+//===== Property ==========================
 public:
 	// Item List
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

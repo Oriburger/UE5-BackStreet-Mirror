@@ -6,16 +6,17 @@
 #include "../CombatManager.h"
 #include "RangedCombatManager.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class BACKSTREET_API URangedCombatManager : public UCombatManager
 {
 	GENERATED_BODY()
 public:
 	URangedCombatManager();
+	
 
+
+public:
 	//공격 처리		
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;

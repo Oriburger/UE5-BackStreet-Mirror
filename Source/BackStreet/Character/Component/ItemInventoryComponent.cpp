@@ -59,10 +59,17 @@ void UItemInventoryComponent::SetItemInventoryFromSaveData()
 void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
 {
 	if (!ItemMap.Contains(ItemID)) return;
-	if (ItemMap[ItemID].ItemType == EItemCategoryInfo::E_SubWeapon
-		|| ItemMap[ItemID].ItemType == EItemCategoryInfo::E_Weapon)
+	if (ItemMap[ItemID].ItemType == EItemCategoryInfo::E_SubWeapon)
 	{
-		if (ItemMap[ItemID].ItemAmount >= MaxMainWeaponCount) return;
+		if (CurrSubWeaponCount >= MaxSubWeaponCount) return;
+		ItemCnt = 1;
+		CurrSubWeaponCount += 1;
+	}
+	else if(ItemMap[ItemID].ItemType == EItemCategoryInfo::E_Weapon)
+	{
+		if (CurrMainWeaponCount >= MaxMainWeaponCount) return;
+		ItemCnt = 1;
+		CurrMainWeaponCount += 1;
 	}
 	ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, ItemMap[ItemID].ItemAmount + ItemCnt);
 	OnUpdateItem.Broadcast();
@@ -72,6 +79,7 @@ void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
 void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
 {
 	if (!ItemMap.Contains(ItemID)) return;
+
 	if (ItemMap[ItemID].ItemType == EItemCategoryInfo::E_SubWeapon)
 	{
 		CurrSubWeaponCount = FMath::Max(0, CurrSubWeaponCount - 1);
@@ -80,7 +88,6 @@ void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
 	{
 		CurrMainWeaponCount = FMath::Max(0, CurrMainWeaponCount - 1);
 	}
-
 	ItemMap[ItemID].ItemAmount = FMath::Max(0, ItemMap[ItemID].ItemAmount - ItemCnt);
 	OnUpdateItem.Broadcast();
 	OnItemRemoved.Broadcast(ItemMap[ItemID], ItemMap[ItemID].ItemAmount);
@@ -94,7 +101,7 @@ void UItemInventoryComponent::GetItemData(int32 ItemID, FItemInfoDataStruct& Ite
 	}
 }
 
-TMap<ECraftingItemType, uint8> UItemInventoryComponent::GetCraftingItemAmount()
+TMap<ECraftingItemType, uint8> UItemInventoryComponent::GetAllCraftingItemAmount()
 {
 	TMap<ECraftingItemType, uint8> currItemAmountMap;
 	TArray< ECraftingItemType> craftingItemTypeList = {ECraftingItemType::E_Screw, ECraftingItemType::E_Spring , ECraftingItemType::E_Gear , ECraftingItemType::E_Wrench };
@@ -114,6 +121,12 @@ TMap<ECraftingItemType, uint8> UItemInventoryComponent::GetCraftingItemAmount()
 	return currItemAmountMap;
 }
 
+int32 UItemInventoryComponent::GetItemAmount(int32 ItemID)
+{
+	if (!ItemMap.Contains(ItemID)) return -1;
+	return ItemMap[ItemID].ItemAmount;
+}
+
 bool UItemInventoryComponent::GetIsItemEnough(int32 ItemID, uint8 NeedItemAmount)
 {
 	if (!ItemMap.Contains(ItemID)) return false;
@@ -124,6 +137,7 @@ bool UItemInventoryComponent::GetIsItemEnough(int32 ItemID, uint8 NeedItemAmount
 
 FItemInfoDataStruct UItemInventoryComponent::GetMainWeaponInfoData()
 {
+	if (CurrMainWeaponCount == 0) FItemInfoDataStruct();
 	TArray<int32> keyList;
 	ItemMap.GenerateKeyArray(keyList);
 
@@ -138,13 +152,16 @@ FItemInfoDataStruct UItemInventoryComponent::GetMainWeaponInfoData()
 
 FItemInfoDataStruct UItemInventoryComponent::GetSubWeaponInfoData()
 {
+	if(CurrSubWeaponCount == 0) FItemInfoDataStruct();
 	TArray<int32> keyList;
 	ItemMap.GenerateKeyArray(keyList);
 
 	for (int32& key : keyList)
 	{
 		if (ItemMap[key].ItemType == EItemCategoryInfo::E_SubWeapon && ItemMap[key].ItemAmount > 0)
+		{
 			return ItemMap[key];
+		}
 	}
 
 	return FItemInfoDataStruct();
