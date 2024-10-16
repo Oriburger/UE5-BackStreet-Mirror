@@ -74,6 +74,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetStageRemainingTime();
 
+	UFUNCTION()
+		void RegisterActor(AActor* TargetActor);
+
 protected:
 	//Add loading screen
 	UFUNCTION()
@@ -106,6 +109,9 @@ protected:
 	//Spawn craftbox
 	UFUNCTION()
 		void SpawnCraftbox(); 
+
+	UFUNCTION()
+		void SpawnItemBox();
 
 	//Spawn portals
 	UFUNCTION()
@@ -215,6 +221,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Class")
 		TSubclassOf<class AEnemyCharacterBase> EnemyCharacterClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Class")
+		TSubclassOf<class AItemBoxBase> ItemBoxClass;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Class")
 		TSubclassOf<UUserWidget> LoadingWidgetClass;

@@ -4,6 +4,8 @@
 #include "ItemBoxBase.h"
 
 #include "../Global/BackStreetGameModeBase.h"
+#include "../System/MapSystem/NewChapterManagerBase.h"
+#include "../System/MapSystem/StageManagerComponent.h"
 #include "InteractiveCollisionComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "NiagaraFunctionLibrary.h"
@@ -26,6 +28,7 @@ void AItemBoxBase::BeginPlay()
 TArray<AItemBase*> AItemBoxBase::SpawnItems(int32 TargetSpawnCount)
 {
 	//프로퍼티 내 각 배열 세팅이 올바르지 않은 경우
+	if (!GamemodeRef.IsValid()) return{};
 	if (SpawnItemIDList.Num() != ItemSpawnProbabilityList.Num()) return TArray<AItemBase*>();
 
 	TArray<AItemBase*> itemList; //반환할 아이템 리스트 
@@ -54,7 +57,12 @@ TArray<AItemBase*> AItemBoxBase::SpawnItems(int32 TargetSpawnCount)
 		{
 			itemList.Add(newItem);
 			newItem->SetActorScale3D(FVector(0.1));
-	
+			
+			if (IsValid(GamemodeRef.Get()->GetChapterManagerRef()))
+			{
+				GamemodeRef.Get()->GetChapterManagerRef()->StageManagerComponent->RegisterActor(newItem);
+			}
+
 			currentSpawnCount++;
 			duplicateCheckSet.Add(targetItemKey); //성공적으로 스폰한 아이템은 셋에 넣어 보관
 		}

@@ -8,6 +8,7 @@
 #include "../../Character/Component/ItemInventoryComponent.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "../../Item/ItemBase.h"
+#include "../../Item/ItemBoxBase.h"
 #include "../AISystem/AIControllerBase.h"
 #include "./Stage/GateBase.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -79,6 +80,12 @@ void UStageManagerComponent::ClearResource()
 float UStageManagerComponent::GetStageRemainingTime()
 {
 	return GetOwner()->GetWorldTimerManager().GetTimerRemaining(TimeAttackTimerHandle);
+}
+
+void UStageManagerComponent::RegisterActor(AActor* TargetActor)
+{
+	if (!IsValid(TargetActor)) return;
+	SpawnedActorList.Add(TargetActor);
 }
 
 void UStageManagerComponent::AddLoadingScreen()
@@ -203,6 +210,10 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 		{
 			CurrentStageInfo.RewardSpawnLocation = spawnPoint->GetActorLocation();
 		}
+		else if (spawnPoint->Tags[1] == FName("ItemBox"))
+		{
+			CurrentStageInfo.ItemBoxSpawnLocationList.Add(spawnPoint->GetActorLocation());
+		}
 	}
 }
 
@@ -294,6 +305,56 @@ void UStageManagerComponent::SpawnCraftbox()
 	//Spawn craft box~~
 }
 
+void UStageManagerComponent::SpawnItemBox()
+{
+	//Basic condition (stage type check and data count check
+	if (!IsValid(ItemBoxClass)) return;
+	if (CurrentStageInfo.StageType != EStageCategoryInfo::E_Entry
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_TimeAttack
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Exterminate
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Escort
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteTimeAttack
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteExterminate
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteEscort
+		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss) return;
+	
+	//Check data is valid
+	if (!CurrentChapterInfo.MaxItemBoxSpawnCountMap.Contains(CurrentStageInfo.StageType))
+	{
+		UE_LOG(LogGameMode, Error, TEXT("----- UStageManagerComponent::SpawnItemBox() ----------"));
+		UE_LOG(LogGameMode, Error, TEXT("> MaxItemBoxSpawnCountMap is not defined for type #%d"), (int32)CurrentStageInfo.StageType);
+		return;
+	}
+	if (CurrentChapterInfo.MaxItemBoxSpawnCountMap[CurrentStageInfo.StageType] > CurrentStageInfo.ItemBoxSpawnLocationList.Num())
+	{
+		UE_LOG(LogGameMode, Error, TEXT("----- UStageManagerComponent::SpawnItemBox() ----------"));
+		UE_LOG(LogGameMode, Error, TEXT("> Spawn point num is less than MaxItemBoxSpanwCount num."));
+		UE_LOG(LogGameMode, Error, TEXT("> There can be collapse among item boxes."));
+	}
+	//Set itembox spawn property
+	int32 spawnItemboxCount = UKismetMathLibrary::RandomInteger(CurrentChapterInfo.MaxItemBoxSpawnCountMap[CurrentStageInfo.StageType]) + 1;
+	int32 randomIdxOffset = UKismetMathLibrary::RandomInteger(CurrentStageInfo.ItemBoxSpawnLocationList.Num());
+
+	//--------------Spawn item to world and add to SpawnedActorList-------------------------------
+	if (CurrentStageInfo.ItemBoxSpawnLocationList.Num() > 0)
+	{
+		for (int32 idx = 0; idx < spawnItemboxCount; idx++)
+		{
+			TArray<int32> keyArray = {};
+			FVector spawnLocation = CurrentStageInfo.ItemBoxSpawnLocationList[(idx + randomIdxOffset) % CurrentStageInfo.ItemBoxSpawnLocationList.Num()];
+
+			AItemBoxBase* newItemBox = GetWorld()->SpawnActor<AItemBoxBase>(ItemBoxClass
+										, spawnLocation + FVector(0.0f, 0.0f, 200.0f), FRotator::ZeroRotator);
+			if (IsValid(newItemBox))
+			{
+				newItemBox->ActivateItem();
+				newItemBox->ActivateProjectileMovement();
+				SpawnedActorList.Add(newItemBox);
+			}
+		}
+	}
+}
+
 void UStageManagerComponent::SpawnPortal(int32 GateCount)
 {
 	if (!ChapterManagerRef.IsValid()) return;
@@ -374,6 +435,10 @@ void UStageManagerComponent::StartStage()
 	//spawn enemy and portal
 	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::StartStage : SpawnEnemy"));
 	SpawnEnemy();
+
+	//spawn ItemBox
+	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::StartStage : ItemBox"));
+	SpawnItemBox();
 
 	//Move player to start location
 	ACharacter* playerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
@@ -523,12 +588,12 @@ bool UStageManagerComponent::CheckStageClearStatus()
 {
 	//Basic condition (stage type check)
 	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
-	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate
-	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteExterminate
-	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Escort
-	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteEscort
-	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Boss
-	|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteExterminate)
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteExterminate
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Escort
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteEscort
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Boss
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteExterminate)
 	{
 		return RemainingEnemyCount == 0;
 	}
