@@ -72,22 +72,30 @@ void AProjectileBase::Tick(float DeltaTime)
 
 void AProjectileBase::InitProjectileAsset()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Init ProjectileAsset #1"));
 	if (ProjectileAssetInfo.ProjectileMesh.IsValid())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Init ProjectileAsset - Mesh"));
 		Mesh->SetStaticMesh(ProjectileAssetInfo.ProjectileMesh.Get());
 		Mesh->SetRelativeLocation(ProjectileAssetInfo.InitialLocation);
 		Mesh->SetWorldScale3D(ProjectileAssetInfo.InitialScale);
 	}
 
 	if (ProjectileAssetInfo.HitEffectParticle.IsValid())
+	{
 		HitNiagaraParticle = ProjectileAssetInfo.HitEffectParticle.Get();
-
+		UE_LOG(LogTemp, Warning, TEXT("Init ProjectileAsset - HitNiagara"));
+	}
 	if (ProjectileAssetInfo.HitEffectParticleLegacy.IsValid())
+	{
 		HitParticle = ProjectileAssetInfo.HitEffectParticleLegacy.Get();
-
+		UE_LOG(LogTemp, Warning, TEXT("Init ProjectileAsset - HitNiagaraLegacy"));
+	}
 	if (ProjectileAssetInfo.ExplosionParticle.IsValid())
+	{
 		ExplosionParticle = ProjectileAssetInfo.ExplosionParticle.Get();
-
+		UE_LOG(LogTemp, Warning, TEXT("Init ProjectileAsset - Explosion"));
+	}
 	if (ProjectileAssetInfo.TrailParticle.IsValid())
 		TrailParticle->SetAsset(ProjectileAssetInfo.TrailParticle.Get());
 }
@@ -230,9 +238,13 @@ void AProjectileBase::OnTargetBeginOverlap(UPrimitiveComponent* OverlappedComp, 
 
 void AProjectileBase::Explode()
 {
-	if (IsActorBeingDestroyed() || !IsValid(this)) return; 
+	UE_LOG(LogTemp, Warning, TEXT("Explode #1"));
+	if (IsActorBeingDestroyed() || !IsValid(this)) return;
+	UE_LOG(LogTemp, Warning, TEXT("Explode #2"));
 	if (!GamemodeRef.IsValid() || !OwnerCharacterRef.IsValid()) return; 
+	UE_LOG(LogTemp, Warning, TEXT("Explode #3"));
 	if (!ProjectileStat.bIsExplosive) return;
+	UE_LOG(LogTemp, Warning, TEXT("Explode #4"));
 
 	//--- 데미지 관련 --------------
 	TArray<AActor*> ignoreActors = { (AActor*)this };
@@ -242,8 +254,10 @@ void AProjectileBase::Explode()
 
 	//--- 이펙트 출력 --------------
 	if (ExplosionParticle != nullptr)
+	{
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionParticle, GetActorLocation(), GetActorRotation());
-	
+		UE_LOG(LogTemp, Warning, TEXT("Explode #5"));
+	}
 	if (AssetManagerBaseRef.IsValid())
 	{
 		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, floor(ProjectileID / 10.0) * 10, "Explosion");

@@ -46,22 +46,17 @@ TArray<AItemBase*> AItemBoxBase::SpawnItems(int32 TargetSpawnCount)
 		//이미 해당 아이템을 스폰했다면? 다시 선택
 		if (duplicateCheckSet.Contains(targetItemKey)) continue;
 
-		if (UKismetMathLibrary::RandomIntegerInRange(0, 100) <= targetItemProbability)
+		const float randomValue = UKismetMathLibrary::RandomFloatInRange(-10.0f, 10.0f);
+		const FVector spawnLocation = GetActorLocation() + FVector(randomValue, randomValue, currentSpawnCount * SpawnLocationInterval + 125.0f);
+		AItemBase* newItem = GamemodeRef.Get()->SpawnItemToWorld(targetItemID, spawnLocation);
+
+		if (IsValid(newItem))
 		{
-			const float randomValue = UKismetMathLibrary::RandomFloatInRange(-10.0f, 10.0f);
-			const FVector spawnLocation = GetActorLocation() + FVector(randomValue, randomValue, currentSpawnCount * SpawnLocationInterval + 125.0f);
-			AItemBase* newItem = GamemodeRef.Get()->SpawnItemToWorld(targetItemID, spawnLocation);
-
-			if (IsValid(newItem))
-			{
-				itemList.Add(newItem);
-				newItem->SetActorScale3D(FVector(0.1));
-
-				//OnMissionItemSpawned.ExecuteIfBound(newItem); //새 아이템을 UMission에 등록
-				
-				currentSpawnCount++;
-				duplicateCheckSet.Add(targetItemKey); //성공적으로 스폰한 아이템은 셋에 넣어 보관
-			}
+			itemList.Add(newItem);
+			newItem->SetActorScale3D(FVector(0.1));
+	
+			currentSpawnCount++;
+			duplicateCheckSet.Add(targetItemKey); //성공적으로 스폰한 아이템은 셋에 넣어 보관
 		}
 	}
 	return itemList;

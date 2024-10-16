@@ -216,6 +216,7 @@ void AMainCharacterBase::SwitchWeapon(bool bSwitchToSubWeapon)
 		if (subWeaponData.ItemID == 0)
 		{
 			UE_LOG(LogTemp, Error, TEXT("SwitchWeapon %d Not Found"), subWeaponData.ItemID);
+			return;
 		}
 		WeaponComponent->InitWeapon(subWeaponData.ItemID - 20000); //temp code
 	}
@@ -224,6 +225,7 @@ void AMainCharacterBase::SwitchWeapon(bool bSwitchToSubWeapon)
 		if (mainWeaponData.ItemID == 0)
 		{
 			UE_LOG(LogTemp, Error, TEXT("SwitchWeapon %d Not Found"), mainWeaponData.ItemID);
+			return;
 		}
 		WeaponComponent->InitWeapon(mainWeaponData.ItemID - 20000); //temp code
 	}

@@ -21,30 +21,30 @@ protected:
 	virtual void BeginPlay() override;
 
 // ------ 기본 로직 -----------------------------
-private:
+protected:
 	//최대 MaxSpawnCount 만큼의 아이템을 확률에 기반하여 스폰하여 List 형태로 반환
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		TArray<class AItemBase*> SpawnItems(int32 TargetSpawnCount);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void LaunchItem(class AItemBase* TargetItem);
 
 // ------ 기본 Property ---------------------------
 protected:
 	//최대로 스폰할 아이템 개수
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Settings", meta = (UIMin = 1, UIMax = 10))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Settings", meta = (UIMin = 1, UIMax = 10))
 		int32 MaxSpawnItemCount;
 
 	//최소로 스폰할 아이템 개수
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Settings", meta = (UIMin = 1, UIMax = 10))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Settings", meta = (UIMin = 1, UIMax = 10))
 		int32 MinSpawnItemCount;
 
-	//현재 아이템 박스가 스폰 가능한 아이템의 ID 리스트 : idx별로 아이템을 구분 / 미션 아이템은 0번에 필수로 포함!!
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Settings")
+	//현재 아이템 박스가 스폰 가능한 아이템의 ID 리스트 : idx별로 아이템을 구분
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Settings")
 		TArray<int32> SpawnItemIDList;
 
-	//각 아이템의 등장 확률를 담은 리스트 (0 ~ 100)  / 미션 아이템은 필수로 포함!!
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Settings")
+	//각 아이템의 등장 확률를 담은 리스트 (0 ~ 100) 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Settings")
 		TArray<float> ItemSpawnProbabilityList;
 
 // ----- Item Launch Option --------------------------
