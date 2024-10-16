@@ -86,34 +86,29 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	}
 	else
 	{
-		//이미 기록이 되어있는 경우? 그대로 덮어씌운다 
-		if (WeaponStatCacheMap.Contains(NewWeaponID)
-			&& WeaponStateCacheMap.Contains(NewWeaponID)
-			&& WeaponAssetCacheMap.Contains(NewWeaponID))
+		WeaponStat = WeaponStatCacheMap.Contains(NewWeaponID)
+					? WeaponStatCacheMap[NewWeaponID]
+					: GetWeaponStatInfoWithID(WeaponID);
+		WeaponState = WeaponStateCacheMap.Contains(NewWeaponID)
+					? WeaponState = WeaponStateCacheMap[NewWeaponID]
+					: FWeaponStateStruct();
+		if (!WeaponStateCacheMap.Contains(NewWeaponID))
 		{
-			WeaponStat = WeaponStatCacheMap[NewWeaponID];
-			WeaponState = WeaponStateCacheMap[NewWeaponID];
-			WeaponAssetInfo = GetWeaponAssetInfoWithID(WeaponID);
-			InitWeaponAsset();
-			return; 
-		}
-		//그렇지 않은 경우 데이터테이블에서 불러온다
-		else
-		{
-			WeaponStat = GetWeaponStatInfoWithID(WeaponID);
 			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_Attack, 0);
 			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_AttackSpeed, 0);
 			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_FinalAttack, 0);
-			if (WeaponStat.WeaponType == EWeaponType::E_Shoot)
-			{
-				WeaponState.RangedWeaponState.CurrentAmmoCount = WeaponStat.RangedWeaponStat.MaxAmmoPerMagazine;
-				WeaponState.RangedWeaponState.ExtraAmmoCount = WeaponStat.RangedWeaponStat.MaxTotalAmmo - WeaponState.RangedWeaponState.CurrentAmmoCount;
-				WeaponState.RangedWeaponState.CurrentAmmoCount = FMath::Max(0, WeaponState.RangedWeaponState.CurrentAmmoCount);
-				WeaponState.RangedWeaponState.ExtraAmmoCount = FMath::Max(0, WeaponState.RangedWeaponState.ExtraAmmoCount);
-			}
 		}
+		WeaponState.RangedWeaponState.UpdateAmmoValidation(WeaponStat.RangedWeaponStat.MaxTotalAmmo);
 	}
-	
+
+	//에셋까지 있다면 그냥 반환
+	if(WeaponAssetCacheMap.Contains(NewWeaponID))
+	{
+		WeaponAssetInfo = WeaponAssetCacheMap[NewWeaponID];
+		InitWeaponAsset();
+		return;
+	}
+
 	//에셋 초기화
 	FWeaponAssetInfoStruct newAssetInfo = GetWeaponAssetInfoWithID(WeaponID);
 	WeaponAssetInfo = newAssetInfo;
@@ -235,6 +230,25 @@ FWeaponStatStruct UWeaponComponentBase::GetWeaponStatInfoWithID(int32 TargetWeap
 	return FWeaponStatStruct();
 }
 
+
+FWeaponStateStruct UWeaponComponentBase::GetWeaponStateCacheDate(int32 TargetWeaponID)
+{
+	if (!WeaponStateCacheMap.Contains(TargetWeaponID)) return FWeaponStateStruct();
+	return WeaponStateCacheMap[TargetWeaponID];
+}
+
+bool UWeaponComponentBase::UpdateWeaponStateCache(int32 TargetWeaponID, FWeaponStateStruct NewState)
+{
+	//@@ 들어오는 정보의 유효성에 대한 검사가 없음 @@ -> 코드 개선 필요
+	if (!WeaponStateCacheMap.Contains(TargetWeaponID))
+	{
+		WeaponStateCacheMap.Add(TargetWeaponID, NewState);
+		return true;
+	}
+	WeaponStateCacheMap[TargetWeaponID] = NewState;
+	if (TargetWeaponID == WeaponID) WeaponState = NewState;
+	return true;
+}
 
 FProjectileStatStruct UWeaponComponentBase::GetProjectileStatInfo(int32 TargetProjectileID)
 {

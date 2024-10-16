@@ -50,6 +50,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void RemoveItem(int32 ItemID, uint8 ItemCnt);
 
+private:
+	//무기를 추가하고 제거한다. WeaponComponent와의 정보 연동을 진행한다
+	bool TryAddWeapon(int32 ItemID, EItemCategoryInfo ItemCategory, int32 ItemCount);
+	bool TryRemoveWeapon(int32 ItemID, EItemCategoryInfo ItemCategory, int32 RemoveCount);
+
+//======= Getter =======================
+public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		void GetItemData(int32 ItemID, FItemInfoDataStruct& ItemData);
 
@@ -84,16 +91,33 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		int32 MaxMainWeaponCount = 1;
+
+protected:
+	UFUNCTION(BlueprintCallable)
+		bool TryUpdateWeaponState(int32 WeaponID, FWeaponStateStruct NewState);
+
+public:
+	//Delegate 이벤트
+	UFUNCTION()
+		void OnWeaponStateUpdated(int32 WeaponID, EWeaponType WeaponType, FWeaponStateStruct NewState);
+
 private:
-		TMap<int32, FWeaponStateStruct> WeaponStateMap;
+	//현재 인벤토리의 유효한 무기 ID들을 리스트로 불러온다
+	TArray<int32> GetValidWeaponIDList(EWeaponType WeaponType);	
 
-		UDataTable* ItemTable;
+	//WeaponComponent로부터 불러온다
+	FWeaponStateStruct& GetWeaponState(int32 WeaponID);
 
-		int32 CurrSubWeaponCount = 0;
+	TMap<int32, FWeaponStateStruct> WeaponStateMap;
 
-		int32 CurrMainWeaponCount = 0;
+	int32 CurrSubWeaponCount = 0;
+
+	int32 CurrMainWeaponCount = 0;
 
 //===== Property ==========================
+private:
+	UDataTable* ItemTable;
+
 public:
 	// Item List
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -103,5 +127,7 @@ public:
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+	TWeakObjectPtr<class UWeaponComponentBase> WeaponRef;
 
 };

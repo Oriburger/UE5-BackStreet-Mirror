@@ -81,7 +81,6 @@ AMainCharacterBase::AMainCharacterBase()
 
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
-	WeaponComponent->OnWeaponStateUpdated.AddDynamic(ItemInventory, &UItemInventoryComponent::OnWeaponStateUpdated);
 
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
 	GetCapsuleComponent()->SetCapsuleRadius(41.0f);
@@ -185,9 +184,6 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//Upper Attack
 		//EnhancedInputComponent->BindAction(InputActionInfo.UpperAttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryUpperAttack);
 
-		//Reload
-		EnhancedInputComponent->BindAction(InputActionInfo.ReloadAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryReload);
-
 		//Sprint
 		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Sprint);
 		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StopSprint);
@@ -214,24 +210,28 @@ void AMainCharacterBase::SwitchWeapon(bool bSwitchToSubWeapon)
 	if (!IsValid(ItemInventory) || (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Shoot))) return;
 	FItemInfoDataStruct subWeaponData = ItemInventory->GetSubWeaponInfoData();
 	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
-	if (subWeaponData.ItemID == 0 || mainWeaponData.ItemID == 0)
-	{
-		//워닝 메시지
-		return;
-	}
+
 	if (bSwitchToSubWeapon && WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Melee)
 	{
+		if (subWeaponData.ItemID == 0)
+		{
+			UE_LOG(LogTemp, Error, TEXT("SwitchWeapon %d Not Found"), subWeaponData.ItemID);
+		}
 		WeaponComponent->InitWeapon(subWeaponData.ItemID - 20000); //temp code
 	}
 	else if (!bSwitchToSubWeapon && WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Shoot)
 	{
+		if (mainWeaponData.ItemID == 0)
+		{
+			UE_LOG(LogTemp, Error, TEXT("SwitchWeapon %d Not Found"), mainWeaponData.ItemID);
+		}
 		WeaponComponent->InitWeapon(mainWeaponData.ItemID - 20000); //temp code
 	}
 }
 
 void AMainCharacterBase::ZoomIn()
 {
-	//==== Exception Handling ==========================
+	//Exception Handling ==========================
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (!IsValid(ItemInventory)) return;
 	FItemInfoDataStruct subWeaponData = ItemInventory->GetSubWeaponInfoData();
@@ -241,7 +241,7 @@ void AMainCharacterBase::ZoomIn()
 	SwitchWeapon(true);										
 	SetAimingMode(true);
 
-	//==== FollowingCamera attach to RangedAimBoom Component using Interp ==================
+	//FollowingCamera attach to RangedAimBoom Component using Interp ==================
 	FLatentActionInfo LatentInfo;
 	LatentInfo.CallbackTarget = this;
 	FollowingCamera->AttachToComponent(RangedAimBoom, FAttachmentTransformRules::KeepWorldTransform);
@@ -253,14 +253,12 @@ void AMainCharacterBase::ZoomIn()
 
 void AMainCharacterBase::ZoomOut()
 {
-	//ActionType !E_Shoot exception handling
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Shoot) return;
-
-	UE_LOG(LogTemp, Warning, TEXT("ZoomOUT"));
+	
 	SwitchWeapon(false);
 	SetAimingMode(false);
 	
-	//======FollowingCamera attach to CameraBoom Component using Interp ===================
+	//FollowingCamera attach to CameraBoom Component using Interp ===================
 	FLatentActionInfo LatentInfo;
 	LatentInfo.CallbackTarget = this;
 	FollowingCamera->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
@@ -476,11 +474,6 @@ void AMainCharacterBase::TryInvestigate()
 	}
 }
 
-void AMainCharacterBase::TryReload()
-{
-	Super::TryReload();
-}
-
 void AMainCharacterBase::LockToTarget(const FInputActionValue& Value)
 {
 	if (GetCharacterMovement()->IsFalling()) return;
@@ -593,8 +586,7 @@ bool AMainCharacterBase::TrySkill(int32 SkillID)
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_Stun
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_Die
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return false;
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown) return false;
 
 	return Super::TrySkill(SkillID);
 }

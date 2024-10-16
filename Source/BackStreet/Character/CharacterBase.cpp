@@ -272,8 +272,7 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 {
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown) return;
-	if (!bForceReset && (CharacterState.CharacterActionState == ECharacterActionType::E_Stun
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;	
+	if (!bForceReset && CharacterState.CharacterActionState == ECharacterActionType::E_Stun) return;	
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
 
@@ -578,14 +577,13 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_Stun
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_Die
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return false;
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown) return false;
 
 
 	//스킬 매니저 있는지 확인
 	if (!SkillManagerComponentRef.IsValid())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to get SkillmanagerBase"));
+		UE_LOG(LogTemp, Error, TEXT("Failed to get SkillmanagerBase"));
 		ensure(SkillManagerComponentRef.IsValid());
 		return false;
 	}
@@ -629,26 +627,6 @@ void ACharacterBase::StopAttack()
 	WeaponComponent->StopAttack();
 }
 
-void ACharacterBase::TryReload()
-{
-	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Shoot
-		&& WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Shoot) return;
-
-	if (WeaponComponent->RangedCombatManager->GetCanReload()) return;
-
-	float reloadTime = WeaponComponent->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
-	if (AssetHardPtrInfo.ReloadAnimMontageList.Num() > 0
-		&& IsValid(AssetHardPtrInfo.ReloadAnimMontageList[0]))
-	{
-		UAnimMontage* reloadAnim = AssetHardPtrInfo.ReloadAnimMontageList[0];
-		if (IsValid(reloadAnim))
-			PlayAnimMontage(reloadAnim);
-	}
-
-	//CharacterState.CharacterActionState = ECharacterActionType::E_Reload;
-	GetWorldTimerManager().SetTimer(ReloadTimerHandle, WeaponComponent->RangedCombatManager, &URangedCombatManager::Reload, reloadTime, false);
-}
-
 void ACharacterBase::InitAsset(int32 NewCharacterID)
 {
 	AssetSoftPtrInfo = GetAssetSoftInfoWithID(NewCharacterID);
@@ -686,14 +664,6 @@ void ACharacterBase::InitAsset(int32 NewCharacterID)
 			for (int32 i = 0; i < AssetSoftPtrInfo.ShootAnimMontageSoftPtrList.Num(); i++)
 			{
 				AssetToStream.AddUnique(AssetSoftPtrInfo.ShootAnimMontageSoftPtrList[i].ToSoftObjectPath());
-			}
-		}
-
-		if (!AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList.IsEmpty())
-		{
-			for (int32 i = 0; i < AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList.Num(); i++)
-			{
-				AssetToStream.AddUnique(AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
@@ -873,13 +843,6 @@ bool ACharacterBase::InitAnimAsset()
 			AssetHardPtrInfo.ShootAnimMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList)
-	{
-		if (animSoftPtr.IsValid())
-		{
-			AssetHardPtrInfo.ReloadAnimMontageList.AddUnique(animSoftPtr.Get());
-		}
-	}
 	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.HitAnimMontageSoftPtrList)
 	{
 		if (animSoftPtr.IsValid())
@@ -983,13 +946,11 @@ bool ACharacterBase::EquipWeapon(int32 NewWeaponID)
 void ACharacterBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
-	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
 	GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
 	GetWorldTimerManager().ClearTimer(HitCounterResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(LocationInterpHandle);
 	GetWorldTimerManager().ClearTimer(AirAtkLocationUpdateHandle);
 	AtkIntervalHandle.Invalidate();
-	ReloadTimerHandle.Invalidate();
 	KnockDownDelayTimerHandle.Invalidate();
 	HitCounterResetTimerHandle.Invalidate();
 	LocationInterpHandle.Invalidate();

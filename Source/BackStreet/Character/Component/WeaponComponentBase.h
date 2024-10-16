@@ -117,7 +117,13 @@ private:
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsWeaponRangeType() { return WeaponStat.WeaponType == EWeaponType::E_Shoot || WeaponStat.WeaponType == EWeaponType::E_Shoot; }
+		FWeaponStateStruct GetWeaponStateCacheDate(int32 TargetWeaponID);
+
+	UFUNCTION()
+		bool UpdateWeaponStateCache(int32 TargetWeaponID, FWeaponStateStruct NewState);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsWeaponRangeType() { return WeaponStat.WeaponType == EWeaponType::E_Shoot; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FWeaponStatStruct GetWeaponStat() { return WeaponStat; }
@@ -150,7 +156,7 @@ public:
 // ======		Upgrade		================
 public:	
 	UFUNCTION(BlueprintCallable)
-	bool UpgradeStat(TArray<uint8> NewLevelList);
+		bool UpgradeStat(TArray<uint8> NewLevelList);
 
 //-------- Combo ------------------------------------
 public:

@@ -29,12 +29,8 @@ public:
 public:
 	UFUNCTION(BlueprintCallable)
 		bool TryFireProjectile(FRotator FireRotationOverride = FRotator::ZeroRotator);
-
-	//장전을 시도. 현재 상태에 따른 성공 여부를 반환
-	UFUNCTION(BlueprintCallable)
-		void Reload();
-
-	//Add ammo count (til ExtraAmmoCount)
+	
+	//Add ammo count
 	UFUNCTION(BlueprintCallable)
 		void AddAmmo(int32 Count);
 
@@ -48,12 +44,8 @@ public:
 	UFUNCTION()
 		void SetInfiniteAmmoMode(bool NewMode);
 
-	//get Stat.ExtraAmmoCount
 	UFUNCTION(BlueprintCallable)
 		int32 GetLeftAmmoCount();
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetCanReload();
 
 //------ Asset----------------------------------
 protected:
@@ -66,10 +58,6 @@ protected:
 		void SpawnShootNiagaraEffect();
 
 //--------타이머 관련--------------------
-protected:
-	UPROPERTY()
-		FTimerHandle AutoReloadTimerHandle;
-
 private:
 	//타이머 이벤트 전달을 위해서만 사용
 	//델리게이트 바인딩 이후 파라미터를 직접 지정하면

@@ -132,9 +132,6 @@ public:
 		TArray<TSoftObjectPtr<UAnimMontage>> ShootAnimMontageSoftPtrList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> ReloadAnimMontageSoftPtrList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TArray<TSoftObjectPtr<UAnimMontage>> HitAnimMontageSoftPtrList;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
@@ -210,9 +207,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
 		TArray<UAnimMontage*> ShootAnimMontageList;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
-		TArray<UAnimMontage*> ReloadAnimMontageList;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
 		TArray<UAnimMontage*> HitAnimMontageList;

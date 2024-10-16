@@ -11,7 +11,6 @@
 #include "../../../Character/MainCharacter/MainCharacterBase.h"
 #include "../../../Character/Component/WeaponComponentBase.h"
 #include "NiagaraFunctionLibrary.h"
-#define AUTO_RELOAD_DELAY_VALUE 0.1
 
 URangedCombatManager::URangedCombatManager()
 {
@@ -20,7 +19,7 @@ URangedCombatManager::URangedCombatManager()
 void URangedCombatManager::Attack()
 {
 	Super::Attack();
-
+	
 	bool result = TryFireProjectile();
 
 	if (AssetManagerRef.IsValid())
@@ -41,9 +40,6 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo
 		&& !OwnerCharacterRef->GetCharacterStat().bInfinite && WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount == 0)
 	{
-		//StopAttack의 ResetActionState로 인해 실행이 되지 않는 현상 방지를 위해
-		//타이머를 통해 일정 시간이 지난 후에 Reload를 시도.
-		GamemodeRef.Get()->GetWorldTimerManager().SetTimer(AutoReloadTimerHandle, OwnerCharacterRef.Get(), &ACharacterBase::TryReload, 1.0f, false, AUTO_RELOAD_DELAY_VALUE);
 		return false;
 	}
 
@@ -75,55 +71,22 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 		&& WeaponComponentRef.Get()->GetWeaponState().RangedWeaponState.GetIsEmpty())
 	{
 		Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->ZoomOut();
-		int32 weaponID = WeaponComponentRef.Get()->GetWeaponStat().WeaponID;
 		Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->SwitchWeapon(false);
-		Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->ItemInventory->RemoveItem(weaponID + 20000, 1);
 	}
-
 	return true;
-}
-
-void URangedCombatManager::Reload()
-{
-	if (!GetCanReload()) return;
-
-	FWeaponStatStruct& weaponStat = WeaponComponentRef.Get()->WeaponStat;
-	FWeaponStateStruct& weaponState = WeaponComponentRef.Get()->WeaponState;
-	int32 addAmmoCnt = FMath::Min(weaponState.RangedWeaponState.ExtraAmmoCount, weaponStat.RangedWeaponStat.MaxAmmoPerMagazine);
-
-	if (addAmmoCnt + weaponState.RangedWeaponState.CurrentAmmoCount > weaponStat.RangedWeaponStat.MaxAmmoPerMagazine)
-	{
-		addAmmoCnt = (weaponStat.RangedWeaponStat.MaxAmmoPerMagazine - weaponState.RangedWeaponState.CurrentAmmoCount);
-	}
-	weaponState.RangedWeaponState.CurrentAmmoCount += addAmmoCnt;
-	weaponState.RangedWeaponState.ExtraAmmoCount -= addAmmoCnt;
-	
-	//broadcast delegate
-	const int32 weaponID = WeaponComponentRef.Get()->WeaponID;
-	const EWeaponType weaponType = weaponStat.WeaponType;
-	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponType, weaponState);
-
-	//if (OwnerCharacterRef.IsValid())
-	//	OwnerCharacterRef.Get()->ResetActionState(true);
-
-	if (AssetManagerRef.IsValid())
-	{
-		AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon
-								, WeaponComponentRef.Get()->WeaponID, "Reload");
-	}
 }
 
 void URangedCombatManager::AddAmmo(int32 Count)
 {
 	if (WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo) return;
-	if (WeaponComponentRef.Get()->WeaponState.RangedWeaponState.ExtraAmmoCount >= 1e5) return;
-	WeaponComponentRef.Get()->WeaponState.RangedWeaponState.ExtraAmmoCount = 
-		(WeaponComponentRef.Get()->WeaponState.RangedWeaponState.ExtraAmmoCount + Count) % (int32)1e5;
 	
 	//broadcast delegate
 	const int32 weaponID = WeaponComponentRef.Get()->WeaponID;
 	const EWeaponType weaponType = WeaponComponentRef.Get()->GetWeaponStat().WeaponType;
-	const FWeaponStateStruct weaponState = WeaponComponentRef.Get()->GetWeaponState();
+	FWeaponStateStruct weaponState = WeaponComponentRef.Get()->GetWeaponState();
+	weaponState.RangedWeaponState.CurrentAmmoCount += Count;
+	weaponState.RangedWeaponState.UpdateAmmoValidation(WeaponComponentRef.Get()->GetWeaponStat().RangedWeaponStat.MaxTotalAmmo);
+
 	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponType, weaponState);
 }
 
@@ -171,15 +134,7 @@ void URangedCombatManager::SetInfiniteAmmoMode(bool NewMode)
 
 int32 URangedCombatManager::GetLeftAmmoCount()
 {
-	return WeaponComponentRef.Get()->WeaponState.RangedWeaponState.ExtraAmmoCount
-			+ WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount;
-}
-
-bool URangedCombatManager::GetCanReload()
-{
-	if (WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo) return false;
-	if (GetLeftAmmoCount() == 0) return false;
-	return true;
+	return WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount;
 }
 
 void URangedCombatManager::SpawnShootNiagaraEffect()

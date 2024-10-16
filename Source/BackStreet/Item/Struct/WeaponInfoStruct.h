@@ -90,14 +90,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsInfiniteAmmo = false;
 
-	//무한 탄창인지?
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bInfiniteMagazine = false;
-
-	//한 탄창에 최대 발사체 수
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 MaxAmmoPerMagazine = 0;
-
 	//소지할 수 있는 최대 발사체 개수 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		int32 MaxTotalAmmo = 200;
@@ -154,20 +146,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f))
 		float FixedDamageAmount = 0.0f;
 
-	// 내구도 PROPERTY 추가
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bInfinite = false;
-
 	// Final Impact Strength, Default is zero.  1.0 + this value 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.0f, UIMax = 5.0f))
 		float FinalImpactStrength = 0.0f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 MaxDurability = 10;
-
-	//인벤토리를 차지하는 칸 수
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		uint8 WeaponWeight = 1;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		float WeaponKnockBackStrength = 500.0f;
@@ -199,11 +180,12 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		int32 CurrentAmmoCount = 0;
 
-	//별도 탄창에 있는 탄환들의 총합
-	UPROPERTY(BlueprintReadOnly)
-		int32 ExtraAmmoCount = 0;
+	inline bool GetIsEmpty() const { return CurrentAmmoCount == 0; }
 
-	inline bool GetIsEmpty() const { return (CurrentAmmoCount + ExtraAmmoCount) == 0; }
+	void UpdateAmmoValidation(int32 MaxTotalAmmo)
+	{
+		CurrentAmmoCount = FMath::Min(MaxTotalAmmo, CurrentAmmoCount);
+	}
 };
 
 USTRUCT(BlueprintType)

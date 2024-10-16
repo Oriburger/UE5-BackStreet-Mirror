@@ -138,9 +138,6 @@ public:
 	UFUNCTION()
 		void TryInvestigate();
 
-	UFUNCTION()
-		virtual void TryReload() override;
-
 	UFUNCTION(BlueprintCallable)
 		virtual void TryAttack() override;
 
