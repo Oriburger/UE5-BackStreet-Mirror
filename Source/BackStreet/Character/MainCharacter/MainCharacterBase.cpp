@@ -256,7 +256,6 @@ void AMainCharacterBase::ZoomOut()
 	//ActionType !E_Throw exception handling
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Throw) return;
 
-	UE_LOG(LogTemp, Warning, TEXT("ZoomOUT"));
 	SwitchWeapon(false);
 	SetAimingMode(false);
 	
