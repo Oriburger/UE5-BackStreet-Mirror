@@ -106,9 +106,7 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 	FRotator spawnRotation = FireRotationOverride.IsNearlyZero(0.01f) ?
 								OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation()
 								: FireRotationOverride;
-
-	DrawDebugSphere(GetWorld(), spawnLocation, 10.0f, 64, FColor::Yellow, true);
-
+	
 	//캐릭터의 Forward 방향으로 맞춰준다.
 	if (FireRotationOverride.IsNearlyZero(0.001f))
 	{
