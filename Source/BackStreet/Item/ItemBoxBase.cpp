@@ -56,7 +56,6 @@ TArray<AItemBase*> AItemBoxBase::SpawnItems(int32 TargetSpawnCount)
 		if (IsValid(newItem))
 		{
 			itemList.Add(newItem);
-			newItem->SetActorScale3D(FVector(0.1));
 			
 			if (IsValid(GamemodeRef.Get()->GetChapterManagerRef()))
 			{

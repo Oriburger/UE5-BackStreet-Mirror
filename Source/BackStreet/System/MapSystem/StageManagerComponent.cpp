@@ -347,8 +347,8 @@ void UStageManagerComponent::SpawnItemBox()
 										, spawnLocation + FVector(0.0f, 0.0f, 200.0f), FRotator::ZeroRotator);
 			if (IsValid(newItemBox))
 			{
-				newItemBox->ActivateItem();
 				newItemBox->ActivateProjectileMovement();
+				newItemBox->ActivateItem();
 				SpawnedActorList.Add(newItemBox);
 			}
 		}

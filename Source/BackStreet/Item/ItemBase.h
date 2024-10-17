@@ -66,7 +66,7 @@ public:
 		void InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride = FItemInfoDataStruct());
 
 	//아이템 초기 효과를 출력하고 활성화 시킨다. (타임라인 활용)
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void ActivateItem();
 
 	UFUNCTION()

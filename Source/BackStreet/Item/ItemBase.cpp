@@ -43,7 +43,7 @@ AItemBase::AItemBase()
 
 	ItemTriggerVolume = CreateDefaultSubobject<UInteractiveCollisionComponent>("SPHERE_COLLISION");
 	ItemTriggerVolume->SetupAttachment(RootComponent);
-	ItemTriggerVolume->SetRelativeScale3D(FVector(5.0f));
+	ItemTriggerVolume->SetWorldScale3D(FVector(5.0f));
 	ItemTriggerVolume->SetCollisionProfileName("ItemTrigger", true);
 	ItemTriggerVolume->OnComponentBeginOverlap.AddUniqueDynamic(this, &AItemBase::OnOverlapBegins);
 

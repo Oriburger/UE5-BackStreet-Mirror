@@ -40,6 +40,7 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo
 		&& !OwnerCharacterRef->GetCharacterStat().bInfinite && WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount == 0)
 	{
+		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName("보조무기가 없습니다."), FColor::White);
 		return false;
 	}
 
@@ -70,8 +71,8 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player")
 		&& WeaponComponentRef.Get()->GetWeaponState().RangedWeaponState.GetIsEmpty())
 	{
-		Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->ZoomOut();
-		Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->SwitchWeapon(false);
+		//Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->ZoomOut();
+		//Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->SwitchWeapon(false);
 	}
 	return true;
 }
@@ -100,11 +101,13 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 	spawmParams.Instigator = OwnerCharacterRef.Get()->GetInstigator();
 	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	FVector spawnLocation = OwnerCharacterRef.Get()->WeaponComponent->GetComponentLocation();
+	FVector spawnLocation = OwnerCharacterRef.Get()->WeaponComponent->GetComponentLocation()
+							+ OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 25.0f;
 	FRotator spawnRotation = FireRotationOverride.IsNearlyZero(0.01f) ?
 								OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation()
 								: FireRotationOverride;
 
+	DrawDebugSphere(GetWorld(), spawnLocation, 10.0f, 64, FColor::Yellow, true);
 
 	//캐릭터의 Forward 방향으로 맞춰준다.
 	if (FireRotationOverride.IsNearlyZero(0.001f))
@@ -113,8 +116,8 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 		spawnRotation.Yaw += 90.0f;
 	}
 
-	FTransform SpawnTransform = { spawnRotation, spawnLocation, {1.0f, 1.0f, 1.0f} };
-	AProjectileBase* newProjectile = Cast<AProjectileBase>(GetWorld()->SpawnActor(AProjectileBase::StaticClass(), &SpawnTransform, spawmParams));
+	FTransform spawnTransform = { spawnRotation, spawnLocation, {1.0f, 1.0f, 1.0f} };
+	AProjectileBase* newProjectile = Cast<AProjectileBase>(GetWorld()->SpawnActor(AProjectileBase::StaticClass(), &spawnTransform, spawmParams));
 
 	if (IsValid(newProjectile) && WeaponComponentRef.Get()->ProjectileAssetInfo.ProjectileID != 0)
 	{
