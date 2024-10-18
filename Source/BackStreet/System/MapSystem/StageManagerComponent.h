@@ -74,7 +74,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetStageRemainingTime();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void RegisterActor(AActor* TargetActor);
 
 protected:
@@ -96,6 +96,9 @@ protected:
 	//Clear previous stage's level instance
 	UFUNCTION()
 		void ClearPreviousActors();
+
+	UFUNCTION()
+		void ClearEnemyActors();
 
 	//Update spawn point member of stage info struct after map load 
 	//There are several points to spawn enemy, player, craftbox etc

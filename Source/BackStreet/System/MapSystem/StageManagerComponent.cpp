@@ -112,6 +112,9 @@ void UStageManagerComponent::CreateLevelInstance(TSoftObjectPtr<UWorld> MainLeve
 {
 	if (MainLevel.IsNull()) return;
 
+	//Clear previous portal
+	ClearPreviousActors();
+
 	//Init loading screen
 	AddLoadingScreen();
 
@@ -167,6 +170,27 @@ void UStageManagerComponent::ClearPreviousActors()
 			else
 			{
 				target->Destroy();
+			}
+		}
+	}
+	SpawnedActorList.Reset();
+	RemainingEnemyCount = 0;
+}
+
+void UStageManagerComponent::ClearEnemyActors()
+{
+	//Remove all spawned actors
+	for (int idx = SpawnedActorList.Num() - 1; idx >= 0; idx--)
+	{
+		if (SpawnedActorList[idx].IsValid())
+		{
+			AActor* target = SpawnedActorList[idx].Get();
+			SpawnedActorList[idx] = nullptr;
+
+			//need refactor. weapon is not destroyed together when character is destroyed using Destroy().
+			if (target->ActorHasTag("Enemy"))
+			{
+				UGameplayStatics::ApplyDamage(target, 1e8, nullptr, GetOwner(), nullptr);
 			}
 		}
 	}
@@ -477,7 +501,7 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	CurrentStageInfo.bIsFinished = true;
 
 	//Clear all remaining actors
-	ClearPreviousActors();
+	ClearEnemyActors();
 
 	//Clear time attack timer handle
 	GetOwner()->GetWorldTimerManager().ClearTimer(TimeAttackTimerHandle);
