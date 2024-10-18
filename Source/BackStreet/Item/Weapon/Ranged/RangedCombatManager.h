@@ -48,7 +48,7 @@ public:
 		int32 GetLeftAmmoCount();
 
 protected:
-	//Get Rotation List to FireProjectile
+	//Get Rotation List for FireProjectile
 	UFUNCTION()
 		TArray<FRotator> GetFireRotationList(int32 FireCount);
 
