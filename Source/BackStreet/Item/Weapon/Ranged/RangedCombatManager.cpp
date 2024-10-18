@@ -149,23 +149,29 @@ int32 URangedCombatManager::GetLeftAmmoCount()
 	return WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount;
 }
 
-//Get Rotation to Fire 
 TArray<FRotator> URangedCombatManager::GetFireRotationList(int32 FireCount)
 {
+	//RotationList for return
 	TArray<FRotator> rotationList;
+	//Get Character Rotation Yaw = Standard
 	float standardRotation = OwnerCharacterRef.Get()->GetActorRotation().Yaw;
+	//Get min and max Angle
 	float maxFireAngle = 100.0f / (FireCount + 1.0f);
 	float minFireAngle = -maxFireAngle;
 	float step = (maxFireAngle - minFireAngle) / (FireCount - 1.0f);
 	int32 halfReps = FireCount / 2;
 
+	//Calculation Rotation Yaw and add to rotationList
 	for (int32 idx = -halfReps; idx <= halfReps; idx++)
 	{
+		// idx == 0 add ZeroRotator
 		if (idx == 0)
 		{
 			rotationList.Add(FRotator::ZeroRotator);
 			continue;
 		}
+
+		//Calculation Yaw  
 		float resultYaw = static_cast<float>(idx) * step / halfReps;
 		rotationList.Add(FRotator(0.0f,standardRotation + resultYaw, 0.0f));
 	}
