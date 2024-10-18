@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -17,15 +17,15 @@ public:
 
 
 public:
-	//°ø°İ Ã³¸®		
+	//ê³µê²© ì²˜ë¦¬		
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
 
-	//°ø°İ ¸¶¹«¸® Ã³¸®
+	//ê³µê²© ë§ˆë¬´ë¦¬ ì²˜ë¦¬
 	UFUNCTION(BlueprintCallable)
 		virtual void StopAttack() override;
 
-//------ Ranged ¿À¹ö¶óÀÌ´õºí ----------------------------
+//------ Ranged ì˜¤ë²„ë¼ì´ë”ë¸” ----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
 		bool TryFireProjectile(FRotator FireRotationOverride = FRotator::ZeroRotator);
@@ -49,19 +49,19 @@ public:
 
 //------ Asset----------------------------------
 protected:
-	//¹ß»ç ¼ø°£¿¡ Ãâ·ÂµÉ ÀÌ¹ÌÅÍ (ÀÓ½Ã, ÃßÈÄ µ¥ÀÌÅÍ Å×ÀÌºí·Î °ü¸® ¿¹Á¤)
+	//ë°œì‚¬ ìˆœê°„ì— ì¶œë ¥ë  ì´ë¯¸í„° (ì„ì‹œ, ì¶”í›„ ë°ì´í„° í…Œì´ë¸”ë¡œ ê´€ë¦¬ ì˜ˆì •)
 	UPROPERTY(VisibleInstanceOnly)
 		class UNiagaraSystem* ShootNiagaraEmitter;
 
-	//Åõ»çÃ¼°¡ ¹ß»çµÇ´Â ÀÌÆåÆ®¸¦ Ãâ·ÂÇÑ´Ù
+	//íˆ¬ì‚¬ì²´ê°€ ë°œì‚¬ë˜ëŠ” ì´í™íŠ¸ë¥¼ ì¶œë ¥í•œë‹¤
 	UFUNCTION()
 		void SpawnShootNiagaraEffect();
 
-//--------Å¸ÀÌ¸Ó °ü·Ã--------------------
+//--------íƒ€ì´ë¨¸ ê´€ë ¨--------------------
 private:
-	//Å¸ÀÌ¸Ó ÀÌº¥Æ® Àü´ŞÀ» À§ÇØ¼­¸¸ »ç¿ë
-	//µ¨¸®°ÔÀÌÆ® ¹ÙÀÎµù ÀÌÈÄ ÆÄ¶ó¹ÌÅÍ¸¦ Á÷Á¢ ÁöÁ¤ÇÏ¸é
-	//Å¸ÀÌ¸Ó ÀÌº¥Æ® ¼öÇà µµÁß¿¡ ÆÄ¶ó¹ÌÅÍ°¡ ¸Ş¸ğ¸®¿¡¼­ ¼Ò¸êµÇ±â¿¡ ³Î ¿¹¿Ü ¹ß»ı
+	//íƒ€ì´ë¨¸ ì´ë²¤íŠ¸ ì „ë‹¬ì„ ìœ„í•´ì„œë§Œ ì‚¬ìš©
+	//ë¸ë¦¬ê²Œì´íŠ¸ ë°”ì¸ë”© ì´í›„ íŒŒë¼ë¯¸í„°ë¥¼ ì§ì ‘ ì§€ì •í•˜ë©´
+	//íƒ€ì´ë¨¸ ì´ë²¤íŠ¸ ìˆ˜í–‰ ë„ì¤‘ì— íŒŒë¼ë¯¸í„°ê°€ ë©”ëª¨ë¦¬ì—ì„œ ì†Œë©¸ë˜ê¸°ì— ë„ ì˜ˆì™¸ ë°œìƒ
 	FRotator FireRotationForTimer; 
 };
 
