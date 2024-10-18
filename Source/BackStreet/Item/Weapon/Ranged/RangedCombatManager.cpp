@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "RangedCombatManager.h"
@@ -40,7 +40,7 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo
 		&& !OwnerCharacterRef->GetCharacterStat().bInfinite && WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount == 0)
 	{
-		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName("º¸Á¶¹«±â°¡ ¾ø½À´Ï´Ù."), FColor::White);
+		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("ë³´ì¡°ë¬´ê¸°ê°€ ì—†ìŠµë‹ˆë‹¤.")), FColor::White);
 		return false;
 	}
 
@@ -54,11 +54,11 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 	}
 	
 	AProjectileBase* newProjectile = CreateProjectile(FireRotationOverride);
-	//½ºÆùÇÑ ¹ß»çÃ¼°¡ Valid ÇÏ´Ù¸é ¹ß»ç
+	//ìŠ¤í°í•œ ë°œì‚¬ì²´ê°€ Valid í•˜ë‹¤ë©´ ë°œì‚¬
 	if (IsValid(newProjectile))
 	{
 		newProjectile->ActivateProjectileMovement();
-		SpawnShootNiagaraEffect(); //¹ß»ç¿Í µ¿½Ã¿¡ ÀÌ¹ÌÅÍ¸¦ Ãâ·ÂÇÑ´Ù.
+		SpawnShootNiagaraEffect(); //ë°œì‚¬ì™€ ë™ì‹œì— ì´ë¯¸í„°ë¥¼ ì¶œë ¥í•œë‹¤.
 	}
 
 	//broadcast delegate
@@ -67,7 +67,7 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 	const FWeaponStateStruct weaponState = WeaponComponentRef.Get()->GetWeaponState();
 	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponType, weaponState);
 
-	//ÅºÈ¯À» ´Ù ½èÀ» °æ¿ì, ¸ğµç ÅºÈ¯À» ¹ß»çÇÑ ÀÌÈÄ ¾Æ·¡ ·ÎÁ÷À» Ã³¸®ÇÑ´Ù
+	//íƒ„í™˜ì„ ë‹¤ ì¼ì„ ê²½ìš°, ëª¨ë“  íƒ„í™˜ì„ ë°œì‚¬í•œ ì´í›„ ì•„ë˜ ë¡œì§ì„ ì²˜ë¦¬í•œë‹¤
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player")
 		&& WeaponComponentRef.Get()->GetWeaponState().RangedWeaponState.GetIsEmpty())
 	{
@@ -97,7 +97,7 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 	FWeaponStateStruct weaponState = WeaponComponentRef.Get()->WeaponState;
 
 	FActorSpawnParameters spawmParams;
-	spawmParams.Owner = OwnerCharacterRef.Get(); //ProjectileÀÇ ¼ÒÀ¯ÀÚ´Â Player
+	spawmParams.Owner = OwnerCharacterRef.Get(); //Projectileì˜ ì†Œìœ ìëŠ” Player
 	spawmParams.Instigator = OwnerCharacterRef.Get()->GetInstigator();
 	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
@@ -107,7 +107,7 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 								OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation()
 								: FireRotationOverride;
 	
-	//Ä³¸¯ÅÍÀÇ Forward ¹æÇâÀ¸·Î ¸ÂÃçÁØ´Ù.
+	//ìºë¦­í„°ì˜ Forward ë°©í–¥ìœ¼ë¡œ ë§ì¶°ì¤€ë‹¤.
 	if (FireRotationOverride.IsNearlyZero(0.001f))
 	{
 		spawnRotation.Pitch = spawnRotation.Roll = 0.0f;
