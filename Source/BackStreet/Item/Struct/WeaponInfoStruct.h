@@ -294,9 +294,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
 		TSoftObjectPtr<class USoundCue> AttackFailSound;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Ranged")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ranged")
 		FRangedWeaponAssetInfoStruct RangedWeaponAssetInfo;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Melee")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Melee")
 		FMeleeWeaponAssetInfoStruct MeleeWeaponAssetInfo;
 };

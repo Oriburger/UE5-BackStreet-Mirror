@@ -105,6 +105,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	if(WeaponAssetCacheMap.Contains(NewWeaponID))
 	{
 		WeaponAssetInfo = WeaponAssetCacheMap[NewWeaponID];
+		SetProjectileInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
 		InitWeaponAsset();
 		return;
 	}
@@ -115,11 +116,8 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 
 	if (WeaponID != 0)
 	{
-		if (WeaponStat.WeaponType == EWeaponType::E_Shoot)
-		{
-			ProjectileStatInfo = GetProjectileStatInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
-			ProjectileAssetInfo = GetProjectileAssetInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
-		}
+		//발사체 초기화
+		SetProjectileInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
 
 		TArray<FSoftObjectPath> tempStream, assetToStream;
 		tempStream.AddUnique(WeaponAssetInfo.WeaponMesh.ToSoftObjectPath());
@@ -284,6 +282,12 @@ FProjectileAssetInfoStruct UWeaponComponentBase::GetProjectileAssetInfo(int32 Ta
 	return FProjectileAssetInfoStruct();
 }
 
+void UWeaponComponentBase::SetProjectileInfo(int32 ProjectileID)
+{
+	if (WeaponStat.WeaponType != EWeaponType::E_Shoot) return;
+	ProjectileStatInfo = GetProjectileStatInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
+	ProjectileAssetInfo = GetProjectileAssetInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
+}
 
 uint8 UWeaponComponentBase::GetLimitedStatLevel(EWeaponStatType WeaponStatType)
 {

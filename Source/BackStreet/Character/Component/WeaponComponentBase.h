@@ -137,6 +137,9 @@ public:
 	UFUNCTION()
 		FProjectileAssetInfoStruct GetProjectileAssetInfo(int32 TargetProjectileID);
 
+	UFUNCTION()
+		void SetProjectileInfo(int32 ProjectileID);
+
 	UFUNCTION(BlueprintCallable)
 		void SetWeaponStat(FWeaponStatStruct NewStat) { WeaponStat = NewStat; }
 
