@@ -45,6 +45,7 @@ AItemBase::AItemBase()
 	ItemTriggerVolume->SetupAttachment(RootComponent);
 	ItemTriggerVolume->SetWorldScale3D(FVector(5.0f));
 	ItemTriggerVolume->SetCollisionProfileName("ItemTrigger", true);
+	ItemTriggerVolume->SetBoxExtent(FVector(40.0f), false);
 	ItemTriggerVolume->OnComponentBeginOverlap.AddUniqueDynamic(this, &AItemBase::OnOverlapBegins);
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("PROJECTILE_MOVEMENT"));
