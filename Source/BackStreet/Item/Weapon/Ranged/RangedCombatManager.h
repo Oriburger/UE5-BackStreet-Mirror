@@ -47,6 +47,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 		int32 GetLeftAmmoCount();
 
+protected:
+	UFUNCTION()
+		TArray<FRotator> GetFireRotationList(int32 FireCount);
+
 //------ Asset----------------------------------
 protected:
 	//발사 순간에 출력될 이미터 (임시, 추후 데이터 테이블로 관리 예정)

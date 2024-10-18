@@ -53,12 +53,23 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 		WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
 	}
 	
-	AProjectileBase* newProjectile = CreateProjectile(FireRotationOverride);
-	//스폰한 발사체가 Valid 하다면 발사
-	if (IsValid(newProjectile))
+	const int32 fireCount = OwnerCharacterRef.Get()->GetCharacterStat().ProjectileCountPerAttack;
+	TArray<FRotator> rotationList = GetFireRotationList(fireCount);
+	for (int32 idx = 0; idx < fireCount; idx++)
 	{
-		newProjectile->ActivateProjectileMovement();
-		SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
+		FRotator fireRotation = FireRotationOverride;
+		if (rotationList.IsValidIndex(idx) && FireRotationOverride.IsNearlyZero(0.1f))
+		{
+			fireRotation = rotationList[idx];
+		}
+		
+		AProjectileBase* newProjectile = CreateProjectile(fireRotation);
+		//스폰한 발사체가 Valid 하다면 발사
+		if (IsValid(newProjectile))
+		{
+			newProjectile->ActivateProjectileMovement();
+			SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
+		}
 	}
 
 	//broadcast delegate
@@ -136,6 +147,29 @@ void URangedCombatManager::SetInfiniteAmmoMode(bool NewMode)
 int32 URangedCombatManager::GetLeftAmmoCount()
 {
 	return WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount;
+}
+
+TArray<FRotator> URangedCombatManager::GetFireRotationList(int32 FireCount)
+{
+	TArray<FRotator> rotationList;
+	double standardRotation = OwnerCharacterRef.Get()->GetActorRotation().Yaw;
+	double maxFireAngle = 100.0f / (FireCount + 1.0f);
+	double minFireAngle = -maxFireAngle;
+	double step = (maxFireAngle - minFireAngle) / (FireCount - 1);
+	int32 halfReps = FireCount / 2;
+
+	for (int32 idx = -halfReps; idx <= halfReps; idx++)
+	{
+		if (idx == 0)
+		{
+			rotationList.Add(FRotator::ZeroRotator);
+			continue;
+		}
+		double resultYaw = static_cast<double>(idx) * step / halfReps;
+		rotationList.Add(FRotator(0.0f,standardRotation + resultYaw, 0.0f));
+	}
+
+	return rotationList;
 }
 
 void URangedCombatManager::SpawnShootNiagaraEffect()
