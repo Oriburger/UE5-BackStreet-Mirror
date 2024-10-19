@@ -124,10 +124,6 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Weapon")
 		bool bInfinite = false;
 
-	//Projectile Count Per Attack
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1, UIMax = 1), Category = "Weapon")
-		int32 ProjectileCountPerAttack = 1;
-
 //======= Weapon Stat ======================
 	//for time-attack stage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")

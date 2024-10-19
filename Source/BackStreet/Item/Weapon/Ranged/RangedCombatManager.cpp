@@ -44,16 +44,15 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 		return false;
 	}
 
-	int32 fireProjectileCnt = OwnerCharacterRef.Get()->GetCharacterStat().ProjectileCountPerAttack;
-
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo 
 		&& !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
 	{
-		fireProjectileCnt = FMath::Min(fireProjectileCnt, WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount);
+		//한번 발사때 n개의 탄환을 소비하는지?
+		//fireProjectileCnt = FMath::Min(fireProjectileCnt, WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount);
 		WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
 	}
 	
-	const int32 fireCount = OwnerCharacterRef.Get()->GetCharacterStat().ProjectileCountPerAttack;
+	int32 fireCount = WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.ProjectileCountPerFire;
 	TArray<FRotator> rotationList = GetFireRotationList(fireCount);
 	for (int32 idx = 0; idx < fireCount; idx++)
 	{
@@ -156,7 +155,7 @@ TArray<FRotator> URangedCombatManager::GetFireRotationList(int32 FireCount)
 	//Get Character Rotation Yaw = Standard
 	float standardRotation = OwnerCharacterRef.Get()->GetActorRotation().Yaw;
 	//Get min and max Angle
-	float maxFireAngle = 100.0f / (FireCount + 1.0f);
+	float maxFireAngle = WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.MultipleMaxFireAngle / (FireCount + 1.0f);
 	float minFireAngle = -maxFireAngle;
 	float step = (maxFireAngle - minFireAngle) / (FireCount - 1.0f);
 	int32 halfReps = FireCount / 2;
@@ -173,7 +172,7 @@ TArray<FRotator> URangedCombatManager::GetFireRotationList(int32 FireCount)
 
 		//Calculation Yaw  
 		float resultYaw = static_cast<float>(idx) * step / halfReps;
-		rotationList.Add(FRotator(0.0f,standardRotation + resultYaw, 0.0f));
+		rotationList.Add(FRotator(0.0f, standardRotation + resultYaw, 0.0f));
 	}
 
 	return rotationList;

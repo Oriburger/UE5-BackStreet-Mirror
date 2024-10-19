@@ -152,7 +152,7 @@ bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct Target
 			}
 			break;
 		case ECharacterAbilityType::E_MultipleShot:
-			characterStat.ProjectileCountPerAttack += targetVariable;
+			//characterStat.ProjectileCountPerAttack += targetVariable;
 			break;
 		case ECharacterAbilityType::E_LargeWishList:
 			characterStat.MaxKeepingSkillCount += targetVariable;

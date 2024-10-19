@@ -94,9 +94,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		int32 MaxTotalAmmo = 200;
 
-	//장전 시간
+	//한 번 발사 할 때, 몇 발을 내보낼지?
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float LoadingDelayTime = 0.0f;
+		int32 ProjectileCountPerFire = 1; 
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		float MultipleMaxFireAngle = 90.0f;
 };
 
 USTRUCT(BlueprintType)
