@@ -157,9 +157,9 @@ void UStageManagerComponent::ClearPreviousActors()
 	//Remove all spawned actors
 	for (int idx = SpawnedActorList.Num() - 1; idx >= 0; idx--)
 	{
-		if (SpawnedActorList[idx].IsValid())
+		if (IsValid(SpawnedActorList[idx]))
 		{
-			AActor* target = SpawnedActorList[idx].Get();
+			AActor* target = SpawnedActorList[idx];
 			SpawnedActorList[idx] = nullptr;
 			
 			//need refactor. weapon is not destroyed together when character is destroyed using Destroy().
@@ -182,19 +182,18 @@ void UStageManagerComponent::ClearEnemyActors()
 	//Remove all spawned actors
 	for (int idx = SpawnedActorList.Num() - 1; idx >= 0; idx--)
 	{
-		if (SpawnedActorList[idx].IsValid())
+		if (IsValid(SpawnedActorList[idx]))
 		{
-			AActor* target = SpawnedActorList[idx].Get();
-			SpawnedActorList[idx] = nullptr;
+			AActor* target = SpawnedActorList[idx];
 
 			//need refactor. weapon is not destroyed together when character is destroyed using Destroy().
 			if (target->ActorHasTag("Enemy"))
 			{
+				SpawnedActorList[idx] = nullptr;
 				UGameplayStatics::ApplyDamage(target, 1e8, nullptr, GetOwner(), nullptr);
 			}
 		}
 	}
-	SpawnedActorList.Reset();
 	RemainingEnemyCount = 0;
 }
 
@@ -369,11 +368,12 @@ void UStageManagerComponent::SpawnItemBox()
 
 			AItemBoxBase* newItemBox = GetWorld()->SpawnActor<AItemBoxBase>(ItemBoxClass
 										, spawnLocation + FVector(0.0f, 0.0f, 200.0f), FRotator::ZeroRotator);
+			
+			SpawnedActorList.Add(newItemBox);
 			if (IsValid(newItemBox))
 			{
 				newItemBox->ActivateProjectileMovement();
 				newItemBox->ActivateItem();
-				SpawnedActorList.Add(newItemBox);
 			}
 		}
 	}
@@ -447,6 +447,7 @@ void UStageManagerComponent::StartStage()
 
 	//Load End
 	OnStageLoadDone.Broadcast();
+	ClearPreviousActors();
 
 	//Update spawn points
 	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::StartStage : Update Spawn Point"));
@@ -582,6 +583,7 @@ AActor* UStageManagerComponent::SpawnItemActor(FItemInfoDataStruct ItemInfo)
 	if (IsValid(newItem))
 	{
 		newItem->InitItem(ItemInfo.ItemID, ItemInfo);
+		RegisterActor(newItem);
 	}
 	return newItem;
 }
