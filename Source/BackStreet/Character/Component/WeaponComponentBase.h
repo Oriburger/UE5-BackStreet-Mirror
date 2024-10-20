@@ -8,6 +8,7 @@
 #define MAX_WEAPON_UPGRADABLE_STAT_IDX 3
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateWeaponUpdated);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDelegateWeaponStateUpdated, int32, WeaponID, EWeaponType, WeaponType, FWeaponStateStruct, NewState);
 
 UCLASS()
 class BACKSTREET_API UWeaponComponentBase : public UStaticMeshComponent
@@ -22,7 +23,10 @@ protected:
 
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateWeaponUpdated OnWeaponUpdated;
+		FDelegateWeaponStateUpdated OnWeaponStateUpdated;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateWeaponUpdated OnMainWeaponUpdated;
 
 //------- VFX --------------------------------
 public:
@@ -105,9 +109,21 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Weapon|Projectile")
 		FProjectileStatStruct ProjectileStatInfo;
 
+private:
+	//무기 교체 시에 사용할 ID 별 스테이트 저장 맵
+	TMap<int32, FWeaponStatStruct> WeaponStatCacheMap;
+	TMap<int32, FWeaponStateStruct> WeaponStateCacheMap;
+	TMap<int32, FWeaponAssetInfoStruct> WeaponAssetCacheMap;
+
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsWeaponRangeType() { return WeaponStat.WeaponType == EWeaponType::E_Shoot || WeaponStat.WeaponType == EWeaponType::E_Throw; }
+		FWeaponStateStruct GetWeaponStateCacheDate(int32 TargetWeaponID);
+
+	UFUNCTION()
+		bool UpdateWeaponStateCache(int32 TargetWeaponID, FWeaponStateStruct NewState);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsWeaponRangeType() { return WeaponStat.WeaponType == EWeaponType::E_Shoot; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FWeaponStatStruct GetWeaponStat() { return WeaponStat; }
@@ -120,6 +136,9 @@ public:
 
 	UFUNCTION()
 		FProjectileAssetInfoStruct GetProjectileAssetInfo(int32 TargetProjectileID);
+
+	UFUNCTION()
+		void SetProjectileInfo(int32 ProjectileID);
 
 	UFUNCTION(BlueprintCallable)
 		void SetWeaponStat(FWeaponStatStruct NewStat) { WeaponStat = NewStat; }
@@ -140,7 +159,8 @@ public:
 // ======		Upgrade		================
 public:	
 	UFUNCTION(BlueprintCallable)
-	bool UpgradeStat(TArray<uint8> NewLevelList);
+		bool UpgradeStat(TArray<uint8> NewLevelList);
+
 //-------- Combo ------------------------------------
 public:
 	//increase combo count

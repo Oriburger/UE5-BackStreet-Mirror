@@ -74,7 +74,7 @@ void UBTTaskPatrolPathPoint::MoveToPatrolPoint()
 
     if (!IsValid(patrolPointInfo.Key))
     {
-        UE_LOG(LogTemp, Warning, TEXT("UBTTaskPatrolPathPoint::MoveToPatrolPoint() : failed to get nstp"));
+        UE_LOG(LogTemp, Error, TEXT("UBTTaskPatrolPathPoint::MoveToPatrolPoint() : failed to get nstp"));
         return;
     }
 
@@ -82,7 +82,7 @@ void UBTTaskPatrolPathPoint::MoveToPatrolPoint()
     AAIController* aiControllerRef = UAIBlueprintHelperLibrary::GetAIController(OwnerCharacterRef.Get());
     if (!IsValid(aiControllerRef))
     {
-        UE_LOG(LogTemp, Warning, TEXT("UBTTaskPatrolPathPoint::MoveToPatrolPoint() : failed to get ai controller"));
+        UE_LOG(LogTemp, Error, TEXT("UBTTaskPatrolPathPoint::MoveToPatrolPoint() : failed to get ai controller"));
         return;
     }
 

@@ -13,7 +13,7 @@ USkillManagerComponentBase::USkillManagerComponentBase()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 }
 
 
@@ -31,7 +31,7 @@ void USkillManagerComponentBase::InitSkillManager()
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	SkillStatTable = GameModeRef.Get()->SkillStatTable;
 	checkf(IsValid(SkillStatTable), TEXT("Failed to get SkillStatDataTable"));
-	OwnerCharacterRef->WeaponComponent->OnWeaponUpdated.AddDynamic(this, &USkillManagerComponentBase::InitSkillMap);
+	OwnerCharacterRef->WeaponComponent->OnMainWeaponUpdated.AddDynamic(this, &USkillManagerComponentBase::InitSkillMap);
 }
 
 void USkillManagerComponentBase::InitSkillMap() {}
@@ -46,9 +46,9 @@ bool USkillManagerComponentBase::TrySkill(int32 SkillID)
 		return false;
 	}
 	if (skillBase->SkillState.bIsBlocked) return false;
-	if (skillBase->SkillStat.SkillLevelStatStruct.bIsLevelValid)
+	if (skillBase->SkillStat.bIsLevelValid)
 	{
-		if (skillBase->SkillState.SkillLevelStateStruct.SkillLevel == 0) return false;
+		//if (skillBase->SkillState.SkillLevel == 0) return false;
 	}
 	skillBase->ActivateSkill();
 	OnSkillActivated.Broadcast(SkillID);
@@ -66,19 +66,14 @@ bool USkillManagerComponentBase::RemoveSkill(int32 SkillID)
 	return true;
 }
 
-bool USkillManagerComponentBase::UpgradeSkill(int32 SkillID, uint8 NewLevel)
+bool USkillManagerComponentBase::UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel)
 {
+	if (!GetIsUpgradeTargetValid(SkillID, UpgradeTarget)) return false;
 	if (!IsSkillValid(SkillID)) return false;
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
 	if (!IsValid(skillBase)) return false;
-	skillBase->SkillState.SkillLevelStateStruct.SkillLevel = NewLevel;
-	skillBase->SkillState.SkillLevelStateStruct.SkillVariableMap = skillBase->SkillStat.SkillLevelStatStruct.LevelInfo[NewLevel].SkillVariableMap;
-	//쿨타임이 레벨에 따라 달라지는 경우 수정
-	if (skillBase->SkillState.SkillLevelStateStruct.SkillVariableMap.Contains("CoolTime"))
-	{
-		skillBase->SkillStat.SkillLevelStatStruct.CoolTime =
-			*skillBase->SkillStat.SkillLevelStatStruct.LevelInfo[NewLevel].SkillVariableMap.Find("CoolTime");
-	}
+	//skillBase->SkillState.SkillLevel = NewLevel;
+	skillBase->SkillState.SkillUpgradeInfoMap[UpgradeTarget] = skillBase->SkillStat.LevelInfo[UpgradeTarget].SkillLevelInfoList[NewLevel];
 	OnSkillUpdated.Broadcast();
 	return true;
 }
@@ -89,13 +84,16 @@ FSkillStatStruct USkillManagerComponentBase::GetSkillInfo(int32 SkillID)
 {
 	FString rowName = FString::FromInt(SkillID);
 	//checkf(IsValid(SkillStatTable), TEXT("SkillStatTable is not valid"));
-	if (SkillStatTable)
+	if (!SkillInfoCache.Contains(SkillID))
 	{
-		FSkillStatStruct* skillStat = SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
-		checkf(skillStat != nullptr, TEXT("SkillStat is not valid"));
-		return *skillStat;
+		if (SkillStatTable)
+		{
+			FSkillStatStruct* skillStat = SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
+			checkf(skillStat != nullptr, TEXT("SkillStat is not valid"));
+			return SkillInfoCache.Add(SkillID, *skillStat);
+		}
 	}
-	return FSkillStatStruct();
+	return SkillInfoCache[SkillID];
 }
 
 ESkillType USkillManagerComponentBase::GetSkillTypeInfo(int32 SkillID)
@@ -110,31 +108,65 @@ ASkillBase* USkillManagerComponentBase::GetOwnSkillBase(int32 SkillID)
 
 bool USkillManagerComponentBase::IsSkillValid(int32 SkillID)
 {
-	UE_LOG(LogTemp, Warning, TEXT("IsSkillValid #1"));
 	if (GetOwnSkillBase(SkillID) == nullptr) return false;
-	UE_LOG(LogTemp, Warning, TEXT("IsSkillValid #2"));
 	return true;
 }
 
-bool USkillManagerComponentBase::IsSkilUpgradable(int32 SkillID, uint8 NewLevel)
+bool USkillManagerComponentBase::GetIsSkillUpgradable(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel)
 {
+	if (!GetIsUpgradeTargetValid(SkillID, UpgradeTarget)) return false;
 	//최대 레벨보다 크면 업그레이드 불가
-	if(GetOwnSkillStat(SkillID).SkillLevelStatStruct.LevelInfo.Num()-1 < NewLevel) return false;
+	if(GetOwnSkillStat(SkillID).LevelInfo[UpgradeTarget].SkillLevelInfoList.Num() - 1 < NewLevel) return false;
 	//현재 레벨과 같거나 작은경우 업그레이드 불가
-	if(GetOwnSkillState(SkillID).SkillLevelStateStruct.SkillLevel >= NewLevel) return false;
+	if(GetOwnSkillState(SkillID).SkillUpgradeInfoMap[UpgradeTarget].CurrentLevel >= NewLevel) return false;
 	return true;
 }
 
 FSkillStatStruct USkillManagerComponentBase::GetOwnSkillStat(int32 SkillID)
 {
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	checkf(IsValid(skillBase), TEXT("Failed Find Skill"));
+	if(!IsValid(skillBase))
+	{ 
+		return GetSkillInfo(SkillID);
+	}
 	return skillBase->SkillStat;
 }
 
 FSkillStateStruct USkillManagerComponentBase::GetOwnSkillState(int32 SkillID)
 {
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	checkf(IsValid(skillBase), TEXT("Failed Find Skill"));
+	if (!IsValid(skillBase))
+	{
+		return FSkillStateStruct();
+	}
 	return skillBase->SkillState;
+}
+
+FSkillUpgradeLevelInfo USkillManagerComponentBase::GetCurrentSkillLevelInfo(int32 SkillID, ESkillUpgradeType Target)
+{
+	if (!GetIsUpgradeTargetValid(SkillID, Target)) return FSkillUpgradeLevelInfo();
+	return GetOwnSkillState(SkillID).SkillUpgradeInfoMap[Target];
+}
+
+FSkillUpgradeLevelInfo USkillManagerComponentBase::GetSkillUpgradeLevelInfo(int32 SkillID, ESkillUpgradeType Target, int32 TargetLevel)
+{
+	if (!GetIsUpgradeLevelValid(SkillID, Target, TargetLevel)) return FSkillUpgradeLevelInfo();
+	return GetOwnSkillStat(SkillID).LevelInfo[Target].SkillLevelInfoList[TargetLevel];
+}
+
+bool USkillManagerComponentBase::GetIsUpgradeTargetValid(int32 SkillID, ESkillUpgradeType UpgradeTarget)
+{
+	if (!GetOwnSkillStat(SkillID).LevelInfo.Contains(UpgradeTarget)
+		|| !GetOwnSkillState(SkillID).SkillUpgradeInfoMap.Contains(UpgradeTarget))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("USkillManagerComponentBase::GetIsUpgradeTargetValid(%d, %d) is not valid"), SkillID, (int32)UpgradeTarget);
+		return false;
+	}
+	return true;
+}
+
+bool USkillManagerComponentBase::GetIsUpgradeLevelValid(int32 SkillID, ESkillUpgradeType UpgradeTarget, int32 TargetLevel)
+{
+	if (!GetIsUpgradeTargetValid(SkillID, UpgradeTarget)) return false;
+	return GetOwnSkillStat(SkillID).LevelInfo[UpgradeTarget].SkillLevelInfoList.IsValidIndex(TargetLevel);
 }

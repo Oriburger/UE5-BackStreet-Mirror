@@ -12,7 +12,8 @@
 				"Engine",
 				"AIModule",
 				"CoreUObject",
-				"UMG"
+				"UMG",
+				"CommonUI"
 			]
 		}
 	],
@@ -23,6 +24,22 @@
 			"SupportedTargetPlatforms": [
 				"Win64"
 			]
+		},
+		{
+			"Name": "HDRIBackdrop",
+			"Enabled": true
+		},
+		{
+			"Name": "MovieRenderPipeline",
+			"Enabled": true
+		},
+		{
+			"Name": "CommonUI",
+			"Enabled": true
+		},
+		{
+			"Name": "RefreshAllNodes",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [

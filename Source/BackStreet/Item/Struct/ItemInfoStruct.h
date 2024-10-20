@@ -18,10 +18,21 @@ enum class EItemCategoryInfo : uint8
 {
 	E_None					UMETA(DisplayName = "None"),
 	E_Weapon				UMETA(DisplayName = "Weapon"),
+	E_SubWeapon				UMETA(DisplayName = "SubWeapon"),
 	E_Ability				UMETA(DisplayName = "Ability"),
 	E_Craft					UMETA(DisplayName = "Craft"),
 	E_Research				UMETA(DisplayName = "Research"),
 	E_GatchaTicket			UMETA(DisplayName = "GatchaTicket"),
+};
+
+UENUM(BlueprintType)
+enum class ECraftingItemType : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_Screw				UMETA(DisplayName = "Screw"),
+	E_Spring				UMETA(DisplayName = "Spring"),
+	E_Gear				UMETA(DisplayName = "Gear"),
+	E_Wrench			UMETA(DisplayName = "Wrench"),
 };
 
 //아이템 박스 스폰 관련 정보를 담은 구조체
@@ -39,10 +50,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FName ItemName;
 
-	//Is item has actual appearance with actor? 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		bool bIsActorItem = false;	
-
 	//Item life type
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		EItemLifeType ItemLifeType = EItemLifeType::E_None;
@@ -50,6 +57,12 @@ public:
 	//Item Type
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		EItemCategoryInfo ItemType = EItemCategoryInfo::E_None;
+
+	//Is item has actual appearance with actor? 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Actor")
+		bool bIsActorItem = false;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Actor")
+		TSubclassOf<class AItemBase> ItemClass;
 
 //=============Asset Info =================
 // 
@@ -123,41 +136,3 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		FWeaponStateStruct WeaponState;
 };
-
-
-//-----------삭제대기--------------------------
-////for "Not Actor Item"
-//USTRUCT(BlueprintType)
-//struct FItemDataStruct : public FTableRowBase
-//{
-//public:
-//	GENERATED_USTRUCT_BODY()
-//
-//	//Item ID
-//	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-//		int32 ItemID = 0;
-//
-//	//Item name
-//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-//		FName ItemName;
-//
-//	//Item type
-//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-//		EItemLifeType ItemType = EItemLifeType::E_None;
-//
-//	//Attainable Chapter
-//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-//		uint8 AttainableChapter = 0;
-//
-//	//Item Description
-//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-//		FName ItemDescription;
-//
-//	//Item Icon Image
-//	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-//		UTexture2D* ItemImage;
-//
-//	//Item Amount which can not edit in datatable
-//	UPROPERTY(BlueprintReadOnly)
-//		uint8 ItemAmount = 0;
-//};

@@ -20,7 +20,7 @@ void UAbilityManagerBase::InitAbilityManager(ACharacterBase* NewCharacter)
 	UDataTable* abilityInfoTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/Character/MainCharacter/Data/D_AbilityInfoDataTable.D_AbilityInfoDataTable'"));
 	if (!InitAbilityInfoListFromTable(abilityInfoTable))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UAbilityManagerBase::InitAbilityManager) DataTable is not found!"));
+		UE_LOG(LogTemp, Error, TEXT("UAbilityManagerBase::InitAbilityManager) DataTable is not found!"));
 	}
 }
 
@@ -152,7 +152,7 @@ bool UAbilityManagerBase::TryUpdateCharacterStat(const FAbilityInfoStruct Target
 			}
 			break;
 		case ECharacterAbilityType::E_MultipleShot:
-			characterStat.ProjectileCountPerAttack += targetVariable;
+			//characterStat.ProjectileCountPerAttack += targetVariable;
 			break;
 		case ECharacterAbilityType::E_LargeWishList:
 			characterStat.MaxKeepingSkillCount += targetVariable;

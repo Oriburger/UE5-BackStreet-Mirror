@@ -2,8 +2,10 @@
 
 
 #include "ItemBoxBase.h"
-#include "ItemBase.h"
+
 #include "../Global/BackStreetGameModeBase.h"
+#include "../System/MapSystem/NewChapterManagerBase.h"
+#include "../System/MapSystem/StageManagerComponent.h"
 #include "InteractiveCollisionComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "NiagaraFunctionLibrary.h"
@@ -14,82 +16,19 @@ AItemBoxBase::AItemBoxBase()
 { 
 	this->Tags.Add(FName("ItemBox"));
 	PrimaryActorTick.bCanEverTick = false;
-	SetActorTickEnabled(false);
-
-	RootComponent = OverlapVolume = CreateDefaultSubobject<UInteractiveCollisionComponent>("BOX_COLLISION");
-	//OverlapVolume->SetupAttachment(RootComponent);
-	OverlapVolume->SetRelativeScale3D(FVector(5.0f));
-	OverlapVolume->SetCollisionProfileName("ItemTrigger", true);
-		
-	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_MESH"));
-	MeshComponent->SetupAttachment(RootComponent);
-	MeshComponent->SetCollisionProfileName("Item", false);
-	MeshComponent->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-	
-	ParticleComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ITEM_NIAGARA_COMPONENT"));
-	ParticleComponent->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
 void AItemBoxBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	OverlapVolume->OnInteractionBegin.AddDynamic(this, &AItemBoxBase::OnItemBoxOpened);
-	MeshComponent->OnComponentHit.AddDynamic(this, &AItemBoxBase::OnMeshHit);
-
-	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 }
 
-void AItemBoxBase::InitItemBox(bool _bIncludeMissionItem)
-{	
-	bIncludeMissionItem = _bIncludeMissionItem;
-}
-
-void AItemBoxBase::OnItemBoxOpened()
-{
-	if (MinSpawnItemCount > MaxSpawnItemCount) //정보 기입이 제대로 이뤄지지 않음
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AItemBoxBase::OnItemBoxOpened) SpawnCount Info가 올바르지 않습니다."));
-		return;
-	}
-
-	int32 spawnItemCount = UKismetMathLibrary::RandomIntegerInRange(MinSpawnItemCount, MaxSpawnItemCount);
-	TArray<AItemBase*> spawnedItemList = SpawnItems(spawnItemCount);
-
-	for (AItemBase*& itemRef : spawnedItemList)
-	{
-		if (!IsValid(itemRef)) continue;
-		LaunchItem(itemRef);
-	}
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OpenEffectParticle, GetActorLocation(), FRotator::ZeroRotator, FVector(1.5f));
-	
-	if(!ActorHasTag("Tutorial")) Destroy();
-}
-
-void AItemBoxBase::OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Player")) return;
-
-	//UI Activate
-}
-
-void AItemBoxBase::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Player")) return;
-
-	//UI Deactivate
-}
-
-void AItemBoxBase::OnMeshHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
-	const FVector meshLocation = MeshComponent->GetComponentLocation();
-	SetActorLocation(meshLocation, false, nullptr, ETeleportType::TeleportPhysics);
-}
 
 TArray<AItemBase*> AItemBoxBase::SpawnItems(int32 TargetSpawnCount)
 {
 	//프로퍼티 내 각 배열 세팅이 올바르지 않은 경우
+	if (!GamemodeRef.IsValid()) return{};
 	if (SpawnItemIDList.Num() != ItemSpawnProbabilityList.Num()) return TArray<AItemBase*>();
 
 	TArray<AItemBase*> itemList; //반환할 아이템 리스트 
@@ -110,22 +49,21 @@ TArray<AItemBase*> AItemBoxBase::SpawnItems(int32 TargetSpawnCount)
 		//이미 해당 아이템을 스폰했다면? 다시 선택
 		if (duplicateCheckSet.Contains(targetItemKey)) continue;
 
-		if (UKismetMathLibrary::RandomIntegerInRange(0, 100) <= targetItemProbability)
+		const float randomValue = UKismetMathLibrary::RandomFloatInRange(-10.0f, 10.0f);
+		const FVector spawnLocation = GetActorLocation() + FVector(randomValue, randomValue, currentSpawnCount * SpawnLocationInterval + 125.0f);
+		AItemBase* newItem = GamemodeRef.Get()->SpawnItemToWorld(targetItemID, spawnLocation);
+
+		if (IsValid(newItem))
 		{
-			const float randomValue = UKismetMathLibrary::RandomFloatInRange(-10.0f, 10.0f);
-			const FVector spawnLocation = GetActorLocation() + FVector(randomValue, randomValue, currentSpawnCount * SpawnLocationInterval + 125.0f);
-			AItemBase* newItem = GamemodeRef.Get()->SpawnItemToWorld(targetItemID, spawnLocation);
-
-			if (IsValid(newItem))
+			itemList.Add(newItem);
+			
+			if (IsValid(GamemodeRef.Get()->GetChapterManagerRef()))
 			{
-				itemList.Add(newItem);
-				newItem->SetActorScale3D(FVector(0.1));
-
-				//OnMissionItemSpawned.ExecuteIfBound(newItem); //새 아이템을 UMission에 등록
-				
-				currentSpawnCount++;
-				duplicateCheckSet.Add(targetItemKey); //성공적으로 스폰한 아이템은 셋에 넣어 보관
+				GamemodeRef.Get()->GetChapterManagerRef()->StageManagerComponent->RegisterActor(newItem);
 			}
+
+			currentSpawnCount++;
+			duplicateCheckSet.Add(targetItemKey); //성공적으로 스폰한 아이템은 셋에 넣어 보관
 		}
 	}
 	return itemList;

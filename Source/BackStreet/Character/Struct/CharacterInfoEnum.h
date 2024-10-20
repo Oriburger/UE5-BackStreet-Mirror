@@ -53,9 +53,9 @@ enum class ECharacterActionType : uint8
 	E_Hit				UMETA(DisplayName = "Hit"),
 	E_Roll				UMETA(DisplayName = "Roll"),
 	E_Jump				UMETA(DisplayName = "Jump"),
-	E_Reload			UMETA(DisplayName = "Reload"),
+	E_NONE				UMETA(DisplayName = "NONE"),
 	E_Stun				UMETA(DisplayName = "Stun"),
 	E_Die				UMETA(DisplayName = "Die"),
-	E_Throw				UMETA(DisplayName = "Throw"),
+	E_Shoot				UMETA(DisplayName = "Shoot"),
 	E_KnockedDown		UMETA(DisplayName = "KnockDown"),
 };

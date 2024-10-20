@@ -40,7 +40,7 @@ public:
 		virtual bool RemoveSkill(int32 SkillID) override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual bool UpgradeSkill(int32 SkillID, uint8 NewLevel) override;
+		virtual bool UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel) override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void ClearAllSkill() override;
