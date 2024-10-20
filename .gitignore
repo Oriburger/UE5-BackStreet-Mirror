@@ -79,6 +79,7 @@ Content/Asset/*
 Content/Asset/Data/*
 Content/Asset/Sound/*
 Content/Art/*
+Plugins/*
 
 # 빌드 데이터 파일
 *_BuiltData.uasset
