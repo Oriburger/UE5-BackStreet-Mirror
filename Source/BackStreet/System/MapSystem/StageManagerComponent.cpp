@@ -160,10 +160,9 @@ void UStageManagerComponent::ClearPreviousActors()
 		if (SpawnedActorList[idx].IsValid())
 		{
 			AActor* target = SpawnedActorList[idx].Get();
-			SpawnedActorList[idx] = nullptr;
-			
+
 			//need refactor. weapon is not destroyed together when character is destroyed using Destroy().
-			if (target->ActorHasTag("Character"))
+			if (IsValid(target) && target->ActorHasTag("Character"))
 			{
 				UGameplayStatics::ApplyDamage(target, 1e8, nullptr, GetOwner(), nullptr);
 			}
@@ -171,6 +170,7 @@ void UStageManagerComponent::ClearPreviousActors()
 			{
 				target->Destroy();
 			}
+			SpawnedActorList[idx] = nullptr;
 		}
 	}
 	SpawnedActorList.Reset();
@@ -186,8 +186,10 @@ void UStageManagerComponent::ClearEnemyActors()
 		{
 			AActor* target = SpawnedActorList[idx].Get();
 
+			if(!IsValid(target) || target->IsActorBeingDestroyed()) SpawnedActorList[idx] = nullptr;
+
 			//need refactor. weapon is not destroyed together when character is destroyed using Destroy().
-			if (target->ActorHasTag("Enemy"))
+			else if (target->ActorHasTag("Enemy"))
 			{
 				SpawnedActorList[idx] = nullptr;
 				UGameplayStatics::ApplyDamage(target, 1e8, nullptr, GetOwner(), nullptr);
