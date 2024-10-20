@@ -136,7 +136,7 @@ private:
 private:
 	//Spawned actor list to manage life cycle
 	//Gate, Enemy Character, Craftbox
-	TArray< AActor* > SpawnedActorList;
+	TArray< TWeakObjectPtr<AActor> > SpawnedActorList;
 
 	//Current stage's information 
 	//Level instance ref and gameplay info struct

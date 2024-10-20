@@ -255,8 +255,8 @@ void AMainCharacterBase::ZoomIn()
 
 void AMainCharacterBase::ZoomOut()
 {
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Shoot) return;
-	
+	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Shoot) return;
+
 	SwitchWeapon(false);
 	SetAimingMode(false);
 	

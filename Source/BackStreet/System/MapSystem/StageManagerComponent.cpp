@@ -157,9 +157,9 @@ void UStageManagerComponent::ClearPreviousActors()
 	//Remove all spawned actors
 	for (int idx = SpawnedActorList.Num() - 1; idx >= 0; idx--)
 	{
-		if (IsValid(SpawnedActorList[idx]))
+		if (SpawnedActorList[idx].IsValid())
 		{
-			AActor* target = SpawnedActorList[idx];
+			AActor* target = SpawnedActorList[idx].Get();
 			SpawnedActorList[idx] = nullptr;
 			
 			//need refactor. weapon is not destroyed together when character is destroyed using Destroy().
@@ -182,9 +182,9 @@ void UStageManagerComponent::ClearEnemyActors()
 	//Remove all spawned actors
 	for (int idx = SpawnedActorList.Num() - 1; idx >= 0; idx--)
 	{
-		if (IsValid(SpawnedActorList[idx]))
+		if (SpawnedActorList[idx].IsValid())
 		{
-			AActor* target = SpawnedActorList[idx];
+			AActor* target = SpawnedActorList[idx].Get();
 
 			//need refactor. weapon is not destroyed together when character is destroyed using Destroy().
 			if (target->ActorHasTag("Enemy"))
