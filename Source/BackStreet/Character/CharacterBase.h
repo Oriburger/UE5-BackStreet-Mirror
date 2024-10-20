@@ -6,6 +6,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateCharacterDie);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTakeDamage);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateHealthChange, float, OldValue, float, NewValue);
 
 UCLASS()
 class BACKSTREET_API ACharacterBase : public ACharacter
@@ -17,6 +18,9 @@ class BACKSTREET_API ACharacterBase : public ACharacter
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTakeDamage OnTakeDamage;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateHealthChange OnHealthChanged;
 
 //----- Global / Component ----------
 public:
@@ -85,8 +89,6 @@ public:
 	virtual void Attack();
 
 	virtual void StopAttack();
-
-	virtual void TryReload();
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 		, AController* EventInstigator, AActor* DamageCauser) override;
@@ -215,7 +217,7 @@ private:
 // ------ 무기 관련 -------------------------------------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool PickWeapon(int32 NewWeaponID);
+		bool EquipWeapon(int32 NewWeaponID);
 // ---- Asset -------------------
 public:
 	//Init asset using softref data table
@@ -281,9 +283,6 @@ protected:
 	//공격 간 딜레이 핸들
 	UPROPERTY()
 		FTimerHandle AtkIntervalHandle;
-
-	UPROPERTY()
-		FTimerHandle ReloadTimerHandle;
 
 	UPROPERTY()
 		TArray<FTimerHandle> SkillAnimPlayTimerHandleList;

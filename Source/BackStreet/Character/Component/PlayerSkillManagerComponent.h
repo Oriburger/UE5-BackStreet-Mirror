@@ -39,7 +39,7 @@ public:
 		virtual bool RemoveSkill(int32 SkillID) override;
 	
 	UFUNCTION(BlueprintCallable)
-		virtual bool UpgradeSkill(int32 SkillID, uint8 NewLevel) override;
+		virtual bool UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel) override;
 
 //======= User Basic Function =======================
 public:
@@ -58,7 +58,7 @@ public:
 		virtual bool IsSkillValid(int32 SkillID) override;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		virtual bool IsSkilUpgradable(int32 SkillID, uint8 NewLevel) override;
+		virtual bool GetIsSkillUpgradable(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel) override;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		virtual ASkillBase* GetOwnSkillBase(int32 SkillID) override;
@@ -75,6 +75,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<uint8> GetRequiredMatAmount(int32 SkillID, uint8 NewSkillLevel);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TMap<int32, int32> GetRequiredMaterialInfo(int32 SkillID, ESkillUpgradeType UpgradeType, uint8 Level);
 
 //====== Property ===============================================================================
 private:

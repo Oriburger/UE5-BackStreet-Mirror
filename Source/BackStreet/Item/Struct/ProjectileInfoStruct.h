@@ -74,6 +74,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		TSoftObjectPtr<UStaticMesh> ProjectileMesh;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		float CollisionRadius = 18.0f;
+
 	//메시의 초기 위치 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		FVector InitialLocation = FVector::ZeroVector;

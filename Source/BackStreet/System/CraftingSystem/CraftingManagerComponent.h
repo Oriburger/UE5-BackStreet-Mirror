@@ -11,8 +11,26 @@ enum class EKeepMat : uint8
 {
 	E_None				UMETA(DisplayName = "None"),
 	E_Screw				UMETA(DisplayName = "Screw"),
-	E_Spring				UMETA(DisplayName = "Spring"),
+	E_Spring			UMETA(DisplayName = "Spring"),
 	E_Gear				UMETA(DisplayName = "Gear"),
+};
+
+USTRUCT(BlueprintType)
+struct FCraftingMaterialSet
+{
+	GENERATED_BODY()
+
+public:
+	//==== Static Proptery ====================
+
+	//Stage type (entry, combat, time attack, boss, miniGame, gatcha etc..)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TArray<int32> IDList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TArray<int32> CountList;
+	
+	bool GetIsValidData() { return IDList.Num() == CountList.Num(); }
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -28,24 +46,29 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	//UPROPERTY()
-	//	int32 SuperMaterialIdx = 3
-
 protected:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void InitCraftingManager();
-//SkillUpgrade == SU
-//WeaponUpgrade == WU
+
 //=======	Common Function		========================
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsMatEnough(); //--> GetIsMaterialEnough
-
-	UFUNCTION()
-		bool ConsumeMat();
+		bool GetIsItemEnough();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsKeepSkillAvailable();
+		bool GetIsItemEnoughForCraft(int32 SkillID);
+
+	UFUNCTION()
+		bool ConsumeItem();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsSkillKeepingAvailable();
+
+	UFUNCTION(BlueprintCallable)
+		void KeepItem(EKeepMat NewKeptItem);
+
+	UFUNCTION(BlueprintCallable)
+		void UnKeepItem();
 
 //=======	Select Skill Function	========================		
 public:
@@ -63,22 +86,28 @@ public:
 
 //=======	Upgrade Skill Function	======================	
 	UFUNCTION(BlueprintCallable)
-		bool UpgradeSkill(int32 SkillID, uint8 NewLevel);
+		bool UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<uint8>UpdateRequiredMatForSU(int32 SkillID, uint8 NewLevel); //--> UpdateSkillUpgradeRequiredInfo
+		TMap<int32, int32> GetSkillCraftMaterialInfo(int32 SkillID);
+
+	UFUNCTION(BlueprintCallable)
+		TMap<int32, int32> UpdateSkillUpgradeRequiredItemList(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel);
+
+	UFUNCTION(BlueprintCallable)
+		TMap<int32, int32> UpdateSkillCraftRequiredItemList(int32 SkillID);
 
 //=======	Upgrade Weapon Function	====================	
 	UFUNCTION(BlueprintCallable)
 		bool UpgradeWeapon(TArray<uint8> NewLevelList);
 		
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<uint8> UpdateRequiredMatForWU(TArray<uint8> NewLevelList); //--> UpdateWeaponUpgradeRequiredInfo
+		TArray<uint8> UpdateWeaponUpgradeRequiredItemList(TArray<uint8> NewLevelList);
 
 	UFUNCTION(BlueprintCallable)
 		bool GetIsStatLevelValid(TArray<uint8> NewLevelList);
 
-//=======	CommonProperty		========================
+//=======	Common Property		========================
 public:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
 		bool bIsSkillCreated = false;
@@ -88,10 +117,10 @@ public:
 
 	//만능재료 사용 안함 = 0, 나사 = 1, 스프링 = 2, 기어 = 3
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite)
-		EKeepMat KeepMat = EKeepMat::E_None;  //--> KeptMaterialType //EKeepMat도 수정바람 
+		EKeepMat KeptItem = EKeepMat::E_None; 
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
-		TArray<uint8> RequiredMatList;   //--> RequiredMaterialList 
+		TMap<int32, int32> RequiredItemInfo;
 
 //=======	SkillSelectProperty		========================
 public:

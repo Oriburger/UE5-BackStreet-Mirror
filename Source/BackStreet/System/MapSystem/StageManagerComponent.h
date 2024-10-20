@@ -74,6 +74,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetStageRemainingTime();
 
+	UFUNCTION(BlueprintCallable)
+		void RegisterActor(AActor* TargetActor);
+
 protected:
 	//Add loading screen
 	UFUNCTION()
@@ -94,6 +97,9 @@ protected:
 	UFUNCTION()
 		void ClearPreviousActors();
 
+	UFUNCTION()
+		void ClearEnemyActors();
+
 	//Update spawn point member of stage info struct after map load 
 	//There are several points to spawn enemy, player, craftbox etc
 	UFUNCTION()
@@ -107,6 +113,9 @@ protected:
 	UFUNCTION()
 		void SpawnCraftbox(); 
 
+	UFUNCTION()
+		void SpawnItemBox();
+
 	//Spawn portals
 	UFUNCTION()
 		void SpawnPortal(int32 GateCount = 1);
@@ -116,6 +125,9 @@ protected:
 
 	UFUNCTION()
 		bool GetLoadIsDone() { return LoadStatus == 0; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetVisitedCraftStageCount() { return VisitedCraftstageCount; }
 
 private:
 	UFUNCTION()
@@ -144,6 +156,9 @@ private:
 	//For instant loading widget
 	UUserWidget* LoadingWidgetRef;
 
+	//How many craft stages were visited?
+	int32 VisitedCraftstageCount = 0;
+
 //======== Gameplay Function ===============
 public:
 	//Start current stage 
@@ -167,6 +182,9 @@ private:
 	//Grant stage reward
 	UFUNCTION()
 		void GrantStageRewards();
+
+	UFUNCTION()
+		AActor* SpawnItemActor(FItemInfoDataStruct ItemInfo);
 
 	//Bind to enemy character death delegate
 	UFUNCTION()
@@ -206,6 +224,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Class")
 		TSubclassOf<class AEnemyCharacterBase> EnemyCharacterClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Class")
+		TSubclassOf<class AItemBoxBase> ItemBoxClass;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Class")
 		TSubclassOf<UUserWidget> LoadingWidgetClass;

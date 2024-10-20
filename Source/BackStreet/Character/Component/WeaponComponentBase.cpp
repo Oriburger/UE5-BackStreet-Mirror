@@ -46,7 +46,6 @@ void UWeaponComponentBase::Attack()
 	}
 	if (IsValid(WeaponTrailParticle))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Trail Test #1"));
 		WeaponTrailParticle->Activate(true);
 	}
 }
@@ -66,21 +65,50 @@ void UWeaponComponentBase::StopAttack()
 void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 {
 	//Stat, State 초기화 
-	WeaponID = NewWeaponID;
-	WeaponStat.WeaponID = WeaponID;
+	int32 oldWeaponID = WeaponID;
+	WeaponStat.WeaponID = WeaponID = NewWeaponID;
+
+	//기존꺼 저장
+	if (oldWeaponID != 0)
+	{
+		WeaponStatCacheMap.Add(oldWeaponID, WeaponStat);
+		WeaponStateCacheMap.Add(oldWeaponID, WeaponState);
+		WeaponAssetCacheMap.Add(oldWeaponID, WeaponAssetInfo);
+	}
+	
+	//캐싱 로직
 	if (NewWeaponID == 0)
 	{
 		WeaponStat = FWeaponStatStruct();
 		WeaponState = FWeaponStateStruct();
-		WeaponAssetInfo = FWeaponAssetInfoStruct();
 		this->SetStaticMesh(nullptr);
 		return;
 	}
-	WeaponStat = GetWeaponStatInfoWithID(WeaponID);
+	else
+	{
+		WeaponStat = WeaponStatCacheMap.Contains(NewWeaponID)
+					? WeaponStatCacheMap[NewWeaponID]
+					: GetWeaponStatInfoWithID(WeaponID);
+		WeaponState = WeaponStateCacheMap.Contains(NewWeaponID)
+					? WeaponState = WeaponStateCacheMap[NewWeaponID]
+					: FWeaponStateStruct();
+		if (!WeaponStateCacheMap.Contains(NewWeaponID))
+		{
+			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_Attack, 0);
+			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_AttackSpeed, 0);
+			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_FinalAttack, 0);
+		}
+		WeaponState.RangedWeaponState.UpdateAmmoValidation(WeaponStat.RangedWeaponStat.MaxTotalAmmo);
+	}
 
-	WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_Attack, 0);
-	WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_AttackSpeed, 0);
-	WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_FinalAttack, 0);
+	//에셋까지 있다면 그냥 반환
+	if(WeaponAssetCacheMap.Contains(NewWeaponID))
+	{
+		WeaponAssetInfo = WeaponAssetCacheMap[NewWeaponID];
+		SetProjectileInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
+		InitWeaponAsset();
+		return;
+	}
 
 	//에셋 초기화
 	FWeaponAssetInfoStruct newAssetInfo = GetWeaponAssetInfoWithID(WeaponID);
@@ -88,11 +116,8 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 
 	if (WeaponID != 0)
 	{
-		if (WeaponStat.WeaponType == EWeaponType::E_Shoot)
-		{
-			ProjectileStatInfo = GetProjectileStatInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
-			ProjectileAssetInfo = GetProjectileAssetInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
-		}
+		//발사체 초기화
+		SetProjectileInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
 
 		TArray<FSoftObjectPath> tempStream, assetToStream;
 		tempStream.AddUnique(WeaponAssetInfo.WeaponMesh.ToSoftObjectPath());
@@ -119,7 +144,11 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &UWeaponComponentBase::InitWeaponAsset));
 	}
-	OnWeaponUpdated.Broadcast();
+	if (WeaponStat.WeaponType == EWeaponType::E_Melee)
+	{
+		OnMainWeaponUpdated.Broadcast();
+	}
+	OnWeaponStateUpdated.Broadcast(WeaponID, WeaponStat.WeaponType, WeaponState);
 }
 
 void UWeaponComponentBase::InitWeaponAsset()
@@ -173,12 +202,14 @@ void UWeaponComponentBase::InitWeaponAsset()
 
 FWeaponAssetInfoStruct UWeaponComponentBase::GetWeaponAssetInfoWithID(int32 TargetWeaponID)
 {
+	if (WeaponAssetCacheMap.Contains(TargetWeaponID)) return WeaponAssetCacheMap[TargetWeaponID];
 	if (WeaponAssetInfoTable != nullptr && TargetWeaponID != 0)
 	{
 		FWeaponAssetInfoStruct* newInfo = nullptr;
 		FString rowName = FString::FromInt(TargetWeaponID);
 
 		newInfo = WeaponAssetInfoTable->FindRow<FWeaponAssetInfoStruct>(FName(rowName), rowName);
+		WeaponAssetCacheMap.Add(TargetWeaponID, *newInfo);
 		if (newInfo != nullptr) return *newInfo;
 	}
 	return FWeaponAssetInfoStruct();
@@ -197,6 +228,25 @@ FWeaponStatStruct UWeaponComponentBase::GetWeaponStatInfoWithID(int32 TargetWeap
 	return FWeaponStatStruct();
 }
 
+
+FWeaponStateStruct UWeaponComponentBase::GetWeaponStateCacheDate(int32 TargetWeaponID)
+{
+	if (!WeaponStateCacheMap.Contains(TargetWeaponID)) return FWeaponStateStruct();
+	return WeaponStateCacheMap[TargetWeaponID];
+}
+
+bool UWeaponComponentBase::UpdateWeaponStateCache(int32 TargetWeaponID, FWeaponStateStruct NewState)
+{
+	//@@ 들어오는 정보의 유효성에 대한 검사가 없음 @@ -> 코드 개선 필요
+	if (!WeaponStateCacheMap.Contains(TargetWeaponID))
+	{
+		WeaponStateCacheMap.Add(TargetWeaponID, NewState);
+		return true;
+	}
+	WeaponStateCacheMap[TargetWeaponID] = NewState;
+	if (TargetWeaponID == WeaponID) WeaponState = NewState;
+	return true;
+}
 
 FProjectileStatStruct UWeaponComponentBase::GetProjectileStatInfo(int32 TargetProjectileID)
 {
@@ -232,21 +282,27 @@ FProjectileAssetInfoStruct UWeaponComponentBase::GetProjectileAssetInfo(int32 Ta
 	return FProjectileAssetInfoStruct();
 }
 
+void UWeaponComponentBase::SetProjectileInfo(int32 ProjectileID)
+{
+	if (WeaponStat.WeaponType != EWeaponType::E_Shoot) return;
+	ProjectileStatInfo = GetProjectileStatInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
+	ProjectileAssetInfo = GetProjectileAssetInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
+}
 
 uint8 UWeaponComponentBase::GetLimitedStatLevel(EWeaponStatType WeaponStatType)
 {
 	checkf(WeaponStat.UpgradableStatInfoMap.Contains(WeaponStatType), TEXT("WeaponType is not valid"));
-	for (uint8 level = 0; level < WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel.Num(); level++)
+	for (uint8 level = 0; level < WeaponStat.UpgradableStatInfoMap[WeaponStatType].StatInfoByLevel.Num(); level++)
 	{
-		if(!WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel[level].bCanUpgradeLevel) return level-1;
+		if(!WeaponStat.UpgradableStatInfoMap[WeaponStatType].StatInfoByLevel[level].bCanUpgradeLevel) return level-1;
 	}
-	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel.Num()-1;
+	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].StatInfoByLevel.Num()-1;
 }
 
 uint8 UWeaponComponentBase::GetMaxStatLevel(EWeaponStatType WeaponStatType)
 {
 	checkf(WeaponStat.UpgradableStatInfoMap.Contains(WeaponStatType), TEXT("WeaponType is not valid"));
-	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].RequiredMaterialByLevel.Num() - 1;
+	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].StatInfoByLevel.Num() - 1;
 }
 
 float UWeaponComponentBase::CalculateTotalDamage(FCharacterStateStruct TargetState)
@@ -263,8 +319,11 @@ bool UWeaponComponentBase::UpgradeStat(TArray<uint8> NewLevelList)
 	for (uint8 idx = 0; idx < MAX_WEAPON_UPGRADABLE_STAT_IDX; idx++)
 	{
 		EWeaponStatType weaponStatType = StaticCast<EWeaponStatType>(idx+1);
-		WeaponState.UpgradedStatMap[weaponStatType] = NewLevelList[idx];
+		WeaponState.UpgradedStatMap.Add(weaponStatType, NewLevelList[idx]);
 	}
+	WeaponStat.WeaponDamage = WeaponStat.UpgradableStatInfoMap[EWeaponStatType::E_Attack].StatInfoByLevel[NewLevelList[0]].StatAdder;
+	WeaponStat.WeaponAtkSpeedRate = WeaponStat.UpgradableStatInfoMap[EWeaponStatType::E_AttackSpeed].StatInfoByLevel[NewLevelList[1]].StatAdder;
+	WeaponStat.FinalImpactStrength = WeaponStat.UpgradableStatInfoMap[EWeaponStatType::E_FinalAttack].StatInfoByLevel[NewLevelList[2]].StatAdder;
 	return true;
 }
 
@@ -276,6 +335,6 @@ void UWeaponComponentBase::UpdateComboState()
 
 bool UWeaponComponentBase::GetIsFinalCombo()
 {
-	if (!OwnerCharacterRef.IsValid()) return false;
+	if (!OwnerCharacterRef.IsValid() || OwnerCharacterRef.Get()->GetMaxComboCount() == 0) return false;
 	return GetCurrentComboCnt() % OwnerCharacterRef.Get()->GetMaxComboCount() == 0;
 }

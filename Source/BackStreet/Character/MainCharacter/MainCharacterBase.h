@@ -10,10 +10,8 @@
 
 class UInputComponent;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialAttack);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialMove);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialZoom);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTutorialRoll);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateZoomBegin);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateZoomEnd);
 
 UCLASS()
 class BACKSTREET_API AMainCharacterBase : public ACharacterBase
@@ -22,16 +20,10 @@ class BACKSTREET_API AMainCharacterBase : public ACharacterBase
 
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateTutorialAttack OnAttack;
+		FDelegateZoomBegin OnZoomBegin;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateTutorialMove OnMove;
-
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateTutorialZoom OnZoom;
-
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateTutorialRoll OnRoll;
+		FDelegateZoomBegin OnZoomEnd;
 
 //-------- Global -----------------
 public:
@@ -63,35 +55,36 @@ public:
 	//플레이어의 메인 카메라
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		UCameraComponent* FollowingCamera;
-		
+
+	//Player SpirngArm for RangedWeapon Aim
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+		USpringArmComponent* RangedAimBoom;
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		class UItemInventoryComponent* ItemInventory;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UPlayerSkillManagerComponent* SkillManagerComponent;
 
-// ------- Throw Test -----------
+// ------- SubWeapon -----------
+public:
+	UFUNCTION(BlueprintCallable)
+		void SwitchWeapon(bool bSwitchToSubWeapon);
+	
+	UFUNCTION()
+		void ZoomIn();
 
 	UFUNCTION()
-		void ReadyToThrow();
+		void ZoomOut();
 
 	UFUNCTION()
-		void Throw();
+		void TryShoot();
 
 	UFUNCTION()
 		void SetAimingMode(bool bNewState);
 
-	UFUNCTION()
-		void UpdateAimingState();
-
-	UFUNCTION()
-		FVector GetThrowDestination();
-
-	UPROPERTY()
-		FTimerHandle AimingTimerHandle;
-
-	UPROPERTY()
-		bool bIsAiming = false;
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FRotator GetAimingRotation(FVector BeginLocation);
 
 // ------- Character Input Action ------- 
 public:
@@ -141,16 +134,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void Dash();
 
-	//카메라 Boom의 길이를 늘이거나 줄인다.
-	UFUNCTION()
-		void ZoomIn(const FInputActionValue& Value);
-
 	//주변에 상호작용 가능한 액터를 조사한다.
 	UFUNCTION()
 		void TryInvestigate();
-
-	UFUNCTION()
-		virtual void TryReload() override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void TryAttack() override;
@@ -292,7 +278,7 @@ public:
 
 // -------- Inventory --------------
 public:
-	virtual bool PickWeapon(int32 NewWeaponID);
+	virtual bool EquipWeapon(int32 NewWeaponID);
 
 // -------- VFX --------------------
 protected:
