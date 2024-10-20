@@ -52,6 +52,10 @@ AItemBase::AItemBase()
 	ProjectileMovement->InitialSpeed = DEFAULT_ITEM_LAUNCH_SPEED;
 	ProjectileMovement->MaxSpeed = DEFAULT_ITEM_LAUNCH_SPEED;
 	ProjectileMovement->bAutoActivate = false;	
+	ProjectileMovement->bShouldBounce = true;
+	ProjectileMovement->Bounciness = 0.5f;
+	ProjectileMovement->Friction = 0.6f;
+	ProjectileMovement->BounceVelocityStopSimulatingThreshold = 2.0f;
 }
 
 // Called when the game starts or when spawned
