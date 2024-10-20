@@ -131,9 +131,8 @@ void AMainCharacterBase::BeginPlay()
 	//ItemInventory->SetItemInventoryFromSaveData();
 
 	
-	
-
 	TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
+	SetAutomaticRotateModeTimer();
 }
 
 // Called every frame
@@ -360,7 +359,7 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 		SetManualRotateMode();
 
 		// set timer for automatic rotate mode 
-		if (LookAxisVector.Length() <= 0.5f)
+		if (LookAxisVector.Length() <= 0.25f)
 		{
 			SetAutomaticRotateModeTimer();
 		}
