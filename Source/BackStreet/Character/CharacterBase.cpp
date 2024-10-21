@@ -155,7 +155,10 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 	CharacterState.bIsAirAttacking = false;
 	CharacterState.bIsDownwardAttacking = false;
 
-	ResetActionState();
+	if (CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
+	{
+		ResetActionState();
+	}
 
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die)
 	{
@@ -269,8 +272,7 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 {
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown) return;
-	if (!bForceReset && (CharacterState.CharacterActionState == ECharacterActionType::E_Stun
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload)) return;	
+	if (!bForceReset && CharacterState.CharacterActionState == ECharacterActionType::E_Stun) return;	
 
 	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
 
@@ -499,13 +501,6 @@ void ACharacterBase::TryAttack()
 		}
 		targetAnimList = AssetHardPtrInfo.ShootAnimMontageList;
 		break;
-	case EWeaponType::E_Throw:
-		if (AssetHardPtrInfo.ThrowAnimMontageList.Num() > 0)
-		{
-			nextAnimIdx = WeaponComponent->GetCurrentComboCnt() % AssetHardPtrInfo.ThrowAnimMontageList.Num();
-		}
-		targetAnimList = AssetHardPtrInfo.ThrowAnimMontageList;
-		break;
 	}
 	if (targetAnimList.Num() > 0
 		&& IsValid(targetAnimList[nextAnimIdx]))
@@ -582,14 +577,13 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_Stun
 		|| CharacterState.CharacterActionState == ECharacterActionType::E_Die
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_Reload) return false;
+		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown) return false;
 
 
 	//스킬 매니저 있는지 확인
 	if (!SkillManagerComponentRef.IsValid())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to get SkillmanagerBase"));
+		UE_LOG(LogTemp, Error, TEXT("Failed to get SkillmanagerBase"));
 		ensure(SkillManagerComponentRef.IsValid());
 		return false;
 	}
@@ -612,15 +606,14 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 	}
 
 	if(skillBase->SkillState.bIsBlocked) return false;
-	else
-	{
-		CharacterState.bCanAttack = false;
-		SetActionState(ECharacterActionType::E_Skill);
-		SkillManagerComponentRef.Get()->TrySkill(SkillID);
-		//Reset Combo
-		WeaponComponent->ResetComboCnt();
-		return true;
-	}
+	
+	CharacterState.bCanAttack = false;
+	SetActionState(ECharacterActionType::E_Skill);
+	SkillManagerComponentRef.Get()->TrySkill(SkillID);
+	
+	//Reset Combo
+	WeaponComponent->ResetComboCnt();
+	return true;
 }
 
 void ACharacterBase::Attack()
@@ -634,41 +627,17 @@ void ACharacterBase::StopAttack()
 	WeaponComponent->StopAttack();
 }
 
-void ACharacterBase::TryReload()
-{
-	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Shoot
-		&& WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Throw) return;
-
-	if (WeaponComponent->RangedCombatManager->GetCanReload()) return;
-
-	float reloadTime = WeaponComponent->GetWeaponStat().RangedWeaponStat.LoadingDelayTime;
-	if (AssetHardPtrInfo.ReloadAnimMontageList.Num() > 0
-		&& IsValid(AssetHardPtrInfo.ReloadAnimMontageList[0]))
-	{
-		UAnimMontage* reloadAnim = AssetHardPtrInfo.ReloadAnimMontageList[0];
-		if (IsValid(reloadAnim))
-			PlayAnimMontage(reloadAnim);
-	}
-
-	CharacterState.CharacterActionState = ECharacterActionType::E_Reload;
-	GetWorldTimerManager().SetTimer(ReloadTimerHandle, WeaponComponent->RangedCombatManager, &URangedCombatManager::Reload, reloadTime, false);
-}
-
 void ACharacterBase::InitAsset(int32 NewCharacterID)
 {
 	AssetSoftPtrInfo = GetAssetSoftInfoWithID(NewCharacterID);
 	AssetHardPtrInfo = FCharacterAssetHardInfo();
-	//SetCharacterAnimAssetInfoData(CharacterID);
-
+	
 	if (!AssetSoftPtrInfo.CharacterMeshSoftPtr.IsNull())
 	{
 		TArray<FSoftObjectPath> AssetToStream;
 
 		// Mesh 관련
 		AssetToStream.AddUnique(AssetSoftPtrInfo.CharacterMeshSoftPtr.ToSoftObjectPath());
-
-		// Animation 관련
-		//AssetToStream.AddUnique(AssetSoftPtrInfo.AnimBlueprint.ToSoftObjectPath());
 
 		if (!AssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList.IsEmpty())
 		{
@@ -695,22 +664,6 @@ void ACharacterBase::InitAsset(int32 NewCharacterID)
 			for (int32 i = 0; i < AssetSoftPtrInfo.ShootAnimMontageSoftPtrList.Num(); i++)
 			{
 				AssetToStream.AddUnique(AssetSoftPtrInfo.ShootAnimMontageSoftPtrList[i].ToSoftObjectPath());
-			}
-		}
-
-		if (!AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList.IsEmpty())
-		{
-			for (int32 i = 0; i < AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList.Num(); i++)
-			{
-				AssetToStream.AddUnique(AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList[i].ToSoftObjectPath());
-			}
-		}
-
-		if (!AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList.IsEmpty())
-		{
-			for (int32 i = 0; i < AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList.Num(); i++)
-			{
-				AssetToStream.AddUnique(AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
@@ -890,20 +843,6 @@ bool ACharacterBase::InitAnimAsset()
 			AssetHardPtrInfo.ShootAnimMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.ThrowAnimMontageSoftPtrList)
-	{
-		if (animSoftPtr.IsValid())
-		{
-			AssetHardPtrInfo.ThrowAnimMontageList.AddUnique(animSoftPtr.Get());
-		}
-	}
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.ReloadAnimMontageSoftPtrList)
-	{
-		if (animSoftPtr.IsValid())
-		{
-			AssetHardPtrInfo.ReloadAnimMontageList.AddUnique(animSoftPtr.Get());
-		}
-	}
 	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.HitAnimMontageSoftPtrList)
 	{
 		if (animSoftPtr.IsValid())
@@ -962,14 +901,7 @@ void ACharacterBase::InitVFXAsset()
 	}
 }
 
-void ACharacterBase::InitSoundAsset()
-{
-	//	TArray<USoundCue*> soundList = SoundAssetInfo.SoundMap.Find("FootStep")->SoundList;
-	//	if (!soundList.IsEmpty())
-	//	{
-	//		FootStepSoundList = soundList;
-	//	}	
-}
+void ACharacterBase::InitSoundAsset(){}
 
 void ACharacterBase::InitMaterialAsset()
 {
@@ -981,16 +913,6 @@ void ACharacterBase::InitMaterialAsset()
 			GetMesh()->SetMaterial(matIdx, GetMesh()->CreateDynamicMaterialInstance(matIdx, AssetHardPtrInfo.DynamicMaterialList[matIdx]));
 		}
 	}
-	/*
-
-	if (!AssetSoftPtrInfo.EmotionTextureList.IsEmpty())
-	{
-		for (TSoftObjectPtr<UTexture> tex : AssetSoftPtrInfo.EmotionTextureList)
-		{
-			if (tex.IsValid())
-				EmotionTextureList.AddUnique(tex.Get());
-		}
-	}*/
 }
 
 FCharacterAssetSoftInfo ACharacterBase::GetAssetSoftInfoWithID(const int32 TargetCharacterID)
@@ -1014,8 +936,9 @@ float ACharacterBase::GetTotalStatValue(float& DefaultValue, FStatInfoStruct& Ab
 		+ (AbilityInfo.FixedValue + SkillInfo.FixedValue - DebuffInfo.FixedValue);
 }
 
-bool ACharacterBase::PickWeapon(int32 NewWeaponID)
+bool ACharacterBase::EquipWeapon(int32 NewWeaponID)
 {
+	if (WeaponComponent->WeaponID != 0) return false;
 	WeaponComponent->InitWeapon(NewWeaponID);
 	return true;
 }
@@ -1023,13 +946,11 @@ bool ACharacterBase::PickWeapon(int32 NewWeaponID)
 void ACharacterBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
-	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
 	GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
 	GetWorldTimerManager().ClearTimer(HitCounterResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(LocationInterpHandle);
 	GetWorldTimerManager().ClearTimer(AirAtkLocationUpdateHandle);
 	AtkIntervalHandle.Invalidate();
-	ReloadTimerHandle.Invalidate();
 	KnockDownDelayTimerHandle.Invalidate();
 	HitCounterResetTimerHandle.Invalidate();
 	LocationInterpHandle.Invalidate();

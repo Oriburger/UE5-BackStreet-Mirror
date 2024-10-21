@@ -18,6 +18,7 @@ enum class EItemCategoryInfo : uint8
 {
 	E_None					UMETA(DisplayName = "None"),
 	E_Weapon				UMETA(DisplayName = "Weapon"),
+	E_SubWeapon				UMETA(DisplayName = "SubWeapon"),
 	E_Ability				UMETA(DisplayName = "Ability"),
 	E_Craft					UMETA(DisplayName = "Craft"),
 	E_Research				UMETA(DisplayName = "Research"),

@@ -65,9 +65,9 @@ bool UEnemySkillManagerComponent::RemoveSkill(int32 SkillID)
 	return true;
 }
 
-bool UEnemySkillManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
+bool UEnemySkillManagerComponent::UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel)
 {
-	return Super::UpgradeSkill(SkillID, NewLevel);
+	return Super::UpgradeSkill(SkillID, UpgradeTarget, NewLevel);
 }
 
 void UEnemySkillManagerComponent::ClearAllSkill()

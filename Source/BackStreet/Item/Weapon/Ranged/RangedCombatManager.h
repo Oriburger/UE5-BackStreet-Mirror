@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -6,67 +6,67 @@
 #include "../CombatManager.h"
 #include "RangedCombatManager.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class BACKSTREET_API URangedCombatManager : public UCombatManager
 {
 	GENERATED_BODY()
 public:
 	URangedCombatManager();
+	
 
-	//°ø°İ Ã³¸®		
+
+public:
+	//ê³µê²© ì²˜ë¦¬		
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
 
-	//°ø°İ ¸¶¹«¸® Ã³¸®
+	//ê³µê²© ë§ˆë¬´ë¦¬ ì²˜ë¦¬
 	UFUNCTION(BlueprintCallable)
 		virtual void StopAttack() override;
 
-//------ Ranged ¿À¹ö¶óÀÌ´õºí ----------------------------
+//------ Ranged ì˜¤ë²„ë¼ì´ë”ë¸” ----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
-		bool TryFireProjectile();
-
-	//ÀåÀüÀ» ½Ãµµ. ÇöÀç »óÅÂ¿¡ µû¸¥ ¼º°ø ¿©ºÎ¸¦ ¹İÈ¯
-	UFUNCTION(BlueprintCallable)
-		void Reload();
-
-	//Add ammo count (til ExtraAmmoCount)
+		bool TryFireProjectile(FRotator FireRotationOverride = FRotator::ZeroRotator);
+	
+	//Add ammo count
 	UFUNCTION(BlueprintCallable)
 		void AddAmmo(int32 Count);
 
 //------ Basic ---------------------------------
 protected:
 	UFUNCTION(BlueprintCallable)
-		class AProjectileBase* CreateProjectile();
+		class AProjectileBase* CreateProjectile(FRotator FireRotationOverride = FRotator::ZeroRotator);
 
 //------- Getter / Setter ---------------------------
 public:
 	UFUNCTION()
 		void SetInfiniteAmmoMode(bool NewMode);
 
-	//get Stat.ExtraAmmoCount
 	UFUNCTION(BlueprintCallable)
 		int32 GetLeftAmmoCount();
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetCanReload();
+protected:
+	//Get Rotation List for FireProjectile
+	UFUNCTION()
+		TArray<FRotator> GetFireRotationList(int32 FireCount);
 
 //------ Asset----------------------------------
 protected:
-	//¹ß»ç ¼ø°£¿¡ Ãâ·ÂµÉ ÀÌ¹ÌÅÍ (ÀÓ½Ã, ÃßÈÄ µ¥ÀÌÅÍ Å×ÀÌºí·Î °ü¸® ¿¹Á¤)
+	//ë°œì‚¬ ìˆœê°„ì— ì¶œë ¥ë  ì´ë¯¸í„° (ì„ì‹œ, ì¶”í›„ ë°ì´í„° í…Œì´ë¸”ë¡œ ê´€ë¦¬ ì˜ˆì •)
 	UPROPERTY(VisibleInstanceOnly)
 		class UNiagaraSystem* ShootNiagaraEmitter;
 
-	//Åõ»çÃ¼°¡ ¹ß»çµÇ´Â ÀÌÆåÆ®¸¦ Ãâ·ÂÇÑ´Ù
+	//íˆ¬ì‚¬ì²´ê°€ ë°œì‚¬ë˜ëŠ” ì´í™íŠ¸ë¥¼ ì¶œë ¥í•œë‹¤
 	UFUNCTION()
 		void SpawnShootNiagaraEffect();
 
-//--------Å¸ÀÌ¸Ó °ü·Ã--------------------
-protected:
-	UPROPERTY()
-		FTimerHandle AutoReloadTimerHandle;
+//--------íƒ€ì´ë¨¸ ê´€ë ¨--------------------
+private:
+	//íƒ€ì´ë¨¸ ì´ë²¤íŠ¸ ì „ë‹¬ì„ ìœ„í•´ì„œë§Œ ì‚¬ìš©
+	//ë¸ë¦¬ê²Œì´íŠ¸ ë°”ì¸ë”© ì´í›„ íŒŒë¼ë¯¸í„°ë¥¼ ì§ì ‘ ì§€ì •í•˜ë©´
+	//íƒ€ì´ë¨¸ ì´ë²¤íŠ¸ ìˆ˜í–‰ ë„ì¤‘ì— íŒŒë¼ë¯¸í„°ê°€ ë©”ëª¨ë¦¬ì—ì„œ ì†Œë©¸ë˜ê¸°ì— ë„ ì˜ˆì™¸ ë°œìƒ
+	FRotator FireRotationForTimer; 
 };
 

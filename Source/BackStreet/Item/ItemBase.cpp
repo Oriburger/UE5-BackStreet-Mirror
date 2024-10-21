@@ -20,13 +20,13 @@ AItemBase::AItemBase()
 	this->Tags.Add(FName("Item"));
 
 	PrimaryActorTick.bCanEverTick = false;
-	DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DEFAULT_SCENE_ROOT"));
-	DefaultSceneRoot->SetupAttachment(RootComponent);
-	SetRootComponent(DefaultSceneRoot);
-		
+	//DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DEFAULT_SCENE_ROOT"));
+	//DefaultSceneRoot->SetupAttachment(RootComponent);
+	
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_STATIC_MESH"));
-	MeshComponent->SetupAttachment(DefaultSceneRoot);
+	MeshComponent->SetupAttachment(RootComponent);
 	MeshComponent->SetCollisionProfileName("Item", true);
+	SetRootComponent(MeshComponent);
 
 	OutlineMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_OUTLINE_MESH"));
 	OutlineMeshComponent->SetupAttachment(MeshComponent);
@@ -43,14 +43,19 @@ AItemBase::AItemBase()
 
 	ItemTriggerVolume = CreateDefaultSubobject<UInteractiveCollisionComponent>("SPHERE_COLLISION");
 	ItemTriggerVolume->SetupAttachment(RootComponent);
-	ItemTriggerVolume->SetRelativeScale3D(FVector(5.0f));
+	ItemTriggerVolume->SetWorldScale3D(FVector(5.0f));
 	ItemTriggerVolume->SetCollisionProfileName("ItemTrigger", true);
+	ItemTriggerVolume->SetBoxExtent(FVector(40.0f), false);
 	ItemTriggerVolume->OnComponentBeginOverlap.AddUniqueDynamic(this, &AItemBase::OnOverlapBegins);
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("PROJECTILE_MOVEMENT"));
 	ProjectileMovement->InitialSpeed = DEFAULT_ITEM_LAUNCH_SPEED;
 	ProjectileMovement->MaxSpeed = DEFAULT_ITEM_LAUNCH_SPEED;
 	ProjectileMovement->bAutoActivate = false;	
+	ProjectileMovement->bShouldBounce = true;
+	ProjectileMovement->Bounciness = 0.5f;
+	ProjectileMovement->Friction = 0.6f;
+	ProjectileMovement->BounceVelocityStopSimulatingThreshold = 2.0f;
 }
 
 // Called when the game starts or when spawned
@@ -116,7 +121,14 @@ void AItemBase::OnItemPicked_Implementation()
 		if (playerRef->ActorHasTag("Player"))
 		{
 			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
-			if (!playerRef->PickWeapon(targetWeaponID)) return;
+			playerRef->EquipWeapon(targetWeaponID);
+		}
+		break;
+	case EItemCategoryInfo::E_SubWeapon:
+		if (playerRef->ActorHasTag("Player"))
+		{
+			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
+			playerRef->EquipWeapon(targetWeaponID);
 		}
 		break;
 	}
@@ -129,7 +141,7 @@ void AItemBase::InitializeItemMesh()
 	if (ItemInfo.ItemMesh.IsNull() || !IsValid(ItemInfo.ItemMesh.Get())) return;
 	
 	MeshComponent->SetStaticMesh(ItemInfo.ItemMesh.Get());
-	MeshComponent->SetRelativeLocation(ItemInfo.InitialLocation);
+	//MeshComponent->SetRelativeLocation(ItemInfo.InitialLocation);
 	MeshComponent->SetRelativeRotation(ItemInfo.InitialRotation);
 	MeshComponent->SetRelativeScale3D(ItemInfo.InitialScale);
 

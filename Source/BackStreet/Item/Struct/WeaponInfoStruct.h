@@ -20,9 +20,7 @@ enum class EWeaponType : uint8
 {
 	E_None				UMETA(DisplayName = "None"),
 	E_Melee				UMETA(DisplayName = "Melee"),
-	E_Throw				UMETA(DisplayName = "Throw"),
 	E_Shoot				UMETA(DisplayName = "Shoot")
-
 };
 
 UENUM(BlueprintType)
@@ -32,7 +30,6 @@ enum class EWeaponStatType : uint8
 	E_Attack				UMETA(DisplayName = "Attack"),
 	E_AttackSpeed		UMETA(DisplayName = "AttackSpeed"),
 	E_FinalAttack		UMETA(DisplayName = "FinalAttack")
-
 };
 
 USTRUCT(BlueprintType)
@@ -60,7 +57,7 @@ public:
 	//업그레이드 스탯
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TArray<FUpgradableStatInfoContainer> StatInfoByLevel;
+		TArray<FUpgradableStatInfoContainer> StatInfoByLevel;
 };
 
 USTRUCT(BlueprintType)
@@ -93,21 +90,16 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsInfiniteAmmo = false;
 
-	//무한 탄창인지?
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bInfiniteMagazine = false;
-
-	//한 탄창에 최대 발사체 수
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 MaxAmmoPerMagazine = 0;
-
 	//소지할 수 있는 최대 발사체 개수 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		int32 MaxTotalAmmo = 200;
 
-	//장전 시간
+	//한 번 발사 할 때, 몇 발을 내보낼지?
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float LoadingDelayTime = 0.0f;
+		int32 ProjectileCountPerFire = 1; 
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		float MultipleMaxFireAngle = 90.0f;
 };
 
 USTRUCT(BlueprintType)
@@ -157,20 +149,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 100.0f))
 		float FixedDamageAmount = 0.0f;
 
-	// 내구도 PROPERTY 추가
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bInfinite = false;
-
 	// Final Impact Strength, Default is zero.  1.0 + this value 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 0.0f, UIMax = 5.0f))
 		float FinalImpactStrength = 0.0f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 MaxDurability = 10;
-
-	//인벤토리를 차지하는 칸 수
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		uint8 WeaponWeight = 1;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		float WeaponKnockBackStrength = 500.0f;
@@ -202,9 +183,12 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		int32 CurrentAmmoCount = 0;
 
-	//별도 탄창에 있는 탄환들의 총합
-	UPROPERTY(BlueprintReadOnly)
-		int32 ExtraAmmoCount = 0;
+	inline bool GetIsEmpty() const { return CurrentAmmoCount == 0; }
+
+	void UpdateAmmoValidation(int32 MaxTotalAmmo)
+	{
+		CurrentAmmoCount = FMath::Min(MaxTotalAmmo, CurrentAmmoCount);
+	}
 };
 
 USTRUCT(BlueprintType)
@@ -233,7 +217,7 @@ public:
 //-----Weapon Upgraded Stat
 	//Upgraded State(in combat area)
 	UPROPERTY(BlueprintReadWrite)
-	TMap<EWeaponStatType, uint8> UpgradedStatMap;
+		TMap<EWeaponStatType, uint8> UpgradedStatMap;
 };
 
 USTRUCT(BlueprintType)
@@ -313,9 +297,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
 		TSoftObjectPtr<class USoundCue> AttackFailSound;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Ranged")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ranged")
 		FRangedWeaponAssetInfoStruct RangedWeaponAssetInfo;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Melee")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Melee")
 		FMeleeWeaponAssetInfoStruct MeleeWeaponAssetInfo;
 };

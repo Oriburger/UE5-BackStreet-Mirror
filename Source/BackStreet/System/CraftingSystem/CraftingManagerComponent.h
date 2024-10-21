@@ -11,8 +11,26 @@ enum class EKeepMat : uint8
 {
 	E_None				UMETA(DisplayName = "None"),
 	E_Screw				UMETA(DisplayName = "Screw"),
-	E_Spring				UMETA(DisplayName = "Spring"),
+	E_Spring			UMETA(DisplayName = "Spring"),
 	E_Gear				UMETA(DisplayName = "Gear"),
+};
+
+USTRUCT(BlueprintType)
+struct FCraftingMaterialSet
+{
+	GENERATED_BODY()
+
+public:
+	//==== Static Proptery ====================
+
+	//Stage type (entry, combat, time attack, boss, miniGame, gatcha etc..)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TArray<int32> IDList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TArray<int32> CountList;
+	
+	bool GetIsValidData() { return IDList.Num() == CountList.Num(); }
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -28,9 +46,6 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	//UPROPERTY()
-	//	int32 SuperMaterialIdx = 3
-
 protected:
 	UFUNCTION(BlueprintCallable)
 		void InitCraftingManager();
@@ -39,6 +54,9 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsItemEnough();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsItemEnoughForCraft(int32 SkillID);
 
 	UFUNCTION()
 		bool ConsumeItem();
@@ -68,10 +86,16 @@ public:
 
 //=======	Upgrade Skill Function	======================	
 	UFUNCTION(BlueprintCallable)
-		bool UpgradeSkill(int32 SkillID, uint8 NewLevel);
+		bool UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<uint8>UpdateSkillUpgradeRequiredItemList(int32 SkillID, uint8 NewLevel);
+		TMap<int32, int32> GetSkillCraftMaterialInfo(int32 SkillID);
+
+	UFUNCTION(BlueprintCallable)
+		TMap<int32, int32> UpdateSkillUpgradeRequiredItemList(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel);
+
+	UFUNCTION(BlueprintCallable)
+		TMap<int32, int32> UpdateSkillCraftRequiredItemList(int32 SkillID);
 
 //=======	Upgrade Weapon Function	====================	
 	UFUNCTION(BlueprintCallable)
@@ -83,7 +107,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool GetIsStatLevelValid(TArray<uint8> NewLevelList);
 
-//=======	CommonProperty		========================
+//=======	Common Property		========================
 public:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
 		bool bIsSkillCreated = false;
@@ -96,7 +120,7 @@ public:
 		EKeepMat KeptItem = EKeepMat::E_None; 
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
-		TArray<uint8> RequiredItemList;
+		TMap<int32, int32> RequiredItemInfo;
 
 //=======	SkillSelectProperty		========================
 public:

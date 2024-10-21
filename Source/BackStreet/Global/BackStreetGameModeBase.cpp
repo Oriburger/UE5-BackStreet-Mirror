@@ -1,13 +1,13 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "BackStreetGameModeBase.h"
-#include "../Widget/BackStreetWidgetBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/MapSystem/NewChapterManagerBase.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
 #include "../Item/ItemBase.h"
 #include "SlateBasics.h"
+#include "CommonActivatableWidget.h"
 #include "Runtime/UMG/Public/UMG.h"
 #include "../Item/Weapon/Throw/ProjectileBase.h"
 
@@ -78,7 +78,6 @@ void ABackStreetGameModeBase::DeactivateSlowHitEffect()
 
 AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector SpawnLocation)
 {
-	/*
 	if (!IsValid(GetWorld())) return nullptr;
 	
 	FActorSpawnParameters actorSpawnParameters;
@@ -94,7 +93,6 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector Spawn
 		}
 		return newItem;
 	}
-	*/
 	return nullptr;
 }
 
@@ -106,46 +104,24 @@ void ABackStreetGameModeBase::UpdateCharacterStat(ACharacterBase* TargetCharacte
 	}
 }
 
-void ABackStreetGameModeBase::SwitchToCombatWidget()
+UCommonUserWidget* ABackStreetGameModeBase::GetMainHUDRef()
 {
-	UBackStreetWidgetBase* combatWidgetRef = GetCombatWidgetRef();
+	if (IsValid(MainHUDRef)) return MainHUDRef;
+	return MainHUDRef = Cast<UCommonUserWidget>(CreateWidget(GetWorld(), MainHUDClass));
+}
+
+void ABackStreetGameModeBase::CreateDefaultHUD()
+{
+	UCommonUserWidget* combatWidgetRef = GetMainHUDRef();
 	if (IsValid(combatWidgetRef))
 	{
 		if (!combatWidgetRef->IsInViewport())
 		{
 			combatWidgetRef->AddToViewport();
 		}
-		combatWidgetRef->SetFocusToWidget(combatWidgetRef, false, true, false);
-	}
-}
-
-void ABackStreetGameModeBase::SwitchToMenuWidget()
-{
-	UBackStreetWidgetBase* menuWidgetRef = GetMenuWidgetRef();
-	if (IsValid(menuWidgetRef))
-	{
-		if (!menuWidgetRef->IsInViewport())
+		if (Cast<UCommonActivatableWidget>(combatWidgetRef))
 		{
-			menuWidgetRef->AddToViewport();
+			//Cast<UCommonActivatableWidget>(combatWidgetRef)->ActivateWidget();
 		}
-		menuWidgetRef->SetFocusToWidget(menuWidgetRef, true, false, true);
 	}
-}
-
-UBackStreetWidgetBase* ABackStreetGameModeBase::GetCombatWidgetRef()
-{
-	if (IsValid(CombatWidgetRef)) return CombatWidgetRef;
-	return CombatWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), CombatWidgetClass));;
-}
-
-UBackStreetWidgetBase* ABackStreetGameModeBase::GetMenuWidgetRef()
-{
-	if (IsValid(MenuWidgetRef)) return MenuWidgetRef;
-	return MenuWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), MenuWidgetClass));
-}
-
-void ABackStreetGameModeBase::CreateDefaultWidgets()
-{
-	SwitchToCombatWidget();
-	MenuWidgetRef = Cast<UBackStreetWidgetBase>(CreateWidget(GetWorld(), MenuWidgetClass));
 }

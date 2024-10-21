@@ -75,21 +75,21 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	int32 SkillID = 0;
+		int32 SkillID = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	int32 WeaponID = 0;
+		int32 WeaponID = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	uint8 MaxLevel = 0;
+		uint8 MaxLevel = 0;
 
 	//<MaterialID, Need Num of Material>
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TMap<int32, FCraftingMaterialStruct> RequiredMaterialMap;
+		TMap<int32, FCraftingMaterialStruct> RequiredMaterialMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TArray<float> CoolTimeByLevel;
+		TArray<float> CoolTimeByLevel;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TMap<FName, FVariableByLevelStruct> SkillVariableMap;
+		TMap<FName, FVariableByLevelStruct> SkillVariableMap;
 };

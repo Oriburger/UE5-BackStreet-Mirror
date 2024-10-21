@@ -90,8 +90,6 @@ public:
 
 	virtual void StopAttack();
 
-	virtual void TryReload();
-
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 		, AController* EventInstigator, AActor* DamageCauser) override;
 
@@ -219,7 +217,7 @@ private:
 // ------ 무기 관련 -------------------------------------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool PickWeapon(int32 NewWeaponID);
+		bool EquipWeapon(int32 NewWeaponID);
 // ---- Asset -------------------
 public:
 	//Init asset using softref data table
@@ -285,9 +283,6 @@ protected:
 	//공격 간 딜레이 핸들
 	UPROPERTY()
 		FTimerHandle AtkIntervalHandle;
-
-	UPROPERTY()
-		FTimerHandle ReloadTimerHandle;
 
 	UPROPERTY()
 		TArray<FTimerHandle> SkillAnimPlayTimerHandleList;

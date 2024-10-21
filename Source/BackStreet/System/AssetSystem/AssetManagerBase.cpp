@@ -8,9 +8,7 @@ UAssetManagerBase::UAssetManagerBase() {}
 
 void UAssetManagerBase::InitAssetManager(ABackStreetGameModeBase* NewGamemodeRef)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Init Asset Manager #1"));
 	if (!IsValid(NewGamemodeRef)) return;
-	UE_LOG(LogTemp, Warning, TEXT("Init Asset Manager #2"));
 	GamemodeRef = NewGamemodeRef;
 
 	SystemSoundAssetTable = GamemodeRef.Get()->SystemSoundAssetTable;
@@ -134,7 +132,7 @@ void UAssetManagerBase::PlaySingleSound(AActor* TargetActor, ESoundAssetType Sou
 
 	if (soundList.Num() != volumeList.Num())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UAssetManagerBase::PlaySingleSound, soundList volumeList member count is not same"));
+		UE_LOG(LogTemp, Error, TEXT("UAssetManagerBase::PlaySingleSound, soundList volumeList member count is not same"));
 	}
 
 	for (int32 idx = 0; idx < volumeList.Num(); idx++)

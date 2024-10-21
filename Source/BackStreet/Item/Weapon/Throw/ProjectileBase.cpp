@@ -21,8 +21,9 @@ AProjectileBase::AProjectileBase()
 
 	RootComponent = SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERE_COLLISION"));
 	SphereCollision->SetCollisionProfileName(TEXT("Projectile"));
-	SphereCollision->SetNotifyRigidBodyCollision(true);
+	SphereCollision->SetNotifyRigidBodyCollision(false);
 	SphereCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	SphereCollision->SetSphereRadius(18.0f, false);
 
 	TargetingCollision = CreateDefaultSubobject<USphereComponent>(TEXT("TARGETING_COLLISION"));
 	TargetingCollision->SetupAttachment(RootComponent);
@@ -34,7 +35,7 @@ AProjectileBase::AProjectileBase()
 	Mesh->SetRelativeRotation(FRotator(0.0f));
 	Mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	Mesh->SetCollisionProfileName("Item");
-	Mesh->SetNotifyRigidBodyCollision(true);	
+	Mesh->SetNotifyRigidBodyCollision(false);	
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("PROJECTILE_MOVEMENT"));
 	ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
@@ -80,14 +81,17 @@ void AProjectileBase::InitProjectileAsset()
 	}
 
 	if (ProjectileAssetInfo.HitEffectParticle.IsValid())
+	{
 		HitNiagaraParticle = ProjectileAssetInfo.HitEffectParticle.Get();
-
+	}
 	if (ProjectileAssetInfo.HitEffectParticleLegacy.IsValid())
+	{
 		HitParticle = ProjectileAssetInfo.HitEffectParticleLegacy.Get();
-
+	}
 	if (ProjectileAssetInfo.ExplosionParticle.IsValid())
+	{
 		ExplosionParticle = ProjectileAssetInfo.ExplosionParticle.Get();
-
+	}
 	if (ProjectileAssetInfo.TrailParticle.IsValid())
 		TrailParticle->SetAsset(ProjectileAssetInfo.TrailParticle.Get());
 }
@@ -167,6 +171,9 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 	if (!ProjectileMovement->IsActive()) return;
 	if (!OwnerCharacterRef.IsValid() || !GamemodeRef.IsValid()) return;
 	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Item")) return;
+	if (OtherActor == OwnerCharacterRef.Get()) return;
+
+	FString name = UKismetSystemLibrary::GetDisplayName(OtherActor);
 
 	if (OtherActor->ActorHasTag("Character"))
 	{
@@ -186,13 +193,17 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		{
 			const float totalDamage = Cast<ACharacterBase>(GetOwner())->WeaponComponent->CalculateTotalDamage(Cast<ACharacterBase>(OtherActor)->GetCharacterState());
 			UGameplayStatics::ApplyDamage(OtherActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
-			DestroyWithEffect(SweepResult.Location, !Cast<ACharacterBase>(OtherActor)->GetCharacterStat().bIsInvincibility);
+			DestroyWithEffect(GetActorLocation(), !Cast<ACharacterBase>(OtherActor)->GetCharacterStat().bIsInvincibility);
 		}
 	}
 }
 
 void AProjectileBase::OnProjectileHit(UPrimitiveComponent* HitComponet, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	if (!Hit.bBlockingHit || Hit.GetActor() == OwnerCharacterRef.Get()) return;
+	
+	FString name = UKismetSystemLibrary::GetDisplayName(OtherComp);
+	
 	//발사체가 총알일경우, 즉시 제거 
 	if (ProjectileStat.bIsBullet)
 	{
@@ -230,7 +241,7 @@ void AProjectileBase::OnTargetBeginOverlap(UPrimitiveComponent* OverlappedComp, 
 
 void AProjectileBase::Explode()
 {
-	if (IsActorBeingDestroyed() || !IsValid(this)) return; 
+	if (IsActorBeingDestroyed() || !IsValid(this)) return;
 	if (!GamemodeRef.IsValid() || !OwnerCharacterRef.IsValid()) return; 
 	if (!ProjectileStat.bIsExplosive) return;
 
@@ -242,8 +253,10 @@ void AProjectileBase::Explode()
 
 	//--- 이펙트 출력 --------------
 	if (ExplosionParticle != nullptr)
+	{
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionParticle, GetActorLocation(), GetActorRotation());
-	
+		UE_LOG(LogTemp, Warning, TEXT("Explode #5"));
+	}
 	if (AssetManagerBaseRef.IsValid())
 	{
 		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, floor(ProjectileID / 10.0) * 10, "Explosion");
