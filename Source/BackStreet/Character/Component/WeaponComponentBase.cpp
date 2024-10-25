@@ -133,7 +133,6 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 		tempStream.AddUnique(WeaponAssetInfo.MeleeWeaponAssetInfo.HitImpactSoundLarge.ToSoftObjectPath());
 
 		//Ranged
-		//tempStream.AddUnique(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileClass.ToSoftObjectPath());
 		tempStream.AddUnique(WeaponAssetInfo.RangedWeaponAssetInfo.ShootEffectParticle.ToSoftObjectPath());
 
 		for (auto& assetPath : tempStream)
@@ -197,6 +196,11 @@ void UWeaponComponentBase::InitWeaponAsset()
 	if (WeaponAssetInfo.MeleeWeaponAssetInfo.HitEffectParticleLarge.IsValid())
 	{
 		HitEffectParticleLarge = WeaponAssetInfo.MeleeWeaponAssetInfo.HitEffectParticleLarge.Get();
+	}
+	if (WeaponAssetInfo.RangedWeaponAssetInfo.ShootEffectParticle.IsValid()
+		&& IsValid(RangedCombatManager))
+	{
+		ShootEffectParticle = WeaponAssetInfo.RangedWeaponAssetInfo.ShootEffectParticle.Get();
 	}
 }
 

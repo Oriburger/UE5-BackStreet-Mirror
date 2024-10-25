@@ -30,14 +30,17 @@ public:
 
 //------- VFX --------------------------------
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UNiagaraComponent* WeaponTrailParticle;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UNiagaraSystem* HitEffectParticle;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UNiagaraSystem* HitEffectParticleLarge;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay | VFX")
+		class UNiagaraSystem* ShootEffectParticle;
 
 //------- Basic property, Action -------------------
 public:
