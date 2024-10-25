@@ -78,7 +78,6 @@ void ABackStreetGameModeBase::DeactivateSlowHitEffect()
 
 AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector SpawnLocation)
 {
-	/*
 	if (!IsValid(GetWorld())) return nullptr;
 	
 	FActorSpawnParameters actorSpawnParameters;
@@ -94,7 +93,6 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector Spawn
 		}
 		return newItem;
 	}
-	*/
 	return nullptr;
 }
 

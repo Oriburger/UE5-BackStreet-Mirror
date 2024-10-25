@@ -30,6 +30,7 @@ void UCraftingManagerComponent::InitCraftingManager()
 	OwnerActorRef->Tags.Add("CraftingBox");
 	MainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	SkillManagerRef = MainCharacterRef.IsValid() ? MainCharacterRef->SkillManagerComponent : nullptr;
+	
 	bIsSkillCreated = false;
 	bIsDisplayingSkillListSet = false;
 }
@@ -37,13 +38,15 @@ void UCraftingManagerComponent::InitCraftingManager()
 bool UCraftingManagerComponent::GetIsItemEnough()
 {
 	if(MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
-	TMap<ECraftingItemType, uint8> currItemMap = MainCharacterRef->ItemInventory->GetCraftingItemAmount();
-	
+	TMap<ECraftingItemType, uint8> currItemMap = MainCharacterRef->ItemInventory->GetAllCraftingItemAmount();
+
 	TArray<int32> itemIdList; RequiredItemInfo.GenerateKeyArray(itemIdList);
 	for (int32 requiredItemId : itemIdList)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("GetIsItemEnough(%d %d)"), requiredItemId, KeptItem);
+
 		//만능재료 사용 시 충족 여부 확인
-		if (static_cast<uint8>(KeptItem) == requiredItemId + 1 &&
+		if (static_cast<uint8>(KeptItem) == requiredItemId &&
 			currItemMap[ECraftingItemType::E_Wrench] >= RequiredItemInfo[requiredItemId]);
 		//일반재료 사용 시 충족 여부 확인
 		else
@@ -59,10 +62,10 @@ bool UCraftingManagerComponent::GetIsItemEnoughForCraft(int32 SkillID)
 {
 	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
 	TMap<int32, int32> craftMaterialInfo = GetSkillCraftMaterialInfo(SkillID);
-	TMap<ECraftingItemType, uint8> currItemMap = MainCharacterRef->ItemInventory->GetCraftingItemAmount();
+	TMap<ECraftingItemType, uint8> currItemMap = MainCharacterRef->ItemInventory->GetAllCraftingItemAmount();
 	TArray<int32> idList; craftMaterialInfo.GenerateKeyArray(idList);
 
-	for (int32& id : idList) 
+	for (int32& id : idList)
 	{
 		if (!currItemMap.Contains((ECraftingItemType)id)) return false;
 		const int32 requiredCount = craftMaterialInfo[id];
@@ -79,12 +82,12 @@ bool UCraftingManagerComponent::ConsumeItem()
 	for (int32 requiredItemId : itemIdList)
 	{
 		//만능재료 사용 시
-	//	if (static_cast<uint8>(KeptItem) == requiredItemId + 1)
-	//	{
-	//		MainCharacterRef->ItemInventory->RemoveItem(4, RequiredItemInfo[requiredItemId]);
-	//	}
+		if (static_cast<uint8>(KeptItem) == requiredItemId)
+		{
+			MainCharacterRef->ItemInventory->RemoveItem(4, RequiredItemInfo[requiredItemId]);
+		}
 		//기본재료 사용 시
-	//	else
+		else
 		{
 			MainCharacterRef->ItemInventory->RemoveItem(requiredItemId, RequiredItemInfo[requiredItemId]);
 		}
@@ -114,8 +117,7 @@ bool UCraftingManagerComponent::AddSkill(int32 NewSkillID)
 	if (!SkillManagerRef.IsValid()) return false;
 
 	UpdateSkillCraftRequiredItemList(NewSkillID);
-	if (!GetIsItemEnough())return false;
-	
+	if (!GetIsItemEnough()) return false;
 	//스킬 추가
 	bool bIsAddSkillSucceed = SkillManagerRef->AddSkill(NewSkillID);
 	if (!bIsAddSkillSucceed) return false;

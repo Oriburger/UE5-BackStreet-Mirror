@@ -168,6 +168,9 @@ public:
 		FRotator PlayerStartRotation = FRotator::ZeroRotator;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TArray<FVector> ItemBoxSpawnLocationList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		FVector RewardSpawnLocation = FVector::ZeroVector;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -254,6 +257,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
 		TMap<EStageCategoryInfo, FStageRewardCandidateInfoList> StageRewardCandidateInfoMap;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
+		TMap<EStageCategoryInfo, int32> MaxItemBoxSpawnCountMap;
 
 	//Stage template list. If this value is set, this overrides the above values(blocked~, stage tyep~)
 	UPROPERTY(EditDefaultsOnly, meta = (UIMin = 1, UIMax = 5), Category = "Config")

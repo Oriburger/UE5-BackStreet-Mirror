@@ -74,6 +74,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetStageRemainingTime();
 
+	UFUNCTION(BlueprintCallable)
+		void RegisterActor(AActor* TargetActor);
+
 protected:
 	//Add loading screen
 	UFUNCTION()
@@ -94,6 +97,9 @@ protected:
 	UFUNCTION()
 		void ClearPreviousActors();
 
+	UFUNCTION()
+		void ClearEnemyActors();
+
 	//Update spawn point member of stage info struct after map load 
 	//There are several points to spawn enemy, player, craftbox etc
 	UFUNCTION()
@@ -106,6 +112,9 @@ protected:
 	//Spawn craftbox
 	UFUNCTION()
 		void SpawnCraftbox(); 
+
+	UFUNCTION()
+		void SpawnItemBox();
 
 	//Spawn portals
 	UFUNCTION()
@@ -215,6 +224,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Class")
 		TSubclassOf<class AEnemyCharacterBase> EnemyCharacterClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Class")
+		TSubclassOf<class AItemBoxBase> ItemBoxClass;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Class")
 		TSubclassOf<UUserWidget> LoadingWidgetClass;

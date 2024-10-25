@@ -22,7 +22,7 @@ void UMeleeCombatManager::Attack()
 
 	if (AssetManagerRef.IsValid())
 	{
-		AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon, WeaponComponentRef.Get()->GetWeaponStat().WeaponID, "Wield");
+		AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon, WeaponComponentRef.Get()->WeaponID, "Wield");
 	}
 
 	GamemodeRef.Get()->GetWorldTimerManager().SetTimer(MeleeAtkTimerHandle, this, &UMeleeCombatManager::MeleeAttack, 0.01f, true);
@@ -160,7 +160,7 @@ void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, AActor
 		}
 		if (AssetManagerRef.IsValid())
 		{
-			AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon, WeaponComponentRef.Get()->WeaponStat.WeaponID, "HitImpact");
+			AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon, WeaponComponentRef.Get()->WeaponID, "HitImpact");
 		}
 	}
 	else
@@ -172,7 +172,7 @@ void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, AActor
 		}
 		if (AssetManagerRef.IsValid())
 		{
-			AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon, WeaponComponentRef.Get()->WeaponStat.WeaponID, "HitImpactLarge");
+			AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon, WeaponComponentRef.Get()->WeaponID, "HitImpactLarge");
 		}
 	}
 

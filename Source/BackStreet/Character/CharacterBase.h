@@ -90,8 +90,6 @@ public:
 
 	virtual void StopAttack();
 
-	virtual void TryReload();
-
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 		, AController* EventInstigator, AActor* DamageCauser) override;
 
@@ -285,9 +283,6 @@ protected:
 	//공격 간 딜레이 핸들
 	UPROPERTY()
 		FTimerHandle AtkIntervalHandle;
-
-	UPROPERTY()
-		FTimerHandle ReloadTimerHandle;
 
 	UPROPERTY()
 		TArray<FTimerHandle> SkillAnimPlayTimerHandleList;

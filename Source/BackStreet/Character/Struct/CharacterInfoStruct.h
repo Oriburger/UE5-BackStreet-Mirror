@@ -58,13 +58,10 @@ public:
 		class UInputAction* AttackAction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
-		class UInputAction* ReloadAction;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
 		class UInputAction* UpperAttackAction;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
-		class UInputAction* ThrowAction;
+		class UInputAction* ShootAction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
 		class UInputAction* ZoomAction;
@@ -127,10 +124,6 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Weapon")
 		bool bInfinite = false;
 
-	//Projectile Count Per Attack
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 1, UIMax = 1), Category = "Weapon")
-		int32 ProjectileCountPerAttack = 1;
-
 //======= Weapon Stat ======================
 	//for time-attack stage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
@@ -184,6 +177,9 @@ public:
 	//Is character sprinting?
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bIsSprinting = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		bool bIsAiming = false;
 
 	//캐릭터의 행동 정보
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

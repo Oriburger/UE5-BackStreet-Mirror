@@ -15,6 +15,24 @@ enum class EKeepMat : uint8
 	E_Gear				UMETA(DisplayName = "Gear"),
 };
 
+USTRUCT(BlueprintType)
+struct FCraftingMaterialSet
+{
+	GENERATED_BODY()
+
+public:
+	//==== Static Proptery ====================
+
+	//Stage type (entry, combat, time attack, boss, miniGame, gatcha etc..)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TArray<int32> IDList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TArray<int32> CountList;
+	
+	bool GetIsValidData() { return IDList.Num() == CountList.Num(); }
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BACKSTREET_API UCraftingManagerComponent : public UActorComponent
 {
@@ -27,9 +45,6 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	//UPROPERTY()
-	//	int32 SuperMaterialIdx = 3
 
 protected:
 	UFUNCTION(BlueprintCallable)

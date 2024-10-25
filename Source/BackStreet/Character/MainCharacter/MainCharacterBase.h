@@ -72,7 +72,7 @@ public:
 // ------- Throw Test -----------
 public:
 	UFUNCTION(BlueprintCallable)
-		void SwitchWeapon();
+		void SwitchWeapon(bool bSwitchToSubWeapon);
 	
 	UFUNCTION()
 		void ZoomIn();
@@ -81,16 +81,13 @@ public:
 		void ZoomOut();
 
 	UFUNCTION()
-		void Throw();
+		void TryShoot();
 
 	UFUNCTION()
 		void SetAimingMode(bool bNewState);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FRotator GetAimingRotation(FVector BeginLocation);
-
-	UPROPERTY()
-		bool bIsAiming = false;
 
 // ------- Character Input Action ------- 
 public:
@@ -143,9 +140,6 @@ public:
 	//주변에 상호작용 가능한 액터를 조사한다.
 	UFUNCTION()
 		void TryInvestigate();
-
-	UFUNCTION()
-		virtual void TryReload() override;
 
 	UFUNCTION(BlueprintCallable)
 		virtual void TryAttack() override;

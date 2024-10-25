@@ -74,6 +74,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		TSoftObjectPtr<UStaticMesh> ProjectileMesh;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		float CollisionRadius = 18.0f;
+
 	//메시의 초기 위치 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		FVector InitialLocation = FVector::ZeroVector;
@@ -93,7 +96,7 @@ public:
 		TSoftObjectPtr<class UNiagaraSystem> TrailParticle;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
-		TSoftObjectPtr<class UNiagaraSystem> ExplosionParticle;
+		TSoftObjectPtr<class UNiagaraSystem> ExplodeParticle;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UParticleSystem> HitEffectParticleLegacy;

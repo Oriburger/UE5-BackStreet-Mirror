@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+Ôªø// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "RangedCombatManager.h"
@@ -7,10 +7,10 @@
 #include "../../../System/AssetSystem/AssetManagerBase.h"
 #include "../../../Global/BackStreetGameModeBase.h"
 #include "../../../Character/CharacterBase.h"
+#include "../../../Character/Component/ItemInventoryComponent.h"
 #include "../../../Character/MainCharacter/MainCharacterBase.h"
 #include "../../../Character/Component/WeaponComponentBase.h"
 #include "NiagaraFunctionLibrary.h"
-#define AUTO_RELOAD_DELAY_VALUE 0.1
 
 URangedCombatManager::URangedCombatManager()
 {
@@ -19,7 +19,7 @@ URangedCombatManager::URangedCombatManager()
 void URangedCombatManager::Attack()
 {
 	Super::Attack();
-
+	
 	bool result = TryFireProjectile();
 
 	if (AssetManagerRef.IsValid())
@@ -40,75 +40,65 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo
 		&& !OwnerCharacterRef->GetCharacterStat().bInfinite && WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount == 0)
 	{
-		if (OwnerCharacterRef->ActorHasTag("Player"))
-		{
-			GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("≈∫»Ø¿Ã ∫Œ¡∑«’¥œ¥Ÿ.")), FColor::White);
-		}
-
-		//StopAttack¿« ResetActionState∑Œ ¿Œ«ÿ Ω««‡¿Ã µ«¡ˆ æ ¥¬ «ˆªÛ πÊ¡ˆ∏¶ ¿ß«ÿ
-		//≈∏¿Ã∏”∏¶ ≈Î«ÿ ¿œ¡§ Ω√∞£¿Ã ¡ˆ≥≠ »ƒø° Reload∏¶ Ω√µµ.
-		GamemodeRef.Get()->GetWorldTimerManager().SetTimer(AutoReloadTimerHandle, OwnerCharacterRef.Get(), &ACharacterBase::TryReload, 1.0f, false, AUTO_RELOAD_DELAY_VALUE);
+		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Î≥¥Ï°∞Î¨¥Í∏∞Í∞Ä ÏóÜÏäµÎãàÎã§.")), FColor::White);
 		return false;
 	}
-
-	int32 fireProjectileCnt = OwnerCharacterRef.Get()->GetCharacterStat().ProjectileCountPerAttack;
 
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo 
 		&& !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
 	{
-		fireProjectileCnt = FMath::Min(fireProjectileCnt, WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount);
+		//ÌïúÎ≤à Î∞úÏÇ¨Îïå nÍ∞úÏùò ÌÉÑÌôòÏùÑ ÏÜåÎπÑÌïòÎäîÏßÄ?
+		//fireProjectileCnt = FMath::Min(fireProjectileCnt, WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount);
 		WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
 	}
-
-	FireRotationForTimer = FireRotationOverride;
-
-	for (int idx = 1; idx <= fireProjectileCnt; idx++)
+	
+	int32 fireCount = WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.ProjectileCountPerFire;
+	TArray<FRotator> rotationList = GetFireRotationList(fireCount);
+	for (int32 idx = 0; idx < fireCount; idx++)
 	{
-		FTimerHandle delayHandle;
-		GetWorld()->GetTimerManager().SetTimer(delayHandle, FTimerDelegate::CreateLambda([&]() {
-			AProjectileBase* newProjectile = CreateProjectile(FireRotationForTimer);
-			//Ω∫∆˘«— πﬂªÁ√º∞° Valid «œ¥Ÿ∏È πﬂªÁ
-			if (IsValid(newProjectile))
-			{
-				newProjectile->ActivateProjectileMovement();
-				SpawnShootNiagaraEffect(); //πﬂªÁøÕ µøΩ√ø° ¿ÃπÃ≈Õ∏¶ √‚∑¬«—¥Ÿ.
-			}
-		}), 0.1f * (float)idx, false);
+		FRotator fireRotation = FireRotationOverride;
+		if (rotationList.IsValidIndex(idx) && FireRotationOverride.IsNearlyZero(0.1f))
+		{
+			fireRotation = rotationList[idx];
+		}
+		
+		AProjectileBase* newProjectile = CreateProjectile(fireRotation);
+		//Ïä§Ìè∞Ìïú Î∞úÏÇ¨Ï≤¥Í∞Ä Valid ÌïòÎã§Î©¥ Î∞úÏÇ¨
+		if (IsValid(newProjectile))
+		{
+			newProjectile->ActivateProjectileMovement();
+			SpawnShootNiagaraEffect(); //Î∞úÏÇ¨ÏôÄ ÎèôÏãúÏóê Ïù¥ÎØ∏ÌÑ∞Î•º Ï∂úÎ†•ÌïúÎã§.
+		}
+	}
+
+	//broadcast delegate
+	const int32 weaponID = WeaponComponentRef.Get()->WeaponID;
+	const EWeaponType weaponType = WeaponComponentRef.Get()->GetWeaponStat().WeaponType;
+	const FWeaponStateStruct weaponState = WeaponComponentRef.Get()->GetWeaponState();
+	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponType, weaponState);
+
+	//ÌÉÑÌôòÏùÑ Îã§ ÏçºÏùÑ Í≤ΩÏö∞, Î™®Îì† ÌÉÑÌôòÏùÑ Î∞úÏÇ¨Ìïú Ïù¥ÌõÑ ÏïÑÎûò Î°úÏßÅÏùÑ Ï≤òÎ¶¨ÌïúÎã§
+	if (OwnerCharacterRef.Get()->ActorHasTag("Player")
+		&& WeaponComponentRef.Get()->GetWeaponState().RangedWeaponState.GetIsEmpty())
+	{
+		//Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->ZoomOut();
+		//Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->SwitchWeapon(false);
 	}
 	return true;
-}
-
-void URangedCombatManager::Reload()
-{
-	if (!GetCanReload()) return;
-
-	FWeaponStatStruct weaponStat = WeaponComponentRef.Get()->WeaponStat;
-	FWeaponStateStruct weaponState = WeaponComponentRef.Get()->WeaponState;
-	int32 addAmmoCnt = FMath::Min(weaponState.RangedWeaponState.ExtraAmmoCount, weaponStat.RangedWeaponStat.MaxAmmoPerMagazine);
-
-	if (addAmmoCnt + weaponState.RangedWeaponState.CurrentAmmoCount > weaponStat.RangedWeaponStat.MaxAmmoPerMagazine)
-	{
-		addAmmoCnt = (weaponStat.RangedWeaponStat.MaxAmmoPerMagazine - weaponState.RangedWeaponState.CurrentAmmoCount);
-	}
-	weaponState.RangedWeaponState.CurrentAmmoCount += addAmmoCnt;
-	weaponState.RangedWeaponState.ExtraAmmoCount -= addAmmoCnt;
-
-	//if (OwnerCharacterRef.IsValid())
-	//	OwnerCharacterRef.Get()->ResetActionState(true);
-
-	if (AssetManagerRef.IsValid())
-	{
-		AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon
-								, WeaponComponentRef.Get()->WeaponID, "Reload");
-	}
 }
 
 void URangedCombatManager::AddAmmo(int32 Count)
 {
 	if (WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo) return;
-	if (WeaponComponentRef.Get()->WeaponState.RangedWeaponState.ExtraAmmoCount >= 1e5) return;
-	WeaponComponentRef.Get()->WeaponState.RangedWeaponState.ExtraAmmoCount = 
-		(WeaponComponentRef.Get()->WeaponState.RangedWeaponState.ExtraAmmoCount + Count) % (int32)1e5;
+	
+	//broadcast delegate
+	const int32 weaponID = WeaponComponentRef.Get()->WeaponID;
+	const EWeaponType weaponType = WeaponComponentRef.Get()->GetWeaponStat().WeaponType;
+	FWeaponStateStruct weaponState = WeaponComponentRef.Get()->GetWeaponState();
+	weaponState.RangedWeaponState.CurrentAmmoCount += Count;
+	weaponState.RangedWeaponState.UpdateAmmoValidation(WeaponComponentRef.Get()->GetWeaponStat().RangedWeaponStat.MaxTotalAmmo);
+
+	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponType, weaponState);
 }
 
 AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOverride)
@@ -117,25 +107,25 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 	FWeaponStateStruct weaponState = WeaponComponentRef.Get()->WeaponState;
 
 	FActorSpawnParameters spawmParams;
-	spawmParams.Owner = OwnerCharacterRef.Get(); //Projectile¿« º“¿Ø¿⁄¥¬ Player
+	spawmParams.Owner = OwnerCharacterRef.Get(); //ProjectileÏùò ÏÜåÏú†ÏûêÎäî Player
 	spawmParams.Instigator = OwnerCharacterRef.Get()->GetInstigator();
 	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	FVector spawnLocation = OwnerCharacterRef.Get()->WeaponComponent->GetComponentLocation();
-	FRotator spawnRotation = FireRotationOverride.IsNearlyZero(0.001f) ?
+	FVector spawnLocation = OwnerCharacterRef.Get()->WeaponComponent->GetComponentLocation()
+							+ OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 25.0f;
+	FRotator spawnRotation = FireRotationOverride.IsNearlyZero(0.01f) ?
 								OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation()
 								: FireRotationOverride;
-
-
-	//ƒ≥∏Ø≈Õ¿« Forward πÊ«‚¿∏∑Œ ∏¬√Á¡ÿ¥Ÿ.
+	
+	//Ï∫êÎ¶≠ÌÑ∞Ïùò Forward Î∞©Ìñ•ÏúºÎ°ú ÎßûÏ∂∞Ï§ÄÎã§.
 	if (FireRotationOverride.IsNearlyZero(0.001f))
 	{
 		spawnRotation.Pitch = spawnRotation.Roll = 0.0f;
 		spawnRotation.Yaw += 90.0f;
 	}
 
-	FTransform SpawnTransform = { spawnRotation, spawnLocation, {1.0f, 1.0f, 1.0f} };
-	AProjectileBase* newProjectile = Cast<AProjectileBase>(GetWorld()->SpawnActor(AProjectileBase::StaticClass(), &SpawnTransform, spawmParams));
+	FTransform spawnTransform = { spawnRotation, spawnLocation, {1.0f, 1.0f, 1.0f} };
+	AProjectileBase* newProjectile = Cast<AProjectileBase>(GetWorld()->SpawnActor(AProjectileBase::StaticClass(), &spawnTransform, spawmParams));
 
 	if (IsValid(newProjectile) && WeaponComponentRef.Get()->ProjectileAssetInfo.ProjectileID != 0)
 	{
@@ -155,22 +145,44 @@ void URangedCombatManager::SetInfiniteAmmoMode(bool NewMode)
 
 int32 URangedCombatManager::GetLeftAmmoCount()
 {
-	return WeaponComponentRef.Get()->WeaponState.RangedWeaponState.ExtraAmmoCount
-			+ WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount;
+	return WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount;
 }
 
-bool URangedCombatManager::GetCanReload()
+TArray<FRotator> URangedCombatManager::GetFireRotationList(int32 FireCount)
 {
-	if (WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo) return false;
-	if (GetLeftAmmoCount() == 0) return false;
-	return true;
+	//RotationList for return
+	TArray<FRotator> rotationList;
+	//Get Character Rotation Yaw = Standard
+	float standardRotation = OwnerCharacterRef.Get()->GetActorRotation().Yaw;
+	//Get min and max Angle
+	float maxFireAngle = WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.MultipleMaxFireAngle / (FireCount + 1.0f);
+	float minFireAngle = -maxFireAngle;
+	float step = (maxFireAngle - minFireAngle) / (FireCount - 1.0f);
+	int32 halfReps = FireCount / 2;
+
+	//Calculation Rotation Yaw and add to rotationList
+	for (int32 idx = -halfReps; idx <= halfReps; idx++)
+	{
+		// idx == 0 add ZeroRotator
+		if (idx == 0)
+		{
+			rotationList.Add(FRotator::ZeroRotator);
+			continue;
+		}
+
+		//Calculation Yaw  
+		float resultYaw = static_cast<float>(idx) * step / halfReps;
+		rotationList.Add(FRotator(0.0f, standardRotation + resultYaw, 0.0f));
+	}
+
+	return rotationList;
 }
 
 void URangedCombatManager::SpawnShootNiagaraEffect()
 {
-	if (!OwnerCharacterRef.IsValid()) return;
+	if (!OwnerCharacterRef.IsValid() || !WeaponComponentRef.IsValid()) return;
 
-	FVector spawnLocation = OwnerCharacterRef.Get()->GetActorLocation() + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 50.0f;
-	FRotator spawnRotation = OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation() + FRotator(0.0f, 0.0f, 0.0f);
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShootNiagaraEmitter, spawnLocation, spawnRotation);
+	FVector spawnLocation = WeaponComponentRef.Get()->GetSocketLocation(FName("Muzzle"));
+	FRotator spawnRotation = WeaponComponentRef.Get()->GetComponentRotation() + FRotator(0.0f, 90.0f, 0.0f);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponComponentRef.Get()->ShootEffectParticle, spawnLocation, spawnRotation, FVector(0.1f));
 }
