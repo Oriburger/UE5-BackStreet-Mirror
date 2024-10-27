@@ -33,6 +33,8 @@ void UCraftingManagerComponent::InitCraftingManager()
 	
 	bIsSkillCreated = false;
 	bIsDisplayingSkillListSet = false;
+
+	UE_LOG(LogTemp, Warning, TEXT("UCraftingManagerComponent::InitCraftingManager()"));
 }
 
 bool UCraftingManagerComponent::GetIsItemEnough()
