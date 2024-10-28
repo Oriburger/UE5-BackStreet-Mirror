@@ -66,7 +66,7 @@ void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent
 	//If SkillActor's life span is sync with causer, then destroy with causer 
 	if (SkillStat.bIsLifeSpanWithCauser)
 	{
-		OwnerCharacterBaseRef->OnCharacterDied.AddDynamic(this, &ASkillBase::DestroySkill);
+		OwnerCharacterBaseRef->OnDeath.AddUObject(this, &ASkillBase::DestroySkill);
 	}
 }
 

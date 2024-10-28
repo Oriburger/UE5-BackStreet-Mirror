@@ -32,19 +32,17 @@ struct FActionInfo
 {
 	GENERATED_BODY()
 
-//===================================================================
-//====== Basic / Config   ===========================================
-
-	// 액션의 이름 
+	//===================================================================
+	//====== Basic / Config =============================================
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default")
-		FString ActionName;
+		FName ActionName;
 
 	// 액션의 Causer -> (Delegate Broadcast 주체, 이를 기반으로 바인딩을 진행)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default")
-		EActionCauserType ActionCauserType; 
+		EActionCauserType ActionCauserType;
 
 	// 액션의 시작 트리거 델리게이트
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Trigger")
 		FName StartTriggerName;
 		FDelegateHandle StartTrigger;
 
@@ -52,8 +50,13 @@ struct FActionInfo
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		bool bIsInstantAction;
 
+	//E_InProgress에서 자동으로 E_RecentlyFinished 로 전환되기까지 걸리는 시간
+	//InstantAction에서만 적용이 된다. 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config", meta = (EditCondition = "bIsInstantAction"))
+		float AutoFinishDelayForInstanceAction = 0.25f;
+
 	// 액션의 종료 트리거 델리게이트
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Trigger", meta = (EditCondition = "!bIsInstantAction"))
 		FName EndTriggerName;
 		FDelegateHandle EndTrigger;
 
@@ -61,37 +64,36 @@ struct FActionInfo
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		float CooldownTimeoutThreshold = 0.5f;
 
-//===================================================================
-//====== State ======================================================
-	// 현재 액션의 상태
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Action")
+	//===================================================================
+	//====== State ======================================================
+		// 현재 액션의 상태
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Action")
 		EActionState ActionState;
 
-	// 액션 지속 시간
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Action")
-		float Duration;
-
-	// 쿨다운 시간
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Action")
-		float CooldownTime;
-
-	// 남은 쿨다운 시간
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Action")
-		float RemainingCooldownTime;
-
-//===================================================================
-//====== Timer ======================================================
+	//===================================================================
+	//====== Timer ======================================================
 	FTimerHandle ActionResetTimerHandle;
+	FTimerHandle AutoFinishTimerHandle;
 	FTimerHandle GetTimerHandle() { return ActionResetTimerHandle; }
 
-//===================================================================
-//====== Function ===================================================
+	//===================================================================
+	//====== Function ===================================================
 	bool GetActionIsReady() { return ActionState == EActionState::E_Ready; }
 	bool GetActionIsActive() { return ActionState == EActionState::E_InProgress; }
-	bool GetActionIsRecentlyEnd() { return ActionState == EActionState::E_RecentlyFinished; } 
+	bool GetActionIsRecentlyEnd() { return ActionState == EActionState::E_RecentlyFinished; }
+	float GetRemainingTimeToReady(const UObject* WorldContextObject)
+	{
+		const UWorld* world = Cast<UWorld>(WorldContextObject);
+		if (IsValid(world))
+		{
+			return world->GetTimerManager().GetTimerRemaining(ActionResetTimerHandle);
+		}
+		return -1.0f;
+	}
 	bool TrySetActionState(EActionState NewState)
 	{
-		if (ActionState == NewState || NewState == EActionState::E_None) return false;
+		if (ActionState == NewState) return true;
+		if (NewState == EActionState::E_None) return false;
 
 		//액션 상태간 전환할 수 있는 그래프를 정의
 		switch (NewState)
@@ -109,10 +111,14 @@ struct FActionInfo
 		return true;
 	}
 
-	FActionInfo() : ActionState(EActionState::E_Ready), Duration(0.0f), CooldownTime(0.0f), RemainingCooldownTime(0.0f) {}
+	bool operator==(const FActionInfo& Other) const { return Other.ActionName == ActionName; }
+
+	FActionInfo() : ActionName(""), ActionCauserType(EActionCauserType::E_None)
+					, StartTriggerName(FName("")), bIsInstantAction(false), EndTriggerName(FName(""))
+					, ActionState(EActionState::E_Ready) {}
 };
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(Blueprintable)
 class BACKSTREET_API UActionTrackingComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -139,6 +145,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+private:
+	void PrintDebugMessage(float DeltaTime);
+
 //======================================================================
 //====== Monitor Function ==============================================
 public:	
@@ -151,8 +160,12 @@ private:
 	bool bIsEnabled = false;
 
 // delegate bind 전용 내부 함수
-private:
+protected:
+	UFUNCTION()
+		void TryUpdateActionState(FName ActionName, EActionState NewState);
 
+	UFUNCTION()
+		void SetAutoTransitionTimer(FName ActionName, EActionState NewState, float DelayValueOverride = -1.0f);
 
 //======================================================================
 //====== Monitor Property ==============================================
@@ -175,4 +188,6 @@ protected:
 //====== etc ==========================================================
 protected:
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
+
+	TWeakObjectPtr<class UWeaponComponentBase> WeaponComponentRef;
 };

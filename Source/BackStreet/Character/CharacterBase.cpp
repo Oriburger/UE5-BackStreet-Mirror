@@ -33,6 +33,7 @@ ACharacterBase::ACharacterBase()
 	WeaponComponent->SetupAttachment(GetMesh());
 
 	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
+	InitializeActionTriggerDelegateMap();
 }
 
 // Called when the game starts or when spawned
@@ -61,6 +62,30 @@ void ACharacterBase::Tick(float DeltaTime)
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void ACharacterBase::InitializeActionTriggerDelegateMap()
+{ 
+	//Init List, 액션 및 델리게이트 추가 시 필수
+	ActionTriggerDelegateMap.Empty();
+	ActionTriggerDelegateMap.Add("OnMoveStarted", &OnMoveStarted);
+	ActionTriggerDelegateMap.Add("OnJumpStarted", &OnJumpStarted);
+	ActionTriggerDelegateMap.Add("OnJumpEnd", &OnJumpEnd);
+	ActionTriggerDelegateMap.Add("OnRollStarted", &OnRollStarted);
+	ActionTriggerDelegateMap.Add("OnSprintStarted", &OnSprintStarted);
+	ActionTriggerDelegateMap.Add("OnSprintEnd", &OnSprintEnd);
+	ActionTriggerDelegateMap.Add("OnRollEnded", &OnRollEnded);
+	ActionTriggerDelegateMap.Add("OnAttackStarted", &OnAttackStarted);
+	ActionTriggerDelegateMap.Add("OnDashAttackStarted", &OnDashAttackStarted);
+	ActionTriggerDelegateMap.Add("OnDamageReceived", &OnDamageReceived);
+	ActionTriggerDelegateMap.Add("OnSkillStarted", &OnSkillStarted);
+	ActionTriggerDelegateMap.Add("OnSkillEnded", &OnSkillEnded);
+	ActionTriggerDelegateMap.Add("OnDeath", &OnDeath);
+}
+
+void ACharacterBase::Test()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Wayrano~~~"));
 }
 
 void ACharacterBase::ResetAtkIntervalTimer()
@@ -154,6 +179,7 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 {
 	CharacterState.bIsAirAttacking = false;
 	CharacterState.bIsDownwardAttacking = false;
+	OnJumpEnd.Broadcast();
 
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
 	{
@@ -296,7 +322,6 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	// ======= Damage & Die event ===============================
 	const float& totalHealthValue = CharacterState.TotalHP;
 	float oldClampedHealthValue = CharacterState.CurrentHP;
 	float newClampedHealthValue = 0.0f;
@@ -306,9 +331,11 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	
 	oldClampedHealthValue = UKismetMathLibrary::MapRangeClamped(oldClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
 	newClampedHealthValue = UKismetMathLibrary::MapRangeClamped(newClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
-
+	
 	OnHealthChanged.Broadcast(oldClampedHealthValue, newClampedHealthValue);
+	OnDamageReceived.Broadcast();
 
+	// =========== 사망 및 애니메이션 처리 ==============
 	if (CharacterState.CurrentHP == 0.0f)
 	{
 		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
@@ -394,7 +421,7 @@ void ACharacterBase::TakeHeal(float HealAmount, bool bIsTimerEvent, uint8 BuffDe
 	float newClampedHealthValue = 0.0f;
 	CharacterState.CurrentHP += HealAmount;
 	newClampedHealthValue = CharacterState.CurrentHP = FMath::Min(CharacterStat.DefaultHP, CharacterState.CurrentHP);
-	OnTakeDamage.Broadcast();
+	OnDamageReceived.Broadcast();
 	
 	oldClampedHealthValue = UKismetMathLibrary::MapRangeClamped(oldClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
 	newClampedHealthValue = UKismetMathLibrary::MapRangeClamped(newClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
@@ -433,7 +460,7 @@ void ACharacterBase::Die()
 	GetCharacterMovement()->Deactivate();
 	bUseControllerRotationYaw = false;
 
-	OnCharacterDied.Broadcast();
+	OnDeath.Broadcast();
 
 	if (AssetHardPtrInfo.DieAnimMontageList.Num() > 0
 		&& IsValid(AssetHardPtrInfo.DieAnimMontageList[0]))
@@ -506,6 +533,7 @@ void ACharacterBase::TryAttack()
 		&& IsValid(targetAnimList[nextAnimIdx]))
 	{
 		PlayAnimMontage(targetAnimList[nextAnimIdx], attackSpeed + 0.25f);
+		OnAttackStarted.Broadcast();
 	}
 }
 
@@ -553,6 +581,7 @@ void ACharacterBase::TryDashAttack()
 
 	// Activate dash anim with interp to target location
 	PlayAnimMontage(AssetHardPtrInfo.DashAttackAnimMontage);
+	OnDashAttackStarted.Broadcast();
 }
 
 void ACharacterBase::DashAttack()

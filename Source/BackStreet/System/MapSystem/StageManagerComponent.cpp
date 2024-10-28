@@ -33,7 +33,7 @@ void UStageManagerComponent::BeginPlay()
 	ACharacter* playerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	if (IsValid(playerCharacter))
 	{
-		Cast<ACharacterBase>(playerCharacter)->OnCharacterDied.AddDynamic(this, &UStageManagerComponent::SetGameIsOver);
+		Cast<ACharacterBase>(playerCharacter)->OnDeath.AddUObject(this, &UStageManagerComponent::SetGameIsOver);
 	}
 	ChapterManagerRef = Cast<ANewChapterManagerBase>(GetOwner());
 	PlayerRef = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));

@@ -279,6 +279,7 @@ void AMainCharacterBase::TryShoot()
 		&& IsValid(AssetHardPtrInfo.ShootAnimMontageList[0]))
 	{
 		PlayAnimMontage(AssetHardPtrInfo.ShootAnimMontageList[0], 1.0f);
+		OnAttackStarted.Broadcast();
 	}
 }
 
@@ -338,6 +339,7 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 		AddMovementInput(forwardAxis, MovementInputValue.Y);
 		AddMovementInput(FollowingCamera->GetRightVector(), MovementInputValue.X);
 
+		OnMoveStarted.Broadcast();
 		SetRotationLagSpeed(Value.Get<FVector2D>());
 	}
 }
@@ -370,6 +372,7 @@ void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
 
 	Jump();
+	OnJumpStarted.Broadcast();
 }
 
 void AMainCharacterBase::Sprint(const FInputActionValue& Value)
@@ -383,6 +386,7 @@ void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 	CharacterState.bIsSprinting = true;
 	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed, 0.75f);
 	SetFieldOfViewWithInterp(105.0f, 0.25f);
+	OnSprintStarted.Broadcast();
 }
 
 void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
@@ -392,6 +396,7 @@ void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 	CharacterState.bIsSprinting = false;
 	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed * 0.75f, 0.4f);
 	SetFieldOfViewWithInterp(90.0f, 0.5f);
+	OnSprintEnd.Broadcast();
 }
 
 void AMainCharacterBase::Roll()
@@ -445,6 +450,7 @@ void AMainCharacterBase::Roll()
 		&& IsValid(AssetHardPtrInfo.RollAnimMontageList[0]))
 	{
 		PlayAnimMontage(AssetHardPtrInfo.RollAnimMontageList[0], 1.0f);
+		OnRollStarted.Broadcast();
 	}	
 }
 
@@ -491,7 +497,6 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 		GetWorld()->GetTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 		GetWorld()->GetTimerManager().SetTimer(FacialEffectResetTimerHandle, this, &AMainCharacterBase::ResetFacialDamageEffect, 1.0f, false);
 	}*/
-	OnTakeDamage.Broadcast();
 	return damageAmount;
 }
 
