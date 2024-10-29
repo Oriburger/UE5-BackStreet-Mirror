@@ -180,9 +180,9 @@ TArray<FRotator> URangedCombatManager::GetFireRotationList(int32 FireCount)
 
 void URangedCombatManager::SpawnShootNiagaraEffect()
 {
-	if (!OwnerCharacterRef.IsValid()) return;
+	if (!OwnerCharacterRef.IsValid() || !WeaponComponentRef.IsValid()) return;
 
-	FVector spawnLocation = OwnerCharacterRef.Get()->GetActorLocation() + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 50.0f;
-	FRotator spawnRotation = OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation() + FRotator(0.0f, 0.0f, 0.0f);
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShootNiagaraEmitter, spawnLocation, spawnRotation);
+	FVector spawnLocation = WeaponComponentRef.Get()->GetSocketLocation(FName("Muzzle"));
+	FRotator spawnRotation = WeaponComponentRef.Get()->GetComponentRotation() + FRotator(0.0f, 90.0f, 0.0f);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponComponentRef.Get()->ShootEffectParticle, spawnLocation, spawnRotation, FVector(0.1f));
 }
