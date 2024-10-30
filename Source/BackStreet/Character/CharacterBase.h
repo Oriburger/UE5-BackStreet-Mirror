@@ -47,10 +47,6 @@ public:
 	// Sets default values for this character's properties
 	ACharacterBase();
 
-	UFUNCTION()
-		void Test();
-		
-
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -118,7 +114,7 @@ public:
 
 	//플레이어가 현재 해당 Action을 수행하고 있는지 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsActionActive(ECharacterActionType Type) { return CharacterState.CharacterActionState == Type; }
+		bool GetIsActionActive(ECharacterActionType Type) { return CharacterGameplayInfo.CharacterActionState == Type; }
 
 	//플레이어의 ActionState를 Idle로 전환한다.
 	UFUNCTION(BlueprintCallable)
@@ -193,9 +189,23 @@ protected:
 //========================================================================
 //====== Stat / State ====================================================
 public:
-	//캐릭터의 상태 정보를 초기화
-	UFUNCTION()
-		void InitCharacterState();
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FCharacterGameplayInfo& GetCharacterGameplayInfoRef() { return CharacterGameplayInfo; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FCharacterGameplayInfo GetCharacterGameplayInfo() { return CharacterGameplayInfo; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetStatTotalValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetTotalValue(TargetStatType); }
+
+	UFUNCTION(BlueprintCallable)
+		void InitCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetCurrentHP();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetMaxHP();
 
 	//캐릭터의 디버프 정보를 업데이트
 	UFUNCTION(BlueprintCallable)
@@ -205,34 +215,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetDebuffIsActive(ECharacterDebuffType DebuffType);
 
-	//Update Character's stat and state
-	UFUNCTION(BlueprintCallable)
-		void UpdateCharacterStatAndState(FCharacterStatStruct NewStat, FCharacterStateStruct NewState);
-
-	//캐릭터의 스탯을 업데이트
-	UFUNCTION(BlueprintCallable)
-		void UpdateCharacterStat(FCharacterStatStruct NewStat);
-
-	UFUNCTION(BlueprintCallable)
-		void UpdateCharacterState(FCharacterStateStruct NewState);
-
 	UFUNCTION(BlueprintCallable)
 		void UpdateWeaponStat(FWeaponStatStruct NewStat);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FCharacterStatStruct GetCharacterStat() { return CharacterStat; }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FCharacterStateStruct GetCharacterState() { return CharacterState; }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetMaxComboCount() { return AssetHardPtrInfo.MeleeAttackAnimMontageList.Num(); }
-
-private:
-	//Calculate Total Stat Value
-	UFUNCTION()
-		float GetTotalStatValue(float& DefaultValue, FStatInfoStruct& AbilityInfo, FStatInfoStruct& SkillInfo, FStatInfoStruct& DebuffInfo);
-
+		
 //========================================================================
 //====== Asset / Weapon ==================================================
 public:
@@ -282,11 +270,10 @@ public:
 protected:
 	//캐릭터의 스탯
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		FCharacterStatStruct CharacterStat;
+		FCharacterDefaultStat DefaultStat;
 
-	//캐릭터의 현재 상태
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
-		FCharacterStateStruct CharacterState;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
+		FCharacterGameplayInfo CharacterGameplayInfo;
 
 	//Gamemode 약 참조
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;

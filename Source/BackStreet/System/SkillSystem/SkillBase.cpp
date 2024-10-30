@@ -117,6 +117,7 @@ void ASkillBase::PlaySingleSound(FName SoundName)
 
 float ASkillBase::PlayAnimMontage(ACharacter* Target, FName AnimName)
 {
+	UE_LOG(LogTemp, Warning, TEXT("ASkillBase::PlayAnimMontage %s"), *AnimName.ToString());
 	if(!SkillStat.SkillAssetStruct.AnimInfoMap.Contains(AnimName)) return 0.0f;
 	FSkillAnimInfoStruct* skillAnimInfo = SkillStat.SkillAssetStruct.AnimInfoMap.Find(AnimName);
 	checkf(skillAnimInfo != nullptr, TEXT("SkillAnimAsset is not valid"));

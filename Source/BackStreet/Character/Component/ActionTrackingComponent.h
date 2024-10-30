@@ -154,10 +154,20 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsEnabled() { return bIsEnabled; }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsActionReady(FName ActionName);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsActionInProgress(FName ActionName);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsActionRecentlyFinished(FName ActionName);
+
 //타이머 이벤트 bind 전용 함수
 private:
 	void SetActionResetTimer(FTimerHandle& TimerHandle, float& TimeoutValue, bool& Target);
 	bool bIsEnabled = false;
+
 
 // delegate bind 전용 내부 함수
 protected:
@@ -166,6 +176,9 @@ protected:
 
 	UFUNCTION()
 		void SetAutoTransitionTimer(FName ActionName, EActionState NewState, float DelayValueOverride = -1.0f);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		EActionState GetActionState(FName ActionName);
 
 //======================================================================
 //====== Monitor Property ==============================================

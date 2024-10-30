@@ -126,7 +126,7 @@ void UTargetingManagerComponent::UpdateTargetedCandidate()
 		OnTargetUpdated.Broadcast(TargetedCandidate.Get());
 	}
 
-	if (TargetedCandidate.IsValid() && !OwnerCharacter.Get()->GetCharacterState().bIsAirAttacking)
+	if (TargetedCandidate.IsValid() && !OwnerCharacter.Get()->GetCharacterGameplayInfo().bIsAirAttacking)
 	{
 		if (FVector::Dist(OwnerCharacter.Get()->GetActorLocation(), TargetedCandidate.Get()->GetActorLocation()) > TargetingMaintainThreashold)
 		{

@@ -33,9 +33,7 @@ void UAbilityManagerComponent::InitAbilityManager(ACharacterBase* NewCharacter)
 bool UAbilityManagerComponent::TryAddNewAbility(int32 AbilityID)
 {
 	if (!OwnerCharacterRef.IsValid()) return false;
-	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
-	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
-
+	
 	if (GetIsAbilityActive(AbilityID)) return false;
 	if (ActiveAbilityInfoList.Num() >= MaxAbilityCount) return false;
 	FAbilityInfoStruct newAbilityInfo = GetAbilityInfo(AbilityID);
@@ -89,8 +87,12 @@ bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct T
 	//Validity 체크 (꺼져있는데 제거를 시도하거나, 켜져있는데 추가를 시도한다면?)
 	if (GetIsAbilityActive(TargetAbilityInfo.AbilityId) != bIsReset) return false;
 	
-	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
-	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
+	FCharacterGameplayInfo& ownerInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfoRef();
+	if (!ownerInfo.IsValid())
+	{
+		UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat / ownerInfo is not valid"));
+		return false;
+	}
 
 	for (int statIdx = 0; statIdx < TargetAbilityInfo.AbilityTypeList.Num(); statIdx++)
 	{
@@ -108,74 +110,38 @@ bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct T
 		case ECharacterAbilityType::E_AutoHeal:
 			break;
 		case ECharacterAbilityType::E_MaxHP:
-			if (bIsPercentage)
-			{
-				characterState.AbilityHP.PercentValue += targetVariable;
-			}
-			else
-			{
-				characterState.AbilityHP.FixedValue += targetVariable;
-			}
+			ownerInfo.SetAbilityStatInfo(ECharacterStatType::E_MaxHealth, targetVariable);
 			break;
 		case ECharacterAbilityType::E_AttackUp:
-			if (bIsPercentage)
-			{
-				characterState.AbilityAttack.PercentValue += targetVariable;
-			}
-			else
-			{
-				characterState.AbilityAttack.FixedValue += targetVariable;
-			}
+			ownerInfo.SetAbilityStatInfo(ECharacterStatType::E_NormalPower, targetVariable);
 			break;
 		case ECharacterAbilityType::E_DefenseUp:
-			if (bIsPercentage)
-			{
-				characterState.AbilityDefense.PercentValue += targetVariable;
-			}
-			else
-			{
-				characterState.AbilityDefense.FixedValue += targetVariable;
-			}
+			ownerInfo.SetAbilityStatInfo(ECharacterStatType::E_Defense, targetVariable);
 			break;
 		case ECharacterAbilityType::E_MoveSpeedUp:
-			if (bIsPercentage)
-			{
-				characterState.AbilityMoveSpeed.PercentValue += targetVariable;
-			}
-			else
-			{
-				characterState.AbilityMoveSpeed.FixedValue += targetVariable;
-			}
+			ownerInfo.SetAbilityStatInfo(ECharacterStatType::E_MoveSpeed, targetVariable);
 			break;
 		case ECharacterAbilityType::E_AtkSpeedUp:
-			if (bIsPercentage)
-			{
-				characterState.AbilityAttackSpeed.PercentValue += targetVariable;
-			}
-			else
-			{
-				characterState.AbilityAttackSpeed.FixedValue += targetVariable;
-			}
+			//ownerInfo.SetAbilityStatInfo(ECharacterStatType::, targetVariable);
 			break;
 		case ECharacterAbilityType::E_MultipleShot:
 			//characterStat.ProjectileCountPerAttack += targetVariable;
 			break;
 		case ECharacterAbilityType::E_LargeWishList:
-			characterStat.MaxKeepingSkillCount += targetVariable;
+			ownerInfo.MaxKeepingSkillCount += targetVariable;
 			break;
 		case ECharacterAbilityType::E_ExtraTime:
-			characterStat.ExtraStageTime += targetVariable;
+			ownerInfo.ExtraStageTime += targetVariable;
 			break;
 		case ECharacterAbilityType::E_LuckyMaterial:
-			characterStat.ExtraPercentageUnivMaterial += targetVariable;
+			ownerInfo.ExtraPercentageUnivMaterial += targetVariable;
 			break;
 		case ECharacterAbilityType::E_InfiniteSkillMaterial:
-			characterStat.bInfiniteSkillMaterial = (bool)targetVariable;
+			ownerInfo.bInfiniteSkillMaterial = (bool)targetVariable;
 			break;
 		}	
 	}
-	OwnerCharacterRef.Get()->UpdateCharacterStatAndState(characterStat, characterState);
-
+	
 	return true;
 }
 

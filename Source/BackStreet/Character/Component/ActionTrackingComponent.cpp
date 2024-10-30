@@ -8,7 +8,7 @@
 // Sets default values for this component's properties
 UActionTrackingComponent::UActionTrackingComponent()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 //====================================================================
@@ -91,8 +91,6 @@ void UActionTrackingComponent::Deactivate()
 	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 }
 
-
-
 // Called every frame
 void UActionTrackingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -128,7 +126,21 @@ void UActionTrackingComponent::PrintDebugMessage(float DeltaTime)
 		GEngine->AddOnScreenDebugMessage(keyId++, DeltaTime, FColor::Yellow, str);
 	}
 	GEngine->AddOnScreenDebugMessage(keyId, DeltaTime, FColor::Yellow, FString("[------- Action Tracking Debug Message -------]"));
+}
 
+bool UActionTrackingComponent::GetIsActionReady(FName ActionName)
+{
+	return GetActionState(ActionName) == EActionState::E_Ready;
+}
+
+bool UActionTrackingComponent::GetIsActionInProgress(FName ActionName)
+{
+	return GetActionState(ActionName) == EActionState::E_InProgress;
+}
+
+bool UActionTrackingComponent::GetIsActionRecentlyFinished(FName ActionName)
+{
+	return GetActionState(ActionName) == EActionState::E_RecentlyFinished;
 }
 
 //======================================================================
@@ -175,4 +187,15 @@ void UActionTrackingComponent::SetAutoTransitionTimer(FName ActionName, EActionS
 	const float delayValue = DelayValueOverride <= 0.0f ? actionInfo.CooldownTimeoutThreshold : DelayValueOverride;
 	FTimerHandle& targetHandle = (NewState == EActionState::E_RecentlyFinished ? actionInfo.AutoFinishTimerHandle : actionInfo.ActionResetTimerHandle);
 	GetWorld()->GetTimerManager().SetTimer(targetHandle, timerDelegate, delayValue, false);
+}
+
+EActionState UActionTrackingComponent::GetActionState(FName ActionName)
+{
+	if (!ActionInfoMap.Contains(ActionName))
+	{
+		UE_LOG(LogTemp, Error, TEXT("UActionTrackingComponent::GetActionState - Action / %s / is not found"), *ActionName.ToString());
+		return EActionState::E_None;
+	}
+	FActionInfo& actionInfo = ActionInfoMap[ActionName];
+	return actionInfo.ActionState;
 }

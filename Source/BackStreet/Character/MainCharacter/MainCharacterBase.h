@@ -165,10 +165,6 @@ public:
 	UFUNCTION()
 		virtual void StandUp() override;
 
-	//Rotation 조절 방식을 기본 방식인 Movement 방향으로 되돌린다
-	UFUNCTION(BlueprintCallable)
-		void ResetRotationToMovement();
-
 	//Targeting system
 	UFUNCTION()
 		void LockToTarget(const FInputActionValue& Value);
@@ -176,10 +172,6 @@ public:
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 			, AController* EventInstigator, AActor* DamageCauser) override;
-
-	//Rotation 조절 방식을 커서 위치로 한다
-	UFUNCTION(BlueprintCallable)
-		void RotateToCursor();
 
 	UFUNCTION()
 		TArray<class UInteractiveCollisionComponent*> GetNearInteractionComponentList();

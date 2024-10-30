@@ -157,7 +157,7 @@ public:
 
 	//Calculate total damage to target character
 	UFUNCTION()
-		float CalculateTotalDamage(FCharacterStateStruct TargetState);
+		float CalculateTotalDamage(FCharacterGameplayInfo TargetState);
 
 // ======		Upgrade		================
 public:	

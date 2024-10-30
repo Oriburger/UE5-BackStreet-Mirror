@@ -75,9 +75,10 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		EnemyStat = *newStat;
 
 		//Set CharacterStat with setting default additional stat bInfinite (infinite use of ammo)
-		UpdateCharacterStat(EnemyStat.CharacterStat);
-		CharacterStat.bInfinite = true;
-		CharacterState.CurrentHP = EnemyStat.CharacterStat.DefaultHP;
+		FCharacterGameplayInfo newInfo = FCharacterGameplayInfo(EnemyStat.DefaultStat);
+		newInfo.CharacterID = NewCharacterID;
+		InitCharacterGameplayInfo(newInfo);
+		CharacterGameplayInfo.bInfinite = true;
 		SetDefaultWeapon();
 	}
 
@@ -116,27 +117,27 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterStat.bIsInvincibility) return 0.0f;
+	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterGameplayInfo.bIsInvincibility) return 0.0f;
 
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 	SetInstantHpWidgetVisibility();
 	
-	FloatingHpBar->SetVisibility(CharacterState.CurrentHP > 0.0f);
+	FloatingHpBar->SetVisibility(CharacterGameplayInfo.CurrentHP > 0.0f);
 
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill) return damageAmount;
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Skill) return damageAmount;
 
 	if (DamageCauser->ActorHasTag("Player"))
 	{
 		//apply fov hit effect by damage amount
 		float fovValue = 90.0f + FMath::Clamp(DamageAmount/100.0f, 0.0f, 1.0f) * 45.0f;
-		if (Cast<AMainCharacterBase>(DamageCauser)->GetCharacterState().bIsDownwardAttacking)
+		if (Cast<AMainCharacterBase>(DamageCauser)->GetCharacterGameplayInfo().bIsDownwardAttacking)
 		{
 			fovValue = 120.0f;
 		}
 		Cast<AMainCharacterBase>(DamageCauser)->SetFieldOfViewWithInterp(fovValue, 5.0f, true);
 	}	
 	
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Hit)
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Hit)
 	{
 		GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, this, &AEnemyCharacterBase::ResetActionStateForTimer, 1.0f, false, CharacterID == 1200 ? 0.1f : 0.5f);
 	}
@@ -175,8 +176,7 @@ void AEnemyCharacterBase::Attack()
 {
 	Super::Attack();
 
-	float attackSpeed = 0.5f;
-	attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * WeaponComponent->GetWeaponStat().WeaponAtkSpeedRate);
+	const float attackSpeed = FMath::Min(1.5f, CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_NormalAttackSpeed) * WeaponComponent->WeaponStat.WeaponAtkSpeedRate);
 
 	GetWorldTimerManager().SetTimer(AtkIntervalHandle, this, &ACharacterBase::ResetAtkIntervalTimer
 		, 1.0f, false, FMath::Max(0.0f, 1.5f - attackSpeed));
