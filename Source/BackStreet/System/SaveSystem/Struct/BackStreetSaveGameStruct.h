@@ -13,8 +13,8 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	//======= SaveData of Character Default Stat ======================
-	UPROPERTY(BlueprintReadWrite)
-		FCharacterStatStruct PlayerStat;
+	///BUPROPERTY(BlueprintReadWrite)
+//		FCharacterStatStruct PlayerStat;
 	
 	UPROPERTY(BlueprintReadWrite)
 		TMap<int32, FItemInfoDataStruct> ItemMap;

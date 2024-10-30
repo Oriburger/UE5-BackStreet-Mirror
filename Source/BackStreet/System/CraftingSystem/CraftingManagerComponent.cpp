@@ -39,7 +39,7 @@ void UCraftingManagerComponent::InitCraftingManager()
 
 bool UCraftingManagerComponent::GetIsItemEnough()
 {
-	if(MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
+	if(MainCharacterRef->GetCharacterGameplayInfo().bInfiniteSkillMaterial) return true;
 	TMap<ECraftingItemType, uint8> currItemMap = MainCharacterRef->ItemInventory->GetAllCraftingItemAmount();
 
 	TArray<int32> itemIdList; RequiredItemInfo.GenerateKeyArray(itemIdList);
@@ -62,7 +62,7 @@ bool UCraftingManagerComponent::GetIsItemEnough()
 
 bool UCraftingManagerComponent::GetIsItemEnoughForCraft(int32 SkillID)
 {
-	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
+	if (MainCharacterRef->GetCharacterGameplayInfo().bInfiniteSkillMaterial) return true;
 	TMap<int32, int32> craftMaterialInfo = GetSkillCraftMaterialInfo(SkillID);
 	TMap<ECraftingItemType, uint8> currItemMap = MainCharacterRef->ItemInventory->GetAllCraftingItemAmount();
 	TArray<int32> idList; craftMaterialInfo.GenerateKeyArray(idList);
@@ -78,7 +78,7 @@ bool UCraftingManagerComponent::GetIsItemEnoughForCraft(int32 SkillID)
 
 bool UCraftingManagerComponent::ConsumeItem()
 {
-	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial) return true;
+	if (MainCharacterRef->GetCharacterGameplayInfo().bInfiniteSkillMaterial) return true;
 
 	TArray<int32> itemIdList; RequiredItemInfo.GenerateKeyArray(itemIdList);
 	for (int32 requiredItemId : itemIdList)
@@ -100,7 +100,7 @@ bool UCraftingManagerComponent::ConsumeItem()
 bool UCraftingManagerComponent::GetIsSkillKeepingAvailable()
 {
 	if (!SkillManagerRef.IsValid()) return false;
-	if(SkillManagerRef->KeepSkillList.Num()>MainCharacterRef->GetCharacterStat().MaxKeepingSkillCount	) return false;
+	if(SkillManagerRef->KeepSkillList.Num()>MainCharacterRef->GetCharacterGameplayInfo().MaxKeepingSkillCount	) return false;
 	return true;
 }
 
@@ -231,7 +231,7 @@ TMap<int32, int32> UCraftingManagerComponent::GetSkillCraftMaterialInfo(int32 Sk
 TMap<int32, int32> UCraftingManagerComponent::UpdateSkillUpgradeRequiredItemList(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel)
 {
 	if (!SkillManagerRef.IsValid()) return TMap<int32, int32>();
-	if (MainCharacterRef->GetCharacterStat().bInfiniteSkillMaterial && NewLevel == 1) return TMap<int32, int32>();
+	if (MainCharacterRef->GetCharacterGameplayInfo().bInfiniteSkillMaterial && NewLevel == 1) return TMap<int32, int32>();
 	RequiredItemInfo.Empty();
 	
 	uint8 currSkillLevel = 0;

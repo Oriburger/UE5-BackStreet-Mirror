@@ -38,14 +38,14 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 {
 	if (!OwnerCharacterRef.IsValid()) return false;
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo
-		&& !OwnerCharacterRef->GetCharacterStat().bInfinite && WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount == 0)
+		&& !OwnerCharacterRef->GetCharacterGameplayInfo().bInfinite && WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount == 0)
 	{
 		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("보조무기가 없습니다.")), FColor::White);
 		return false;
 	}
 
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo 
-		&& !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
+		&& !OwnerCharacterRef.Get()->GetCharacterGameplayInfo().bInfinite)
 	{
 		//한번 발사때 n개의 탄환을 소비하는지?
 		//fireProjectileCnt = FMath::Min(fireProjectileCnt, WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount);

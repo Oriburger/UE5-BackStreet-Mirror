@@ -303,11 +303,11 @@ uint8 UWeaponComponentBase::GetMaxStatLevel(EWeaponStatType WeaponStatType)
 	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].StatInfoByLevel.Num() - 1;
 }
 
-float UWeaponComponentBase::CalculateTotalDamage(FCharacterStateStruct TargetState)
+float UWeaponComponentBase::CalculateTotalDamage(FCharacterGameplayInfo TargetState)
 {
 	if (!OwnerCharacterRef.IsValid()) return 0.0f;
-	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
-	return WeaponStat.WeaponDamage * (1 + FMath::Max(-1, ownerState.TotalAttack - TargetState.TotalDefense))
+	FCharacterGameplayInfo ownerState = OwnerCharacterRef.Get()->GetCharacterGameplayInfo();
+	return WeaponStat.WeaponDamage * (1 + FMath::Max(-1, ownerState.GetTotalValue(ECharacterStatType::E_NormalPower) - TargetState.GetTotalValue(ECharacterStatType::E_Defense)))
 		* (1 + WeaponStat.bCriticalApply * WeaponStat.CriticalDamageRate)
 		+ (!WeaponStat.bFixDamageApply ? 0.0f : WeaponStat.FixedDamageAmount);
 }

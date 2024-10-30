@@ -10,7 +10,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateWeaponUpdated);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDelegateWeaponStateUpdated, int32, WeaponID, EWeaponType, WeaponType, FWeaponStateStruct, NewState);
 
-UCLASS()
+UCLASS(Blueprintable)
 class BACKSTREET_API UWeaponComponentBase : public UStaticMeshComponent
 {
 	GENERATED_BODY()
@@ -157,7 +157,7 @@ public:
 
 	//Calculate total damage to target character
 	UFUNCTION()
-		float CalculateTotalDamage(FCharacterStateStruct TargetState);
+		float CalculateTotalDamage(FCharacterGameplayInfo TargetState);
 
 // ======		Upgrade		================
 public:	
