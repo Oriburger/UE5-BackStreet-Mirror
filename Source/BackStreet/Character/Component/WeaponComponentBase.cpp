@@ -66,6 +66,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 {
 	//Stat, State 초기화 
 	int32 oldWeaponID = WeaponID;
+	bool bIsCached = false;
 	WeaponStat.WeaponID = WeaponID = NewWeaponID;
 
 	//기존꺼 저장
@@ -86,6 +87,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	}
 	else
 	{
+		bIsCached = WeaponStatCacheMap.Contains(NewWeaponID);
 		WeaponStat = WeaponStatCacheMap.Contains(NewWeaponID)
 					? WeaponStatCacheMap[NewWeaponID]
 					: GetWeaponStatInfoWithID(WeaponID);
@@ -99,15 +101,6 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_FinalAttack, 0);
 		}
 		WeaponState.RangedWeaponState.UpdateAmmoValidation(WeaponStat.RangedWeaponStat.MaxTotalAmmo);
-	}
-
-	//에셋까지 있다면 그냥 반환
-	if(WeaponAssetCacheMap.Contains(NewWeaponID))
-	{
-		WeaponAssetInfo = WeaponAssetCacheMap[NewWeaponID];
-		SetProjectileInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
-		InitWeaponAsset();
-		return;
 	}
 
 	//에셋 초기화
@@ -143,8 +136,9 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &UWeaponComponentBase::InitWeaponAsset));
 	}
-	if (WeaponStat.WeaponType == EWeaponType::E_Melee)
+	if (!bIsCached && WeaponStat.WeaponType == EWeaponType::E_Melee)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("On Main Weapon Updated : %d %d"), WeaponStat.WeaponID, (int32)WeaponStat.WeaponType)
 		OnMainWeaponUpdated.Broadcast();
 	}
 	OnWeaponStateUpdated.Broadcast(WeaponID, WeaponStat.WeaponType, WeaponState);
