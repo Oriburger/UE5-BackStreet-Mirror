@@ -157,7 +157,11 @@ public:
 
 	//Calculate total damage to target character
 	UFUNCTION()
-		float CalculateTotalDamage(FCharacterGameplayInfo TargetState);
+		float CalculateTotalDamage(FCharacterGameplayInfo TargetState, bool& bIsFatalAttack);
+
+private:
+	float CalculateAttackFatality(FCharacterGameplayInfo& GameplayInfoRef
+			, bool bIsJumpAttacking = false, bool bIsDashAttacking = false);
 
 // ======		Upgrade		================
 public:	

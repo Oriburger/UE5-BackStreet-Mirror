@@ -31,25 +31,25 @@ enum class ECharacterStatType : uint8
 	E_MoveSpeed				UMETA(DisplayName = "MoveSpeed"),
 	E_RollDelay				UMETA(DisplayName = "RollDelay"),
 
-	E_NormalPower			UMETA(DisplayName = "NormalPower"),
-	E_NormalAttackSpeed			UMETA(DisplayName = "NormalSpeed"),
-	E_NormalFatality		UMETA(DisplayName = "NormalFatality"),
-	E_NormalFlame			UMETA(DisplayName = "NormalFlame"),
+	E_NormalPower			UMETA(DisplayName = "NormalPower"),			//[0, 1]
+	E_NormalAttackSpeed		UMETA(DisplayName = "NormalSpeed"),			//[0, 1]
+	E_NormalFatality		UMETA(DisplayName = "NormalFatality"),		//[0, 1]
+	E_NormalFlame			UMETA(DisplayName = "NormalFlame"),			
 	E_NormalPoison			UMETA(DisplayName = "NormalPoison"),
 	E_NormalSlow			UMETA(DisplayName = "NormalSlow"),
 	E_NormalStun			UMETA(DisplayName = "NormalStun"),
 
-	E_DashAttackPower		UMETA(DisplayName = "DashAttackPower"),
-	E_DashAttackSpeed		UMETA(DisplayName = "DashAttackSpeed"),
-	E_DashAttackFatality	UMETA(DisplayName = "DashAttackFatality"),
+	E_DashAttackPower		UMETA(DisplayName = "DashAttackPower"),		//[0, 1]
+	E_DashAttackSpeed		UMETA(DisplayName = "DashAttackSpeed"),		//[0, 1]
+	E_DashAttackFatality	UMETA(DisplayName = "DashAttackFatality"),	//[0, 1]
 	E_DashAttackFlame		UMETA(DisplayName = "DashAttackFlame"),
 	E_DashAttackPoison		UMETA(DisplayName = "DashAttackPoison"),
 	E_DashAttackSlow		UMETA(DisplayName = "DashAttackSlow"),
 	E_DashAttackStun		UMETA(DisplayName = "DashAttackStun"),
 
-	E_JumpAttackPower		UMETA(DisplayName = "JumpAttackPower"),
-	E_JumpAttackSpeed		UMETA(DisplayName = "JumpAttackSpeed"),
-	E_JumpAttackFatality	UMETA(DisplayName = "JumpAttackFatality"),
+	E_JumpAttackPower		UMETA(DisplayName = "JumpAttackPower"),		//[0, 1]
+	E_JumpAttackSpeed		UMETA(DisplayName = "JumpAttackSpeed"),		//[0, 1]
+	E_JumpAttackFatality	UMETA(DisplayName = "JumpAttackFatality"),	//[0, 1]
 	E_JumpAttackFlame		UMETA(DisplayName = "JumpAttackFlame"),
 	E_JumpAttackPoison		UMETA(DisplayName = "JumpAttackPoison"),
 	E_JumpAttackSlow		UMETA(DisplayName = "JumpAttackSlow"),
@@ -79,7 +79,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		bool bIsContainProbability;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config", meta = (EditCondition = "bIsContainProbability"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config", meta = (EditCondition = "bIsContainProbability", UIMin = 0.0f, UIMax = 1.0f))
 		float ProbabilityValue = 1.0f;
 		
 //===================================================================
@@ -162,18 +162,22 @@ public:
 	GENERATED_USTRUCT_BODY()
 //==========================================================
 //====== Stat ==============================================
+	//CharacterBase내 DefaultStat에 의해 초기화가 되는지?
+	UPROPERTY(EditDefaultsOnly, Category = "Default")
+		bool bUseDefaultStat = false;
+
 	//캐릭터의 종류를 나타내는 ID
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Default", meta = (UIMin = 0, UIMax = 2500))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Default", meta = (EditCondition = "!bUseDefaultStat", UIMin = 0, UIMax = 2500))
 		int32 CharacterID = 0;
 
 	//무한 내구도 / 무한 탄약 (Enemy 기본 스탯)
-	UPROPERTY(BlueprintReadWrite, Category = "Stat")
+	UPROPERTY(BlueprintReadWrite, Category = "Stat", meta = (EditCondition = "!bUseDefaultStat"))
 		bool bInfinite = false;
 
-	UPROPERTY(BlueprintReadWrite, Category = "Stat")
+	UPROPERTY(BlueprintReadWrite, Category = "Stat", meta = (EditCondition = "!bUseDefaultStat"))
 		bool bIsInvincibility = false;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stat")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stat", meta = (EditCondition = "!bUseDefaultStat"))
 		TArray<FStatValueGroup> StatGroupList;
 
 //=========================================================

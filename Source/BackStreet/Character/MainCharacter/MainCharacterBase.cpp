@@ -5,6 +5,7 @@
 #include "../Component/ItemInventoryComponent.h"
 #include "../Component/SkillManagerComponentBase.h"
 #include "../Component/PlayerSkillManagerComponent.h"
+#include "../Component/ActionTrackingComponent.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SaveSystem/BackStreetGameInstance.h"
 #include "../../System/AbilitySystem/AbilityManagerBase.h"

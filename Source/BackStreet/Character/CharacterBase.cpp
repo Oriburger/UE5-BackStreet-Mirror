@@ -3,6 +3,7 @@
 #include "./Component/TargetingManagerComponent.h"
 #include "./Component/WeaponComponentBase.h"
 #include "./Component/SkillManagerComponentBase.h"
+#include "./Component/ActionTrackingComponent.h"
 #include "../Item/Weapon/Ranged/RangedCombatManager.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
@@ -27,10 +28,11 @@ ACharacterBase::ACharacterBase()
 	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 115.0f, 90.0f));
 
 	DebuffManagerComponent = CreateDefaultSubobject<UDebuffManagerComponent>(TEXT("DEBUFF_MANAGER"));
-	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));
+	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));;
+	ActionTrackingComponent = CreateDefaultSubobject<UActionTrackingComponent>(TEXT("ACTION_TRACKER"));
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
-	WeaponComponent->SetupAttachment(GetMesh());
+	WeaponComponent->SetupAttachment(GetMesh(), FName("Weapon_R"));
 
 	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
 	InitializeActionTriggerDelegateMap();
@@ -75,6 +77,7 @@ void ACharacterBase::InitializeActionTriggerDelegateMap()
 	ActionTriggerDelegateMap.Add("OnSprintEnd", &OnSprintEnd);
 	ActionTriggerDelegateMap.Add("OnRollEnded", &OnRollEnded);
 	ActionTriggerDelegateMap.Add("OnAttackStarted", &OnAttackStarted);
+	ActionTriggerDelegateMap.Add("OnJumpAttackStarted", &OnJumpAttackStarted);
 	ActionTriggerDelegateMap.Add("OnDashAttackStarted", &OnDashAttackStarted);
 	ActionTriggerDelegateMap.Add("OnDamageReceived", &OnDamageReceived);
 	ActionTriggerDelegateMap.Add("OnSkillStarted", &OnSkillStarted);
@@ -232,10 +235,12 @@ void ACharacterBase::StandUp()
 
 void ACharacterBase::InitCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo)
 {
-	if (!NewGameplayInfo.IsValid()) return;
-	CharacterGameplayInfo = NewGameplayInfo;
-	CharacterID = NewGameplayInfo.CharacterID;
-
+	if (CharacterGameplayInfo.bUseDefaultStat)
+	{
+		if (!NewGameplayInfo.IsValid()) return;
+		CharacterGameplayInfo = NewGameplayInfo;
+		CharacterID = NewGameplayInfo.CharacterID;
+	}
 	CharacterGameplayInfo.bCanAttack = true;
 	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Idle;
 	CharacterGameplayInfo.CurrentHP = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MaxHealth);
@@ -285,7 +290,7 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 	FWeaponStatStruct currWeaponStat = this->WeaponComponent->GetWeaponStat();
 	this->WeaponComponent->SetWeaponStat(currWeaponStat);
 	StopAttack();
-
+	 
 	if (!GetWorldTimerManager().IsTimerActive(AtkIntervalHandle))
 	{
 		CharacterGameplayInfo.bCanAttack = true;
@@ -542,6 +547,7 @@ void ACharacterBase::TryDownwardAttack()
 	if (IsValid(AssetHardPtrInfo.DownwardAttackAnimMontage))
 	{
 		PlayAnimMontage(AssetHardPtrInfo.DownwardAttackAnimMontage);
+		OnJumpAttackStarted.Broadcast();
 	}
 }
 

@@ -3,6 +3,7 @@
 #include "WeaponComponentBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
+#include "../../Character/Component/ActionTrackingComponent.h"
 #include "../../Character/CharacterBase.h"
 #include "../../Item/Weapon/CombatManager.h"
 #include "../../Item/Weapon/Melee/MeleeCombatManager.h"
@@ -303,13 +304,49 @@ uint8 UWeaponComponentBase::GetMaxStatLevel(EWeaponStatType WeaponStatType)
 	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].StatInfoByLevel.Num() - 1;
 }
 
-float UWeaponComponentBase::CalculateTotalDamage(FCharacterGameplayInfo TargetState)
+float UWeaponComponentBase::CalculateTotalDamage(FCharacterGameplayInfo TargetState, bool& bIsFatalAttack)
 {
 	if (!OwnerCharacterRef.IsValid()) return 0.0f;
+	bool bIsDashAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("DashAttack"));
+	bool bIsJumpAttacking = !OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"));
+
 	FCharacterGameplayInfo ownerState = OwnerCharacterRef.Get()->GetCharacterGameplayInfo();
-	return WeaponStat.WeaponDamage * (1 + FMath::Max(-1, ownerState.GetTotalValue(ECharacterStatType::E_NormalPower) - TargetState.GetTotalValue(ECharacterStatType::E_Defense)))
-		* (1 + WeaponStat.bCriticalApply * WeaponStat.CriticalDamageRate)
-		+ (!WeaponStat.bFixDamageApply ? 0.0f : WeaponStat.FixedDamageAmount);
+	const float fatalMultiplier = CalculateAttackFatality(ownerState, bIsJumpAttacking, bIsDashAttacking);
+	bIsFatalAttack = (fatalMultiplier > 0.0f);
+
+	UE_LOG(LogTemp, Warning, TEXT("JUMP ATK : %d,  DASH ATK : %d"), (int32)bIsJumpAttacking, (int32)bIsDashAttacking);
+
+	return WeaponStat.WeaponDamage
+		* (1.0f + FMath::Max(0.0f, ownerState.GetTotalValue(ECharacterStatType::E_NormalPower) - TargetState.GetTotalValue(ECharacterStatType::E_Defense)))
+		* (WeaponStat.bCriticalApply ? WeaponStat.CriticalDamageRate : 1.0f) // 크리티컬 데미지 적용 여부
+		* (bIsDashAttacking ? (1.0f + ownerState.GetTotalValue(ECharacterStatType::E_DashAttackPower)) : 1.0f) // 대쉬 공격 여부
+		* (bIsJumpAttacking ? (1.0f + ownerState.GetTotalValue(ECharacterStatType::E_JumpAttackPower)) : 1.0f) // 점프 공격 여부
+		* (1.0f + fatalMultiplier)
+		+ (WeaponStat.bFixDamageApply ? WeaponStat.FixedDamageAmount : 0.0f);  // 치명적 공격의 추가 배율
+}
+
+float UWeaponComponentBase::CalculateAttackFatality(FCharacterGameplayInfo& GameplayInfoRef, bool bIsJumpAttacking, bool bIsDashAttacking)
+{
+	FStatValueGroup fatalInfo;
+	if (bIsDashAttacking) 
+		fatalInfo = GameplayInfoRef.GetStatGroup(ECharacterStatType::E_DashAttackFatality);
+	else if (bIsJumpAttacking) 
+		fatalInfo = GameplayInfoRef.GetStatGroup(ECharacterStatType::E_JumpAttackFatality);
+	else
+		fatalInfo = GameplayInfoRef.GetStatGroup(ECharacterStatType::E_NormalFatality);
+
+	if (!fatalInfo.bIsContainProbability)
+	{
+		UE_LOG(LogTemp, Error, TEXT("UWeaponComponentBase::CaltulateAttackFatality : fatalInfo does not contain a probability Info."));
+	}
+
+	if (fatalInfo.ProbabilityValue >= FMath::FRand())
+	{
+		fatalInfo.UpdateTotalValue();
+		return fatalInfo.GetTotalValue();
+	}
+	return 0.0f;
+
 }
 
 bool UWeaponComponentBase::UpgradeStat(TArray<uint8> NewLevelList)

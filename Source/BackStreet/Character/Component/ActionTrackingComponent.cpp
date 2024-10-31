@@ -8,7 +8,7 @@
 // Sets default values for this component's properties
 UActionTrackingComponent::UActionTrackingComponent()
 {
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 }
 
 //====================================================================
@@ -20,7 +20,7 @@ void UActionTrackingComponent::BeginPlay()
 	Super::BeginPlay();
 
 	//활성화 여부 판단
-	if (GetOwner()->ActorHasTag("Player") || ForceEnableMonitorForEnemy)
+	if (GetOwner()->ActorHasTag("Player") || bForceEnableMonitorForEnemy)
 		bIsEnabled = true;
 
 	//캐릭터 레퍼런스 셋
@@ -95,7 +95,7 @@ void UActionTrackingComponent::Deactivate()
 void UActionTrackingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	PrintDebugMessage(DeltaTime);
+	if(bShowDebugMessage) PrintDebugMessage(DeltaTime);
 }
 
 void UActionTrackingComponent::PrintDebugMessage(float DeltaTime)
