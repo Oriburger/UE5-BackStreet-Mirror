@@ -39,7 +39,7 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CAMERA_BOOM"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->bUsePawnControlRotation = true;
-	CameraBoom->TargetArmLength = 500.0f;
+	CameraBoom->TargetArmLength = 375.0f;
 	CameraBoom->bInheritPitch = true;
 	CameraBoom->bInheritRoll = false;
 	CameraBoom->bInheritYaw = true;
@@ -47,7 +47,7 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom->bEnableCameraRotationLag = true;	
 	CameraBoom->CameraRotationLagSpeed = 0.5f;
 	CameraBoom->CameraLagMaxDistance = 1000.0f;
-	CameraBoom->SetRelativeLocation({ 0.0f, 30.0f, 80.0f });
+	CameraBoom->SetRelativeLocation({ 0.0f, 30.0f, 25.0f });
 	CameraBoom->SetWorldRotation({ -45.0f, 0.0f, 0.0f });
 
 
@@ -59,7 +59,7 @@ AMainCharacterBase::AMainCharacterBase()
 	RangedAimBoom->bInheritPitch = true;
 	RangedAimBoom->bInheritRoll = false;
 	RangedAimBoom->bInheritYaw = true;
-	RangedAimBoom->SetRelativeLocation({ 0.0f, 85.0f, 10.0f });	//Set Location
+	RangedAimBoom->SetRelativeLocation({ 0.0f, 80.0f, -10 });	//Set Location
 
 	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 110.0f, 120.0f));
 
