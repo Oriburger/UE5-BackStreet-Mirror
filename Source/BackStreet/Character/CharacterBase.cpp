@@ -242,6 +242,7 @@ void ACharacterBase::InitCharacterGameplayInfo(FCharacterGameplayInfo NewGamepla
 		CharacterID = NewGameplayInfo.CharacterID;
 	}
 	CharacterGameplayInfo.bCanAttack = true;
+	CharacterGameplayInfo.bCanRoll = true;
 	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Idle;
 	CharacterGameplayInfo.CurrentHP = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MaxHealth);
 	GetCharacterMovement()->MaxWalkSpeed = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed);
@@ -326,7 +327,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 			Die();
 		}
 	}
-	else if (this->CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill && !this->CharacterGameplayInfo.bIsAirAttacking)
+	else if (DamageCauser != this && this->CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill && !this->CharacterGameplayInfo.bIsAirAttacking)
 	{
 		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num() - 1);
 		if (AssetHardPtrInfo.HitAnimMontageList.Num() > 0 && IsValid(AssetHardPtrInfo.HitAnimMontageList[randomIdx]))
@@ -344,7 +345,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(DamageCauser->GetActorLocation(), GetActorLocation());
 	newRotation.Pitch = newRotation.Roll = 0.0f;
 
-	if (DamageCauser->ActorHasTag("Player"))
+	if (DamageCauser->ActorHasTag("Player") && DamageCauser != this)
 	{
 		ACharacterBase* causerTarget = Cast<ACharacterBase>(DamageCauser)->TargetingManagerComponent->GetTargetedCharacter();
 		if (IsValid(causerTarget) && causerTarget == this)
@@ -370,9 +371,9 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	GetWorldTimerManager().SetTimer(HitCounterResetTimerHandle, this, &ACharacterBase::ResetHitCounter, 1.0f, false, 1.0f);
 
 	// Check knock down condition and set knock down event using retriggable timer
-	if (Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetWeaponStat().FinalImpactStrength > 0 && Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetIsFinalCombo())
+	//if (Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetWeaponStat().FinalImpactStrength > 0 && Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetIsFinalCombo())
 	{
-		KnockDown();
+		//KnockDown();
 		/*
 		GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
 		KnockDownDelayTimerHandle.Invalidate();
@@ -386,7 +387,11 @@ float ACharacterBase::TakeDebuffDamage(ECharacterDebuffType DebuffType, float Da
 {
 	if (!IsValid(Causer) || Causer->IsActorBeingDestroyed()) return 0.0f;
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
-	TakeDamage(DamageAmount, FDamageEvent(), nullptr, Causer);
+	float totalDamage = DamageAmount;
+	totalDamage = FMath::Min(totalDamage, DamageAmount);
+	totalDamage = FMath::Max(0.0f, totalDamage);
+
+	TakeDamage(DamageAmount, FDamageEvent(), nullptr, this);
 	return DamageAmount;
 }
 
@@ -401,7 +406,7 @@ void ACharacterBase::TakeHeal(float HealAmount, bool bIsTimerEvent, uint8 BuffDe
 	const float& totalHealthValue = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MaxHealth);
 	float oldClampedHealthValue = CharacterGameplayInfo.CurrentHP;
 	float newClampedHealthValue = 0.0f;
-	CharacterGameplayInfo.CurrentHP += HealAmount;
+	CharacterGameplayInfo.CurrentHP += (HealAmount * (1.0f + GetStatTotalValue(ECharacterStatType::E_HealItemPerformance)));
 	newClampedHealthValue = CharacterGameplayInfo.CurrentHP = FMath::Min(totalHealthValue, CharacterGameplayInfo.CurrentHP);
 	OnDamageReceived.Broadcast();
 	

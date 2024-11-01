@@ -349,6 +349,55 @@ float UWeaponComponentBase::CalculateAttackFatality(FCharacterGameplayInfo& Game
 
 }
 
+void UWeaponComponentBase::ApplyWeaponDebuff(ACharacterBase* TargetCharacter)
+{
+	if(!OwnerCharacterRef.IsValid() || !IsValid(TargetCharacter)) return;
+
+	bool bIsJumpAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("JumpAttack"));
+	bool bIsDashAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("DashAttack"));
+	float flameValue, poisonValue, stunValue, slowValue;
+	const float debuffTime = 2.5f + OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_DebuffTime);
+
+	if (bIsJumpAttacking)
+	{
+		flameValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_JumpAttackFlame);
+		poisonValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_JumpAttackPoison);
+		stunValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_JumpAttackStun);
+		slowValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_JumpAttackSlow);
+	}
+	else if (bIsDashAttacking)
+	{
+		flameValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_DashAttackFlame);
+		poisonValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_DashAttackPoison);
+		stunValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_DashAttackStun);
+		slowValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_DashAttackSlow);
+	}
+	else
+	{
+		flameValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_NormalFlame);
+		poisonValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_NormalPoison);
+		stunValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_NormalStun);
+		slowValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_NormalSlow);
+	}
+
+	if (flameValue > 0.0f)
+	{
+		TargetCharacter->TryAddNewDebuff(FDebuffInfoStruct(ECharacterDebuffType::E_Burn, debuffTime, flameValue, true), OwnerCharacterRef.Get());
+	}
+	else if (poisonValue > 0.0f)
+	{
+		TargetCharacter->TryAddNewDebuff(FDebuffInfoStruct(ECharacterDebuffType::E_Poison, debuffTime, poisonValue, true), OwnerCharacterRef.Get());
+	}
+	else if (stunValue > 0.0f)
+	{
+		TargetCharacter->TryAddNewDebuff(FDebuffInfoStruct(ECharacterDebuffType::E_Stun, debuffTime + stunValue, 0.0f, true), OwnerCharacterRef.Get());
+	}
+	else if (slowValue > 0.0f)
+	{
+		TargetCharacter->TryAddNewDebuff(FDebuffInfoStruct(ECharacterDebuffType::E_Slow, debuffTime, slowValue, true), OwnerCharacterRef.Get());
+	}
+}
+
 bool UWeaponComponentBase::UpgradeStat(TArray<uint8> NewLevelList)
 {
 	for (uint8 idx = 0; idx < MAX_WEAPON_UPGRADABLE_STAT_IDX; idx++)

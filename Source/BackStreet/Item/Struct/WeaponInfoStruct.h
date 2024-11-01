@@ -77,6 +77,10 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		bool bIsPercentage = false;
+
+	FDebuffInfoStruct() : Type(ECharacterDebuffType::E_None), TotalTime(0.0f), Variable(0.0f), bIsPercentage(false) {}
+	FDebuffInfoStruct(ECharacterDebuffType NewType, float NewTotalTime, float NewVariable, bool NewIsPercentage)
+		: Type(NewType), TotalTime(NewTotalTime), Variable(NewVariable), bIsPercentage(NewIsPercentage) {}
 };
 
 USTRUCT(BlueprintType)

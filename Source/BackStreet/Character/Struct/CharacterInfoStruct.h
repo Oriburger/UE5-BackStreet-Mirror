@@ -23,7 +23,7 @@ enum class ECharacterStatType : uint8
 	E_MaxHealth				UMETA(DisplayName = "MaxHealth"),
 	E_Defense				UMETA(DisplayName = "Defense"),
 
-	E_FlameResist			UMETA(DisplayName = "FlameResist"),
+	E_BurnResist			UMETA(DisplayName = "BurnResist"),
 	E_PoisonResist			UMETA(DisplayName = "PoisonResist"),
 	E_SlowResist			UMETA(DisplayName = "SlowResist"),
 	E_StunResist			UMETA(DisplayName = "StunResist"),
@@ -37,7 +37,7 @@ enum class ECharacterStatType : uint8
 	E_NormalFlame			UMETA(DisplayName = "NormalFlame"),			
 	E_NormalPoison			UMETA(DisplayName = "NormalPoison"),
 	E_NormalSlow			UMETA(DisplayName = "NormalSlow"),
-	E_NormalStun			UMETA(DisplayName = "NormalStun"),
+	E_NormalStun			UMETA(DisplayName = "NormalStun"),	
 
 	E_DashAttackPower		UMETA(DisplayName = "DashAttackPower"),		//[0, 1]
 	E_DashAttackSpeed		UMETA(DisplayName = "DashAttackSpeed"),		//[0, 1]
@@ -49,7 +49,7 @@ enum class ECharacterStatType : uint8
 
 	E_JumpAttackPower		UMETA(DisplayName = "JumpAttackPower"),		//[0, 1]
 	E_JumpAttackSpeed		UMETA(DisplayName = "JumpAttackSpeed"),		//[0, 1]
-	E_JumpAttackFatality	UMETA(DisplayName = "JumpAttackFatality"),	//[0, 1]
+	E_JumpAttackFatality	UMETA(DisplayName = "JumpAttackFatality"),	//[0, 1] 
 	E_JumpAttackFlame		UMETA(DisplayName = "JumpAttackFlame"),
 	E_JumpAttackPoison		UMETA(DisplayName = "JumpAttackPoison"),
 	E_JumpAttackSlow		UMETA(DisplayName = "JumpAttackSlow"),
@@ -58,6 +58,7 @@ enum class ECharacterStatType : uint8
 	E_SkillCoolTime			UMETA(DisplayName = "SkillCoolTime"),
 	E_SubWeaponCapacity		UMETA(DisplayName = "SubWeaponCapacity"),
 	E_HealItemPerformance	UMETA(DisplayName = "HealItemPerformance"),
+	E_DebuffTime			UMETA(DisplayName = "NormalDebuffTime"),	//[0, 1] (2.5sec + val)
 	E_LuckyDrop				UMETA(DisplayName = "LuckyDrop")
 };
 
@@ -102,13 +103,19 @@ public:
 	void Reset() { FStatValueGroup(); }
 	void SetDefaultValue(float NewValue)
 	{
+		if (NewValue < 0.0f) return;
 		DefaultValue = NewValue;
 		UpdateTotalValue();
 	}
 	void UpdateTotalValue()
 	{
-		TotalValue =  DefaultValue
+		TotalValue = DefaultValue
 			+ DefaultValue * (AbilityRateValue + SkillRateValue - DebuffRateValue);
+		if (TotalValue < 0.0f)
+		{
+			UE_LOG(LogTemp, Error, TEXT("FStatValueGroup::UpdateTotalValue T : %.2lf, D : %.2lf, A : %.2lf, S : %.2lf, DF: %.2lf")
+						, TotalValue, DefaultValue, AbilityRateValue, SkillRateValue, DebuffRateValue);
+		}
 	}
 	float GetTotalValue() { return TotalValue; }
 	
@@ -201,6 +208,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
 		bool bCanAttack = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
+		bool bCanRoll = false;
+
 	//Is character sprinting?
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
 		bool bIsSprinting = false;
@@ -284,7 +294,7 @@ public:
 	}
 
 	FCharacterGameplayInfo() : CharacterID(0) , bInfinite(false) , bIsInvincibility(false), StatGroupList(), CharacterDebuffState(1 << 10)
-		, CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), bCanAttack(false), bIsSprinting(false), bIsAiming(false)
+		, CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), bCanAttack(false), bCanRoll(false), bIsSprinting(false), bIsAiming(false)
 		, bIsAirAttacking(false), bIsDownwardAttacking(false), HitCounter(0), ExtraStageTime(0.0f), MaxKeepingSkillCount(1)
 		, bInfiniteSkillMaterial(false), ExtraPercentageUnivMaterial(0.0f)
 	{
@@ -297,7 +307,7 @@ public:
 	}
 
 	FCharacterGameplayInfo(FCharacterDefaultStat DefaultStat) : CharacterID(DefaultStat.CharacterID), bInfinite(DefaultStat.bInfinite), bIsInvincibility(DefaultStat.bIsInvincibility)
-		, StatGroupList(), CharacterDebuffState(1 << 10), CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), bCanAttack(false)
+		, StatGroupList(), CharacterDebuffState(1 << 10), CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), bCanAttack(false), bCanRoll(false)
 		, bIsSprinting(false), bIsAiming(false), bIsAirAttacking(false), bIsDownwardAttacking(false), HitCounter(0), ExtraStageTime(0.0f)
 		, MaxKeepingSkillCount(1), bInfiniteSkillMaterial(false), ExtraPercentageUnivMaterial(0.0f)
 	{
