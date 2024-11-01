@@ -53,8 +53,6 @@ public:
 	UFUNCTION()
 		AItemBase* SpawnItemToWorld(int32 ItemID, FVector SpawnLocation);
 
-	UFUNCTION()
-		void UpdateCharacterStat(class ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }

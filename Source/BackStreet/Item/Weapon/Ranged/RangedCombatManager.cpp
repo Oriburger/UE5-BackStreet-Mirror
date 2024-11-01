@@ -38,14 +38,14 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 {
 	if (!OwnerCharacterRef.IsValid()) return false;
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo
-		&& !OwnerCharacterRef->GetCharacterStat().bInfinite && WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount == 0)
+		&& !OwnerCharacterRef->GetCharacterGameplayInfo().bInfinite && WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount == 0)
 	{
 		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("보조무기가 없습니다.")), FColor::White);
 		return false;
 	}
 
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo 
-		&& !OwnerCharacterRef.Get()->GetCharacterStat().bInfinite)
+		&& !OwnerCharacterRef.Get()->GetCharacterGameplayInfo().bInfinite)
 	{
 		//한번 발사때 n개의 탄환을 소비하는지?
 		//fireProjectileCnt = FMath::Min(fireProjectileCnt, WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount);
@@ -180,9 +180,9 @@ TArray<FRotator> URangedCombatManager::GetFireRotationList(int32 FireCount)
 
 void URangedCombatManager::SpawnShootNiagaraEffect()
 {
-	if (!OwnerCharacterRef.IsValid()) return;
+	if (!OwnerCharacterRef.IsValid() || !WeaponComponentRef.IsValid()) return;
 
-	FVector spawnLocation = OwnerCharacterRef.Get()->GetActorLocation() + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 50.0f;
-	FRotator spawnRotation = OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation() + FRotator(0.0f, 0.0f, 0.0f);
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShootNiagaraEmitter, spawnLocation, spawnRotation);
+	FVector spawnLocation = WeaponComponentRef.Get()->GetSocketLocation(FName("Muzzle"));
+	FRotator spawnRotation = WeaponComponentRef.Get()->GetComponentRotation() + FRotator(0.0f, 90.0f, 0.0f);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponComponentRef.Get()->ShootEffectParticle, spawnLocation, spawnRotation, FVector(0.1f));
 }

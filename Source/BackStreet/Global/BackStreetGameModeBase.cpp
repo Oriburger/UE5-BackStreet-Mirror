@@ -96,14 +96,6 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector Spawn
 	return nullptr;
 }
 
-void ABackStreetGameModeBase::UpdateCharacterStat(ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat)
-{
-	if (IsValid(TargetCharacter))
-	{
-		TargetCharacter->UpdateCharacterStat(NewStat);
-	}
-}
-
 UCommonUserWidget* ABackStreetGameModeBase::GetMainHUDRef()
 {
 	if (IsValid(MainHUDRef)) return MainHUDRef;

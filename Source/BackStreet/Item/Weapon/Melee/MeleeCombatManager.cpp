@@ -87,8 +87,8 @@ void UMeleeCombatManager::MeleeAttack()
 	bool bIsFinalCombo = WeaponComponentRef.Get()->GetIsFinalCombo();
 	bool bIsMeleeTraceSucceed = false;
 
-	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
-	
+	FCharacterGameplayInfo ownerInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfo();
+
 	TArray<FVector> currTracePositionList = GetCurrentMeleePointList();
 	TArray<AActor*> targetList = CheckMeleeAttackTargetWithSphereTrace();
 	MeleePrevTracePointList = currTracePositionList;
@@ -96,10 +96,10 @@ void UMeleeCombatManager::MeleeAttack()
 	for (auto& target : targetList)
 	{
 		//if target is valid, apply damage
-		if (IsValid(target) && (!Cast<ACharacterBase>(target)->GetCharacterStat().bIsInvincibility))
+		if (IsValid(target))
 		{
-			FCharacterStateStruct targetState = Cast<ACharacterBase>(target)->GetCharacterState();
-			float totalDamage = WeaponComponentRef.Get()->CalculateTotalDamage(targetState);
+			FCharacterGameplayInfo targetInfo = Cast<ACharacterBase>(target)->GetCharacterGameplayInfo();
+			float totalDamage = WeaponComponentRef.Get()->CalculateTotalDamage(targetInfo);
 			totalDamage = bIsFinalCombo ? totalDamage * (WeaponComponentRef.Get()->WeaponStat.FinalImpactStrength + 1.0f) : totalDamage;
 
 			//Activate Melee Hit Effect
@@ -107,7 +107,7 @@ void UMeleeCombatManager::MeleeAttack()
 
 			//Apply Knockback
 			if (!target->ActorHasTag("Boss")
-				&& !OwnerCharacterRef.Get()->GetCharacterState().bIsAirAttacking)
+				&& !ownerInfo.bIsAirAttacking)
 			{
 				OwnerCharacterRef.Get()->ApplyKnockBack(target, WeaponComponentRef.Get()->WeaponStat.WeaponKnockBackStrength);
 			}

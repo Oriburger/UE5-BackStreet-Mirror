@@ -66,7 +66,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UPlayerSkillManagerComponent* SkillManagerComponent;
 
-// ------- SubWeapon -----------
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UAbilityManagerComponent* AbilityManagerComponent; 
+
+// ------- Throw Test -----------
 public:
 	UFUNCTION(BlueprintCallable)
 		void SwitchWeapon(bool bSwitchToSubWeapon);
@@ -162,10 +165,6 @@ public:
 	UFUNCTION()
 		virtual void StandUp() override;
 
-	//Rotation 조절 방식을 기본 방식인 Movement 방향으로 되돌린다
-	UFUNCTION(BlueprintCallable)
-		void ResetRotationToMovement();
-
 	//Targeting system
 	UFUNCTION()
 		void LockToTarget(const FInputActionValue& Value);
@@ -173,10 +172,6 @@ public:
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 			, AController* EventInstigator, AActor* DamageCauser) override;
-
-	//Rotation 조절 방식을 커서 위치로 한다
-	UFUNCTION(BlueprintCallable)
-		void RotateToCursor();
 
 	UFUNCTION()
 		TArray<class UInteractiveCollisionComponent*> GetNearInteractionComponentList();
@@ -261,7 +256,7 @@ public:
 // ------- 어빌리티 / 디버프 ---------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class UAbilityManagerBase* GetAbilityManagerRef() { return AbilityManagerRef; }
+		class UAbilityManagerComponent* GetAbilityManagerRef() { return AbilityManagerComponent; }
 
 public: 
 	//디버프 상태를 지정
@@ -317,9 +312,6 @@ public:
 private:
 	UPROPERTY()
 		float TargetFieldOfView = 0.0f;
-
-	UPROPERTY()
-		class UAbilityManagerBase* AbilityManagerRef;
 
 	//플레이어 컨트롤러 약 참조
 	TWeakObjectPtr<class AMainCharacterController> PlayerControllerRef;
