@@ -5,6 +5,7 @@
 #include "../Component/ItemInventoryComponent.h"
 #include "../Component/SkillManagerComponentBase.h"
 #include "../Component/PlayerSkillManagerComponent.h"
+#include "../Component/ActionTrackingComponent.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SaveSystem/BackStreetGameInstance.h"
 #include "../../System/AbilitySystem/AbilityManagerBase.h"
@@ -38,7 +39,7 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CAMERA_BOOM"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->bUsePawnControlRotation = true;
-	CameraBoom->TargetArmLength = 500.0f;
+	CameraBoom->TargetArmLength = 375.0f;
 	CameraBoom->bInheritPitch = true;
 	CameraBoom->bInheritRoll = false;
 	CameraBoom->bInheritYaw = true;
@@ -46,7 +47,7 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom->bEnableCameraRotationLag = true;	
 	CameraBoom->CameraRotationLagSpeed = 0.5f;
 	CameraBoom->CameraLagMaxDistance = 1000.0f;
-	CameraBoom->SetRelativeLocation({ 0.0f, 30.0f, 80.0f });
+	CameraBoom->SetRelativeLocation({ 0.0f, 30.0f, 25.0f });
 	CameraBoom->SetWorldRotation({ -45.0f, 0.0f, 0.0f });
 
 
@@ -58,7 +59,7 @@ AMainCharacterBase::AMainCharacterBase()
 	RangedAimBoom->bInheritPitch = true;
 	RangedAimBoom->bInheritRoll = false;
 	RangedAimBoom->bInheritYaw = true;
-	RangedAimBoom->SetRelativeLocation({ 0.0f, 85.0f, 10.0f });	//Set Location
+	RangedAimBoom->SetRelativeLocation({ 0.0f, 80.0f, -10 });	//Set Location
 
 	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 110.0f, 120.0f));
 
@@ -325,6 +326,7 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (GetCharacterMovement()->IsFalling()) return;
+	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
 	if (CharacterGameplayInfo.bIsAirAttacking || CharacterGameplayInfo.bIsDownwardAttacking) return;
 
 	// input is a Vector2D
@@ -374,6 +376,7 @@ void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
 
 	Jump();
 	OnJumpStarted.Broadcast();
@@ -407,7 +410,8 @@ void AMainCharacterBase::Roll()
 {	
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Attack)) return;
-	if (CharacterGameplayInfo.bIsAirAttacking || CharacterGameplayInfo.bIsDownwardAttacking) return;
+	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
+	if (!CharacterGameplayInfo.bCanRoll || CharacterGameplayInfo.bIsAirAttacking || CharacterGameplayInfo.bIsDownwardAttacking) return;
 
 	if (GetIsActionActive(ECharacterActionType::E_Attack))
 	{
@@ -455,7 +459,12 @@ void AMainCharacterBase::Roll()
 	{
 		PlayAnimMontage(AssetHardPtrInfo.RollAnimMontageList[0], 1.0f);
 		OnRollStarted.Broadcast();
-	}	
+		
+		CharacterGameplayInfo.bCanRoll = false;
+		GetWorldTimerManager().SetTimer(RollDelayTimerHandle, FTimerDelegate::CreateLambda([=]() {
+			CharacterGameplayInfo.bCanRoll = true;
+		}), CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_RollDelay), false);
+	}
 }
 
 void AMainCharacterBase::Dash()
@@ -892,11 +901,13 @@ void AMainCharacterBase::ClearAllTimerHandle()
 
 	GetWorldTimerManager().ClearTimer(BuffEffectResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(FacialEffectResetTimerHandle);
-	GetWorldTimerManager().ClearTimer(RollTimerHandle); 
+	GetWorldTimerManager().ClearTimer(RollDelayTimerHandle);
 	GetWorldTimerManager().ClearTimer(DashDelayTimerHandle);
+	GetWorldTimerManager().ClearTimer(JumpAttackDebuffTimerHandle);
 
 	BuffEffectResetTimerHandle.Invalidate();
 	FacialEffectResetTimerHandle.Invalidate();
-	RollTimerHandle.Invalidate();
+	RollDelayTimerHandle.Invalidate();
 	DashDelayTimerHandle.Invalidate();
+	JumpAttackDebuffTimerHandle.Invalidate();
 }

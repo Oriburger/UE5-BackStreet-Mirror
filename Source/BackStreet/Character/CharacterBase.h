@@ -25,6 +25,7 @@ public:
 	FDelegateOnActionTrigger OnRollEnded;
 	FDelegateOnActionTrigger OnAttackStarted;
 	FDelegateOnActionTrigger OnDashAttackStarted;
+	FDelegateOnActionTrigger OnJumpAttackStarted;
 	FDelegateOnActionTrigger OnDamageReceived;
 	FDelegateOnActionTrigger OnSkillStarted;
 	FDelegateOnActionTrigger OnSkillEnded;
@@ -72,6 +73,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UTargetingManagerComponent* TargetingManagerComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UActionTrackingComponent* ActionTrackingComponent;
 
 public:
 	TWeakObjectPtr<class USkillManagerComponentBase> SkillManagerComponentRef;
@@ -272,7 +276,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
 		FCharacterDefaultStat DefaultStat;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 		FCharacterGameplayInfo CharacterGameplayInfo;
 
 	//Gamemode ¾à ÂüÁ¶

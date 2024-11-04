@@ -325,7 +325,11 @@ private:
 	FTimerHandle CameraRotationAlignmentHandle;
 	
 	//구르기 딜레이 타이머
-	FTimerHandle RollTimerHandle;
+	FTimerHandle RollDelayTimerHandle;
+
+	//연속 점프 공격 시 스턴 주기위함
+	FTimerHandle JumpAttackDebuffTimerHandle;
+	int32 JumpAttackCount = 0;
 
 	//WalkSpeed Interpolate timer
 	FTimerHandle WalkSpeedInterpTimerHandle;

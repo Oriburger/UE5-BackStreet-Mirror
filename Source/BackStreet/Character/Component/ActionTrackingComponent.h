@@ -163,6 +163,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsActionRecentlyFinished(FName ActionName);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		EActionState GetActionState(FName ActionName);
+
 //타이머 이벤트 bind 전용 함수
 private:
 	void SetActionResetTimer(FTimerHandle& TimerHandle, float& TimeoutValue, bool& Target);
@@ -177,9 +180,6 @@ protected:
 	UFUNCTION()
 		void SetAutoTransitionTimer(FName ActionName, EActionState NewState, float DelayValueOverride = -1.0f);
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		EActionState GetActionState(FName ActionName);
-
 //======================================================================
 //====== Monitor Property ==============================================
 protected:
@@ -191,7 +191,11 @@ protected:
 protected:
 	//디버그용) 적들에게도 모니터링 타이머를 적용할지 유무 판단
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Debug")
-		bool ForceEnableMonitorForEnemy = false;
+		bool bForceEnableMonitorForEnemy = false;
+	
+	//디버그 메시지를 띄울지 여부 결정
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Debug")
+		bool bShowDebugMessage = true;
 
 	//최대 콤보 수
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config", meta = (UIMin = 0.0f, UIMax = 1.5f))
