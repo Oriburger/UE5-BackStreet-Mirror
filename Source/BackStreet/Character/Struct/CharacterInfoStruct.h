@@ -96,28 +96,28 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 		float TotalValue;
-
 //===================================================================
 //====== Function ===================================================
-	bool IsValid() { return DefaultValue > 0.0f; }
-	void Reset() { FStatValueGroup(); }
-	void SetDefaultValue(float NewValue)
+	inline bool IsValid() { return DefaultValue > 0.0f; }
+	inline void Reset() { FStatValueGroup(); }
+	inline void SetDefaultValue(float NewValue)
 	{
 		if (NewValue < 0.0f) return;
 		DefaultValue = NewValue;
 		UpdateTotalValue();
 	}
-	void UpdateTotalValue()
+	inline void UpdateTotalValue()
 	{
 		TotalValue = DefaultValue
 			+ DefaultValue * (AbilityRateValue + SkillRateValue - DebuffRateValue);
+
 		if (TotalValue < 0.0f)
 		{
 			UE_LOG(LogTemp, Error, TEXT("FStatValueGroup::UpdateTotalValue T : %.2lf, D : %.2lf, A : %.2lf, S : %.2lf, DF: %.2lf")
 						, TotalValue, DefaultValue, AbilityRateValue, SkillRateValue, DebuffRateValue);
 		}
 	}
-	float GetTotalValue() { return TotalValue; }
+	inline float GetTotalValue() { return TotalValue; }
 	
 	FStatValueGroup(ECharacterStatType NewType) : StatType(NewType), DefaultValue(0.0f), bIsContainProbability(false), ProbabilityValue(1.0f)
 						, DebuffRateValue(0.0f), AbilityRateValue(0.0f), SkillRateValue(0.0f), TotalValue(0.0f) {}
@@ -248,49 +248,61 @@ public:
 
 //=========================================================
 //====== Function =========================================
-	bool IsValid() { return CharacterID > 0; }
+	inline bool IsValid() { return CharacterID > 0; }
 
-	FStatValueGroup& GetStatGroup(ECharacterStatType StatType)
+	inline FStatValueGroup& GetStatGroup(ECharacterStatType StatType)
 	{
 		return StatGroupList[(uint8)StatType];
 	}
-	float GetSkillStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).SkillRateValue; }
-	float GetDebuffStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).DebuffRateValue; }
-	float GetAbilityStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).AbilityRateValue; }
-	
-	float GetTotalValue(ECharacterStatType StatType) 
-	{ 
+	inline void UpdateTotalValues()
+	{
+		for(FStatValueGroup& target : StatGroupList)
+			target.UpdateTotalValue();
+	}
+	inline float GetSkillStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).SkillRateValue; }
+	inline float GetDebuffStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).DebuffRateValue; }
+	inline float GetAbilityStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).AbilityRateValue; }
+	inline float GetProbabilityStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).bIsContainProbability ? GetStatGroup(StatType).ProbabilityValue : -1.0f; }
+	inline bool GetIsContainProbability(ECharacterStatType StatType) {	return GetStatGroup(StatType).bIsContainProbability; }
+	inline float GetTotalValue(ECharacterStatType StatType) 
+	{
 		GetStatGroup(StatType).UpdateTotalValue();
 		return GetStatGroup(StatType).GetTotalValue(); 
 	}
-	
-	bool SetDefaultStatInfo(ECharacterStatType StatType, float NewValue)
+	inline bool SetDefaultStatInfo(ECharacterStatType StatType, float NewValue)
 	{
 		FStatValueGroup& target = GetStatGroup(StatType);
 		target.DefaultValue = NewValue;
 		target.UpdateTotalValue();
 		return target.IsValid();
 	}
-	bool SetSkillStatInfo(ECharacterStatType StatType, float NewValue)
+	inline bool SetSkillStatInfo(ECharacterStatType StatType, float NewValue)
 	{
 		FStatValueGroup& target = GetStatGroup(StatType);
 		target.SkillRateValue = NewValue;
 		target.UpdateTotalValue();
 		return target.IsValid();
 	}
-	bool SetDebuffStatInfo(ECharacterStatType StatType, float NewValue)
+	inline bool SetDebuffStatInfo(ECharacterStatType StatType, float NewValue)
 	{
 		FStatValueGroup& target = GetStatGroup(StatType);
 		target.DebuffRateValue = NewValue;
 		target.UpdateTotalValue();
 		return target.IsValid();
 	}
-	bool SetAbilityStatInfo(ECharacterStatType StatType, float NewValue)
+	inline bool SetAbilityStatInfo(ECharacterStatType StatType, float NewValue)
 	{
 		FStatValueGroup& target = GetStatGroup(StatType);
 		target.AbilityRateValue = NewValue;
 		target.UpdateTotalValue();
 		return target.IsValid();
+	}
+	inline bool SetProbabilityStatInfo(ECharacterStatType StatType, float NewValue)
+	{
+		FStatValueGroup& target = GetStatGroup(StatType);
+		if (!target.bIsContainProbability || NewValue < 0.0f) return false;
+		target.ProbabilityValue = NewValue;
+		return true;
 	}
 
 	FCharacterGameplayInfo() : CharacterID(0) , bInfinite(false) , bIsInvincibility(false), StatGroupList(), CharacterDebuffState(1 << 10)

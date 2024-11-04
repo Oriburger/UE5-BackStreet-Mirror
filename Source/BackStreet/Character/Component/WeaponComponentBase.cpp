@@ -310,11 +310,9 @@ float UWeaponComponentBase::CalculateTotalDamage(FCharacterGameplayInfo TargetSt
 	bool bIsDashAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("DashAttack"));
 	bool bIsJumpAttacking = !OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"));
 
-	FCharacterGameplayInfo ownerState = OwnerCharacterRef.Get()->GetCharacterGameplayInfo();
+	FCharacterGameplayInfo& ownerState = OwnerCharacterRef.Get()->GetCharacterGameplayInfoRef();
 	const float fatalMultiplier = CalculateAttackFatality(ownerState, bIsJumpAttacking, bIsDashAttacking);
 	bIsFatalAttack = (fatalMultiplier > 0.0f);
-
-	UE_LOG(LogTemp, Warning, TEXT("JUMP ATK : %d,  DASH ATK : %d"), (int32)bIsJumpAttacking, (int32)bIsDashAttacking);
 
 	return WeaponStat.WeaponDamage
 		* (1.0f + FMath::Max(0.0f, ownerState.GetTotalValue(ECharacterStatType::E_NormalPower) - TargetState.GetTotalValue(ECharacterStatType::E_Defense)))
@@ -327,26 +325,16 @@ float UWeaponComponentBase::CalculateTotalDamage(FCharacterGameplayInfo TargetSt
 
 float UWeaponComponentBase::CalculateAttackFatality(FCharacterGameplayInfo& GameplayInfoRef, bool bIsJumpAttacking, bool bIsDashAttacking)
 {
-	FStatValueGroup fatalInfo;
-	if (bIsDashAttacking) 
-		fatalInfo = GameplayInfoRef.GetStatGroup(ECharacterStatType::E_DashAttackFatality);
-	else if (bIsJumpAttacking) 
-		fatalInfo = GameplayInfoRef.GetStatGroup(ECharacterStatType::E_JumpAttackFatality);
-	else
-		fatalInfo = GameplayInfoRef.GetStatGroup(ECharacterStatType::E_NormalFatality);
-
-	if (!fatalInfo.bIsContainProbability)
-	{
-		UE_LOG(LogTemp, Error, TEXT("UWeaponComponentBase::CaltulateAttackFatality : fatalInfo does not contain a probability Info."));
-	}
-
-	if (fatalInfo.ProbabilityValue >= FMath::FRand())
+	FStatValueGroup& fatalInfo = GameplayInfoRef.GetStatGroup(bIsDashAttacking ? ECharacterStatType::E_DashAttackFatality
+								: (bIsJumpAttacking ? ECharacterStatType::E_JumpAttackFatality
+								: ECharacterStatType::E_NormalFatality));
+	
+	if (fatalInfo.bIsContainProbability && fatalInfo.ProbabilityValue >= FMath::FRand())
 	{
 		fatalInfo.UpdateTotalValue();
 		return fatalInfo.GetTotalValue();
 	}
 	return 0.0f;
-
 }
 
 void UWeaponComponentBase::ApplyWeaponDebuff(ACharacterBase* TargetCharacter)

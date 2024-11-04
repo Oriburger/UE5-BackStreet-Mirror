@@ -219,7 +219,6 @@ void ACharacterBase::KnockDown()
 	GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
 	KnockDownDelayTimerHandle.Invalidate();
 
-	
 	FTimerDelegate KnockDownDelegate;
 	KnockDownDelegate.BindUFunction(this, "StandUp");
 	GetWorldTimerManager().SetTimer(KnockDownAnimMontageHandle, KnockDownDelegate, 1.0f, false, 2.0f);
@@ -241,6 +240,7 @@ void ACharacterBase::InitCharacterGameplayInfo(FCharacterGameplayInfo NewGamepla
 		CharacterGameplayInfo = NewGameplayInfo;
 		CharacterID = NewGameplayInfo.CharacterID;
 	}
+	CharacterGameplayInfo.UpdateTotalValues();
 	CharacterGameplayInfo.bCanAttack = true;
 	CharacterGameplayInfo.bCanRoll = true;
 	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Idle;
