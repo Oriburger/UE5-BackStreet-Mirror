@@ -99,11 +99,15 @@ void UMeleeCombatManager::MeleeAttack()
 		if (IsValid(target))
 		{
 			FCharacterGameplayInfo targetInfo = Cast<ACharacterBase>(target)->GetCharacterGameplayInfo();
-			float totalDamage = WeaponComponentRef.Get()->CalculateTotalDamage(targetInfo);
-			totalDamage = bIsFinalCombo ? totalDamage * (WeaponComponentRef.Get()->WeaponStat.FinalImpactStrength + 1.0f) : totalDamage;
+			bool bIsFatalAttack = false;
+			float totalDamage = WeaponComponentRef.Get()->CalculateTotalDamage(targetInfo, bIsFatalAttack);
+			UE_LOG(LogTemp, Warning, TEXT("UMeleeCombatManager::MeleeAttack()---- TotalDmg : %.2lf / bIsFatalAtk : %d"), totalDamage, (int32)bIsFatalAttack);
+
+			//Apply Debuff
+			WeaponComponentRef.Get()->ApplyWeaponDebuff(Cast<ACharacterBase>(target));
 
 			//Activate Melee Hit Effect
-			ActivateMeleeHitEffect(target->GetActorLocation(), target, bIsFinalCombo && WeaponComponentRef.Get()->WeaponStat.FinalImpactStrength > 0.0f);
+			ActivateMeleeHitEffect(target->GetActorLocation(), target, bIsFatalAttack);
 
 			//Apply Knockback
 			if (!target->ActorHasTag("Boss")

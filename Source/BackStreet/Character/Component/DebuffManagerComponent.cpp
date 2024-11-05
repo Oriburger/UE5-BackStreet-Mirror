@@ -37,6 +37,8 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 
 	FTimerHandle& timerHandle = GetResetTimerHandle(DebuffInfo.Type);
 	FTimerHandle& dotDamageHandle = GetDotDamageTimerHandle(DebuffInfo.Type);
+	float resistValue = -1.0f;
+	float totalDamage = 0.0f;
 
 	if (GetDebuffIsActive((ECharacterDebuffType)DebuffInfo.Type))
 	{
@@ -63,11 +65,12 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 	{
 		//----데미지 디버프-------------------
 	case ECharacterDebuffType::E_Burn:
+		resistValue = characterInfo.GetTotalValue(ECharacterStatType::E_BurnResist);
 	case ECharacterDebuffType::E_Poison:
-		dotDamageDelegate.BindUFunction(this, FName("ApplyDotDamage")
-										, DebuffInfo.Type
-										,	(float)(DebuffInfo.bIsPercentage ? characterInfo.GetTotalValue(ECharacterStatType::E_MaxHealth) * DebuffInfo.Variable : DebuffInfo.Variable)
-										,	OwnerCharacterRef.Get());
+		resistValue = resistValue != -1.0f ? resistValue : characterInfo.GetTotalValue(ECharacterStatType::E_PoisonResist);
+		totalDamage = (float)(DebuffInfo.bIsPercentage ? characterInfo.GetTotalValue(ECharacterStatType::E_MaxHealth) * DebuffInfo.Variable : DebuffInfo.Variable);
+		totalDamage -= totalDamage * resistValue;
+		dotDamageDelegate.BindUFunction(this, FName("ApplyDotDamage"), DebuffInfo.Type, totalDamage, OwnerCharacterRef.Get());
 		GetWorld()->GetTimerManager().SetTimer(dotDamageHandle, dotDamageDelegate, 1.0f, true);
 		break;
 		//----스탯 조정 디버프-------------------
@@ -77,7 +80,8 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 		break;
 	case ECharacterDebuffType::E_Slow:
-		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_MoveSpeed, DebuffInfo.Variable);
+		resistValue = characterInfo.GetTotalValue(ECharacterStatType::E_SlowResist);
+		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_MoveSpeed, DebuffInfo.Variable - resistValue);
 		break;
 	case ECharacterDebuffType::E_AttackDown:
 		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_NormalPower, DebuffInfo.Variable);

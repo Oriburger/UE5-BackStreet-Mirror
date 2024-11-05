@@ -45,7 +45,7 @@ bool UAbilityManagerComponent::TryAddNewAbility(int32 AbilityID)
 	}
 	TryUpdateCharacterStat(newAbilityInfo, false);
 	ActiveAbilityInfoList.Add(newAbilityInfo);
-	AbilityUpdateDelegate.Broadcast(ActiveAbilityInfoList);
+	OnAbilityUpdated.Broadcast(ActiveAbilityInfoList);
 
 	return true;
 }
@@ -56,25 +56,50 @@ bool UAbilityManagerComponent::TryRemoveAbility(int32 AbilityID)
 	if (!GetIsAbilityActive(AbilityID)) return false;
 	if (ActiveAbilityInfoList.Num() == 0) return false;
 
-	FAbilityInfoStruct targetAbilityInfo = GetAbilityInfo(AbilityID);
-	if (targetAbilityInfo.AbilityId <= 0) return false;
-	
-	for (int idx = 0; idx < ActiveAbilityInfoList.Num(); idx++)
+	FCharacterGameplayInfo& ownerInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfoRef();
+	if (!ownerInfo.IsValid())
 	{
-		FAbilityInfoStruct& abilityInfo = ActiveAbilityInfoList[idx];
-		if (abilityInfo.AbilityId == targetAbilityInfo.AbilityId)
+		UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::TryRemoveAbility / ownerInfo is not valid"));
+		return false;
+	}
+
+	int32 targetAbilityIdx = GetAbilityListIdx(AbilityID);
+	FAbilityInfoStruct targetAbilityInfo = ActiveAbilityInfoList[targetAbilityIdx];
+	if (targetAbilityIdx == -1 || !targetAbilityInfo.IsValid())
+	{
+		UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::TryRemoveAbility / AbiliID is not found"));
+		return false;
+	}
+	else
+	{
+		ActiveAbilityInfoList.RemoveAt(targetAbilityIdx);
+		if (targetAbilityInfo.bIsRepetitive)
 		{
-			TryUpdateCharacterStat(abilityInfo, true);
-			ActiveAbilityInfoList.RemoveAt(idx);
-			if (abilityInfo.bIsRepetitive)
-			{
-				OwnerCharacterRef.Get()->GetWorldTimerManager().ClearTimer(abilityInfo.TimerHandle);
-			}
-			AbilityUpdateDelegate.Broadcast(ActiveAbilityInfoList);
-			return true;
+			OwnerCharacterRef.Get()->GetWorldTimerManager().ClearTimer(targetAbilityInfo.TimerHandle);
 		}
 	}
-	return false;
+
+	bool result = false;
+	TArray<ECharacterStatType> targetStatTypeList; targetAbilityInfo.TargetStatMap.GenerateKeyArray(targetStatTypeList);
+	for (ECharacterStatType& statType : targetStatTypeList)
+	{
+		FAbilityValueInfoStruct abilityValue = targetAbilityInfo.TargetStatMap[statType];
+		if (abilityValue.Variable <= 0.0f || ownerInfo.StatGroupList.IsValidIndex((int32)statType))
+		{
+			UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat newStat for %d"), (int32)statType);
+			continue;
+		}
+
+		//Adder로 동작함
+		ownerInfo.SetAbilityStatInfo(statType, ownerInfo.GetAbilityStatInfo(statType) - abilityValue.Variable);
+		if (abilityValue.bIsContainProbability && ownerInfo.GetIsContainProbability(statType))
+		{
+			ownerInfo.SetProbabilityStatInfo(statType, ownerInfo.GetProbabilityStatInfo(statType) - abilityValue.ProbabilityValue);
+		}
+	}
+
+	OnAbilityUpdated.Broadcast(ActiveAbilityInfoList);
+	return true;
 }
 
 void UAbilityManagerComponent::ClearAllAbility()
@@ -94,6 +119,25 @@ bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct T
 		return false;
 	}
 
+	TArray<ECharacterStatType> targetStatTypeList; TargetAbilityInfo.TargetStatMap.GenerateKeyArray(targetStatTypeList);
+	for (ECharacterStatType& statType : targetStatTypeList)
+	{
+		FAbilityValueInfoStruct abilityValue = TargetAbilityInfo.TargetStatMap[statType];
+
+		if (abilityValue.Variable <= 0.0f || ownerInfo.StatGroupList.IsValidIndex((int32)statType))
+		{
+			UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat newStat for %d"), (int32)statType);
+			continue;
+		}
+
+		//Adder로 동작함
+		ownerInfo.SetAbilityStatInfo(statType, ownerInfo.GetAbilityStatInfo(statType) + abilityValue.Variable);
+		if (abilityValue.bIsContainProbability && ownerInfo.GetIsContainProbability(statType))
+		{
+			ownerInfo.SetProbabilityStatInfo(statType, ownerInfo.GetProbabilityStatInfo(statType) + abilityValue.ProbabilityValue);
+		}
+	}
+	/*
 	for (int statIdx = 0; statIdx < TargetAbilityInfo.AbilityTypeList.Num(); statIdx++)
 	{
 		ECharacterAbilityType targetType = TargetAbilityInfo.AbilityTypeList[FMath::Min(TargetAbilityInfo.AbilityTypeList.Num() - 1, statIdx)];
@@ -141,7 +185,7 @@ bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct T
 			break;
 		}	
 	}
-	
+	*/
 	return true;
 }
 
@@ -164,8 +208,27 @@ int32 UAbilityManagerComponent::GetMaxAbilityCount() const
 
 FAbilityInfoStruct UAbilityManagerComponent::GetAbilityInfo(int32 AbilityID)
 {
-	if(!AbilityInfoList.IsValidIndex(AbilityID)) return FAbilityInfoStruct();
-	return AbilityInfoList[AbilityID];
+	for (const FAbilityInfoStruct& abilityInfo : ActiveAbilityInfoList)
+	{
+		if (abilityInfo.AbilityId == AbilityID)
+		{
+			return abilityInfo;
+		}
+	}
+	return FAbilityInfoStruct();
+}
+
+int32 UAbilityManagerComponent::GetAbilityListIdx(int32 AbilityID)
+{
+	for (int32 idx = 0; idx < ActiveAbilityInfoList.Num(); idx++)
+	{
+		FAbilityInfoStruct& abilityInfo = ActiveAbilityInfoList[idx];
+		if (abilityInfo.AbilityId == AbilityID)
+		{
+			return idx;
+		}
+	}
+	return -1;
 }
 
 bool UAbilityManagerComponent::InitAbilityInfoListFromTable(const UDataTable* AbilityInfoTable)
