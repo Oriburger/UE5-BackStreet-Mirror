@@ -278,7 +278,7 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 1, 2, 3 ],
+						"RewardItemIDList": [ 11, 12, 13 ],
 						"RewardItemProbabilityList": [ 1, 1, 1 ]
 					}
 				]
@@ -287,8 +287,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 1, 2, 3 ],
-						"RewardItemProbabilityList": [ 1, 1, 1 ]
+						"RewardItemIDList": [ 11, 12, 13, 14 ],
+						"RewardItemProbabilityList": [ 1, 1, 1, 1 ]
 					}
 				]
 			},
@@ -296,8 +296,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 4 ],
-						"RewardItemProbabilityList": [ 1 ]
+						"RewardItemIDList": [ 4, 11, 12, 13, 14 ],
+						"RewardItemProbabilityList": [ 1, 1, 1, 1, 1 ]
 					}
 				]
 			},
@@ -305,8 +305,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 9 ],
-						"RewardItemProbabilityList": [ 1 ]
+						"RewardItemIDList": [ 11, 12, 13, 14 ],
+						"RewardItemProbabilityList": [ 1, 1, 1, 1 ]
 					}
 				]
 			},
@@ -314,8 +314,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 10 ],
-						"RewardItemProbabilityList": [ 1 ]
+						"RewardItemIDList": [ 4, 11, 12, 13, 14 ],
+						"RewardItemProbabilityList": [ 1, 1, 1, 1, 1 ]
 					}
 				]
 			},
@@ -337,6 +337,14 @@
 					}
 				]
 			}
+		},
+		"MaxItemBoxSpawnCountMap":
+		{
+			"E_Entry": 2,
+			"E_Exterminate": 3,
+			"E_EliteExterminate": 3,
+			"E_TimeAttack": 3,
+			"E_EliteTimeAttack": 3
 		},
 		"StageTemplateList": [
 			{
@@ -741,15 +749,27 @@
 			"E_TimeAttack":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter01/Chapter01_Combat08.Chapter01_Combat08",
-					"/Game/Map/Chapter01/Chapter01_Combat09.Chapter01_Combat09"
+					"/Game/Map/Chapter01/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Chapter01_Combat08.Chapter01_Combat08"
 				]
 			},
 			"E_EliteTimeAttack":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter01/Chapter01_Combat08.Chapter01_Combat08",
-					"/Game/Map/Chapter01/Chapter01_Combat09.Chapter01_Combat09"
+					"/Game/Map/Chapter01/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Chapter01_Combat08.Chapter01_Combat08"
 				]
 			},
 			"E_Escort":

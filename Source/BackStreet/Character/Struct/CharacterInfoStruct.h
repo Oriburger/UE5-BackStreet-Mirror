@@ -248,7 +248,7 @@ public:
 
 //=========================================================
 //====== Function =========================================
-	inline bool IsValid() { return CharacterID > 0; }
+	inline bool IsValid() { return CharacterID >= 0; }
 
 	inline FStatValueGroup& GetStatGroup(ECharacterStatType StatType)
 	{

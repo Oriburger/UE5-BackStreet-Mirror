@@ -37,6 +37,17 @@ enum class EAbilityTierType : uint8
 	E_Mythic			UMETA(DisplayName = "Mythic"),
 };
 
+UENUM(BlueprintType)
+enum class EAbilityType : uint8
+{
+	E_None						UMETA(DisplayName = "None"),
+	E_BasicStat					UMETA(DisplayName = "BasicStat"),
+	E_Debuff					UMETA(DisplayName = "Debuff"),
+	E_Action					UMETA(DisplayName = "Action"),
+	E_Item						UMETA(DisplayName = "Item"),
+	E_SpecialAction				UMETA(DisplayName = "SpecialAction")
+};
+
 USTRUCT(BlueprintType)
 struct FAbilityInfoStruct : public FTableRowBase
 {
@@ -50,6 +61,10 @@ public:
 	//for Multiple Stat
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TMap<ECharacterStatType, FAbilityValueInfoStruct> TargetStatMap;
+
+	//어빌리티의 분류 (어떤 스탯을 강화할 것인지?)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		EAbilityType AbilityType;
 
 	//어빌리티명
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -150,31 +165,38 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<FAbilityInfoStruct> GetAbilityInfoList() { return ActiveAbilityInfoList;  }
 
+	//아직 뽑힌적 없는 무작위의 어빌리티를 반환한다. (개수와 타입 지정 가능)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FAbilityInfoStruct> GetRandomAbilityInfoList(int32 Count, TArray<EAbilityType> TypeList);
+
 protected:
 	UFUNCTION()
 		bool TryUpdateCharacterStat(const FAbilityInfoStruct TargetAbilityInfo, bool bIsReset = false);
 
-	//배열로부터 AbilityInfo를 불러들임
+	//배열로부터 AbilityInfo를 불러들임 (활성화 된 것 중에서 찾을지 지정 가능)
 	UFUNCTION()
-		FAbilityInfoStruct GetAbilityInfo(int32 AbilityID);
+		FAbilityInfoStruct GetAbilityInfo(int32 AbilityID, bool bActiveAbilityOnly = false);
 
+	//배열로부터 AbilityInfoList의 idx를 불러들임 (활성화 된 것 중에서 찾을지 지정 가능)
 	UFUNCTION()
-		int32 GetAbilityListIdx(int32 AbilityID);
+		int32 GetAbilityListIdx(int32 AbilityID, bool bActiveAbilityOnly = false);
 
 private:
-	UFUNCTION()
-		bool InitAbilityInfoListFromTable(const UDataTable* AbilityInfoTable);
+	bool InitAbilityInfoListFromTable(const UDataTable* AbilityInfoTable);
+	//이전 단계의 어빌리티가 뽑혔는지를 체크한다. 
+	bool CanPickAbility(int32 AbilityID);
 
 //--------- Property ----------------------------------------------------
 protected:
 	//최대 어빌리티 수
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		int32 MaxAbilityCount = 9999999;
-		
+
 private:
 	//현재 플레이어가 소유한 어빌리티의 정보
 	UPROPERTY()
 		TArray<FAbilityInfoStruct> ActiveAbilityInfoList;
+		TArray<bool> AbilityPickedInfoList;
 	
 	//소유자 캐릭터 약참조
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;

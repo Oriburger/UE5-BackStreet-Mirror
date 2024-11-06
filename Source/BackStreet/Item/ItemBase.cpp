@@ -67,7 +67,6 @@ void AItemBase::BeginPlay()
 	OnPlayerBeginPickUp.BindUFunction(this, FName("OnItemPicked"));
 	ItemTriggerVolume->OnInteractionBegin.AddDynamic(this, &AItemBase::OnItemPicked);
 	PlayerRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-
 	ActivateItem();
 }
 
@@ -93,6 +92,7 @@ void AItemBase::InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride)
 		}
 	}
 	OnItemInitialized.Broadcast(ItemInfo);
+	ActivateItem();
 }
 
 void AItemBase::OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

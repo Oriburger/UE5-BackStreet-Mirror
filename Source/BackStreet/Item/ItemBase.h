@@ -56,7 +56,7 @@ public:
 
 // ------ 기본 Info ---------------------------
 protected:
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
 		FItemInfoDataStruct ItemInfo;
 
 // ------ 아이템 기본 로직-------------------------------------

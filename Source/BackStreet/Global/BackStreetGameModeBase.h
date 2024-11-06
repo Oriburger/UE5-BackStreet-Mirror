@@ -53,7 +53,6 @@ public:
 	UFUNCTION()
 		AItemBase* SpawnItemToWorld(int32 ItemID, FVector SpawnLocation);
 
-
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }
 
