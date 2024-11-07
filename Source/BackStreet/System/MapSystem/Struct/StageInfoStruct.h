@@ -287,4 +287,8 @@ public:
 	//Boss character class per chapter
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
 		TSubclassOf<class AEnemyCharacterBase> BossCharacterClass;
+
+//======= Function =======================
+public:
+	bool IsValid() { return StageInfoList.Num() > 0; }
 };

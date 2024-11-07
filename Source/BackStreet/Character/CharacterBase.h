@@ -202,6 +202,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetStatTotalValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetTotalValue(TargetStatType); }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetStatProbabilityValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetProbabilityStatInfo(TargetStatType); }
+
 	UFUNCTION(BlueprintCallable)
 		void InitCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo);
 
@@ -268,6 +271,22 @@ protected:
 public:
 	UPROPERTY(BlueprintReadOnly)
 		TArray<USoundCue*> FootStepSoundList;
+
+//========================================================================
+//====== VFX ============================================================
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraComponent* BuffNiagaraEmitter;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraComponent* DirectionNiagaraEmitter;
+
+public:
+	UFUNCTION()
+		void ActivateDebuffNiagara(uint8 DebuffType);
+
+	UFUNCTION()
+		void DeactivateBuffEffect();
 
 //========================================================================
 //====== PROPERTY ========================================================

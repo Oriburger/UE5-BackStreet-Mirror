@@ -275,23 +275,9 @@ public:
 public:
 	virtual bool EquipWeapon(int32 NewWeaponID);
 
-// -------- VFX --------------------
-protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class UNiagaraComponent* BuffNiagaraEmitter;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class UNiagaraComponent* DirectionNiagaraEmitter;
-
 private:
 	UPROPERTY()
 		bool bIsWallThroughEffectActivated = false;
-
-	UFUNCTION()
-		void ActivateDebuffNiagara(uint8 DebuffType);
-
-	UFUNCTION()
-		void DeactivateBuffEffect();
 
 	//캐릭터가 데미지를 입을 시, 빨간 Pulse 효과와 표정 텍스쳐 효과를 적용
 	UFUNCTION()

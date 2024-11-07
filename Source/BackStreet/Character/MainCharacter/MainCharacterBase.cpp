@@ -68,15 +68,6 @@ AMainCharacterBase::AMainCharacterBase()
 	FollowingCamera->SetupAttachment(CameraBoom);
 	FollowingCamera->bAutoActivate = true;
 
-	BuffNiagaraEmitter = CreateDefaultSubobject<UNiagaraComponent>(TEXT("BUFF_EFFECT"));
-	BuffNiagaraEmitter->SetupAttachment(GetMesh());
-	BuffNiagaraEmitter->SetRelativeLocation(FVector(0.0f, 0.0f, 45.0f));
-	BuffNiagaraEmitter->bAutoActivate = false;
-
-	DirectionNiagaraEmitter = CreateDefaultSubobject<UNiagaraComponent>(TEXT("DIRECTION_EFFECT"));
-	DirectionNiagaraEmitter->SetupAttachment(GetMesh());
-	DirectionNiagaraEmitter->SetRelativeRotation({ 0.0f, 90.0f, 0.0f });
-
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
 
@@ -820,8 +811,6 @@ bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* C
 	{
 		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "Debuff");
 	}
-	
-	ActivateDebuffNiagara((uint8)DebuffInfo.Type);
 
 	FTimerDelegate timerDelegate; 
 
@@ -850,27 +839,6 @@ bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 bool AMainCharacterBase::EquipWeapon(const int32 NewWeaponID)
 {
 	return Super::EquipWeapon(NewWeaponID);
-}
-
-void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)
-{
-	if (!IsValid(BuffNiagaraEmitter)) return;
-	TArray<UNiagaraSystem*>& targetEmitterList = AssetHardPtrInfo.DebuffNiagaraEffectList;
-
-	if (targetEmitterList.IsValidIndex(DebuffType) && targetEmitterList[DebuffType] != nullptr)
-	{
-		BuffNiagaraEmitter->SetRelativeLocation(FVector(0.0f, 0.0f, 125.0f));
-		BuffNiagaraEmitter->Deactivate();
-		BuffNiagaraEmitter->SetAsset((targetEmitterList)[DebuffType], false);
-		BuffNiagaraEmitter->Activate();
-	}
-}
-
-void AMainCharacterBase::DeactivateBuffEffect()
-{
-	if (!IsValid(BuffNiagaraEmitter)) return;
-	BuffNiagaraEmitter->SetAsset(nullptr, false);
-	BuffNiagaraEmitter->Deactivate(); 
 }
 
 void AMainCharacterBase::SetFacialDamageEffect()
