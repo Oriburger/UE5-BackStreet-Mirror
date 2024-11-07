@@ -3,6 +3,7 @@
 #include "WeaponComponentBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
+#include "../../Character/Component/ActionTrackingComponent.h"
 #include "../../Character/CharacterBase.h"
 #include "../../Item/Weapon/CombatManager.h"
 #include "../../Item/Weapon/Melee/MeleeCombatManager.h"
@@ -66,6 +67,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 {
 	//Stat, State 초기화 
 	int32 oldWeaponID = WeaponID;
+	bool bIsCached = false;
 	WeaponStat.WeaponID = WeaponID = NewWeaponID;
 
 	//기존꺼 저장
@@ -86,6 +88,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	}
 	else
 	{
+		bIsCached = WeaponStatCacheMap.Contains(NewWeaponID);
 		WeaponStat = WeaponStatCacheMap.Contains(NewWeaponID)
 					? WeaponStatCacheMap[NewWeaponID]
 					: GetWeaponStatInfoWithID(WeaponID);
@@ -99,15 +102,6 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_FinalAttack, 0);
 		}
 		WeaponState.RangedWeaponState.UpdateAmmoValidation(WeaponStat.RangedWeaponStat.MaxTotalAmmo);
-	}
-
-	//에셋까지 있다면 그냥 반환
-	if(WeaponAssetCacheMap.Contains(NewWeaponID))
-	{
-		WeaponAssetInfo = WeaponAssetCacheMap[NewWeaponID];
-		SetProjectileInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
-		InitWeaponAsset();
-		return;
 	}
 
 	//에셋 초기화
@@ -133,7 +127,6 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 		tempStream.AddUnique(WeaponAssetInfo.MeleeWeaponAssetInfo.HitImpactSoundLarge.ToSoftObjectPath());
 
 		//Ranged
-		//tempStream.AddUnique(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileClass.ToSoftObjectPath());
 		tempStream.AddUnique(WeaponAssetInfo.RangedWeaponAssetInfo.ShootEffectParticle.ToSoftObjectPath());
 
 		for (auto& assetPath : tempStream)
@@ -144,8 +137,9 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
 		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &UWeaponComponentBase::InitWeaponAsset));
 	}
-	if (WeaponStat.WeaponType == EWeaponType::E_Melee)
+	if (!bIsCached && WeaponStat.WeaponType == EWeaponType::E_Melee)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("On Main Weapon Updated : %d %d"), WeaponStat.WeaponID, (int32)WeaponStat.WeaponType)
 		OnMainWeaponUpdated.Broadcast();
 	}
 	OnWeaponStateUpdated.Broadcast(WeaponID, WeaponStat.WeaponType, WeaponState);
@@ -197,6 +191,11 @@ void UWeaponComponentBase::InitWeaponAsset()
 	if (WeaponAssetInfo.MeleeWeaponAssetInfo.HitEffectParticleLarge.IsValid())
 	{
 		HitEffectParticleLarge = WeaponAssetInfo.MeleeWeaponAssetInfo.HitEffectParticleLarge.Get();
+	}
+	if (WeaponAssetInfo.RangedWeaponAssetInfo.ShootEffectParticle.IsValid()
+		&& IsValid(RangedCombatManager))
+	{
+		ShootEffectParticle = WeaponAssetInfo.RangedWeaponAssetInfo.ShootEffectParticle.Get();
 	}
 }
 
@@ -305,13 +304,86 @@ uint8 UWeaponComponentBase::GetMaxStatLevel(EWeaponStatType WeaponStatType)
 	return WeaponStat.UpgradableStatInfoMap[WeaponStatType].StatInfoByLevel.Num() - 1;
 }
 
-float UWeaponComponentBase::CalculateTotalDamage(FCharacterStateStruct TargetState)
+float UWeaponComponentBase::CalculateTotalDamage(FCharacterGameplayInfo TargetState, bool& bIsFatalAttack)
 {
 	if (!OwnerCharacterRef.IsValid()) return 0.0f;
-	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
-	return WeaponStat.WeaponDamage * (1 + FMath::Max(-1, ownerState.TotalAttack - TargetState.TotalDefense))
-		* (1 + WeaponStat.bCriticalApply * WeaponStat.CriticalDamageRate)
-		+ (!WeaponStat.bFixDamageApply ? 0.0f : WeaponStat.FixedDamageAmount);
+	bool bIsDashAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("DashAttack"));
+	bool bIsJumpAttacking = !OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"));
+
+	FCharacterGameplayInfo& ownerState = OwnerCharacterRef.Get()->GetCharacterGameplayInfoRef();
+	const float fatalMultiplier = CalculateAttackFatality(ownerState, bIsJumpAttacking, bIsDashAttacking);
+	bIsFatalAttack = (fatalMultiplier > 0.0f);
+
+	return WeaponStat.WeaponDamage
+		* (1.0f + FMath::Max(0.0f, ownerState.GetTotalValue(ECharacterStatType::E_NormalPower) - TargetState.GetTotalValue(ECharacterStatType::E_Defense)))
+		* (WeaponStat.bCriticalApply ? WeaponStat.CriticalDamageRate : 1.0f) // 크리티컬 데미지 적용 여부
+		* (bIsDashAttacking ? (1.0f + ownerState.GetTotalValue(ECharacterStatType::E_DashAttackPower)) : 1.0f) // 대쉬 공격 여부
+		* (bIsJumpAttacking ? (1.0f + ownerState.GetTotalValue(ECharacterStatType::E_JumpAttackPower)) : 1.0f) // 점프 공격 여부
+		* (1.0f + fatalMultiplier)
+		+ (WeaponStat.bFixDamageApply ? WeaponStat.FixedDamageAmount : 0.0f);  // 치명적 공격의 추가 배율
+}
+
+float UWeaponComponentBase::CalculateAttackFatality(FCharacterGameplayInfo& GameplayInfoRef, bool bIsJumpAttacking, bool bIsDashAttacking)
+{
+	FStatValueGroup& fatalInfo = GameplayInfoRef.GetStatGroup(bIsDashAttacking ? ECharacterStatType::E_DashAttackFatality
+								: (bIsJumpAttacking ? ECharacterStatType::E_JumpAttackFatality
+								: ECharacterStatType::E_NormalFatality));
+	
+	if (fatalInfo.bIsContainProbability && fatalInfo.ProbabilityValue >= FMath::FRand())
+	{
+		fatalInfo.UpdateTotalValue();
+		return fatalInfo.GetTotalValue();
+	}
+	return 0.0f;
+}
+
+void UWeaponComponentBase::ApplyWeaponDebuff(ACharacterBase* TargetCharacter)
+{
+	if(!OwnerCharacterRef.IsValid() || !IsValid(TargetCharacter)) return;
+
+	bool bIsJumpAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("JumpAttack"));
+	bool bIsDashAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("DashAttack"));
+	float flameValue, poisonValue, stunValue, slowValue;
+	const float debuffTime = 2.5f + OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_DebuffTime);
+
+	if (bIsJumpAttacking)
+	{
+		flameValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_JumpAttackFlame);
+		poisonValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_JumpAttackPoison);
+		stunValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_JumpAttackStun);
+		slowValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_JumpAttackSlow);
+	}
+	else if (bIsDashAttacking)
+	{
+		flameValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_DashAttackFlame);
+		poisonValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_DashAttackPoison);
+		stunValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_DashAttackStun);
+		slowValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_DashAttackSlow);
+	}
+	else
+	{
+		flameValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_NormalFlame);
+		poisonValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_NormalPoison);
+		stunValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_NormalStun);
+		slowValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_NormalSlow);
+	}
+
+	if (flameValue > 0.0f)
+	{
+		TargetCharacter->TryAddNewDebuff(FDebuffInfoStruct(ECharacterDebuffType::E_Burn, debuffTime, flameValue, true), OwnerCharacterRef.Get());
+	}
+	else if (poisonValue > 0.0f)
+	{
+		TargetCharacter->TryAddNewDebuff(FDebuffInfoStruct(ECharacterDebuffType::E_Poison, debuffTime, poisonValue, true), OwnerCharacterRef.Get());
+	}
+	else if (stunValue > 0.0f)
+	{
+		TargetCharacter->TryAddNewDebuff(FDebuffInfoStruct(ECharacterDebuffType::E_Stun, debuffTime + stunValue, 0.0f, true), OwnerCharacterRef.Get());
+	}
+	else if (slowValue > 0.0f)
+	{
+		TargetCharacter->TryAddNewDebuff(FDebuffInfoStruct(ECharacterDebuffType::E_Slow, debuffTime, slowValue, true), OwnerCharacterRef.Get());
+	}
 }
 
 bool UWeaponComponentBase::UpgradeStat(TArray<uint8> NewLevelList)

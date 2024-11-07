@@ -10,7 +10,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateWeaponUpdated);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDelegateWeaponStateUpdated, int32, WeaponID, EWeaponType, WeaponType, FWeaponStateStruct, NewState);
 
-UCLASS()
+UCLASS(Blueprintable)
 class BACKSTREET_API UWeaponComponentBase : public UStaticMeshComponent
 {
 	GENERATED_BODY()
@@ -30,14 +30,17 @@ public:
 
 //------- VFX --------------------------------
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UNiagaraComponent* WeaponTrailParticle;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UNiagaraSystem* HitEffectParticle;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
 		class UNiagaraSystem* HitEffectParticleLarge;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay | VFX")
+		class UNiagaraSystem* ShootEffectParticle;
 
 //------- Basic property, Action -------------------
 public:
@@ -154,7 +157,14 @@ public:
 
 	//Calculate total damage to target character
 	UFUNCTION()
-		float CalculateTotalDamage(FCharacterStateStruct TargetState);
+		float CalculateTotalDamage(FCharacterGameplayInfo TargetState, bool& bIsFatalAttack);
+
+	UFUNCTION()
+		void ApplyWeaponDebuff(class ACharacterBase* TargetCharacter);
+private:
+	float CalculateAttackFatality(FCharacterGameplayInfo& GameplayInfoRef
+			, bool bIsJumpAttacking = false, bool bIsDashAttacking = false);
+
 
 // ======		Upgrade		================
 public:	

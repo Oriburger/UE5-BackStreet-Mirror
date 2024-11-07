@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../../Global/BackStreet.h"
+#include "Components/ActorComponent.h"
 #include "TimerManager.h"
 #include "AbilityManagerBase.generated.h"
 
@@ -12,11 +13,18 @@ struct FAbilityValueInfoStruct
 public:
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float Variable = 0.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		bool bIsPercentage  = false;
+	// 추가로 확률 정보가 필요한지? 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool bIsContainProbability = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bIsContainProbability", UIMin = 0.0f, UIMax = 1.0f))
+		float ProbabilityValue = 1.0f;
+
+public:
+	FAbilityValueInfoStruct() : Variable(0.0f), bIsContainProbability(false), ProbabilityValue(0.0f) {}
 };
 
 UENUM(BlueprintType)
@@ -39,10 +47,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0, UIMax = 10))
 		int32 AbilityId = 0;
 
-	//Ability Type (Multiple Type / this value is for updating stat)
-	//ex)  {E_AttackUp, E_DefenseUp}  ->  update character's attack stat var and def stat
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		TArray<ECharacterAbilityType> AbilityTypeList;
+	//for Multiple Stat
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TMap<ECharacterStatType, FAbilityValueInfoStruct> TargetStatMap;
 
 	//어빌리티명
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -50,19 +57,15 @@ public:
 
 	//Ability's Tier
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		EAbilityTierType AbilityTier;
+		EAbilityTierType AbilityTier = EAbilityTierType::E_None;
 
 	//어빌리티 설명
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FName AbilityDescription;
 
-	//어빌리티 설명
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FName AbilityDetailDescription;
-
 	//어빌리티의 아이콘
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		UTexture2D* AbilityIcon;
+		UTexture2D* AbilityIcon = nullptr;
 		
 	//반복적인 연산이 필요한지? (도트 힐) , 현재 미사용
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -75,32 +78,41 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TArray<FAbilityValueInfoStruct> VariableInfo;	
 
+public:
 	//Repetitive 연산을 위한 TimerHandle
-	UPROPERTY()
-		FTimerHandle TimerHandle; 
-		FTimerDelegate TimerDelegate;
+	FTimerHandle TimerHandle; 
+	FTimerDelegate TimerDelegate;
 
 public:
 	inline bool operator==(const FAbilityInfoStruct& other) const
 	{
 		return AbilityId == other.AbilityId;
 	}
+
+	inline bool IsValid() const
+	{
+		return AbilityId > 0;
+	}
 };
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityInfoList, const TArray<FAbilityInfoStruct>&, AbilityInfoList);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityUpdate, const TArray<FAbilityInfoStruct>&, AbilityInfoList);
 
-UCLASS()
-class BACKSTREET_API UAbilityManagerBase : public UObject
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+class BACKSTREET_API UAbilityManagerComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	UAbilityManagerBase();
-	
+	UAbilityManagerComponent();
+
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateAbilityInfoList AbilityUpdateDelegate;
+		FDelegateAbilityUpdate OnAbilityUpdated;
+
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
 
 //--------- Function ----------------------------------------------------
 public:
@@ -146,6 +158,9 @@ protected:
 	UFUNCTION()
 		FAbilityInfoStruct GetAbilityInfo(int32 AbilityID);
 
+	UFUNCTION()
+		int32 GetAbilityListIdx(int32 AbilityID);
+
 private:
 	UFUNCTION()
 		bool InitAbilityInfoListFromTable(const UDataTable* AbilityInfoTable);
@@ -153,8 +168,8 @@ private:
 //--------- Property ----------------------------------------------------
 protected:
 	//최대 어빌리티 수
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 1, UIMax = 5))
-		int32 MaxAbilityCount = 2;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		int32 MaxAbilityCount = 9999999;
 		
 private:
 	//현재 플레이어가 소유한 어빌리티의 정보

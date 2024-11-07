@@ -5,6 +5,7 @@
 #include "../Component/ItemInventoryComponent.h"
 #include "../Component/SkillManagerComponentBase.h"
 #include "../Component/PlayerSkillManagerComponent.h"
+#include "../Component/ActionTrackingComponent.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SaveSystem/BackStreetGameInstance.h"
 #include "../../System/AbilitySystem/AbilityManagerBase.h"
@@ -38,7 +39,7 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CAMERA_BOOM"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->bUsePawnControlRotation = true;
-	CameraBoom->TargetArmLength = 500.0f;
+	CameraBoom->TargetArmLength = 375.0f;
 	CameraBoom->bInheritPitch = true;
 	CameraBoom->bInheritRoll = false;
 	CameraBoom->bInheritYaw = true;
@@ -46,7 +47,7 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom->bEnableCameraRotationLag = true;	
 	CameraBoom->CameraRotationLagSpeed = 0.5f;
 	CameraBoom->CameraLagMaxDistance = 1000.0f;
-	CameraBoom->SetRelativeLocation({ 0.0f, 30.0f, 80.0f });
+	CameraBoom->SetRelativeLocation({ 0.0f, 30.0f, 25.0f });
 	CameraBoom->SetWorldRotation({ -45.0f, 0.0f, 0.0f });
 
 
@@ -58,12 +59,9 @@ AMainCharacterBase::AMainCharacterBase()
 	RangedAimBoom->bInheritPitch = true;
 	RangedAimBoom->bInheritRoll = false;
 	RangedAimBoom->bInheritYaw = true;
-	RangedAimBoom->SetRelativeLocation({ 0.0f, 85.0f, 10.0f });	//Set Location
+	RangedAimBoom->SetRelativeLocation({ 0.0f, 80.0f, -10 });	//Set Location
 
 	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 110.0f, 120.0f));
-
-	SkillManagerComponent = CreateDefaultSubobject<UPlayerSkillManagerComponent>(TEXT("SKILL_MANAGER_"));
-	SkillManagerComponentRef = SkillManagerComponent;
 
 	//MainCharacter Main Camera
 	FollowingCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FOLLOWING_CAMERA"));
@@ -81,6 +79,11 @@ AMainCharacterBase::AMainCharacterBase()
 
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
+
+	SkillManagerComponent = CreateDefaultSubobject<UPlayerSkillManagerComponent>(TEXT("SKILL_MANAGER_"));
+	SkillManagerComponentRef = SkillManagerComponent;
+
+	AbilityManagerComponent = CreateDefaultSubobject<UAbilityManagerComponent>(TEXT("ABILITY_MANAGER"));
 
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
 	GetCapsuleComponent()->SetCapsuleRadius(41.0f);
@@ -100,6 +103,8 @@ void AMainCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	InitCharacterGameplayInfo(DefaultStat);
+	
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -111,13 +116,9 @@ void AMainCharacterBase::BeginPlay()
 
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
-	AbilityManagerRef = NewObject<UAbilityManagerBase>(this, UAbilityManagerBase::StaticClass(), FName("AbilityfManager"));
-	AbilityManagerRef->InitAbilityManager(this);
-
-	ItemInventory->InitInventory();
-	InitCharacterState();
-
+	AbilityManagerComponent->InitAbilityManager(this);
 	InitCombatUI();
+
 
 	//UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
 
@@ -129,6 +130,7 @@ void AMainCharacterBase::BeginPlay()
 	//}
 	//SetCharacterStatFromSaveData();
 	//ItemInventory->SetItemInventoryFromSaveData();
+	ItemInventory->InitInventory();
 
 	
 	TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
@@ -233,7 +235,7 @@ void AMainCharacterBase::SwitchWeapon(bool bSwitchToSubWeapon)
 void AMainCharacterBase::ZoomIn()
 {
 	//Exception Handling ==========================
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (!IsValid(ItemInventory)) return;
 	FItemInfoDataStruct subWeaponData = ItemInventory->GetSubWeaponInfoData();
 	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
@@ -272,7 +274,7 @@ void AMainCharacterBase::ZoomOut()
 void AMainCharacterBase::TryShoot()
 {
 	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Shoot) return;
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Shoot) return;
+	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Shoot) return;
 
 	FRotator shootRotation = GetAimingRotation(WeaponComponent->GetComponentLocation());
 	WeaponComponent->RangedCombatManager->TryFireProjectile(shootRotation);
@@ -281,6 +283,7 @@ void AMainCharacterBase::TryShoot()
 		&& IsValid(AssetHardPtrInfo.ShootAnimMontageList[0]))
 	{
 		PlayAnimMontage(AssetHardPtrInfo.ShootAnimMontageList[0], 1.0f);
+		OnAttackStarted.Broadcast();
 	}
 }
 
@@ -288,11 +291,12 @@ void AMainCharacterBase::SetAimingMode(bool bNewState)
 {
 	GetCharacterMovement()->bOrientRotationToMovement = !bNewState;
 	bUseControllerRotationYaw = bNewState;
-	CharacterState.CharacterActionState = bNewState ? ECharacterActionType::E_Shoot : ECharacterActionType::E_Idle;	
-	CharacterState.bIsAiming = bNewState;
-	CharacterState.bIsSprinting = bNewState ? false : CharacterState.bIsSprinting;	
+	CharacterGameplayInfo.CharacterActionState = bNewState ? ECharacterActionType::E_Shoot : ECharacterActionType::E_Idle;
+	CharacterGameplayInfo.bIsAiming = bNewState;
+	CharacterGameplayInfo.bIsSprinting = bNewState ? false : CharacterGameplayInfo.bIsSprinting;
 
-	const float aimMoveSpeed = bNewState ? CharacterStat.DefaultMoveSpeed * 0.3f : CharacterStat.DefaultMoveSpeed;
+	const float moveSpeed = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed);
+	const float aimMoveSpeed = bNewState ? moveSpeed * 0.3f : moveSpeed;
 	SetWalkSpeedWithInterp(aimMoveSpeed, 0.75f);
 }
 
@@ -322,7 +326,8 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (GetCharacterMovement()->IsFalling()) return;
-	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
+	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
+	if (CharacterGameplayInfo.bIsAirAttacking || CharacterGameplayInfo.bIsDownwardAttacking) return;
 
 	// input is a Vector2D
 	MovementInputValue = Value.Get<FVector2D>();
@@ -340,6 +345,7 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 		AddMovementInput(forwardAxis, MovementInputValue.Y);
 		AddMovementInput(FollowingCamera->GetRightVector(), MovementInputValue.X);
 
+		OnMoveStarted.Broadcast();
 		SetRotationLagSpeed(Value.Get<FVector2D>());
 	}
 }
@@ -369,38 +375,43 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
 
 	Jump();
+	OnJumpStarted.Broadcast();
 }
 
 void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
-	if (CharacterState.bIsSprinting) return;
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (CharacterGameplayInfo.bIsSprinting) return;
+	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero()) return;
 	
 	WeaponComponent->ResetComboCnt();
-	CharacterState.bIsSprinting = true;
-	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed, 0.75f);
+	CharacterGameplayInfo.bIsSprinting = true;
+	SetWalkSpeedWithInterp(CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed) * 1.25, 0.75f);
 	SetFieldOfViewWithInterp(105.0f, 0.25f);
+	OnSprintStarted.Broadcast();
 }
 
 void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 {
-	if (!CharacterState.bIsSprinting) return;
+	if (!CharacterGameplayInfo.bIsSprinting) return;
 
-	CharacterState.bIsSprinting = false;
-	SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed * 0.75f, 0.4f);
+	CharacterGameplayInfo.bIsSprinting = false;
+	SetWalkSpeedWithInterp(CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed), 0.4f);
 	SetFieldOfViewWithInterp(90.0f, 0.5f);
+	OnSprintEnd.Broadcast();
 }
 
 void AMainCharacterBase::Roll()
 {	
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Attack)) return;
-	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
+	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
+	if (!CharacterGameplayInfo.bCanRoll || CharacterGameplayInfo.bIsAirAttacking || CharacterGameplayInfo.bIsDownwardAttacking) return;
 
 	if (GetIsActionActive(ECharacterActionType::E_Attack))
 	{
@@ -442,12 +453,18 @@ void AMainCharacterBase::Roll()
 	}
 
 	//애니메이션 
-	CharacterState.CharacterActionState = ECharacterActionType::E_Roll;
+	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Roll;
 	if (AssetHardPtrInfo.RollAnimMontageList.Num() > 0
 		&& IsValid(AssetHardPtrInfo.RollAnimMontageList[0]))
 	{
 		PlayAnimMontage(AssetHardPtrInfo.RollAnimMontageList[0], 1.0f);
-	}	
+		OnRollStarted.Broadcast();
+		
+		CharacterGameplayInfo.bCanRoll = false;
+		GetWorldTimerManager().SetTimer(RollDelayTimerHandle, FTimerDelegate::CreateLambda([=]() {
+			CharacterGameplayInfo.bCanRoll = true;
+		}), CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_RollDelay), false);
+	}
 }
 
 void AMainCharacterBase::Dash()
@@ -478,7 +495,7 @@ void AMainCharacterBase::TryInvestigate()
 void AMainCharacterBase::LockToTarget(const FInputActionValue& Value)
 {
 	if (GetCharacterMovement()->IsFalling()) return;
-	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
+	if (CharacterGameplayInfo.bIsAirAttacking || CharacterGameplayInfo.bIsDownwardAttacking) return;
 
 	TargetingManagerComponent->ActivateTargeting();
 }
@@ -493,17 +510,16 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 		GetWorld()->GetTimerManager().ClearTimer(FacialEffectResetTimerHandle);
 		GetWorld()->GetTimerManager().SetTimer(FacialEffectResetTimerHandle, this, &AMainCharacterBase::ResetFacialDamageEffect, 1.0f, false);
 	}*/
-	OnTakeDamage.Broadcast();
 	return damageAmount;
 }
 
 void AMainCharacterBase::TryAttack()
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Attack
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Idle
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Shoot) return;
-	if (!CharacterState.bCanAttack) return;
+	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Attack
+		&& CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle
+		&& CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Shoot) return;
+	if (!CharacterGameplayInfo.bCanAttack) return;
 	if (WeaponComponent->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
@@ -511,15 +527,15 @@ void AMainCharacterBase::TryAttack()
 	}
 	this->Tags.Add("Attack|Common");
 
-	if (CharacterState.bIsSprinting && !CharacterState.bIsAirAttacking
-		&& !CharacterState.bIsDownwardAttacking && !GetCharacterMovement()->IsFalling())
+	if (CharacterGameplayInfo.bIsSprinting && !CharacterGameplayInfo.bIsAirAttacking
+		&& !CharacterGameplayInfo.bIsDownwardAttacking && !GetCharacterMovement()->IsFalling())
 	{
 		TryDashAttack();
 		return;
 	}
 
 	//Rotate to attack direction using input (1. movement / 2. camera)
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Idle)
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
 	{
 		if (MovementInputValue.Length() > 0)
 		{
@@ -539,9 +555,9 @@ void AMainCharacterBase::TryAttack()
 void AMainCharacterBase::TryUpperAttack()
 {
 	if (GetCharacterMovement()->IsFalling()) return;
-	if (CharacterState.bIsAirAttacking) return;
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (CharacterState.bIsSprinting)
+	if (CharacterGameplayInfo.bIsAirAttacking) return;
+	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (CharacterGameplayInfo.bIsSprinting)
 	{
 		SetFieldOfViewWithInterp(90.0f, 0.75f);
 	}
@@ -571,7 +587,7 @@ void AMainCharacterBase::TryUpperAttack()
 void AMainCharacterBase::TryDownwardAttack()
 {
 	Super::TryDownwardAttack();
-	if (!GetCharacterMovement()->IsFalling() || !CharacterState.bIsAirAttacking) return;
+	if (!GetCharacterMovement()->IsFalling() || !CharacterGameplayInfo.bIsAirAttacking) return;
 	if (IsValid(TargetingManagerComponent->GetTargetedCharacter()))
 	{
 		SetFieldOfViewWithInterp(110.0f, 0.75f);
@@ -580,14 +596,14 @@ void AMainCharacterBase::TryDownwardAttack()
 
 bool AMainCharacterBase::TrySkill(int32 SkillID)
 {	
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Attack)
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Attack)
 	{
 		StopAttack();
 	}
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_Stun
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_Die
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown) return false;
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Skill
+		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Stun
+		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die
+		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_KnockedDown) return false;
 
 	return Super::TrySkill(SkillID);
 }
@@ -614,20 +630,6 @@ void AMainCharacterBase::StandUp()
 {
 	Super::StandUp();
 }
-
-void AMainCharacterBase::RotateToCursor()
-{
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Attack) return;
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle
-		&& CharacterState.CharacterActionState != ECharacterActionType::E_Shoot) return;
-
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	FRotator newRotation = GetControlRotation();
-	newRotation.Pitch = newRotation.Roll = 0.0f;
-	SetActorRotation(newRotation);
-	return;
-}
-
 
 TArray<UInteractiveCollisionComponent*> AMainCharacterBase::GetNearInteractionComponentList()
 {
@@ -753,17 +755,7 @@ void AMainCharacterBase::OnTargetingStateUpdated(bool bIsActivated, APawn* Targe
 
 void AMainCharacterBase::SetCharacterStatFromSaveData()
 {
-	CharacterStat = SavedData.PlayerSaveGameData.PlayerStat;
-}
-
-void AMainCharacterBase::ResetRotationToMovement()
-{
-	/* 시점 전환을 위해 제거
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Roll) return;
-	FRotator newRotation = GetCapsuleComponent()->GetComponentRotation();
-	newRotation.Yaw += 270.0f;
-	GetMesh()->SetWorldRotation(newRotation);
-	GetCharacterMovement()->bOrientRotationToMovement = true;*/
+	//CharacterStat = SavedData.PlayerSaveGameData.PlayerStat;
 }
 
 void AMainCharacterBase::SetWalkSpeedWithInterp(float NewValue, const float InterpSpeed, const bool bAutoReset)
@@ -786,7 +778,7 @@ void AMainCharacterBase::UpdateWalkSpeed(const float TargetValue, const float In
 		GetWorld()->GetTimerManager().ClearTimer(WalkSpeedInterpTimerHandle);
 		if (bAutoReset)
 		{
-			SetWalkSpeedWithInterp(CharacterStat.DefaultMoveSpeed * 0.5f, InterpSpeed * 1.5f, false);
+			SetWalkSpeedWithInterp(CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed) * 0.5f, InterpSpeed * 1.5f, false);
 		}
 	}
 	currentSpeed = FMath::FInterpTo(currentSpeed, TargetValue, 0.1f, InterpSpeed);
@@ -842,20 +834,17 @@ bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* C
 
 bool AMainCharacterBase::TryAddNewAbility(const int32 NewAbilityID)
 {
-	if(!IsValid(AbilityManagerRef)) return false;
-	return AbilityManagerRef->TryAddNewAbility(NewAbilityID);
+	return AbilityManagerComponent->TryAddNewAbility(NewAbilityID);
 }
 
 bool AMainCharacterBase::TryRemoveAbility(const int32 NewAbilityID)
 {
-	if (!IsValid(AbilityManagerRef)) return false;
-	return AbilityManagerRef->TryRemoveAbility(NewAbilityID);
+	return AbilityManagerComponent->TryRemoveAbility(NewAbilityID);
 }
 
 bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 {
-	if (!IsValid(AbilityManagerRef)) return false;
-	return AbilityManagerRef->GetIsAbilityActive(AbilityID);
+	return AbilityManagerComponent->GetIsAbilityActive(AbilityID);
 }
 
 bool AMainCharacterBase::EquipWeapon(const int32 NewWeaponID)
@@ -912,11 +901,13 @@ void AMainCharacterBase::ClearAllTimerHandle()
 
 	GetWorldTimerManager().ClearTimer(BuffEffectResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(FacialEffectResetTimerHandle);
-	GetWorldTimerManager().ClearTimer(RollTimerHandle); 
+	GetWorldTimerManager().ClearTimer(RollDelayTimerHandle);
 	GetWorldTimerManager().ClearTimer(DashDelayTimerHandle);
+	GetWorldTimerManager().ClearTimer(JumpAttackDebuffTimerHandle);
 
 	BuffEffectResetTimerHandle.Invalidate();
 	FacialEffectResetTimerHandle.Invalidate();
-	RollTimerHandle.Invalidate();
+	RollDelayTimerHandle.Invalidate();
 	DashDelayTimerHandle.Invalidate();
+	JumpAttackDebuffTimerHandle.Invalidate();
 }

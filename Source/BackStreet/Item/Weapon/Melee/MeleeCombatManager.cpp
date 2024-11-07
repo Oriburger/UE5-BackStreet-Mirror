@@ -87,8 +87,8 @@ void UMeleeCombatManager::MeleeAttack()
 	bool bIsFinalCombo = WeaponComponentRef.Get()->GetIsFinalCombo();
 	bool bIsMeleeTraceSucceed = false;
 
-	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
-	
+	FCharacterGameplayInfo ownerInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfo();
+
 	TArray<FVector> currTracePositionList = GetCurrentMeleePointList();
 	TArray<AActor*> targetList = CheckMeleeAttackTargetWithSphereTrace();
 	MeleePrevTracePointList = currTracePositionList;
@@ -96,18 +96,22 @@ void UMeleeCombatManager::MeleeAttack()
 	for (auto& target : targetList)
 	{
 		//if target is valid, apply damage
-		if (IsValid(target) && (!Cast<ACharacterBase>(target)->GetCharacterStat().bIsInvincibility))
+		if (IsValid(target))
 		{
-			FCharacterStateStruct targetState = Cast<ACharacterBase>(target)->GetCharacterState();
-			float totalDamage = WeaponComponentRef.Get()->CalculateTotalDamage(targetState);
-			totalDamage = bIsFinalCombo ? totalDamage * (WeaponComponentRef.Get()->WeaponStat.FinalImpactStrength + 1.0f) : totalDamage;
+			FCharacterGameplayInfo targetInfo = Cast<ACharacterBase>(target)->GetCharacterGameplayInfo();
+			bool bIsFatalAttack = false;
+			float totalDamage = WeaponComponentRef.Get()->CalculateTotalDamage(targetInfo, bIsFatalAttack);
+			UE_LOG(LogTemp, Warning, TEXT("UMeleeCombatManager::MeleeAttack()---- TotalDmg : %.2lf / bIsFatalAtk : %d"), totalDamage, (int32)bIsFatalAttack);
+
+			//Apply Debuff
+			WeaponComponentRef.Get()->ApplyWeaponDebuff(Cast<ACharacterBase>(target));
 
 			//Activate Melee Hit Effect
-			ActivateMeleeHitEffect(target->GetActorLocation(), target, bIsFinalCombo && WeaponComponentRef.Get()->WeaponStat.FinalImpactStrength > 0.0f);
+			ActivateMeleeHitEffect(target->GetActorLocation(), target, bIsFatalAttack);
 
 			//Apply Knockback
 			if (!target->ActorHasTag("Boss")
-				&& !OwnerCharacterRef.Get()->GetCharacterState().bIsAirAttacking)
+				&& !ownerInfo.bIsAirAttacking)
 			{
 				OwnerCharacterRef.Get()->ApplyKnockBack(target, WeaponComponentRef.Get()->WeaponStat.WeaponKnockBackStrength);
 			}

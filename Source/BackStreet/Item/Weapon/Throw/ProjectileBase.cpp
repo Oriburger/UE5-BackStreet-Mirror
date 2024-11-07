@@ -88,12 +88,22 @@ void AProjectileBase::InitProjectileAsset()
 	{
 		HitParticle = ProjectileAssetInfo.HitEffectParticleLegacy.Get();
 	}
-	if (ProjectileAssetInfo.ExplosionParticle.IsValid())
+	if (ProjectileAssetInfo.ExplodeParticle.IsValid())
 	{
-		ExplosionParticle = ProjectileAssetInfo.ExplosionParticle.Get();
+		ExplodeParticle = ProjectileAssetInfo.ExplodeParticle.Get();
 	}
 	if (ProjectileAssetInfo.TrailParticle.IsValid())
+	{
 		TrailParticle->SetAsset(ProjectileAssetInfo.TrailParticle.Get());
+	}
+	if (ProjectileAssetInfo.HitSound.IsValid())
+	{
+		HitSound = ProjectileAssetInfo.HitSound.Get();
+	}
+	if (ProjectileAssetInfo.ExplosionSound.IsValid())
+	{
+		ExplosionSound = ProjectileAssetInfo.ExplosionSound.Get();
+	}
 }
 
 void AProjectileBase::DestroyWithEffect(FVector Location, bool bContainCameraShake)
@@ -115,6 +125,9 @@ void AProjectileBase::DestroyWithEffect(FVector Location, bool bContainCameraSha
 
 	if (HitNiagaraParticle != nullptr)
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitNiagaraParticle, targetTransform.GetLocation(), targetTransform.GetRotation().Rotator());
+
+	if (HitSound != nullptr)
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, GetActorLocation());
 
 	Destroy();
 }
@@ -143,7 +156,10 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectil
 		tempStream.AddUnique(ProjectileAssetInfo.TrailParticle.ToSoftObjectPath());
 		tempStream.AddUnique(ProjectileAssetInfo.HitEffectParticle.ToSoftObjectPath());
 		tempStream.AddUnique(ProjectileAssetInfo.HitEffectParticleLegacy.ToSoftObjectPath());
-			
+		tempStream.AddUnique(ProjectileAssetInfo.ExplodeParticle.ToSoftObjectPath());
+		tempStream.AddUnique(ProjectileAssetInfo.HitSound.ToSoftObjectPath());
+		tempStream.AddUnique(ProjectileAssetInfo.ExplosionSound.ToSoftObjectPath());
+
 		for (auto& assetPath : tempStream)
 		{
 			if (!assetPath.IsValid() || assetPath.IsNull()) continue;
@@ -191,9 +207,10 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		}
 		else
 		{
-			const float totalDamage = Cast<ACharacterBase>(GetOwner())->WeaponComponent->CalculateTotalDamage(Cast<ACharacterBase>(OtherActor)->GetCharacterState());
+			bool bIsFatalAttack = false;
+			const float totalDamage = Cast<ACharacterBase>(GetOwner())->WeaponComponent->CalculateTotalDamage(Cast<ACharacterBase>(OtherActor)->GetCharacterGameplayInfo(), bIsFatalAttack);
 			UGameplayStatics::ApplyDamage(OtherActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
-			DestroyWithEffect(GetActorLocation(), !Cast<ACharacterBase>(OtherActor)->GetCharacterStat().bIsInvincibility);
+			DestroyWithEffect(GetActorLocation(), true);
 		}
 	}
 }
@@ -252,11 +269,15 @@ void AProjectileBase::Explode()
 		, OwnerCharacterRef.Get()->GetController(), ECC_WorldStatic);
 
 	//--- ÀÌÆåÆ® Ãâ·Â --------------
-	if (ExplosionParticle != nullptr)
+	if (ExplodeParticle != nullptr)
 	{
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionParticle, GetActorLocation(), GetActorRotation());
-		UE_LOG(LogTemp, Warning, TEXT("Explode #5"));
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplodeParticle, GetActorLocation(), GetActorRotation());
 	}
+	if (ExplosionSound != nullptr)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation());
+	}
+
 	if (AssetManagerBaseRef.IsValid())
 	{
 		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Weapon, floor(ProjectileID / 10.0) * 10, "Explosion");

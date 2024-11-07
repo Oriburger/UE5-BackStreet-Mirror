@@ -3,6 +3,7 @@
 #include "./Component/TargetingManagerComponent.h"
 #include "./Component/WeaponComponentBase.h"
 #include "./Component/SkillManagerComponentBase.h"
+#include "./Component/ActionTrackingComponent.h"
 #include "../Item/Weapon/Ranged/RangedCombatManager.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
@@ -27,12 +28,14 @@ ACharacterBase::ACharacterBase()
 	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 115.0f, 90.0f));
 
 	DebuffManagerComponent = CreateDefaultSubobject<UDebuffManagerComponent>(TEXT("DEBUFF_MANAGER"));
-	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));
+	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));;
+	ActionTrackingComponent = CreateDefaultSubobject<UActionTrackingComponent>(TEXT("ACTION_TRACKER"));
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
-	WeaponComponent->SetupAttachment(GetMesh());
+	WeaponComponent->SetupAttachment(GetMesh(), FName("Weapon_R"));
 
 	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
+	InitializeActionTriggerDelegateMap();
 }
 
 // Called when the game starts or when spawned
@@ -41,7 +44,6 @@ void ACharacterBase::BeginPlay()
 	Super::BeginPlay();
 
 	CharacterID = AssetSoftPtrInfo.CharacterID;
-	InitCharacterState();
 
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (GamemodeRef.IsValid())
@@ -63,9 +65,29 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void ACharacterBase::InitializeActionTriggerDelegateMap()
+{ 
+	//Init List, 액션 및 델리게이트 추가 시 필수
+	ActionTriggerDelegateMap.Empty();
+	ActionTriggerDelegateMap.Add("OnMoveStarted", &OnMoveStarted);
+	ActionTriggerDelegateMap.Add("OnJumpStarted", &OnJumpStarted);
+	ActionTriggerDelegateMap.Add("OnJumpEnd", &OnJumpEnd);
+	ActionTriggerDelegateMap.Add("OnRollStarted", &OnRollStarted);
+	ActionTriggerDelegateMap.Add("OnSprintStarted", &OnSprintStarted);
+	ActionTriggerDelegateMap.Add("OnSprintEnd", &OnSprintEnd);
+	ActionTriggerDelegateMap.Add("OnRollEnded", &OnRollEnded);
+	ActionTriggerDelegateMap.Add("OnAttackStarted", &OnAttackStarted);
+	ActionTriggerDelegateMap.Add("OnJumpAttackStarted", &OnJumpAttackStarted);
+	ActionTriggerDelegateMap.Add("OnDashAttackStarted", &OnDashAttackStarted);
+	ActionTriggerDelegateMap.Add("OnDamageReceived", &OnDamageReceived);
+	ActionTriggerDelegateMap.Add("OnSkillStarted", &OnSkillStarted);
+	ActionTriggerDelegateMap.Add("OnSkillEnded", &OnSkillEnded);
+	ActionTriggerDelegateMap.Add("OnDeath", &OnDeath);
+}
+
 void ACharacterBase::ResetAtkIntervalTimer()
 {
-	CharacterState.bCanAttack = true;
+	CharacterGameplayInfo.bCanAttack = true;
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 }
 
@@ -93,7 +115,7 @@ void ACharacterBase::SetAirAtkLocationUpdateTimer()
 
 void ACharacterBase::ResetAirAtkLocationUpdateTimer()
 {
-	CharacterState.bIsAirAttacking = false;
+	CharacterGameplayInfo.bIsAirAttacking = false;
 	GetWorldTimerManager().ClearTimer(AirAtkLocationUpdateHandle);
 	AirAtkLocationUpdateHandle.Invalidate();
 }
@@ -152,15 +174,16 @@ void ACharacterBase::SetAirAttackLocation()
 
 void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 {
-	CharacterState.bIsAirAttacking = false;
-	CharacterState.bIsDownwardAttacking = false;
+	CharacterGameplayInfo.bIsAirAttacking = false;
+	CharacterGameplayInfo.bIsDownwardAttacking = false;
+	OnJumpEnd.Broadcast();
 
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Skill)
+	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill)
 	{
 		ResetActionState();
 	}
 
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die)
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die)
 	{
 		Die();
 	}
@@ -183,20 +206,19 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 
 void ACharacterBase::ResetHitCounter()
 {
-	CharacterState.HitCounter = 0;
+	CharacterGameplayInfo.HitCounter = 0;
 }
 
 void ACharacterBase::KnockDown()
 {
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die) return;
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die) return;
 	ResetHitCounter();
 
-	CharacterState.CharacterActionState = ECharacterActionType::E_KnockedDown;
+	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_KnockedDown;
 
 	GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
 	KnockDownDelayTimerHandle.Invalidate();
 
-	
 	FTimerDelegate KnockDownDelegate;
 	KnockDownDelegate.BindUFunction(this, "StandUp");
 	GetWorldTimerManager().SetTimer(KnockDownAnimMontageHandle, KnockDownDelegate, 1.0f, false, 2.0f);
@@ -205,18 +227,35 @@ void ACharacterBase::KnockDown()
 
 void ACharacterBase::StandUp()
 {
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die) return;
-	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die) return;
+	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Idle;
 	GetWorldTimerManager().ClearTimer(KnockDownAnimMontageHandle);
 }
 
-void ACharacterBase::InitCharacterState()
+void ACharacterBase::InitCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo)
 {
-	CharacterState.CurrentHP = CharacterStat.DefaultHP;
-	CharacterState.bCanAttack = true;
-	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
+	if (CharacterGameplayInfo.bUseDefaultStat)
+	{
+		if (!NewGameplayInfo.IsValid()) return;
+		CharacterGameplayInfo = NewGameplayInfo;
+		CharacterID = NewGameplayInfo.CharacterID;
+	}
+	CharacterGameplayInfo.UpdateTotalValues();
+	CharacterGameplayInfo.bCanAttack = true;
+	CharacterGameplayInfo.bCanRoll = true;
+	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Idle;
+	CharacterGameplayInfo.CurrentHP = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MaxHealth);
+	GetCharacterMovement()->MaxWalkSpeed = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed);
+}
 
-	UpdateCharacterStat(CharacterStat);
+float ACharacterBase::GetCurrentHP()
+{
+	return CharacterGameplayInfo.CurrentHP;
+}
+
+float ACharacterBase::GetMaxHP()
+{
+	return CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MaxHealth);
 }
 
 bool ACharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)
@@ -233,36 +272,6 @@ bool ACharacterBase::GetDebuffIsActive(ECharacterDebuffType DebuffType)
 	return DebuffManagerComponent->GetDebuffIsActive(DebuffType);
 }
 
-void ACharacterBase::UpdateCharacterStatAndState(FCharacterStatStruct NewStat, FCharacterStateStruct NewState)
-{
-	UpdateCharacterState(NewState);
-	UpdateCharacterStat(NewStat);
-}
-
-void ACharacterBase::UpdateCharacterStat(FCharacterStatStruct NewStat)
-{
-	CharacterStat = NewStat;
-
-	//Update Character State's total property 
-	const float hpRate = CharacterState.CurrentHP / CharacterState.TotalHP;
-	const float oldTotalHP = CharacterState.TotalHP;
-	const float oldCurrentHP = CharacterState.CurrentHP;
-	CharacterState.TotalHP = GetTotalStatValue(CharacterStat.DefaultHP, CharacterState.AbilityHP, CharacterState.SkillHP, CharacterState.DebuffHP);
-	CharacterState.CurrentHP = hpRate > 1.0f ? CharacterState.CurrentHP : CharacterState.TotalHP * hpRate;
-	CharacterState.TotalAttack = GetTotalStatValue(CharacterStat.DefaultAttack, CharacterState.AbilityAttack, CharacterState.SkillAttack, CharacterState.DebuffAttack);
-	CharacterState.TotalDefense = GetTotalStatValue(CharacterStat.DefaultDefense, CharacterState.AbilityDefense, CharacterState.SkillDefense, CharacterState.DebuffDefense);
-	CharacterState.TotalMoveSpeed = GetTotalStatValue(CharacterStat.DefaultMoveSpeed, CharacterState.AbilityMoveSpeed, CharacterState.SkillMoveSpeed, CharacterState.DebuffMoveSpeed);
-	CharacterState.TotalAttackSpeed = GetTotalStatValue(CharacterStat.DefaultAttackSpeed, CharacterState.AbilityAttackSpeed, CharacterState.SkillAttackSpeed, CharacterState.DebuffAttackSpeed);
-
-	//Update movement speed
-	GetCharacterMovement()->MaxWalkSpeed = CharacterState.TotalMoveSpeed;
-}
-
-void ACharacterBase::UpdateCharacterState(FCharacterStateStruct NewState)
-{
-	CharacterState = NewState;
-}
-
 void ACharacterBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 {
 	WeaponComponent->WeaponStat = NewStat;
@@ -270,11 +279,11 @@ void ACharacterBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 
 void ACharacterBase::ResetActionState(bool bForceReset)
 {
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Die
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown) return;
-	if (!bForceReset && CharacterState.CharacterActionState == ECharacterActionType::E_Stun) return;	
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die
+		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_KnockedDown) return;
+	if (!bForceReset && CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Stun) return;	
 
-	CharacterState.CharacterActionState = ECharacterActionType::E_Idle;
+	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Idle;
 
 	//Reset Location Interp Timer Handle
 	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
@@ -282,42 +291,43 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 	FWeaponStatStruct currWeaponStat = this->WeaponComponent->GetWeaponStat();
 	this->WeaponComponent->SetWeaponStat(currWeaponStat);
 	StopAttack();
-
+	 
 	if (!GetWorldTimerManager().IsTimerActive(AtkIntervalHandle))
 	{
-		CharacterState.bCanAttack = true;
+		CharacterGameplayInfo.bCanAttack = true;
 	}
 }
 
 float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	if (!IsValid(DamageCauser) || CharacterStat.bIsInvincibility || DamageAmount <= 0.0f) return 0.0f;
+	if (!IsValid(DamageCauser) || CharacterGameplayInfo.bIsInvincibility || DamageAmount <= 0.0f) return 0.0f;
 	//if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
 
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	// ======= Damage & Die event ===============================
-	const float& totalHealthValue = CharacterState.TotalHP;
-	float oldClampedHealthValue = CharacterState.CurrentHP;
+	const float& totalHealthValue = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MaxHealth);
+	float oldClampedHealthValue = CharacterGameplayInfo.CurrentHP;
 	float newClampedHealthValue = 0.0f;
 
-	CharacterState.CurrentHP = CharacterState.CurrentHP - DamageAmount * (1.0f - FMath::Clamp(0.5f * CharacterState.TotalDefense, 0.0f, 0.5f));
-	newClampedHealthValue = CharacterState.CurrentHP = FMath::Max(0.0f, CharacterState.CurrentHP);
+	CharacterGameplayInfo.CurrentHP = CharacterGameplayInfo.CurrentHP - DamageAmount * (1.0f - FMath::Clamp(0.5f * CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_Defense), 0.0f, 0.5f));
+	newClampedHealthValue = CharacterGameplayInfo.CurrentHP = FMath::Max(0.0f, CharacterGameplayInfo.CurrentHP);
 	
 	oldClampedHealthValue = UKismetMathLibrary::MapRangeClamped(oldClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
 	newClampedHealthValue = UKismetMathLibrary::MapRangeClamped(newClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
-
+	
 	OnHealthChanged.Broadcast(oldClampedHealthValue, newClampedHealthValue);
+	OnDamageReceived.Broadcast();
 
-	if (CharacterState.CurrentHP == 0.0f)
+	// =========== 사망 및 애니메이션 처리 ==============
+	if (CharacterGameplayInfo.CurrentHP == 0.0f)
 	{
-		CharacterState.CharacterActionState = ECharacterActionType::E_Die;
+		CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Die;
 		if (!GetCharacterMovement()->IsFalling())
 		{
 			Die();
 		}
 	}
-	else if (this->CharacterState.CharacterActionState != ECharacterActionType::E_Skill && !this->CharacterState.bIsAirAttacking)
+	else if (DamageCauser != this && this->CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill && !this->CharacterGameplayInfo.bIsAirAttacking)
 	{
 		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num() - 1);
 		if (AssetHardPtrInfo.HitAnimMontageList.Num() > 0 && IsValid(AssetHardPtrInfo.HitAnimMontageList[randomIdx]))
@@ -335,7 +345,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(DamageCauser->GetActorLocation(), GetActorLocation());
 	newRotation.Pitch = newRotation.Roll = 0.0f;
 
-	if (DamageCauser->ActorHasTag("Player"))
+	if (DamageCauser->ActorHasTag("Player") && DamageCauser != this)
 	{
 		ACharacterBase* causerTarget = Cast<ACharacterBase>(DamageCauser)->TargetingManagerComponent->GetTargetedCharacter();
 		if (IsValid(causerTarget) && causerTarget == this)
@@ -353,7 +363,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 
 	// ====== Hit Counter & Knock Down Check ===========================
-	CharacterState.HitCounter += 1;
+	CharacterGameplayInfo.HitCounter += 1;
 
 	// Set hit counter reset event using retriggable timer
 	GetWorldTimerManager().ClearTimer(HitCounterResetTimerHandle);
@@ -361,9 +371,9 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	GetWorldTimerManager().SetTimer(HitCounterResetTimerHandle, this, &ACharacterBase::ResetHitCounter, 1.0f, false, 1.0f);
 
 	// Check knock down condition and set knock down event using retriggable timer
-	if (Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetWeaponStat().FinalImpactStrength > 0 && Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetIsFinalCombo())
+	//if (Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetWeaponStat().FinalImpactStrength > 0 && Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetIsFinalCombo())
 	{
-		KnockDown();
+		//KnockDown();
 		/*
 		GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
 		KnockDownDelayTimerHandle.Invalidate();
@@ -377,24 +387,28 @@ float ACharacterBase::TakeDebuffDamage(ECharacterDebuffType DebuffType, float Da
 {
 	if (!IsValid(Causer) || Causer->IsActorBeingDestroyed()) return 0.0f;
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return 0.0f;
-	TakeDamage(DamageAmount, FDamageEvent(), nullptr, Causer);
+	float totalDamage = DamageAmount;
+	totalDamage = FMath::Min(totalDamage, DamageAmount);
+	totalDamage = FMath::Max(0.0f, totalDamage);
+
+	TakeDamage(DamageAmount, FDamageEvent(), nullptr, this);
 	return DamageAmount;
 }
 
 void ACharacterBase::SetActionState(ECharacterActionType Type)
 {
-	CharacterState.CharacterActionState = Type;
+	CharacterGameplayInfo.CharacterActionState = Type;
 	return;
 }
 
 void ACharacterBase::TakeHeal(float HealAmount, bool bIsTimerEvent, uint8 BuffDebuffType)
 {
-	const float& totalHealthValue = CharacterState.TotalHP;
-	float oldClampedHealthValue = CharacterState.CurrentHP;
+	const float& totalHealthValue = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MaxHealth);
+	float oldClampedHealthValue = CharacterGameplayInfo.CurrentHP;
 	float newClampedHealthValue = 0.0f;
-	CharacterState.CurrentHP += HealAmount;
-	newClampedHealthValue = CharacterState.CurrentHP = FMath::Min(CharacterStat.DefaultHP, CharacterState.CurrentHP);
-	OnTakeDamage.Broadcast();
+	CharacterGameplayInfo.CurrentHP += (HealAmount * (1.0f + GetStatTotalValue(ECharacterStatType::E_HealItemPerformance)));
+	newClampedHealthValue = CharacterGameplayInfo.CurrentHP = FMath::Min(totalHealthValue, CharacterGameplayInfo.CurrentHP);
+	OnDamageReceived.Broadcast();
 	
 	oldClampedHealthValue = UKismetMathLibrary::MapRangeClamped(oldClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
 	newClampedHealthValue = UKismetMathLibrary::MapRangeClamped(newClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
@@ -429,11 +443,11 @@ void ACharacterBase::Die()
 	ClearAllTimerHandle();
 
 	//무적 처리를 하고, Movement를 비활성화
-	CharacterStat.bIsInvincibility = true;
+	CharacterGameplayInfo.bIsInvincibility = true;
 	GetCharacterMovement()->Deactivate();
 	bUseControllerRotationYaw = false;
 
-	OnCharacterDied.Broadcast();
+	OnDeath.Broadcast();
 
 	if (AssetHardPtrInfo.DieAnimMontageList.Num() > 0
 		&& IsValid(AssetHardPtrInfo.DieAnimMontageList[0]))
@@ -449,13 +463,13 @@ void ACharacterBase::Die()
 void ACharacterBase::TryAttack()
 {
 	if (GetWorldTimerManager().IsTimerActive(AtkIntervalHandle)) return;
-	if (!CharacterState.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
+	if (!CharacterGameplayInfo.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 
-	CharacterState.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
-	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
+	CharacterGameplayInfo.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
+	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Attack;
 
 	int32 nextAnimIdx = 0;
-	const float attackSpeed = FMath::Clamp(CharacterStat.DefaultAttackSpeed * WeaponComponent->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
+	const float attackSpeed = FMath::Clamp(GetCharacterGameplayInfo().GetTotalValue(ECharacterStatType::E_NormalAttackSpeed) * WeaponComponent->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
 	//Choose animation which fit battle situation
 	TArray <UAnimMontage*> targetAnimList;
@@ -463,7 +477,7 @@ void ACharacterBase::TryAttack()
 	{
 	case EWeaponType::E_Melee:
 		//check melee anim type
-		if (CharacterState.bIsAirAttacking && GetCharacterMovement()->IsFalling())
+		if (CharacterGameplayInfo.bIsAirAttacking && GetCharacterMovement()->IsFalling())
 		{
 			if (AssetHardPtrInfo.AirAttackAnimMontageList.Num() > 0)
 			{
@@ -477,7 +491,7 @@ void ACharacterBase::TryAttack()
 				}
 			}
 		}
-		else if (CharacterState.bIsAirAttacking || GetCharacterMovement()->IsFalling())
+		else if (CharacterGameplayInfo.bIsAirAttacking || GetCharacterMovement()->IsFalling())
 		{
 			ResetAirAtkLocationUpdateTimer();
 			if (IsValid(TargetingManagerComponent) && IsValid(TargetingManagerComponent->GetTargetedCharacter()))
@@ -506,16 +520,17 @@ void ACharacterBase::TryAttack()
 		&& IsValid(targetAnimList[nextAnimIdx]))
 	{
 		PlayAnimMontage(targetAnimList[nextAnimIdx], attackSpeed + 0.25f);
+		OnAttackStarted.Broadcast();
 	}
 }
 
 void ACharacterBase::TryUpperAttack()
 {
 	if (GetCharacterMovement()->IsFalling()) return;
-	if (CharacterState.bIsAirAttacking) return;
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (CharacterGameplayInfo.bIsAirAttacking) return;
+	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
 
-	CharacterState.bIsAirAttacking = true;
+	CharacterGameplayInfo.bIsAirAttacking = true;
 	WeaponComponent->ResetComboCnt();
 
 	//LaunchCharcter is called by anim notify on upper attack animation
@@ -530,29 +545,31 @@ void ACharacterBase::TryDownwardAttack()
 {
 	if (!GetCharacterMovement()->IsFalling()) return;
 
-	CharacterState.bIsAirAttacking = false;
-	CharacterState.bIsDownwardAttacking = true;
+	CharacterGameplayInfo.bIsAirAttacking = false;
+	CharacterGameplayInfo.bIsDownwardAttacking = true;
 	WeaponComponent->ResetComboCnt();
 
 	if (IsValid(AssetHardPtrInfo.DownwardAttackAnimMontage))
 	{
 		PlayAnimMontage(AssetHardPtrInfo.DownwardAttackAnimMontage);
+		OnJumpAttackStarted.Broadcast();
 	}
 }
 
 void ACharacterBase::TryDashAttack()
 {
-	if (CharacterState.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (CharacterState.bIsAirAttacking || CharacterState.bIsDownwardAttacking) return;
+	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
+	if (CharacterGameplayInfo.bIsAirAttacking || CharacterGameplayInfo.bIsDownwardAttacking) return;
 	if (GetCharacterMovement()->IsFalling()) return;
 	if (!IsValid(AssetHardPtrInfo.DashAttackAnimMontage)) return;
-	if (GetVelocity().Length() <= CharacterState.TotalMoveSpeed * 0.75f) return;
+	if (GetVelocity().Length() <= CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed) * 0.75f) return;
 
 	// Set action state
-	CharacterState.CharacterActionState = ECharacterActionType::E_Attack;
+	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Attack;
 
 	// Activate dash anim with interp to target location
 	PlayAnimMontage(AssetHardPtrInfo.DashAttackAnimMontage);
+	OnDashAttackStarted.Broadcast();
 }
 
 void ACharacterBase::DashAttack()
@@ -573,11 +590,11 @@ void ACharacterBase::DashAttack()
 
 bool ACharacterBase::TrySkill(int32 SkillID)
 {
-	if (!CharacterState.bCanAttack) return false;
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_Stun
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_Die
-		|| CharacterState.CharacterActionState == ECharacterActionType::E_KnockedDown) return false;
+	if (!CharacterGameplayInfo.bCanAttack) return false;
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Skill
+		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Stun
+		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die
+		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_KnockedDown) return false;
 
 
 	//스킬 매니저 있는지 확인
@@ -607,7 +624,7 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 
 	if(skillBase->SkillState.bIsBlocked) return false;
 	
-	CharacterState.bCanAttack = false;
+	CharacterGameplayInfo.bCanAttack = false;
 	SetActionState(ECharacterActionType::E_Skill);
 	SkillManagerComponentRef.Get()->TrySkill(SkillID);
 	
@@ -618,7 +635,7 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 
 void ACharacterBase::Attack()
 {
-	const float attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * WeaponComponent->WeaponStat.WeaponAtkSpeedRate);
+	const float attackSpeed = FMath::Min(1.5f, CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_NormalAttackSpeed) * WeaponComponent->WeaponStat.WeaponAtkSpeedRate);
 	WeaponComponent->Attack();
 }
 
@@ -927,13 +944,6 @@ FCharacterAssetSoftInfo ACharacterBase::GetAssetSoftInfoWithID(const int32 Targe
 		if (newInfo != nullptr) return *newInfo;
 	}
 	return FCharacterAssetSoftInfo();
-}
-
-float ACharacterBase::GetTotalStatValue(float& DefaultValue, FStatInfoStruct& AbilityInfo, FStatInfoStruct& SkillInfo, FStatInfoStruct& DebuffInfo)
-{
-	return DefaultValue
-		+ DefaultValue * (AbilityInfo.PercentValue + SkillInfo.PercentValue - DebuffInfo.PercentValue)
-		+ (AbilityInfo.FixedValue + SkillInfo.FixedValue - DebuffInfo.FixedValue);
 }
 
 bool ACharacterBase::EquipWeapon(int32 NewWeaponID)

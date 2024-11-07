@@ -66,7 +66,7 @@ void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent
 	//If SkillActor's life span is sync with causer, then destroy with causer 
 	if (SkillStat.bIsLifeSpanWithCauser)
 	{
-		OwnerCharacterBaseRef->OnCharacterDied.AddDynamic(this, &ASkillBase::DestroySkill);
+		OwnerCharacterBaseRef->OnDeath.AddUObject(this, &ASkillBase::DestroySkill);
 	}
 }
 
@@ -117,6 +117,7 @@ void ASkillBase::PlaySingleSound(FName SoundName)
 
 float ASkillBase::PlayAnimMontage(ACharacter* Target, FName AnimName)
 {
+	UE_LOG(LogTemp, Warning, TEXT("ASkillBase::PlayAnimMontage %s"), *AnimName.ToString());
 	if(!SkillStat.SkillAssetStruct.AnimInfoMap.Contains(AnimName)) return 0.0f;
 	FSkillAnimInfoStruct* skillAnimInfo = SkillStat.SkillAssetStruct.AnimInfoMap.Find(AnimName);
 	checkf(skillAnimInfo != nullptr, TEXT("SkillAnimAsset is not valid"));
