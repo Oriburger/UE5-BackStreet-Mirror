@@ -57,6 +57,8 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 								, DebuffInfo.Variable, DebuffInfo.bIsPercentage }, Causer);
 	}
 
+	OwnerCharacterRef.Get()->ActivateDebuffNiagara((uint8)DebuffInfo.Type);
+
 	/*---- 디버프 타이머 세팅 ----------------------------*/
 	DebuffInfo.Variable = FMath::Min(1.0f, FMath::Abs(DebuffInfo.Variable)); //값 정제
 	characterInfo.CharacterDebuffState |= (1 << (int)DebuffInfo.Type);
@@ -199,6 +201,7 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 	float ResetVal = FMath::Max(0.001f, DebuffInfo.Variable);
 	characterInfo.CharacterDebuffState &= ~(1 << (int)DebuffType);
 
+	OwnerCharacterRef.Get()->DeactivateBuffEffect();
 	switch ((ECharacterDebuffType)DebuffType)
 	{
 	case ECharacterDebuffType::E_Burn:

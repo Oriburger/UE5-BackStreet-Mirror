@@ -34,6 +34,15 @@ ACharacterBase::ACharacterBase()
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
 	WeaponComponent->SetupAttachment(GetMesh(), FName("Weapon_R"));
 
+	BuffNiagaraEmitter = CreateDefaultSubobject<UNiagaraComponent>(TEXT("BUFF_EFFECT"));
+	BuffNiagaraEmitter->SetupAttachment(GetMesh());
+	BuffNiagaraEmitter->SetRelativeLocation(FVector(0.0f, 0.0f, 80.0f));
+	BuffNiagaraEmitter->bAutoActivate = false;
+
+	DirectionNiagaraEmitter = CreateDefaultSubobject<UNiagaraComponent>(TEXT("DIRECTION_EFFECT"));
+	DirectionNiagaraEmitter->SetupAttachment(GetMesh());
+	DirectionNiagaraEmitter->SetRelativeRotation({ 0.0f, 90.0f, 0.0f });
+
 	GetCapsuleComponent()->SetNotifyRigidBodyCollision(true);
 	InitializeActionTriggerDelegateMap();
 }
@@ -944,6 +953,28 @@ FCharacterAssetSoftInfo ACharacterBase::GetAssetSoftInfoWithID(const int32 Targe
 		if (newInfo != nullptr) return *newInfo;
 	}
 	return FCharacterAssetSoftInfo();
+}
+
+void ACharacterBase::ActivateDebuffNiagara(uint8 DebuffType)
+{
+	if (!IsValid(BuffNiagaraEmitter) || DebuffType <= (uint8)ECharacterDebuffType::E_Temp) return;
+	TArray<UNiagaraSystem*>& targetEmitterList = AssetHardPtrInfo.DebuffNiagaraEffectList;
+
+	if (targetEmitterList.IsValidIndex(DebuffType) && targetEmitterList[DebuffType] != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ACharacterBase::ActivateDebuffNiagara #2- %d"), DebuffType);
+		BuffNiagaraEmitter->SetRelativeLocation(FVector(0.0f, 0.0f, 60.0f));
+		BuffNiagaraEmitter->Deactivate();
+		BuffNiagaraEmitter->SetAsset((targetEmitterList)[DebuffType], true);
+		BuffNiagaraEmitter->Activate();
+	}
+}
+
+void ACharacterBase::DeactivateBuffEffect()
+{
+	if (!IsValid(BuffNiagaraEmitter)) return;
+	BuffNiagaraEmitter->SetAsset(nullptr, false);
+	BuffNiagaraEmitter->Deactivate();
 }
 
 bool ACharacterBase::EquipWeapon(int32 NewWeaponID)
