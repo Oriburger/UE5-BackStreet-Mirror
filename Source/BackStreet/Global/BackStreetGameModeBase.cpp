@@ -3,6 +3,7 @@
 #include "BackStreetGameModeBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/MapSystem/NewChapterManagerBase.h"
+#include "../System/MapSystem/StageManagerComponent.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
 #include "../Item/ItemBase.h"
@@ -51,6 +52,13 @@ void ABackStreetGameModeBase::FinishGame(bool bGameIsOver)
 {
 	if (!IsValid(ChapterManagerRef)) return;
 	ChapterManagerRef->FinishChapter(!bGameIsOver);
+}
+
+void ABackStreetGameModeBase::RegisterActorToStageManager(AActor* TargetActor)
+{
+	if (!IsValid(TargetActor) || !IsValid(ChapterManagerRef)) return;
+	if (!ChapterManagerRef->GetCurrentChapterInfo().IsValid()) return;
+	ChapterManagerRef->StageManagerComponent->RegisterActor(TargetActor);
 }
 
 void ABackStreetGameModeBase::PlayCameraShakeEffect(ECameraShakeType EffectType, FVector Location, float Radius)

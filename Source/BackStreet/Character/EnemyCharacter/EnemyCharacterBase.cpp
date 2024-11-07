@@ -6,6 +6,8 @@
 #include "../Component/EnemySkillManagerComponent.h"
 #include "../MainCharacter/MainCharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
+#include "../../System/MapSystem/NewChapterManagerBase.h"
+#include "../../System/MapSystem/StageManagerComponent.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
 #include "../../System/AISystem/AIControllerBase.h"
 #include "../../Item/ItemBase.h"
@@ -231,8 +233,9 @@ void AEnemyCharacterBase::SpawnDeathItems()
 
 		if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
 		{
-			AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 10.0f);
-
+			//임시로 오프셋 넣어둠. 언젠가 Linetrace로 바닥 맞춰주는 로직 추가할 것.
+			AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 10.0f - FVector(0.0f, 0.0f, 50.0f));
+			
 			if (IsValid(newItem))
 			{
 				spawnedItemList.Add(newItem);
@@ -240,10 +243,17 @@ void AEnemyCharacterBase::SpawnDeathItems()
 			}
 		}
 	}
+
+	ACharacterBase* playerRef = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	for (auto& targetItem : spawnedItemList)
 	{
-		targetItem->ActivateProjectileMovement();
+		if (IsValid(playerRef) && playerRef->GetStatProbabilityValue(ECharacterStatType::E_LuckyDrop) >= FMath::FRandRange(0.0f, 1.0f))
+		{
+			targetItem->SetItemAmount(2);
+		}
+		GamemodeRef.Get()->RegisterActorToStageManager(targetItem);
 		targetItem->ActivateItem();
+		//targetItem->ActivateProjectileMovement(); //텍스쳐만 있는 아이템의 경우에는 바닥을 뚫는 문제가 있음, 추후 개선 필요
 	}
 }
 

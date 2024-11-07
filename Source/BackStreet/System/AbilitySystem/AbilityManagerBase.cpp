@@ -97,7 +97,7 @@ bool UAbilityManagerComponent::TryRemoveAbility(int32 AbilityID)
 	for (ECharacterStatType& statType : targetStatTypeList)
 	{
 		FAbilityValueInfoStruct abilityValue = targetAbilityInfo.TargetStatMap[statType];
-		if (abilityValue.Variable <= 0.0f || !ownerInfo.StatGroupList.IsValidIndex((int32)statType))
+		if (!ownerInfo.StatGroupList.IsValidIndex((int32)statType))
 		{
 			UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat newStat for %d"), (int32)statType);
 			continue;
@@ -172,7 +172,7 @@ bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct T
 	{
 		FAbilityValueInfoStruct abilityValue = TargetAbilityInfo.TargetStatMap[statType];
 
-		if (abilityValue.Variable <= 0.0f || !ownerInfo.StatGroupList.IsValidIndex((int32)statType))
+		if (!ownerInfo.StatGroupList.IsValidIndex((int32)statType))
 		{
 			UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat newStat for %d is not valid"), (int32)statType);
 			continue;

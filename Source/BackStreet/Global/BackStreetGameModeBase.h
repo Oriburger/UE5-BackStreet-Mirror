@@ -38,6 +38,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void FinishGame(bool bGameIsOver);
 
+	UFUNCTION(BlueprintCallable)
+		void RegisterActorToStageManager(AActor* TargetActor);
+
 	UFUNCTION(BlueprintImplementableEvent)
 		void PrintDebugMessage();
 

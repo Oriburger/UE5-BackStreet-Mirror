@@ -95,6 +95,13 @@ void AItemBase::InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride)
 	ActivateItem();
 }
 
+void AItemBase::SetItemAmount(int32 NewAmount)
+{
+	if (ItemInfo.ItemType != EItemCategoryInfo::E_SubWeapon && ItemInfo.ItemType != EItemCategoryInfo::E_Craft) return;
+	UE_LOG(LogTemp, Warning, TEXT("AItemBase::SetItemAmount Type : %d, Amount : %d"), (int32)ItemInfo.ItemType, NewAmount);
+	ItemInfo.ItemAmount = NewAmount;
+}
+
 void AItemBase::OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Player")) return;
