@@ -247,10 +247,12 @@ void AEnemyCharacterBase::SpawnDeathItems()
 	ACharacterBase* playerRef = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	for (auto& targetItem : spawnedItemList)
 	{
+		uint8 newAmount = 1;
 		if (IsValid(playerRef) && playerRef->GetStatProbabilityValue(ECharacterStatType::E_LuckyDrop) >= FMath::FRandRange(0.0f, 1.0f))
 		{
-			targetItem->SetItemAmount(2);
+			newAmount = 2;
 		}
+		targetItem->SetItemAmount(newAmount);
 		GamemodeRef.Get()->RegisterActorToStageManager(targetItem);
 		targetItem->ActivateItem();
 		//targetItem->ActivateProjectileMovement(); //텍스쳐만 있는 아이템의 경우에는 바닥을 뚫는 문제가 있음, 추후 개선 필요
