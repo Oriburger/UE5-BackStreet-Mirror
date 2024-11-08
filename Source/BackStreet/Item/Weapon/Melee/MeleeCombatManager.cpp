@@ -6,6 +6,7 @@
 #include "../../../System/AssetSystem/AssetManagerBase.h"
 #include "../../../Global/BackStreetGameModeBase.h"
 #include "../../../Character/CharacterBase.h"
+#include "../../../Character/Component/ActionTrackingComponent.h"
 #include "../../../Character/Component/WeaponComponentBase.h"
 #include "../../../System/AssetSystem/AssetManagerBase.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -86,6 +87,9 @@ void UMeleeCombatManager::MeleeAttack()
 	FHitResult hitResult;
 	bool bIsFinalCombo = WeaponComponentRef.Get()->GetIsFinalCombo();
 	bool bIsMeleeTraceSucceed = false;
+	bool bIsJumpAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("JumpAttack"))
+							|| OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionRecentlyFinished(FName("JumpAttack"));
+	bool bIsDashAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("DashAttack"));
 
 	FCharacterGameplayInfo ownerInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfo();
 
@@ -104,8 +108,15 @@ void UMeleeCombatManager::MeleeAttack()
 			UE_LOG(LogTemp, Warning, TEXT("UMeleeCombatManager::MeleeAttack()---- TotalDmg : %.2lf / bIsFatalAtk : %d"), totalDamage, (int32)bIsFatalAttack);
 
 			//Apply Debuff
-			WeaponComponentRef.Get()->ApplyWeaponDebuff(Cast<ACharacterBase>(target));
-
+			const TArray<ECharacterDebuffType> targetDebuffTypeList = { ECharacterDebuffType::E_Burn, ECharacterDebuffType::E_Poison
+																		, ECharacterDebuffType::E_Stun, ECharacterDebuffType::E_Slow };
+			for (auto& debuffType : targetDebuffTypeList)
+			{
+				ECharacterStatType targetStatType = FCharacterGameplayInfo::GetDebuffStatType(bIsJumpAttacking, bIsDashAttacking, debuffType);
+				if (targetStatType == ECharacterStatType::E_None) continue;
+				WeaponComponentRef.Get()->ApplyWeaponDebuff(Cast<ACharacterBase>(target), debuffType, targetStatType);
+			}
+			
 			//Activate Melee Hit Effect
 			ActivateMeleeHitEffect(target->GetActorLocation(), target, bIsFatalAttack);
 

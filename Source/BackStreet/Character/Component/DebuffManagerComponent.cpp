@@ -188,7 +188,7 @@ FDebuffInfoStruct UDebuffManagerComponent::GetDebuffResetValue(ECharacterDebuffT
 
 void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffType, FDebuffInfoStruct DebuffInfo)
 {
-	if (!OwnerCharacterRef.IsValid()) return;
+	if (!OwnerCharacterRef.IsValid() || DebuffType == ECharacterDebuffType::E_None) return;
 	if (OwnerCharacterRef.Get()->GetIsActionActive(ECharacterActionType::E_Die)) return;
 
 	//FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
@@ -201,7 +201,9 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 	float ResetVal = FMath::Max(0.001f, DebuffInfo.Variable);
 	characterInfo.CharacterDebuffState &= ~(1 << (int)DebuffType);
 
+	UE_LOG(LogTemp, Warning, TEXT("UDebuffManagerComponent::ResetStatDebuffState - type : %d"), (int32)DebuffType);
 	OwnerCharacterRef.Get()->DeactivateBuffEffect();
+
 	switch ((ECharacterDebuffType)DebuffType)
 	{
 	case ECharacterDebuffType::E_Burn:

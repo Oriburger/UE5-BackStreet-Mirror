@@ -118,7 +118,7 @@ public:
 		}
 	}
 	inline float GetTotalValue() { return TotalValue; }
-	
+
 	FStatValueGroup(ECharacterStatType NewType) : StatType(NewType), DefaultValue(0.0f), bIsContainProbability(false), ProbabilityValue(1.0f)
 						, DebuffRateValue(0.0f), AbilityRateValue(0.0f), SkillRateValue(0.0f), TotalValue(0.0f) {}
 
@@ -303,6 +303,58 @@ public:
 		if (!target.bIsContainProbability || NewValue < 0.0f) return false;
 		target.ProbabilityValue = NewValue;
 		return true;
+	}
+	static FORCEINLINE ECharacterStatType GetDebuffStatType(bool bIsJumpAttacking, bool bIsDashAttacking, ECharacterDebuffType DebuffType)
+	{
+		// 기본값은 Normal 공격 유형으로 설정
+		if (bIsJumpAttacking)
+		{
+			switch (DebuffType)
+			{
+			case ECharacterDebuffType::E_Burn:
+				return ECharacterStatType::E_JumpAttackFlame;
+			case ECharacterDebuffType::E_Poison:
+				return ECharacterStatType::E_JumpAttackPoison;
+			case ECharacterDebuffType::E_Stun:
+				return ECharacterStatType::E_JumpAttackStun;
+			case ECharacterDebuffType::E_Slow:
+				return ECharacterStatType::E_JumpAttackSlow;
+			default:
+				return ECharacterStatType::E_None; // 디버프 타입이 없을 경우
+			}
+		}
+		else if (bIsDashAttacking)
+		{
+			switch (DebuffType)
+			{
+			case ECharacterDebuffType::E_Burn:
+				return ECharacterStatType::E_DashAttackFlame;
+			case ECharacterDebuffType::E_Poison:
+				return ECharacterStatType::E_DashAttackPoison;
+			case ECharacterDebuffType::E_Stun:
+				return ECharacterStatType::E_DashAttackStun;
+			case ECharacterDebuffType::E_Slow:
+				return ECharacterStatType::E_DashAttackSlow;
+			default:
+				return ECharacterStatType::E_None;
+			}
+		}
+		else
+		{
+			switch (DebuffType)
+			{
+			case ECharacterDebuffType::E_Burn:
+				return ECharacterStatType::E_NormalFlame;
+			case ECharacterDebuffType::E_Poison:
+				return ECharacterStatType::E_NormalPoison;
+			case ECharacterDebuffType::E_Stun:
+				return ECharacterStatType::E_NormalStun;
+			case ECharacterDebuffType::E_Slow:
+				return ECharacterStatType::E_NormalSlow;
+			default:
+				return ECharacterStatType::E_None;
+			}
+		}
 	}
 
 	FCharacterGameplayInfo() : CharacterID(0) , bInfinite(false) , bIsInvincibility(false), StatGroupList(), CharacterDebuffState(1 << 10)
