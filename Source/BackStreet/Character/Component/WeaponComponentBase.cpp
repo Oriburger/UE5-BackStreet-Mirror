@@ -108,11 +108,14 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	FWeaponAssetInfoStruct newAssetInfo = GetWeaponAssetInfoWithID(WeaponID);
 	WeaponAssetInfo = newAssetInfo;
 
+	//발사체 초기화
+	if (WeaponStat.WeaponType == EWeaponType::E_Shoot)
+	{
+		SetProjectileInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
+	}
+
 	if (WeaponID != 0)
 	{
-		//발사체 초기화
-		SetProjectileInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
-
 		TArray<FSoftObjectPath> tempStream, assetToStream;
 		tempStream.AddUnique(WeaponAssetInfo.WeaponMesh.ToSoftObjectPath());
 		tempStream.AddUnique(WeaponAssetInfo.DestroyEffectParticle.ToSoftObjectPath());
@@ -131,7 +134,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 
 		for (auto& assetPath : tempStream)
 		{
-			if (!assetPath.IsValid() || !assetPath.IsValid()) continue;
+			if (!assetPath.IsValid()) continue;
 			assetToStream.AddUnique(assetPath);
 		}
 		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
@@ -283,7 +286,7 @@ FProjectileAssetInfoStruct UWeaponComponentBase::GetProjectileAssetInfo(int32 Ta
 
 void UWeaponComponentBase::SetProjectileInfo(int32 ProjectileID)
 {
-	if (WeaponStat.WeaponType != EWeaponType::E_Shoot) return;
+	if (WeaponStat.WeaponType != EWeaponType::E_Shoot || ProjectileID == 0) return;
 	ProjectileStatInfo = GetProjectileStatInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
 	ProjectileAssetInfo = GetProjectileAssetInfo(WeaponAssetInfo.RangedWeaponAssetInfo.ProjectileID);
 }
