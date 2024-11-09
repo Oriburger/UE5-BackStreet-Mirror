@@ -48,7 +48,6 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 		&& !OwnerCharacterRef.Get()->GetCharacterGameplayInfo().bInfinite)
 	{
 		//한번 발사때 n개의 탄환을 소비하는지?
-		//fireProjectileCnt = FMath::Min(fireProjectileCnt, WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount);
 		WeaponComponentRef.Get()->WeaponState.RangedWeaponState.CurrentAmmoCount -= 1;
 	}
 	

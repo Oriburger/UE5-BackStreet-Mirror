@@ -29,7 +29,7 @@ void UDebuffManagerComponent::BeginPlay()
 
 bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActor* Causer)
 {
-	if (!OwnerCharacterRef.IsValid()) return false;
+	if (!OwnerCharacterRef.IsValid() || DebuffInfo.Type == ECharacterDebuffType::E_None) return false;
 	if (OwnerCharacterRef.Get()->GetIsActionActive(ECharacterActionType::E_Die)) return false;
 
 	FTimerDelegate timerDelegate, dotDamageDelegate;
@@ -75,7 +75,7 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 		dotDamageDelegate.BindUFunction(this, FName("ApplyDotDamage"), DebuffInfo.Type, totalDamage, OwnerCharacterRef.Get());
 		GetWorld()->GetTimerManager().SetTimer(dotDamageHandle, dotDamageDelegate, 1.0f, true);
 		break;
-		//----스탯 조정 디버프-------------------
+	//----스탯 조정 디버프-------------------
 	case ECharacterDebuffType::E_Stun:
 		OwnerCharacterRef.Get()->StopAttack();
 		characterInfo.CharacterActionState = ECharacterActionType::E_Stun;
@@ -219,6 +219,11 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 		break;
 	case ECharacterDebuffType::E_DefenseDown:
 		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_Defense, 0);
+		break;
+	case ECharacterDebuffType::E_Stun:
+		characterInfo.CharacterActionState = ECharacterActionType::E_Idle;
+		OwnerCharacterRef.Get()->ResetActionState(true);
+		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 		break;
 	}
 	ClearDebuffTimer(DebuffType);
