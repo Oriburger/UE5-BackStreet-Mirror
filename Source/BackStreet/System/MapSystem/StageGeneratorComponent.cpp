@@ -127,8 +127,8 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 			|| stageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack || stageInfo.StageType == EStageCategoryInfo::E_Entry
 			|| stageInfo.StageType == EStageCategoryInfo::E_EliteEscort || stageInfo.StageType == EStageCategoryInfo::E_Escort)
 		{
-			checkf(CurrentChapterInfo.EnemyCompositionInfoMap.Contains(stageInfo.StageType), TEXT("EnemyCompositionInfoMap is empty"));
-			stageInfo.EnemyCompositionInfo = *CurrentChapterInfo.EnemyCompositionInfoMap.Find(stageInfo.StageType);
+			checkf(CurrentChapterInfo.StageEnemyCompositionInfoMap.Contains(stageInfo.StageType), TEXT("EnemyCompositionInfoMap is empty"));
+			stageInfo.EnemyCompositionInfo = *CurrentChapterInfo.StageEnemyCompositionInfoMap.Find(stageInfo.StageType);
 		}
 		result.Add(stageInfo);
 	}

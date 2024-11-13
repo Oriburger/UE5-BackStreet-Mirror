@@ -160,6 +160,18 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 100.0f, UIMax = 1000.0f), Category = "Default")
 		float DefaultMoveSpeed = 400.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 0.8f), Category = "Default")
+		float DefaultBurnResist = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 0.8f), Category = "Default")
+		float DefaultPoisonResist = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 0.8f), Category = "Default")
+		float DefaultSlowResist = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 0.8f), Category = "Default")
+		float DefaultStunResist = 0.0f;
 };
 
 USTRUCT(BlueprintType)
@@ -386,6 +398,10 @@ public:
 		StatGroupList[(uint8)ECharacterStatType::E_NormalPower].SetDefaultValue(DefaultStat.DefaultAttack);
 		StatGroupList[(uint8)ECharacterStatType::E_MoveSpeed].SetDefaultValue(DefaultStat.DefaultMoveSpeed);
 		StatGroupList[(uint8)ECharacterStatType::E_NormalAttackSpeed].SetDefaultValue(DefaultStat.DefaultAttackSpeed);
+		StatGroupList[(uint8)ECharacterStatType::E_BurnResist].SetDefaultValue(DefaultStat.DefaultBurnResist);
+		StatGroupList[(uint8)ECharacterStatType::E_PoisonResist].SetDefaultValue(DefaultStat.DefaultPoisonResist);
+		StatGroupList[(uint8)ECharacterStatType::E_SlowResist].SetDefaultValue(DefaultStat.DefaultSlowResist);
+		StatGroupList[(uint8)ECharacterStatType::E_StunResist].SetDefaultValue(DefaultStat.DefaultStunResist);
 	}
 };
 

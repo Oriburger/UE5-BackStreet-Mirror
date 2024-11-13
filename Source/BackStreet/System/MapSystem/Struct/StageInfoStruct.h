@@ -45,7 +45,7 @@ enum class EChapterLevel : uint8
 };
 
 USTRUCT(BlueprintType)
-struct FEnemyGroupInfo
+struct FEnemyCompositionInfo
 {
 	GENERATED_BODY()
 
@@ -56,13 +56,15 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FEnemyCompositionInfo
+struct FEnemyCompositionNameList
 {
 	GENERATED_BODY()
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		TArray<FEnemyGroupInfo> CompositionList;
+		TArray<FName> CompositionNameList;
+
+	bool IsValid() { return CompositionNameList.Num() > 0; }
 };
 
 USTRUCT(BlueprintType)
@@ -139,14 +141,13 @@ public:
 	//Battle stages only use this value!
 	//List of enemy's composition to spawn 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		FEnemyCompositionInfo EnemyCompositionInfo;
+		FEnemyCompositionNameList EnemyCompositionInfo;
 
 	//It is declared on tarray because of scalability
 	//Temporary Code : stage icon will be replaced with this first member icon
 		//the non-combat stage (such as craft, minigame) is exception.
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TArray<FItemInfoDataStruct> RewardInfoList;
-
 
 	//==== Dynamic Proptery ====================
 	//Dyanmically update after level load
@@ -250,10 +251,15 @@ public:
 		float EliteTimeAtkStageTimeOut = 60.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
 		float NormalTimeAtkStageTimeOut = 50.0f;
-	
-	//Enemy composition information of stage type
+
+	//Enemy composition information of stage type by name
+	//ex) "Tiny_Group" "Tiny_Flame_Group" "Elite_Only" ...
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
-		TMap<EStageCategoryInfo, FEnemyCompositionInfo> EnemyCompositionInfoMap;
+		TMap<FName, FEnemyCompositionInfo> EnemyCompositionMap;
+
+	//Composition name map for stage type
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
+		TMap<EStageCategoryInfo, FEnemyCompositionNameList> StageEnemyCompositionInfoMap;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
 		TMap<EStageCategoryInfo, FStageRewardCandidateInfoList> StageRewardCandidateInfoMap;
