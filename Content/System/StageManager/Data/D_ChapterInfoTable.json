@@ -717,7 +717,7 @@
 			"E_Entry":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter01/Chapter01_Entry.Chapter01_Entry"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Entry.Chapter01_Entry"
 				]
 			},
 			"E_Exterminate":
@@ -725,12 +725,12 @@
 				"LevelList": [
 					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
 					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
-					"/Game/Map/Chapter01/Chapter01_Combat03.Chapter01_Combat03",
-					"/Game/Map/Chapter01/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
 					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
-					"/Game/Map/Chapter01/Chapter01_Combat06.Chapter01_Combat06",
-					"/Game/Map/Chapter01/Chapter01_Combat07.Chapter01_Combat07",
-					"/Game/Map/Chapter01/Chapter01_Combat08.Chapter01_Combat08"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08"
 				]
 			},
 			"E_EliteExterminate":
@@ -738,12 +738,12 @@
 				"LevelList": [
 					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
 					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
-					"/Game/Map/Chapter01/Chapter01_Combat03.Chapter01_Combat03",
-					"/Game/Map/Chapter01/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
 					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
-					"/Game/Map/Chapter01/Chapter01_Combat06.Chapter01_Combat06",
-					"/Game/Map/Chapter01/Chapter01_Combat07.Chapter01_Combat07",
-					"/Game/Map/Chapter01/Chapter01_Combat08.Chapter01_Combat08"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08"
 				]
 			},
 			"E_TimeAttack":
@@ -751,12 +751,12 @@
 				"LevelList": [
 					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
 					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
-					"/Game/Map/Chapter01/Chapter01_Combat03.Chapter01_Combat03",
-					"/Game/Map/Chapter01/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
 					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
-					"/Game/Map/Chapter01/Chapter01_Combat06.Chapter01_Combat06",
-					"/Game/Map/Chapter01/Chapter01_Combat07.Chapter01_Combat07",
-					"/Game/Map/Chapter01/Chapter01_Combat08.Chapter01_Combat08"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08"
 				]
 			},
 			"E_EliteTimeAttack":
@@ -764,12 +764,12 @@
 				"LevelList": [
 					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
 					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
-					"/Game/Map/Chapter01/Chapter01_Combat03.Chapter01_Combat03",
-					"/Game/Map/Chapter01/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
 					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
-					"/Game/Map/Chapter01/Chapter01_Combat06.Chapter01_Combat06",
-					"/Game/Map/Chapter01/Chapter01_Combat07.Chapter01_Combat07",
-					"/Game/Map/Chapter01/Chapter01_Combat08.Chapter01_Combat08"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08"
 				]
 			},
 			"E_Escort":
