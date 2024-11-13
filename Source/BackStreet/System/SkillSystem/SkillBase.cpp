@@ -77,9 +77,13 @@ void ASkillBase::ActivateSkill_Implementation()
 	
 	//Set cooltime timer
 	FSkillUpgradeLevelInfo coolTimeInfo = SkillState.SkillUpgradeInfoMap[ESkillUpgradeType::E_CoolTime];
+	float coolTimeAbilityValue = OwnerCharacterBaseRef.IsValid() 
+								? OwnerCharacterBaseRef.Get()->GetStatTotalValue(ECharacterStatType::E_SkillCoolTime)
+								: 0.0f;
+	coolTimeAbilityValue = (1.0f - FMath::Min(1.0f, coolTimeAbilityValue)) * 0.8f;
 	if (coolTimeInfo.Variable > 0.0f)
 	{
-		SetSkillBlockedTimer(coolTimeInfo.Variable);
+		SetSkillBlockedTimer(coolTimeInfo.Variable * coolTimeAbilityValue);
 	}
 }
 
