@@ -84,15 +84,7 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 			stageInfo.StageIcon = *CurrentChapterInfo.StageIconInfoMap.Find(stageInfo.StageType);
 		}
 
-		//4. set stage's level asset 
-		if (stageInfo.StageType != EStageCategoryInfo::E_None)
-		{
-			checkf(CurrentChapterInfo.StageLevelInfoMap.Contains(stageInfo.StageType), TEXT("StageLevelInfoMap is not valid, type : %d"), (int32)stageInfo.StageType);
-			TMap<EStageCategoryInfo, FLevelSoftObjectPtrList>& infoMap = CurrentChapterInfo.StageLevelInfoMap;
-			stageInfo.MainLevelAsset = GetRandomWorld(infoMap.Find(stageInfo.StageType)->LevelList);
-		}
-
-		//5. set reward and stage's special property
+		//4. set reward and stage's special property
 		switch (stageInfo.StageType)
 		{
 		case EStageCategoryInfo::E_TimeAttack:
@@ -121,7 +113,7 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 			break;
 		}
 
-		//6. set enemy composition
+		//5. set enemy composition
 		if (stageInfo.StageType == EStageCategoryInfo::E_Boss || stageInfo.StageType == EStageCategoryInfo::E_Exterminate
 			|| stageInfo.StageType == EStageCategoryInfo::E_EliteExterminate || stageInfo.StageType == EStageCategoryInfo::E_TimeAttack
 			|| stageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack || stageInfo.StageType == EStageCategoryInfo::E_Entry

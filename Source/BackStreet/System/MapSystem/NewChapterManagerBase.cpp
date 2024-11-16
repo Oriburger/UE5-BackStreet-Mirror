@@ -62,7 +62,7 @@ void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 	StageManagerComponent->ClearResource();
 
 	//Reward Ã³¸®
-
+	
 
 	//change level to main menu
 	FTimerDelegate openLevelDelegate;

@@ -49,11 +49,12 @@ void UStageManagerComponent::Initialize(FChapterInfo NewChapterInfo)
 void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 {
 	if (IsValid(MainAreaRef)) ClearPreviousLevelData();
-	
+
 	//Clear previous portal
 	ClearPreviousActors();
 
 	//Init new stage
+	FStageInfo oldStageInfo = CurrentStageInfo;
 	CurrentStageInfo = NewStageInfo;
 
 	UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
@@ -67,6 +68,22 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	}
 
 	//Load new level
+	TArray<TSoftObjectPtr<UWorld>> newWorldAssetList = CurrentChapterInfo.GetWorldList(NewStageInfo.StageType);
+	if (newWorldAssetList.Num() == 1)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::InitStage - Lack of %d's Map Count, It may cause the level reinstancing crash."), (int32)NewStageInfo.StageType);
+	}
+
+	int32 randIdxAdder = FMath::RandRange(0, 100);
+	for (int32 idx = 0; idx < newWorldAssetList.Num(); idx++)
+	{
+		int32 newIdx = (idx + randIdxAdder) % newWorldAssetList.Num();
+		NewStageInfo.MainLevelAsset = newWorldAssetList[newIdx];
+		if ((IsValid(GetWorld()) && oldStageInfo.MainLevelAsset.IsValid())
+			&& GetWorld()->GetMapName() != oldStageInfo.MainLevelAsset.Get()->GetMapName())
+			break; 
+	}
+
 	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
 	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 1.0f, true);
 }
@@ -125,7 +142,7 @@ void UStageManagerComponent::CreateLevelInstance(TSoftObjectPtr<UWorld> MainLeve
 	MainAreaRef = MainAreaRef->LoadLevelInstanceBySoftObjectPtr(GetWorld(), MainLevel, FVector(0.0f)
 					, FRotator::ZeroRotator, result);
 	MainAreaRef->OnLevelLoaded.AddDynamic(this, &UStageManagerComponent::UpdateLoadStatusCount);
-	
+
 	if (OuterLevel.IsNull()) return;
 	{
 		OuterAreaRef = OuterAreaRef->LoadLevelInstanceBySoftObjectPtr(GetWorld(), OuterLevel, FVector(0.0f)
@@ -453,7 +470,7 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 
 		//Start stage with delay
 		FTimerHandle gameStartDelayHandle;
-		GetWorld()->GetTimerManager().SetTimer(gameStartDelayHandle, this, &UStageManagerComponent::StartStage, 2.0f, false);
+		GetWorld()->GetTimerManager().SetTimer(gameStartDelayHandle, this, &UStageManagerComponent::StartStage, 0.75f, false);
 	}
 }
 

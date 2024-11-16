@@ -297,4 +297,20 @@ public:
 //======= Function =======================
 public:
 	bool IsValid() { return StageInfoList.Num() > 0; }
+
+	TArray<TSoftObjectPtr<UWorld>> GetWorldList(EStageCategoryInfo StageType)
+	{
+		if (!StageLevelInfoMap.Contains(StageType)) return {};
+		return StageLevelInfoMap[StageType].LevelList;
+	}
+	TSoftObjectPtr<UWorld> GetRandomWorld(EStageCategoryInfo StageType)
+	{
+		TArray<TSoftObjectPtr<UWorld>> list = GetWorldList(StageType);
+		if (!list.IsEmpty())
+		{
+			return list[FMath::RandRange(0, list.Num() - 1)];
+		}
+		return nullptr;
+	}
+
 };
