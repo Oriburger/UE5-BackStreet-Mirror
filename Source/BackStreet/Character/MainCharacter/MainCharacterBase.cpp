@@ -122,7 +122,6 @@ void AMainCharacterBase::BeginPlay()
 	//SetCharacterStatFromSaveData();
 	//ItemInventory->SetItemInventoryFromSaveData();
 	ItemInventory->InitInventory();
-
 	
 	TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
 	SetAutomaticRotateModeTimer();
@@ -526,7 +525,22 @@ void AMainCharacterBase::TryAttack()
 	}
 
 	//Rotate to attack direction using input (1. movement / 2. camera)
-	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
+	if (IsValid(TargetingManagerComponent->GetTargetedCandidate())
+		&& GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) > 150.0f
+		&& !ActionTrackingComponent->GetIsActionInProgress("Attack"))
+	{
+		FVector startLocation = GetActorLocation();
+		FVector endLocation = TargetingManagerComponent->GetTargetedCandidate()->GetActorLocation();
+		FVector dirVector = endLocation - startLocation; dirVector.Normalize();
+		SetActorRotation(UKismetMathLibrary::FindLookAtRotation(startLocation, endLocation));
+		SetLocationWithInterp(startLocation + dirVector * (FVector::Distance(startLocation, endLocation) - 75.0f), 2.0f);
+		if (GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) > 400.0f)
+		{
+			SetFieldOfViewWithInterp(130.0f, 3.0f, true);
+		}
+	}
+
+	else if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
 	{
 		if (MovementInputValue.Length() > 0)
 		{

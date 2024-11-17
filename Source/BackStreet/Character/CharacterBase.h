@@ -5,6 +5,8 @@
 #include "CharacterBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateHealthChange, float, OldValue, float, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateBeginLocationInterp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateEndLocationInterp);
 DECLARE_MULTICAST_DELEGATE(FDelegateOnActionTrigger);
 
 UCLASS()
@@ -33,6 +35,12 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateHealthChange OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateBeginLocationInterp OnBeginLocationInterp;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateEndLocationInterp OnEndLocationInterp;
 
 public:
 	TMap<FName, FDelegateOnActionTrigger*> ActionTriggerDelegateMap;

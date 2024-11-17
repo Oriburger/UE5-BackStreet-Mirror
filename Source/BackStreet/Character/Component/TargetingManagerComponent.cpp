@@ -34,32 +34,39 @@ void UTargetingManagerComponent::BeginPlay()
 
 	if (bAutoTargeting)
 	{
-		GetOwner()->GetWorldTimerManager().SetTimer(AutoFindTimerHandle, this, &UTargetingManagerComponent::UpdateTargetedCandidate, 0.5f, true);
+		GetOwner()->GetWorldTimerManager().SetTimer(AutoFindTimerHandle, this, &UTargetingManagerComponent::UpdateTargetedCandidate, AutoTargetingRate, true);
 	}
 }
 
-AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float Radius)
+AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 {
 	if (!OwnerCharacter.IsValid() || !FollowingCameraRef.IsValid()) return nullptr;
 
-	FVector startLocation = OwnerCharacter.Get()->GetActorLocation();
-	FVector endLocation = startLocation + FollowingCameraRef.Get()->GetForwardVector() * MaxFindDistance;
+	FVector traceDirection = FollowingCameraRef.Get()->GetForwardVector(); traceDirection.Z = 0.0f;
+	FVector startLocation = OwnerCharacter.Get()->GetActorLocation() + traceDirection * 50.0f;
+	FVector endLocation = startLocation + traceDirection * MaxFindDistance;
 	TArray<FHitResult> hitResultList;
 	TArray<AActor*> actorToIgnore = { OwnerCharacter.Get() };
 	if (bIsTargetingActivated && TargetedCharacter.IsValid())
 	{
 		actorToIgnore.Add(TargetedCharacter.Get());
 	}
-	UKismetSystemLibrary::SphereTraceMultiByProfile(GetWorld(), startLocation, endLocation, Radius, "Pawn", false
-		, actorToIgnore, EDrawDebugTrace::None, hitResultList, true);
+	UKismetSystemLibrary::SphereTraceMultiByProfile(GetWorld(), startLocation, endLocation, RadiusOverride <= 1.0f ? TraceRadius : RadiusOverride, "Pawn", false
+		, actorToIgnore, bShowDebugSphere ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResultList, true, FColor::Green, FColor::Red, AutoTargetingRate);
 
 	float minDist = FLT_MAX;
 	ACharacterBase* target = nullptr;
+	
+	bool bContainsOldCandidate = false;
 	for (FHitResult& result : hitResultList)
 	{
 		if (!result.bBlockingHit) continue;
 
 		AActor* pawn = result.GetActor();
+		if (pawn == TargetedCandidate)
+		{
+			bContainsOldCandidate = true;
+		}
 
 		if (!IsValid(pawn)) continue;
 		if (!pawn->Tags.IsValidIndex(1) || !OwnerCharacter.Get()->Tags.IsValidIndex(1)) continue;
@@ -71,6 +78,10 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float Radius)
 			dist = minDist;
 			target = Cast<ACharacterBase>(pawn);
 		}
+	}
+	if (!bContainsOldCandidate)
+	{
+		TargetedCandidate.Reset();
 	}
 	return target;
 }

@@ -105,6 +105,7 @@ void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, 
 	FTimerDelegate updateFunctionDelegate;
 
 	//Binding the function with specific values
+	OnBeginLocationInterp.Broadcast();
 	updateFunctionDelegate.BindUFunction(this, FName("UpdateLocation"), NewValue, InterpSpeed, bAutoReset);
 
 	//Calling MyUsefulFunction after 5 seconds without looping
@@ -135,6 +136,7 @@ void ACharacterBase::UpdateLocation(const FVector TargetValue, const float Inter
 	if (currentLocation.Equals(TargetValue, 10.0f))
 	{
 		GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
+		OnEndLocationInterp.Broadcast();
 		if (bAutoReset)
 		{
 			//SetLocationWithInterp(GetActorLocation() , InterpSpeed * 1.5f, false);
