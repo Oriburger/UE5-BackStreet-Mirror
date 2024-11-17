@@ -192,8 +192,9 @@ void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, AActor
 	}
 
 	//카메라 Shake 효과
-	GamemodeRef.Get()->PlayCameraShakeEffect(OwnerCharacterRef.Get()->ActorHasTag("Player") ? ECameraShakeType::E_Attack : ECameraShakeType::E_Hit, Location);
+	if (OwnerCharacterRef.Get()->GetCharacterGameplayInfo().bIsInvincibility) return;
 
+	GamemodeRef.Get()->PlayCameraShakeEffect(OwnerCharacterRef.Get()->ActorHasTag("Player") ? ECameraShakeType::E_Attack : ECameraShakeType::E_Hit, Location);
 }
 
 TArray<FVector> UMeleeCombatManager::GetCurrentMeleePointList()

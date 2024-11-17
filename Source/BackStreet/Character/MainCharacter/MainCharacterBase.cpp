@@ -526,7 +526,7 @@ void AMainCharacterBase::TryAttack()
 
 	//Rotate to attack direction using input (1. movement / 2. camera)
 	if (IsValid(TargetingManagerComponent->GetTargetedCandidate())
-		&& GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) > 150.0f
+		&& GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) >= 200.0f
 		&& !ActionTrackingComponent->GetIsActionInProgress("Attack"))
 	{
 		FVector startLocation = GetActorLocation();
