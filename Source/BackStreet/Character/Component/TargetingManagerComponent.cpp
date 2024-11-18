@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "../CharacterBase.h"
+#include "ActionTrackingComponent.h"
 
 // Sets default values for this component's properties
 UTargetingManagerComponent::UTargetingManagerComponent()
@@ -51,6 +52,14 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 	{
 		actorToIgnore.Add(TargetedCharacter.Get());
 	}
+
+	if (!OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionReady("Attack"))
+	{
+		traceDirection = OwnerCharacter.Get()->GetMesh()->GetRightVector();
+		startLocation = OwnerCharacter.Get()->HitSceneComponent->GetComponentLocation();
+		endLocation = startLocation + traceDirection * MaxFindDistance;
+	}
+
 	UKismetSystemLibrary::SphereTraceMultiByProfile(GetWorld(), startLocation, endLocation, RadiusOverride <= 1.0f ? TraceRadius : RadiusOverride, "Pawn", false
 		, actorToIgnore, bShowDebugSphere ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResultList, true, FColor::Green, FColor::Red, AutoTargetingRate);
 
