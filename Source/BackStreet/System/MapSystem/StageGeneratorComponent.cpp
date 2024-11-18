@@ -85,10 +85,15 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 		}
 
 		//4. set reward and stage's special property
+
+		if (stageInfo.StageType == EStageCategoryInfo::E_TimeAttack) stageInfo.StageType = EStageCategoryInfo::E_Exterminate;
+		else if (stageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack) stageInfo.StageType = EStageCategoryInfo::E_EliteExterminate;
+
 		switch (stageInfo.StageType)
 		{
 		case EStageCategoryInfo::E_TimeAttack:
 		case EStageCategoryInfo::E_EliteTimeAttack:
+			/*
 			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
 			stageInfo.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
 			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType);
@@ -96,7 +101,7 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 			{
 				stageInfo.StageIcon = stageInfo.RewardInfoList[0].ItemImage;
 			}
-			break;
+			break;*/
 		case EStageCategoryInfo::E_Exterminate:
 		case EStageCategoryInfo::E_EliteExterminate:
 		case EStageCategoryInfo::E_Escort:
