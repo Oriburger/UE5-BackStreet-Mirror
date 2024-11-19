@@ -533,7 +533,7 @@ void AMainCharacterBase::TryAttack()
 		FVector endLocation = TargetingManagerComponent->GetTargetedCandidate()->GetActorLocation();
 		FVector dirVector = endLocation - startLocation; dirVector.Normalize();
 		SetActorRotation(UKismetMathLibrary::FindLookAtRotation(startLocation, endLocation));
-		SetLocationWithInterp(startLocation + dirVector * (FVector::Distance(startLocation, endLocation) - 75.0f), 2.0f);
+		SetLocationWithInterp(startLocation + dirVector * (FVector::Distance(startLocation, endLocation) - 55.0f), 2.0f);
 		if (GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) > 400.0f)
 		{
 			SetFieldOfViewWithInterp(130.0f, 3.0f, true);
