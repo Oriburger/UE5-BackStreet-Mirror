@@ -81,11 +81,14 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 		NewStageInfo.MainLevelAsset = newWorldAssetList[newIdx];
 		if ((IsValid(GetWorld()) && oldStageInfo.MainLevelAsset.IsValid())
 			&& GetWorld()->GetMapName() != oldStageInfo.MainLevelAsset.Get()->GetMapName())
-			break; 
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::InitStage - Found the stage candidate %s"), *oldStageInfo.MainLevelAsset.Get()->GetMapName());
+			break;
+		}
 	}
 
 	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
-	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 1.0f, true);
+	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 0.25f, true);
 }
 
 void UStageManagerComponent::ClearResource()
@@ -470,7 +473,7 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 
 		//Start stage with delay
 		FTimerHandle gameStartDelayHandle;
-		GetWorld()->GetTimerManager().SetTimer(gameStartDelayHandle, this, &UStageManagerComponent::StartStage, 0.75f, false);
+		GetWorld()->GetTimerManager().SetTimer(gameStartDelayHandle, this, &UStageManagerComponent::StartStage, 2.0f, false);
 	}
 }
 
