@@ -152,7 +152,6 @@ void UTargetingManagerComponent::UpdateTargetedCandidate()
 	{
 		TargetedCandidate = Cast<ACharacterBase>(newCandidate);
 		OnTargetUpdated.Broadcast(TargetedCandidate.Get());
-		UE_LOG(LogTemp, Warning, TEXT("TargetedCandidate : %s"), *TargetedCandidate.Get()->GetName());
 	}
 
 	if (TargetedCandidate.IsValid() && !OwnerCharacter.Get()->GetCharacterGameplayInfo().bIsAirAttacking)
