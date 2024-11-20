@@ -60,7 +60,7 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 		endLocation = startLocation + traceDirection * MaxFindDistance;
 	}
 
-	UKismetSystemLibrary::SphereTraceMultiByProfile(GetWorld(), startLocation, endLocation, RadiusOverride <= 1.0f ? TraceRadius : RadiusOverride, "Pawn", false
+	UKismetSystemLibrary::SphereTraceMultiByProfile(GetWorld(), startLocation, endLocation, RadiusOverride <= 1.0f ? TraceRadius : RadiusOverride, "Pawn", true
 		, actorToIgnore, bShowDebugSphere ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResultList, true, FColor::Green, FColor::Red, AutoTargetingRate);
 
 	float minDist = FLT_MAX;
