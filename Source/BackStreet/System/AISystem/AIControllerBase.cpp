@@ -117,6 +117,13 @@ void AAIControllerBase::UpdateNewWeapon()
 	GetBlackboardComponent()->SetValueAsBool("HasRangedWeapon", Cast<ACharacterBase>(GetPawn())->WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Melee);
 }
 
+void AAIControllerBase::ConvertBehaviorType(EAIBehaviorType ActionType)
+{
+	if(!IsValid(GetPawn())) return;
+	GetBlackboardComponent()->SetValueAsEnum("AIBehaviorState", (uint8)ActionType);
+	AIBehaviorState = ActionType;
+}
+
 void AAIControllerBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(SightLossTimerHandle);
