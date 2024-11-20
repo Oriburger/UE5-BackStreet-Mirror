@@ -105,8 +105,7 @@ void UMeleeCombatManager::MeleeAttack()
 			FCharacterGameplayInfo targetInfo = Cast<ACharacterBase>(target)->GetCharacterGameplayInfo();
 			bool bIsFatalAttack = false;
 			float totalDamage = WeaponComponentRef.Get()->CalculateTotalDamage(targetInfo, bIsFatalAttack);
-			UE_LOG(LogTemp, Warning, TEXT("UMeleeCombatManager::MeleeAttack()---- TotalDmg : %.2lf / bIsFatalAtk : %d"), totalDamage, (int32)bIsFatalAttack);
-
+			
 			//Apply Debuff
 			const TArray<ECharacterDebuffType> targetDebuffTypeList = { ECharacterDebuffType::E_Burn, ECharacterDebuffType::E_Poison
 																		, ECharacterDebuffType::E_Stun, ECharacterDebuffType::E_Slow };

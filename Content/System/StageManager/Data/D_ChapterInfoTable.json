@@ -668,8 +668,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 11, 12, 13, 14 ],
-						"RewardItemProbabilityList": [ 1, 1, 1, 1 ]
+						"RewardItemIDList": [ 9, 11, 12, 13, 14 ],
+						"RewardItemProbabilityList": [ 2, 1, 1, 1, 1 ]
 					}
 				]
 			},
@@ -677,8 +677,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 9, 11, 12, 13, 14, 4 ],
-						"RewardItemProbabilityList": [ 3, 1, 1, 1, 1, 2 ]
+						"RewardItemIDList": [ 4, 9, 11, 12, 13, 14 ],
+						"RewardItemProbabilityList": [ 2, 3, 1, 1, 1, 1 ]
 					}
 				]
 			},
