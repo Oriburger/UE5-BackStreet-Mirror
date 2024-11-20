@@ -112,8 +112,8 @@ void UTargetingManagerComponent::ActivateTargeting()
 	TargetedCharacter = TargetedCandidate;
 
 	bIsTargetingActivated = true;
-	GetOwner()->GetWorldTimerManager().ClearTimer(CameraRotateTimerHandle);
-	GetOwner()->GetWorldTimerManager().SetTimer(CameraRotateTimerHandle, this, &UTargetingManagerComponent::UpdateCameraRotation, 0.01f, true);
+	//GetOwner()->GetWorldTimerManager().ClearTimer(CameraRotateTimerHandle);
+	//GetOwner()->GetWorldTimerManager().SetTimer(CameraRotateTimerHandle, this, &UTargetingManagerComponent::UpdateCameraRotation, 0.01f, true);
 
 	TargetedCharacter.Get()->GetCharacterMovement()->bOrientRotationToMovement = false;
 	TargetedCharacter.Get()->GetCharacterMovement()->bUseControllerDesiredRotation = true;
@@ -132,7 +132,7 @@ void UTargetingManagerComponent::DeactivateTargeting()
 	bIsTargetingActivated = false;
 	if (FollowingCameraRef.IsValid())
 	{
-		FollowingCameraRef.Get()->SetRelativeLocationAndRotation(FVector::ZeroVector, FRotator::ZeroRotator, false);
+		//FollowingCameraRef.Get()->SetRelativeLocationAndRotation(FVector::ZeroVector, FRotator::ZeroRotator, false);
 	}
 	OnTargetingActivated.Broadcast(false, nullptr);
 }
