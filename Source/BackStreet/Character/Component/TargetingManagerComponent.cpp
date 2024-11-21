@@ -53,11 +53,19 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 		actorToIgnore.Add(TargetedCharacter.Get());
 	}
 
-	if (!OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionReady("Attack"))
+	if (false)
 	{
 		traceDirection = OwnerCharacter.Get()->GetMesh()->GetRightVector();
+		endLocation = startLocation + traceDirection * MaxFindDistance;
+	}
+	
+	if (TargetedCandidate.IsValid() && !OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionReady("Attack"))
+	{
+		//FVector CandidateDirection = TargetedCandidate.Get()->GetActorForwardVector() * -MaxFindDistance;
+		traceDirection = TargetedCandidate.Get()->GetActorForwardVector() * -1.0f;
 		startLocation = OwnerCharacter.Get()->HitSceneComponent->GetComponentLocation();
 		endLocation = startLocation + traceDirection * MaxFindDistance;
+		//endLocation = startLocation + CandidateDirection;
 	}
 
 	UKismetSystemLibrary::SphereTraceMultiByProfile(GetWorld(), startLocation, endLocation, RadiusOverride <= 1.0f ? TraceRadius : RadiusOverride, "Pawn", true
@@ -72,7 +80,7 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 		if (!result.bBlockingHit) continue;
 
 		AActor* pawn = result.GetActor();
-		if (pawn == TargetedCandidate)
+		if (pawn == TargetedCandidate && pawn != nullptr)
 		{
 			bContainsOldCandidate = true;
 		}
