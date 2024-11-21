@@ -351,14 +351,15 @@ void UWeaponComponentBase::ApplyWeaponDebuff(ACharacterBase* TargetCharacter, EC
 	const float debuffTime = 2.5f + OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_DebuffTime);
 	//stun은 디버프 길이가 적용이 됨
 	float targetTime = (DebuffType == ECharacterDebuffType::E_Stun) ? debuffTime + targetValue : debuffTime;
+	const float randomSeed = UKismetMathLibrary::RandomFloatInRange(0.0f, 100.0f);
 
 	bool result = false;
-	if (targetValue > 0.0f && probabilityValue >= FMath::FRand())
+	if (targetValue > 0.0f && probabilityValue * 100.0f > randomSeed)
 	{
 		result = TargetCharacter->TryAddNewDebuff(FDebuffInfoStruct(DebuffType, targetTime, targetValue, true), OwnerCharacterRef.Get());
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("UWeaponComponentBase::ApplyWeaponDebuff #3 - type : %d // value : %.2lf // time : %.2lf // result : %d"), (int32)DebuffType, targetValue, targetTime, (int32)result);
+	UE_LOG(LogTemp, Warning, TEXT("UWeaponComponentBase::ApplyWeaponDebuff #3 - type : %d // value : %.2lf // random (%.2lf, %.2lf) // time : %.2lf // result : %d"), (int32)DebuffType, targetValue, probabilityValue * 100.0f, randomSeed, targetTime, (int32)result);
 }
 
 bool UWeaponComponentBase::UpgradeStat(TArray<uint8> NewLevelList)

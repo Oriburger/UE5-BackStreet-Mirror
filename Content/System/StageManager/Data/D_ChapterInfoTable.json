@@ -523,6 +523,13 @@
 					"1100": 1,
 					"1101": 2
 				}
+			},
+			"boss":
+			{
+				"EnemySet":
+				{
+					"1200": 1
+				}
 			}
 		},
 		"StageEnemyCompositionInfoMap":
@@ -641,7 +648,9 @@
 			},
 			"E_Boss":
 			{
-				"CompositionNameList": []
+				"CompositionNameList": [
+					"boss"
+				]
 			}
 		},
 		"StageRewardCandidateInfoMap":
@@ -659,8 +668,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 11, 12, 13, 14 ],
-						"RewardItemProbabilityList": [ 1, 1, 1, 1 ]
+						"RewardItemIDList": [ 9, 11, 12, 13, 14 ],
+						"RewardItemProbabilityList": [ 2, 1, 1, 1, 1 ]
 					}
 				]
 			},
@@ -668,8 +677,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 9, 11, 12, 13, 14, 4 ],
-						"RewardItemProbabilityList": [ 3, 1, 1, 1, 1, 2 ]
+						"RewardItemIDList": [ 4, 9, 11, 12, 13, 14 ],
+						"RewardItemProbabilityList": [ 2, 3, 1, 1, 1, 1 ]
 					}
 				]
 			},

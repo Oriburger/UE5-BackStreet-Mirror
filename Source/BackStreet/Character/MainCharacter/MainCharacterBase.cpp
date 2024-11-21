@@ -192,7 +192,7 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//SubWeapon
 		EnhancedInputComponent->BindAction(InputActionInfo.ShootAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryShoot);
 
-		EnhancedInputComponent->BindAction(LockToTargetAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::LockToTarget);
+		//EnhancedInputComponent->BindAction(LockToTargetAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::LockToTarget);
 	}
 }
 
@@ -527,7 +527,10 @@ void AMainCharacterBase::TryAttack()
 	//Rotate to attack direction using input (1. movement / 2. camera)
 	if (IsValid(TargetingManagerComponent->GetTargetedCandidate())
 		&& GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) >= 200.0f
-		&& !ActionTrackingComponent->GetIsActionInProgress("Attack"))
+		&& !ActionTrackingComponent->GetIsActionInProgress("Attack")
+		&& !ActionTrackingComponent->GetIsActionInProgress("DashAttack")
+		&& !ActionTrackingComponent->GetIsActionInProgress("JumpAttack")
+		&& WeaponComponent->GetWeaponStat().WeaponType == EWeaponType::E_Melee)
 	{
 		FVector startLocation = GetActorLocation();
 		FVector endLocation = TargetingManagerComponent->GetTargetedCandidate()->GetActorLocation();

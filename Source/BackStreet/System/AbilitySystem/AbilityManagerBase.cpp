@@ -260,7 +260,6 @@ bool UAbilityManagerComponent::InitAbilityInfoListFromTable(const UDataTable* Ab
 bool UAbilityManagerComponent::CanPickAbility(int32 AbilityID)
 {
 	EAbilityTierType tier = GetAbilityInfo(AbilityID).AbilityTier;
-	UE_LOG(LogTemp, Warning, TEXT("CanPickAbility id : %d, tier : %d,  tf? : %d"), AbilityID, tier, (int32)AbilityPickedInfoList[AbilityID]);
 	if (tier == EAbilityTierType::E_Common)
 		return !AbilityPickedInfoList[AbilityID]; // 1단계는 무조건 가능
 	if (tier == EAbilityTierType::E_Rare)

@@ -110,7 +110,10 @@ void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, 
 
 	//Calling MyUsefulFunction after 5 seconds without looping
 	ResetLocationInterpTimer();
-	GetWorld()->GetTimerManager().SetTimer(LocationInterpHandle, updateFunctionDelegate, 0.01f, true);
+	if (FVector::Distance(GetActorLocation(), NewValue) > 150.0f) //벽뚫기 방지코드
+	{
+		GetWorld()->GetTimerManager().SetTimer(LocationInterpHandle, updateFunctionDelegate, 0.01f, true);
+	}
 }
 
 void ACharacterBase::ResetLocationInterpTimer()
