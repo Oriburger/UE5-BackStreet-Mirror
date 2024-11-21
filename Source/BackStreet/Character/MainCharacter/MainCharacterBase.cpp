@@ -497,8 +497,8 @@ void AMainCharacterBase::SnapToCharacter(AActor* Target)
 	//@@@@@@@@ TEMPORARY CODE @@@@@@@@@@@@@@@@@@@@@@@
 	if (WeaponComponent->GetCurrentComboCnt() == 0)
 	{
-		if (CharacterGameplayInfo.CurrentSP < 0.5f) return;
-		CharacterGameplayInfo.CurrentSP -= 0.5f;
+		//if (CharacterGameplayInfo.CurrentSP < 0.5f) return;
+		//CharacterGameplayInfo.CurrentSP -= 0.5f;
 	}
 
 	FVector startLocation = GetActorLocation();
