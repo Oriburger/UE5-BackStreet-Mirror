@@ -79,6 +79,13 @@ protected:
 	UFUNCTION()
 		virtual void StandUp() override;
 
+// -------- 비헤이비어트리 및 AIController 관련 ---------
+public:
+	//Calculate probability depend on HitCount
+	UFUNCTION()
+	bool CalculateIgnoreHitProbability(int32 HitCounter);
+
+
 // ----- 캐릭터 스탯 및 상태 관련 ---------
 public:
 	//Initialize EnemyCharacter except asset info.

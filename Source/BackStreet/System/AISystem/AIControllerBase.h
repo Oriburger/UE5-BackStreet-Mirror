@@ -37,6 +37,13 @@ public:
 	UFUNCTION()
 		void SetTurnDirection(bool Right, bool Left);
 
+	UFUNCTION(BlueprintCallable)
+		EAIBehaviorType GetBehaviorState();
+
+	UFUNCTION()
+		void SetBehaviorState(EAIBehaviorType ActionType);
+	
+
 private:
 
 	bool TurnRight;
@@ -83,11 +90,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		UBehaviorTree* BehaviorTree;
 
+private:
 	//AI가 현재 내리고 있는 BT 액션 상태를 나타앰
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY()
 		EAIBehaviorType AIBehaviorState;
 
-private:
 	//캐릭터 감지 Time-Out 시, 기억을 지우는 로직을 수행
 	//해당 함수에 바인딩하여 사용할 타이머 핸들
 	UPROPERTY()

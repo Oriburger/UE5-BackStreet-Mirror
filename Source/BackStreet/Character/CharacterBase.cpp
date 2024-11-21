@@ -8,6 +8,7 @@
 #include "../Global/BackStreetGameModeBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/SkillSystem/SkillBase.h"
+#include "../System/AISystem/AIControllerBase.h"
 #include "Engine/DamageEvents.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -322,6 +323,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	const float& totalHealthValue = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MaxHealth);
 	float oldClampedHealthValue = CharacterGameplayInfo.CurrentHP;
 	float newClampedHealthValue = 0.0f;
+	AAIControllerBase* aiControllerRef = nullptr;
 
 	CharacterGameplayInfo.CurrentHP = CharacterGameplayInfo.CurrentHP - DamageAmount * (1.0f - FMath::Clamp(0.5f * CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_Defense), 0.0f, 0.5f));
 	newClampedHealthValue = CharacterGameplayInfo.CurrentHP = FMath::Max(0.0f, CharacterGameplayInfo.CurrentHP);
@@ -332,6 +334,8 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	OnHealthChanged.Broadcast(oldClampedHealthValue, newClampedHealthValue);
 	OnDamageReceived.Broadcast();
 
+	aiControllerRef = Cast<AAIControllerBase>(Controller);;
+
 	// =========== 사망 및 애니메이션 처리 ==============
 	if (CharacterGameplayInfo.CurrentHP == 0.0f)
 	{
@@ -341,10 +345,12 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 			Die();
 		}
 	}
-	else if (DamageCauser != this && this->CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill && !this->CharacterGameplayInfo.bIsAirAttacking)
+	else if (DamageCauser != this && this->CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill 
+		&& !this->CharacterGameplayInfo.bIsAirAttacking && IsValid(aiControllerRef))
 	{
 		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num() - 1);
-		if (AssetHardPtrInfo.HitAnimMontageList.Num() > 0 && IsValid(AssetHardPtrInfo.HitAnimMontageList[randomIdx]))
+		if (AssetHardPtrInfo.HitAnimMontageList.Num() > 0 && IsValid(AssetHardPtrInfo.HitAnimMontageList[randomIdx]) 
+			&& aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill)
 		{
 			PlayAnimMontage(AssetHardPtrInfo.HitAnimMontageList[randomIdx]);
 		}

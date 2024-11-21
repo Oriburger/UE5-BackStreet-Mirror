@@ -134,3 +134,16 @@ void AAIControllerBase::SetTurnDirection(bool Right, bool Left)
 	TurnRight = Right;
 	TurnLeft = Left;
 }
+
+EAIBehaviorType AAIControllerBase::GetBehaviorState()
+{
+	return AIBehaviorState;
+}
+
+void AAIControllerBase::SetBehaviorState(EAIBehaviorType ActionType)
+{
+	if (!IsValid(GetPawn())) return;
+	GetBlackboardComponent()->SetValueAsEnum("AIBehaviorState", (uint8)ActionType);
+	AIBehaviorState = ActionType;
+	UE_LOG(LogTemp, Warning, TEXT("Set Behavior State"));
+}

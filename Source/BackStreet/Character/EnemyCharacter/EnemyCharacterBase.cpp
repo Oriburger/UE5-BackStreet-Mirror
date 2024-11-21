@@ -146,7 +146,7 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 
 	//Stop AI Logic And Set Reactivation event
 	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(Controller);
-	if (IsValid(aiControllerRef) && CharacterID != 1200)
+	if (IsValid(aiControllerRef) && CharacterID != 1200 && aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill)
 	{
 		aiControllerRef->DeactivateAI();
 		GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
@@ -159,6 +159,13 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), DamageCauser->GetActorLocation());
 		newRotation.Pitch = newRotation.Roll = 0.0f;
 		SetActorRotation(newRotation);
+	}
+	
+	//Check IgnoreHit
+	bool ignoreHitResult = CalculateIgnoreHitProbability(CharacterGameplayInfo.HitCounter);
+	if (ignoreHitResult)
+	{	
+		aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Skill);
 	}
 
 	return damageAmount;
@@ -306,6 +313,23 @@ void AEnemyCharacterBase::KnockDown()
 void AEnemyCharacterBase::StandUp()
 {
 	Super::StandUp();
+}
+
+bool AEnemyCharacterBase::CalculateIgnoreHitProbability(int32 HitCounter)
+{
+	float baseProb = 0.05f, maxProb = 0.9f;
+	float increment = EnemyStat.DefaultStat.DefaultDefense * 0.2f;
+	float ignoreHitProbability = baseProb + (HitCounter * increment);
+
+	float result = UKismetMathLibrary::FMin(maxProb, ignoreHitProbability);
+	UE_LOG(LogTemp, Warning, TEXT("CalcIgnoreHit result : %f"), result);
+
+	if (FMath::FRand() <= result)
+	{
+		return true;
+	}
+	else return false;
+	return false;
 }
 
 void AEnemyCharacterBase::SetInstantHpWidgetVisibility()
