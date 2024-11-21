@@ -101,7 +101,12 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_AttackSpeed, 0);
 			WeaponState.UpgradedStatMap.Add(EWeaponStatType::E_FinalAttack, 0);
 		}
-		WeaponState.RangedWeaponState.UpdateAmmoValidation(WeaponStat.RangedWeaponStat.MaxTotalAmmo);
+		float multipiler = 1.0f;
+		if (OwnerCharacterRef.IsValid())
+		{
+			multipiler += OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_SubWeaponCapacity);
+		}
+		WeaponState.RangedWeaponState.UpdateAmmoValidation(WeaponStat.RangedWeaponStat.MaxTotalAmmo * (int32)multipiler);
 	}
 
 	//에셋 초기화

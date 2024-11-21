@@ -170,6 +170,9 @@ public:
 		void LockToTarget(const FInputActionValue& Value);
 
 	UFUNCTION()
+		void SnapToCharacter(AActor* Target);
+
+	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 			, AController* EventInstigator, AActor* DamageCauser) override;
 

@@ -490,6 +490,28 @@ void AMainCharacterBase::LockToTarget(const FInputActionValue& Value)
 	TargetingManagerComponent->ActivateTargeting();
 }
 
+void AMainCharacterBase::SnapToCharacter(AActor* Target)
+{
+	if (!IsValid(Target)) return;
+
+	//@@@@@@@@ TEMPORARY CODE @@@@@@@@@@@@@@@@@@@@@@@
+	if (WeaponComponent->GetCurrentComboCnt() == 0)
+	{
+		if (CharacterGameplayInfo.CurrentSP < 0.5f) return;
+		CharacterGameplayInfo.CurrentSP -= 0.5f;
+	}
+
+	FVector startLocation = GetActorLocation();
+	FVector endLocation = Target->GetActorLocation();
+	FVector dirVector = endLocation - startLocation; dirVector.Normalize();
+	SetActorRotation(UKismetMathLibrary::FindLookAtRotation(startLocation, endLocation));
+	SetLocationWithInterp(startLocation + dirVector * (FVector::Distance(startLocation, endLocation) - 75.0f), 2.0f);
+	if (GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) > 400.0f)
+	{
+		SetFieldOfViewWithInterp(130.0f, 3.0f, true);
+	}
+}
+
 float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -532,15 +554,7 @@ void AMainCharacterBase::TryAttack()
 		&& !ActionTrackingComponent->GetIsActionInProgress("JumpAttack")
 		&& WeaponComponent->GetWeaponStat().WeaponType == EWeaponType::E_Melee)
 	{
-		FVector startLocation = GetActorLocation();
-		FVector endLocation = TargetingManagerComponent->GetTargetedCandidate()->GetActorLocation();
-		FVector dirVector = endLocation - startLocation; dirVector.Normalize();
-		SetActorRotation(UKismetMathLibrary::FindLookAtRotation(startLocation, endLocation));
-		SetLocationWithInterp(startLocation + dirVector * (FVector::Distance(startLocation, endLocation) - 75.0f), 2.0f);
-		if (GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) > 400.0f)
-		{
-			SetFieldOfViewWithInterp(130.0f, 3.0f, true);
-		}
+		SnapToCharacter(TargetingManagerComponent->GetTargetedCandidate());
 	}
 
 	else if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
