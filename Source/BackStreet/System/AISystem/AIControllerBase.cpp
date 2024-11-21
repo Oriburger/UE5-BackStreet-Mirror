@@ -117,13 +117,6 @@ void AAIControllerBase::UpdateNewWeapon()
 	GetBlackboardComponent()->SetValueAsBool("HasRangedWeapon", Cast<ACharacterBase>(GetPawn())->WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Melee);
 }
 
-void AAIControllerBase::ConvertBehaviorType(EAIBehaviorType ActionType)
-{
-	if(!IsValid(GetPawn())) return;
-	GetBlackboardComponent()->SetValueAsEnum("AIBehaviorState", (uint8)ActionType);
-	AIBehaviorState = ActionType;
-}
-
 void AAIControllerBase::ClearAllTimerHandle()
 {
 	GetWorldTimerManager().ClearTimer(SightLossTimerHandle);
@@ -140,4 +133,17 @@ void AAIControllerBase::SetTurnDirection(bool Right, bool Left)
 {
 	TurnRight = Right;
 	TurnLeft = Left;
+}
+
+EAIBehaviorType AAIControllerBase::GetBehaviorState()
+{
+	return AIBehaviorState;
+}
+
+void AAIControllerBase::SetBehaviorState(EAIBehaviorType ActionType)
+{
+	if (!IsValid(GetPawn())) return;
+	GetBlackboardComponent()->SetValueAsEnum("AIBehaviorState", (uint8)ActionType);
+	AIBehaviorState = ActionType;
+	UE_LOG(LogTemp, Warning, TEXT("Set Behavior State"));
 }
