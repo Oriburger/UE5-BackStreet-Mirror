@@ -4,6 +4,7 @@
 #include "../../Character/Component/SkillManagerComponentBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Character/CharacterBase.h"
+#include "../AISystem/AIControllerBase.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 #include "Components/AudioComponent.h"
@@ -94,6 +95,13 @@ void ASkillBase::DeactivateSkill()
 	SetActorTransform(skillTransform);
 	SkillState.bIsHidden = true;
 	SetActorHiddenInGame(true);
+
+	OwnerCharacterBaseRef = Cast<ACharacterBase>(SkillManagerComponentRef->GetOwner());
+	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(OwnerCharacterBaseRef->Controller);
+	if(OwnerCharacterBaseRef.IsValid() && IsValid(aiControllerRef))
+	{
+		aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Idle);
+	}
 }
 
 void ASkillBase::DestroySkill()
