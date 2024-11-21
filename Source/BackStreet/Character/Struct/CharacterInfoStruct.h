@@ -216,6 +216,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
 		float CurrentHP = 0.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+		float CurrentSP = 0.0f;
+
 	//공격을 할 수 있는 상태인지?
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
 		bool bCanAttack = false;
@@ -370,7 +373,7 @@ public:
 	}
 
 	FCharacterGameplayInfo() : CharacterID(0) , bInfinite(false) , bIsInvincibility(false), StatGroupList(), CharacterDebuffState(1 << 10)
-		, CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), bCanAttack(false), bCanRoll(false), bIsSprinting(false), bIsAiming(false)
+		, CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), CurrentSP(0.0f), bCanAttack(false), bCanRoll(false), bIsSprinting(false), bIsAiming(false)
 		, bIsAirAttacking(false), bIsDownwardAttacking(false), HitCounter(0), ExtraStageTime(0.0f), MaxKeepingSkillCount(1)
 		, bInfiniteSkillMaterial(false), ExtraPercentageUnivMaterial(0.0f)
 	{
@@ -383,7 +386,7 @@ public:
 	}
 
 	FCharacterGameplayInfo(FCharacterDefaultStat DefaultStat) : CharacterID(DefaultStat.CharacterID), bInfinite(DefaultStat.bInfinite), bIsInvincibility(DefaultStat.bIsInvincibility)
-		, StatGroupList(), CharacterDebuffState(1 << 10), CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), bCanAttack(false), bCanRoll(false)
+		, StatGroupList(), CharacterDebuffState(1 << 10), CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), CurrentSP(0.0f), bCanAttack(false), bCanRoll(false)
 		, bIsSprinting(false), bIsAiming(false), bIsAirAttacking(false), bIsDownwardAttacking(false), HitCounter(0), ExtraStageTime(0.0f)
 		, MaxKeepingSkillCount(1), bInfiniteSkillMaterial(false), ExtraPercentageUnivMaterial(0.0f)
 	{
@@ -535,124 +538,3 @@ struct FEnemyStatStruct : public FTableRowBase
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Skill")
 		TArray<int32> EnemySkillIDList; 
 };
-
-
-/*
-USTRUCT(BlueprintType)
-struct FStatInfoStruct
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(BlueprintReadOnly)
-	float PercentValue = 0.0f;
-
-	UPROPERTY(BlueprintReadOnly)
-	float FixedValue = 0.0f;
-};
-
-USTRUCT(BlueprintType)
-struct FCharacterStateStruct
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	//====== Character State ===============
-		//캐릭터의 디버프 상태 (Bit-Field로 표현)
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int32 CharacterDebuffState = (1 << 10);
-
-	//공격을 할 수 있는 상태인지?
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	bool bCanAttack = false;
-
-	//Is character sprinting?
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	bool bIsSprinting = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	bool bIsAiming = false;
-
-	//캐릭터의 행동 정보
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	ECharacterActionType CharacterActionState = ECharacterActionType::E_Idle;
-
-	//====== Current Stat ===================
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float TotalHP = 0.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float TotalAttack = 0.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float TotalDefense = 0.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float TotalMoveSpeed = 0.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float TotalAttackSpeed = 0.0f;
-
-	//PlayerMaxHP는 1.0f
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float CurrentHP = 0.0f;
-
-	//======= Additional Stat , Uneditable ======================
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct AbilityHP;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct AbilityAttack;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct AbilityAttackSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct AbilityMoveSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct AbilityDefense;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct SkillHP;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct SkillAttack;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct SkillAttackSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct SkillMoveSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct SkillDefense;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct DebuffHP;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct DebuffAttack;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct DebuffAttackSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct DebuffMoveSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct DebuffDefense;
-
-	//====== Player ====================================	
-		//Air Atk Movement
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	bool bIsAirAttacking = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	bool bIsDownwardAttacking = false;
-
-	//Hit Counter For Knockback Event
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int32 HitCounter = 0;
-};
-*/
