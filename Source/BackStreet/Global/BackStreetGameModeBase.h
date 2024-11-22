@@ -137,6 +137,8 @@ protected:
 	//게임 일시정지 여부
 	UPROPERTY(BlueprintReadWrite)
 		bool bIsGamePaused = false;
+	
+	TMap<int32, UClass*> ItemClassCacheMap;
 
 
 };
