@@ -90,15 +90,26 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector Spawn
 	
 	FActorSpawnParameters actorSpawnParameters;
 	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	
+	FString rowName = FString::FromInt(ItemID);
+	FItemInfoDataStruct* newInfo = ItemInfoTable->FindRow<FItemInfoDataStruct>(FName(rowName), rowName);
 
-	if (ItemClass != nullptr)
+	UClass* targetClass = ItemClass;
+	if (ItemClassCacheMap.Contains(ItemID))
 	{
-		AItemBase* newItem = Cast<AItemBase>(GetWorld()->SpawnActor(ItemClass, &SpawnLocation, nullptr, actorSpawnParameters));
+		targetClass = ItemClassCacheMap[ItemID];
+	}
+	else if (newInfo != nullptr && newInfo->ItemClass != nullptr)
+	{
+		ItemClassCacheMap.Add(ItemID, newInfo->ItemClass);
+		targetClass = newInfo->ItemClass;
+	}
 
-		if (IsValid(newItem))
-		{
-			newItem->InitItem(ItemID);
-		}
+	AItemBase* newItem = Cast<AItemBase>(GetWorld()->SpawnActor(targetClass, &SpawnLocation, nullptr, actorSpawnParameters));
+
+	if (IsValid(newItem))
+	{
+		newItem->InitItem(ItemID);
 		return newItem;
 	}
 	return nullptr;
