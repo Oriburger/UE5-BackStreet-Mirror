@@ -6,6 +6,8 @@
 #include "../Component/EnemySkillManagerComponent.h"
 #include "../MainCharacter/MainCharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
+#include "../../System/MapSystem/NewChapterManagerBase.h"
+#include "../../System/MapSystem/StageManagerComponent.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
 #include "../../System/AISystem/AIControllerBase.h"
 #include "../../Item/ItemBase.h"
@@ -75,9 +77,10 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		EnemyStat = *newStat;
 
 		//Set CharacterStat with setting default additional stat bInfinite (infinite use of ammo)
-		UpdateCharacterStat(EnemyStat.CharacterStat);
-		CharacterStat.bInfinite = true;
-		CharacterState.CurrentHP = EnemyStat.CharacterStat.DefaultHP;
+		FCharacterGameplayInfo newInfo = FCharacterGameplayInfo(EnemyStat.DefaultStat);
+		newInfo.CharacterID = NewCharacterID;
+		InitCharacterGameplayInfo(newInfo);
+		CharacterGameplayInfo.bInfinite = true;
 		SetDefaultWeapon();
 	}
 
@@ -116,34 +119,34 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterStat.bIsInvincibility) return 0.0f;
+	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterGameplayInfo.bIsInvincibility) return 0.0f;
 
 	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
 	SetInstantHpWidgetVisibility();
 	
-	FloatingHpBar->SetVisibility(CharacterState.CurrentHP > 0.0f);
+	FloatingHpBar->SetVisibility(CharacterGameplayInfo.CurrentHP > 0.0f);
 
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Skill) return damageAmount;
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Skill) return damageAmount;
 
 	if (DamageCauser->ActorHasTag("Player"))
 	{
 		//apply fov hit effect by damage amount
 		float fovValue = 90.0f + FMath::Clamp(DamageAmount/100.0f, 0.0f, 1.0f) * 45.0f;
-		if (Cast<AMainCharacterBase>(DamageCauser)->GetCharacterState().bIsDownwardAttacking)
+		if (Cast<AMainCharacterBase>(DamageCauser)->GetCharacterGameplayInfo().bIsDownwardAttacking)
 		{
 			fovValue = 120.0f;
 		}
 		Cast<AMainCharacterBase>(DamageCauser)->SetFieldOfViewWithInterp(fovValue, 5.0f, true);
 	}	
 	
-	if (CharacterState.CharacterActionState == ECharacterActionType::E_Hit)
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Hit)
 	{
 		GetWorldTimerManager().SetTimer(HitTimeOutTimerHandle, this, &AEnemyCharacterBase::ResetActionStateForTimer, 1.0f, false, CharacterID == 1200 ? 0.1f : 0.5f);
 	}
 
 	//Stop AI Logic And Set Reactivation event
 	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(Controller);
-	if (IsValid(aiControllerRef) && CharacterID != 1200)
+	if (IsValid(aiControllerRef) && CharacterID != 1200 && aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill)
 	{
 		aiControllerRef->DeactivateAI();
 		GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
@@ -156,6 +159,13 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), DamageCauser->GetActorLocation());
 		newRotation.Pitch = newRotation.Roll = 0.0f;
 		SetActorRotation(newRotation);
+	}
+	
+	//Check IgnoreHit
+	bool ignoreHitResult = CalculateIgnoreHitProbability(CharacterGameplayInfo.HitCounter);
+	if (ignoreHitResult)
+	{	
+		aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Skill);
 	}
 
 	return damageAmount;
@@ -175,8 +185,7 @@ void AEnemyCharacterBase::Attack()
 {
 	Super::Attack();
 
-	float attackSpeed = 0.5f;
-	attackSpeed = FMath::Min(1.5f, CharacterStat.DefaultAttackSpeed * WeaponComponent->GetWeaponStat().WeaponAtkSpeedRate);
+	const float attackSpeed = FMath::Min(1.5f, CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_NormalAttackSpeed) * WeaponComponent->WeaponStat.WeaponAtkSpeedRate);
 
 	GetWorldTimerManager().SetTimer(AtkIntervalHandle, this, &ACharacterBase::ResetAtkIntervalTimer
 		, 1.0f, false, FMath::Max(0.0f, 1.5f - attackSpeed));
@@ -231,8 +240,9 @@ void AEnemyCharacterBase::SpawnDeathItems()
 
 		if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
 		{
-			AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 10.0f);
-
+			//임시로 오프셋 넣어둠. 언젠가 Linetrace로 바닥 맞춰주는 로직 추가할 것.
+			AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 10.0f - FVector(0.0f, 0.0f, 50.0f));
+			
 			if (IsValid(newItem))
 			{
 				spawnedItemList.Add(newItem);
@@ -240,10 +250,19 @@ void AEnemyCharacterBase::SpawnDeathItems()
 			}
 		}
 	}
+
+	ACharacterBase* playerRef = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	for (auto& targetItem : spawnedItemList)
 	{
-		targetItem->ActivateProjectileMovement();
+		uint8 newAmount = 1;
+		if (IsValid(playerRef) && playerRef->GetStatProbabilityValue(ECharacterStatType::E_LuckyDrop) >= FMath::FRandRange(0.0f, 1.0f))
+		{
+			newAmount = 2;
+		}
+		targetItem->SetItemAmount(newAmount);
+		GamemodeRef.Get()->RegisterActorToStageManager(targetItem);
 		targetItem->ActivateItem();
+		//targetItem->ActivateProjectileMovement(); //텍스쳐만 있는 아이템의 경우에는 바닥을 뚫는 문제가 있음, 추후 개선 필요
 	}
 }
 
@@ -294,6 +313,23 @@ void AEnemyCharacterBase::KnockDown()
 void AEnemyCharacterBase::StandUp()
 {
 	Super::StandUp();
+}
+
+bool AEnemyCharacterBase::CalculateIgnoreHitProbability(int32 HitCounter)
+{
+	float baseProb = 0.05f, maxProb = 0.9f;
+	float increment = EnemyStat.DefaultStat.DefaultDefense * 0.2f;
+	float ignoreHitProbability = baseProb + (HitCounter * increment);
+
+	float result = UKismetMathLibrary::FMin(maxProb, ignoreHitProbability);
+	UE_LOG(LogTemp, Warning, TEXT("CalcIgnoreHit result : %f"), result);
+
+	if (FMath::FRand() <= result)
+	{
+		return true;
+	}
+	else return false;
+	return false;
 }
 
 void AEnemyCharacterBase::SetInstantHpWidgetVisibility()

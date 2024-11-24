@@ -33,7 +33,7 @@ protected:
 // ============ Core Function =======================
 public:
 	UFUNCTION()	
-		AActor* FindNearEnemyToTarget(float Radius = 500.0f);
+		AActor* FindNearEnemyToTarget(float RadiusOverride = 0.0f);
 
 	UFUNCTION()
 		void ForceTargetingToNearestCharacter();
@@ -66,6 +66,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class ACharacterBase* GetTargetedCharacter();// {  }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class ACharacterBase* GetTargetedCandidate() { return TargetedCandidate.IsValid() ? TargetedCandidate.Get() : nullptr; }
+
 	UFUNCTION(BlueprintCallable)
 		void SetTargetedCharacter(class ACharacterBase* NewTarget);
 
@@ -77,6 +80,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		float MaxFindDistance = 1000.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		float TraceRadius = 400.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		float AutoTargetingRate = 0.25f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		bool bShowDebugSphere = false;
+
 		
 private:
 	bool bIsTargetingActivated;

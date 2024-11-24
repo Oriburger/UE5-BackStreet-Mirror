@@ -24,8 +24,9 @@ void UPlayerSkillManagerComponent::InitSkillManager()
 
 void UPlayerSkillManagerComponent::InitSkillMap()
 {
-	Super::InitSkillMap();
 	if (!OwnerCharacterRef.IsValid()) return;
+	if (OwnerCharacterRef->WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Melee) return;
+	Super::InitSkillMap();
 
 	SkillInventoryMap.Reset();
 	EquipedSkillMap.Reset();
@@ -205,6 +206,7 @@ bool UPlayerSkillManagerComponent::EquipSkill(int32 NewSkillID)
 
 void UPlayerSkillManagerComponent::ClearAllSkill()
 {
+	Super::ClearAllSkill();
 	InitSkillMap();
 	OnSkillUpdated.Broadcast();
 }

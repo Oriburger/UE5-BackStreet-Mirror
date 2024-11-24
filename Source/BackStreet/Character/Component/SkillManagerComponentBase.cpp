@@ -32,9 +32,13 @@ void USkillManagerComponentBase::InitSkillManager()
 	SkillStatTable = GameModeRef.Get()->SkillStatTable;
 	checkf(IsValid(SkillStatTable), TEXT("Failed to get SkillStatDataTable"));
 	OwnerCharacterRef->WeaponComponent->OnMainWeaponUpdated.AddDynamic(this, &USkillManagerComponentBase::InitSkillMap);
+	UE_LOG(LogTemp, Warning, TEXT("USkillManagerComponentBase::InitSkillManager()"));
 }
 
-void USkillManagerComponentBase::InitSkillMap() {}
+void USkillManagerComponentBase::InitSkillMap() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("InitSkillMap()"));
+}
 
 bool USkillManagerComponentBase::TrySkill(int32 SkillID)
 {
@@ -78,7 +82,10 @@ bool USkillManagerComponentBase::UpgradeSkill(int32 SkillID, ESkillUpgradeType U
 	return true;
 }
 
-void USkillManagerComponentBase::ClearAllSkill() {}
+void USkillManagerComponentBase::ClearAllSkill() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("USkillManagerComponentBase::ClearAllSkill() "));
+}
 
 FSkillStatStruct USkillManagerComponentBase::GetSkillInfo(int32 SkillID)
 {

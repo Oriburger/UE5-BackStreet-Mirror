@@ -73,7 +73,13 @@ protected:
 		class UNiagaraSystem* HitNiagaraParticle;
 
 	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|VFX")
-		class UNiagaraSystem* ExplosionParticle;
+		class UNiagaraSystem* ExplodeParticle;
+
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|SFX")
+		class USoundCue* HitSound;	
+
+	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay|SFX")
+		class USoundCue* ExplosionSound;
 
 //------ 기본 함수  ------------------
 public:

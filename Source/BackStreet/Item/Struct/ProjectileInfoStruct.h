@@ -96,7 +96,7 @@ public:
 		TSoftObjectPtr<class UNiagaraSystem> TrailParticle;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
-		TSoftObjectPtr<class UNiagaraSystem> ExplosionParticle;
+		TSoftObjectPtr<class UNiagaraSystem> ExplodeParticle;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
 		TSoftObjectPtr<class UParticleSystem> HitEffectParticleLegacy;

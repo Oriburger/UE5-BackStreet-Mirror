@@ -6,6 +6,7 @@
 #include "../../../System/AssetSystem/AssetManagerBase.h"
 #include "../../../Global/BackStreetGameModeBase.h"
 #include "../../../Character/CharacterBase.h"
+#include "../../../Character/Component/ActionTrackingComponent.h"
 #include "../../../Character/Component/WeaponComponentBase.h"
 #include "../../../System/AssetSystem/AssetManagerBase.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -86,9 +87,12 @@ void UMeleeCombatManager::MeleeAttack()
 	FHitResult hitResult;
 	bool bIsFinalCombo = WeaponComponentRef.Get()->GetIsFinalCombo();
 	bool bIsMeleeTraceSucceed = false;
+	bool bIsJumpAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("JumpAttack"))
+							|| OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionRecentlyFinished(FName("JumpAttack"));
+	bool bIsDashAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("DashAttack"));
 
-	FCharacterStateStruct ownerState = OwnerCharacterRef.Get()->GetCharacterState();
-	
+	FCharacterGameplayInfo ownerInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfo();
+
 	TArray<FVector> currTracePositionList = GetCurrentMeleePointList();
 	TArray<AActor*> targetList = CheckMeleeAttackTargetWithSphereTrace();
 	MeleePrevTracePointList = currTracePositionList;
@@ -96,18 +100,28 @@ void UMeleeCombatManager::MeleeAttack()
 	for (auto& target : targetList)
 	{
 		//if target is valid, apply damage
-		if (IsValid(target) && (!Cast<ACharacterBase>(target)->GetCharacterStat().bIsInvincibility))
+		if (IsValid(target))
 		{
-			FCharacterStateStruct targetState = Cast<ACharacterBase>(target)->GetCharacterState();
-			float totalDamage = WeaponComponentRef.Get()->CalculateTotalDamage(targetState);
-			totalDamage = bIsFinalCombo ? totalDamage * (WeaponComponentRef.Get()->WeaponStat.FinalImpactStrength + 1.0f) : totalDamage;
-
+			FCharacterGameplayInfo targetInfo = Cast<ACharacterBase>(target)->GetCharacterGameplayInfo();
+			bool bIsFatalAttack = false;
+			float totalDamage = WeaponComponentRef.Get()->CalculateTotalDamage(targetInfo, bIsFatalAttack);
+			
+			//Apply Debuff
+			const TArray<ECharacterDebuffType> targetDebuffTypeList = { ECharacterDebuffType::E_Burn, ECharacterDebuffType::E_Poison
+																		, ECharacterDebuffType::E_Stun, ECharacterDebuffType::E_Slow };
+			for (auto& debuffType : targetDebuffTypeList)
+			{
+				ECharacterStatType targetStatType = FCharacterGameplayInfo::GetDebuffStatType(bIsJumpAttacking, bIsDashAttacking, debuffType);
+				if (targetStatType == ECharacterStatType::E_None) continue;
+				WeaponComponentRef.Get()->ApplyWeaponDebuff(Cast<ACharacterBase>(target), debuffType, targetStatType);
+			}
+			
 			//Activate Melee Hit Effect
-			ActivateMeleeHitEffect(target->GetActorLocation(), target, bIsFinalCombo && WeaponComponentRef.Get()->WeaponStat.FinalImpactStrength > 0.0f);
+			ActivateMeleeHitEffect(target->GetActorLocation(), target, bIsFatalAttack);
 
 			//Apply Knockback
 			if (!target->ActorHasTag("Boss")
-				&& !OwnerCharacterRef.Get()->GetCharacterState().bIsAirAttacking)
+				&& !ownerInfo.bIsAirAttacking)
 			{
 				OwnerCharacterRef.Get()->ApplyKnockBack(target, WeaponComponentRef.Get()->WeaponStat.WeaponKnockBackStrength);
 			}
@@ -177,8 +191,9 @@ void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, AActor
 	}
 
 	//카메라 Shake 효과
-	GamemodeRef.Get()->PlayCameraShakeEffect(OwnerCharacterRef.Get()->ActorHasTag("Player") ? ECameraShakeType::E_Attack : ECameraShakeType::E_Hit, Location);
+	if (OwnerCharacterRef.Get()->GetCharacterGameplayInfo().bIsInvincibility) return;
 
+	GamemodeRef.Get()->PlayCameraShakeEffect(OwnerCharacterRef.Get()->ActorHasTag("Player") ? ECameraShakeType::E_Attack : ECameraShakeType::E_Hit, Location);
 }
 
 TArray<FVector> UMeleeCombatManager::GetCurrentMeleePointList()

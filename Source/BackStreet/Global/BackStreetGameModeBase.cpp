@@ -3,6 +3,7 @@
 #include "BackStreetGameModeBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/MapSystem/NewChapterManagerBase.h"
+#include "../System/MapSystem/StageManagerComponent.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
 #include "../Item/ItemBase.h"
@@ -53,6 +54,13 @@ void ABackStreetGameModeBase::FinishGame(bool bGameIsOver)
 	ChapterManagerRef->FinishChapter(!bGameIsOver);
 }
 
+void ABackStreetGameModeBase::RegisterActorToStageManager(AActor* TargetActor)
+{
+	if (!IsValid(TargetActor) || !IsValid(ChapterManagerRef)) return;
+	if (!ChapterManagerRef->GetCurrentChapterInfo().IsValid()) return;
+	ChapterManagerRef->StageManagerComponent->RegisterActor(TargetActor);
+}
+
 void ABackStreetGameModeBase::PlayCameraShakeEffect(ECameraShakeType EffectType, FVector Location, float Radius)
 {
 	if (!IsValid(GetWorld()) || !CameraShakeEffectList.IsValidIndex((uint8)EffectType)) return;
@@ -82,26 +90,29 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector Spawn
 	
 	FActorSpawnParameters actorSpawnParameters;
 	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	
+	FString rowName = FString::FromInt(ItemID);
+	FItemInfoDataStruct* newInfo = ItemInfoTable->FindRow<FItemInfoDataStruct>(FName(rowName), rowName);
 
-	if (ItemClass != nullptr)
+	UClass* targetClass = ItemClass;
+	if (ItemClassCacheMap.Contains(ItemID))
 	{
-		AItemBase* newItem = Cast<AItemBase>(GetWorld()->SpawnActor(ItemClass, &SpawnLocation, nullptr, actorSpawnParameters));
+		targetClass = ItemClassCacheMap[ItemID];
+	}
+	else if (newInfo != nullptr && newInfo->ItemClass != nullptr)
+	{
+		ItemClassCacheMap.Add(ItemID, newInfo->ItemClass);
+		targetClass = newInfo->ItemClass;
+	}
 
-		if (IsValid(newItem))
-		{
-			newItem->InitItem(ItemID);
-		}
+	AItemBase* newItem = Cast<AItemBase>(GetWorld()->SpawnActor(targetClass, &SpawnLocation, nullptr, actorSpawnParameters));
+
+	if (IsValid(newItem))
+	{
+		newItem->InitItem(ItemID);
 		return newItem;
 	}
 	return nullptr;
-}
-
-void ABackStreetGameModeBase::UpdateCharacterStat(ACharacterBase* TargetCharacter, FCharacterStatStruct NewStat)
-{
-	if (IsValid(TargetCharacter))
-	{
-		TargetCharacter->UpdateCharacterStat(NewStat);
-	}
 }
 
 UCommonUserWidget* ABackStreetGameModeBase::GetMainHUDRef()

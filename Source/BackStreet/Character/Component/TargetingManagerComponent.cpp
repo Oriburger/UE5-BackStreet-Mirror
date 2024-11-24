@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "../CharacterBase.h"
+#include "ActionTrackingComponent.h"
 
 // Sets default values for this component's properties
 UTargetingManagerComponent::UTargetingManagerComponent()
@@ -34,32 +35,55 @@ void UTargetingManagerComponent::BeginPlay()
 
 	if (bAutoTargeting)
 	{
-		GetOwner()->GetWorldTimerManager().SetTimer(AutoFindTimerHandle, this, &UTargetingManagerComponent::UpdateTargetedCandidate, 0.5f, true);
+		GetOwner()->GetWorldTimerManager().SetTimer(AutoFindTimerHandle, this, &UTargetingManagerComponent::UpdateTargetedCandidate, AutoTargetingRate, true);
 	}
 }
 
-AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float Radius)
+AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 {
 	if (!OwnerCharacter.IsValid() || !FollowingCameraRef.IsValid()) return nullptr;
 
-	FVector startLocation = OwnerCharacter.Get()->GetActorLocation();
-	FVector endLocation = startLocation + FollowingCameraRef.Get()->GetForwardVector() * MaxFindDistance;
+	FVector traceDirection = FollowingCameraRef.Get()->GetForwardVector(); traceDirection.Z = 0.0f;
+	FVector startLocation = OwnerCharacter.Get()->GetActorLocation() + traceDirection * 50.0f;
+	FVector endLocation = startLocation + traceDirection * MaxFindDistance;
 	TArray<FHitResult> hitResultList;
 	TArray<AActor*> actorToIgnore = { OwnerCharacter.Get() };
 	if (bIsTargetingActivated && TargetedCharacter.IsValid())
 	{
 		actorToIgnore.Add(TargetedCharacter.Get());
 	}
-	UKismetSystemLibrary::SphereTraceMultiByProfile(GetWorld(), startLocation, endLocation, Radius, "Pawn", false
-		, actorToIgnore, EDrawDebugTrace::None, hitResultList, true);
+
+	if (false)
+	{
+		traceDirection = OwnerCharacter.Get()->GetMesh()->GetRightVector();
+		endLocation = startLocation + traceDirection * MaxFindDistance;
+	}
+	
+	if (TargetedCandidate.IsValid() && !OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionReady("Attack"))
+	{
+		//FVector CandidateDirection = TargetedCandidate.Get()->GetActorForwardVector() * -MaxFindDistance;
+		traceDirection = TargetedCandidate.Get()->GetActorForwardVector() * -1.0f;
+		startLocation = OwnerCharacter.Get()->HitSceneComponent->GetComponentLocation();
+		endLocation = startLocation + traceDirection * MaxFindDistance;
+		//endLocation = startLocation + CandidateDirection;
+	}
+
+	UKismetSystemLibrary::SphereTraceMultiByProfile(GetWorld(), startLocation, endLocation, RadiusOverride <= 1.0f ? TraceRadius : RadiusOverride, "Pawn", true
+		, actorToIgnore, bShowDebugSphere ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResultList, true, FColor::Green, FColor::Red, AutoTargetingRate);
 
 	float minDist = FLT_MAX;
 	ACharacterBase* target = nullptr;
+	
+	bool bContainsOldCandidate = false;
 	for (FHitResult& result : hitResultList)
 	{
 		if (!result.bBlockingHit) continue;
 
 		AActor* pawn = result.GetActor();
+		if (pawn == TargetedCandidate && pawn != nullptr)
+		{
+			bContainsOldCandidate = true;
+		}
 
 		if (!IsValid(pawn)) continue;
 		if (!pawn->Tags.IsValidIndex(1) || !OwnerCharacter.Get()->Tags.IsValidIndex(1)) continue;
@@ -71,6 +95,10 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float Radius)
 			dist = minDist;
 			target = Cast<ACharacterBase>(pawn);
 		}
+	}
+	if (!bContainsOldCandidate)
+	{
+		TargetedCandidate.Reset();
 	}
 	return target;
 }
@@ -92,8 +120,8 @@ void UTargetingManagerComponent::ActivateTargeting()
 	TargetedCharacter = TargetedCandidate;
 
 	bIsTargetingActivated = true;
-	GetOwner()->GetWorldTimerManager().ClearTimer(CameraRotateTimerHandle);
-	GetOwner()->GetWorldTimerManager().SetTimer(CameraRotateTimerHandle, this, &UTargetingManagerComponent::UpdateCameraRotation, 0.01f, true);
+	//GetOwner()->GetWorldTimerManager().ClearTimer(CameraRotateTimerHandle);
+	//GetOwner()->GetWorldTimerManager().SetTimer(CameraRotateTimerHandle, this, &UTargetingManagerComponent::UpdateCameraRotation, 0.01f, true);
 
 	TargetedCharacter.Get()->GetCharacterMovement()->bOrientRotationToMovement = false;
 	TargetedCharacter.Get()->GetCharacterMovement()->bUseControllerDesiredRotation = true;
@@ -112,7 +140,7 @@ void UTargetingManagerComponent::DeactivateTargeting()
 	bIsTargetingActivated = false;
 	if (FollowingCameraRef.IsValid())
 	{
-		FollowingCameraRef.Get()->SetRelativeLocationAndRotation(FVector::ZeroVector, FRotator::ZeroRotator, false);
+		//FollowingCameraRef.Get()->SetRelativeLocationAndRotation(FVector::ZeroVector, FRotator::ZeroRotator, false);
 	}
 	OnTargetingActivated.Broadcast(false, nullptr);
 }
@@ -126,7 +154,7 @@ void UTargetingManagerComponent::UpdateTargetedCandidate()
 		OnTargetUpdated.Broadcast(TargetedCandidate.Get());
 	}
 
-	if (TargetedCandidate.IsValid() && !OwnerCharacter.Get()->GetCharacterState().bIsAirAttacking)
+	if (TargetedCandidate.IsValid() && !OwnerCharacter.Get()->GetCharacterGameplayInfo().bIsAirAttacking)
 	{
 		if (FVector::Dist(OwnerCharacter.Get()->GetActorLocation(), TargetedCandidate.Get()->GetActorLocation()) > TargetingMaintainThreashold)
 		{

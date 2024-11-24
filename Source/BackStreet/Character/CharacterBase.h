@@ -4,35 +4,60 @@
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateCharacterDie);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateTakeDamage);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateHealthChange, float, OldValue, float, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateBeginLocationInterp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateEndLocationInterp);
+DECLARE_MULTICAST_DELEGATE(FDelegateOnActionTrigger);
 
 UCLASS()
 class BACKSTREET_API ACharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
-	friend class AWeaponInventoryBase;
 
+//========================================================================
+//====== Delegate ========================================================
 public:
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateTakeDamage OnTakeDamage;
+	FDelegateOnActionTrigger OnMoveStarted;
+	FDelegateOnActionTrigger OnJumpStarted;
+	FDelegateOnActionTrigger OnJumpEnd;
+	FDelegateOnActionTrigger OnRollStarted;
+	FDelegateOnActionTrigger OnSprintStarted;
+	FDelegateOnActionTrigger OnSprintEnd;
+	FDelegateOnActionTrigger OnRollEnded;
+	FDelegateOnActionTrigger OnAttackStarted;
+	FDelegateOnActionTrigger OnDashAttackStarted;
+	FDelegateOnActionTrigger OnJumpAttackStarted;
+	FDelegateOnActionTrigger OnDamageReceived;
+	FDelegateOnActionTrigger OnSkillStarted;
+	FDelegateOnActionTrigger OnSkillEnded;
+	FDelegateOnActionTrigger OnDeath;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateHealthChange OnHealthChanged;
 
-//----- Global / Component ----------
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateBeginLocationInterp OnBeginLocationInterp;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateEndLocationInterp OnEndLocationInterp;
+
+public:
+	TMap<FName, FDelegateOnActionTrigger*> ActionTriggerDelegateMap;
+
+private:
+	//생성자에서 호출
+	void InitializeActionTriggerDelegateMap();
+
+
+//========================================================================
+//====== Global / Component ==============================================
 public:
 	// Sets default values for this character's properties
 	ACharacterBase();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	//Weapon이 파괴되었을때 호출할 이벤트
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateCharacterDie OnCharacterDied;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -57,10 +82,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UTargetingManagerComponent* TargetingManagerComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UActionTrackingComponent* ActionTrackingComponent;
+
 public:
 	TWeakObjectPtr<class USkillManagerComponentBase> SkillManagerComponentRef;
 
-// ------- Character Action 기본 ------- 
+//========================================================================
+//========= Action =======================================================
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
 		int32 CharacterID;
@@ -97,7 +126,7 @@ public:
 
 	//플레이어가 현재 해당 Action을 수행하고 있는지 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsActionActive(ECharacterActionType Type) { return CharacterState.CharacterActionState == Type; }
+		bool GetIsActionActive(ECharacterActionType Type) { return CharacterGameplayInfo.CharacterActionState == Type; }
 
 	//플레이어의 ActionState를 Idle로 전환한다.
 	UFUNCTION(BlueprintCallable)
@@ -142,9 +171,6 @@ public:
 	////Launch event when upperattack
 	//UFUNCTION(BlueprintCallable)
 	//	void LaunchCharacterWithTarget();
-	//
-	//UFUNCTION(BlueprintCallable);
-	//	void LaunchCharacterWithTarget();
 
 	//UFUNCTION(BlueprintCallable)
 	//	void ActivateAirMode(bool bDeactivateFlag = false);	
@@ -172,11 +198,29 @@ protected:
 	//Stand UP
 	virtual void StandUp();
 
-// ------- Character Stat/State ------------------------------
+//========================================================================
+//====== Stat / State ====================================================
 public:
-	//캐릭터의 상태 정보를 초기화
-	UFUNCTION()
-		void InitCharacterState();
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FCharacterGameplayInfo& GetCharacterGameplayInfoRef() { return CharacterGameplayInfo; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FCharacterGameplayInfo GetCharacterGameplayInfo() { return CharacterGameplayInfo; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetStatTotalValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetTotalValue(TargetStatType); }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetStatProbabilityValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetProbabilityStatInfo(TargetStatType); }
+
+	UFUNCTION(BlueprintCallable)
+		void InitCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetCurrentHP();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetMaxHP();
 
 	//캐릭터의 디버프 정보를 업데이트
 	UFUNCTION(BlueprintCallable)
@@ -186,35 +230,14 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetDebuffIsActive(ECharacterDebuffType DebuffType);
 
-	//Update Character's stat and state
-	UFUNCTION(BlueprintCallable)
-		void UpdateCharacterStatAndState(FCharacterStatStruct NewStat, FCharacterStateStruct NewState);
-
-	//캐릭터의 스탯을 업데이트
-	UFUNCTION(BlueprintCallable)
-		void UpdateCharacterStat(FCharacterStatStruct NewStat);
-
-	UFUNCTION(BlueprintCallable)
-		void UpdateCharacterState(FCharacterStateStruct NewState);
-
 	UFUNCTION(BlueprintCallable)
 		void UpdateWeaponStat(FWeaponStatStruct NewStat);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FCharacterStatStruct GetCharacterStat() { return CharacterStat; }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FCharacterStateStruct GetCharacterState() { return CharacterState; }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetMaxComboCount() { return AssetHardPtrInfo.MeleeAttackAnimMontageList.Num(); }
-
-private:
-	//Calculate Total Stat Value
-	UFUNCTION()
-		float GetTotalStatValue(float& DefaultValue, FStatInfoStruct& AbilityInfo, FStatInfoStruct& SkillInfo, FStatInfoStruct& DebuffInfo);
-
-// ------ 무기 관련 -------------------------------------------
+		
+//========================================================================
+//====== Asset / Weapon ==================================================
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool EquipWeapon(int32 NewWeaponID);
@@ -257,17 +280,31 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		TArray<USoundCue*> FootStepSoundList;
 
-// ------ 그 외 캐릭터 프로퍼티  ---------------
+//========================================================================
+//====== VFX ============================================================
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraComponent* BuffNiagaraEmitter;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraComponent* DirectionNiagaraEmitter;
+
+public:
+	UFUNCTION()
+		void ActivateDebuffNiagara(uint8 DebuffType);
+
+	UFUNCTION()
+		void DeactivateBuffEffect();
+
+//========================================================================
+//====== PROPERTY ========================================================
 protected:
 	//캐릭터의 스탯
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		FCharacterStatStruct CharacterStat;
+		FCharacterDefaultStat DefaultStat;
 
-	//캐릭터의 현재 상태
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
-		FCharacterStateStruct CharacterState;
-
-	//Character Item Inventory
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+		FCharacterGameplayInfo CharacterGameplayInfo;
 
 	//Gamemode 약 참조
 		TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
@@ -275,7 +312,9 @@ protected:
 	//Gamemode 약 참조
 		TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
 
-// ----- 타이머 관련 ---------------------------------
+
+//========================================================================
+//====== Timer ===========================================================
 protected:
 	UFUNCTION()
 		virtual void ClearAllTimerHandle();

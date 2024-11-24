@@ -56,7 +56,7 @@ public:
 
 // ------ 기본 Info ---------------------------
 protected:
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay")
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
 		FItemInfoDataStruct ItemInfo;
 
 // ------ 아이템 기본 로직-------------------------------------
@@ -64,6 +64,9 @@ public:
 	// 외부에서 Init하기위해 Call
 	UFUNCTION(BlueprintCallable)
 		void InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride = FItemInfoDataStruct());
+
+	UFUNCTION()
+		void SetItemAmount(int32 NewAmount);
 
 	//아이템 초기 효과를 출력하고 활성화 시킨다. (타임라인 활용)
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)

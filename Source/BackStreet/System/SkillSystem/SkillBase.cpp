@@ -4,6 +4,7 @@
 #include "../../Character/Component/SkillManagerComponentBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Character/CharacterBase.h"
+#include "../AISystem/AIControllerBase.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 #include "Components/AudioComponent.h"
@@ -66,7 +67,7 @@ void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent
 	//If SkillActor's life span is sync with causer, then destroy with causer 
 	if (SkillStat.bIsLifeSpanWithCauser)
 	{
-		OwnerCharacterBaseRef->OnCharacterDied.AddDynamic(this, &ASkillBase::DestroySkill);
+		OwnerCharacterBaseRef->OnDeath.AddUObject(this, &ASkillBase::DestroySkill);
 	}
 }
 
@@ -77,9 +78,13 @@ void ASkillBase::ActivateSkill_Implementation()
 	
 	//Set cooltime timer
 	FSkillUpgradeLevelInfo coolTimeInfo = SkillState.SkillUpgradeInfoMap[ESkillUpgradeType::E_CoolTime];
+	float coolTimeAbilityValue = OwnerCharacterBaseRef.IsValid() 
+								? OwnerCharacterBaseRef.Get()->GetStatTotalValue(ECharacterStatType::E_SkillCoolTime)
+								: 0.0f;
+	coolTimeAbilityValue = (1.0f - FMath::Min(1.0f, coolTimeAbilityValue)) * 0.8f;
 	if (coolTimeInfo.Variable > 0.0f)
 	{
-		SetSkillBlockedTimer(coolTimeInfo.Variable);
+		SetSkillBlockedTimer(coolTimeInfo.Variable * coolTimeAbilityValue);
 	}
 }
 
@@ -90,6 +95,13 @@ void ASkillBase::DeactivateSkill()
 	SetActorTransform(skillTransform);
 	SkillState.bIsHidden = true;
 	SetActorHiddenInGame(true);
+
+	OwnerCharacterBaseRef = Cast<ACharacterBase>(SkillManagerComponentRef->GetOwner());
+	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(OwnerCharacterBaseRef->Controller);
+	if(OwnerCharacterBaseRef.IsValid() && IsValid(aiControllerRef))
+	{
+		aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Idle);
+	}
 }
 
 void ASkillBase::DestroySkill()
@@ -117,6 +129,7 @@ void ASkillBase::PlaySingleSound(FName SoundName)
 
 float ASkillBase::PlayAnimMontage(ACharacter* Target, FName AnimName)
 {
+	UE_LOG(LogTemp, Warning, TEXT("ASkillBase::PlayAnimMontage %s"), *AnimName.ToString());
 	if(!SkillStat.SkillAssetStruct.AnimInfoMap.Contains(AnimName)) return 0.0f;
 	FSkillAnimInfoStruct* skillAnimInfo = SkillStat.SkillAssetStruct.AnimInfoMap.Find(AnimName);
 	checkf(skillAnimInfo != nullptr, TEXT("SkillAnimAsset is not valid"));

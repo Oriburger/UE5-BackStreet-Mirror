@@ -29,15 +29,16 @@ void UDebuffManagerComponent::BeginPlay()
 
 bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActor* Causer)
 {
-	if (!OwnerCharacterRef.IsValid()) return false;
+	if (!OwnerCharacterRef.IsValid() || DebuffInfo.Type == ECharacterDebuffType::E_None) return false;
 	if (OwnerCharacterRef.Get()->GetIsActionActive(ECharacterActionType::E_Die)) return false;
 
 	FTimerDelegate timerDelegate, dotDamageDelegate;
-	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
-	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
+	FCharacterGameplayInfo& characterInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfoRef();
 
 	FTimerHandle& timerHandle = GetResetTimerHandle(DebuffInfo.Type);
 	FTimerHandle& dotDamageHandle = GetDotDamageTimerHandle(DebuffInfo.Type);
+	float resistValue = -1.0f;
+	float totalDamage = 0.0f;
 
 	if (GetDebuffIsActive((ECharacterDebuffType)DebuffInfo.Type))
 	{
@@ -56,65 +57,46 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 								, DebuffInfo.Variable, DebuffInfo.bIsPercentage }, Causer);
 	}
 
+	OwnerCharacterRef.Get()->ActivateDebuffNiagara((uint8)DebuffInfo.Type);
+
 	/*---- 디버프 타이머 세팅 ----------------------------*/
 	DebuffInfo.Variable = FMath::Min(1.0f, FMath::Abs(DebuffInfo.Variable)); //값 정제
-	characterState.CharacterDebuffState |= (1 << (int)DebuffInfo.Type);
+	characterInfo.CharacterDebuffState |= (1 << (int)DebuffInfo.Type);
 
 	switch (DebuffInfo.Type)
 	{
 		//----데미지 디버프-------------------
 	case ECharacterDebuffType::E_Burn:
+		resistValue = characterInfo.GetTotalValue(ECharacterStatType::E_BurnResist);
 	case ECharacterDebuffType::E_Poison:
-		dotDamageDelegate.BindUFunction(this, FName("ApplyDotDamage")
-										, DebuffInfo.Type
-										,	(float)(DebuffInfo.bIsPercentage ? characterState.TotalHP * DebuffInfo.Variable : DebuffInfo.Variable)
-										,	OwnerCharacterRef.Get());
+		resistValue = resistValue != -1.0f ? resistValue : characterInfo.GetTotalValue(ECharacterStatType::E_PoisonResist);
+		totalDamage = (float)(DebuffInfo.bIsPercentage ? characterInfo.GetTotalValue(ECharacterStatType::E_MaxHealth) * DebuffInfo.Variable : DebuffInfo.Variable);
+		totalDamage -= totalDamage * resistValue;
+		dotDamageDelegate.BindUFunction(this, FName("ApplyDotDamage"), DebuffInfo.Type, totalDamage, OwnerCharacterRef.Get());
 		GetWorld()->GetTimerManager().SetTimer(dotDamageHandle, dotDamageDelegate, 1.0f, true);
 		break;
-		//----스탯 조정 디버프-------------------
+	//----스탯 조정 디버프-------------------
 	case ECharacterDebuffType::E_Stun:
 		OwnerCharacterRef.Get()->StopAttack();
-		characterState.CharacterActionState = ECharacterActionType::E_Stun;
+		characterInfo.CharacterActionState = ECharacterActionType::E_Stun;
 		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 		break;
 	case ECharacterDebuffType::E_Slow:
-		if (DebuffInfo.bIsPercentage)
-		{
-			characterState.DebuffMoveSpeed.PercentValue += DebuffInfo.Variable;
-			characterState.DebuffAttackSpeed.PercentValue += DebuffInfo.Variable;
-		}
-		else
-		{
-			characterState.DebuffMoveSpeed.FixedValue += DebuffInfo.Variable;
-			characterState.DebuffAttackSpeed.FixedValue += DebuffInfo.Variable;
-		}
+		resistValue = characterInfo.GetTotalValue(ECharacterStatType::E_SlowResist);
+		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_MoveSpeed, DebuffInfo.Variable - resistValue);
 		break;
 	case ECharacterDebuffType::E_AttackDown:
-		if (DebuffInfo.bIsPercentage)
-		{
-			characterState.DebuffAttack.PercentValue += DebuffInfo.Variable;
-		}
-		else
-		{
-			characterState.DebuffAttack.FixedValue += DebuffInfo.Variable;
-		}
+		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_NormalPower, DebuffInfo.Variable);
+		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_DashAttackPower, DebuffInfo.Variable);
+		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_JumpAttackPower, DebuffInfo.Variable);
 		break;
 	case ECharacterDebuffType::E_DefenseDown:
-		if (DebuffInfo.bIsPercentage)
-		{
-			characterState.DebuffDefense.PercentValue += DebuffInfo.Variable;
-		}
-		else
-		{
-			characterState.DebuffDefense.FixedValue += DebuffInfo.Variable;
-		}
+		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_Defense, DebuffInfo.Variable);
 		break;
 	}
 	if(!ResetValueInfoMap.Contains(DebuffInfo.Type))
 		ResetValueInfoMap.Add(DebuffInfo.Type, DebuffInfo);
 	ResetValueInfoMap[DebuffInfo.Type] = DebuffInfo;
-
-	OwnerCharacterRef.Get()->UpdateCharacterStatAndState(characterStat, characterState);
 
 	GetWorld()->GetTimerManager().SetTimer(timerHandle, timerDelegate, 1.0f, false, DebuffInfo.TotalTime);
 
@@ -206,17 +188,21 @@ FDebuffInfoStruct UDebuffManagerComponent::GetDebuffResetValue(ECharacterDebuffT
 
 void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffType, FDebuffInfoStruct DebuffInfo)
 {
-	if (!OwnerCharacterRef.IsValid()) return;
+	if (!OwnerCharacterRef.IsValid() || DebuffType == ECharacterDebuffType::E_None) return;
 	if (OwnerCharacterRef.Get()->GetIsActionActive(ECharacterActionType::E_Die)) return;
 
-	FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
-	FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterStat();
+	//FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
+	//FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterGameplayInfo();
+	FCharacterGameplayInfo& characterInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfoRef();
 
 	FTimerHandle& timerHandle = GetResetTimerHandle(DebuffType);
 	FTimerHandle& dotDamageHandle = GetDotDamageTimerHandle(DebuffType);
 
 	float ResetVal = FMath::Max(0.001f, DebuffInfo.Variable);
-	characterState.CharacterDebuffState &= ~(1 << (int)DebuffType);
+	characterInfo.CharacterDebuffState &= ~(1 << (int)DebuffType);
+
+	UE_LOG(LogTemp, Warning, TEXT("UDebuffManagerComponent::ResetStatDebuffState - type : %d"), (int32)DebuffType);
+	OwnerCharacterRef.Get()->DeactivateBuffEffect();
 
 	switch ((ECharacterDebuffType)DebuffType)
 	{
@@ -224,45 +210,22 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 	case ECharacterDebuffType::E_Poison:
 		break;
 	case ECharacterDebuffType::E_Slow:
-		if (DebuffInfo.bIsPercentage)
-		{
-			characterState.DebuffMoveSpeed.PercentValue -= ResetVal;
-			characterState.DebuffAttackSpeed.PercentValue -= ResetVal;
-		}
-		else
-		{
-			characterState.DebuffMoveSpeed.FixedValue -= ResetVal;
-			characterState.DebuffAttackSpeed.FixedValue -= ResetVal;
-		}
+		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_MoveSpeed, 0);
+		break;
+	case ECharacterDebuffType::E_AttackDown:
+		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_NormalPower, 0);
+		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_DashAttackPower, 0);
+		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_JumpAttackPower, 0);
+		break;
+	case ECharacterDebuffType::E_DefenseDown:
+		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_Defense, 0);
 		break;
 	case ECharacterDebuffType::E_Stun:
-		characterState.CharacterActionState = ECharacterActionType::E_Idle;
+		characterInfo.CharacterActionState = ECharacterActionType::E_Idle;
 		OwnerCharacterRef.Get()->ResetActionState(true);
 		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 		break;
-	case ECharacterDebuffType::E_AttackDown:
-		if (DebuffInfo.bIsPercentage)
-		{
-			characterState.DebuffAttack.PercentValue -= ResetVal;
-		}
-		else
-		{
-			characterState.DebuffAttack.FixedValue -= ResetVal;
-		}
-		break;
-	case ECharacterDebuffType::E_DefenseDown:
-		if (DebuffInfo.bIsPercentage)
-		{
-			characterState.DebuffDefense.PercentValue -= ResetVal;
-		}
-		else
-		{
-			characterState.DebuffDefense.FixedValue -= ResetVal;
-		}
-		
-		break;
 	}
-	OwnerCharacterRef.Get()->UpdateCharacterStatAndState(characterStat, characterState);
 	ClearDebuffTimer(DebuffType);
 }
 

@@ -66,7 +66,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UPlayerSkillManagerComponent* SkillManagerComponent;
 
-// ------- SubWeapon -----------
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UAbilityManagerComponent* AbilityManagerComponent; 
+
+// ------- Throw Test -----------
 public:
 	UFUNCTION(BlueprintCallable)
 		void SwitchWeapon(bool bSwitchToSubWeapon);
@@ -162,21 +165,16 @@ public:
 	UFUNCTION()
 		virtual void StandUp() override;
 
-	//Rotation 조절 방식을 기본 방식인 Movement 방향으로 되돌린다
-	UFUNCTION(BlueprintCallable)
-		void ResetRotationToMovement();
-
 	//Targeting system
 	UFUNCTION()
 		void LockToTarget(const FInputActionValue& Value);
 
 	UFUNCTION()
+		void SnapToCharacter(AActor* Target);
+
+	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 			, AController* EventInstigator, AActor* DamageCauser) override;
-
-	//Rotation 조절 방식을 커서 위치로 한다
-	UFUNCTION(BlueprintCallable)
-		void RotateToCursor();
 
 	UFUNCTION()
 		TArray<class UInteractiveCollisionComponent*> GetNearInteractionComponentList();
@@ -261,7 +259,7 @@ public:
 // ------- 어빌리티 / 디버프 ---------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class UAbilityManagerBase* GetAbilityManagerRef() { return AbilityManagerRef; }
+		class UAbilityManagerComponent* GetAbilityManagerRef() { return AbilityManagerComponent; }
 
 public: 
 	//디버프 상태를 지정
@@ -280,23 +278,9 @@ public:
 public:
 	virtual bool EquipWeapon(int32 NewWeaponID);
 
-// -------- VFX --------------------
-protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class UNiagaraComponent* BuffNiagaraEmitter;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
-		class UNiagaraComponent* DirectionNiagaraEmitter;
-
 private:
 	UPROPERTY()
 		bool bIsWallThroughEffectActivated = false;
-
-	UFUNCTION()
-		void ActivateDebuffNiagara(uint8 DebuffType);
-
-	UFUNCTION()
-		void DeactivateBuffEffect();
 
 	//캐릭터가 데미지를 입을 시, 빨간 Pulse 효과와 표정 텍스쳐 효과를 적용
 	UFUNCTION()
@@ -318,9 +302,6 @@ private:
 	UPROPERTY()
 		float TargetFieldOfView = 0.0f;
 
-	UPROPERTY()
-		class UAbilityManagerBase* AbilityManagerRef;
-
 	//플레이어 컨트롤러 약 참조
 	TWeakObjectPtr<class AMainCharacterController> PlayerControllerRef;
 
@@ -333,7 +314,11 @@ private:
 	FTimerHandle CameraRotationAlignmentHandle;
 	
 	//구르기 딜레이 타이머
-	FTimerHandle RollTimerHandle;
+	FTimerHandle RollDelayTimerHandle;
+
+	//연속 점프 공격 시 스턴 주기위함
+	FTimerHandle JumpAttackDebuffTimerHandle;
+	int32 JumpAttackCount = 0;
 
 	//WalkSpeed Interpolate timer
 	FTimerHandle WalkSpeedInterpTimerHandle;
