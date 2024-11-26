@@ -140,6 +140,7 @@ private:
 
 	//Current stage's information 
 	//Level instance ref and gameplay info struct
+	TSoftObjectPtr<UWorld> PreviousLevel;
 	FChapterInfo CurrentChapterInfo;
 	FStageInfo CurrentStageInfo;
 	ULevelStreamingDynamic* OuterAreaRef;

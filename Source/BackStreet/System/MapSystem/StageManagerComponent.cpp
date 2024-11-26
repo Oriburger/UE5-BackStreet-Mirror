@@ -48,16 +48,18 @@ void UStageManagerComponent::Initialize(FChapterInfo NewChapterInfo)
 
 void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 {
-	if (IsValid(MainAreaRef)) ClearPreviousLevelData();
+	if (IsValid(MainAreaRef))
+	{
+		ClearPreviousLevelData();
+	}
 
 	//Clear previous portal
 	ClearPreviousActors();
 
 	//Init new stage
-	FStageInfo oldStageInfo = CurrentStageInfo;
 	CurrentStageInfo = NewStageInfo;
 
-	UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
+	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::InitStage-------------"));
 	UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
 	UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %s"), *CurrentStageInfo.Coordinate.ToString());
 
@@ -67,28 +69,33 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 		VisitedCraftstageCount += 1;
 	}
 
-	//Load new level
+	//Check level asset list is not empty	
 	TArray<TSoftObjectPtr<UWorld>> newWorldAssetList = CurrentChapterInfo.GetWorldList(NewStageInfo.StageType);
-	if (newWorldAssetList.Num() == 1)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::InitStage - Lack of %d's Map Count, It may cause the level reinstancing crash."), (int32)NewStageInfo.StageType);
-	}
+	checkf(!newWorldAssetList.IsEmpty(), TEXT("UStageManagerComponent::InitStage - newWorldAssetList가 지정되어있지않습니다."));
 
-	int32 randIdxAdder = FMath::RandRange(0, 100);
-	for (int32 idx = 0; idx < newWorldAssetList.Num(); idx++)
+	//Load new level
+	if (newWorldAssetList.Num() == 1 || PreviousLevel.IsNull())
 	{
-		int32 newIdx = (idx + randIdxAdder) % newWorldAssetList.Num();
-		NewStageInfo.MainLevelAsset = newWorldAssetList[newIdx];
-		if ((IsValid(GetWorld()) && oldStageInfo.MainLevelAsset.IsValid())
-			&& GetWorld()->GetMapName() != oldStageInfo.MainLevelAsset.Get()->GetMapName())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::InitStage - Found the stage candidate %s"), *oldStageInfo.MainLevelAsset.Get()->GetMapName());
-			break;
-		}
+		UE_LOG(LogTemp, Warning, TEXT("> UStageManagerComponent::InitStage - Lack of %d's Map Count, It may cause the level reinstancing crash."), (int32)NewStageInfo.StageType);
+		NewStageInfo.MainLevelAsset = newWorldAssetList[0];
 	}
+	else
+	{
+		int32 prevLevelIdx = -1;
+		int32 randIdxAdder = FMath::RandRange(1, newWorldAssetList.Num() - 1);
 
+		newWorldAssetList.Find(PreviousLevel, prevLevelIdx);
+		prevLevelIdx = prevLevelIdx == INDEX_NONE ? 0 : prevLevelIdx;
+
+		UE_LOG(LogTemp, Warning, TEXT("> prev : %d, randIdx : %d, result : %d"), prevLevelIdx, randIdxAdder, (prevLevelIdx + randIdxAdder) % newWorldAssetList.Num());
+
+		NewStageInfo.MainLevelAsset = newWorldAssetList[(prevLevelIdx + randIdxAdder) % newWorldAssetList.Num()];
+	}
+	UE_LOG(LogTemp, Warning, TEXT("> MapName : %s"), *NewStageInfo.MainLevelAsset.ToString());
+	PreviousLevel = NewStageInfo.MainLevelAsset;
 	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
 	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 0.25f, true);
+
 }
 
 void UStageManagerComponent::ClearResource()

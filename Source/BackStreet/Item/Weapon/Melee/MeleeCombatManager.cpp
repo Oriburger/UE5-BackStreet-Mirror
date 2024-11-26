@@ -161,16 +161,8 @@ void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, AActor
 	{
 		if (IsValid(WeaponComponentRef.Get()->HitEffectParticle))
 		{
-			if (IsValid(AttachTarget))
-			{
-				UNiagaraFunctionLibrary::SpawnSystemAttached(WeaponComponentRef.Get()->HitEffectParticle, AttachTarget->GetRootComponent()
-					, FName(""), FVector(), WeaponComponentRef.Get()->WeaponState.SlashRotation, EAttachLocation::KeepRelativeOffset, true);
-			}
-			else
-			{
-				UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponComponentRef.Get()->HitEffectParticle, emitterSpawnTransform.GetLocation()
-					, WeaponComponentRef.Get()->WeaponState.SlashRotation + randomRotator, emitterSpawnTransform.GetScale3D());
-			}
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponComponentRef.Get()->HitEffectParticle, emitterSpawnTransform.GetLocation()
+				, WeaponComponentRef.Get()->WeaponState.SlashRotation + randomRotator, emitterSpawnTransform.GetScale3D());
 		}
 		if (AssetManagerRef.IsValid())
 		{
