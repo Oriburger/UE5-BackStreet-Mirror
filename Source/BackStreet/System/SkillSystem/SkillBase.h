@@ -29,7 +29,7 @@ public:
 //======= User Basic Function =======================
 public:	
 	UFUNCTION()
-		void InitSkill(FSkillStatStruct NewSkillStat, class USkillManagerComponentBase* NewSkillManagerComponent);
+		void InitSkill(FSkillStatStruct NewSkillStat, class USkillManagerComponentBase* NewSkillManagerComponent, FSkillInfo NewSkillInfo = FSkillInfo());
 
 	//Must link with parent function in Blueprint
 	UFUNCTION(BlueprintNativeEvent)
@@ -61,6 +61,9 @@ protected:
 		UNiagaraSystem* GetNiagaraEffect(FName EffectName);
 
 public:	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		FSkillInfo SkillInfo;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
 		FSkillStatStruct SkillStat;
 

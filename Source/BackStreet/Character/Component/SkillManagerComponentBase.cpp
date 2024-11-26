@@ -24,6 +24,85 @@ void USkillManagerComponentBase::BeginPlay()
 	InitSkillManager();
 }
 
+bool USkillManagerComponentBase::TryAddSkill(int32 NewSkillID)
+{
+	bool bIsInInventory = false;
+	FSkillInfo skillInfo = GetSkillInfoData(NewSkillID, bIsInInventory);
+	if (!skillInfo.IsValid() || bIsInInventory)
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::TryAddSkill %d failed - Reason %d %d"), NewSkillID, !skillInfo.IsValid(), bIsInInventory);
+		return false;
+	}
+	SkillInventory.Add(NewSkillID, skillInfo);
+	return true;
+}
+
+bool USkillManagerComponentBase::TryRemoveSkill(int32 TargetSkillID)
+{
+	bool bIsInInventory = false;
+	FSkillInfo skillInfo = GetSkillInfoData(TargetSkillID, bIsInInventory);
+	if (!skillInfo.IsValid() || !bIsInInventory)
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::TryRemoveSkill %d failed"), TargetSkillID);
+		return false;
+	}
+	SkillInventory.Remove(TargetSkillID);
+	return true;
+}
+
+bool USkillManagerComponentBase::TryActivateSkill(int32 TargetSkillID)
+{
+	bool bIsInInventory = false;
+	FSkillInfo skillInfo = GetSkillInfoData(TargetSkillID, bIsInInventory);
+	if (!skillInfo.IsValid() || !bIsInInventory || !OwnerCharacterRef.IsValid())
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::TryActivateSkill %d failed - Reason %d %d %d"), TargetSkillID, !skillInfo.IsValid(), !bIsInInventory, !OwnerCharacterRef.IsValid());
+		return false;
+	}
+	if (!skillInfo.bContainPrevAction)
+	{
+		OwnerCharacterRef.Get()->PlayAnimMontage(skillInfo.SkillAnimation);
+		return true;
+	}
+	else if(skillInfo.PrevActionClass != nullptr)
+	{
+		ASkillBase* prevAction = Cast<ASkillBase>(GetWorld()->SpawnActor(skillInfo.PrevActionClass));
+		prevAction->InitSkill(FSkillStatStruct(), this); //제거 필요
+		prevAction->ActivateSkill();
+	}
+	return true;
+}
+
+FSkillInfo USkillManagerComponentBase::GetSkillInfoData(int32 TargetSkillID, bool& bIsInInventory)
+{
+	if (SkillInventory.Contains(TargetSkillID))
+	{
+		bIsInInventory = true;
+		return SkillInventory[TargetSkillID];
+	}
+
+	bIsInInventory = false;
+	FString rowName = FString::FromInt(TargetSkillID);
+	if (!SkillInfoCache.Contains(TargetSkillID))
+	{
+		if (SkillStatTable)
+		{
+			FSkillInfo* skillInfo = SkillInfoTable->FindRow<FSkillInfo>(FName(rowName), rowName);
+			if (skillInfo == nullptr)
+			{
+				UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::GetSkillInfoData %d is not found"), TargetSkillID);
+				return FSkillInfo();
+			}
+			return SkillInfoCacheMap.Add(TargetSkillID, *skillInfo);
+		}
+	}
+	return SkillInfoCacheMap[TargetSkillID];
+}
+
+//================================================================
+//================================================================
+//================================================================
+
 void USkillManagerComponentBase::InitSkillManager()
 {
 	//Initialize the owner character ref

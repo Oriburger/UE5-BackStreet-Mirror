@@ -40,8 +40,10 @@ void ASkillBase::Tick(float DeltaSeconds)
 	}
 }
 
-void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponentBase* NewSkillManagerComponent)
+void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponentBase* NewSkillManagerComponent, FSkillInfo NewSkillInfo)
 {
+	SkillInfo = NewSkillInfo;
+
 	SkillStat = NewSkillStat;
 	SkillManagerComponentRef = NewSkillManagerComponent;
 	FString rowName = FString::FromInt(SkillStat.SkillID);
@@ -73,6 +75,12 @@ void ASkillBase::InitSkill(FSkillStatStruct NewSkillStat, USkillManagerComponent
 
 void ASkillBase::ActivateSkill_Implementation()
 {
+	//TEMPORARY
+	SetSkillBlockedTimer(15.0f);
+	return;
+
+	//-------------- LEGACY --------------
+	/*
 	if (!SkillState.SkillUpgradeInfoMap.Contains(ESkillUpgradeType::E_CoolTime)) return;
 	SetActorHiddenInGame(false);
 	
@@ -85,7 +93,7 @@ void ASkillBase::ActivateSkill_Implementation()
 	if (coolTimeInfo.Variable > 0.0f)
 	{
 		SetSkillBlockedTimer(coolTimeInfo.Variable * coolTimeAbilityValue);
-	}
+	}*/
 }
 
 void ASkillBase::DeactivateSkill()
@@ -121,15 +129,21 @@ ACharacterBase* ASkillBase::GetOwnerCharacterRef()
 
 void ASkillBase::PlaySingleSound(FName SoundName)
 {
+	UE_LOG(LogTemp, Error, TEXT("ASkillBase::PlaySingleSound is LEGACY. Remove this code."));
+
+	/*
 	if (AssetManagerBaseRef.IsValid())
 	{
 		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Skill, SkillStat.SkillID, SoundName);
 	}
+	*/
 }
 
 float ASkillBase::PlayAnimMontage(ACharacter* Target, FName AnimName)
 {
-	UE_LOG(LogTemp, Warning, TEXT("ASkillBase::PlayAnimMontage %s"), *AnimName.ToString());
+	UE_LOG(LogTemp, Error, TEXT("ASkillBase::PlayAnimMontage is LEGACY. Remove this code."));
+	return 0.0f;
+	/*
 	if(!SkillStat.SkillAssetStruct.AnimInfoMap.Contains(AnimName)) return 0.0f;
 	FSkillAnimInfoStruct* skillAnimInfo = SkillStat.SkillAssetStruct.AnimInfoMap.Find(AnimName);
 	checkf(skillAnimInfo != nullptr, TEXT("SkillAnimAsset is not valid"));
@@ -137,6 +151,7 @@ float ASkillBase::PlayAnimMontage(ACharacter* Target, FName AnimName)
 	if (!IsValid(anim)) return 0.0f;
 	float animPlayTime = Target->PlayAnimMontage(anim, skillAnimInfo->AnimPlayRate);
 	return animPlayTime;
+	*/
 }
 
 UNiagaraSystem* ASkillBase::GetNiagaraEffect(FName EffectName)
