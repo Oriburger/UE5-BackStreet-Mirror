@@ -30,6 +30,37 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+//========== Basic ==============================
+public:
+	UFUNCTION(BlueprintCallable)
+		bool TryAddSkill(int32 NewSkillID);
+
+	UFUNCTION(BlueprintCallable)
+		bool TryRemoveSkill(int32 TargetSkillID);
+
+	UFUNCTION(BlueprintCallable)
+		bool TryActivateSkill(int32 TargetSkillID);
+
+//========== Getter ==============================
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FSkillInfo GetSkillInfoData(int32 TargetSkillID, bool& bIsInInventory);
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|")
+		TMap<int32, FSkillInfo> SkillInventory;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gamplay|Data")
+		UDataTable* SkillInfoTable;
+
+private:
+	TMap<int32, FSkillInfo> SkillInfoCacheMap;
+
+
+//===============================================
+//===============================================
+//=======  LEGACY  ==============================
+
+ 
 //======= Basic function ========================
 protected:
 	virtual void InitSkillManager();

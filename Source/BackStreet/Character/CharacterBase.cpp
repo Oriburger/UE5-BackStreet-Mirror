@@ -625,6 +625,7 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 		return false;
 	}
 
+	/* @@@@@@@@@@ LEGACY SKILL CODE @@@@@@@@@@
 	//스킬을 보유중인지 확인
 	if (!SkillManagerComponentRef.Get()->IsSkillValid(SkillID))
 	{
@@ -641,9 +642,9 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 			return false;
 		}
 	}
-
 	if(skillBase->SkillState.bIsBlocked) return false;
-	
+	*/
+
 	CharacterGameplayInfo.bCanAttack = false;
 	SetActionState(ECharacterActionType::E_Skill);
 	SkillManagerComponentRef.Get()->TrySkill(SkillID);
