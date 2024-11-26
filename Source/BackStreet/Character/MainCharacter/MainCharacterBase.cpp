@@ -315,7 +315,6 @@ void AMainCharacterBase::ResetMovementInputValue()
 void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
-	if (GetCharacterMovement()->IsFalling()) return;
 	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
 	if (CharacterGameplayInfo.bIsAirAttacking || CharacterGameplayInfo.bIsDownwardAttacking) return;
 
