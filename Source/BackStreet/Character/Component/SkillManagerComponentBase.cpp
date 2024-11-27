@@ -81,7 +81,8 @@ FSkillInfo USkillManagerComponentBase::GetSkillInfoData(int32 TargetSkillID, boo
 		return SkillInventory[TargetSkillID];
 	}
 
-	bIsInInventory = false;
+	//Enemy doesn't use the inventory data. 
+	bIsInInventory = OwnerCharacterRef.IsValid() ? OwnerCharacterRef.Get()->ActorHasTag("Enemy") : false;
 	FString rowName = FString::FromInt(TargetSkillID);
 	if (!SkillInfoCache.Contains(TargetSkillID))
 	{

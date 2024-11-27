@@ -615,7 +615,7 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Stun
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_KnockedDown) return false;
-
+	
 
 	//스킬 매니저 있는지 확인
 	if (!SkillManagerComponentRef.IsValid())
@@ -645,9 +645,10 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 	if(skillBase->SkillState.bIsBlocked) return false;
 	*/
 
+
 	CharacterGameplayInfo.bCanAttack = false;
 	SetActionState(ECharacterActionType::E_Skill);
-	SkillManagerComponentRef.Get()->TrySkill(SkillID);
+	SkillManagerComponentRef.Get()->TryActivateSkill(SkillID);
 	
 	//Reset Combo
 	WeaponComponent->ResetComboCnt();
