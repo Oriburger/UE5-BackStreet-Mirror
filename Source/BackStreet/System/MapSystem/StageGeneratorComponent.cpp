@@ -85,7 +85,6 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 		}
 
 		//4. set reward and stage's special property
-
 		if (stageInfo.StageType == EStageCategoryInfo::E_TimeAttack) stageInfo.StageType = EStageCategoryInfo::E_Exterminate;
 		else if (stageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack) stageInfo.StageType = EStageCategoryInfo::E_EliteExterminate;
 
@@ -135,7 +134,6 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 	{
 		result[GetStageIdx(coordinate)].bIsBlocked = true;
 	}
-
 	for (int32 idx : CurrentChapterInfo.BlockedStageIdxList)
 	{
 		result[idx].bIsBlocked = true;
