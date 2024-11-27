@@ -43,11 +43,15 @@ public:
 	UFUNCTION()
 		void DestroySkill();
 
+//======= Getter Function =======================
 	UFUNCTION(BlueprintCallable, Blueprintpure)
 		ACharacterBase* GetOwnerCharacterRef();
 
 	UFUNCTION(BlueprintCallable, Blueprintpure)
 		FSkillAssetStruct GetSkillAssetStruct() {return SkillStat.SkillAssetStruct;}
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		UAnimMontage* GetSkillAnimMontage() { return SkillInfo.SkillAnimation; }
 
 //======= DataTable, Asset =======================
 protected:
