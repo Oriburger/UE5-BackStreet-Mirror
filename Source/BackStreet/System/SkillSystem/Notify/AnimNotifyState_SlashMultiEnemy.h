@@ -15,16 +15,45 @@ class BACKSTREET_API UAnimNotifyState_SlashMultiEnemy : public UAnimNotifyState
 	GENERATED_BODY()
 
 public:
-#if WITH_EDITORONLY_DATA
-	/** Color of Notify in editor */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AnimNotify)
-		int32 SlashCount;
+	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference) override;
+	virtual void NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference) override;
+	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 
-	/** Whether this notify state instance should fire in animation editors */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, AdvancedDisplay, Category = AnimNotify)
-		float SlashSpeedRate;
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX/SFX")
+		class UNiagaraSystem* SlashEffectNiagara;
 
-#endif // WITH_EDITORONLY_DATA
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX/SFX")
+		class USoundCue* SlashEffectSound;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		float SlashInterval = 0.1f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		float SlashSpeedTime = 0.05f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		float InterpSpeed = 20.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		bool bContainExtraSlash = false;
+
+protected:
+	UFUNCTION()
+		void ApplyDamageWithInterval(AActor* TargetActor);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetZigZagIdxByDistance(int32 TargetIdx, int32 Length);
+
+private:
+	bool bIsInterping = false;
+	float EndPoint = 0.0f;
+	float ElapsedTime = 0.0f;
+	int32 SlashIdx = 0;
+	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
+	TArray<FVector> MoveErrorValueList = { FVector(50.0f, 50.0f, 10.0f)
+										,  FVector(-50.0f, 50.0f, 10.0f)
+										,  FVector(50.0f, -50.0f, 10.0f)
+										,  FVector(-50.0f, -50.0f, 10.0f) };
+	FTimerHandle damageIntervalHandle;
 };

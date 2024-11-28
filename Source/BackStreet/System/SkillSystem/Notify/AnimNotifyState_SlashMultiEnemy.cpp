@@ -2,4 +2,102 @@
 
 
 #include "AnimNotifyState_SlashMultiEnemy.h"
+#include "../../../Character/CharacterBase.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "../../../Character/Component/SkillManagerComponentBase.h"
 
+void UAnimNotifyState_SlashMultiEnemy::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
+{
+	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
+	if (!IsValid(MeshComp)|| !IsValid(MeshComp->GetOwner()) || !MeshComp->GetOwner()->ActorHasTag("Character")) return;
+	
+	//Initialize
+	OwnerCharacterRef = Cast<ACharacterBase>(MeshComp->GetOwner());
+	bIsInterping = false;
+	ElapsedTime = SlashIdx = 0;
+	EndPoint = MeshComp->GetAnimInstance()->Montage_GetPosition(MeshComp->GetAnimInstance()->GetCurrentActiveMontage());
+	EndPoint += TotalDuration;
+}
+
+void UAnimNotifyState_SlashMultiEnemy::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
+{
+	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime, EventReference);
+	if (!OwnerCharacterRef.IsValid()) return;
+
+	if(!bIsInterping) ElapsedTime += FrameDeltaTime;
+
+	const TArray<AActor*> resultList = OwnerCharacterRef.Get()->SkillManagerComponent->TraceResultCache;
+	if (SlashIdx >= resultList.Num())
+	{
+		OwnerCharacterRef.Get()->GetWorldTimerManager().ClearTimer(damageIntervalHandle);
+		damageIntervalHandle.Invalidate();
+		UAnimMontage* test = MeshComp->GetAnimInstance()->GetCurrentActiveMontage();
+		MeshComp->GetAnimInstance()->Montage_JumpToSection("End", test);
+		return;
+	}
+
+
+	if (ElapsedTime >= SlashInterval)
+	{
+		ElapsedTime = 0.0f;
+		const int32 targetIdx = GetZigZagIdxByDistance(SlashIdx, resultList.Num());
+
+		if (!resultList.IsValidIndex(targetIdx)) return;
+		
+		if (IsValid(resultList[targetIdx]))
+		{
+			FVector targetLocation = resultList[targetIdx]->GetActorLocation();
+			targetLocation += MoveErrorValueList[UKismetMathLibrary::RandomInteger(MoveErrorValueList.Num())];
+
+			bIsInterping = true;
+			OwnerCharacterRef.Get()->SetLocationWithInterp(targetLocation, InterpSpeed);
+			OwnerCharacterRef.Get()->GetWorldTimerManager().SetTimer(damageIntervalHandle, FTimerDelegate::CreateLambda([=]() {
+				ApplyDamageWithInterval(resultList[targetIdx]);
+				bIsInterping = false;
+			}), SlashSpeedTime, false);
+		}
+	}
+}
+
+void UAnimNotifyState_SlashMultiEnemy::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
+{
+	Super::NotifyEnd(MeshComp, Animation, EventReference);
+	if (!OwnerCharacterRef.IsValid()) return;
+	OwnerCharacterRef.Get()->GetWorldTimerManager().ClearTimer(damageIntervalHandle);
+	damageIntervalHandle.Invalidate();
+
+	TArray<AActor*>& resultList = OwnerCharacterRef.Get()->SkillManagerComponent->TraceResultCache;
+	if (bContainExtraSlash)
+	{
+		for (auto& target : resultList)
+		{
+			if (!IsValid(target)) continue;
+			ApplyDamageWithInterval(target);
+		}
+	}
+	resultList.Empty();
+}
+
+int32 UAnimNotifyState_SlashMultiEnemy::GetZigZagIdxByDistance(int32 TargetIdx, int32 Length)
+{
+	if (TargetIdx % 2 == 0) return TargetIdx / 2;
+	return (Length - 1) / 2 - TargetIdx / 2;
+}
+
+void UAnimNotifyState_SlashMultiEnemy::ApplyDamageWithInterval(AActor* TargetActor)
+{
+	bIsInterping = true;
+	if (!IsValid(TargetActor)) return;
+	
+	UGameplayStatics::ApplyDamage(TargetActor, 1.0f, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
+	
+	if (SlashEffectNiagara != nullptr)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(OwnerCharacterRef.Get(), SlashEffectNiagara, TargetActor->GetActorLocation(), UKismetMathLibrary::RandomRotator());
+	}
+	if (SlashEffectSound != nullptr)
+	{
+		UGameplayStatics::PlaySoundAtLocation(OwnerCharacterRef.Get(), SlashEffectSound, TargetActor->GetActorLocation());
+	}
+	SlashIdx += 1;
+}
