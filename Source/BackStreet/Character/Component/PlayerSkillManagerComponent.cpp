@@ -24,21 +24,7 @@ void UPlayerSkillManagerComponent::InitSkillManager()
 
 void UPlayerSkillManagerComponent::InitSkillMap()
 {
-	if (!OwnerCharacterRef.IsValid()) return;
-	if (OwnerCharacterRef->WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Melee) return;
-	Super::InitSkillMap();
-
-	SkillInventoryMap.Reset();
-	EquipedSkillMap.Reset();
-
-	for (ESkillType skillType : OwnerCharacterRef->WeaponComponent->GetWeaponStat().SkillTypeList)
-	{
-		SkillInventoryMap.Add(skillType, FSkillListContainer());
-		EquipedSkillMap.Add(skillType, 0);
-		ObtainableSkillMap.Add(skillType, FObtainableSkillListContainer());
-	}
-	UpdateObtainableSkillMap();
-	return;
+	
 }
 
 bool UPlayerSkillManagerComponent::TrySkill(int32 SkillID)
@@ -48,6 +34,7 @@ bool UPlayerSkillManagerComponent::TrySkill(int32 SkillID)
 
 bool UPlayerSkillManagerComponent::AddSkill(int32 SkillID)
 {
+	/*
 	if (!Super::AddSkill(SkillID)) return false;
 	FString rowName = FString::FromInt(SkillID);
 	FSkillStatStruct* skillStat = SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
@@ -89,13 +76,14 @@ bool UPlayerSkillManagerComponent::AddSkill(int32 SkillID)
 	{
 		UpgradeSkill(SkillID, ESkillUpgradeType::E_CoolTime, 1);
 	}
-	UpdateObtainableSkillMap();
+	UpdateObtainableSkillMap();*/
 	OnSkillUpdated.Broadcast();
 	return true;
 }
 
 bool UPlayerSkillManagerComponent::RemoveSkill(int32 SkillID)
 {
+	/*
 	if (!IsSkillValid(SkillID)) return true;
 	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
 	if (!IsValid(skillBase))
@@ -118,19 +106,21 @@ bool UPlayerSkillManagerComponent::RemoveSkill(int32 SkillID)
 		}
 	}
 	UpdateObtainableSkillMap();
-	OnSkillUpdated.Broadcast();
+	OnSkillUpdated.Broadcast();*/
 	return true;
 }
 
 bool UPlayerSkillManagerComponent::UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel)
 {
+	/*
 	bool bIsUpgraded = Super::UpgradeSkill(SkillID, UpgradeTarget, NewLevel);
-	OnSkillUpdated.Broadcast();
-	return bIsUpgraded;
+	OnSkillUpdated.Broadcast();*/
+	return false;
 }
 
 void UPlayerSkillManagerComponent::UpdateObtainableSkillMap()
 {
+	/*
 	if (OwnerCharacterRef->WeaponComponent->WeaponID == 0) return;
 	TArray<ESkillType> skillTypeList = OwnerCharacterRef->WeaponComponent->GetWeaponStat().SkillTypeList;
 
@@ -190,25 +180,27 @@ void UPlayerSkillManagerComponent::UpdateObtainableSkillMap()
 	}
 	ObtainableSkillMap = obtainableSkillMap;
 	OnSkillUpdated.Broadcast();
-	return;
+	return;*/
 }
 
 bool UPlayerSkillManagerComponent::EquipSkill(int32 NewSkillID)
-{
+{/*
 	if (!IsSkillValid(NewSkillID)) return false;
 	else
 	{
 		EquipedSkillMap.Add(GetSkillInfo(NewSkillID).SkillWeaponStruct.SkillType, NewSkillID);
 		OnSkillUpdated.Broadcast();
 		return true;
-	}
+	}*/
+	return true;
 }
 
 void UPlayerSkillManagerComponent::ClearAllSkill()
 {
+	/*
 	Super::ClearAllSkill();
 	InitSkillMap();
-	OnSkillUpdated.Broadcast();
+	OnSkillUpdated.Broadcast();*/
 }
 
 bool UPlayerSkillManagerComponent::IsSkillValid(int32 SkillID)
@@ -223,6 +215,7 @@ bool UPlayerSkillManagerComponent::GetIsSkillUpgradable(int32 SkillID, ESkillUpg
 
 ASkillBase* UPlayerSkillManagerComponent::GetOwnSkillBase(int32 SkillID)
 {
+	/*
 	if (!SkillInventoryMap.Contains(GetSkillTypeInfo(SkillID))) return nullptr;
 	for (TWeakObjectPtr<ASkillBase> skillBase : SkillInventoryMap.Find(GetSkillTypeInfo(SkillID))->SkillBaseList)
 	{
@@ -230,12 +223,14 @@ ASkillBase* UPlayerSkillManagerComponent::GetOwnSkillBase(int32 SkillID)
 		{
 			return skillBase.Get();
 		}
-	}
+	}*/
 	return nullptr;
 }
 
+/*
 TArray<uint8> UPlayerSkillManagerComponent::GetRequiredMatAmount(int32 SkillID, uint8 NewSkillLevel)
 {
+	
 	FSkillStatStruct skillInfo = GetSkillInfo(SkillID);
 	checkf(skillInfo.SkillID != 0, TEXT("Failed Find Skill"));
 	return {};//skillInfo.LevelInfo[NewSkillLevel].RequiredMaterial;
@@ -243,9 +238,12 @@ TArray<uint8> UPlayerSkillManagerComponent::GetRequiredMatAmount(int32 SkillID, 
 
 TMap<int32, int32> UPlayerSkillManagerComponent::GetRequiredMaterialInfo(int32 SkillID, ESkillUpgradeType UpgradeType, uint8 Level)
 {
+	return TMap<int32, int32>();
+	
 	FSkillStatStruct skillInfo = GetSkillInfo(SkillID);
 	checkf(skillInfo.SkillID != 0, TEXT("Failed Find Skill"));
 	if(!skillInfo.LevelInfo.Contains(UpgradeType)) return TMap<int32, int32>();
 	else if(!skillInfo.LevelInfo[UpgradeType].SkillLevelInfoList.IsValidIndex(Level)) return TMap<int32, int32>();
 	return skillInfo.LevelInfo[UpgradeType].SkillLevelInfoList[Level].RequiredMaterialMap;
 }
+*/

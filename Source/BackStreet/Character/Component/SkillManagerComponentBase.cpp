@@ -67,7 +67,7 @@ bool USkillManagerComponentBase::TryActivateSkill(int32 TargetSkillID)
 	else if(skillInfo.PrevActionClass != nullptr)
 	{
 		ASkillBase* prevAction = Cast<ASkillBase>(GetWorld()->SpawnActor(skillInfo.PrevActionClass));
-		prevAction->InitSkill(FSkillStatStruct(), this); //제거 필요
+		prevAction->InitSkill(FSkillStatStruct(), this, skillInfo); //제거 필요
 		prevAction->ActivateSkill();
 	}
 	return true;
@@ -86,7 +86,12 @@ FSkillInfo USkillManagerComponentBase::GetSkillInfoData(int32 TargetSkillID, boo
 	FString rowName = FString::FromInt(TargetSkillID);
 	if (!SkillInfoCache.Contains(TargetSkillID))
 	{
-		if (SkillStatTable)
+		if (SkillInfoTable == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::GetSkillInfoData SkillInfoTable is not found"));
+			return FSkillInfo();
+		}
+		else
 		{
 			FSkillInfo* skillInfo = SkillInfoTable->FindRow<FSkillInfo>(FName(rowName), rowName);
 			if (skillInfo == nullptr)
@@ -96,6 +101,7 @@ FSkillInfo USkillManagerComponentBase::GetSkillInfoData(int32 TargetSkillID, boo
 			}
 			return SkillInfoCacheMap.Add(TargetSkillID, *skillInfo);
 		}
+		
 	}
 	return SkillInfoCacheMap[TargetSkillID];
 }
@@ -117,7 +123,10 @@ void USkillManagerComponentBase::InitSkillManager()
 
 void USkillManagerComponentBase::InitSkillMap() 
 {
-	UE_LOG(LogTemp, Warning, TEXT("InitSkillMap()"));
+	if (!OwnerCharacterRef.IsValid() || OwnerCharacterRef.Get()->ActorHasTag("Enemy")) return;
+	if (OwnerCharacterRef->WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Melee) return;
+	
+	return;
 }
 
 bool USkillManagerComponentBase::TrySkill(int32 SkillID)

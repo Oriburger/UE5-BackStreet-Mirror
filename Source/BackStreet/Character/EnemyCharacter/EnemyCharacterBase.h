@@ -36,9 +36,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|UI")
 		class UWidgetComponent* TargetingSupportWidget;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UEnemySkillManagerComponent* SkillManagerComponent;
-
 // ----- Asset & Stat ---------------------
 	UFUNCTION(BlueprintCallable)
 		virtual void InitAsset(int32 NewCharacterID) override;	
