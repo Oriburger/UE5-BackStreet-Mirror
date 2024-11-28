@@ -8,7 +8,8 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateEquiped, int32, SkillID);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateSkillUpdated);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillActivated, int32, SkillID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillActivated, FSkillInfo, SkillInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillDeactivated, FSkillInfo, SkillInfo);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BACKSTREET_API USkillManagerComponentBase : public UActorComponent
@@ -26,6 +27,9 @@ public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateSkillActivated OnSkillActivated;
 
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateSkillDeactivated OnSkillDeactivated;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -42,7 +46,7 @@ public:
 		bool TryActivateSkill(int32 TargetSkillID);
 
 	UFUNCTION(BlueprintCallable)
-		void DestroyCurrentSkill();
+		void DeactivateCurrentSkill();
 
 //========== Getter ==============================
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -63,8 +67,7 @@ private:
 	TMap<int32, FSkillInfo> SkillInfoCacheMap;
 
 	UPROPERTY()
-		TWeakObjectPtr<ASkillBase> CurrentSkill;
-
+		FSkillInfo PrevSkillInfo;
 
 //===============================================
 //===============================================
