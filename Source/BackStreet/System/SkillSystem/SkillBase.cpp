@@ -98,9 +98,6 @@ void ASkillBase::ActivateSkill_Implementation()
 
 void ASkillBase::DeactivateSkill()
 {
-	FTransform skillTransform;
-	skillTransform.SetLocation({0,0,-400});
-	SetActorTransform(skillTransform);
 	SkillState.bIsHidden = true;
 	SetActorHiddenInGame(true);
 

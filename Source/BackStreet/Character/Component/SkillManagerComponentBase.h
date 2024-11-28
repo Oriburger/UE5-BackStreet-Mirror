@@ -48,6 +48,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FSkillInfo GetSkillInfoData(int32 TargetSkillID, bool& bIsInInventory);
 
+	//It must be flushed after using.
+	UPROPERTY(BlueprintReadWrite)
+		TArray<AActor*> TraceResultCache;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|")
 		TMap<int32, FSkillInfo> SkillInventory;

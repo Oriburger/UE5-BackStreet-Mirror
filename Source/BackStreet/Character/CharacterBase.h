@@ -85,8 +85,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UActionTrackingComponent* ActionTrackingComponent;
 
-public:
-	TWeakObjectPtr<class USkillManagerComponentBase> SkillManagerComponentRef;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class USkillManagerComponentBase* SkillManagerComponent;
 
 //========================================================================
 //========= Action =======================================================

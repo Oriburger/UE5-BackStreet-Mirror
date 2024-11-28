@@ -25,7 +25,8 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	FloatingHpBar->SetupAttachment(GetCapsuleComponent());
 	FloatingHpBar->SetRelativeLocation(FVector(0.0f, 0.0f, 85.0f));
 	FloatingHpBar->SetWorldRotation(FRotator(0.0f, 180.0f, 0.0f));
-	FloatingHpBar->SetDrawSize({ 80.0f, 10.0f });
+	FloatingHpBar->SetDrawSize({ 100.0f, 20.0f });
+	FloatingHpBar->SetWidgetSpace(EWidgetSpace::Screen);
 	FloatingHpBar->SetVisibility(false);
 
 	TargetingSupportWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("TARGETING_SUPPORT"));
@@ -34,10 +35,8 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	TargetingSupportWidget->SetWorldRotation(FRotator(0.0f, 180.0f, 0.0f));
 	TargetingSupportWidget->SetRelativeScale3D(FVector(0.15f));
 	TargetingSupportWidget->SetDrawSize({ 500.0f, 500.0f });
+	TargetingSupportWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	TargetingSupportWidget->SetVisibility(false);
-
-	SkillManagerComponent = CreateDefaultSubobject<UEnemySkillManagerComponent>(TEXT("SKILL_MANAGER_"));
-	SkillManagerComponentRef = SkillManagerComponent;
 
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;

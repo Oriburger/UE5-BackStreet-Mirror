@@ -71,9 +71,6 @@ AMainCharacterBase::AMainCharacterBase()
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
 
-	SkillManagerComponent = CreateDefaultSubobject<UPlayerSkillManagerComponent>(TEXT("SKILL_MANAGER_"));
-	SkillManagerComponentRef = SkillManagerComponent;
-
 	AbilityManagerComponent = CreateDefaultSubobject<UAbilityManagerComponent>(TEXT("ABILITY_MANAGER"));
 
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
@@ -355,7 +352,7 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 		SetManualRotateMode();
 
 		// set timer for automatic rotate mode 
-		if (LookAxisVector.Length() <= 0.25f)
+		if (LookAxisVector.Length() <= 0.1f)
 		{
 			SetAutomaticRotateModeTimer();
 		}

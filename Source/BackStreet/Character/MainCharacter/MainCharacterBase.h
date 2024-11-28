@@ -64,9 +64,6 @@ public:
 		class UItemInventoryComponent* ItemInventory;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UPlayerSkillManagerComponent* SkillManagerComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UAbilityManagerComponent* AbilityManagerComponent; 
 
 // ------- Throw Test -----------

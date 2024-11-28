@@ -31,6 +31,7 @@ ACharacterBase::ACharacterBase()
 	DebuffManagerComponent = CreateDefaultSubobject<UDebuffManagerComponent>(TEXT("DEBUFF_MANAGER"));
 	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));;
 	ActionTrackingComponent = CreateDefaultSubobject<UActionTrackingComponent>(TEXT("ACTION_TRACKER"));
+	SkillManagerComponent = CreateDefaultSubobject<USkillManagerComponentBase>(TEXT("SKILL_MANAGER"));
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
 	WeaponComponent->SetupAttachment(GetMesh(), FName("Weapon_R"));
@@ -615,15 +616,7 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Stun
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_KnockedDown) return false;
-	
 
-	//스킬 매니저 있는지 확인
-	if (!SkillManagerComponentRef.IsValid())
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to get SkillmanagerBase"));
-		ensure(SkillManagerComponentRef.IsValid());
-		return false;
-	}
 
 	/* @@@@@@@@@@ LEGACY SKILL CODE @@@@@@@@@@
 	//스킬을 보유중인지 확인
@@ -648,7 +641,7 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 
 	CharacterGameplayInfo.bCanAttack = false;
 	SetActionState(ECharacterActionType::E_Skill);
-	SkillManagerComponentRef.Get()->TryActivateSkill(SkillID);
+	SkillManagerComponent->TryActivateSkill(SkillID);
 	
 	//Reset Combo
 	WeaponComponent->ResetComboCnt();
