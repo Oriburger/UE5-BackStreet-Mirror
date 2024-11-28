@@ -69,9 +69,27 @@ bool USkillManagerComponentBase::TryActivateSkill(int32 TargetSkillID)
 		ASkillBase* prevAction = Cast<ASkillBase>(GetWorld()->SpawnActor(skillInfo.PrevActionClass));
 		prevAction->InitSkill(FSkillStatStruct(), this); //제거 필요
 		prevAction->ActivateSkill();
+		
+		if (CurrentSkill.IsValid())
+		{
+			UE_LOG(LogTemp, Error, TEXT("USkilllManagercomponentBase::TryActivateSkill currentSkill is not Destroyed - Reason %d"), !CurrentSkill.IsValid());
+			CurrentSkill->Destroy();
+		}
+		CurrentSkill = prevAction;
 	}
 	return true;
 }
+
+void USkillManagerComponentBase::DestroyCurrentSkill()
+{
+	if (CurrentSkill.IsValid())
+	{
+		CurrentSkill->DeactivateSkill();
+		CurrentSkill->Destroy();
+	}
+}
+
+
 
 FSkillInfo USkillManagerComponentBase::GetSkillInfoData(int32 TargetSkillID, bool& bIsInInventory)
 {

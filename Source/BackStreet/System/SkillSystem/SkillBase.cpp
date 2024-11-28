@@ -106,7 +106,8 @@ void ASkillBase::DeactivateSkill()
 
 	OwnerCharacterBaseRef = Cast<ACharacterBase>(SkillManagerComponentRef->GetOwner());
 	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(OwnerCharacterBaseRef->Controller);
-	if(OwnerCharacterBaseRef.IsValid() && IsValid(aiControllerRef))
+	if(OwnerCharacterBaseRef.IsValid() && IsValid(aiControllerRef) 
+		&& aiControllerRef->GetBehaviorState() == EAIBehaviorType::E_Skill)
 	{
 		aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Idle);
 	}

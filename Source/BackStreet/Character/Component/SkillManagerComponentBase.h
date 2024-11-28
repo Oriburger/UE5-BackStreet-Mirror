@@ -41,6 +41,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool TryActivateSkill(int32 TargetSkillID);
 
+	UFUNCTION(BlueprintCallable)
+		void DestroyCurrentSkill();
+
 //========== Getter ==============================
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FSkillInfo GetSkillInfoData(int32 TargetSkillID, bool& bIsInInventory);
@@ -54,6 +57,9 @@ protected:
 
 private:
 	TMap<int32, FSkillInfo> SkillInfoCacheMap;
+
+	UPROPERTY()
+		TWeakObjectPtr<ASkillBase> CurrentSkill;
 
 
 //===============================================
