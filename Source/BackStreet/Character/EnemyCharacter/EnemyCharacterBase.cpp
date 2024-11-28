@@ -70,6 +70,7 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
 	AssetSoftPtrInfo.CharacterID = CharacterID = NewCharacterID;
+	SkillManagerComponent->OnSkillDeactivated.AddDynamic(this, &AEnemyCharacterBase::OnSkillDeactivated);
 	
 	if (newStat != nullptr)
 	{
@@ -102,6 +103,17 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	if (NewCharacterID == 1200)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Floating Widget 초기화"));
+	}
+}
+
+void AEnemyCharacterBase::ResetAiBehaviorState()
+{
+	AAIControllerBase* aiControllerRef;
+	aiControllerRef = Cast<AAIControllerBase>(Controller);
+
+	if (IsValid(aiControllerRef) && aiControllerRef->GetBehaviorState() == EAIBehaviorType::E_Skill)
+	{
+		aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Idle);
 	}
 }
 

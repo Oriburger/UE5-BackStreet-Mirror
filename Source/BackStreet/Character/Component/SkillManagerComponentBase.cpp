@@ -59,18 +59,44 @@ bool USkillManagerComponentBase::TryActivateSkill(int32 TargetSkillID)
 		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::TryActivateSkill %d failed - Reason %d %d %d"), TargetSkillID, !skillInfo.IsValid(), !bIsInInventory, !OwnerCharacterRef.IsValid());
 		return false;
 	}
+	
+	if (PrevSkillInfo.PrevActionRef.IsValid())
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkilllManagercomponentBase::TryActivateSkill prevSkill is not Destroyed - Reason %d"), !PrevSkillInfo.PrevActionRef.IsValid());
+		PrevSkillInfo.PrevActionRef.Get()->Destroy();
+	}
+
 	if (!skillInfo.bContainPrevAction)
 	{
 		OwnerCharacterRef.Get()->PlayAnimMontage(skillInfo.SkillAnimation);
-		return true;
+		PrevSkillInfo = skillInfo;
 	}
-	else if(skillInfo.PrevActionClass != nullptr)
+	else if (skillInfo.PrevActionClass != nullptr)
 	{
 		ASkillBase* prevAction = Cast<ASkillBase>(GetWorld()->SpawnActor(skillInfo.PrevActionClass));
 		prevAction->InitSkill(FSkillStatStruct(), this, skillInfo); //제거 필요
 		prevAction->ActivateSkill();
+		PrevSkillInfo = skillInfo;
 	}
+	else return false;
+
+	OnSkillActivated.Broadcast(skillInfo);
 	return true;
+}
+
+void USkillManagerComponentBase::DeactivateCurrentSkill()
+{
+	ASkillBase* prevSkillBase;
+	if (PrevSkillInfo.PrevActionRef.IsValid())
+	{
+		prevSkillBase = Cast<ASkillBase>(PrevSkillInfo.PrevActionRef);
+		prevSkillBase->DeactivateSkill();
+		prevSkillBase->Destroy();
+	}
+	PrevSkillInfo.IsValid();
+	OnSkillDeactivated.Broadcast(PrevSkillInfo);
+
+	PrevSkillInfo = FSkillInfo();
 }
 
 FSkillInfo USkillManagerComponentBase::GetSkillInfoData(int32 TargetSkillID, bool& bIsInInventory)
@@ -144,7 +170,7 @@ bool USkillManagerComponentBase::TrySkill(int32 SkillID)
 		//if (skillBase->SkillState.SkillLevel == 0) return false;
 	}
 	skillBase->ActivateSkill();
-	OnSkillActivated.Broadcast(SkillID);
+	//OnSkillActivated.Broadcast(SkillID);
 	return true;
 }
 

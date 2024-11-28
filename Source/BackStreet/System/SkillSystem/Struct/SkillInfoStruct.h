@@ -48,13 +48,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bIsValid = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TWeakObjectPtr<AActor> PrevActionRef;
+
 	bool IsValid()
 	{
 		return bIsValid = (SkillID > 0);
 	}
 
 	FSkillInfo() : SkillID(0), SkillName(""), IconImage(nullptr), SkillDescription(""), SkillAnimation(nullptr), bContainPrevAction(false)
-		, PrevActionClass(nullptr), bIsLifeSpanWithCauser(false), MaterialID(0), MaterialCount(0), bIsValid(false) { }
+		, PrevActionClass(nullptr), bIsLifeSpanWithCauser(false), MaterialID(0), MaterialCount(0), bIsValid(false), PrevActionRef(nullptr) { }
 };
 
 

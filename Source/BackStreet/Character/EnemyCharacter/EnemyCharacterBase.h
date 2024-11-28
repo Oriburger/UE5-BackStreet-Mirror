@@ -94,6 +94,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Data|Table")
 		UDataTable* EnemyStatTable;
 
+	UFUNCTION()
+		void ResetAiBehaviorState();
+
+	UFUNCTION()
+		void OnSkillDeactivated(FSkillInfo SkillInfo) { ResetAiBehaviorState(); }
+
 private:
 	//Set default weapon actor using weapon inventory
 	UFUNCTION()
