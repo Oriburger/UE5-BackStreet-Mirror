@@ -138,7 +138,7 @@ void ACharacterBase::ResetAirAtkLocationUpdateTimer()
 void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset)
 {
 	FVector currentLocation = GetActorLocation();
-	if (currentLocation.Equals(TargetValue, 10.0f))
+	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? 100.0f : 25.0f))
 	{
 		GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 		OnEndLocationInterp.Broadcast();
