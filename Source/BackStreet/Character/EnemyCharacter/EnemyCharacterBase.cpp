@@ -122,7 +122,11 @@ void AEnemyCharacterBase::SetDefaultWeapon()
 	WeaponComponent->InitWeapon(EnemyStat.DefaultWeaponID);
 	if (IsValid(Controller))
 	{
-		Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();
+		AAIControllerBase* controllerRef = Cast<AAIControllerBase>(Controller);
+		if (IsValid(controllerRef))
+		{
+			controllerRef->UpdateNewWeapon();
+		}
 	}
 }
 
