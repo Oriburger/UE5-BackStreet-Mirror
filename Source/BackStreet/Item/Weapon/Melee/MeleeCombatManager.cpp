@@ -85,7 +85,6 @@ void UMeleeCombatManager::MeleeAttack()
 {
 	if (!WeaponComponentRef.IsValid()) return;
 	FHitResult hitResult;
-	bool bIsFinalCombo = WeaponComponentRef.Get()->GetIsFinalCombo();
 	bool bIsMeleeTraceSucceed = false;
 	bool bIsJumpAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("JumpAttack"))
 							|| OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionRecentlyFinished(FName("JumpAttack"));
@@ -146,7 +145,7 @@ void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, AActor
 	//Activate Slow Effect (Hit stop)
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player"))
 	{
-		const float dilationValue = WeaponComponentRef.Get()->GetIsFinalCombo() ? 0.08 : 0.75;
+		const float dilationValue = 0.8;
 		GamemodeRef.Get()->ActivateSlowHitEffect(dilationValue);
 	}
 

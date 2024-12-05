@@ -379,15 +379,3 @@ bool UWeaponComponentBase::UpgradeStat(TArray<uint8> NewLevelList)
 	WeaponStat.FinalImpactStrength = WeaponStat.UpgradableStatInfoMap[EWeaponStatType::E_FinalAttack].StatInfoByLevel[NewLevelList[2]].StatAdder;
 	return true;
 }
-
-void UWeaponComponentBase::UpdateComboState()
-{
-	WeaponState.ComboCount = (WeaponState.ComboCount + 1);
-	//OwnerCharacterRef.Get()->GetWeaponInventoryRef()->SyncCurrentWeaponInfo(true);
-}
-
-bool UWeaponComponentBase::GetIsFinalCombo()
-{
-	if (!OwnerCharacterRef.IsValid() || OwnerCharacterRef.Get()->GetMaxComboCount() == 0) return false;
-	return GetCurrentComboCnt() % OwnerCharacterRef.Get()->GetMaxComboCount() == 0;
-}

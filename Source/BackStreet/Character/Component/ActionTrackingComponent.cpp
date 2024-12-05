@@ -131,6 +131,7 @@ void UActionTrackingComponent::PrintDebugMessage(float DeltaTime)
 		FString str = FString::Printf(TEXT("[Action %s] / State : %s / Cooldown : %.2f"), *actionInfo.ActionName.ToString(), *state, remainingTime);
 		GEngine->AddOnScreenDebugMessage(keyId++, DeltaTime, FColor::Yellow, str);
 	}
+	GEngine->AddOnScreenDebugMessage(keyId++, DeltaTime, FColor::Yellow, FString::Printf(TEXT("[Combo] / Type : %d / Count : %d"), (int32)CurrentComboType, CurrentComboCount));
 	GEngine->AddOnScreenDebugMessage(keyId, DeltaTime, FColor::Yellow, FString("[------- Action Tracking Debug Message -------]"));
 }
 
@@ -193,6 +194,12 @@ void UActionTrackingComponent::SetAutoTransitionTimer(FName ActionName, EActionS
 	const float delayValue = DelayValueOverride <= 0.0f ? actionInfo.CooldownTimeoutThreshold : DelayValueOverride;
 	FTimerHandle& targetHandle = (NewState == EActionState::E_RecentlyFinished ? actionInfo.AutoFinishTimerHandle : actionInfo.ActionResetTimerHandle);
 	GetWorld()->GetTimerManager().SetTimer(targetHandle, timerDelegate, delayValue, false);
+}
+
+void UActionTrackingComponent::ResetComboCount()
+{
+	CurrentComboType = EComboType::E_Normal;
+	CurrentComboCount = 0;
 }
 
 EActionState UActionTrackingComponent::GetActionState(FName ActionName)

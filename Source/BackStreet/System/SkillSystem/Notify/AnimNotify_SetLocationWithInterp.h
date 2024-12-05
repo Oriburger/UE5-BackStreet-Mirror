@@ -31,7 +31,7 @@ public:
 		bool bUseRightVector = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config|Trace", meta = (EditCondition = "!bUseTraceCache"))
-		TEnumAsByte<ENotifyTraceType> TraceType = ENotifyTraceType::E_Character;
+		ENotifyTraceType TraceType = ENotifyTraceType::E_Character;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config|Trace", meta = (EditCondition = "!bUseTraceCache"))
 		TArray< TEnumAsByte<EObjectTypeQuery> > ObjectTypeList;
