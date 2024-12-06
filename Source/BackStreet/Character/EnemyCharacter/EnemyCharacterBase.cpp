@@ -52,6 +52,8 @@ void AEnemyCharacterBase::BeginPlay()
 	SpawnDefaultController();
 	InitEnemyCharacter(CharacterID);
 	SetDefaultWeapon();
+
+	CharacterGameplayInfo.bUseDefaultStat = true;
 }
 
 void AEnemyCharacterBase::InitAsset(int32 NewCharacterID)
