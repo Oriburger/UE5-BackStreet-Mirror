@@ -48,6 +48,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void DeactivateCurrentSkill();
 
+	UFUNCTION(BlueprintCallable)
+		bool UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel);
+
+	UFUNCTION(BlueprintCallable)
+		void ClearAllSkill();
+
 //========== Getter ==============================
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FSkillInfo GetSkillInfoData(int32 TargetSkillID, bool& bIsInInventory);
@@ -56,6 +62,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		TArray<AActor*> TraceResultCache;
 
+//======= Ref =========
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|")
 		TMap<int32, FSkillInfo> SkillInventory;
@@ -64,74 +71,9 @@ protected:
 		UDataTable* SkillInfoTable;
 
 private:
-	TMap<int32, FSkillInfo> SkillInfoCacheMap;
-
-	UPROPERTY()
-		FSkillInfo PrevSkillInfo;
-
-//===============================================
-//===============================================
-//=======  LEGACY  ==============================
-
- 
-//======= Basic function ========================
-protected:
-	virtual void InitSkillManager();
-
-	virtual void InitSkillMap();
-
-public:
-	virtual bool TrySkill(int32 SkillID);
-
-	virtual bool AddSkill(int32 SkillID);
-
-	virtual bool RemoveSkill(int32 SkillID);
-
-	virtual bool UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel);
-
-	virtual void ClearAllSkill();
-
-//======== Getter ============================
-public:
-	virtual bool IsSkillValid(int32 SkillID);
-
-	virtual bool GetIsSkillUpgradable(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel);
-
-	virtual ASkillBase* GetOwnSkillBase(int32 SkillID);
-
-public:
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillStatStruct GetSkillInfo(int32 SkillID);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		ESkillType GetSkillTypeInfo(int32 SkillID);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillStatStruct GetOwnSkillStat(int32 SkillID);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillStateStruct GetOwnSkillState(int32 SkillID);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillUpgradeLevelInfo GetCurrentSkillLevelInfo(int32 SkillID, ESkillUpgradeType Target);
-	
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillUpgradeLevelInfo GetSkillUpgradeLevelInfo(int32 SkillID, ESkillUpgradeType Target, int32 TargetLevel);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsUpgradeTargetValid(int32 SkillID, ESkillUpgradeType UpgradeTarget);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsUpgradeLevelValid(int32 SkillID, ESkillUpgradeType UpgradeTarget, int32 TargetLevel);
-
-//======= DataTable =============================================================================
-protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Gamplay|Data")
-		UDataTable* SkillStatTable;
-
-//======= Ref =========
-private:
 	TMap<int32, FSkillStatStruct> SkillInfoCache;
+	TMap<int32, FSkillInfo> SkillInfoCacheMap;
+	FSkillInfo PrevSkillInfo;
 
 protected:
 	//GameMode Soft Ref
