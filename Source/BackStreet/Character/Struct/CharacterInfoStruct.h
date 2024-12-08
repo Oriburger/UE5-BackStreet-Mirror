@@ -96,29 +96,29 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 		float TotalValue;
-
 //===================================================================
 //====== Function ===================================================
-	bool IsValid() { return DefaultValue > 0.0f; }
-	void Reset() { FStatValueGroup(); }
-	void SetDefaultValue(float NewValue)
+	inline bool IsValid() { return DefaultValue > 0.0f; }
+	inline void Reset() { FStatValueGroup(); }
+	inline void SetDefaultValue(float NewValue)
 	{
 		if (NewValue < 0.0f) return;
 		DefaultValue = NewValue;
 		UpdateTotalValue();
 	}
-	void UpdateTotalValue()
+	inline void UpdateTotalValue()
 	{
 		TotalValue = DefaultValue
 			+ DefaultValue * (AbilityRateValue + SkillRateValue - DebuffRateValue);
+
 		if (TotalValue < 0.0f)
 		{
 			UE_LOG(LogTemp, Error, TEXT("FStatValueGroup::UpdateTotalValue T : %.2lf, D : %.2lf, A : %.2lf, S : %.2lf, DF: %.2lf")
 						, TotalValue, DefaultValue, AbilityRateValue, SkillRateValue, DebuffRateValue);
 		}
 	}
-	float GetTotalValue() { return TotalValue; }
-	
+	inline float GetTotalValue() { return TotalValue; }
+
 	FStatValueGroup(ECharacterStatType NewType) : StatType(NewType), DefaultValue(0.0f), bIsContainProbability(false), ProbabilityValue(1.0f)
 						, DebuffRateValue(0.0f), AbilityRateValue(0.0f), SkillRateValue(0.0f), TotalValue(0.0f) {}
 
@@ -160,6 +160,18 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 100.0f, UIMax = 1000.0f), Category = "Default")
 		float DefaultMoveSpeed = 400.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 0.8f), Category = "Default")
+		float DefaultBurnResist = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 0.8f), Category = "Default")
+		float DefaultPoisonResist = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 0.8f), Category = "Default")
+		float DefaultSlowResist = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 0.8f), Category = "Default")
+		float DefaultStunResist = 0.0f;
 };
 
 USTRUCT(BlueprintType)
@@ -203,6 +215,9 @@ public:
 	//PlayerMaxHP는 1.0f
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
 		float CurrentHP = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+		float CurrentSP = 0.0f;
 
 	//공격을 할 수 있는 상태인지?
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
@@ -248,53 +263,117 @@ public:
 
 //=========================================================
 //====== Function =========================================
-	bool IsValid() { return CharacterID > 0; }
+	inline bool IsValid() { return CharacterID >= 0; }
 
-	FStatValueGroup& GetStatGroup(ECharacterStatType StatType)
+	inline FStatValueGroup& GetStatGroup(ECharacterStatType StatType)
 	{
 		return StatGroupList[(uint8)StatType];
 	}
-	float GetSkillStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).SkillRateValue; }
-	float GetDebuffStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).DebuffRateValue; }
-	float GetAbilityStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).AbilityRateValue; }
-	
-	float GetTotalValue(ECharacterStatType StatType) 
-	{ 
+	inline void UpdateTotalValues()
+	{
+		for(FStatValueGroup& target : StatGroupList)
+			target.UpdateTotalValue();
+	}
+	inline float GetSkillStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).SkillRateValue; }
+	inline float GetDebuffStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).DebuffRateValue; }
+	inline float GetAbilityStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).AbilityRateValue; }
+	inline float GetProbabilityStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).bIsContainProbability ? GetStatGroup(StatType).ProbabilityValue : -1.0f; }
+	inline bool GetIsContainProbability(ECharacterStatType StatType) {	return GetStatGroup(StatType).bIsContainProbability; }
+	inline float GetTotalValue(ECharacterStatType StatType) 
+	{
 		GetStatGroup(StatType).UpdateTotalValue();
 		return GetStatGroup(StatType).GetTotalValue(); 
 	}
-	
-	bool SetDefaultStatInfo(ECharacterStatType StatType, float NewValue)
+	inline bool SetDefaultStatInfo(ECharacterStatType StatType, float NewValue)
 	{
 		FStatValueGroup& target = GetStatGroup(StatType);
 		target.DefaultValue = NewValue;
 		target.UpdateTotalValue();
 		return target.IsValid();
 	}
-	bool SetSkillStatInfo(ECharacterStatType StatType, float NewValue)
+	inline bool SetSkillStatInfo(ECharacterStatType StatType, float NewValue)
 	{
 		FStatValueGroup& target = GetStatGroup(StatType);
 		target.SkillRateValue = NewValue;
 		target.UpdateTotalValue();
 		return target.IsValid();
 	}
-	bool SetDebuffStatInfo(ECharacterStatType StatType, float NewValue)
+	inline bool SetDebuffStatInfo(ECharacterStatType StatType, float NewValue)
 	{
 		FStatValueGroup& target = GetStatGroup(StatType);
 		target.DebuffRateValue = NewValue;
 		target.UpdateTotalValue();
 		return target.IsValid();
 	}
-	bool SetAbilityStatInfo(ECharacterStatType StatType, float NewValue)
+	inline bool SetAbilityStatInfo(ECharacterStatType StatType, float NewValue)
 	{
 		FStatValueGroup& target = GetStatGroup(StatType);
 		target.AbilityRateValue = NewValue;
 		target.UpdateTotalValue();
 		return target.IsValid();
 	}
+	inline bool SetProbabilityStatInfo(ECharacterStatType StatType, float NewValue)
+	{
+		FStatValueGroup& target = GetStatGroup(StatType);
+		if (!target.bIsContainProbability || NewValue < 0.0f) return false;
+		target.ProbabilityValue = NewValue;
+		return true;
+	}
+	static FORCEINLINE ECharacterStatType GetDebuffStatType(bool bIsJumpAttacking, bool bIsDashAttacking, ECharacterDebuffType DebuffType)
+	{
+		// 기본값은 Normal 공격 유형으로 설정
+		if (bIsJumpAttacking)
+		{
+			switch (DebuffType)
+			{
+			case ECharacterDebuffType::E_Burn:
+				return ECharacterStatType::E_JumpAttackFlame;
+			case ECharacterDebuffType::E_Poison:
+				return ECharacterStatType::E_JumpAttackPoison;
+			case ECharacterDebuffType::E_Stun:
+				return ECharacterStatType::E_JumpAttackStun;
+			case ECharacterDebuffType::E_Slow:
+				return ECharacterStatType::E_JumpAttackSlow;
+			default:
+				return ECharacterStatType::E_None; // 디버프 타입이 없을 경우
+			}
+		}
+		else if (bIsDashAttacking)
+		{
+			switch (DebuffType)
+			{
+			case ECharacterDebuffType::E_Burn:
+				return ECharacterStatType::E_DashAttackFlame;
+			case ECharacterDebuffType::E_Poison:
+				return ECharacterStatType::E_DashAttackPoison;
+			case ECharacterDebuffType::E_Stun:
+				return ECharacterStatType::E_DashAttackStun;
+			case ECharacterDebuffType::E_Slow:
+				return ECharacterStatType::E_DashAttackSlow;
+			default:
+				return ECharacterStatType::E_None;
+			}
+		}
+		else
+		{
+			switch (DebuffType)
+			{
+			case ECharacterDebuffType::E_Burn:
+				return ECharacterStatType::E_NormalFlame;
+			case ECharacterDebuffType::E_Poison:
+				return ECharacterStatType::E_NormalPoison;
+			case ECharacterDebuffType::E_Stun:
+				return ECharacterStatType::E_NormalStun;
+			case ECharacterDebuffType::E_Slow:
+				return ECharacterStatType::E_NormalSlow;
+			default:
+				return ECharacterStatType::E_None;
+			}
+		}
+	}
 
 	FCharacterGameplayInfo() : CharacterID(0) , bInfinite(false) , bIsInvincibility(false), StatGroupList(), CharacterDebuffState(1 << 10)
-		, CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), bCanAttack(false), bCanRoll(false), bIsSprinting(false), bIsAiming(false)
+		, CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), CurrentSP(0.0f), bCanAttack(false), bCanRoll(false), bIsSprinting(false), bIsAiming(false)
 		, bIsAirAttacking(false), bIsDownwardAttacking(false), HitCounter(0), ExtraStageTime(0.0f), MaxKeepingSkillCount(1)
 		, bInfiniteSkillMaterial(false), ExtraPercentageUnivMaterial(0.0f)
 	{
@@ -307,7 +386,7 @@ public:
 	}
 
 	FCharacterGameplayInfo(FCharacterDefaultStat DefaultStat) : CharacterID(DefaultStat.CharacterID), bInfinite(DefaultStat.bInfinite), bIsInvincibility(DefaultStat.bIsInvincibility)
-		, StatGroupList(), CharacterDebuffState(1 << 10), CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), bCanAttack(false), bCanRoll(false)
+		, StatGroupList(), CharacterDebuffState(1 << 10), CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), CurrentSP(0.0f), bCanAttack(false), bCanRoll(false)
 		, bIsSprinting(false), bIsAiming(false), bIsAirAttacking(false), bIsDownwardAttacking(false), HitCounter(0), ExtraStageTime(0.0f)
 		, MaxKeepingSkillCount(1), bInfiniteSkillMaterial(false), ExtraPercentageUnivMaterial(0.0f)
 	{
@@ -322,6 +401,10 @@ public:
 		StatGroupList[(uint8)ECharacterStatType::E_NormalPower].SetDefaultValue(DefaultStat.DefaultAttack);
 		StatGroupList[(uint8)ECharacterStatType::E_MoveSpeed].SetDefaultValue(DefaultStat.DefaultMoveSpeed);
 		StatGroupList[(uint8)ECharacterStatType::E_NormalAttackSpeed].SetDefaultValue(DefaultStat.DefaultAttackSpeed);
+		StatGroupList[(uint8)ECharacterStatType::E_BurnResist].SetDefaultValue(DefaultStat.DefaultBurnResist);
+		StatGroupList[(uint8)ECharacterStatType::E_PoisonResist].SetDefaultValue(DefaultStat.DefaultPoisonResist);
+		StatGroupList[(uint8)ECharacterStatType::E_SlowResist].SetDefaultValue(DefaultStat.DefaultSlowResist);
+		StatGroupList[(uint8)ECharacterStatType::E_StunResist].SetDefaultValue(DefaultStat.DefaultStunResist);
 	}
 };
 
@@ -370,36 +453,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* SwitchWeaponAction;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
-		class UInputAction* DropWeaponAction;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
-		class UInputAction* PickSubWeaponAction;
-
 	// Jump Input Action
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* JumpAction;
 
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* SprintAction;
-
-//------------------UI---------------------------------------------------------------------------
-public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
-		class UInputAction* PlayerInfoUIAction;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
-		class UInputAction* ConfirmUIAction;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
-		class UInputAction* CancelUIAction;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
-		class UInputAction* MoveUIAction;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
-		class UInputAction* SwitchTabUIAction;
 };
 
 //===============================================
@@ -455,124 +514,3 @@ struct FEnemyStatStruct : public FTableRowBase
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Skill")
 		TArray<int32> EnemySkillIDList; 
 };
-
-
-/*
-USTRUCT(BlueprintType)
-struct FStatInfoStruct
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(BlueprintReadOnly)
-	float PercentValue = 0.0f;
-
-	UPROPERTY(BlueprintReadOnly)
-	float FixedValue = 0.0f;
-};
-
-USTRUCT(BlueprintType)
-struct FCharacterStateStruct
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	//====== Character State ===============
-		//캐릭터의 디버프 상태 (Bit-Field로 표현)
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int32 CharacterDebuffState = (1 << 10);
-
-	//공격을 할 수 있는 상태인지?
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	bool bCanAttack = false;
-
-	//Is character sprinting?
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	bool bIsSprinting = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	bool bIsAiming = false;
-
-	//캐릭터의 행동 정보
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	ECharacterActionType CharacterActionState = ECharacterActionType::E_Idle;
-
-	//====== Current Stat ===================
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float TotalHP = 0.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float TotalAttack = 0.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float TotalDefense = 0.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float TotalMoveSpeed = 0.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float TotalAttackSpeed = 0.0f;
-
-	//PlayerMaxHP는 1.0f
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float CurrentHP = 0.0f;
-
-	//======= Additional Stat , Uneditable ======================
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct AbilityHP;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct AbilityAttack;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct AbilityAttackSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct AbilityMoveSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct AbilityDefense;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct SkillHP;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct SkillAttack;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct SkillAttackSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct SkillMoveSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct SkillDefense;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct DebuffHP;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct DebuffAttack;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct DebuffAttackSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct DebuffMoveSpeed;
-
-	UPROPERTY(BlueprintReadWrite)
-	FStatInfoStruct DebuffDefense;
-
-	//====== Player ====================================	
-		//Air Atk Movement
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	bool bIsAirAttacking = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	bool bIsDownwardAttacking = false;
-
-	//Hit Counter For Knockback Event
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int32 HitCounter = 0;
-};
-*/

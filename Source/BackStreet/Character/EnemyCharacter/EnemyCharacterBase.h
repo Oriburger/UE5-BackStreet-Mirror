@@ -36,17 +36,13 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|UI")
 		class UWidgetComponent* TargetingSupportWidget;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UEnemySkillManagerComponent* SkillManagerComponent;
-
 // ----- Asset & Stat ---------------------
 	UFUNCTION(BlueprintCallable)
 		virtual void InitAsset(int32 NewCharacterID) override;	
 
-protected:
 	//Stat data of enemy character including stat, default weapon, drop info
 	//EnemyStatStruct.EnemyStat member initializes the parent's member CharacterStat
-	UPROPERTY(VisibleInstanceOnly, Category = "Gameplay")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Gameplay")
 		FEnemyStatStruct EnemyStat;
 
 // ----- Action ---------------
@@ -80,6 +76,13 @@ protected:
 	UFUNCTION()
 		virtual void StandUp() override;
 
+// -------- 비헤이비어트리 및 AIController 관련 ---------
+public:
+	//Calculate probability depend on HitCount
+	UFUNCTION()
+	bool CalculateIgnoreHitProbability(int32 HitCounter);
+
+
 // ----- 캐릭터 스탯 및 상태 관련 ---------
 public:
 	//Initialize EnemyCharacter except asset info.
@@ -90,6 +93,12 @@ public:
 	//적의 스탯 테이블
 	UPROPERTY(EditDefaultsOnly, Category = "Data|Table")
 		UDataTable* EnemyStatTable;
+
+	UFUNCTION()
+		void ResetAiBehaviorState();
+
+	UFUNCTION()
+		void OnSkillDeactivated(FSkillInfo SkillInfo) { ResetAiBehaviorState(); }
 
 private:
 	//Set default weapon actor using weapon inventory

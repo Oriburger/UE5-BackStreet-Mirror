@@ -48,15 +48,18 @@ void UStageManagerComponent::Initialize(FChapterInfo NewChapterInfo)
 
 void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 {
-	if (IsValid(MainAreaRef)) ClearPreviousLevelData();
-	
+	if (IsValid(MainAreaRef))
+	{
+		ClearPreviousLevelData();
+	}
+
 	//Clear previous portal
 	ClearPreviousActors();
 
 	//Init new stage
 	CurrentStageInfo = NewStageInfo;
 
-	UE_LOG(LogTemp, Warning, TEXT("=========== Init Stage ============"));
+	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::InitStage-------------"));
 	UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
 	UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %s"), *CurrentStageInfo.Coordinate.ToString());
 
@@ -66,9 +69,33 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 		VisitedCraftstageCount += 1;
 	}
 
+	//Check level asset list is not empty	
+	TArray<TSoftObjectPtr<UWorld>> newWorldAssetList = CurrentChapterInfo.GetWorldList(NewStageInfo.StageType);
+	checkf(!newWorldAssetList.IsEmpty(), TEXT("UStageManagerComponent::InitStage - newWorldAssetList가 지정되어있지않습니다."));
+
 	//Load new level
+	if (newWorldAssetList.Num() == 1 || PreviousLevel.IsNull())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("> UStageManagerComponent::InitStage - Lack of %d's Map Count, It may cause the level reinstancing crash."), (int32)NewStageInfo.StageType);
+		NewStageInfo.MainLevelAsset = newWorldAssetList[0];
+	}
+	else
+	{
+		int32 prevLevelIdx = -1;
+		int32 randIdxAdder = FMath::RandRange(1, newWorldAssetList.Num() - 1);
+
+		newWorldAssetList.Find(PreviousLevel, prevLevelIdx);
+		prevLevelIdx = prevLevelIdx == INDEX_NONE ? 0 : prevLevelIdx;
+
+		UE_LOG(LogTemp, Warning, TEXT("> prev : %d, randIdx : %d, result : %d"), prevLevelIdx, randIdxAdder, (prevLevelIdx + randIdxAdder) % newWorldAssetList.Num());
+
+		NewStageInfo.MainLevelAsset = newWorldAssetList[(prevLevelIdx + randIdxAdder) % newWorldAssetList.Num()];
+	}
+	UE_LOG(LogTemp, Warning, TEXT("> MapName : %s"), *NewStageInfo.MainLevelAsset.ToString());
+	PreviousLevel = NewStageInfo.MainLevelAsset;
 	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
-	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 1.0f, true);
+	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 0.25f, true);
+
 }
 
 void UStageManagerComponent::ClearResource()
@@ -125,7 +152,7 @@ void UStageManagerComponent::CreateLevelInstance(TSoftObjectPtr<UWorld> MainLeve
 	MainAreaRef = MainAreaRef->LoadLevelInstanceBySoftObjectPtr(GetWorld(), MainLevel, FVector(0.0f)
 					, FRotator::ZeroRotator, result);
 	MainAreaRef->OnLevelLoaded.AddDynamic(this, &UStageManagerComponent::UpdateLoadStatusCount);
-	
+
 	if (OuterLevel.IsNull()) return;
 	{
 		OuterAreaRef = OuterAreaRef->LoadLevelInstanceBySoftObjectPtr(GetWorld(), OuterLevel, FVector(0.0f)
@@ -254,53 +281,69 @@ void UStageManagerComponent::SpawnEnemy()
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteEscort
 		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss) return;
 
-	if (CurrentStageInfo.EnemyCompositionInfo.CompositionList.Num() == 0)
+	if (CurrentStageInfo.EnemyCompositionInfo.CompositionNameList.Num() == 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::SpawnEnemy : Not enough enemy composition"));
+		UE_LOG(LogTemp, Error, TEXT("UStageManagerComponent::SpawnEnemy : Not enough enemy composition"));
 		return;
 	}
 
 	//Check data is valid
-	if (CurrentStageInfo.EnemyCompositionInfo.CompositionList.Num() > CurrentStageInfo.EnemySpawnLocationList.Num())
+	if (CurrentStageInfo.EnemySpawnLocationList.Num() == 0)
 	{
-		UE_LOG(LogGameMode, Warning, TEXT("------- UStageManagerComponent::SpawnEnemy() -------"));
-		UE_LOG(LogGameMode, Warning, TEXT("Spawn point num is less than enemy composition list num."));
-		UE_LOG(LogGameMode, Warning, TEXT("There can be collapse among enemy characters."));
+		UE_LOG(LogGameMode, Error, TEXT("------- UStageManagerComponent::SpawnEnemy() -------"));
+		UE_LOG(LogGameMode, Error, TEXT("Spawn point num is not enough. Mob will not be spawned"));
 	}
 	//Init enemy count to zero
 	RemainingEnemyCount = 0;
 
 	//--------------Spawn enemy to world and add to SpawnedActorList-------------------------------
-	if (CurrentStageInfo.EnemySpawnLocationList.Num() > 0)
+	TArray<FName> compositionNameList = CurrentChapterInfo.StageEnemyCompositionInfoMap[CurrentStageInfo.StageType].CompositionNameList;
+	
+	if (compositionNameList.IsEmpty())
 	{
-		for (int32 idx = 0; idx < CurrentStageInfo.EnemyCompositionInfo.CompositionList.Num(); idx++)
+		UE_LOG(LogTemp, Error, TEXT("UStageManagerComponent::SpawnEnemy : composition for stage type %d is empty"), (int32)CurrentStageInfo.StageType);
+		return;
+	}
+
+	for (int32 idx = 0; idx < CurrentStageInfo.EnemySpawnLocationList.Num(); idx++)
+	{
+		const int32 randomIdx = UKismetMathLibrary::RandomInteger(compositionNameList.Num());
+		const FName targetName = compositionNameList[randomIdx];
+		FEnemyCompositionInfo enemyComposition;
+
+		if (!CurrentChapterInfo.EnemyCompositionMap.Contains(targetName))
 		{
-			FEnemyGroupInfo& composition = CurrentStageInfo.EnemyCompositionInfo.CompositionList[idx];
+			UE_LOG(LogTemp, Error, TEXT("UStageManagerComponent::SpawnEnemy : composition \"%s\" is not found"), *targetName.ToString());
+			continue;
+		}
 
-			TArray<int32> keyArray = {};
-			FVector spawnLocation = CurrentStageInfo.EnemySpawnLocationList[idx % CurrentStageInfo.EnemySpawnLocationList.Num()];
-			composition.EnemySet.GenerateKeyArray(keyArray);
+		TArray<int32> keyArray = {};
+		FVector spawnLocation = CurrentStageInfo.EnemySpawnLocationList[idx];
+		enemyComposition = CurrentChapterInfo.EnemyCompositionMap[targetName];
+		enemyComposition.EnemySet.GenerateKeyArray(keyArray);
 
-			for (int32& enemyID : keyArray)
+		UE_LOG(LogTemp, Warning, TEXT("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
+		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::SpawnEnemy : composition - %s %d"), *targetName.ToString(), keyArray.Num());
+
+		for (int32& enemyID : keyArray)
+		{
+			int32 count = enemyComposition.EnemySet[enemyID];
+
+			while (count--)
 			{
-				int32 count = composition.EnemySet[enemyID];
-
-				while (count--)
+				AEnemyCharacterBase* newEnemy = GetWorld()->SpawnActor<AEnemyCharacterBase>(EnemyCharacterClass
+					, spawnLocation + FVector(0.0f, 0.0f, 200.0f), FRotator::ZeroRotator);
+				if (IsValid(newEnemy))
 				{
-					AEnemyCharacterBase* newEnemy = GetWorld()->SpawnActor<AEnemyCharacterBase>(EnemyCharacterClass
-						, spawnLocation + FVector(0.0f, 0.0f, 200.0f), FRotator::ZeroRotator);
-					if (IsValid(newEnemy))
-					{
-						newEnemy->CharacterID = enemyID;
-						newEnemy->InitEnemyCharacter(enemyID);
-						newEnemy->InitAsset(enemyID);
-						newEnemy->SpawnDefaultController();
-						newEnemy->EnemyDeathDelegate.BindUFunction(this, FName("UpdateEnemyCountAndCheckClear"));
-						Cast<AAIControllerBase>(newEnemy->GetController())->ActivateAI();
+					newEnemy->CharacterID = enemyID;
+					newEnemy->InitEnemyCharacter(enemyID);
+					newEnemy->InitAsset(enemyID);
+					newEnemy->SpawnDefaultController();
+					newEnemy->EnemyDeathDelegate.BindUFunction(this, FName("UpdateEnemyCountAndCheckClear"));
+					Cast<AAIControllerBase>(newEnemy->GetController())->ActivateAI();
 
-						SpawnedActorList.Add(newEnemy);
-						RemainingEnemyCount += 1;
-					}
+					SpawnedActorList.Add(newEnemy);
+					RemainingEnemyCount += 1;
 				}
 			}
 		}

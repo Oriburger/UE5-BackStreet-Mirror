@@ -38,6 +38,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void FinishGame(bool bGameIsOver);
 
+	UFUNCTION(BlueprintCallable)
+		void RegisterActorToStageManager(AActor* TargetActor);
+
 	UFUNCTION(BlueprintImplementableEvent)
 		void PrintDebugMessage();
 
@@ -52,7 +55,6 @@ public:
 
 	UFUNCTION()
 		AItemBase* SpawnItemToWorld(int32 ItemID, FVector SpawnLocation);
-
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }
@@ -135,6 +137,8 @@ protected:
 	//게임 일시정지 여부
 	UPROPERTY(BlueprintReadWrite)
 		bool bIsGamePaused = false;
+	
+	TMap<int32, UClass*> ItemClassCacheMap;
 
 
 };

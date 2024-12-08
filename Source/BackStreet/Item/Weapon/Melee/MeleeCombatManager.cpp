@@ -6,6 +6,7 @@
 #include "../../../System/AssetSystem/AssetManagerBase.h"
 #include "../../../Global/BackStreetGameModeBase.h"
 #include "../../../Character/CharacterBase.h"
+#include "../../../Character/Component/ActionTrackingComponent.h"
 #include "../../../Character/Component/WeaponComponentBase.h"
 #include "../../../System/AssetSystem/AssetManagerBase.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -84,8 +85,10 @@ void UMeleeCombatManager::MeleeAttack()
 {
 	if (!WeaponComponentRef.IsValid()) return;
 	FHitResult hitResult;
-	bool bIsFinalCombo = WeaponComponentRef.Get()->GetIsFinalCombo();
 	bool bIsMeleeTraceSucceed = false;
+	bool bIsJumpAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("JumpAttack"))
+							|| OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionRecentlyFinished(FName("JumpAttack"));
+	bool bIsDashAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("DashAttack"));
 
 	FCharacterGameplayInfo ownerInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfo();
 
@@ -101,11 +104,17 @@ void UMeleeCombatManager::MeleeAttack()
 			FCharacterGameplayInfo targetInfo = Cast<ACharacterBase>(target)->GetCharacterGameplayInfo();
 			bool bIsFatalAttack = false;
 			float totalDamage = WeaponComponentRef.Get()->CalculateTotalDamage(targetInfo, bIsFatalAttack);
-			UE_LOG(LogTemp, Warning, TEXT("UMeleeCombatManager::MeleeAttack()---- TotalDmg : %.2lf / bIsFatalAtk : %d"), totalDamage, (int32)bIsFatalAttack);
-
+			
 			//Apply Debuff
-			WeaponComponentRef.Get()->ApplyWeaponDebuff(Cast<ACharacterBase>(target));
-
+			const TArray<ECharacterDebuffType> targetDebuffTypeList = { ECharacterDebuffType::E_Burn, ECharacterDebuffType::E_Poison
+																		, ECharacterDebuffType::E_Stun, ECharacterDebuffType::E_Slow };
+			for (auto& debuffType : targetDebuffTypeList)
+			{
+				ECharacterStatType targetStatType = FCharacterGameplayInfo::GetDebuffStatType(bIsJumpAttacking, bIsDashAttacking, debuffType);
+				if (targetStatType == ECharacterStatType::E_None) continue;
+				WeaponComponentRef.Get()->ApplyWeaponDebuff(Cast<ACharacterBase>(target), debuffType, targetStatType);
+			}
+			
 			//Activate Melee Hit Effect
 			ActivateMeleeHitEffect(target->GetActorLocation(), target, bIsFatalAttack);
 
@@ -136,7 +145,7 @@ void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, AActor
 	//Activate Slow Effect (Hit stop)
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player"))
 	{
-		const float dilationValue = WeaponComponentRef.Get()->GetIsFinalCombo() ? 0.08 : 0.75;
+		const float dilationValue = 0.8;
 		GamemodeRef.Get()->ActivateSlowHitEffect(dilationValue);
 	}
 
@@ -151,16 +160,8 @@ void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, AActor
 	{
 		if (IsValid(WeaponComponentRef.Get()->HitEffectParticle))
 		{
-			if (IsValid(AttachTarget))
-			{
-				UNiagaraFunctionLibrary::SpawnSystemAttached(WeaponComponentRef.Get()->HitEffectParticle, AttachTarget->GetRootComponent()
-					, FName(""), FVector(), WeaponComponentRef.Get()->WeaponState.SlashRotation, EAttachLocation::KeepRelativeOffset, true);
-			}
-			else
-			{
-				UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponComponentRef.Get()->HitEffectParticle, emitterSpawnTransform.GetLocation()
-					, WeaponComponentRef.Get()->WeaponState.SlashRotation + randomRotator, emitterSpawnTransform.GetScale3D());
-			}
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponComponentRef.Get()->HitEffectParticle, emitterSpawnTransform.GetLocation()
+				, WeaponComponentRef.Get()->WeaponState.SlashRotation + randomRotator, emitterSpawnTransform.GetScale3D());
 		}
 		if (AssetManagerRef.IsValid())
 		{
@@ -181,8 +182,9 @@ void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, AActor
 	}
 
 	//카메라 Shake 효과
-	GamemodeRef.Get()->PlayCameraShakeEffect(OwnerCharacterRef.Get()->ActorHasTag("Player") ? ECameraShakeType::E_Attack : ECameraShakeType::E_Hit, Location);
+	if (OwnerCharacterRef.Get()->GetCharacterGameplayInfo().bIsInvincibility) return;
 
+	GamemodeRef.Get()->PlayCameraShakeEffect(OwnerCharacterRef.Get()->ActorHasTag("Player") ? ECameraShakeType::E_Attack : ECameraShakeType::E_Hit, Location);
 }
 
 TArray<FVector> UMeleeCombatManager::GetCurrentMeleePointList()

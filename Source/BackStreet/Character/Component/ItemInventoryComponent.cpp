@@ -74,9 +74,12 @@ void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
 	{
 		TryAddWeapon(ItemID, ItemMap[ItemID].ItemType, ItemCnt);
 	}
-	ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, ItemMap[ItemID].ItemAmount + ItemCnt);
+	else
+	{
+		OnItemAdded.Broadcast(ItemMap[ItemID], ItemCnt);
+		ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, ItemMap[ItemID].ItemAmount + ItemCnt);
+	}
 	OnUpdateItem.Broadcast();
-	OnItemAdded.Broadcast(ItemMap[ItemID], ItemCnt);
 }
 
 void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
@@ -102,6 +105,7 @@ bool UItemInventoryComponent::TryAddWeapon(int32 ItemID, EItemCategoryInfo ItemC
 		//임시 코드
 		if (CurrMainWeaponCount >= MaxMainWeaponCount) return false;
 		CurrMainWeaponCount += 1;
+		ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, ItemMap[ItemID].ItemAmount + ItemCount);
 	}
 	else if (ItemCategory == EItemCategoryInfo::E_SubWeapon)
 	{
@@ -109,14 +113,7 @@ bool UItemInventoryComponent::TryAddWeapon(int32 ItemID, EItemCategoryInfo ItemC
 		if (CurrSubWeaponCount >= MaxSubWeaponCount)
 		{
 			TArray<int32> subWeaponIDList = GetValidWeaponIDList(EWeaponType::E_Shoot);
-			if (subWeaponIDList.Contains(ItemID))
-			{
-				FWeaponStateStruct targetState = GetWeaponState(ItemID - 20000);
-				targetState.RangedWeaponState.CurrentAmmoCount += ItemCount;
-				TryUpdateWeaponState(ItemID - 20000, targetState);
-				return true;
-			}
-			else
+			if (!subWeaponIDList.Contains(ItemID) && subWeaponIDList.Num() > 0)
 			{
 				//만약 새로 줍는 무기라면 버리고 로직을 수행
 				RemoveItem(subWeaponIDList[0], 99);
@@ -125,8 +122,22 @@ bool UItemInventoryComponent::TryAddWeapon(int32 ItemID, EItemCategoryInfo ItemC
 		//무기를 줍는다 (카운팅 / 정보 연동)
 		CurrSubWeaponCount += 1;
 		FWeaponStateStruct& targetState = GetWeaponState(ItemID - 20000);
+		int32 prevCount = targetState.RangedWeaponState.CurrentAmmoCount;
 		targetState.RangedWeaponState.CurrentAmmoCount += ItemCount;
+		
+		//@@ TEMPORARY CODE @@@@@@@
+		int32 maxAmmoCount = WeaponRef.Get()->GetWeaponStatInfoWithID(ItemID - 20000).RangedWeaponStat.MaxTotalAmmo;
+		maxAmmoCount = maxAmmoCount * (1.0f + OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_SubWeaponCapacity));
+		targetState.RangedWeaponState.UpdateAmmoValidation(maxAmmoCount);
+		ItemCount = targetState.RangedWeaponState.CurrentAmmoCount - prevCount;
+
+		UE_LOG(LogTemp, Warning, TEXT("UItemInventoryComponent::TryAddWeapon maxAmmo : %d,  added : %d, after : %d"), maxAmmoCount, ItemCount, targetState.RangedWeaponState.CurrentAmmoCount);
+
+		if (ItemCount <= 0) return false;
+
+		ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, ItemMap[ItemID].ItemAmount + ItemCount);
 		TryUpdateWeaponState(ItemID - 20000, targetState);
+		OnItemAdded.Broadcast(ItemMap[ItemID], ItemCount);
 	}
 	return true;
 }

@@ -5,6 +5,8 @@
 #include "CharacterBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateHealthChange, float, OldValue, float, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateBeginLocationInterp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateEndLocationInterp);
 DECLARE_MULTICAST_DELEGATE(FDelegateOnActionTrigger);
 
 UCLASS()
@@ -33,6 +35,12 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateHealthChange OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateBeginLocationInterp OnBeginLocationInterp;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateEndLocationInterp OnEndLocationInterp;
 
 public:
 	TMap<FName, FDelegateOnActionTrigger*> ActionTriggerDelegateMap;
@@ -77,8 +85,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UActionTrackingComponent* ActionTrackingComponent;
 
-public:
-	TWeakObjectPtr<class USkillManagerComponentBase> SkillManagerComponentRef;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class USkillManagerComponentBase* SkillManagerComponent;
 
 //========================================================================
 //========= Action =======================================================
@@ -184,6 +192,8 @@ protected:
 	UFUNCTION()
 		void ResetHitCounter();	
 
+	virtual TArray<UAnimMontage*> GetTargetMeleeAnimMontageList();
+
 	//Knock down with 
 	virtual void KnockDown();
 
@@ -201,6 +211,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetStatTotalValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetTotalValue(TargetStatType); }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetStatProbabilityValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetProbabilityStatInfo(TargetStatType); }
 
 	UFUNCTION(BlueprintCallable)
 		void InitCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo);
@@ -223,7 +236,7 @@ public:
 		void UpdateWeaponStat(FWeaponStatStruct NewStat);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetMaxComboCount() { return AssetHardPtrInfo.MeleeAttackAnimMontageList.Num(); }
+		int32 GetMaxComboCount() { return AssetHardPtrInfo.NormalComboAnimMontageList.Num(); }
 		
 //========================================================================
 //====== Asset / Weapon ==================================================
@@ -268,6 +281,22 @@ protected:
 public:
 	UPROPERTY(BlueprintReadOnly)
 		TArray<USoundCue*> FootStepSoundList;
+
+//========================================================================
+//====== VFX ============================================================
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraComponent* BuffNiagaraEmitter;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraComponent* DirectionNiagaraEmitter;
+
+public:
+	UFUNCTION()
+		void ActivateDebuffNiagara(uint8 DebuffType);
+
+	UFUNCTION()
+		void DeactivateBuffEffect();
 
 //========================================================================
 //====== PROPERTY ========================================================

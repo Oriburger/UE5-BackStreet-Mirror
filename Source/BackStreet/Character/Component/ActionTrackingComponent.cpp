@@ -40,7 +40,10 @@ void UActionTrackingComponent::BindMonitorEvent()
 	if (!bIsEnabled) return;
 	if (!WeaponComponentRef.IsValid() || !OwnerCharacterRef.IsValid())
 	{
-		UE_LOG(LogTemp, Error, TEXT("UActionTrackingComponent::BindMonitorEvent() -> Weapon / OwnerCharacter is not valid"));
+		if (bShowDebugMessage)
+		{
+			UE_LOG(LogTemp, Error, TEXT("UActionTrackingComponent::BindMonitorEvent() -> Weapon / OwnerCharacter is not valid"));
+		}
 		return;
 	}
 
@@ -48,7 +51,10 @@ void UActionTrackingComponent::BindMonitorEvent()
 	TArray<FName> actionTriggerNameList; ownerActionTriggerMap.GenerateKeyArray(actionTriggerNameList);
 	for (FName& name : actionTriggerNameList)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("name ; %s"), *name.ToString());
+		if (bShowDebugMessage)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("name ; %s"), *name.ToString());
+		}
 	}
 
 	TArray<FName> actionInfoKeyList; ActionInfoMap.GenerateKeyArray(actionInfoKeyList);
@@ -125,6 +131,7 @@ void UActionTrackingComponent::PrintDebugMessage(float DeltaTime)
 		FString str = FString::Printf(TEXT("[Action %s] / State : %s / Cooldown : %.2f"), *actionInfo.ActionName.ToString(), *state, remainingTime);
 		GEngine->AddOnScreenDebugMessage(keyId++, DeltaTime, FColor::Yellow, str);
 	}
+	GEngine->AddOnScreenDebugMessage(keyId++, DeltaTime, FColor::Yellow, FString::Printf(TEXT("[Combo] / Type : %d / Count : %d"), (int32)CurrentComboType, CurrentComboCount));
 	GEngine->AddOnScreenDebugMessage(keyId, DeltaTime, FColor::Yellow, FString("[------- Action Tracking Debug Message -------]"));
 }
 
@@ -158,7 +165,7 @@ void UActionTrackingComponent::TryUpdateActionState(FName ActionName, EActionSta
 	if (!ActionInfoMap.Contains(ActionName)) return;
 	FActionInfo& actionInfo  = ActionInfoMap[ActionName];
 	bool result = actionInfo.TrySetActionState(NewState);
-	if (!result)
+	if (!result && bShowDebugMessage)
 	{
 		UE_LOG(LogTemp, Error, TEXT("UActionTrackingComponent::TryUpdateActionState(%s, %d) failed"), *ActionName.ToString(), (int32)NewState);
 	}
@@ -187,6 +194,12 @@ void UActionTrackingComponent::SetAutoTransitionTimer(FName ActionName, EActionS
 	const float delayValue = DelayValueOverride <= 0.0f ? actionInfo.CooldownTimeoutThreshold : DelayValueOverride;
 	FTimerHandle& targetHandle = (NewState == EActionState::E_RecentlyFinished ? actionInfo.AutoFinishTimerHandle : actionInfo.ActionResetTimerHandle);
 	GetWorld()->GetTimerManager().SetTimer(targetHandle, timerDelegate, delayValue, false);
+}
+
+void UActionTrackingComponent::ResetComboCount()
+{
+	CurrentComboType = EComboType::E_Normal;
+	CurrentComboCount = 0;
 }
 
 EActionState UActionTrackingComponent::GetActionState(FName ActionName)

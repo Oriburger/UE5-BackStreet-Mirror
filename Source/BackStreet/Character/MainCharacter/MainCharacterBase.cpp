@@ -68,20 +68,8 @@ AMainCharacterBase::AMainCharacterBase()
 	FollowingCamera->SetupAttachment(CameraBoom);
 	FollowingCamera->bAutoActivate = true;
 
-	BuffNiagaraEmitter = CreateDefaultSubobject<UNiagaraComponent>(TEXT("BUFF_EFFECT"));
-	BuffNiagaraEmitter->SetupAttachment(GetMesh());
-	BuffNiagaraEmitter->SetRelativeLocation(FVector(0.0f, 0.0f, 45.0f));
-	BuffNiagaraEmitter->bAutoActivate = false;
-
-	DirectionNiagaraEmitter = CreateDefaultSubobject<UNiagaraComponent>(TEXT("DIRECTION_EFFECT"));
-	DirectionNiagaraEmitter->SetupAttachment(GetMesh());
-	DirectionNiagaraEmitter->SetRelativeRotation({ 0.0f, 90.0f, 0.0f });
-
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
-
-	SkillManagerComponent = CreateDefaultSubobject<UPlayerSkillManagerComponent>(TEXT("SKILL_MANAGER_"));
-	SkillManagerComponentRef = SkillManagerComponent;
 
 	AbilityManagerComponent = CreateDefaultSubobject<UAbilityManagerComponent>(TEXT("ABILITY_MANAGER"));
 
@@ -118,20 +106,7 @@ void AMainCharacterBase::BeginPlay()
 
 	AbilityManagerComponent->InitAbilityManager(this);
 	InitCombatUI();
-
-
-	//UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
-
-	//Load SaveData
-	//if (gameInstance->LoadGameSaveData(SavedData)) return;
-	//else
-	//{
-	//	gameInstance->SaveGameData(FSaveData());
-	//}
-	//SetCharacterStatFromSaveData();
-	//ItemInventory->SetItemInventoryFromSaveData();
 	ItemInventory->InitInventory();
-
 	
 	TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
 	SetAutomaticRotateModeTimer();
@@ -201,8 +176,8 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		//SubWeapon
 		EnhancedInputComponent->BindAction(InputActionInfo.ShootAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryShoot);
-
-		EnhancedInputComponent->BindAction(LockToTargetAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::LockToTarget);
+		
+		//EnhancedInputComponent->BindAction(LockToTargetAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::LockToTarget);
 	}
 }
 
@@ -325,7 +300,6 @@ void AMainCharacterBase::ResetMovementInputValue()
 void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
-	if (GetCharacterMovement()->IsFalling()) return;
 	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
 	if (CharacterGameplayInfo.bIsAirAttacking || CharacterGameplayInfo.bIsDownwardAttacking) return;
 
@@ -363,12 +337,7 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X / 2.0f);
 		AddControllerPitchInput(LookAxisVector.Y / 2.0f);
 		SetManualRotateMode();
-
-		// set timer for automatic rotate mode 
-		if (LookAxisVector.Length() <= 0.25f)
-		{
-			SetAutomaticRotateModeTimer();
-		}
+		SetAutomaticRotateModeTimer();
 	}
 }
 
@@ -389,7 +358,7 @@ void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero()) return;
 	
-	WeaponComponent->ResetComboCnt();
+	ActionTrackingComponent->ResetComboCount();
 	CharacterGameplayInfo.bIsSprinting = true;
 	SetWalkSpeedWithInterp(CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed) * 1.25, 0.75f);
 	SetFieldOfViewWithInterp(105.0f, 0.25f);
@@ -500,6 +469,28 @@ void AMainCharacterBase::LockToTarget(const FInputActionValue& Value)
 	TargetingManagerComponent->ActivateTargeting();
 }
 
+void AMainCharacterBase::SnapToCharacter(AActor* Target)
+{
+	if (!IsValid(Target)) return;
+
+	//@@@@@@@@ TEMPORARY CODE @@@@@@@@@@@@@@@@@@@@@@@
+	if (ActionTrackingComponent->CurrentComboCount == 0)
+	{
+		//if (CharacterGameplayInfo.CurrentSP < 0.5f) return;
+		//CharacterGameplayInfo.CurrentSP -= 0.5f;
+	}
+
+	FVector startLocation = GetActorLocation();
+	FVector endLocation = Target->GetActorLocation();
+	FVector dirVector = endLocation - startLocation; dirVector.Normalize();
+	SetActorRotation(UKismetMathLibrary::FindLookAtRotation(startLocation, endLocation));
+	SetLocationWithInterp(startLocation + dirVector * (FVector::Distance(startLocation, endLocation) - 75.0f), 2.0f);
+	if (GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) > 400.0f)
+	{
+		SetFieldOfViewWithInterp(130.0f, 3.0f, true);
+	}
+}
+
 float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -535,7 +526,17 @@ void AMainCharacterBase::TryAttack()
 	}
 
 	//Rotate to attack direction using input (1. movement / 2. camera)
-	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
+	if (IsValid(TargetingManagerComponent->GetTargetedCandidate())
+		&& GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) >= 200.0f
+		&& !ActionTrackingComponent->GetIsActionInProgress("Attack")
+		&& !ActionTrackingComponent->GetIsActionInProgress("DashAttack")
+		&& !ActionTrackingComponent->GetIsActionInProgress("JumpAttack")
+		&& WeaponComponent->GetWeaponStat().WeaponType == EWeaponType::E_Melee)
+	{
+		SnapToCharacter(TargetingManagerComponent->GetTargetedCandidate());
+	}
+
+	else if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
 	{
 		if (MovementInputValue.Length() > 0)
 		{
@@ -543,7 +544,7 @@ void AMainCharacterBase::TryAttack()
 				+ FollowingCamera->GetComponentRotation().Yaw;
 			SetActorRotation(FRotator(0.0f, turnAngle, 0.0f));
 		}
-		else
+		else if(ActionTrackingComponent->GetIsActionReady("Attack"))
 		{
 			SetActorRotation(FRotator(0.0f, FollowingCamera->GetComponentRotation().Yaw, 0.0f));
 		}
@@ -658,6 +659,24 @@ TArray<UInteractiveCollisionComponent*> AMainCharacterBase::GetNearInteractionCo
 	return {};
 }
 
+TArray<UAnimMontage*> AMainCharacterBase::GetTargetMeleeAnimMontageList()
+{
+	TArray<UAnimMontage*> targetAnimList;
+	
+	switch (ActionTrackingComponent->CurrentComboType)
+	{
+	case EComboType::E_Jump:
+		targetAnimList = AssetHardPtrInfo.JumpComboAnimMontageList;
+		break;
+	case EComboType::E_Dash:
+		targetAnimList = AssetHardPtrInfo.DashComboAnimMontageList;
+		break;
+	default:
+		targetAnimList = Super::GetTargetMeleeAnimMontageList();
+	}
+	return targetAnimList;
+}
+
 void AMainCharacterBase::StopDashMovement()
 {
 	const FVector& direction = GetMesh()->GetRightVector();
@@ -696,7 +715,13 @@ void AMainCharacterBase::SetAutomaticRotateMode()
 {
 	if (TargetingManagerComponent->GetIsTargetingActivated()) return;
 	
-	SetCameraVerticalAlignmentWithInterp(GetControlRotation().Pitch <= 90.0f ? 0.0f : 360.0f, 0.25f);
+	float currentPitch = GetControlRotation().Pitch;
+	if (currentPitch <= 0.0f || currentPitch >= 360.0f)
+	{
+		currentPitch = currentPitch + 720.0f;
+		currentPitch = FMath::Fmod(currentPitch, 360.0f);
+	}
+	SetCameraVerticalAlignmentWithInterp(currentPitch >= 270.0f ? 360.0f : 0.0f, 0.14f);
 
 	GetWorld()->GetTimerManager().SetTimer(RotationResetTimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
@@ -715,11 +740,23 @@ void AMainCharacterBase::UpdateCameraPitch(float TargetPitch, float InterpSpeed)
 		GetWorld()->GetTimerManager().ClearTimer(CameraRotationAlignmentHandle);
 	}
 	currentRotation.Pitch = FMath::FInterpTo(currentRotation.Pitch, TargetPitch, 0.1f, InterpSpeed);
+	if (currentRotation.Pitch <= 0.0f || currentRotation.Pitch >= 360.0f)
+	{
+		currentRotation.Pitch = currentRotation.Pitch + 720.0f;
+		currentRotation.Pitch = FMath::Fmod(currentRotation.Pitch, 360.0f);
+	}
 	Controller->SetControlRotation(currentRotation);
 }
 
 void AMainCharacterBase::SetManualRotateMode()
 {
+	//clear automatic timer
+	GetWorld()->GetTimerManager().ClearTimer(CameraRotationAlignmentHandle);
+	GetWorld()->GetTimerManager().ClearTimer(RotationResetTimerHandle);
+	CameraRotationAlignmentHandle.Invalidate();
+	RotationResetTimerHandle.Invalidate();
+
+	//Set manual properties
 	CameraBoom->bEnableCameraRotationLag = false;
 	CameraBoom->bUsePawnControlRotation = true;
 	if (Controller != nullptr)
@@ -820,8 +857,6 @@ bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* C
 	{
 		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "Debuff");
 	}
-	
-	ActivateDebuffNiagara((uint8)DebuffInfo.Type);
 
 	FTimerDelegate timerDelegate; 
 
@@ -850,27 +885,6 @@ bool AMainCharacterBase::GetIsAbilityActive(const int32 AbilityID)
 bool AMainCharacterBase::EquipWeapon(const int32 NewWeaponID)
 {
 	return Super::EquipWeapon(NewWeaponID);
-}
-
-void AMainCharacterBase::ActivateDebuffNiagara(uint8 DebuffType)
-{
-	if (!IsValid(BuffNiagaraEmitter)) return;
-	TArray<UNiagaraSystem*>& targetEmitterList = AssetHardPtrInfo.DebuffNiagaraEffectList;
-
-	if (targetEmitterList.IsValidIndex(DebuffType) && targetEmitterList[DebuffType] != nullptr)
-	{
-		BuffNiagaraEmitter->SetRelativeLocation(FVector(0.0f, 0.0f, 125.0f));
-		BuffNiagaraEmitter->Deactivate();
-		BuffNiagaraEmitter->SetAsset((targetEmitterList)[DebuffType], false);
-		BuffNiagaraEmitter->Activate();
-	}
-}
-
-void AMainCharacterBase::DeactivateBuffEffect()
-{
-	if (!IsValid(BuffNiagaraEmitter)) return;
-	BuffNiagaraEmitter->SetAsset(nullptr, false);
-	BuffNiagaraEmitter->Deactivate(); 
 }
 
 void AMainCharacterBase::SetFacialDamageEffect()

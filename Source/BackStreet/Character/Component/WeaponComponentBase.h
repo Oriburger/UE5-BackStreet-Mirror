@@ -160,35 +160,16 @@ public:
 		float CalculateTotalDamage(FCharacterGameplayInfo TargetState, bool& bIsFatalAttack);
 
 	UFUNCTION()
-		void ApplyWeaponDebuff(class ACharacterBase* TargetCharacter);
+		void ApplyWeaponDebuff(class ACharacterBase* TargetCharacter, ECharacterDebuffType DebuffType, ECharacterStatType DebuffStatType);
 private:
 	float CalculateAttackFatality(FCharacterGameplayInfo& GameplayInfoRef
 			, bool bIsJumpAttacking = false, bool bIsDashAttacking = false);
 
 
-// ======		Upgrade		================
+//====== Upgrade ================
 public:	
 	UFUNCTION(BlueprintCallable)
 		bool UpgradeStat(TArray<uint8> NewLevelList);
-
-//-------- Combo ------------------------------------
-public:
-	//increase combo count
-	UFUNCTION(BlueprintCallable)
-		void UpdateComboState();
-
-	//set timer for resetting combo count
-	//UFUNCTION(BlueprintCallable)
-	//	virtual void SetResetComboTimer();
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetCurrentComboCnt() { return WeaponState.ComboCount; }
-
-	UFUNCTION(BlueprintCallable)
-		void ResetComboCnt() { WeaponState.ComboCount = 0; }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsFinalCombo();
 
 //-------- Combat Manager -------------------------------
 public:

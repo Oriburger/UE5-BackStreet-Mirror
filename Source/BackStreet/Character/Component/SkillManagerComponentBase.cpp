@@ -24,6 +24,118 @@ void USkillManagerComponentBase::BeginPlay()
 	InitSkillManager();
 }
 
+bool USkillManagerComponentBase::TryAddSkill(int32 NewSkillID)
+{
+	bool bIsInInventory = false;
+	FSkillInfo skillInfo = GetSkillInfoData(NewSkillID, bIsInInventory);
+	if (!skillInfo.IsValid() || bIsInInventory)
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::TryAddSkill %d failed - Reason %d %d"), NewSkillID, !skillInfo.IsValid(), bIsInInventory);
+		return false;
+	}
+	SkillInventory.Add(NewSkillID, skillInfo);
+	return true;
+}
+
+bool USkillManagerComponentBase::TryRemoveSkill(int32 TargetSkillID)
+{
+	bool bIsInInventory = false;
+	FSkillInfo skillInfo = GetSkillInfoData(TargetSkillID, bIsInInventory);
+	if (!skillInfo.IsValid() || !bIsInInventory)
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::TryRemoveSkill %d failed"), TargetSkillID);
+		return false;
+	}
+	SkillInventory.Remove(TargetSkillID);
+	return true;
+}
+
+bool USkillManagerComponentBase::TryActivateSkill(int32 TargetSkillID)
+{
+	bool bIsInInventory = false;
+	FSkillInfo skillInfo = GetSkillInfoData(TargetSkillID, bIsInInventory);
+	if (!skillInfo.IsValid() || !bIsInInventory || !OwnerCharacterRef.IsValid())
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::TryActivateSkill %d failed - Reason %d %d %d"), TargetSkillID, !skillInfo.IsValid(), !bIsInInventory, !OwnerCharacterRef.IsValid());
+		return false;
+	}
+	
+	if (PrevSkillInfo.PrevActionRef.IsValid())
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkilllManagercomponentBase::TryActivateSkill prevSkill is not Destroyed - Reason %d"), !PrevSkillInfo.PrevActionRef.IsValid());
+		PrevSkillInfo.PrevActionRef.Get()->Destroy();
+	}
+
+	if (!skillInfo.bContainPrevAction)
+	{
+		OwnerCharacterRef.Get()->PlayAnimMontage(skillInfo.SkillAnimation);
+		PrevSkillInfo = skillInfo;
+	}
+	else if (skillInfo.PrevActionClass != nullptr)
+	{
+		ASkillBase* prevAction = Cast<ASkillBase>(GetWorld()->SpawnActor(skillInfo.PrevActionClass));
+		prevAction->InitSkill(FSkillStatStruct(), this, skillInfo); //제거 필요
+		prevAction->ActivateSkill();
+		PrevSkillInfo = skillInfo;
+	}
+	else return false;
+
+	OnSkillActivated.Broadcast(skillInfo);
+	return true;
+}
+
+void USkillManagerComponentBase::DeactivateCurrentSkill()
+{
+	ASkillBase* prevSkillBase;
+	if (PrevSkillInfo.PrevActionRef.IsValid())
+	{
+		prevSkillBase = Cast<ASkillBase>(PrevSkillInfo.PrevActionRef);
+		prevSkillBase->DeactivateSkill();
+		prevSkillBase->Destroy();
+	}
+	PrevSkillInfo.IsValid();
+	OnSkillDeactivated.Broadcast(PrevSkillInfo);
+
+	PrevSkillInfo = FSkillInfo();
+}
+
+FSkillInfo USkillManagerComponentBase::GetSkillInfoData(int32 TargetSkillID, bool& bIsInInventory)
+{
+	if (SkillInventory.Contains(TargetSkillID))
+	{
+		bIsInInventory = true;
+		return SkillInventory[TargetSkillID];
+	}
+
+	//Enemy doesn't use the inventory data. 
+	bIsInInventory = OwnerCharacterRef.IsValid() ? OwnerCharacterRef.Get()->ActorHasTag("Enemy") : false;
+	FString rowName = FString::FromInt(TargetSkillID);
+	if (!SkillInfoCache.Contains(TargetSkillID))
+	{
+		if (SkillInfoTable == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::GetSkillInfoData SkillInfoTable is not found"));
+			return FSkillInfo();
+		}
+		else
+		{
+			FSkillInfo* skillInfo = SkillInfoTable->FindRow<FSkillInfo>(FName(rowName), rowName);
+			if (skillInfo == nullptr)
+			{
+				UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::GetSkillInfoData %d is not found"), TargetSkillID);
+				return FSkillInfo();
+			}
+			return SkillInfoCacheMap.Add(TargetSkillID, *skillInfo);
+		}
+		
+	}
+	return SkillInfoCacheMap[TargetSkillID];
+}
+
+//================================================================
+//================================================================
+//================================================================
+
 void USkillManagerComponentBase::InitSkillManager()
 {
 	//Initialize the owner character ref
@@ -37,7 +149,10 @@ void USkillManagerComponentBase::InitSkillManager()
 
 void USkillManagerComponentBase::InitSkillMap() 
 {
-	UE_LOG(LogTemp, Warning, TEXT("InitSkillMap()"));
+	if (!OwnerCharacterRef.IsValid() || OwnerCharacterRef.Get()->ActorHasTag("Enemy")) return;
+	if (OwnerCharacterRef->WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Melee) return;
+	
+	return;
 }
 
 bool USkillManagerComponentBase::TrySkill(int32 SkillID)
@@ -55,7 +170,7 @@ bool USkillManagerComponentBase::TrySkill(int32 SkillID)
 		//if (skillBase->SkillState.SkillLevel == 0) return false;
 	}
 	skillBase->ActivateSkill();
-	OnSkillActivated.Broadcast(SkillID);
+	//OnSkillActivated.Broadcast(SkillID);
 	return true;
 }
 
