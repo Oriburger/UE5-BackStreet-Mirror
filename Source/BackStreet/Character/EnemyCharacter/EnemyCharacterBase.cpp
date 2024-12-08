@@ -52,6 +52,8 @@ void AEnemyCharacterBase::BeginPlay()
 	SpawnDefaultController();
 	InitEnemyCharacter(CharacterID);
 	SetDefaultWeapon();
+
+	CharacterGameplayInfo.bUseDefaultStat = true;
 }
 
 void AEnemyCharacterBase::InitAsset(int32 NewCharacterID)
@@ -122,7 +124,11 @@ void AEnemyCharacterBase::SetDefaultWeapon()
 	WeaponComponent->InitWeapon(EnemyStat.DefaultWeaponID);
 	if (IsValid(Controller))
 	{
-		Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();
+		AAIControllerBase* controllerRef = Cast<AAIControllerBase>(Controller);
+		if (IsValid(controllerRef))
+		{
+			controllerRef->UpdateNewWeapon();
+		}
 	}
 }
 

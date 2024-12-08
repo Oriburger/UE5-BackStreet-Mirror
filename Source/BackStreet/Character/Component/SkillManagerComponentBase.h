@@ -56,6 +56,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		TArray<AActor*> TraceResultCache;
 
+	UPROPERTY(BlueprintReadWrite)
+		TArray<AActor*> SpawnedActorList;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|")
 		TMap<int32, FSkillInfo> SkillInventory;
