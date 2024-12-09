@@ -176,6 +176,10 @@ public:
 	UFUNCTION()
 		TArray<class UInteractiveCollisionComponent*> GetNearInteractionComponentList();
 
+protected:
+	UFUNCTION()
+		virtual TArray<UAnimMontage*> GetTargetMeleeAnimMontageList() override;
+
 private:
 	UFUNCTION()
 		void StopDashMovement();
