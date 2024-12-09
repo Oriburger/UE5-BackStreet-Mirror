@@ -205,16 +205,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		int32 CurrentDurability = 10;
 
-	//ÄÞº¸ ¼ö
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		int32 ComboCount = 0;
-
 	//temp, meleeonly
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FRotator SlashRotation = FRotator::ZeroRotator;
 
 //-----Weapon Skill------
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FRangedWeaponStateStruct RangedWeaponState;
 

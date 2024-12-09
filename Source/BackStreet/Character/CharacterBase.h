@@ -85,8 +85,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UActionTrackingComponent* ActionTrackingComponent;
 
-public:
-	TWeakObjectPtr<class USkillManagerComponentBase> SkillManagerComponentRef;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class USkillManagerComponentBase* SkillManagerComponent;
 
 //========================================================================
 //========= Action =======================================================
@@ -192,6 +192,8 @@ protected:
 	UFUNCTION()
 		void ResetHitCounter();	
 
+	virtual TArray<UAnimMontage*> GetTargetMeleeAnimMontageList();
+
 	//Knock down with 
 	virtual void KnockDown();
 
@@ -234,7 +236,7 @@ public:
 		void UpdateWeaponStat(FWeaponStatStruct NewStat);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetMaxComboCount() { return AssetHardPtrInfo.MeleeAttackAnimMontageList.Num(); }
+		int32 GetMaxComboCount() { return AssetHardPtrInfo.NormalComboAnimMontageList.Num(); }
 		
 //========================================================================
 //====== Asset / Weapon ==================================================

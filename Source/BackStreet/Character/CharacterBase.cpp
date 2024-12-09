@@ -31,6 +31,7 @@ ACharacterBase::ACharacterBase()
 	DebuffManagerComponent = CreateDefaultSubobject<UDebuffManagerComponent>(TEXT("DEBUFF_MANAGER"));
 	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));;
 	ActionTrackingComponent = CreateDefaultSubobject<UActionTrackingComponent>(TEXT("ACTION_TRACKER"));
+	SkillManagerComponent = CreateDefaultSubobject<USkillManagerComponentBase>(TEXT("SKILL_MANAGER"));
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
 	WeaponComponent->SetupAttachment(GetMesh(), FName("Weapon_R"));
@@ -137,7 +138,7 @@ void ACharacterBase::ResetAirAtkLocationUpdateTimer()
 void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset)
 {
 	FVector currentLocation = GetActorLocation();
-	if (currentLocation.Equals(TargetValue, 10.0f))
+	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? 100.0f : 25.0f))
 	{
 		GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 		OnEndLocationInterp.Broadcast();
@@ -195,7 +196,7 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 
 	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill)
 	{
-		ResetActionState();
+		//ResetActionState();
 	}
 
 	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die)
@@ -206,7 +207,7 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 	//damager side 
 	if (this->GetVelocity().Length() >= 3500.0f)
 	{
-		GamemodeRef.Get()->ActivateSlowHitEffect(0.2f);
+		GamemodeRef.Get()->ActivateSlowHitEffect(0.5f);
 		GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 1000.0f);
 
 		//play smash sound
@@ -222,6 +223,57 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 void ACharacterBase::ResetHitCounter()
 {
 	CharacterGameplayInfo.HitCounter = 0;
+}
+
+TArray<UAnimMontage*> ACharacterBase::GetTargetMeleeAnimMontageList()
+{
+	int32 nextAnimIdx = 0;
+	TArray<UAnimMontage*> targetAnimList;
+
+	switch (WeaponComponent->GetWeaponStat().WeaponType)
+	{
+	case EWeaponType::E_Melee:
+		//check melee anim type
+		if (CharacterGameplayInfo.bIsAirAttacking && GetCharacterMovement()->IsFalling())
+		{
+			if (AssetHardPtrInfo.AirAttackAnimMontageList.Num() > 0)
+			{
+				nextAnimIdx = ActionTrackingComponent->CurrentComboCount % AssetHardPtrInfo.AirAttackAnimMontageList.Num();
+				targetAnimList = AssetHardPtrInfo.AirAttackAnimMontageList;
+
+				if (ActionTrackingComponent->CurrentComboCount == AssetHardPtrInfo.AirAttackAnimMontageList.Num())
+				{
+					TryDownwardAttack();
+					return {};
+				}
+			}
+		}
+		else if (CharacterGameplayInfo.bIsAirAttacking || GetCharacterMovement()->IsFalling())
+		{
+			ResetAirAtkLocationUpdateTimer();
+			if (IsValid(TargetingManagerComponent) && IsValid(TargetingManagerComponent->GetTargetedCharacter()))
+			{
+				TargetingManagerComponent->GetTargetedCharacter()->ResetAirAtkLocationUpdateTimer();
+			}
+			TryDownwardAttack();
+			return {};
+		}
+		else if (AssetHardPtrInfo.NormalComboAnimMontageList.Num() > 0)
+		{
+			nextAnimIdx = ActionTrackingComponent->CurrentComboCount % AssetHardPtrInfo.NormalComboAnimMontageList.Num();
+			targetAnimList = AssetHardPtrInfo.NormalComboAnimMontageList;
+		}
+		break;
+
+	case EWeaponType::E_Shoot:
+		if (AssetHardPtrInfo.ShootAnimMontageList.Num() > 0)
+		{
+			nextAnimIdx = ActionTrackingComponent->CurrentComboCount % AssetHardPtrInfo.ShootAnimMontageList.Num();
+		}
+		targetAnimList = AssetHardPtrInfo.ShootAnimMontageList;
+		break;
+	}
+	return targetAnimList;
 }
 
 void ACharacterBase::KnockDown()
@@ -485,80 +537,42 @@ void ACharacterBase::TryAttack()
 	if (GetWorldTimerManager().IsTimerActive(AtkIntervalHandle)) return;
 	if (!CharacterGameplayInfo.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 
-	CharacterGameplayInfo.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
-	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Attack;
-
-	int32 nextAnimIdx = 0;
+	int32 nextAnimIdx = ActionTrackingComponent->CurrentComboCount;
 	const float attackSpeed = FMath::Clamp(GetCharacterGameplayInfo().GetTotalValue(ECharacterStatType::E_NormalAttackSpeed) * WeaponComponent->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
 	//Choose animation which fit battle situation
-	TArray <UAnimMontage*> targetAnimList;
-	switch (WeaponComponent->GetWeaponStat().WeaponType)
+	TArray <UAnimMontage*> targetAnimList = GetTargetMeleeAnimMontageList();
+	if (targetAnimList.IsEmpty())
 	{
-	case EWeaponType::E_Melee:
-		//check melee anim type
-		if (CharacterGameplayInfo.bIsAirAttacking && GetCharacterMovement()->IsFalling())
-		{
-			if (AssetHardPtrInfo.AirAttackAnimMontageList.Num() > 0)
-			{
-				nextAnimIdx = WeaponComponent->GetCurrentComboCnt() % AssetHardPtrInfo.AirAttackAnimMontageList.Num();
-				targetAnimList = AssetHardPtrInfo.AirAttackAnimMontageList;
-
-				if (WeaponComponent->GetCurrentComboCnt() == AssetHardPtrInfo.AirAttackAnimMontageList.Num())
-				{
-					TryDownwardAttack();
-					return;
-				}
-			}
-		}
-		else if (CharacterGameplayInfo.bIsAirAttacking || GetCharacterMovement()->IsFalling())
-		{
-			ResetAirAtkLocationUpdateTimer();
-			if (IsValid(TargetingManagerComponent) && IsValid(TargetingManagerComponent->GetTargetedCharacter()))
-			{
-				TargetingManagerComponent->GetTargetedCharacter()->ResetAirAtkLocationUpdateTimer();
-			}
-			TryDownwardAttack();
-			return;
-		}
-
-		else if (AssetHardPtrInfo.MeleeAttackAnimMontageList.Num() > 0)
-		{
-			nextAnimIdx = WeaponComponent->GetCurrentComboCnt() % AssetHardPtrInfo.MeleeAttackAnimMontageList.Num();
-			targetAnimList = AssetHardPtrInfo.MeleeAttackAnimMontageList;
-		}
-		break;
-	case EWeaponType::E_Shoot:
-		if (AssetHardPtrInfo.ShootAnimMontageList.Num() > 0)
-		{
-			nextAnimIdx = WeaponComponent->GetCurrentComboCnt() % AssetHardPtrInfo.ShootAnimMontageList.Num();
-		}
-		targetAnimList = AssetHardPtrInfo.ShootAnimMontageList;
-		break;
+		UE_LOG(LogTemp, Error, TEXT("ACharacterBase::TryAttack() - ID : %d, Combo type %d, anim montage list is empty"), CharacterID, (int32)ActionTrackingComponent->CurrentComboType);
+		return;
 	}
-	if (targetAnimList.Num() > 0
+	nextAnimIdx %= targetAnimList.Num();
+	if (targetAnimList.IsValidIndex(nextAnimIdx)
 		&& IsValid(targetAnimList[nextAnimIdx]))
 	{
 		PlayAnimMontage(targetAnimList[nextAnimIdx], attackSpeed + 0.25f);
+		CharacterGameplayInfo.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
+		CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Attack;
 		OnAttackStarted.Broadcast();
 	}
 }
 
 void ACharacterBase::TryUpperAttack()
-{
+{/*
 	if (GetCharacterMovement()->IsFalling()) return;
 	if (CharacterGameplayInfo.bIsAirAttacking) return;
 	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
 
 	CharacterGameplayInfo.bIsAirAttacking = true;
-	WeaponComponent->ResetComboCnt();
+	ActionTrackingComponent->ResetComboCount();
 
 	//LaunchCharcter is called by anim notify on upper attack animation
 
 	if (IsValid(AssetHardPtrInfo.UpperAttackAnimMontage))
 	{
 		PlayAnimMontage(AssetHardPtrInfo.UpperAttackAnimMontage);
-	}
+	}*/
 }
 
 void ACharacterBase::TryDownwardAttack()
@@ -567,11 +581,12 @@ void ACharacterBase::TryDownwardAttack()
 
 	CharacterGameplayInfo.bIsAirAttacking = false;
 	CharacterGameplayInfo.bIsDownwardAttacking = true;
-	WeaponComponent->ResetComboCnt();
+	ActionTrackingComponent->ResetComboCount();
 
 	if (IsValid(AssetHardPtrInfo.DownwardAttackAnimMontage))
 	{
 		PlayAnimMontage(AssetHardPtrInfo.DownwardAttackAnimMontage);
+		ActionTrackingComponent->CurrentComboType = EComboType::E_Jump;
 		OnJumpAttackStarted.Broadcast();
 	}
 }
@@ -589,6 +604,7 @@ void ACharacterBase::TryDashAttack()
 
 	// Activate dash anim with interp to target location
 	PlayAnimMontage(AssetHardPtrInfo.DashAttackAnimMontage);
+	ActionTrackingComponent->CurrentComboType = EComboType::E_Dash;
 	OnDashAttackStarted.Broadcast();
 }
 
@@ -617,14 +633,7 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_KnockedDown) return false;
 
 
-	//스킬 매니저 있는지 확인
-	if (!SkillManagerComponentRef.IsValid())
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to get SkillmanagerBase"));
-		ensure(SkillManagerComponentRef.IsValid());
-		return false;
-	}
-
+	/* @@@@@@@@@@ LEGACY SKILL CODE @@@@@@@@@@
 	//스킬을 보유중인지 확인
 	if (!SkillManagerComponentRef.Get()->IsSkillValid(SkillID))
 	{
@@ -641,15 +650,16 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 			return false;
 		}
 	}
-
 	if(skillBase->SkillState.bIsBlocked) return false;
-	
+	*/
+
+
 	CharacterGameplayInfo.bCanAttack = false;
 	SetActionState(ECharacterActionType::E_Skill);
-	SkillManagerComponentRef.Get()->TrySkill(SkillID);
+	SkillManagerComponent->TryActivateSkill(SkillID);
 	
 	//Reset Combo
-	WeaponComponent->ResetComboCnt();
+	ActionTrackingComponent->ResetComboCount();
 	return true;
 }
 
@@ -676,15 +686,28 @@ void ACharacterBase::InitAsset(int32 NewCharacterID)
 		// Mesh 관련
 		AssetToStream.AddUnique(AssetSoftPtrInfo.CharacterMeshSoftPtr.ToSoftObjectPath());
 
-		if (!AssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList.IsEmpty())
+		if (!AssetSoftPtrInfo.NormalComboAnimMontageSoftPtrList.IsEmpty())
 		{
-			for (int32 i = 0; i < AssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList.Num(); i++)
+			for (int32 i = 0; i < AssetSoftPtrInfo.NormalComboAnimMontageSoftPtrList.Num(); i++)
 			{
-				AssetToStream.AddUnique(AssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList[i].ToSoftObjectPath());
+				AssetToStream.AddUnique(AssetSoftPtrInfo.NormalComboAnimMontageSoftPtrList[i].ToSoftObjectPath());
+			}
+		}
+		if (!AssetSoftPtrInfo.JumpComboAnimMontageSoftPtrList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetSoftPtrInfo.JumpComboAnimMontageSoftPtrList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetSoftPtrInfo.JumpComboAnimMontageSoftPtrList[i].ToSoftObjectPath());
+			}
+		}
+		if (!AssetSoftPtrInfo.DashComboAnimMontageSoftPtrList.IsEmpty())
+		{
+			for (int32 i = 0; i < AssetSoftPtrInfo.DashComboAnimMontageSoftPtrList.Num(); i++)
+			{
+				AssetToStream.AddUnique(AssetSoftPtrInfo.DashComboAnimMontageSoftPtrList[i].ToSoftObjectPath());
 			}
 		}
 
-		AssetToStream.AddUnique(AssetSoftPtrInfo.UpperAttackAnimMontageSoftPtr.ToSoftObjectPath());
 		AssetToStream.AddUnique(AssetSoftPtrInfo.DownwardAttackAnimMontageSoftPtr.ToSoftObjectPath());
 		AssetToStream.AddUnique(AssetSoftPtrInfo.DashAttackAnimMontageSoftPtr.ToSoftObjectPath());
 
@@ -843,19 +866,27 @@ void ACharacterBase::SetAsset()
 
 bool ACharacterBase::InitAnimAsset()
 {
-	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.MeleeAttackAnimMontageSoftPtrList)
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.NormalComboAnimMontageSoftPtrList)
 	{
 		if (animSoftPtr.IsValid())
 		{
-			AssetHardPtrInfo.MeleeAttackAnimMontageList.AddUnique(animSoftPtr.Get());
+			AssetHardPtrInfo.NormalComboAnimMontageList.AddUnique(animSoftPtr.Get());
 		}
 	}
-
-	if (AssetSoftPtrInfo.UpperAttackAnimMontageSoftPtr.IsValid())
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.JumpComboAnimMontageSoftPtrList)
 	{
-		AssetHardPtrInfo.UpperAttackAnimMontage = AssetSoftPtrInfo.UpperAttackAnimMontageSoftPtr.Get();
+		if (animSoftPtr.IsValid())
+		{
+			AssetHardPtrInfo.JumpComboAnimMontageList.AddUnique(animSoftPtr.Get());
+		}
 	}
-
+	for (TSoftObjectPtr<UAnimMontage>& animSoftPtr : AssetSoftPtrInfo.DashComboAnimMontageSoftPtrList)
+	{
+		if (animSoftPtr.IsValid())
+		{
+			AssetHardPtrInfo.DashComboAnimMontageList.AddUnique(animSoftPtr.Get());
+		}
+	}
 	if (AssetSoftPtrInfo.DownwardAttackAnimMontageSoftPtr.IsValid())
 	{
 		AssetHardPtrInfo.DownwardAttackAnimMontage = AssetSoftPtrInfo.DownwardAttackAnimMontageSoftPtr.Get();

@@ -25,7 +25,8 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	FloatingHpBar->SetupAttachment(GetCapsuleComponent());
 	FloatingHpBar->SetRelativeLocation(FVector(0.0f, 0.0f, 85.0f));
 	FloatingHpBar->SetWorldRotation(FRotator(0.0f, 180.0f, 0.0f));
-	FloatingHpBar->SetDrawSize({ 80.0f, 10.0f });
+	FloatingHpBar->SetDrawSize({ 100.0f, 20.0f });
+	FloatingHpBar->SetWidgetSpace(EWidgetSpace::Screen);
 	FloatingHpBar->SetVisibility(false);
 
 	TargetingSupportWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("TARGETING_SUPPORT"));
@@ -34,10 +35,8 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	TargetingSupportWidget->SetWorldRotation(FRotator(0.0f, 180.0f, 0.0f));
 	TargetingSupportWidget->SetRelativeScale3D(FVector(0.15f));
 	TargetingSupportWidget->SetDrawSize({ 500.0f, 500.0f });
+	TargetingSupportWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	TargetingSupportWidget->SetVisibility(false);
-
-	SkillManagerComponent = CreateDefaultSubobject<UEnemySkillManagerComponent>(TEXT("SKILL_MANAGER_"));
-	SkillManagerComponentRef = SkillManagerComponent;
 
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -53,6 +52,8 @@ void AEnemyCharacterBase::BeginPlay()
 	SpawnDefaultController();
 	InitEnemyCharacter(CharacterID);
 	SetDefaultWeapon();
+
+	CharacterGameplayInfo.bUseDefaultStat = true;
 }
 
 void AEnemyCharacterBase::InitAsset(int32 NewCharacterID)
@@ -71,6 +72,7 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
 	AssetSoftPtrInfo.CharacterID = CharacterID = NewCharacterID;
+	SkillManagerComponent->OnSkillDeactivated.AddDynamic(this, &AEnemyCharacterBase::OnSkillDeactivated);
 	
 	if (newStat != nullptr)
 	{
@@ -106,12 +108,27 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	}
 }
 
+void AEnemyCharacterBase::ResetAiBehaviorState()
+{
+	AAIControllerBase* aiControllerRef;
+	aiControllerRef = Cast<AAIControllerBase>(Controller);
+
+	if (IsValid(aiControllerRef) && aiControllerRef->GetBehaviorState() == EAIBehaviorType::E_Skill)
+	{
+		aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Idle);
+	}
+}
+
 void AEnemyCharacterBase::SetDefaultWeapon()
 {
 	WeaponComponent->InitWeapon(EnemyStat.DefaultWeaponID);
 	if (IsValid(Controller))
 	{
-		Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();
+		AAIControllerBase* controllerRef = Cast<AAIControllerBase>(Controller);
+		if (IsValid(controllerRef))
+		{
+			controllerRef->UpdateNewWeapon();
+		}
 	}
 }
 

@@ -64,9 +64,6 @@ public:
 		class UItemInventoryComponent* ItemInventory;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UPlayerSkillManagerComponent* SkillManagerComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UAbilityManagerComponent* AbilityManagerComponent; 
 
 // ------- Throw Test -----------
@@ -178,6 +175,10 @@ public:
 
 	UFUNCTION()
 		TArray<class UInteractiveCollisionComponent*> GetNearInteractionComponentList();
+
+protected:
+	UFUNCTION()
+		virtual TArray<UAnimMontage*> GetTargetMeleeAnimMontageList() override;
 
 private:
 	UFUNCTION()

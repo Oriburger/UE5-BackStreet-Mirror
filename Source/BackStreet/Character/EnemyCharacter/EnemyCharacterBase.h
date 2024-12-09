@@ -36,9 +36,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|UI")
 		class UWidgetComponent* TargetingSupportWidget;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UEnemySkillManagerComponent* SkillManagerComponent;
-
 // ----- Asset & Stat ---------------------
 	UFUNCTION(BlueprintCallable)
 		virtual void InitAsset(int32 NewCharacterID) override;	
@@ -96,6 +93,12 @@ public:
 	//적의 스탯 테이블
 	UPROPERTY(EditDefaultsOnly, Category = "Data|Table")
 		UDataTable* EnemyStatTable;
+
+	UFUNCTION()
+		void ResetAiBehaviorState();
+
+	UFUNCTION()
+		void OnSkillDeactivated(FSkillInfo SkillInfo) { ResetAiBehaviorState(); }
 
 private:
 	//Set default weapon actor using weapon inventory

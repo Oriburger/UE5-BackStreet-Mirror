@@ -135,6 +135,6 @@ private:
 
 	TWeakObjectPtr<class AMainCharacterBase> MainCharacterRef;
 
-	TWeakObjectPtr<class UPlayerSkillManagerComponent> SkillManagerRef;
+	TWeakObjectPtr<class USkillManagerComponentBase> SkillManagerRef;
 
 };

@@ -71,9 +71,6 @@ AMainCharacterBase::AMainCharacterBase()
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
 
-	SkillManagerComponent = CreateDefaultSubobject<UPlayerSkillManagerComponent>(TEXT("SKILL_MANAGER_"));
-	SkillManagerComponentRef = SkillManagerComponent;
-
 	AbilityManagerComponent = CreateDefaultSubobject<UAbilityManagerComponent>(TEXT("ABILITY_MANAGER"));
 
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
@@ -109,18 +106,6 @@ void AMainCharacterBase::BeginPlay()
 
 	AbilityManagerComponent->InitAbilityManager(this);
 	InitCombatUI();
-
-
-	//UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
-
-	//Load SaveData
-	//if (gameInstance->LoadGameSaveData(SavedData)) return;
-	//else
-	//{
-	//	gameInstance->SaveGameData(FSaveData());
-	//}
-	//SetCharacterStatFromSaveData();
-	//ItemInventory->SetItemInventoryFromSaveData();
 	ItemInventory->InitInventory();
 	
 	TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
@@ -191,7 +176,7 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		//SubWeapon
 		EnhancedInputComponent->BindAction(InputActionInfo.ShootAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryShoot);
-
+		
 		//EnhancedInputComponent->BindAction(LockToTargetAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::LockToTarget);
 	}
 }
@@ -352,12 +337,7 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X / 2.0f);
 		AddControllerPitchInput(LookAxisVector.Y / 2.0f);
 		SetManualRotateMode();
-
-		// set timer for automatic rotate mode 
-		if (LookAxisVector.Length() <= 0.25f)
-		{
-			SetAutomaticRotateModeTimer();
-		}
+		SetAutomaticRotateModeTimer();
 	}
 }
 
@@ -378,7 +358,7 @@ void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero()) return;
 	
-	WeaponComponent->ResetComboCnt();
+	ActionTrackingComponent->ResetComboCount();
 	CharacterGameplayInfo.bIsSprinting = true;
 	SetWalkSpeedWithInterp(CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed) * 1.25, 0.75f);
 	SetFieldOfViewWithInterp(105.0f, 0.25f);
@@ -494,7 +474,7 @@ void AMainCharacterBase::SnapToCharacter(AActor* Target)
 	if (!IsValid(Target)) return;
 
 	//@@@@@@@@ TEMPORARY CODE @@@@@@@@@@@@@@@@@@@@@@@
-	if (WeaponComponent->GetCurrentComboCnt() == 0)
+	if (ActionTrackingComponent->CurrentComboCount == 0)
 	{
 		//if (CharacterGameplayInfo.CurrentSP < 0.5f) return;
 		//CharacterGameplayInfo.CurrentSP -= 0.5f;
@@ -679,6 +659,24 @@ TArray<UInteractiveCollisionComponent*> AMainCharacterBase::GetNearInteractionCo
 	return {};
 }
 
+TArray<UAnimMontage*> AMainCharacterBase::GetTargetMeleeAnimMontageList()
+{
+	TArray<UAnimMontage*> targetAnimList;
+	
+	switch (ActionTrackingComponent->CurrentComboType)
+	{
+	case EComboType::E_Jump:
+		targetAnimList = AssetHardPtrInfo.JumpComboAnimMontageList;
+		break;
+	case EComboType::E_Dash:
+		targetAnimList = AssetHardPtrInfo.DashComboAnimMontageList;
+		break;
+	default:
+		targetAnimList = Super::GetTargetMeleeAnimMontageList();
+	}
+	return targetAnimList;
+}
+
 void AMainCharacterBase::StopDashMovement()
 {
 	const FVector& direction = GetMesh()->GetRightVector();
@@ -717,7 +715,13 @@ void AMainCharacterBase::SetAutomaticRotateMode()
 {
 	if (TargetingManagerComponent->GetIsTargetingActivated()) return;
 	
-	SetCameraVerticalAlignmentWithInterp(GetControlRotation().Pitch <= 90.0f ? 0.0f : 360.0f, 0.25f);
+	float currentPitch = GetControlRotation().Pitch;
+	if (currentPitch <= 0.0f || currentPitch >= 360.0f)
+	{
+		currentPitch = currentPitch + 720.0f;
+		currentPitch = FMath::Fmod(currentPitch, 360.0f);
+	}
+	SetCameraVerticalAlignmentWithInterp(currentPitch >= 270.0f ? 360.0f : 0.0f, 0.14f);
 
 	GetWorld()->GetTimerManager().SetTimer(RotationResetTimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
@@ -736,11 +740,23 @@ void AMainCharacterBase::UpdateCameraPitch(float TargetPitch, float InterpSpeed)
 		GetWorld()->GetTimerManager().ClearTimer(CameraRotationAlignmentHandle);
 	}
 	currentRotation.Pitch = FMath::FInterpTo(currentRotation.Pitch, TargetPitch, 0.1f, InterpSpeed);
+	if (currentRotation.Pitch <= 0.0f || currentRotation.Pitch >= 360.0f)
+	{
+		currentRotation.Pitch = currentRotation.Pitch + 720.0f;
+		currentRotation.Pitch = FMath::Fmod(currentRotation.Pitch, 360.0f);
+	}
 	Controller->SetControlRotation(currentRotation);
 }
 
 void AMainCharacterBase::SetManualRotateMode()
 {
+	//clear automatic timer
+	GetWorld()->GetTimerManager().ClearTimer(CameraRotationAlignmentHandle);
+	GetWorld()->GetTimerManager().ClearTimer(RotationResetTimerHandle);
+	CameraRotationAlignmentHandle.Invalidate();
+	RotationResetTimerHandle.Invalidate();
+
+	//Set manual properties
 	CameraBoom->bEnableCameraRotationLag = false;
 	CameraBoom->bUsePawnControlRotation = true;
 	if (Controller != nullptr)
