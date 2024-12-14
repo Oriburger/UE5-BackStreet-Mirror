@@ -6,6 +6,7 @@
 #include "../../../System/AssetSystem/AssetManagerBase.h"
 #include "../../../Global/BackStreetGameModeBase.h"
 #include "../../../Character/CharacterBase.h"
+#include "../../../Character/EnemyCharacter/EnemyCharacterBase.h"
 #include "../../../Character/Component/ActionTrackingComponent.h"
 #include "../../../Character/Component/WeaponComponentBase.h"
 #include "../../../System/AssetSystem/AssetManagerBase.h"

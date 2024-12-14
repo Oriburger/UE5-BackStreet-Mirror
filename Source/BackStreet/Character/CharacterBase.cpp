@@ -4,6 +4,7 @@
 #include "./Component/WeaponComponentBase.h"
 #include "./Component/SkillManagerComponentBase.h"
 #include "./Component/ActionTrackingComponent.h"
+#include "./EnemyCharacter/EnemyCharacterBase.h"
 #include "../Item/Weapon/Ranged/RangedCombatManager.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
@@ -121,6 +122,22 @@ void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, 
 void ACharacterBase::ResetLocationInterpTimer()
 {
 	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
+}
+
+void ACharacterBase::PlayHitAnimMontage()
+{
+	if (GetIsActionActive(ECharacterActionType::E_Skill)) return;
+
+	AAIControllerBase* aiControllerRef = nullptr;
+	aiControllerRef = Cast<AAIControllerBase>(Controller);
+
+	if (!IsValid(aiControllerRef) && aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill) return;
+
+	const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num() - 1);
+	if (AssetHardPtrInfo.HitAnimMontageList.Num() > 0 && IsValid(AssetHardPtrInfo.HitAnimMontageList[randomIdx]))
+	{
+		PlayAnimMontage(AssetHardPtrInfo.HitAnimMontageList[randomIdx]);
+	}
 }
 
 void ACharacterBase::SetAirAtkLocationUpdateTimer()
@@ -375,7 +392,6 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	const float& totalHealthValue = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MaxHealth);
 	float oldClampedHealthValue = CharacterGameplayInfo.CurrentHP;
 	float newClampedHealthValue = 0.0f;
-	AAIControllerBase* aiControllerRef = nullptr;
 
 	CharacterGameplayInfo.CurrentHP = CharacterGameplayInfo.CurrentHP - DamageAmount * (1.0f - FMath::Clamp(0.5f * CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_Defense), 0.0f, 0.5f));
 	newClampedHealthValue = CharacterGameplayInfo.CurrentHP = FMath::Max(0.0f, CharacterGameplayInfo.CurrentHP);
@@ -386,8 +402,6 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	OnHealthChanged.Broadcast(oldClampedHealthValue, newClampedHealthValue);
 	OnDamageReceived.Broadcast();
 
-	aiControllerRef = Cast<AAIControllerBase>(Controller);;
-
 	// =========== 사망 및 애니메이션 처리 ==============
 	if (CharacterGameplayInfo.CurrentHP == 0.0f)
 	{
@@ -395,16 +409,6 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		if (!GetCharacterMovement()->IsFalling())
 		{
 			Die();
-		}
-	}
-	else if (DamageCauser != this && this->CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill 
-		&& !this->CharacterGameplayInfo.bIsAirAttacking && IsValid(aiControllerRef))
-	{
-		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num() - 1);
-		if (AssetHardPtrInfo.HitAnimMontageList.Num() > 0 && IsValid(AssetHardPtrInfo.HitAnimMontageList[randomIdx]) 
-			&& aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill)
-		{
-			PlayAnimMontage(AssetHardPtrInfo.HitAnimMontageList[randomIdx]);
 		}
 	}
 
@@ -501,8 +505,16 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 	knockBackDirection *= Strength;
 	knockBackDirection.Z = 1.0f;
 
-	//GetCharacterMovement()->AddImpulse(knockBackDirection);
-	Cast<ACharacterBase>(Target)->LaunchCharacter(knockBackDirection, true, false);
+	if (Target->ActorHasTag("Enemy"))
+	{
+		AEnemyCharacterBase* knockBackCharacter = Cast<AEnemyCharacterBase>(Target);
+		knockBackCharacter->TakeKnockBack(knockBackDirection, Strength);
+	}
+}
+
+void ACharacterBase::TakeKnockBack(FVector KnockBackDirection, float Strength)
+{
+	LaunchCharacter(KnockBackDirection, true, false);
 }
 
 void ACharacterBase::Die()

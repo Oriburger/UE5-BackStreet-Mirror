@@ -124,6 +124,8 @@ public:
 
 	virtual void Die();
 
+	virtual void TakeKnockBack(FVector KnockBackDirection, float Strength);
+
 	//플레이어가 현재 해당 Action을 수행하고 있는지 반환
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsActionActive(ECharacterActionType Type) { return CharacterGameplayInfo.CharacterActionState == Type; }
@@ -157,6 +159,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void ResetLocationInterpTimer();
+
+	UFUNCTION()
+		void PlayHitAnimMontage();
 	
 	//Set air atk location update event timer
 	//This func is called by upper atk anim montage's notify

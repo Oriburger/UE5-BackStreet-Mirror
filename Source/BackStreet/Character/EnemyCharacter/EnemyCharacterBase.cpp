@@ -132,6 +132,33 @@ void AEnemyCharacterBase::SetDefaultWeapon()
 	}
 }
 
+
+void AEnemyCharacterBase::TakeKnockBack(FVector KnockBackDirection, float Strength)
+{
+	if (IsActorBeingDestroyed()) return;
+	if (GetIsActionActive(ECharacterActionType::E_Die)) return;
+
+	AAIControllerBase* aiControllerRef = nullptr;
+	aiControllerRef = Cast<AAIControllerBase>(Controller);
+
+	if (IsValid(aiControllerRef) && CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill
+		&& aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill)
+	{
+		Super::TakeKnockBack(KnockBackDirection, Strength);
+
+		if (Strength >= 3500)
+		{
+			//SetActionState(ECharacterActionType::E_KnockedDown);
+			KnockDown();
+		}
+		else if (Strength < 3500)
+		{
+			if (GetIsActionActive(ECharacterActionType::E_KnockedDown)) SetActionState(ECharacterActionType::E_Idle);
+			PlayHitAnimMontage();
+		}
+	}
+}
+
 float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -147,7 +174,7 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 
 	if (DamageCauser->ActorHasTag("Player"))
 	{
-		//apply fov hit effect by damage amount
+		//apply fov hit effect by damage amountd
 		float fovValue = 90.0f + FMath::Clamp(DamageAmount/100.0f, 0.0f, 1.0f) * 45.0f;
 		if (Cast<AMainCharacterBase>(DamageCauser)->GetCharacterGameplayInfo().bIsDownwardAttacking)
 		{
@@ -179,10 +206,13 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	}
 	
 	//Check IgnoreHit
-	bool ignoreHitResult = CalculateIgnoreHitProbability(CharacterGameplayInfo.HitCounter);
-	if (ignoreHitResult)
-	{	
-		aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Skill);
+	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_KnockedDown)
+	{
+		bool ignoreHitResult = CalculateIgnoreHitProbability(CharacterGameplayInfo.HitCounter);
+		if (ignoreHitResult)
+		{
+			aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Skill);
+		}
 	}
 
 	return damageAmount;
@@ -339,7 +369,6 @@ bool AEnemyCharacterBase::CalculateIgnoreHitProbability(int32 HitCounter)
 	float ignoreHitProbability = baseProb + (HitCounter * increment);
 
 	float result = UKismetMathLibrary::FMin(maxProb, ignoreHitProbability);
-	UE_LOG(LogTemp, Warning, TEXT("CalcIgnoreHit result : %f"), result);
 
 	if (FMath::FRand() <= result)
 	{
