@@ -250,32 +250,35 @@ TArray<UAnimMontage*> ACharacterBase::GetTargetMeleeAnimMontageList()
 	switch (WeaponComponent->GetWeaponStat().WeaponType)
 	{
 	case EWeaponType::E_Melee:
-		//check melee anim type
-		if (CharacterGameplayInfo.bIsAirAttacking && GetCharacterMovement()->IsFalling())
+		if (!ActorHasTag("Enemy"))
 		{
-			if (AssetHardPtrInfo.AirAttackAnimMontageList.Num() > 0)
+			if (CharacterGameplayInfo.bIsAirAttacking && GetCharacterMovement()->IsFalling())
 			{
-				nextAnimIdx = ActionTrackingComponent->CurrentComboCount % AssetHardPtrInfo.AirAttackAnimMontageList.Num();
-				targetAnimList = AssetHardPtrInfo.AirAttackAnimMontageList;
-
-				if (ActionTrackingComponent->CurrentComboCount == AssetHardPtrInfo.AirAttackAnimMontageList.Num())
+				if (AssetHardPtrInfo.AirAttackAnimMontageList.Num() > 0)
 				{
-					TryDownwardAttack();
-					return {};
+					nextAnimIdx = ActionTrackingComponent->CurrentComboCount % AssetHardPtrInfo.AirAttackAnimMontageList.Num();
+					targetAnimList = AssetHardPtrInfo.AirAttackAnimMontageList;
+
+					if (ActionTrackingComponent->CurrentComboCount == AssetHardPtrInfo.AirAttackAnimMontageList.Num())
+					{
+						TryDownwardAttack();
+						return {};
+					}
 				}
 			}
-		}
-		else if (CharacterGameplayInfo.bIsAirAttacking || GetCharacterMovement()->IsFalling())
-		{
-			ResetAirAtkLocationUpdateTimer();
-			if (IsValid(TargetingManagerComponent) && IsValid(TargetingManagerComponent->GetTargetedCharacter()))
+			else if (CharacterGameplayInfo.bIsAirAttacking || GetCharacterMovement()->IsFalling())
 			{
-				TargetingManagerComponent->GetTargetedCharacter()->ResetAirAtkLocationUpdateTimer();
+				ResetAirAtkLocationUpdateTimer();
+				if (IsValid(TargetingManagerComponent) && IsValid(TargetingManagerComponent->GetTargetedCharacter()))
+				{
+					TargetingManagerComponent->GetTargetedCharacter()->ResetAirAtkLocationUpdateTimer();
+				}
+				TryDownwardAttack();
+				return {};
 			}
-			TryDownwardAttack();
-			return {};
 		}
-		else if (AssetHardPtrInfo.NormalComboAnimMontageList.Num() > 0)
+		//check melee anim type
+		if (AssetHardPtrInfo.NormalComboAnimMontageList.Num() > 0)
 		{
 			nextAnimIdx = ActionTrackingComponent->CurrentComboCount % AssetHardPtrInfo.NormalComboAnimMontageList.Num();
 			targetAnimList = AssetHardPtrInfo.NormalComboAnimMontageList;
