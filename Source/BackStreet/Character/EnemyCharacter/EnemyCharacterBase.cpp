@@ -144,12 +144,10 @@ void AEnemyCharacterBase::TakeKnockBack(FVector KnockBackDirection, float Streng
 	if (IsValid(aiControllerRef) && CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill
 		&& aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill)
 	{
-		Super::TakeKnockBack(KnockBackDirection, Strength);
-
 		if (Strength >= 3500)
 		{
-			//SetActionState(ECharacterActionType::E_KnockedDown);
-			KnockDown();
+			SetActionState(ECharacterActionType::E_KnockedDown);
+			PlayKnockBackAnimMontage();
 		}
 		else if (Strength < 3500)
 		{
