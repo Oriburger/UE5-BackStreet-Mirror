@@ -140,6 +140,39 @@ void ACharacterBase::PlayHitAnimMontage()
 	}
 }
 
+void ACharacterBase::PlayKnockBackAnimMontage()
+{
+	if (GetIsActionActive(ECharacterActionType::E_Skill)) return;
+
+	AAIControllerBase* aiControllerRef = nullptr;
+	aiControllerRef = Cast<AAIControllerBase>(Controller);
+
+	if (!IsValid(aiControllerRef) && aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill) return;
+
+	if (AssetHardPtrInfo.KnockdownAnimMontageList.Num() > 0 && IsValid(AssetHardPtrInfo.KnockdownAnimMontageList[0]))
+	{
+		PlayAnimMontage(AssetHardPtrInfo.KnockdownAnimMontageList[0]);
+	}
+}
+
+TArray<FName> ACharacterBase::GetCurrentMontageSlotName()
+{
+	TArray<FName> slotName;
+
+	UAnimMontage* currentMontage = GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
+
+	if (IsValid(currentMontage))
+	{
+		for (int32 slotTrackIndex = 0; slotTrackIndex < currentMontage->SlotAnimTracks.Num(); slotTrackIndex++)
+		{
+			FSlotAnimationTrack slotAnimationTrack = currentMontage->SlotAnimTracks[slotTrackIndex];
+			slotName.Add(slotAnimationTrack.SlotName);
+		}
+	}
+
+	return slotName;
+}
+
 void ACharacterBase::SetAirAtkLocationUpdateTimer()
 {
 	GetWorldTimerManager().SetTimer(AirAtkLocationUpdateHandle, this, &ACharacterBase::SetAirAttackLocation, 0.1, true);
@@ -308,8 +341,7 @@ void ACharacterBase::KnockDown()
 
 	FTimerDelegate KnockDownDelegate;
 	KnockDownDelegate.BindUFunction(this, "StandUp");
-	GetWorldTimerManager().SetTimer(KnockDownAnimMontageHandle, KnockDownDelegate, 1.0f, false, 2.0f);
-	
+	GetWorldTimerManager().SetTimer(KnockDownAnimMontageHandle, KnockDownDelegate, 1.0f, false, 4.5f);
 }
 
 void ACharacterBase::StandUp()
@@ -366,8 +398,7 @@ void ACharacterBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 
 void ACharacterBase::ResetActionState(bool bForceReset)
 {
-	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die
-		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_KnockedDown) return;
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die) return;
 	if (!bForceReset && CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Stun) return;	
 
 	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Idle;
@@ -501,6 +532,7 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 {
 	if (!IsValid(Target) || Target->IsActorBeingDestroyed()) return;
 	if (Cast<ACharacterBase>(Target)->GetCharacterMovement()->IsFalling()) return;
+	if (GetIsActionActive(ECharacterActionType::E_Skill)) return;
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return;
 
 	FVector knockBackDirection = Target->GetActorLocation() - GetActorLocation();
@@ -518,6 +550,7 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 void ACharacterBase::TakeKnockBack(FVector KnockBackDirection, float Strength)
 {
 	LaunchCharacter(KnockBackDirection, true, false);
+	//SetLocationWithInterp(KnockBackDirection, 1.0f, false);
 }
 
 void ACharacterBase::Die()

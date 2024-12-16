@@ -162,6 +162,12 @@ public:
 
 	UFUNCTION()
 		void PlayHitAnimMontage();
+
+	UFUNCTION()
+		void PlayKnockBackAnimMontage();
+
+	UFUNCTION(BlueprintCallable)
+		TArray<FName> GetCurrentMontageSlotName();
 	
 	//Set air atk location update event timer
 	//This func is called by upper atk anim montage's notify
