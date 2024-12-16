@@ -40,7 +40,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		EAIBehaviorType GetBehaviorState();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		void SetBehaviorState(EAIBehaviorType ActionType);
 	
 
