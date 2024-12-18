@@ -8,7 +8,6 @@
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/SaveSystem/BackStreetGameInstance.h"
 #include "../../System/AbilitySystem/AbilityManagerBase.h"
-#include "../../System/CraftingSystem/CraftBoxBase.h"
 #include "../../System/AssetSystem/AssetManagerBase.h"
 #include "../../Item/ItemBase.h"
 #include "../../Item/ItemBoxBase.h"
@@ -231,10 +230,9 @@ void AMainCharacterBase::ZoomIn()
 void AMainCharacterBase::ZoomOut()
 {
 	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Shoot) return;
-
+	
 	SwitchWeapon(false);
 	SetAimingMode(false);
-	
 	//FollowingCamera attach to CameraBoom Component using Interp ===================
 	FLatentActionInfo LatentInfo;
 	LatentInfo.CallbackTarget = this;
