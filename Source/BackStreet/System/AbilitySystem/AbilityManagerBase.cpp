@@ -24,8 +24,7 @@ void UAbilityManagerComponent::InitAbilityManager(ACharacterBase* NewCharacter)
 	OwnerCharacterRef = NewCharacter;
 
 	//초기화 시점에 진행
-	UDataTable* abilityInfoTable = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/Character/MainCharacter/Data/D_AbilityInfoTable.D_AbilityInfoTable'"));
-	if (!InitAbilityInfoListFromTable(abilityInfoTable))
+	if (!InitAbilityInfoListFromTable())
 	{
 		UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::InitAbilityManager) DataTable is not found!"));
 	}
@@ -237,7 +236,7 @@ int32 UAbilityManagerComponent::GetAbilityListIdx(int32 AbilityID, bool bActiveA
 	return -1;
 }
 
-bool UAbilityManagerComponent::InitAbilityInfoListFromTable(const UDataTable* AbilityInfoTable)
+bool UAbilityManagerComponent::InitAbilityInfoListFromTable()
 {
 	if (AbilityInfoTable == nullptr) return false;
 
