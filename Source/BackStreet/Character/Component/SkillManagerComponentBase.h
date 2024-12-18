@@ -10,6 +10,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateEquiped, int32, SkillID);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateSkillUpdated);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillActivated, FSkillInfo, SkillInfo);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillDeactivated, FSkillInfo, SkillInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillListUpdated, const TArray<FSkillInfo>&, SkillInventory);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BACKSTREET_API USkillManagerComponentBase : public UActorComponent
@@ -30,9 +31,15 @@ public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateSkillDeactivated OnSkillDeactivated;
 
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateSkillListUpdated OnSkillInventoryUpdated;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	
+private:
+	void InitSkillInfoCache();
 
 //========== Basic ==============================
 public:
@@ -56,7 +63,13 @@ public:
 
 //========== Getter ==============================
 	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<int32> GetCraftableIDList();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FSkillInfo GetSkillInfoData(int32 TargetSkillID, bool& bIsInInventory);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<int32> GetPlayerSkillIDList();
 
 	//It must be flushed after using.
 	UPROPERTY(BlueprintReadWrite)
@@ -73,6 +86,7 @@ protected:
 private:
 	TMap<int32, FSkillStatStruct> SkillInfoCache;
 	TMap<int32, FSkillInfo> SkillInfoCacheMap;
+	TArray<int32> PlayerSkillIDList;
 	FSkillInfo PrevSkillInfo;
 
 protected:

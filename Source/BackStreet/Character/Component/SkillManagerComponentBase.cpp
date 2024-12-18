@@ -24,6 +24,30 @@ void USkillManagerComponentBase::BeginPlay()
 	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	OwnerCharacterRef->WeaponComponent->OnMainWeaponUpdated.AddDynamic(this, &USkillManagerComponentBase::ClearAllSkill);
+
+	//Init Skill Map
+	InitSkillInfoCache();
+}
+
+void USkillManagerComponentBase::InitSkillInfoCache()
+{
+	if (!SkillInfoCacheMap.IsEmpty()) return;
+	if (SkillInfoTable != nullptr)
+	{
+		TArray<FName> rowNameList = SkillInfoTable->GetRowNames();
+		for (auto& row : rowNameList)
+		{
+			FString contextString = "";
+			FSkillInfo* skillInfo = SkillInfoTable->FindRow<FSkillInfo>(row, contextString);
+			if (skillInfo == nullptr) continue;
+			SkillInfoCacheMap.Add(skillInfo->SkillID, *skillInfo);
+
+			if (skillInfo->bIsPlayerSkill)
+			{
+				PlayerSkillIDList.Add(skillInfo->SkillID);
+			}
+		}
+	}
 }
 
 bool USkillManagerComponentBase::TryAddSkill(int32 NewSkillID)
@@ -36,6 +60,9 @@ bool USkillManagerComponentBase::TryAddSkill(int32 NewSkillID)
 		return false;
 	}
 	SkillInventory.Add(NewSkillID, skillInfo);
+	TArray<FSkillInfo> skillInfoList;
+	SkillInventory.GenerateValueArray(skillInfoList);
+	OnSkillInventoryUpdated.Broadcast(skillInfoList);
 	return true;
 }
 
@@ -49,6 +76,9 @@ bool USkillManagerComponentBase::TryRemoveSkill(int32 TargetSkillID)
 		return false;
 	}
 	SkillInventory.Remove(TargetSkillID);
+	TArray<FSkillInfo> skillInfoList;
+	SkillInventory.GenerateValueArray(skillInfoList);
+	OnSkillInventoryUpdated.Broadcast(skillInfoList);
 	return true;
 }
 
@@ -101,6 +131,20 @@ void USkillManagerComponentBase::DeactivateCurrentSkill()
 	PrevSkillInfo = FSkillInfo();
 }
 
+TArray<int32> USkillManagerComponentBase::GetCraftableIDList()
+{
+	TArray<int32> resultList;
+
+	for (int32& id : PlayerSkillIDList)
+	{
+		if (!SkillInventory.Contains(id))
+		{
+			resultList.Add(id);
+		}
+	}
+	return resultList;
+}
+
 FSkillInfo USkillManagerComponentBase::GetSkillInfoData(int32 TargetSkillID, bool& bIsInInventory)
 {
 	if (SkillInventory.Contains(TargetSkillID))
@@ -132,6 +176,13 @@ FSkillInfo USkillManagerComponentBase::GetSkillInfoData(int32 TargetSkillID, boo
 		
 	}
 	return SkillInfoCacheMap[TargetSkillID];
+}
+
+TArray<int32> USkillManagerComponentBase::GetPlayerSkillIDList()
+{
+	if(!PlayerSkillIDList.IsEmpty()) return PlayerSkillIDList;
+	InitSkillInfoCache();
+	return PlayerSkillIDList;
 }
 
 
