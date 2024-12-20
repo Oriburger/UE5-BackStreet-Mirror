@@ -3,7 +3,6 @@
 #include "../Component/TargetingManagerComponent.h"
 #include "../Component/WeaponComponentBase.h"
 #include "../Component/SkillManagerComponentBase.h"
-#include "../Component/EnemySkillManagerComponent.h"
 #include "../MainCharacter/MainCharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/MapSystem/NewChapterManagerBase.h"
@@ -93,12 +92,11 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		{
 			if (skillID != 0)
 			{
-				bool result = SkillManagerComponent->AddSkill(skillID);
+				bool result = SkillManagerComponent->TryAddSkill(skillID);
 				UE_LOG(LogTemp, Warning, TEXT("Add Skill %d --- %d"), skillID, (int32)result);
 			}
 		}
 	}
-
 	InitFloatingHpWidget();
 	InitTargetingSupportingWidget();
 

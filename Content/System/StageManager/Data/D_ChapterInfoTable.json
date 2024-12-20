@@ -659,8 +659,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 11, 12, 13 ],
-						"RewardItemProbabilityList": [ 1, 1, 1 ]
+						"RewardItemIDList": [ 11, 12, 13, 14 ],
+						"RewardItemProbabilityList": [ 1, 1, 1, 1 ]
 					}
 				]
 			},
@@ -668,8 +668,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 9, 11, 12, 13, 14 ],
-						"RewardItemProbabilityList": [ 2, 1, 1, 1, 1 ]
+						"RewardItemIDList": [ 9, 11, 12, 13, 14, 15, 16, 17 ],
+						"RewardItemProbabilityList": [ 3, 1, 1, 1, 1, 1, 1, 1 ]
 					}
 				]
 			},
@@ -677,8 +677,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 4, 9, 11, 12, 13, 14 ],
-						"RewardItemProbabilityList": [ 2, 3, 1, 1, 1, 1 ]
+						"RewardItemIDList": [ 9, 11, 12, 13, 14, 15, 16, 17 ],
+						"RewardItemProbabilityList": [ 5, 1, 1, 1, 1, 3, 3, 3 ]
 					}
 				]
 			},
@@ -1514,13 +1514,13 @@
 			"E_Boss":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter01/Chapter01_Boss.Chapter01_Boss"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Boss.Chapter01_Boss"
 				]
 			},
 			"E_Craft":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter01/Chapter01_Craft.Chapter01_Craft"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Craft.Chapter01_Craft"
 				]
 			},
 			"E_MiniGame":

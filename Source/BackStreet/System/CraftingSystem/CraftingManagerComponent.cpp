@@ -6,9 +6,9 @@
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "../../Character/Component/SkillManagerComponentBase.h"
-#include "../../Character/Component/PlayerSkillManagerComponent.h"
 #include "../../Character/Component/WeaponComponentBase.h"
 #include "../../Character/Component/ItemInventoryComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 UCraftingManagerComponent::UCraftingManagerComponent()
 {
@@ -30,90 +30,37 @@ void UCraftingManagerComponent::InitCraftingManager()
 	OwnerActorRef->Tags.Add("CraftingBox");
 	MainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	SkillManagerRef = MainCharacterRef.IsValid() ? MainCharacterRef->SkillManagerComponent : nullptr;
-	
-	bIsSkillCreated = false;
-	bIsDisplayingSkillListSet = false;
 
-	UE_LOG(LogTemp, Warning, TEXT("UCraftingManagerComponent::InitCraftingManager()"));
+	CraftCandidateIDList = GetRandomCraftableSkillIdx(MaxCraftSlotCount);
 }
 
-bool UCraftingManagerComponent::GetIsItemEnough()
+bool UCraftingManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
 {
+	if (!SkillManagerRef.IsValid()) return false;
 	return true;
 }
 
-bool UCraftingManagerComponent::GetIsItemEnoughForCraft(int32 SkillID)
+TArray<int32> UCraftingManagerComponent::GetRandomCraftableSkillIdx(int32 MaxCount)
 {
-	return true;
+	TArray<int32> result = TArray<int32>();
+	TArray<int32> craftableIDList = GetCraftableIDList();
+
+	UE_LOG(LogTemp, Warning, TEXT("UCraftingManagerComponent::GetRandomCraftableSkillIdx(%d) #1 - %d"), MaxCount, craftableIDList.Num());
+
+	while (result.Num() < MaxCount)
+	{
+		if (craftableIDList.IsEmpty()) break;
+
+		const int32 targetIdx = UKismetMathLibrary::RandomInteger(craftableIDList.Num());
+		result.Add(craftableIDList[targetIdx]);
+		craftableIDList.RemoveAt(targetIdx);
+	}
+	UE_LOG(LogTemp, Warning, TEXT("UCraftingManagerComponent::GetRandomCraftableSkillIdx(%d) = %d"), MaxCount, result.Num());
+	return result;
 }
 
-bool UCraftingManagerComponent::ConsumeItem()
+TArray<int32> UCraftingManagerComponent::GetCraftableIDList()
 {
-	return true;
-}
-
-bool UCraftingManagerComponent::GetIsSkillKeepingAvailable()
-{	
-	return true;
-}
-
-void UCraftingManagerComponent::KeepItem(EKeepMat NewKeptItem)
-{
-}
-
-void UCraftingManagerComponent::UnKeepItem()
-{
-}
-
-bool UCraftingManagerComponent::AddSkill(int32 NewSkillID)
-{	
-	return true;
-}
-
-void UCraftingManagerComponent::SetDisplayingSkillList()
-{
-
-}
-
-void UCraftingManagerComponent::KeepSkill(int32 SkillID)
-{
-}
-
-void UCraftingManagerComponent::UnkeepSkill(int32 SkillID)
-{
-}
-
-bool UCraftingManagerComponent::UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel)
-{
-	return true;
-}
-
-TMap<int32, int32> UCraftingManagerComponent::GetSkillCraftMaterialInfo(int32 SkillID)
-{
-	return TMap<int32, int32>();
-}
-
-TMap<int32, int32> UCraftingManagerComponent::UpdateSkillUpgradeRequiredItemList(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel)
-{
-	return TMap<int32, int32>();
-}
-
-TMap<int32, int32> UCraftingManagerComponent::UpdateSkillCraftRequiredItemList(int32 SkillID)
-{
-	return TMap<int32, int32>();
-}
-
-bool UCraftingManagerComponent::UpgradeWeapon(TArray<uint8> NewLevelList)
-{
-	return false;
-}
-
-TArray<uint8> UCraftingManagerComponent::UpdateWeaponUpgradeRequiredItemList(TArray<uint8> NewLevelList)
-{
-	return {};
-}
-
-bool UCraftingManagerComponent::GetIsStatLevelValid(TArray<uint8> NewLevelList)
-{
-	return true;
+	if (!SkillManagerRef.IsValid()) return {};
+	return SkillManagerRef.Get()->GetCraftableIDList();
 }
