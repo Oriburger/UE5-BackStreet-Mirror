@@ -137,7 +137,10 @@ bool UItemInventoryComponent::TryAddWeapon(int32 ItemID, EItemCategoryInfo ItemC
 
 		ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, ItemMap[ItemID].ItemAmount + ItemCount);
 		TryUpdateWeaponState(ItemID - 20000, targetState);
-		OnItemAdded.Broadcast(ItemMap[ItemID], ItemCount);
+		
+		
+		
+		.Broadcast(ItemMap[ItemID], ItemCount);
 	}
 	return true;
 }
