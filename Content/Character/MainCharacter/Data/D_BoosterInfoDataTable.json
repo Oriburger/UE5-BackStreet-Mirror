@@ -1,0 +1,2803 @@
+[
+    {
+        "Name": "1",
+        "AbilityId": 1,
+        "TargetStatMap": {
+            "E_NormalFlame": {
+                "Variable": 0.001,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.05
+            }
+        },
+        "AbilityType": "E_Flame",
+        "AbilityName": "크리티컬 화염 일격 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "5% 확률로 일반 공격이 화염 피해를 가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability02.TX_ICON_ability02'",
+        "bIsRepetitive": false,
+        "FuncName": "ApplyFlame",
+        "VariableInfo": []
+    },
+    {
+        "Name": "2",
+        "AbilityId": 2,
+        "TargetStatMap": {
+            "E_NormalFlame": {
+                "Variable": 0.001,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.15
+            }
+        },
+        "AbilityType": "E_Flame",
+        "AbilityName": "크리티컬 화염 일격 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "15% 확률로 일반 공격이 화염 피해를 가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability07.TX_ICON_ability07'",
+        "bIsRepetitive": false,
+        "FuncName": "ApplyFlame",
+        "VariableInfo": []
+    },
+    {
+        "Name": "3",
+        "AbilityId": 3,
+        "TargetStatMap": {
+            "E_NormalFlame": {
+                "Variable": 0.001,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.3
+            }
+        },
+        "AbilityType": "E_Flame",
+        "AbilityName": "크리티컬 화염 일격 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "30% 확률로 일반 공격이 화염 피해를 가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability12.TX_ICON_ability12'",
+        "bIsRepetitive": true,
+        "FuncName": "ApplyFlame",
+        "VariableInfo": []
+    },
+    {
+        "Name": "4",
+        "AbilityId": 4,
+        "TargetStatMap": {
+            "E_DashAttackFlame": {
+                "Variable": 0.0015,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.07
+            }
+        },
+        "AbilityType": "E_Flame",
+        "AbilityName": "크리티컬 화염 돌진 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "7% 확률로 대시 공격이 화염 피해를 가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability02.TX_ICON_ability02'",
+        "bIsRepetitive": false,
+        "FuncName": "ApplyFlame",
+        "VariableInfo": []
+    },
+    {
+        "Name": "5",
+        "AbilityId": 5,
+        "TargetStatMap": {
+            "E_DashAttackFlame": {
+                "Variable": 0.0015,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.16
+            }
+        },
+        "AbilityType": "E_Flame",
+        "AbilityName": "크리티컬 화염 돌진 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "16% 확률로 대시 공격이 화염 피해를 가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability07.TX_ICON_ability07'",
+        "bIsRepetitive": false,
+        "FuncName": "ApplyFlame",
+        "VariableInfo": []
+    },
+    {
+        "Name": "6",
+        "AbilityId": 6,
+        "TargetStatMap": {
+            "E_DashAttackFlame": {
+                "Variable": 0.0015,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.35
+            }
+        },
+        "AbilityType": "E_Flame",
+        "AbilityName": "크리티컬 화염 돌진 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "35% 확률로 대시 공격이 화염 피해를 가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability12.TX_ICON_ability12'",
+        "bIsRepetitive": false,
+        "FuncName": "ApplyFlame",
+        "VariableInfo": []
+    },
+    {
+        "Name": "7",
+        "AbilityId": 7,
+        "TargetStatMap": {
+            "E_JumpAttackFlame": {
+                "Variable": 0.0015,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.07
+            }
+        },
+        "AbilityType": "E_Flame",
+        "AbilityName": "크리티컬 공중 화염 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "7% 확률로 점프 공격이 화염 피해를 가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability02.TX_ICON_ability02'",
+        "bIsRepetitive": false,
+        "FuncName": "ApplyFlame",
+        "VariableInfo": []
+    },
+    {
+        "Name": "8",
+        "AbilityId": 8,
+        "TargetStatMap": {
+            "E_JumpAttackFlame": {
+                "Variable": 0.0015,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.16
+            }
+        },
+        "AbilityType": "E_Flame",
+        "AbilityName": "크리티컬 공중 화염 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "16% 확률로 점프 공격이 화염 피해를 가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability02.TX_ICON_ability02'",
+        "bIsRepetitive": false,
+        "FuncName": "ApplyFlame",
+        "VariableInfo": []
+    },
+    {
+        "Name": "9",
+        "AbilityId": 9,
+        "TargetStatMap": {
+            "E_JumpAttackFlame": {
+                "Variable": 0.0015,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.35
+            }
+        },
+        "AbilityType": "E_Flame",
+        "AbilityName": "크리티컬 공중 화염 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "35% 확률로 점프 공격이 화염 피해를 가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability02.TX_ICON_ability02'",
+        "bIsRepetitive": false,
+        "FuncName": "ApplyFlame",
+        "VariableInfo": []
+    },
+    {
+        "Name": "10",
+        "AbilityId": 10,
+        "TargetStatMap": {
+            "E_NormalPoison": {
+                "Variable": 0.0001,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "산화 일격 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "일반 공격이 약한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability04.TX_ICON_ability04'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "11",
+        "AbilityId": 11,
+        "TargetStatMap": {
+            "E_NormalPoison": {
+                "Variable": 0.0002,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "산화 일격 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "일반 공격이 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability09.TX_ICON_ability09'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "12",
+        "AbilityId": 12,
+        "TargetStatMap": {
+            "E_NormalPoison": {
+                "Variable": 0.0003,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "산화 일격 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "일반 공격이 강한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability04.TX_ICON_ability04'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "13",
+        "AbilityId": 13,
+        "TargetStatMap": {
+            "E_DashAttackPoison": {
+                "Variable": 0.00015,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "산화 돌진 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "대시 공격이 약한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability04.TX_ICON_ability04'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "14",
+        "AbilityId": 14,
+        "TargetStatMap": {
+            "E_DashAttackPoison": {
+                "Variable": 0.0003,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "산화 돌진 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "대시 공격이 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability09.TX_ICON_ability09'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "15",
+        "AbilityId": 15,
+        "TargetStatMap": {
+            "E_DashAttackPoison": {
+                "Variable": 0.00045,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "산화 돌진 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "대시 공격이 강한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability14.TX_ICON_ability14'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "16",
+        "AbilityId": 16,
+        "TargetStatMap": {
+            "E_JumpAttackPoison": {
+                "Variable": 0.00015,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "공중 산화 공격 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "점프 공격이 약한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability04.TX_ICON_ability04'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "17",
+        "AbilityId": 17,
+        "TargetStatMap": {
+            "E_JumpAttackPoison": {
+                "Variable": 0.0003,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "공중 산화 공격 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "점프 공격이 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability09.TX_ICON_ability09'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "18",
+        "AbilityId": 18,
+        "TargetStatMap": {
+            "E_JumpAttackPoison": {
+                "Variable": 0.00045,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "공중 산화 공격 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "점프 공격이 강한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability14.TX_ICON_ability14'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "19",
+        "AbilityId": 19,
+        "TargetStatMap": {
+            "E_NormalPoison": {
+                "Variable": 0.001,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            },
+            "E_MaxHealth": {
+                "Variable": -0.2,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "고위험 산화 일격 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "최대 체력이 20% 줄어들지만, 일반 공격 시 강한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability04.TX_ICON_ability04'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "20",
+        "AbilityId": 20,
+        "TargetStatMap": {
+            "E_NormalPoison": {
+                "Variable": 0.002,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            },
+            "E_MaxHealth": {
+                "Variable": -0.2,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "고위험 산화 일격 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "최대 체력이 20% 줄어들지만, 일반 공격 시 더욱 강력한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability09.TX_ICON_ability09'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "21",
+        "AbilityId": 21,
+        "TargetStatMap": {
+            "E_NormalPoison": {
+                "Variable": 0.003,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            },
+            "E_MaxHealth": {
+                "Variable": -0.2,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "고위험 산화 일격 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "최대 체력이 20% 줄어들지만, 일반 공격 시 매우 강력한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability14.TX_ICON_ability14'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "22",
+        "AbilityId": 22,
+        "TargetStatMap": {
+            "E_NormalPoison": {
+                "Variable": 0.001,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            },
+            "E_Defense": {
+                "Variable": -0.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "유해성 산화 일격 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "방어력이 50% 줄어들지만, 일반 공격 시 강한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability04.TX_ICON_ability04'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "23",
+        "AbilityId": 23,
+        "TargetStatMap": {
+            "E_NormalPoison": {
+                "Variable": 0.002,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_Defense": {
+                "Variable": -0.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "유해성 산화 일격 (희귀)",
+        "AbilityTier": "E_None",
+        "AbilityDescription": "방어력이 50% 줄어들지만, 일반 공격 시 더욱 강력한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability09.TX_ICON_ability09'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "24",
+        "AbilityId": 24,
+        "TargetStatMap": {
+            "E_NormalPoison": {
+                "Variable": 0.003,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_Defense": {
+                "Variable": -0.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "유해성 산화 일격 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "방어력이 50% 줄어들지만, 일반 공격 시 매우 강력한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability14.TX_ICON_ability14'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "25",
+        "AbilityId": 25,
+        "TargetStatMap": {
+            "E_DashAttackPoison": {
+                "Variable": 0.002,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0
+            },
+            "E_NormalPower": {
+                "Variable": -0.02,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "유해성 산화 돌진 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "일반 공격력이 2% 감소하지만, 대시 공격 시 강력한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability04.TX_ICON_ability04'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "26",
+        "AbilityId": 26,
+        "TargetStatMap": {
+            "E_DashAttackPoison": {
+                "Variable": 0.003,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            },
+            "E_NormalPower": {
+                "Variable": -0.02,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "유해성 산화 돌진 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "일반 공격력이 2% 감소하지만, 대시 공격 시 더욱 강력한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability09.TX_ICON_ability09'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "27",
+        "AbilityId": 27,
+        "TargetStatMap": {
+            "E_DashAttackPoison": {
+                "Variable": 0.004,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            },
+            "E_NormalPower": {
+                "Variable": -0.02,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "유해성 산화 돌진 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "일반 공격력이 2% 감소하지만, 대시 공격 시 매우 강력한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability14.TX_ICON_ability14'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "28",
+        "AbilityId": 28,
+        "TargetStatMap": {
+            "E_DashAttackPoison": {
+                "Variable": 0.002,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0
+            },
+            "E_NormalPower": {
+                "Variable": -0.02,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "유해성 공중 공격 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "일반 공격력이 2% 감소하지만, 점프 공격 시 강력한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability04.TX_ICON_ability04'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "29",
+        "AbilityId": 29,
+        "TargetStatMap": {
+            "E_JumpAttackPoison": {
+                "Variable": 0.003,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            },
+            "E_NormalPower": {
+                "Variable": -0.02,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "유해성 공중 공격 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "일반 공격력이 2% 감소하지만, 점프 공격 시 더욱 강력한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability09.TX_ICON_ability09'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "30",
+        "AbilityId": 30,
+        "TargetStatMap": {
+            "E_JumpAttackPoison": {
+                "Variable": 0.004,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            },
+            "E_NormalPower": {
+                "Variable": -0.02,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Poison",
+        "AbilityName": "유해성 공중 공격 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "일반 공격력이 2% 감소하지만, 점프 공격 시 매우 강력한 산성 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability14.TX_ICON_ability14'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "31",
+        "AbilityId": 31,
+        "TargetStatMap": {
+            "E_NormalSlow": {
+                "Variable": 0.05,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            },
+            "E_NormalPower": {
+                "Variable": 0.02,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "쓰로틀링 일격 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "일반 공격이 조금 강해지며 슬로우 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "32",
+        "AbilityId": 32,
+        "TargetStatMap": {
+            "E_NormalSlow": {
+                "Variable": 0.05,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            },
+            "E_NormalPower": {
+                "Variable": 0.05,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "쓰로틀링 일격 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "일반 공격이 강해지며 슬로우 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "33",
+        "AbilityId": 33,
+        "TargetStatMap": {
+            "E_NormalSlow": {
+                "Variable": 0.05,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 1
+            },
+            "E_NormalPower": {
+                "Variable": 0.1,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "쓰로틀링 일격 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "일반 공격이 매우 강해지며 슬로우 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "34",
+        "AbilityId": 34,
+        "TargetStatMap": {
+            "E_DashAttackSlow": {
+                "Variable": 0.055,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackPower": {
+                "Variable": 0.025,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "쓰로틀링 돌진 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "대시 공격이 조금 강해지며 슬로우 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "35",
+        "AbilityId": 35,
+        "TargetStatMap": {
+            "E_DashAttackSlow": {
+                "Variable": 0.055,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackPower": {
+                "Variable": 0.055,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "쓰로틀링 돌진 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "대시 공격이 더 강해지며 슬로우 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "36",
+        "AbilityId": 36,
+        "TargetStatMap": {
+            "E_DashAttackSlow": {
+                "Variable": 0.055,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackPower": {
+                "Variable": 0.105,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "쓰로틀링 돌진 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "대시 공격이 매우 강해지며 슬로우 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "37",
+        "AbilityId": 37,
+        "TargetStatMap": {
+            "E_JumpAttackSlow": {
+                "Variable": 0.055,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_JumpAttackPower": {
+                "Variable": 0.025,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "공중 쓰로틀링 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "점프 공격이 조금 강해지며 슬로우 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "38",
+        "AbilityId": 38,
+        "TargetStatMap": {
+            "E_JumpAttackSlow": {
+                "Variable": 0.055,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_JumpAttackPower": {
+                "Variable": 0.055,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "공중 쓰로틀링 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "점프 공격이 더 강해지며 슬로우 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "39",
+        "AbilityId": 39,
+        "TargetStatMap": {
+            "E_JumpAttackSlow": {
+                "Variable": 0.055,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_JumpAttackPower": {
+                "Variable": 0.105,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "공중 쓰로틀링 (일반)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "점프 공격이 매우 강해지며 슬로우 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "40",
+        "AbilityId": 40,
+        "TargetStatMap": {
+            "E_MoveSpeed": {
+                "Variable": -0.3,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_NormalPower": {
+                "Variable": 0.1,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "자체 쓰로틀링 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "이동 속도가 30% 감소하지만, 일반 공격력이 10% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "41",
+        "AbilityId": 41,
+        "TargetStatMap": {
+            "E_MoveSpeed": {
+                "Variable": -0.3,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_NormalPower": {
+                "Variable": 0.2,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "자체 쓰로틀링 (일반)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "이동 속도가 30% 감소하지만, 일반 공격력이 20% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "42",
+        "AbilityId": 42,
+        "TargetStatMap": {
+            "E_MoveSpeed": {
+                "Variable": -0.3,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_NormalPower": {
+                "Variable": 0.3,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "자체 쓰로틀링 (일반)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "이동 속도가 30% 감소하지만, 일반 공격력이 30% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "43",
+        "AbilityId": 43,
+        "TargetStatMap": {
+            "E_NormalAttackSpeed": {
+                "Variable": -0.15,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_NormalSlow": {
+                "Variable": 0.2,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "자체 쓰로틀링 일격 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "일반 공격 속도가 15% 감소하지만, 강한 슬로우 피해가 발생한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "44",
+        "AbilityId": 44,
+        "TargetStatMap": {
+            "E_NormalAttackSpeed": {
+                "Variable": -0.15,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_NormalSlow": {
+                "Variable": 0.4,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "자체 쓰로틀링 일격 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "일반 공격 속도가 15% 감소하지만, 더욱 강력한 슬로우 피해가 발생한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "45",
+        "AbilityId": 45,
+        "TargetStatMap": {
+            "E_NormalAttackSpeed": {
+                "Variable": -0.15,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_NormalSlow": {
+                "Variable": 0.6,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "자체 쓰로틀링 일격 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "일반 공격 속도가 15% 감소하지만, 매우 강력한 슬로우 피해가 발생한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "46",
+        "AbilityId": 46,
+        "TargetStatMap": {
+            "E_DashAttackSpeed": {
+                "Variable": -0.15,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackSlow": {
+                "Variable": 0.25,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "자체 쓰로틀링 돌진 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "대시 공격 속도가 15% 감소하지만, 강한 슬로우 피해가 발생한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "47",
+        "AbilityId": 47,
+        "TargetStatMap": {
+            "E_DashAttackSpeed": {
+                "Variable": -0.15,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackSlow": {
+                "Variable": 0.45,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "자체 쓰로틀링 돌진 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "대시 공격 속도가 15% 감소하지만, 강력한 슬로우 피해가 발생한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "48",
+        "AbilityId": 48,
+        "TargetStatMap": {
+            "E_DashAttackSpeed": {
+                "Variable": -0.15,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackSlow": {
+                "Variable": 0.65,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "자체 쓰로틀링 돌진 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "대시 공격 속도가 15% 감소하지만, 매우 강력한 슬로우 피해가 발생한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "49",
+        "AbilityId": 49,
+        "TargetStatMap": {
+            "E_JumpAttackSpeed": {
+                "Variable": -0.15,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackSlow": {
+                "Variable": 0.25,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "자체 공중 쓰로틀링 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "점프 공격 속도가 15% 감소하지만, 슬로우 피해가 발생한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "50",
+        "AbilityId": 50,
+        "TargetStatMap": {
+            "E_JumpAttackSpeed": {
+                "Variable": -0.15,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackSlow": {
+                "Variable": 0.45,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "자체 공중 쓰로틀링 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "점프 공격 속도가 15% 감소하지만, 강력한 슬로우 피해가 발생한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "51",
+        "AbilityId": 51,
+        "TargetStatMap": {
+            "E_JumpAttackSpeed": {
+                "Variable": -0.15,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackSlow": {
+                "Variable": 0.65,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Slow",
+        "AbilityName": "자체 공중 쓰로틀링 (전설)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "점프 공격 속도가 15% 감소하지만, 매우 강력한 슬로우 피해가 발생한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "52",
+        "AbilityId": 52,
+        "TargetStatMap": {
+            "E_MoveSpeed": {
+                "Variable": 0.15,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "보법 최적화 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "이동 속도가 15% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "53",
+        "AbilityId": 53,
+        "TargetStatMap": {
+            "E_MoveSpeed": {
+                "Variable": 0.26,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "보법 최적화 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "이동 속도가 26% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "54",
+        "AbilityId": 54,
+        "TargetStatMap": {
+            "E_MoveSpeed": {
+                "Variable": 0.4,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "보법 최적화 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "이동 속도가 40% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "55",
+        "AbilityId": 55,
+        "TargetStatMap": {
+            "E_RollDelay": {
+                "Variable": -0.2,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "낙법 최적화 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "구르기 딜레이가 20% 감소한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "56",
+        "AbilityId": 56,
+        "TargetStatMap": {
+            "E_RollDelay": {
+                "Variable": -0.3,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "낙법 최적화 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "구르기 딜레이가 30% 감소한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "57",
+        "AbilityId": 57,
+        "TargetStatMap": {
+            "E_RollDelay": {
+                "Variable": -0.4,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "낙법 최적화 (일반)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "구르기 딜레이가 40% 감소한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "58",
+        "AbilityId": 58,
+        "TargetStatMap": {
+            "E_SkillCoolTime": {
+                "Variable": -0.1,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "스킬 최적화 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "전체 스킬 쿨타임이 10% 감소한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "59",
+        "AbilityId": 59,
+        "TargetStatMap": {
+            "E_SkillCoolTime": {
+                "Variable": -0.35,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "스킬 최적화 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "전체 스킬 쿨타임이 35% 감소한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "60",
+        "AbilityId": 60,
+        "TargetStatMap": {
+            "E_SkillCoolTime": {
+                "Variable": -0.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "스킬 최적화 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "전체 스킬 쿨타임이 50% 감소한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "61",
+        "AbilityId": 61,
+        "TargetStatMap": {
+            "E_NormalAttackSpeed": {
+                "Variable": 0.05,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "일격 최적화 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "일반 공격 속도가 5% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "62",
+        "AbilityId": 62,
+        "TargetStatMap": {
+            "E_NormalAttackSpeed": {
+                "Variable": 0.2,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "일격 최적화 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "일반 공격 속도가 20% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "63",
+        "AbilityId": 63,
+        "TargetStatMap": {
+            "E_NormalAttackSpeed": {
+                "Variable": 0.35,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "일격 최적화 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "일반 공격 속도가 35% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "64",
+        "AbilityId": 64,
+        "TargetStatMap": {
+            "E_DashAttackSpeed": {
+                "Variable": 0.08,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "돌진 최적화 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "대시 공격 속도가 8% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "65",
+        "AbilityId": 65,
+        "TargetStatMap": {
+            "E_DashAttackSpeed": {
+                "Variable": 0.25,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "돌진 최적화 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "대시 공격 속도가 25% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "66",
+        "AbilityId": 66,
+        "TargetStatMap": {
+            "E_DashAttackSpeed": {
+                "Variable": 0.45,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "돌진 최적화 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "대시 공격 속도가 45% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "67",
+        "AbilityId": 67,
+        "TargetStatMap": {
+            "E_JumpAttackSpeed": {
+                "Variable": 0.08,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "공중 공격 최적화 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "점프 공격 속도가 8% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "68",
+        "AbilityId": 68,
+        "TargetStatMap": {
+            "E_JumpAttackSpeed": {
+                "Variable": 0.24,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "공중 공격 최적화 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "점프 공격 속도가 24% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "69",
+        "AbilityId": 69,
+        "TargetStatMap": {
+            "E_JumpAttackSpeed": {
+                "Variable": 0.4,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "공중 공격 최적화 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "점프 공격 속도가 40% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "70",
+        "AbilityId": 70,
+        "TargetStatMap": {
+            "E_MoveSpeed": {
+                "Variable": 0.45,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_MaxHealth": {
+                "Variable": -0.1,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Action",
+        "AbilityName": "호흡 곤란",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "최대 체력이 10% 감소하지만, 이동 속도가 45% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "0",
+        "AbilityId": 0,
+        "TargetStatMap": {},
+        "AbilityType": "E_None",
+        "AbilityName": "None",
+        "AbilityTier": "E_None",
+        "AbilityDescription": "None",
+        "AbilityIcon": "None",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "0",
+        "AbilityId": 0,
+        "TargetStatMap": {},
+        "AbilityType": "E_None",
+        "AbilityName": "None",
+        "AbilityTier": "E_None",
+        "AbilityDescription": "None",
+        "AbilityIcon": "None",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "73",
+        "AbilityId": 73,
+        "TargetStatMap": {
+            "E_MaxHealth": {
+                "Variable": 0.15,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "배터리 강화 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "최대 체력이 15% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability05.TX_ICON_ability05'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "74",
+        "AbilityId": 74,
+        "TargetStatMap": {
+            "E_MaxHealth": {
+                "Variable": 0.25,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "배터리 강화 (일반)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "최대 체력이 25% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability10.TX_ICON_ability10'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "75",
+        "AbilityId": 75,
+        "TargetStatMap": {
+            "E_MaxHealth": {
+                "Variable": 0.35,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "배터리 강화 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "최대 체력이 35% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability17.TX_ICON_ability17'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "76",
+        "AbilityId": 76,
+        "TargetStatMap": {
+            "E_HealItemPerformance": {
+                "Variable": 0.3,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.1
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "힐팩 강화 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "10% 확률로 회복 아이템으로 회복되는 양이 30% 늘어난다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability05.TX_ICON_ability05'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "77",
+        "AbilityId": 77,
+        "TargetStatMap": {
+            "E_HealItemPerformance": {
+                "Variable": 0.35,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.1
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "힐팩 강화 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "10% 확률로 회복 아이템으로 회복되는 양이 35% 늘어난다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability10.TX_ICON_ability10'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "78",
+        "AbilityId": 78,
+        "TargetStatMap": {
+            "E_HealItemPerformance": {
+                "Variable": 0.3,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.1
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "힐팩 강화 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "10% 확률로 회복 아이템으로 회복되는 양이 45% 늘어난다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability17.TX_ICON_ability17'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "79",
+        "AbilityId": 79,
+        "TargetStatMap": {
+            "E_SubWeaponCapacity": {
+                "Variable": 1.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.2
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "보조무기 슬롯 강화 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "보조무기 최대 보유량을 1.5배로 늘린다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability05.TX_ICON_ability05'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "80",
+        "AbilityId": 80,
+        "TargetStatMap": {
+            "E_SubWeaponCapacity": {
+                "Variable": 2,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.2
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "보조무기 슬롯 강화 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "보조무기 최대 보유량을 2배로 늘린다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability09.TX_ICON_ability09'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "81",
+        "AbilityId": 81,
+        "TargetStatMap": {
+            "E_SubWeaponCapacity": {
+                "Variable": 3,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.2
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "보조무기 슬롯 강화 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "보조무기 최대 보유량을 3배로 늘린다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability14.TX_ICON_ability14'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "82",
+        "AbilityId": 82,
+        "TargetStatMap": {
+            "E_LuckyDrop": {
+                "Variable": 2,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.25
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "럭키 드롭 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "처치 시 25%의 확률로 조합재료(몹 드롭 아이템)을 2배 더 제공한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability05.TX_ICON_ability05'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "83",
+        "AbilityId": 83,
+        "TargetStatMap": {
+            "E_LuckyDrop": {
+                "Variable": 3,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.25
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "럭키 드롭 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "처치 시 25%의 확률로 조합재료(몹 드롭 아이템)을 3배 더 제공한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability09.TX_ICON_ability09'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "84",
+        "AbilityId": 84,
+        "TargetStatMap": {
+            "E_LuckyDrop": {
+                "Variable": 4,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.25
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "럭키 드롭 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "처치 시 25%의 확률로 조합재료(몹 드롭 아이템)을 4배 더 제공한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability16.TX_ICON_ability16'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "85",
+        "AbilityId": 85,
+        "TargetStatMap": {
+            "E_NormalFatality": {
+                "Variable": 0.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.3
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "치명 일격 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "일반 공격 시 치명타 피해량이 2배 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability05.TX_ICON_ability05'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "86",
+        "AbilityId": 86,
+        "TargetStatMap": {
+            "E_NormalFatality": {
+                "Variable": 1.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.3
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "치명 일격 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "일반 공격 시 치명타 피해량이 3배 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability10.TX_ICON_ability10'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "87",
+        "AbilityId": 87,
+        "TargetStatMap": {
+            "E_NormalFatality": {
+                "Variable": 2.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.3
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "치명 일격 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "일반 공격 시 치명타 피해량이 4배 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability14.TX_ICON_ability14'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "88",
+        "AbilityId": 88,
+        "TargetStatMap": {
+            "E_NormalFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.05
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "일격 히트 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "일반 공격 시 치명타 확률이 5% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability05.TX_ICON_ability05'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "89",
+        "AbilityId": 89,
+        "TargetStatMap": {
+            "E_NormalFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.1
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "일격 히트 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "일반 공격 시 치명타 확률이 10% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability10.TX_ICON_ability10'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "90",
+        "AbilityId": 90,
+        "TargetStatMap": {
+            "E_NormalFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.15
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "일격 히트 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "일반 공격 시 치명타 확률이 15% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability14.TX_ICON_ability14'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "91",
+        "AbilityId": 91,
+        "TargetStatMap": {
+            "E_DashAttackFatality": {
+                "Variable": 2.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.05
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "치명 돌진 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "일반 공격 시 치명타 피해량이 2.5배 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability05.TX_ICON_ability05'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "92",
+        "AbilityId": 92,
+        "TargetStatMap": {
+            "E_DashAttackFatality": {
+                "Variable": 3.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.05
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "치명 돌진 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "일반 공격 시 치명타 피해량이 3.5배 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability10.TX_ICON_ability10'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "93",
+        "AbilityId": 93,
+        "TargetStatMap": {
+            "E_DashAttackFatality": {
+                "Variable": 4.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.05
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "치명 돌진 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "일반 공격 시 치명타 피해량이 4.5배 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability14.TX_ICON_ability14'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "94",
+        "AbilityId": 94,
+        "TargetStatMap": {
+            "E_DashAttackFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.07
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "돌진 히트 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "대시 공격 시 치명타 확률이 7% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability05.TX_ICON_ability05'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "95",
+        "AbilityId": 95,
+        "TargetStatMap": {
+            "E_DashAttackFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.12
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "돌진 히트 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "대시 공격 시 치명타 확률이 12% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability10.TX_ICON_ability10'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "96",
+        "AbilityId": 96,
+        "TargetStatMap": {
+            "E_DashAttackFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.17
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "돌진 히트 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "대시 공격 시 치명타 확률이 17% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability10.TX_ICON_ability10'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "97",
+        "AbilityId": 97,
+        "TargetStatMap": {
+            "E_JumpAttackFatality": {
+                "Variable": 2.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.05
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "치명 공중 공격 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "점프 공격 시 치명타 피해량이 2.5배 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability05.TX_ICON_ability05'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "98",
+        "AbilityId": 98,
+        "TargetStatMap": {
+            "E_JumpAttackFatality": {
+                "Variable": 3.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.05
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "치명 공중 공격 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "점프 공격 시 치명타 피해량이 3.5배 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability10.TX_ICON_ability10'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "99",
+        "AbilityId": 99,
+        "TargetStatMap": {
+            "E_JumpAttackFatality": {
+                "Variable": 4.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.05
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "치명 공중 공격 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "점프 공격 시 치명타 피해량이 4.5배 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability14.TX_ICON_ability14'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "100",
+        "AbilityId": 100,
+        "TargetStatMap": {
+            "E_JumpAttackFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.07
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "공중 히트 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "점프 공격 시 치명타 확률이 7% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability05.TX_ICON_ability05'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "101",
+        "AbilityId": 101,
+        "TargetStatMap": {
+            "E_JumpAttackFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.12
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "공중 히트 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "점프 공격 시 치명타 확률이 12% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability10.TX_ICON_ability10'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "102",
+        "AbilityId": 102,
+        "TargetStatMap": {
+            "E_JumpAttackFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.17
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "공중 히트 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "점프 공격 시 치명타 확률이 17% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability14.TX_ICON_ability14'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "103",
+        "AbilityId": 103,
+        "TargetStatMap": {
+            "E_JumpAttackFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.02
+            },
+            "E_NormalFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.02
+            },
+            "E_DashAttackFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.02
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "히트 레이트 강화 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "모든 공격의 치명타 확률이 2% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability05.TX_ICON_ability05'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "104",
+        "AbilityId": 104,
+        "TargetStatMap": {
+            "E_JumpAttackFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.03
+            },
+            "E_NormalFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.03
+            },
+            "E_DashAttackFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.03
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "히트 레이트 강화 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "모든 공격의 치명타 확률이 3% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability09.TX_ICON_ability09'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "105",
+        "AbilityId": 105,
+        "TargetStatMap": {
+            "E_JumpAttackFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.04
+            },
+            "E_NormalFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.04
+            },
+            "E_DashAttackFatality": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.04
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "히트 레이트 강화 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "모든 공격의 치명타 확률이 4% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability15.TX_ICON_ability15'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "106",
+        "AbilityId": 106,
+        "TargetStatMap": {
+            "E_JumpAttackFatality": {
+                "Variable": 1.2,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.02
+            },
+            "E_NormalFatality": {
+                "Variable": 1.2,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.02
+            },
+            "E_DashAttackFatality": {
+                "Variable": 1.2,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.02
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "치명타 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "모든 공격의 치명타 피해량이 1.2배 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability05.TX_ICON_ability05'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "107",
+        "AbilityId": 107,
+        "TargetStatMap": {
+            "E_JumpAttackFatality": {
+                "Variable": 1.3,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.02
+            },
+            "E_NormalFatality": {
+                "Variable": 1.3,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.02
+            },
+            "E_DashAttackFatality": {
+                "Variable": 1.3,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.02
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "치명타 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "모든 공격의 치명타 피해량이 1.3배 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability09.TX_ICON_ability09'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "108",
+        "AbilityId": 108,
+        "TargetStatMap": {
+            "E_JumpAttackFatality": {
+                "Variable": 1.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.02
+            },
+            "E_NormalFatality": {
+                "Variable": 1.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.02
+            },
+            "E_DashAttackFatality": {
+                "Variable": 1.5,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0.02
+            }
+        },
+        "AbilityType": "E_SpecialAction",
+        "AbilityName": "치명타 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "모든 공격의 치명타 피해량이 1.5배 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability15.TX_ICON_ability15'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "109",
+        "AbilityId": 109,
+        "TargetStatMap": {
+            "E_NormalStun": {
+                "Variable": 0.03,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.5
+            },
+            "E_NormalPower": {
+                "Variable": 0.05,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 일격 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "일반 공격력이 5% 증가하며 확률적으로 스턴 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "110",
+        "AbilityId": 110,
+        "TargetStatMap": {
+            "E_NormalStun": {
+                "Variable": 0,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_NormalPower": {
+                "Variable": 0.15,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 일격 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "일반 공격력이 15% 증가하며 확률적으로 스턴 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "111",
+        "AbilityId": 111,
+        "TargetStatMap": {
+            "E_NormalStun": {
+                "Variable": 0,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_NormalPower": {
+                "Variable": 0.25,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 일격 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "일반 공격력이 25% 증가하며 확률적으로 스턴 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "112",
+        "AbilityId": 112,
+        "TargetStatMap": {
+            "E_DashAttackStun": {
+                "Variable": 0.04,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackPower": {
+                "Variable": 0.07,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 돌진 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "대시 공격력이 7% 증가하며 확률적으로 스턴 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "113",
+        "AbilityId": 113,
+        "TargetStatMap": {
+            "E_DashAttackStun": {
+                "Variable": 0,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackPower": {
+                "Variable": 0.17,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 돌진 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "대시 공격력이 17% 증가하며 확률적으로 스턴 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "114",
+        "AbilityId": 114,
+        "TargetStatMap": {
+            "E_DashAttackStun": {
+                "Variable": 0,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackPower": {
+                "Variable": 0.27,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 돌진 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "대시 공격력이 27% 증가하며 확률적으로 스턴 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "115",
+        "AbilityId": 115,
+        "TargetStatMap": {
+            "E_DashAttackStun": {
+                "Variable": 0.04,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackPower": {
+                "Variable": 0.07,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 공중 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "점프 공격력이 7% 증가하며 확률적으로 스턴 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "116",
+        "AbilityId": 116,
+        "TargetStatMap": {
+            "E_DashAttackStun": {
+                "Variable": 0,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackPower": {
+                "Variable": 0.17,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 공중 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "점프 공격력이 17% 증가하며 확률적으로 스턴 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability08.TX_ICON_ability08'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "117",
+        "AbilityId": 117,
+        "TargetStatMap": {
+            "E_DashAttackStun": {
+                "Variable": 0,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackPower": {
+                "Variable": 0.27,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 공중 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "점프 공격력이 27% 증가하며 확률적으로 스턴 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability13.TX_ICON_ability13'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "118",
+        "AbilityId": 118,
+        "TargetStatMap": {
+            "E_NormalStun": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.1
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 일격 강화 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "일반 공격 시 스턴 피해를 입힐 확률이 10% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "119",
+        "AbilityId": 119,
+        "TargetStatMap": {
+            "E_NormalStun": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.2
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 일격 강화 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "일반 공격 시 스턴 피해를 입힐 확률이 20% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "120",
+        "AbilityId": 120,
+        "TargetStatMap": {
+            "E_NormalStun": {
+                "Variable": 0,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.3
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 일격 강화 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "일반 공격 시 스턴 피해를 입힐 확률이 30% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "121",
+        "AbilityId": 121,
+        "TargetStatMap": {
+            "E_StunResist": {
+                "Variable": 0.3,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 저항 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "스턴 피해에 저항력이 30% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "122",
+        "AbilityId": 122,
+        "TargetStatMap": {
+            "E_StunResist": {
+                "Variable": 0.4,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 저항 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "스턴 피해에 저항력이 40% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "123",
+        "AbilityId": 123,
+        "TargetStatMap": {
+            "E_StunResist": {
+                "Variable": 0.3,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "프리징 저항 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "스턴 피해에 저항력이 50% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "124",
+        "AbilityId": 124,
+        "TargetStatMap": {
+            "E_NormalStun": {
+                "Variable": 0.8,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.01
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "출력 이상 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "일반 공격 시 1% 확률로 매우 강한 스턴 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "125",
+        "AbilityId": 125,
+        "TargetStatMap": {
+            "E_NormalStun": {
+                "Variable": 0.8,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.02
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "출력 이상 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "일반 공격 시 2% 확률로 매우 강한 스턴 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability12.TX_ICON_ability12'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "126",
+        "AbilityId": 126,
+        "TargetStatMap": {
+            "E_NormalStun": {
+                "Variable": 0.8,
+                "bIsContainProbability": true,
+                "ProbabilityValue": 0.03
+            }
+        },
+        "AbilityType": "E_Stun",
+        "AbilityName": "출력 이상 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "일반 공격 시 3% 확률로 매우 강한 스턴 피해를 입힌다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability03.TX_ICON_ability03'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "127",
+        "AbilityId": 127,
+        "TargetStatMap": {
+            "E_NormalPower": {
+                "Variable": 0.01,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackPower": {
+                "Variable": 0.01,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_JumpAttackPower": {
+                "Variable": 0.01,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "시스템 성능 강화 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "모든 공격력이 1% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability05.TX_ICON_ability05'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "128",
+        "AbilityId": 128,
+        "TargetStatMap": {
+            "E_NormalPower": {
+                "Variable": 0.02,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackPower": {
+                "Variable": 0.02,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_JumpAttackPower": {
+                "Variable": 0.02,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "시스템 성능 강화 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "모든 공격력이 2% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability10.TX_ICON_ability10'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "129",
+        "AbilityId": 129,
+        "TargetStatMap": {
+            "E_NormalPower": {
+                "Variable": 0.03,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_DashAttackPower": {
+                "Variable": 0.03,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            },
+            "E_JumpAttackPower": {
+                "Variable": 0.03,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "시스템 성능 강화 (희귀)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "모든 공격력이 3% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability14.TX_ICON_ability14'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "130",
+        "AbilityId": 130,
+        "TargetStatMap": {
+            "E_Defense": {
+                "Variable": 0,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "방어 성능 강화 (일반)",
+        "AbilityTier": "E_Common",
+        "AbilityDescription": "방어력이 10% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability05.TX_ICON_ability05'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "131",
+        "AbilityId": 131,
+        "TargetStatMap": {
+            "E_Defense": {
+                "Variable": 0,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "방어 성능 강화 (희귀)",
+        "AbilityTier": "E_Rare",
+        "AbilityDescription": "방어력이 30% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability10.TX_ICON_ability10'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    },
+    {
+        "Name": "132",
+        "AbilityId": 132,
+        "TargetStatMap": {
+            "E_Defense": {
+                "Variable": 0,
+                "bIsContainProbability": false,
+                "ProbabilityValue": 0
+            }
+        },
+        "AbilityType": "E_Item",
+        "AbilityName": "방어 성능 강화 (전설)",
+        "AbilityTier": "E_Legendary",
+        "AbilityDescription": "방어력이 50% 증가한다",
+        "AbilityIcon": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Ability/TX_ICON_ability14.TX_ICON_ability14'",
+        "bIsRepetitive": false,
+        "FuncName": "None",
+        "VariableInfo": []
+    }
+]

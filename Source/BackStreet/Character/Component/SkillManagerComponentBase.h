@@ -75,6 +75,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		TArray<AActor*> TraceResultCache;
 
+	UPROPERTY(BlueprintReadWrite)
+		TArray<AActor*> SpawnedActorList;
+
 //======= Ref =========
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|")

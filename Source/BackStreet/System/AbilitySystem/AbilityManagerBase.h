@@ -41,11 +41,18 @@ UENUM(BlueprintType)
 enum class EAbilityType : uint8
 {
 	E_None						UMETA(DisplayName = "None"),
+	//Legacy
 	E_BasicStat					UMETA(DisplayName = "BasicStat"),
 	E_Debuff					UMETA(DisplayName = "Debuff"),
 	E_Action					UMETA(DisplayName = "Action"),
 	E_Item						UMETA(DisplayName = "Item"),
-	E_SpecialAction				UMETA(DisplayName = "SpecialAction")
+	E_SpecialAction				UMETA(DisplayName = "SpecialAction"),
+
+	//New 
+	E_Flame						UMETA(DisplayName = "Flame"),
+	E_Poison					UMETA(DisplayName = "Poison"),
+	E_Slow						UMETA(DisplayName = "Slow"),
+	E_Stun						UMETA(DisplayName = "Stun"),
 };
 
 USTRUCT(BlueprintType)
@@ -129,6 +136,11 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+//--------- Property ----------------------------------------------------
+public:
+	UPROPERTY(EditDefaultsOnly)
+		UDataTable* AbilityInfoTable;
+
 //--------- Function ----------------------------------------------------
 public:
 	// Active Ability getter 함수
@@ -182,7 +194,7 @@ protected:
 		int32 GetAbilityListIdx(int32 AbilityID, bool bActiveAbilityOnly = false);
 
 private:
-	bool InitAbilityInfoListFromTable(const UDataTable* AbilityInfoTable);
+	bool InitAbilityInfoListFromTable();
 	//이전 단계의 어빌리티가 뽑혔는지를 체크한다. 
 	bool CanPickAbility(int32 AbilityID);
 
