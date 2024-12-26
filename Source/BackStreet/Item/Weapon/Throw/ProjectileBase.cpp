@@ -27,7 +27,7 @@ AProjectileBase::AProjectileBase()
 
 	TargetingCollision = CreateDefaultSubobject<USphereComponent>(TEXT("TARGETING_COLLISION"));
 	TargetingCollision->SetupAttachment(RootComponent);
-	TargetingCollision->SetWorldScale3D(FVector(5.0f));
+	TargetingCollision->SetWorldScale3D(FVector(0.01f));
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PROJECTILE_MESH"));
 	Mesh->SetupAttachment(RootComponent);
@@ -46,7 +46,7 @@ AProjectileBase::AProjectileBase()
 	TrailParticle->SetRelativeLocation(FVector(0.0f));
 	TrailParticle->bAutoActivate = false;
 
-	InitialLifeSpan = 10.0f;
+	InitialLifeSpan = ProjectileStat.LifeTime;
 	this->Tags.Add("Projectile");
 }
 
@@ -54,9 +54,14 @@ AProjectileBase::AProjectileBase()
 void AProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();	
+
+	SetOwnerCharacter(Cast<ACharacterBase>(this->GetOwner()));
 	
+	// Homing
+	TargetingCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnTargetBeginOverlap);
+
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnProjectileBeginOverlap);
-	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnTargetBeginOverlap);
+
 	SphereCollision->OnComponentHit.AddDynamic(this, &AProjectileBase::OnProjectileHit);
 
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
@@ -173,8 +178,30 @@ void AProjectileBase::InitProjectile(ACharacterBase* NewCharacterRef, FProjectil
 
 void AProjectileBase::UpdateProjectileStat(FProjectileStatStruct NewStat)
 {
-	ProjectileStat = NewStat;
-	ProjectileMovement->bIsHomingProjectile = ProjectileStat.bIsHoming; 
+	//This is Shit. If you add stat, definitely add it to this code.
+	ProjectileStat.ProjectileID = NewStat.ProjectileID;
+	ProjectileStat.ProjectileName = NewStat.ProjectileName;
+	ProjectileStat.Description = NewStat.Description;
+	ProjectileStat.bIsExplosive = NewStat.bIsExplosive;
+	ProjectileStat.bIsBullet = NewStat.bIsBullet;
+	ProjectileStat.ProjectileSpeed = NewStat.ProjectileSpeed;
+	ProjectileStat.ProjectileDamage = NewStat.ProjectileDamage;
+	ProjectileStat.GravityScale = NewStat.GravityScale;
+	ProjectileStat.LifeTime = NewStat.LifeTime;
+	ProjectileStat.bIsHoming = NewStat.bIsHoming;
+	ProjectileStat.HomingAcceleration = NewStat.HomingAcceleration;
+	ProjectileStat.TargetingCollisionScale = NewStat.TargetingCollisionScale;
+	ProjectileStat.DebuffInfoOverride = NewStat.DebuffInfoOverride;
+
+	// ProjectileStat Debuff info override
+	if (ProjectileStat.DebuffInfoOverride)
+	{
+		ProjectileStat.DebuffInfo = NewStat.DebuffInfo;
+	}
+
+	TargetingCollision->SetWorldScale3D(FVector(ProjectileStat.TargetingCollisionScale));
+	InitialLifeSpan = ProjectileStat.LifeTime;
+	SetLifeSpan(ProjectileStat.LifeTime);
 	ProjectileMovement->ProjectileGravityScale =  ProjectileStat.bIsBullet ? 0.0f : 1.0f;
 	ProjectileMovement->InitialSpeed = ProjectileStat.ProjectileSpeed;
 	ProjectileMovement->MaxSpeed = ProjectileStat.ProjectileSpeed;
@@ -187,15 +214,12 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 	if (!ProjectileMovement->IsActive()) return;
 	if (!OwnerCharacterRef.IsValid() || !GamemodeRef.IsValid()) return;
 	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Item")) return;
-	if (OtherActor == OwnerCharacterRef.Get()) return;
+	if (OtherActor == OwnerCharacterRef.Get()) return; 
 
 	FString name = UKismetSystemLibrary::GetDisplayName(OtherActor);
 
 	if (OtherActor->ActorHasTag("Character"))
 	{
-		//It would be change later
-		if(!ProjectileState.bCanAttackCauser&& (OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1]))) return;
-
 		//디버프가 있다면?
 		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(ProjectileStat.DebuffInfo, OwnerCharacterRef.Get());
 
@@ -247,13 +271,23 @@ void AProjectileBase::OnProjectileHit(UPrimitiveComponent* HitComponet, AActor* 
 }
 
 void AProjectileBase::OnTargetBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{		
+{	
+	if (ProjectileStat.ProjectileID == 0) return;
 	if (!IsValid(OtherActor) || !OwnerCharacterRef.IsValid()) return;
-	if ( OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
-	if (!ProjectileStat.bIsHoming || OtherActor == OwnerCharacterRef.Get() || !bIsActivated) return;
+	if (!OtherActor->ActorHasTag("Character")) return;
+	if (OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1]) || OtherActor == this) return;
+	if (OtherActor == OwnerCharacterRef.Get()) return;
+	if (!ProjectileStat.bIsHoming) return;
 
-	ProjectileMovement->HomingTargetComponent = OverlappedComp;
-	ProjectileMovement->bIsHomingProjectile = true;
+	if (OtherActor->ActorHasTag("Player"))
+	{
+		ACharacterBase* targetCharacter = Cast<ACharacterBase>(OtherActor);
+		USceneComponent* TargetComponent = targetCharacter->GetCapsuleComponent();
+
+		ProjectileMovement->HomingTargetComponent = TargetComponent;
+		ProjectileMovement->bIsHomingProjectile = true;
+		ProjectileMovement->HomingAccelerationMagnitude = ProjectileStat.HomingAcceleration;
+	}
 }
 
 void AProjectileBase::Explode()
@@ -300,6 +334,7 @@ void AProjectileBase::ActivateProjectileMovement()
 	ProjectileMovement->Activate();
 	if (IsValid(TrailParticle))
 	{
+		TrailParticle->ResetSystem();
 		TrailParticle->bAutoActivate = true;
 	}
 	bIsActivated = true; 

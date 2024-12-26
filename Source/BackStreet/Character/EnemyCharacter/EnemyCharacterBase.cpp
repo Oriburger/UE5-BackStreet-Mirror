@@ -373,7 +373,6 @@ bool AEnemyCharacterBase::CalculateIgnoreHitProbability(int32 HitCounter)
 		return true;
 	}
 	else return false;
-	return false;
 }
 
 void AEnemyCharacterBase::SetInstantHpWidgetVisibility()

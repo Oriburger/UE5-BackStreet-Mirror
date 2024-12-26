@@ -20,13 +20,13 @@ struct FProjectileStatStruct : public FTableRowBase
 public:
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		int32 ProjectileID = 0;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FName ProjectileName;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FName Description;
 
 	//폭발 타입의 발사체인지? (RadialDamage)
@@ -48,12 +48,25 @@ public:
 	//중력 스케일
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float GravityScale = 1.0f;
+	
+	//발사체 수명
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		float LifeTime = 10.0f;
 
 	//유도가 되는지?
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsHoming = false;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bIsHoming"))
+		float HomingAcceleration = 0.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bIsHoming"))
+		float TargetingCollisionScale = 0.0f;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool DebuffInfoOverride;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "DebuffInfoOverride"))
 		FDebuffInfoStruct DebuffInfo;
 };
 
