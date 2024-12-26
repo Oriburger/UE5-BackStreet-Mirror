@@ -4,6 +4,7 @@
 #include "./Component/WeaponComponentBase.h"
 #include "./Component/SkillManagerComponentBase.h"
 #include "./Component/ActionTrackingComponent.h"
+#include "./EnemyCharacter/EnemyCharacterBase.h"
 #include "../Item/Weapon/Ranged/RangedCombatManager.h"
 #include "../Global/BackStreetGameModeBase.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
@@ -123,6 +124,55 @@ void ACharacterBase::ResetLocationInterpTimer()
 	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 }
 
+void ACharacterBase::PlayHitAnimMontage()
+{
+	if (GetIsActionActive(ECharacterActionType::E_Skill)) return;
+
+	AAIControllerBase* aiControllerRef = nullptr;
+	aiControllerRef = Cast<AAIControllerBase>(Controller);
+
+	if (!IsValid(aiControllerRef) && aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill) return;
+
+	const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num() - 1);
+	if (AssetHardPtrInfo.HitAnimMontageList.Num() > 0 && IsValid(AssetHardPtrInfo.HitAnimMontageList[randomIdx]))
+	{
+		PlayAnimMontage(AssetHardPtrInfo.HitAnimMontageList[randomIdx]);
+	}
+}
+
+void ACharacterBase::PlayKnockBackAnimMontage()
+{
+	if (GetIsActionActive(ECharacterActionType::E_Skill)) return;
+
+	AAIControllerBase* aiControllerRef = nullptr;
+	aiControllerRef = Cast<AAIControllerBase>(Controller);
+
+	if (!IsValid(aiControllerRef) && aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill) return;
+
+	if (AssetHardPtrInfo.KnockdownAnimMontageList.Num() > 0 && IsValid(AssetHardPtrInfo.KnockdownAnimMontageList[0]))
+	{
+		PlayAnimMontage(AssetHardPtrInfo.KnockdownAnimMontageList[0]);
+	}
+}
+
+TArray<FName> ACharacterBase::GetCurrentMontageSlotName()
+{
+	TArray<FName> slotName;
+
+	UAnimMontage* currentMontage = GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
+
+	if (IsValid(currentMontage))
+	{
+		for (int32 slotTrackIndex = 0; slotTrackIndex < currentMontage->SlotAnimTracks.Num(); slotTrackIndex++)
+		{
+			FSlotAnimationTrack slotAnimationTrack = currentMontage->SlotAnimTracks[slotTrackIndex];
+			slotName.Add(slotAnimationTrack.SlotName);
+		}
+	}
+
+	return slotName;
+}
+
 void ACharacterBase::SetAirAtkLocationUpdateTimer()
 {
 	GetWorldTimerManager().SetTimer(AirAtkLocationUpdateHandle, this, &ACharacterBase::SetAirAttackLocation, 0.1, true);
@@ -233,32 +283,35 @@ TArray<UAnimMontage*> ACharacterBase::GetTargetMeleeAnimMontageList()
 	switch (WeaponComponent->GetWeaponStat().WeaponType)
 	{
 	case EWeaponType::E_Melee:
-		//check melee anim type
-		if (CharacterGameplayInfo.bIsAirAttacking && GetCharacterMovement()->IsFalling())
+		if (!ActorHasTag("Enemy"))
 		{
-			if (AssetHardPtrInfo.AirAttackAnimMontageList.Num() > 0)
+			if (CharacterGameplayInfo.bIsAirAttacking && GetCharacterMovement()->IsFalling())
 			{
-				nextAnimIdx = ActionTrackingComponent->CurrentComboCount % AssetHardPtrInfo.AirAttackAnimMontageList.Num();
-				targetAnimList = AssetHardPtrInfo.AirAttackAnimMontageList;
-
-				if (ActionTrackingComponent->CurrentComboCount == AssetHardPtrInfo.AirAttackAnimMontageList.Num())
+				if (AssetHardPtrInfo.AirAttackAnimMontageList.Num() > 0)
 				{
-					TryDownwardAttack();
-					return {};
+					nextAnimIdx = ActionTrackingComponent->CurrentComboCount % AssetHardPtrInfo.AirAttackAnimMontageList.Num();
+					targetAnimList = AssetHardPtrInfo.AirAttackAnimMontageList;
+
+					if (ActionTrackingComponent->CurrentComboCount == AssetHardPtrInfo.AirAttackAnimMontageList.Num())
+					{
+						TryDownwardAttack();
+						return {};
+					}
 				}
 			}
-		}
-		else if (CharacterGameplayInfo.bIsAirAttacking || GetCharacterMovement()->IsFalling())
-		{
-			ResetAirAtkLocationUpdateTimer();
-			if (IsValid(TargetingManagerComponent) && IsValid(TargetingManagerComponent->GetTargetedCharacter()))
+			else if (CharacterGameplayInfo.bIsAirAttacking || GetCharacterMovement()->IsFalling())
 			{
-				TargetingManagerComponent->GetTargetedCharacter()->ResetAirAtkLocationUpdateTimer();
+				ResetAirAtkLocationUpdateTimer();
+				if (IsValid(TargetingManagerComponent) && IsValid(TargetingManagerComponent->GetTargetedCharacter()))
+				{
+					TargetingManagerComponent->GetTargetedCharacter()->ResetAirAtkLocationUpdateTimer();
+				}
+				TryDownwardAttack();
+				return {};
 			}
-			TryDownwardAttack();
-			return {};
 		}
-		else if (AssetHardPtrInfo.NormalComboAnimMontageList.Num() > 0)
+		//check melee anim type
+		if (AssetHardPtrInfo.NormalComboAnimMontageList.Num() > 0)
 		{
 			nextAnimIdx = ActionTrackingComponent->CurrentComboCount % AssetHardPtrInfo.NormalComboAnimMontageList.Num();
 			targetAnimList = AssetHardPtrInfo.NormalComboAnimMontageList;
@@ -288,8 +341,7 @@ void ACharacterBase::KnockDown()
 
 	FTimerDelegate KnockDownDelegate;
 	KnockDownDelegate.BindUFunction(this, "StandUp");
-	GetWorldTimerManager().SetTimer(KnockDownAnimMontageHandle, KnockDownDelegate, 1.0f, false, 2.0f);
-	
+	GetWorldTimerManager().SetTimer(KnockDownAnimMontageHandle, KnockDownDelegate, 1.0f, false, 4.5f);
 }
 
 void ACharacterBase::StandUp()
@@ -346,8 +398,7 @@ void ACharacterBase::UpdateWeaponStat(FWeaponStatStruct NewStat)
 
 void ACharacterBase::ResetActionState(bool bForceReset)
 {
-	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die
-		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_KnockedDown) return;
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die) return;
 	if (!bForceReset && CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Stun) return;	
 
 	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Idle;
@@ -375,7 +426,6 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	const float& totalHealthValue = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MaxHealth);
 	float oldClampedHealthValue = CharacterGameplayInfo.CurrentHP;
 	float newClampedHealthValue = 0.0f;
-	AAIControllerBase* aiControllerRef = nullptr;
 
 	CharacterGameplayInfo.CurrentHP = CharacterGameplayInfo.CurrentHP - DamageAmount * (1.0f - FMath::Clamp(0.5f * CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_Defense), 0.0f, 0.5f));
 	newClampedHealthValue = CharacterGameplayInfo.CurrentHP = FMath::Max(0.0f, CharacterGameplayInfo.CurrentHP);
@@ -386,8 +436,6 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	OnHealthChanged.Broadcast(oldClampedHealthValue, newClampedHealthValue);
 	OnDamageReceived.Broadcast();
 
-	aiControllerRef = Cast<AAIControllerBase>(Controller);;
-
 	// =========== 사망 및 애니메이션 처리 ==============
 	if (CharacterGameplayInfo.CurrentHP == 0.0f)
 	{
@@ -395,16 +443,6 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		if (!GetCharacterMovement()->IsFalling())
 		{
 			Die();
-		}
-	}
-	else if (DamageCauser != this && this->CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill 
-		&& !this->CharacterGameplayInfo.bIsAirAttacking && IsValid(aiControllerRef))
-	{
-		const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num() - 1);
-		if (AssetHardPtrInfo.HitAnimMontageList.Num() > 0 && IsValid(AssetHardPtrInfo.HitAnimMontageList[randomIdx]) 
-			&& aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill)
-		{
-			PlayAnimMontage(AssetHardPtrInfo.HitAnimMontageList[randomIdx]);
 		}
 	}
 
@@ -494,6 +532,7 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 {
 	if (!IsValid(Target) || Target->IsActorBeingDestroyed()) return;
 	if (Cast<ACharacterBase>(Target)->GetCharacterMovement()->IsFalling()) return;
+	if (GetIsActionActive(ECharacterActionType::E_Skill)) return;
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return;
 
 	FVector knockBackDirection = Target->GetActorLocation() - GetActorLocation();
@@ -501,8 +540,17 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 	knockBackDirection *= Strength;
 	knockBackDirection.Z = 1.0f;
 
-	//GetCharacterMovement()->AddImpulse(knockBackDirection);
-	Cast<ACharacterBase>(Target)->LaunchCharacter(knockBackDirection, true, false);
+	if (Target->ActorHasTag("Enemy"))
+	{
+		AEnemyCharacterBase* knockBackCharacter = Cast<AEnemyCharacterBase>(Target);
+		knockBackCharacter->TakeKnockBack(knockBackDirection, Strength);
+	}
+}
+
+void ACharacterBase::TakeKnockBack(FVector KnockBackDirection, float Strength)
+{
+	LaunchCharacter(KnockBackDirection, true, false);
+	//SetLocationWithInterp(KnockBackDirection, 1.0f, false);
 }
 
 void ACharacterBase::Die()

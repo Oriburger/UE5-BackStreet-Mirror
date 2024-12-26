@@ -100,6 +100,9 @@ public:
 	UFUNCTION()
 		void OnSkillDeactivated(FSkillInfo SkillInfo) { ResetAiBehaviorState(); }
 
+	UFUNCTION()
+		virtual void TakeKnockBack(FVector KnockBackDirection, float Strength) override;
+
 private:
 	//Set default weapon actor using weapon inventory
 	UFUNCTION()

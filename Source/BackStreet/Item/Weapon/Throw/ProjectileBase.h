@@ -83,7 +83,7 @@ protected:
 
 //------ 기본 함수  ------------------
 public:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void InitProjectile(class ACharacterBase* NewCharacterRef, FProjectileAssetInfoStruct NewAssetInfo, FProjectileStatStruct NewStatInfo);
 
 	UFUNCTION(BlueprintCallable)
