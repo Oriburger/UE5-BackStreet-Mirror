@@ -532,6 +532,7 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 {
 	if (!IsValid(Target) || Target->IsActorBeingDestroyed()) return;
 	if (Cast<ACharacterBase>(Target)->GetCharacterMovement()->IsFalling()) return;
+	if (Cast<ACharacterBase>(Target)->ActorHasTag("Boss")) return;
 	if (GetIsActionActive(ECharacterActionType::E_Skill)) return;
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return;
 
