@@ -6,6 +6,7 @@
 #include "../../../System/AssetSystem/AssetManagerBase.h"
 #include "../../../Global/BackStreetGameModeBase.h"
 #include "../../../Character/CharacterBase.h"
+#include "../../../Character/EnemyCharacter/EnemyCharacterBase.h"
 #include "../../../Character/Component/ActionTrackingComponent.h"
 #include "../../../Character/Component/WeaponComponentBase.h"
 #include "../../../System/AssetSystem/AssetManagerBase.h"
@@ -116,7 +117,8 @@ void UMeleeCombatManager::MeleeAttack()
 			}
 			
 			//Activate Melee Hit Effect
-			ActivateMeleeHitEffect(target->GetActorLocation(), target, bIsFatalAttack);
+			ActivateMeleeHitEffect(target->GetActorLocation(), target, bIsFatalAttack 
+				|| (WeaponComponentRef.Get()->WeaponStat.WeaponKnockBackStrength > 3500));
 
 			//Apply Knockback
 			if (!target->ActorHasTag("Boss")
@@ -146,7 +148,7 @@ void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, AActor
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player"))
 	{
 		const float dilationValue = 0.8;
-		GamemodeRef.Get()->ActivateSlowHitEffect(dilationValue);
+		GamemodeRef.Get()->ActivateSlowHitEffect(bImpactEffect ? dilationValue * 2.0f : dilationValue);
 	}
 
 	//Spawn emitter
