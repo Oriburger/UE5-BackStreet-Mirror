@@ -270,6 +270,65 @@ void AProjectileBase::OnProjectileHit(UPrimitiveComponent* HitComponet, AActor* 
 		GetWorldTimerManager().SetTimer(AutoExplodeTimer, this, &AProjectileBase::Explode, 1.5f, false);
 }
 
+void AProjectileBase::CheckBeginLocationOverlap(float SphereRadius, float Distance, bool IsCharacterBase)
+{
+	FVector sphereStartLocation;
+	FVector sphereEndLocation;
+	FVector spherePose;
+	TArray<TEnumAsByte<EObjectTypeQuery>> objectTypes;
+	TArray<AActor*> actorsToIgnore;
+	TArray<AActor*> sphereOverlapActors;
+	actorsToIgnore.Add(OwnerCharacterRef.Get());
+
+	if (IsCharacterBase)
+	{
+		sphereStartLocation = OwnerCharacterRef.Get()->GetActorLocation();
+	}
+	else sphereStartLocation = Cast<ACharacterBase>(GetOwner())->WeaponComponent->GetComponentLocation();
+	
+	sphereEndLocation = OwnerCharacterRef.Get()->GetActorForwardVector() * Distance;
+	spherePose = sphereStartLocation + sphereEndLocation;
+	objectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
+
+	DrawDebugSphere(GetWorld(), spherePose, SphereRadius, 12, FColor(181, 0, 0), true, -1, 0, 2);
+
+	bool result = UKismetSystemLibrary::SphereOverlapActors(GetWorld(), spherePose, SphereRadius, objectTypes, nullptr, actorsToIgnore, sphereOverlapActors);
+	if (result)
+	{
+		for (AActor* overlapActor : sphereOverlapActors)
+		{
+			if (overlapActor->ActorHasTag("Player"))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("sphereOverlap Actors : Player"));
+				ACharacterBase* player = Cast<ACharacterBase>(overlapActor);
+				if (IsValid(player))
+				{
+					player->TryAddNewDebuff(ProjectileStat.DebuffInfo, OwnerCharacterRef.Get());
+				}
+				if (ProjectileStat.bIsExplosive)
+				{
+					Explode();
+					return;
+				}
+				else
+				{
+					bool bIsFatalAttack = false;
+					const float totalDamage = Cast<ACharacterBase>(GetOwner())->WeaponComponent->CalculateTotalDamage(Cast<ACharacterBase>(overlapActor)->GetCharacterGameplayInfo(), bIsFatalAttack);
+					UGameplayStatics::ApplyDamage(overlapActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
+					
+					GetWorld()->GetTimerManager().SetTimer(DestroyWithEffectTimer,
+						FTimerDelegate::CreateLambda([&]()
+							{
+								UE_LOG(LogTemp, Warning, TEXT("destroywitheffect"));
+								DestroyWithEffect(OwnerCharacterRef.Get()->GetActorLocation(), true);
+								GetWorld()->GetTimerManager().ClearTimer(DestroyWithEffectTimer);
+							}), 0.1f, false);
+				}
+			}
+		}
+	}
+}
+
 void AProjectileBase::OnTargetBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {	
 	if (ProjectileStat.ProjectileID == 0) return;
