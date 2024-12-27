@@ -12,7 +12,7 @@ public:
 
 //======== Basic Info ==================================
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		int32 SkillID;
+		int32 SkillID = 0;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FName SkillName;
