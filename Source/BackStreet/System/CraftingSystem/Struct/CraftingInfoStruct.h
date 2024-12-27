@@ -22,10 +22,10 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TArray<uint8> RequiredMaterial;
+		TArray<uint8> RequiredMaterial;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	float StatByLevel;
+		float StatByLevel = 0.0f;
 };
 
 USTRUCT(BlueprintType)

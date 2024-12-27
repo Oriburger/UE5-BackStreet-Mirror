@@ -232,7 +232,7 @@ public:
 		int32 GridSize = 3;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Config")
-		FVector2D CurrentStageCoordinate;	
+		FVector2D CurrentStageCoordinate = FVector2D(0.0f);	
 
 	//blocked stage list, this value determines shape of chapter
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")

@@ -71,7 +71,7 @@ public:
 
 	//어빌리티의 분류 (어떤 스탯을 강화할 것인지?)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		EAbilityType AbilityType;
+		EAbilityType AbilityType = EAbilityType::E_None;
 
 	//어빌리티명
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
