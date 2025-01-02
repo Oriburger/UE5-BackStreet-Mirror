@@ -101,7 +101,7 @@ public:
 		void OnSkillDeactivated(FSkillInfo SkillInfo) { ResetAiBehaviorState(); }
 
 	UFUNCTION()
-		void TakeKnockBack(float knockbackForce, float knockbackResist);
+		void TakeKnockBack(float KnockbackForce, float KnockbackResist);
 
 private:
 	//Set default weapon actor using weapon inventory
