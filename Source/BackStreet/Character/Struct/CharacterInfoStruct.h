@@ -172,6 +172,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 0.8f), Category = "Default")
 		float DefaultStunResist = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 1.0f), Category = "Default")
+		float DefaultKnockBackResist = 0.0f;
 };
 
 USTRUCT(BlueprintType)
