@@ -218,7 +218,7 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 
 	FString name = UKismetSystemLibrary::GetDisplayName(OtherActor);
 
-	if (OtherActor->ActorHasTag("Character"))
+	if (OtherActor->ActorHasTag("Player"))
 	{
 		//디버프가 있다면?
 		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(ProjectileStat.DebuffInfo, OwnerCharacterRef.Get());
@@ -290,8 +290,6 @@ void AProjectileBase::CheckBeginLocationOverlap(float SphereRadius, float Distan
 	spherePose = sphereStartLocation + sphereEndLocation;
 	objectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
 
-	DrawDebugSphere(GetWorld(), spherePose, SphereRadius, 12, FColor(181, 0, 0), true, -1, 0, 2);
-
 	bool result = UKismetSystemLibrary::SphereOverlapActors(GetWorld(), spherePose, SphereRadius, objectTypes, nullptr, actorsToIgnore, sphereOverlapActors);
 	if (result)
 	{
@@ -299,12 +297,12 @@ void AProjectileBase::CheckBeginLocationOverlap(float SphereRadius, float Distan
 		{
 			if (overlapActor->ActorHasTag("Player"))
 			{
-				UE_LOG(LogTemp, Warning, TEXT("sphereOverlap Actors : Player"));
 				ACharacterBase* player = Cast<ACharacterBase>(overlapActor);
 				if (IsValid(player))
 				{
 					player->TryAddNewDebuff(ProjectileStat.DebuffInfo, OwnerCharacterRef.Get());
 				}
+
 				if (ProjectileStat.bIsExplosive)
 				{
 					Explode();
@@ -315,11 +313,10 @@ void AProjectileBase::CheckBeginLocationOverlap(float SphereRadius, float Distan
 					bool bIsFatalAttack = false;
 					const float totalDamage = Cast<ACharacterBase>(GetOwner())->WeaponComponent->CalculateTotalDamage(Cast<ACharacterBase>(overlapActor)->GetCharacterGameplayInfo(), bIsFatalAttack);
 					UGameplayStatics::ApplyDamage(overlapActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
-					
+
 					GetWorld()->GetTimerManager().SetTimer(DestroyWithEffectTimer,
 						FTimerDelegate::CreateLambda([&]()
 							{
-								UE_LOG(LogTemp, Warning, TEXT("destroywitheffect"));
 								DestroyWithEffect(OwnerCharacterRef.Get()->GetActorLocation(), true);
 								GetWorld()->GetTimerManager().ClearTimer(DestroyWithEffectTimer);
 							}), 0.1f, false);
