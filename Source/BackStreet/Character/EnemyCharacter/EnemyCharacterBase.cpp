@@ -131,7 +131,7 @@ void AEnemyCharacterBase::SetDefaultWeapon()
 }
 
 
-void AEnemyCharacterBase::TakeKnockBack(float knockbackForce, float knockbackResist)
+void AEnemyCharacterBase::TakeKnockBack(float KnockbackForce, float KnockbackResist)
 {
 	if (IsActorBeingDestroyed()) return;
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return;
@@ -139,7 +139,7 @@ void AEnemyCharacterBase::TakeKnockBack(float knockbackForce, float knockbackRes
 	AAIControllerBase* aiControllerRef = nullptr;
 	aiControllerRef = Cast<AAIControllerBase>(Controller);
 
-	float effectiveKnockback = knockbackForce * (1 - knockbackResist);
+	float effectiveKnockback = KnockbackForce * (1 - KnockbackResist);
 	const float knockbackThreshold = 3500;
 
 	if (IsValid(aiControllerRef) && CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill
