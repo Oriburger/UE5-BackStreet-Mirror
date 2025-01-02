@@ -214,11 +214,12 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 	if (!ProjectileMovement->IsActive()) return;
 	if (!OwnerCharacterRef.IsValid() || !GamemodeRef.IsValid()) return;
 	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Item")) return;
-	if (OtherActor == OwnerCharacterRef.Get()) return; 
+	if (OtherActor == OwnerCharacterRef.Get()) return;
+	if (OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
 
 	FString name = UKismetSystemLibrary::GetDisplayName(OtherActor);
 
-	if (OtherActor->ActorHasTag("Player"))
+	if (OtherActor->ActorHasTag("Character"))
 	{
 		//디버프가 있다면?
 		Cast<ACharacterBase>(OtherActor)->TryAddNewDebuff(ProjectileStat.DebuffInfo, OwnerCharacterRef.Get());
