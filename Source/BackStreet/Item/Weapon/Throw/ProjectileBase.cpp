@@ -214,8 +214,8 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 	if (!ProjectileMovement->IsActive()) return;
 	if (!OwnerCharacterRef.IsValid() || !GamemodeRef.IsValid()) return;
 	if (!IsValid(OtherActor) || OtherActor->ActorHasTag("Item")) return;
-	if (OtherActor == OwnerCharacterRef.Get()) return;
-	if (OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
+	if (!ProjectileState.bCanAttackCauser && OtherActor == OwnerCharacterRef.Get()) return;
+	if (!OwnerCharacterRef.Get()->Tags[1].IsValid() && OtherActor->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) return;
 
 	FString name = UKismetSystemLibrary::GetDisplayName(OtherActor);
 
