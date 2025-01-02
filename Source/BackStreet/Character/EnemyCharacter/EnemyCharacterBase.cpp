@@ -131,7 +131,7 @@ void AEnemyCharacterBase::SetDefaultWeapon()
 }
 
 
-void AEnemyCharacterBase::TakeKnockBack(float KnockbackForce, float KnockbackResist)
+void AEnemyCharacterBase::TakeKnockBack(float knockbackForce, float knockbackResist)
 {
 	if (IsActorBeingDestroyed()) return;
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return;
