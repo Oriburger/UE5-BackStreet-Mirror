@@ -271,31 +271,31 @@ void AProjectileBase::OnProjectileHit(UPrimitiveComponent* HitComponet, AActor* 
 		GetWorldTimerManager().SetTimer(AutoExplodeTimer, this, &AProjectileBase::Explode, 1.5f, false);
 }
 
-void AProjectileBase::CheckBeginLocationOverlap(float SphereRadius, float Distance, bool IsCharacterBase)
+void AProjectileBase::CheckInitialDamageCondition(float SphereRadius, float Distance, bool bIsCharacterStandard)
 {
 	FVector sphereStartLocation;
-	FVector sphereEndLocation;
-	FVector spherePose;
 	TArray<TEnumAsByte<EObjectTypeQuery>> objectTypes;
 	TArray<AActor*> actorsToIgnore;
 	TArray<AActor*> sphereOverlapActors;
 	actorsToIgnore.Add(OwnerCharacterRef.Get());
 
-	if (IsCharacterBase)
+	if (bIsCharacterStandard)
 	{
 		sphereStartLocation = OwnerCharacterRef.Get()->GetActorLocation();
 	}
 	else sphereStartLocation = Cast<ACharacterBase>(GetOwner())->WeaponComponent->GetComponentLocation();
 	
-	sphereEndLocation = OwnerCharacterRef.Get()->GetActorForwardVector() * Distance;
-	spherePose = sphereStartLocation + sphereEndLocation;
+	sphereStartLocation += OwnerCharacterRef.Get()->GetActorForwardVector() * Distance;;
 	objectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
 
-	bool result = UKismetSystemLibrary::SphereOverlapActors(GetWorld(), spherePose, SphereRadius, objectTypes, nullptr, actorsToIgnore, sphereOverlapActors);
+	bool result = UKismetSystemLibrary::SphereOverlapActors(GetWorld(), sphereStartLocation, SphereRadius, objectTypes, nullptr, actorsToIgnore, sphereOverlapActors);
 	if (result)
 	{
 		for (AActor* overlapActor : sphereOverlapActors)
 		{
+
+			if (!IsValid(overlapActor)) continue;
+
 			if (overlapActor->ActorHasTag("Player"))
 			{
 				ACharacterBase* player = Cast<ACharacterBase>(overlapActor);

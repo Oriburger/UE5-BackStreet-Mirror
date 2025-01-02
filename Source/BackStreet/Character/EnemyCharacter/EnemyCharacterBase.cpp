@@ -131,7 +131,7 @@ void AEnemyCharacterBase::SetDefaultWeapon()
 }
 
 
-void AEnemyCharacterBase::TakeKnockBack(FVector KnockBackDirection, float Strength)
+void AEnemyCharacterBase::TakeKnockBack(float knockbackForce, float knockbackResist)
 {
 	if (IsActorBeingDestroyed()) return;
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return;
@@ -139,15 +139,18 @@ void AEnemyCharacterBase::TakeKnockBack(FVector KnockBackDirection, float Streng
 	AAIControllerBase* aiControllerRef = nullptr;
 	aiControllerRef = Cast<AAIControllerBase>(Controller);
 
+	float effectiveKnockback = knockbackForce * (1 - knockbackResist);
+	const float knockbackThreshold = 3500;
+
 	if (IsValid(aiControllerRef) && CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill
 		&& aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill)
 	{
-		if (Strength >= 3500)
+		if (effectiveKnockback >= knockbackThreshold)
 		{
 			SetActionState(ECharacterActionType::E_KnockedDown);
 			PlayKnockBackAnimMontage();
 		}
-		else if (Strength < 3500)
+		else if (effectiveKnockback < knockbackThreshold)
 		{
 			if (GetIsActionActive(ECharacterActionType::E_KnockedDown)) SetActionState(ECharacterActionType::E_Idle);
 			PlayHitAnimMontage();

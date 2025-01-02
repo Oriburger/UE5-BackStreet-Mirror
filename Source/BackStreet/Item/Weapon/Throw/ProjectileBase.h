@@ -97,8 +97,9 @@ public:
 		void OnProjectileHit(class UPrimitiveComponent* HitComponet, class AActor* OtherActor, class UPrimitiveComponent* OtherComp
 			, FVector NormalImpulse, const FHitResult& Hit);
 
+	//SphereOverlap to handle near actors in case of RangedCombat Attack
 	UFUNCTION()
-		void CheckBeginLocationOverlap(float SphereRadius, float Distance, bool IsCharacterBase);
+		void CheckInitialDamageCondition(float SphereRadius, float Distance, bool bIsCharacterStandard);
 
 	UFUNCTION(BlueprintCallable)
 		void ActivateProjectileMovement();

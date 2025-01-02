@@ -532,7 +532,6 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 {
 	if (!IsValid(Target) || Target->IsActorBeingDestroyed()) return;
 	if (Cast<ACharacterBase>(Target)->GetCharacterMovement()->IsFalling()) return;
-	if (Cast<ACharacterBase>(Target)->ActorHasTag("Boss")) return;
 	if (GetIsActionActive(ECharacterActionType::E_Skill)) return;
 	if (GetIsActionActive(ECharacterActionType::E_Die)) return;
 
@@ -544,14 +543,8 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 	if (Target->ActorHasTag("Enemy"))
 	{
 		AEnemyCharacterBase* knockBackCharacter = Cast<AEnemyCharacterBase>(Target);
-		knockBackCharacter->TakeKnockBack(knockBackDirection, Strength);
+		knockBackCharacter->TakeKnockBack(Strength, DefaultStat.DefaultKnockBackResist);
 	}
-}
-
-void ACharacterBase::TakeKnockBack(FVector KnockBackDirection, float Strength)
-{
-	LaunchCharacter(KnockBackDirection, true, false);
-	//SetLocationWithInterp(KnockBackDirection, 1.0f, false);
 }
 
 void ACharacterBase::Die()

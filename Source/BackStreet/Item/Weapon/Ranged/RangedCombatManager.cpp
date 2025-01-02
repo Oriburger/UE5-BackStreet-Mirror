@@ -66,7 +66,7 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 		//스폰한 발사체가 Valid 하다면 발사
 		if (IsValid(newProjectile))
 		{
-			newProjectile->CheckBeginLocationOverlap(15.0f, 15.0f, false);
+			newProjectile->CheckInitialDamageCondition(15.0f, 15.0f, false);
 			newProjectile->ActivateProjectileMovement();
 			SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
 		}
