@@ -46,14 +46,15 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	void InitCraftingManager();
-
 //=======	Common Function	& Property	================
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		int32 MaxCraftSlotCount = 3; 
 
 public:
+	UFUNCTION(BlueprintCallable)
+		void InitCraftingManager(class AMainCharacterBase* OwnerCharacterRef);
+
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void OnCraftConfirmed(FSkillInfo SkillInfo);
 
