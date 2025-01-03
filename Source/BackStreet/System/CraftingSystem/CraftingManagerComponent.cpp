@@ -20,18 +20,20 @@ UCraftingManagerComponent::UCraftingManagerComponent()
 void UCraftingManagerComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	InitCraftingManager();
 }
 
-void UCraftingManagerComponent::InitCraftingManager()
+void UCraftingManagerComponent::InitCraftingManager(class AMainCharacterBase* OwnerCharacterRef)
 {
+	if (!IsValid(OwnerCharacterRef))
+	{
+		UE_LOG(LogTemp, Error, TEXT("CraftingManagerComponent::InitCraftingManager : Owner is not valid"));
+		return;
+	}
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	OwnerActorRef = GetOwner();
 	OwnerActorRef->Tags.Add("CraftingBox");
-	MainCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	SkillManagerRef = MainCharacterRef.IsValid() ? MainCharacterRef->SkillManagerComponent : nullptr;
-
-	CraftCandidateIDList = GetRandomCraftableSkillIdx(MaxCraftSlotCount);
+	MainCharacterRef = OwnerCharacterRef;
+	SkillManagerRef = OwnerCharacterRef->SkillManagerComponent;
 }
 
 bool UCraftingManagerComponent::UpgradeSkill(int32 SkillID, uint8 NewLevel)
