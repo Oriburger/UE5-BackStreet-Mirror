@@ -19,7 +19,7 @@ URangedCombatManager::URangedCombatManager()
 void URangedCombatManager::Attack()
 {
 	Super::Attack();
-	
+
 	bool result = TryFireProjectile();
 
 	if (AssetManagerRef.IsValid())
@@ -62,9 +62,11 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 		}
 		
 		AProjectileBase* newProjectile = CreateProjectile(fireRotation);
+		
 		//스폰한 발사체가 Valid 하다면 발사
 		if (IsValid(newProjectile))
 		{
+			newProjectile->CheckInitialDamageCondition(15.0f, 15.0f, false);
 			newProjectile->ActivateProjectileMovement();
 			SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
 		}
@@ -108,7 +110,7 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 	FActorSpawnParameters spawmParams;
 	spawmParams.Owner = OwnerCharacterRef.Get(); //Projectile의 소유자는 Player
 	spawmParams.Instigator = OwnerCharacterRef.Get()->GetInstigator();
-	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::DontSpawnIfColliding;
 
 	FVector spawnLocation = OwnerCharacterRef.Get()->WeaponComponent->GetComponentLocation()
 							+ OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 25.0f;
