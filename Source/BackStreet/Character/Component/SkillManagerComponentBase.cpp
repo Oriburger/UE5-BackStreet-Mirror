@@ -60,6 +60,12 @@ bool USkillManagerComponentBase::TryAddSkill(int32 NewSkillID)
 		return false;
 	}
 	SkillInventory.Add(NewSkillID, skillInfo);
+
+	if (skillInfo.CoolTimeValue > 0.0f && !CoolTimerHandleMap.Contains(NewSkillID))
+	{
+		CoolTimerHandleMap.Add(NewSkillID, FTimerHandle());
+	}
+
 	TArray<FSkillInfo> skillInfoList;
 	SkillInventory.GenerateValueArray(skillInfoList);
 	OnSkillInventoryUpdated.Broadcast(skillInfoList);
@@ -76,6 +82,12 @@ bool USkillManagerComponentBase::TryRemoveSkill(int32 TargetSkillID)
 		return false;
 	}
 	SkillInventory.Remove(TargetSkillID);
+	if (skillInfo.CoolTimeValue > 0.0f && CoolTimerHandleMap.Contains(TargetSkillID))
+	{
+		CoolTimerHandleMap[TargetSkillID].Invalidate();
+		GetWorld()->GetTimerManager().ClearTimer(CoolTimerHandleMap[TargetSkillID]);
+		CoolTimerHandleMap.Remove(TargetSkillID);
+	}
 	TArray<FSkillInfo> skillInfoList;
 	SkillInventory.GenerateValueArray(skillInfoList);
 	OnSkillInventoryUpdated.Broadcast(skillInfoList);
@@ -113,6 +125,15 @@ bool USkillManagerComponentBase::TryActivateSkill(int32 TargetSkillID)
 	else return false;
 
 	OnSkillActivated.Broadcast(skillInfo);
+
+	if (skillInfo.CoolTimeValue > 0.0f && CoolTimerHandleMap.Contains(TargetSkillID))
+	{
+		FTimerDelegate timerDelegate;
+		timerDelegate.BindUFunction(this, FName("UpdateSkillValidity"), TargetSkillID, true);
+		UpdateSkillValidity(TargetSkillID, false);
+		GetWorld()->GetTimerManager().SetTimer(CoolTimerHandleMap[TargetSkillID], timerDelegate, skillInfo.CoolTimeValue, false);
+	}
+
 	return true;
 }
 
@@ -171,6 +192,7 @@ FSkillInfo USkillManagerComponentBase::GetSkillInfoData(int32 TargetSkillID, boo
 				UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::GetSkillInfoData %d is not found"), TargetSkillID);
 				return FSkillInfo();
 			}
+			skillInfo->bIsValid = true;
 			return SkillInfoCacheMap.Add(TargetSkillID, *skillInfo);
 		}
 		
@@ -185,6 +207,12 @@ TArray<int32> USkillManagerComponentBase::GetPlayerSkillIDList()
 	return PlayerSkillIDList;
 }
 
+float USkillManagerComponentBase::GetRemainingCoolTime(int32 TargetSkillID)
+{
+	if (!CoolTimerHandleMap.Contains(TargetSkillID)) return 0.0f;
+	return GetWorld()->GetTimerManager().GetTimerRemaining(CoolTimerHandleMap[TargetSkillID]);
+}
+
 
 bool USkillManagerComponentBase::UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel)
 {
@@ -194,4 +222,16 @@ bool USkillManagerComponentBase::UpgradeSkill(int32 SkillID, ESkillUpgradeType U
 void USkillManagerComponentBase::ClearAllSkill() 
 {
 
+}
+
+void USkillManagerComponentBase::UpdateSkillValidity(int32 TargetSkillID, bool NewState)
+{
+	bool bIsInInventory = false;
+	FSkillInfo skillInfo = GetSkillInfoData(TargetSkillID, bIsInInventory);
+	if (!bIsInInventory || !OwnerCharacterRef.IsValid())
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::UpdateSkillValidity %d %d failed - Reason %d %d"), TargetSkillID, (int32)NewState, !bIsInInventory, !OwnerCharacterRef.IsValid());
+		return;
+	}
+	SkillInventory[TargetSkillID].bIsValid = NewState;
 }

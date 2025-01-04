@@ -60,8 +60,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void ClearAllSkill();
+private:
+	//스킬의 사용 가능 여부를 업데이트 한다.
+	UFUNCTION()
+		void UpdateSkillValidity(int32 TargetSkillID, bool NewState);
 
 //========== Getter ==============================
+public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<int32> GetCraftableIDList();
 
@@ -70,6 +75,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<int32> GetPlayerSkillIDList();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetRemainingCoolTime(int32 TargetSkillID);
 
 	//It must be flushed after using.
 	UPROPERTY(BlueprintReadWrite)
@@ -87,6 +95,7 @@ protected:
 		UDataTable* SkillInfoTable;
 
 private:
+	TMap<int32, FTimerHandle> CoolTimerHandleMap;
 	TMap<int32, FSkillStatStruct> SkillInfoCache;
 	TMap<int32, FSkillInfo> SkillInfoCacheMap;
 	TArray<int32> PlayerSkillIDList;
