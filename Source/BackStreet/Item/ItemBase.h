@@ -100,15 +100,13 @@ public:
 
 // ------ Asset ----------------------------------------------
 protected:
-	//아이템 데이터 테이블 (에셋 정보 포함)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
-		UDataTable* ItemDataInfoTable;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
 		UNiagaraSystem* ItemPickEffect;
 
 // ------ 참조 프로퍼티 ---------------------------------------------
 protected:
+	UDataTable* ItemDataInfoTable;
+
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class AMainCharacterBase* GetPlayerRef() { return PlayerRef.Get(); }
 

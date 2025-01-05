@@ -26,6 +26,7 @@ void USkillManagerComponentBase::BeginPlay()
 	OwnerCharacterRef->WeaponComponent->OnMainWeaponUpdated.AddDynamic(this, &USkillManagerComponentBase::ClearAllSkill);
 
 	//Init Skill Map
+	SkillInfoTable = GameModeRef.Get()->SkillInfoTable;
 	InitSkillInfoCache();
 }
 

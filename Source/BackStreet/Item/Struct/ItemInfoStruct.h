@@ -30,7 +30,7 @@ enum class ECraftingItemType : uint8
 {
 	E_None				UMETA(DisplayName = "None"),
 	E_Screw				UMETA(DisplayName = "Screw"),
-	E_Spring				UMETA(DisplayName = "Spring"),
+	E_Spring			UMETA(DisplayName = "Spring"),
 	E_Gear				UMETA(DisplayName = "Gear"),
 	E_Wrench			UMETA(DisplayName = "Wrench"),
 };
@@ -49,6 +49,12 @@ public:
 	//아이템명
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FName ItemName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FName ItemDescription;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		bool bShowInfoWidget = false;
 
 	//Item life type
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
@@ -94,7 +100,6 @@ public:
 		UTexture2D* DeactiveItemImage;
 
 //=============State =================
-	
 	//Item Amount which can not edit in datatable
 	UPROPERTY(BlueprintReadOnly)
 		uint8 ItemAmount = 0;

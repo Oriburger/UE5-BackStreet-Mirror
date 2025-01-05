@@ -136,11 +136,6 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-//--------- Property ----------------------------------------------------
-public:
-	UPROPERTY(EditDefaultsOnly)
-		UDataTable* AbilityInfoTable;
-
 //--------- Function ----------------------------------------------------
 public:
 	// Active Ability getter 함수
@@ -213,7 +208,12 @@ private:
 	//소유자 캐릭터 약참조
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 
+	//GameMode Soft Ref
+	TWeakObjectPtr<class ABackStreetGameModeBase> GameModeRef;
+
 	//모든 어빌리티의 정보
 	UPROPERTY()
 		TArray<FAbilityInfoStruct> AbilityInfoList;
+	
+	UDataTable* AbilityInfoTable;
 };

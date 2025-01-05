@@ -91,14 +91,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|")
 		TMap<int32, FSkillInfo> SkillInventory;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gamplay|Data")
-		UDataTable* SkillInfoTable;
-
 private:
 	TMap<int32, FTimerHandle> CoolTimerHandleMap;
 	TMap<int32, FSkillStatStruct> SkillInfoCache;
 	TMap<int32, FSkillInfo> SkillInfoCacheMap;
 	TArray<int32> PlayerSkillIDList;
+	UDataTable* SkillInfoTable;
 	FSkillInfo PrevSkillInfo;
 
 protected:

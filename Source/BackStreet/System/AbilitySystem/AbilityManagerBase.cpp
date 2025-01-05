@@ -3,6 +3,7 @@
 
 #include "AbilityManagerBase.h"
 #include "../../Character/CharacterBase.h"
+#include "../../Global/BackStreetGameModeBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -15,6 +16,9 @@ UAbilityManagerComponent::UAbilityManagerComponent()
 void UAbilityManagerComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	AbilityInfoTable = GameModeRef.Get()->AbilityInfoTable;
 }
 
 void UAbilityManagerComponent::InitAbilityManager(ACharacterBase* NewCharacter)

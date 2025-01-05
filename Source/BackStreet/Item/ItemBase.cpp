@@ -64,6 +64,8 @@ void AItemBase::BeginPlay()
 	Super::BeginPlay();
 
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
+	ItemDataInfoTable = GamemodeRef.Get()->ItemInfoTable;
+
 	OnPlayerBeginPickUp.BindUFunction(this, FName("OnItemPicked"));
 	ItemTriggerVolume->OnInteractionBegin.AddDynamic(this, &AItemBase::OnItemPicked);
 	PlayerRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
