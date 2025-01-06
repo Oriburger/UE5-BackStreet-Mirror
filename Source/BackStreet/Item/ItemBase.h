@@ -105,7 +105,9 @@ protected:
 
 // ------ 참조 프로퍼티 ---------------------------------------------
 protected:
-	UDataTable* ItemDataInfoTable;
+	//editor only, it will be overriden by gamemode's property "itemDataInfoTable"
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		UDataTable* ItemDataInfoTable;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class AMainCharacterBase* GetPlayerRef() { return PlayerRef.Get(); }

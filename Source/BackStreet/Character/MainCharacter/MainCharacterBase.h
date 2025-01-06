@@ -174,7 +174,7 @@ public:
 			, AController* EventInstigator, AActor* DamageCauser) override;
 
 	UFUNCTION()
-		TArray<class UInteractiveCollisionComponent*> GetNearInteractionComponentList();
+		class UInteractiveCollisionComponent* GetNearInteractionComponent();
 
 protected:
 	UFUNCTION()
@@ -183,6 +183,8 @@ protected:
 private:
 	UFUNCTION()
 		void StopDashMovement();
+
+	TWeakObjectPtr<class UInteractiveCollisionComponent> InteractionCandidateRef;
 
 //------- Camera Rotation Support Event ------ 
 

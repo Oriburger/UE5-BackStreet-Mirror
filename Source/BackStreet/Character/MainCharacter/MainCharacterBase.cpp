@@ -90,7 +90,6 @@ void AMainCharacterBase::BeginPlay()
 	Super::BeginPlay();
 	
 	InitCharacterGameplayInfo(DefaultStat);
-	
 
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
@@ -310,6 +309,17 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 
 		OnMoveStarted.Broadcast();
 		SetRotationLagSpeed(Value.Get<FVector2D>());
+
+		//Update interaction candidate every move
+		if (InteractionCandidateRef.IsValid())
+		{
+			InteractionCandidateRef.Get()->SetInteractState(false);
+		}
+		InteractionCandidateRef = GetNearInteractionComponent();
+		if (InteractionCandidateRef.IsValid())
+		{
+			InteractionCandidateRef.Get()->SetInteractState(true);
+		}
 	}
 }
 
@@ -436,16 +446,15 @@ void AMainCharacterBase::Dash()
 void AMainCharacterBase::TryInvestigate()
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
-	TArray<UInteractiveCollisionComponent*> nearCompoenentList = GetNearInteractionComponentList();
 
-	if (nearCompoenentList.Num())
+	if (InteractionCandidateRef.IsValid())
 	{
 		if (AssetHardPtrInfo.InvestigateAnimMontageList.Num() > 0
 			&& IsValid(AssetHardPtrInfo.InvestigateAnimMontageList[0]))
 		{
 			PlayAnimMontage(AssetHardPtrInfo.InvestigateAnimMontageList[0]);
 		}
-		nearCompoenentList[0]->Interact();
+		InteractionCandidateRef.Get()->Interact();
 		ResetActionState();
 	}
 }
@@ -621,12 +630,12 @@ void AMainCharacterBase::StandUp()
 	Super::StandUp();
 }
 
-TArray<UInteractiveCollisionComponent*> AMainCharacterBase::GetNearInteractionComponentList()
+UInteractiveCollisionComponent* AMainCharacterBase::GetNearInteractionComponent()
 {
 	TArray<UInteractiveCollisionComponent*> returnList;
 	TArray<UClass*> targetClassList = { UInteractiveCollisionComponent::StaticClass() };
 	TEnumAsByte<EObjectTypeQuery> itemObjectType = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel3);
-	FVector overlapBeginPos = GetActorLocation() + GetMesh()->GetForwardVector() * 70.0f + GetMesh()->GetUpVector() * -45.0f;
+	FVector overlapBeginPos = GetActorLocation();
 	
 	for (float sphereRadius = 0.2f; sphereRadius < 15.0f; sphereRadius += 0.2f)
 	{
@@ -640,12 +649,11 @@ TArray<UInteractiveCollisionComponent*> AMainCharacterBase::GetNearInteractionCo
 			if (resultList.Num() > 0)
 			{
 				for (UPrimitiveComponent*& component : resultList)
-					returnList.Add(Cast<UInteractiveCollisionComponent>(component));
-				return returnList; //찾는 즉시 반환
+					return Cast<UInteractiveCollisionComponent>(component); //찾는 즉시 반환
 			}
 		}
 	}
-	return {};
+	return nullptr;
 }
 
 TArray<UAnimMontage*> AMainCharacterBase::GetTargetMeleeAnimMontageList()
