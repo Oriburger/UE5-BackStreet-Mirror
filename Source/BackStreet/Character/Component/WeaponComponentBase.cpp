@@ -24,11 +24,6 @@ void UWeaponComponentBase::BeginPlay()
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
 
-	WeaponAssetInfoTable = GamemodeRef.Get()->WeaponAssetInfoTable;
-	WeaponStatInfoTable = GamemodeRef.Get()->WeaponStatInfoTable;
-	ProjectileAssetInfoTable = GamemodeRef.Get()->ProjectileAssetInfoTable;
-	ProjectileStatInfoTable = GamemodeRef.Get()->ProjectileStatInfoTable;
-
 	//Init combat manager
 	MeleeCombatManager = NewObject<UMeleeCombatManager>(this, FName("MELEECOMBAT_MANAGER"));
 	MeleeCombatManager->InitCombatManager(GamemodeRef.Get(), OwnerCharacterRef.Get(), this);

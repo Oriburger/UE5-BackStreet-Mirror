@@ -95,22 +95,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gamplay|Data|Character")
 		UDataTable* AbilityInfoTable;
 
-	//data table for weapon asset
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data|Weapon")
-		UDataTable* WeaponAssetInfoTable;
-
-	//data table for weapon stat
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data|Weapon")
-		UDataTable* WeaponStatInfoTable;
-
-	//data table for projectile asset
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data|Weapon")
-		UDataTable* ProjectileAssetInfoTable;
-
-	//data table for projectile stat
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data|Weapon")
-		UDataTable* ProjectileStatInfoTable;
-
 //------ À§Á¬ ------------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")

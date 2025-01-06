@@ -72,13 +72,17 @@ public:
 		FWeaponStatStruct GetWeaponStatInfoWithID(int32 TargetWeaponID);
 
 private:
-	UDataTable* WeaponAssetInfoTable;
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
+		UDataTable* WeaponAssetInfoTable;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
+		UDataTable* WeaponStatInfoTable;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
+		UDataTable* ProjectileAssetInfoTable;
 
-	UDataTable* WeaponStatInfoTable;
-
-	UDataTable* ProjectileAssetInfoTable;
-
-	UDataTable* ProjectileStatInfoTable;
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
+		UDataTable* ProjectileStatInfoTable;
 
 public:
 	//asset info for this weapon instance
