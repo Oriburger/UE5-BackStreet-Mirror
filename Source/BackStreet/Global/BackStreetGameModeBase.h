@@ -92,9 +92,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gamplay|Data|Character")
 		UDataTable* SkillInfoTable;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gamplay|Data|Character")
-		UDataTable* AbilityInfoTable;
-
 //------ À§Á¬ ------------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")

@@ -43,7 +43,7 @@ public:
 	GENERATED_USTRUCT_BODY()
 
 	//아이템 ID
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 		int32 ItemID = 0;
 
 	//아이템명

@@ -18,7 +18,7 @@ void UAbilityManagerComponent::BeginPlay()
 	Super::BeginPlay();
 
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	AbilityInfoTable = GameModeRef.Get()->AbilityInfoTable;
+	UpdateCumulativeProbabilityList();
 }
 
 void UAbilityManagerComponent::InitAbilityManager(ACharacterBase* NewCharacter)
@@ -41,7 +41,7 @@ bool UAbilityManagerComponent::TryAddNewAbility(int32 AbilityID)
 	if (GetIsAbilityActive(AbilityID)) return false;
 	if (ActiveAbilityInfoList.Num() >= MaxAbilityCount) return false;
 
-	//이전 단계의 어빌리티가 있다면 제거부터 함
+	//이전 단계의 어빌리티가 있다면 제거부터 함 // not working 250107 
 	if (AbilityID > 0 && AbilityID % 3 != 1)
 	{
 		if (!TryRemoveAbility(AbilityID - 1))
@@ -60,7 +60,7 @@ bool UAbilityManagerComponent::TryAddNewAbility(int32 AbilityID)
 	}
 	TryUpdateCharacterStat(newAbilityInfo, false);
 	ActiveAbilityInfoList.Add(newAbilityInfo);
-	AbilityPickedInfoList[AbilityID] = true;
+	AbilityPickedInfoList[AbilityID / 3] = true;
 	OnAbilityUpdated.Broadcast(ActiveAbilityInfoList);
 
 	return true;
@@ -123,39 +123,120 @@ void UAbilityManagerComponent::ClearAllAbility()
 	ActiveAbilityInfoList.Empty();
 }
 
+void UAbilityManagerComponent::UpdateProbilityValue(EAbilityTierType TierType, float NewProbability)
+{
+	if (!ProbabilityInfoMap.Contains(TierType))
+	{
+		ProbabilityInfoMap.Add(TierType, NewProbability);
+	}
+	else
+	{
+		ProbabilityInfoMap[TierType] = NewProbability;
+	}
+	UpdateCumulativeProbabilityList();
+}
+
 TArray<FAbilityInfoStruct> UAbilityManagerComponent::GetRandomAbilityInfoList(int32 Count, TArray<EAbilityType> TypeList)
 {
-	if (AbilityPickedInfoList.IsEmpty()) return {};
-
+	if (AbilityPickedInfoList.IsEmpty())
+	{
+		UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::GetRandomAbilityInfoList, AbilityPickedInfoList is empty"));
+		return {};
+	}
+	
 	TArray<FAbilityInfoStruct> selectedAbilities;
-	TArray<int32> candidates, pickedIdx;
+	TArray<int32> candidateGroups, pickedGroupIdx;
+	
+	//무한 루프 방지 코드
+	int32 tryCount = 0; 
+	const int32 tryCountThreshold = Count * 100;
 
 	// TypeList와 단계 확인을 통과한 후보들 필터링
-	for (int32 idx = 1; idx < AbilityInfoList.Num(); ++idx)
+	for (int32 groupIdx = 0; groupIdx < AbilityInfoList.Num() / 3; ++groupIdx)
 	{
-		const FAbilityInfoStruct& abilityInfo = AbilityInfoList[idx];
-		if (!AbilityPickedInfoList[idx] && TypeList.Contains(abilityInfo.AbilityType) && CanPickAbility(abilityInfo.AbilityId))
+		const FAbilityInfoStruct& abilityInfo = AbilityInfoList[groupIdx * 3 + 1];
+		if (TypeList.Contains(abilityInfo.AbilityType) && CanPickAbility(abilityInfo.AbilityId))
 		{
-			candidates.Add(idx);
+			candidateGroups.Add(groupIdx);
+		}
+	}
+	while (selectedAbilities.Num() < Count && selectedAbilities.Num() < candidateGroups.Num())
+	{
+		tryCount += 1; 
+		if (tryCount >= tryCountThreshold) break;
+
+		const int32 randomCandidateIdx = UKismetMathLibrary::RandomInteger(candidateGroups.Num());
+		const int32 selectedGroupIdx = candidateGroups[randomCandidateIdx];
+		if (pickedGroupIdx.Contains(selectedGroupIdx))
+		{
+			continue; 
+		}
+
+		UE_LOG(LogTemp, Warning, TEXT("Pick group idx --------------"));
+		for (auto& p : pickedGroupIdx)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("%d"), p);
+		}
+		UE_LOG(LogTemp, Warning, TEXT("-----------------------------"));
+
+		
+		//확률 프로퍼티가 지정되어있지 않을 경우
+		if (CumulativeProbabilityList.Num() < 3)
+		{
+			//랜덤 adder로 티어결정
+			const int32 randomAdder = UKismetMathLibrary::RandomInteger((int32)EAbilityTierType::E_Legendary);
+			const int32 resultAbilityIdx = selectedGroupIdx * 3 + randomAdder + 1;
+
+			if (AbilityInfoList.IsValidIndex(resultAbilityIdx))
+			{
+				selectedAbilities.Add(AbilityInfoList[resultAbilityIdx]);
+				pickedGroupIdx.Add(selectedGroupIdx);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::GetRandomAbilityInfoList(%d) failed - selected Group %d / random Adder %d / resultAbilityIdx %d"), selectedGroupIdx, randomAdder, resultAbilityIdx);
+			}
+		}
+		//지정된 경우 
+		else
+		{
+			float randomValue = UKismetMathLibrary::RandomFloatInRange(0.0f, TotalProbabilityValue);
+			int32 resultAbilityIdx = -1;
+
+			for (int32 idx = 1; idx < CumulativeProbabilityList.Num(); idx++)
+			{
+				if (randomValue >= CumulativeProbabilityList[idx - 1] && randomValue <= CumulativeProbabilityList[idx])
+				{
+					resultAbilityIdx = selectedGroupIdx * 3 + idx; 
+					pickedGroupIdx.Add(selectedGroupIdx);
+					break;
+				}
+			}
+			if (resultAbilityIdx != -1 && AbilityInfoList.IsValidIndex(resultAbilityIdx))
+			{
+				selectedAbilities.Add(AbilityInfoList[resultAbilityIdx]);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::GetRandomAbilityInfoList(%d) error with cumulativeprobList - selected Group %d / random Value %.2lf / resultAbilityIdx %d"), selectedGroupIdx, randomValue, resultAbilityIdx);
+			}
 		}
 	}
 
-	if (candidates.Num() <= Count)
-	{
-		for (int32& abilityIdx : candidates)
-		{
-			selectedAbilities.Add(AbilityInfoList[abilityIdx]);
-		}
-		return selectedAbilities;
-	}
-
-	while (selectedAbilities.Num() < Count)
-	{
-		int32 selectedIdx = candidates[UKismetMathLibrary::RandomInteger(candidates.Num())];
-		if (selectedAbilities.Contains(AbilityInfoList[selectedIdx])) continue;
-		selectedAbilities.Add(AbilityInfoList[selectedIdx]);
-	}
 	return selectedAbilities;
+}
+
+void UAbilityManagerComponent::UpdateCumulativeProbabilityList()
+{
+	//누적합 배열 재구성
+	CumulativeProbabilityList = { 0.0f }; //E_None
+	TotalProbabilityValue = 0.0f;
+	for (auto& probability : ProbabilityInfoMap)
+	{
+		const float lastProbability = CumulativeProbabilityList.Last();
+		TotalProbabilityValue += probability.Value;
+		CumulativeProbabilityList.Add(probability.Value + lastProbability);
+	}
 }
 
 bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct TargetAbilityInfo, bool bIsReset)
@@ -263,13 +344,7 @@ bool UAbilityManagerComponent::InitAbilityInfoListFromTable()
 bool UAbilityManagerComponent::CanPickAbility(int32 AbilityID)
 {
 	EAbilityTierType tier = GetAbilityInfo(AbilityID).AbilityTier;
-	if (tier == EAbilityTierType::E_Common)
-		return !AbilityPickedInfoList[AbilityID]; // 1단계는 무조건 가능
-	if (tier == EAbilityTierType::E_Rare)
-		return AbilityPickedInfoList[AbilityID - 1] && !AbilityPickedInfoList[AbilityID];
-	if (tier == EAbilityTierType::E_Legendary)
-		return AbilityPickedInfoList[AbilityID - 1] && !AbilityPickedInfoList[AbilityID];
-	return false;
+	return !AbilityPickedInfoList[AbilityID / 3];
 }
 
 TArray<ECharacterAbilityType> UAbilityManagerComponent::GetActiveAbilityList() const
