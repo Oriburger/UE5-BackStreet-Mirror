@@ -136,11 +136,6 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-//--------- Property ----------------------------------------------------
-public:
-	UPROPERTY(EditDefaultsOnly)
-		UDataTable* AbilityInfoTable;
-
 //--------- Function ----------------------------------------------------
 public:
 	// Active Ability getter 함수
@@ -167,19 +162,8 @@ public:
 	UFUNCTION()
 		void ClearAllAbility();
 
-	//해당 Ability가 Active한지 반환
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsAbilityActive(int32 AbilityID) const;
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetMaxAbilityCount() const;
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<FAbilityInfoStruct> GetAbilityInfoList() { return ActiveAbilityInfoList;  }
-
-	//아직 뽑힌적 없는 무작위의 어빌리티를 반환한다. (개수와 타입 지정 가능)
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<FAbilityInfoStruct> GetRandomAbilityInfoList(int32 Count, TArray<EAbilityType> TypeList);
+	UFUNCTION()
+		void UpdateProbilityValue(EAbilityTierType TierType, float NewProbability);
 
 protected:
 	UFUNCTION()
@@ -198,11 +182,36 @@ private:
 	//이전 단계의 어빌리티가 뽑혔는지를 체크한다. 
 	bool CanPickAbility(int32 AbilityID);
 
+
+//--------- Getter ----------------------------------------------------
+public:
+	//해당 Ability가 Active한지 반환
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsAbilityActive(int32 AbilityID) const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetMaxAbilityCount() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FAbilityInfoStruct> GetAbilityInfoList() { return ActiveAbilityInfoList; }
+
+	//아직 뽑힌적 없는 무작위의 어빌리티를 반환한다. (개수와 타입 지정 가능)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FAbilityInfoStruct> GetRandomAbilityInfoList(int32 Count, TArray<EAbilityType> TypeList);
+
 //--------- Property ----------------------------------------------------
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		UDataTable* AbilityInfoTable;
+
 protected:
 	//최대 어빌리티 수
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		int32 MaxAbilityCount = 9999999;
+
+	//티어에 따른 등장 확률, 미지정 시 모두 같은 확률 적용
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		TMap<EAbilityTierType, float> ProbabilityInfoMap;
 
 private:
 	//현재 플레이어가 소유한 어빌리티의 정보
@@ -212,6 +221,15 @@ private:
 	
 	//소유자 캐릭터 약참조
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
+
+	//확률 계산을 위한 누적합 배열
+	TArray<float> CumulativeProbabilityList;
+	void UpdateCumulativeProbabilityList();
+	//ProbabilityInfoMap의 float 값을 모두 더한 값
+	float TotalProbabilityValue = 0.0f;
+
+	//GameMode Soft Ref
+	TWeakObjectPtr<class ABackStreetGameModeBase> GameModeRef;
 
 	//모든 어빌리티의 정보
 	UPROPERTY()

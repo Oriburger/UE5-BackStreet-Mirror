@@ -12,3 +12,9 @@ void UInteractiveCollisionComponent::Interact()
 {
 	OnInteractionBegin.Broadcast();
 }
+
+void UInteractiveCollisionComponent::SetInteractState(bool bNewState)
+{
+	bCanInteract = bNewState; 
+	OnInteractionAvailableStateUpdate.Broadcast(bNewState);
+}

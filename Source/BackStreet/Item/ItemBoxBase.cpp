@@ -79,5 +79,4 @@ void AItemBoxBase::LaunchItem(AItemBase* TargetItem)
 
 	TargetItem->SetLaunchDirection(launchDirection * LaunchSpeed);
 	TargetItem->ActivateProjectileMovement();
-	TargetItem->ActivateItem();
 }

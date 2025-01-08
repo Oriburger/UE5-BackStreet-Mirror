@@ -50,16 +50,19 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		int32 MaterialCount;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float CoolTimeValue;
+
 //======== Function, State ======================================
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		bool bIsValid = false;
+		bool bIsValid = true;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TWeakObjectPtr<AActor> PrevActionRef;
 
 	bool IsValid()
 	{
-		return bIsValid = (SkillID > 0);
+		return bIsValid && SkillID > 0;
 	}
 
 	friend uint32 GetTypeHash(const FSkillInfo& Other)
@@ -68,7 +71,7 @@ public:
 	}
 
 	FSkillInfo() : SkillID(0), SkillName(""), IconImage(nullptr), SkillDescription(""), SkillSubDescription(""), SkillAnimation(nullptr), bContainPrevAction(false)
-		, PrevActionClass(nullptr), bIsLifeSpanWithCauser(false), bIsPlayerSkill(false), MaterialID(0), MaterialCount(0), bIsValid(false), PrevActionRef(nullptr) { }
+		, PrevActionClass(nullptr), bIsLifeSpanWithCauser(false), bIsPlayerSkill(false), MaterialID(0), MaterialCount(0), CoolTimeValue(0.0f), bIsValid(true), PrevActionRef(nullptr) { }
 };
 
 UENUM(BlueprintType)

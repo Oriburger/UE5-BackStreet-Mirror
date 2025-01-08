@@ -19,6 +19,7 @@ enum class EInteractionType : uint8
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateInteract);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateInteractAvailableState, bool, bNewState);
 
 UCLASS( ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BACKSTREET_API UInteractiveCollisionComponent : public UBoxComponent
@@ -31,11 +32,19 @@ public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateInteract OnInteractionBegin;
 
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateInteractAvailableState OnInteractionAvailableStateUpdate;
+
 public:
 	UFUNCTION()
 		void Interact();
 
+	UFUNCTION(BlueprintCallable)
+		void SetInteractState(bool bNewState);
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
 		EInteractionType InteractionType;
 	
+private:
+	bool bCanInteract = false;
 };

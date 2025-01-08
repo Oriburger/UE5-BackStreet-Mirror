@@ -625,8 +625,10 @@ AActor* UStageManagerComponent::SpawnItemActor(FItemInfoDataStruct ItemInfo)
 	//Spawn location will be edited.
 	FVector spawnLocation = CurrentStageInfo.RewardSpawnLocation + FVector(0, 0, 100);
 	AItemBase* newItem = Cast<AItemBase>(GetWorld()->SpawnActor(ItemInfo.ItemClass, &spawnLocation, nullptr, actorSpawnParameters));
+	
 	if (IsValid(newItem))
 	{
+		newItem->SetOwner(GetOwner());
 		newItem->InitItem(ItemInfo.ItemID, ItemInfo);
 		RegisterActor(newItem);
 	}

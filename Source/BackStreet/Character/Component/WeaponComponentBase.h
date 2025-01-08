@@ -71,20 +71,16 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FWeaponStatStruct GetWeaponStatInfoWithID(int32 TargetWeaponID);
 
-protected:
-	//data table for weapon asset
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* WeaponAssetInfoTable;
-
-	//data table for weapon stat
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* WeaponStatInfoTable;
-
-	//data table for projectile asset
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* ProjectileAssetInfoTable;
 
-	//data table for projectile stat
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* ProjectileStatInfoTable;
 
