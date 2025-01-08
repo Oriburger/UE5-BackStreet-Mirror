@@ -44,7 +44,7 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 	if (!OwnerCharacter.IsValid() || !FollowingCameraRef.IsValid()) return nullptr;
 
 	FVector traceDirection = FollowingCameraRef.Get()->GetForwardVector(); traceDirection.Z = 0.0f;
-	FVector startLocation = OwnerCharacter.Get()->GetActorLocation() + traceDirection * 50.0f;
+	FVector startLocation = OwnerCharacter.Get()->GetActorLocation() + traceDirection * 150.0f;
 	FVector endLocation = startLocation + traceDirection * MaxFindDistance;
 	TArray<FHitResult> hitResultList;
 	TArray<AActor*> actorToIgnore = { OwnerCharacter.Get() };
@@ -53,28 +53,25 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 		actorToIgnore.Add(TargetedCharacter.Get());
 	}
 
-	if (false)
+	//TargetedCandidate가 있다면 && 공격 중일때 (막 끝났을때)
+	if (TargetedCandidate.IsValid() && !OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionReady("Attack"))
 	{
-		traceDirection = OwnerCharacter.Get()->GetMesh()->GetRightVector();
+		//
+		traceDirection = TargetedCandidate.Get()->GetActorForwardVector() * -1.0f;
+		startLocation = OwnerCharacter.Get()->HitSceneComponent->GetComponentLocation() + traceDirection * 50.0f;;
 		endLocation = startLocation + traceDirection * MaxFindDistance;
 	}
 	
-	if (TargetedCandidate.IsValid() && !OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionReady("Attack"))
-	{
-		//FVector CandidateDirection = TargetedCandidate.Get()->GetActorForwardVector() * -MaxFindDistance;
-		traceDirection = TargetedCandidate.Get()->GetActorForwardVector() * -1.0f;
-		startLocation = OwnerCharacter.Get()->HitSceneComponent->GetComponentLocation();
-		endLocation = startLocation + traceDirection * MaxFindDistance;
-		//endLocation = startLocation + CandidateDirection;
-	}
 
+	//trace 진행
 	UKismetSystemLibrary::SphereTraceMultiByProfile(GetWorld(), startLocation, endLocation, RadiusOverride <= 1.0f ? TraceRadius : RadiusOverride, "Pawn", true
 		, actorToIgnore, bShowDebugSphere ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResultList, true, FColor::Green, FColor::Red, AutoTargetingRate);
 
 	float minDist = FLT_MAX;
 	ACharacterBase* target = nullptr;
 	
-	bool bContainsOldCandidate = false;
+	
+	bool bContainsOldCandidate = false; //타게팅이 잡힌애가 또 트레이스에 잡힌다면?
 	for (FHitResult& result : hitResultList)
 	{
 		if (!result.bBlockingHit) continue;
@@ -96,9 +93,11 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 			target = Cast<ACharacterBase>(pawn);
 		}
 	}
-	if (!bContainsOldCandidate)
+
+	//포함이 되어있다면 그냥 그 폰을 반환
+	if (bContainsOldCandidate)
 	{
-		TargetedCandidate.Reset();
+		return TargetedCandidate.Get();
 	}
 	return target;
 }
@@ -148,7 +147,11 @@ void UTargetingManagerComponent::DeactivateTargeting()
 void UTargetingManagerComponent::UpdateTargetedCandidate()
 {
 	AActor* newCandidate = FindNearEnemyToTarget();
-	if (IsValid(newCandidate))
+	
+	//후보 업데이트는 다음과 같은 조건일때 수행한다 
+	//기본적으로 netCandidate가 valid할 때 (정상적으로 찾았을때)
+	//현재 공격중이 아닐때 혹은 아무도 없을때
+	if (!TargetedCandidate.IsValid() || OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionReady("Attack"))
 	{
 		TargetedCandidate = Cast<ACharacterBase>(newCandidate);
 		OnTargetUpdated.Broadcast(TargetedCandidate.Get());
