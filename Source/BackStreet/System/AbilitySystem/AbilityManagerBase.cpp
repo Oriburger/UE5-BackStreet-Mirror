@@ -172,14 +172,6 @@ TArray<FAbilityInfoStruct> UAbilityManagerComponent::GetRandomAbilityInfoList(in
 			continue; 
 		}
 
-		UE_LOG(LogTemp, Warning, TEXT("Pick group idx --------------"));
-		for (auto& p : pickedGroupIdx)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("%d"), p);
-		}
-		UE_LOG(LogTemp, Warning, TEXT("-----------------------------"));
-
-		
 		//확률 프로퍼티가 지정되어있지 않을 경우
 		if (CumulativeProbabilityList.Num() < 3)
 		{
