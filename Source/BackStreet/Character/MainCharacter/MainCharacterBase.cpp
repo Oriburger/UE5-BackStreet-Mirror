@@ -332,9 +332,19 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 
 	if (Controller != nullptr && !TargetingManagerComponent->GetIsTargetingActivated())
 	{
+		//Set invert Axis
+		if (bInvertXAxis)
+		{
+			LookAxisVector.X = -LookAxisVector.X;
+		}
+		if (bInvertYAxis)
+		{
+			LookAxisVector.Y = -LookAxisVector.Y;
+		}
+
 		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X / 2.0f);
-		AddControllerPitchInput(LookAxisVector.Y / 2.0f);
+		AddControllerYawInput(LookAxisVector.X * CameraSensivity);
+		AddControllerPitchInput(LookAxisVector.Y * CameraSensivity);
 		SetManualRotateMode();
 		SetAutomaticRotateModeTimer();
 	}

@@ -250,6 +250,20 @@ private:
 	UFUNCTION()
 		void UpdateFieldOfView(const float TargetValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
 
+//-------- EasyUI LoadSettings --------------
+protected:
+	UPROPERTY(BlueprintReadWrite)
+		bool bHoldToSprint;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool bInvertYAxis;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool bInvertXAxis;
+
+	UPROPERTY(BlueprintReadWrite)
+		float CameraSensivity;
+
 // ------- SaveData ฐüทร --------------------
 protected:
 	UFUNCTION()
