@@ -103,7 +103,7 @@ protected:
 	//Update spawn point member of stage info struct after map load 
 	//There are several points to spawn enemy, player, craftbox etc
 	UFUNCTION()
-		void UpdateSpawnPointProperty();
+		bool TryUpdateSpawnPointProperty();
 
 	//Spawn enemy character
 	UFUNCTION()
@@ -151,7 +151,7 @@ private:
 	int32 LoadStatus = 0;
 
 	//Property for level instance load
-	float LoadTimeOut = 30.0f;
+	float LoadTimeOut = 120.0f;
 	FTimerHandle LoadCheckTimerHandle;
 
 	//For instant loading widget

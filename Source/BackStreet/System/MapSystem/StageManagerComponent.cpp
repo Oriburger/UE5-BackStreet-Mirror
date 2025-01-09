@@ -226,13 +226,15 @@ void UStageManagerComponent::ClearEnemyActors()
 	RemainingEnemyCount = 0;
 }
 
-void UStageManagerComponent::UpdateSpawnPointProperty()
+bool UStageManagerComponent::TryUpdateSpawnPointProperty()
 {
-	if (!IsValid(MainAreaRef)) return;
+	if (!IsValid(MainAreaRef)) return false;
 
 	TArray<AActor*> spawnPointList;
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Point"), spawnPointList);
 	const FVector zAxisCalibrationValue = FVector(0.0f, 0.0f, 50.0f);
+
+	if (spawnPointList.IsEmpty()) return false;
 
 	for (AActor*& spawnPoint : spawnPointList)
 	{
@@ -267,6 +269,7 @@ void UStageManagerComponent::UpdateSpawnPointProperty()
 			CurrentStageInfo.ItemBoxSpawnLocationList.Add(spawnPoint->GetActorLocation());
 		}
 	}
+	return true;
 }
 
 void UStageManagerComponent::SpawnEnemy()
@@ -472,15 +475,32 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 
 	if (GetLoadIsDone())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame() : Load Done, StartStage"));
+		//Update spawn points 
+		//LoadDone이 떠도, 
+		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame : Update Spawn Point"));
+		bool result = TryUpdateSpawnPointProperty();
 
-		//Clear timer and invalidate
-		GetWorld()->GetTimerManager().ClearTimer(LoadCheckTimerHandle);
-		LoadCheckTimerHandle.Invalidate();
+		if (result)
+		{
+			//Clear timer and invalidate
+			GetWorld()->GetTimerManager().ClearTimer(LoadCheckTimerHandle);
+			LoadCheckTimerHandle.Invalidate();
 
-		//Start stage with delay
-		FTimerHandle gameStartDelayHandle;
-		GetWorld()->GetTimerManager().SetTimer(gameStartDelayHandle, this, &UStageManagerComponent::StartStage, 2.0f, false);
+			//Clear Prev Actors
+			UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame : Clear Previous Actors"));
+			ClearPreviousActors();
+
+			//Start stage with delay
+			UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame() : Load Done, StartStage"));
+			FTimerHandle gameStartDelayHandle;
+			GetWorld()->GetTimerManager().SetTimer(gameStartDelayHandle, this, &UStageManagerComponent::StartStage, 2.0f, false);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame() : Post load task (UpdateSpawnPointProperty) Failed, Retry..."));
+			GetWorld()->GetTimerManager().ClearTimer(LoadCheckTimerHandle);
+			GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 2.0f, false);
+		}
 	}
 }
 
@@ -490,13 +510,8 @@ void UStageManagerComponent::StartStage()
 	if (CurrentStageInfo.bIsVisited) return; 
 	CurrentStageInfo.bIsVisited = true;
 
-	//Load End
+	//Load End Broadcast (Safe with latent delay)
 	OnStageLoadDone.Broadcast();
-	ClearPreviousActors();
-
-	//Update spawn points
-	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::StartStage : Update Spawn Point"));
-	UpdateSpawnPointProperty();
 
 	//Remove loading screen 
 	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::StartStage : Remove loading screen"));
