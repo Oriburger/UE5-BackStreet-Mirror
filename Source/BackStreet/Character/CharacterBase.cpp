@@ -91,6 +91,10 @@ void ACharacterBase::InitializeActionTriggerDelegateMap()
 	ActionTriggerDelegateMap.Add("OnAttackStarted", &OnAttackStarted);
 	ActionTriggerDelegateMap.Add("OnJumpAttackStarted", &OnJumpAttackStarted);
 	ActionTriggerDelegateMap.Add("OnDashAttackStarted", &OnDashAttackStarted);
+	ActionTriggerDelegateMap.Add("OnAimStarted", &OnAimStarted);
+	ActionTriggerDelegateMap.Add("OnAimEnd", &OnAimEnded);
+	ActionTriggerDelegateMap.Add("OnShootStarted", &OnShootStarted);
+	ActionTriggerDelegateMap.Add("OnInteractStarted", &OnInteractStarted);
 	ActionTriggerDelegateMap.Add("OnDamageReceived", &OnDamageReceived);
 	ActionTriggerDelegateMap.Add("OnSkillStarted", &OnSkillStarted);
 	ActionTriggerDelegateMap.Add("OnSkillEnded", &OnSkillEnded);
