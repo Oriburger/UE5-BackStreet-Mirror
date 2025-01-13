@@ -20,20 +20,24 @@ public:
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 
 protected: 
+	UPROPERTY(BlueprintReadOnly)
+		TArray<AActor*> ShootablePillarList;
 
 	UPROPERTY(BlueprintReadOnly)
-	bool Shootable = false;
+		bool bIsShootable = false;
+
+	UPROPERTY(BlueprintReadOnly)
+		int32 PillarIndex = 0;
 
 private:
+	UPROPERTY()
+		float TotalDurationTime = 0.0f;
 
 	UPROPERTY()
-	float TotalDurationTime = 0.0f;
+		float ShootIntervalTime = 0.0f;
 
 	UPROPERTY()
-	float ShootIntervalTime = 0.0f;
-
-	UPROPERTY()
-	float CumulativeFrameTime = 0.0f;
+		float CumulativeFrameTime = 0.0f;
 
 	UFUNCTION()
 	void CalculateShootDelayTime();
