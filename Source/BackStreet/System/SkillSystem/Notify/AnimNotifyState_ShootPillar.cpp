@@ -37,10 +37,10 @@ void UAnimNotifyState_ShootPillar::NotifyTick(USkeletalMeshComponent* MeshComp, 
 
 void UAnimNotifyState_ShootPillar::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
-	Super::NotifyEnd(MeshComp, Animation, EventReference);
 	if (!OwnerCharacterRef.IsValid()) return;
-	if (CumulativeFrameTime > 0.0f)	CumulativeFrameTime = 0.0f;
+	Super::NotifyEnd(MeshComp, Animation, EventReference);
 
+	if (CumulativeFrameTime > 0.0f)	CumulativeFrameTime = 0.0f;
 	PillarIndex = 0;
 }
 
