@@ -169,6 +169,10 @@ void UActionTrackingComponent::TryUpdateActionState(FName ActionName, EActionSta
 	{
 		UE_LOG(LogTemp, Error, TEXT("UActionTrackingComponent::TryUpdateActionState(%s, %d) failed"), *ActionName.ToString(), (int32)NewState);
 	}
+	if (OnActionStateUpdated.IsBound() && NewState != EActionState::E_None)
+	{
+		OnActionStateUpdated.Broadcast(ActionName, (uint8)NewState);
+	}
 	
 	//자동 전환 조건에 따라 타이머를 지정한다.
 	if (NewState == EActionState::E_InProgress && actionInfo.bIsInstantAction)
