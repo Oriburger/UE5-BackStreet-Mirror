@@ -24,7 +24,7 @@ protected:
 		TArray<AActor*> ShootablePillarList;
 
 	UPROPERTY(BlueprintReadOnly)
-		bool Shootable = false;
+		bool bIsShootable = false;
 
 	UPROPERTY(BlueprintReadOnly)
 		int32 PillarIndex = 0;
