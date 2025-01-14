@@ -170,9 +170,10 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	}
 }
 
-void AMainCharacterBase::SwitchWeapon(bool bSwitchToSubWeapon)
+void AMainCharacterBase::SwitchWeapon(bool bSwitchToSubWeapon, bool bForceApply)
 {
-	if (!IsValid(ItemInventory) || (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Shoot))) return;
+	if (!IsValid(ItemInventory)) return;
+	if (!bForceApply && (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Shoot))) return;
 	FItemInfoDataStruct subWeaponData = ItemInventory->GetSubWeaponInfoData();
 	FItemInfoDataStruct mainWeaponData = ItemInventory->GetMainWeaponInfoData();
 
@@ -248,6 +249,17 @@ void AMainCharacterBase::TryShoot()
 		PlayAnimMontage(AssetHardPtrInfo.ShootAnimMontageList[0], 1.0f);
 		OnAttackStarted.Broadcast();
 	}
+}
+
+void AMainCharacterBase::TryShootBySubCombo(FRotator ShootRotation)
+{
+	UE_LOG(LogTemp, Warning, TEXT("TryShootBySubCombo #1"));
+
+	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Shoot) return;
+
+	UE_LOG(LogTemp, Warning, TEXT("TryShootBySubCombo #2"));
+
+	WeaponComponent->RangedCombatManager->TryFireProjectile(ShootRotation);
 }
 
 void AMainCharacterBase::SetAimingMode(bool bNewState)
