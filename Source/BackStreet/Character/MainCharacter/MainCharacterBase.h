@@ -81,7 +81,7 @@ public:
 		void TryShoot();
 
 	UFUNCTION(BlueprintCallable)
-		void TryShootBySubCombo(FRotator ShootRotation);
+		void TryShootBySubCombo(FRotator ShootRotation, FVector ShootLocation);
 
 	UFUNCTION()
 		void SetAimingMode(bool bNewState);

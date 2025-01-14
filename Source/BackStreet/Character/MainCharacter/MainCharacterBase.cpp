@@ -251,7 +251,7 @@ void AMainCharacterBase::TryShoot()
 	}
 }
 
-void AMainCharacterBase::TryShootBySubCombo(FRotator ShootRotation)
+void AMainCharacterBase::TryShootBySubCombo(FRotator ShootRotation, FVector ShootLocation)
 {
 	UE_LOG(LogTemp, Warning, TEXT("TryShootBySubCombo #1"));
 
@@ -259,7 +259,7 @@ void AMainCharacterBase::TryShootBySubCombo(FRotator ShootRotation)
 
 	UE_LOG(LogTemp, Warning, TEXT("TryShootBySubCombo #2"));
 
-	WeaponComponent->RangedCombatManager->TryFireProjectile(ShootRotation);
+	WeaponComponent->RangedCombatManager->TryFireProjectile(ShootRotation, ShootLocation);
 }
 
 void AMainCharacterBase::SetAimingMode(bool bNewState)

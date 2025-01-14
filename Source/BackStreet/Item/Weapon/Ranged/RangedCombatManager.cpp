@@ -34,7 +34,7 @@ void URangedCombatManager::StopAttack()
 	Super::Attack();
 }
 
-bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
+bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride, FVector FireLocationOverride)
 {
 	if (!OwnerCharacterRef.IsValid()) return false;
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo
@@ -61,7 +61,7 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 			fireRotation = rotationList[idx];
 		}
 		
-		AProjectileBase* newProjectile = CreateProjectile(fireRotation);
+		AProjectileBase* newProjectile = CreateProjectile(fireRotation, FireLocationOverride);
 		
 		//스폰한 발사체가 Valid 하다면 발사
 		if (IsValid(newProjectile))
@@ -102,7 +102,7 @@ void URangedCombatManager::AddAmmo(int32 Count)
 	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponType, weaponState);
 }
 
-AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOverride)
+AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOverride, FVector FireLocationOverride)
 {	
 	FWeaponStatStruct weaponStat = WeaponComponentRef.Get()->WeaponStat;
 	FWeaponStateStruct weaponState = WeaponComponentRef.Get()->WeaponState;
@@ -112,8 +112,9 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 	spawmParams.Instigator = OwnerCharacterRef.Get()->GetInstigator();
 	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::DontSpawnIfColliding;
 
-	FVector spawnLocation = OwnerCharacterRef.Get()->WeaponComponent->GetComponentLocation()
-							+ OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 25.0f;
+	FVector spawnLocation = FireLocationOverride.IsNearlyZero(0.01f) ? 
+								OwnerCharacterRef.Get()->WeaponComponent->GetComponentLocation() + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 25.0f
+								: FireLocationOverride;
 	FRotator spawnRotation = FireRotationOverride.IsNearlyZero(0.01f) ?
 								OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation()
 								: FireRotationOverride;
