@@ -9,9 +9,14 @@
 void UAnimNotifyState_ShootPillar::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
 	if (!IsValid(MeshComp)|| !IsValid(MeshComp->GetOwner()) || !MeshComp->GetOwner()->ActorHasTag("Character")) return;
-	if (ShootablePillarList.Num() < 1) return;
+	
 	OwnerCharacterRef = Cast<ACharacterBase>(MeshComp->GetOwner());
-	ShootablePillarList = OwnerCharacterRef.Get()->SkillManagerComponent->TraceResultCache;
+	if (OwnerCharacterRef.IsValid() && IsValid(OwnerCharacterRef.Get()->SkillManagerComponent))
+	{
+		ShootablePillarList = OwnerCharacterRef.Get()->SkillManagerComponent->TraceResultCache;
+		if (ShootablePillarList.Num() <= 0) return;
+	}
+
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 
 	TotalDurationTime = TotalDuration;
@@ -29,8 +34,9 @@ void UAnimNotifyState_ShootPillar::NotifyTick(USkeletalMeshComponent* MeshComp, 
 
 	if (FMath::IsNearlyEqual(CumulativeFrameTime, ShootIntervalTime, 0.03f) && PillarIndex <= ShootablePillarList.Num()-1)
 	{
-		PillarIndex++;
 		CumulativeFrameTime = 0.0f;
+		PillarIndex++;
+		if (!IsValid(ShootablePillarList[PillarIndex])) return;
 		bIsShootable = true;
 	}
 }
@@ -42,13 +48,13 @@ void UAnimNotifyState_ShootPillar::NotifyEnd(USkeletalMeshComponent* MeshComp, U
 
 	if (CumulativeFrameTime > 0.0f)	CumulativeFrameTime = 0.0f;
 	PillarIndex = 0;
+	ShootablePillarList.Empty();
 }
 
 void UAnimNotifyState_ShootPillar::CalculateShootDelayTime()
 {
 	if (!OwnerCharacterRef.IsValid()) return;
-	TArray<AActor*> resultList = OwnerCharacterRef.Get()->SkillManagerComponent->TraceResultCache;
-	int32 length = resultList.Num();
+	int32 length = ShootablePillarList.Num();
 
 	if (length <= 1)
 	{
