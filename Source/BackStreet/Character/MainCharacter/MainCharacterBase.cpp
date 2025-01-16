@@ -515,14 +515,6 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	PlayHitAnimMontage();
-
-	//Disable this Logic until Facial Material Logic usable
-	/*if (damageAmount > 0.0f && DamageCauser->ActorHasTag("Enemy"))
-	{
-		SetFacialDamageEffect();
-		GetWorld()->GetTimerManager().ClearTimer(FacialEffectResetTimerHandle);
-		GetWorld()->GetTimerManager().SetTimer(FacialEffectResetTimerHandle, this, &AMainCharacterBase::ResetFacialDamageEffect, 1.0f, false);
-	}*/
 	return damageAmount;
 }
 

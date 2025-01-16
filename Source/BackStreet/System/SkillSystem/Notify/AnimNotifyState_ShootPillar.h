@@ -20,8 +20,6 @@ public:
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 
 protected: 
-	UPROPERTY(BlueprintReadOnly)
-		TArray<AActor*> ShootablePillarList;
 
 	UPROPERTY(BlueprintReadOnly)
 		bool bIsShootable = false;
@@ -30,6 +28,10 @@ protected:
 		int32 PillarIndex = 0;
 
 private:
+
+	UPROPERTY()
+		int32 PillarNum = 0;
+
 	UPROPERTY()
 		float TotalDurationTime = 0.0f;
 
