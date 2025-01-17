@@ -87,7 +87,7 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 		if (pawn->Tags[1] == OwnerCharacter.Get()->Tags[1]) continue;
 
 		float dist = FVector::Distance(pawn->GetActorLocation(), startLocation);
-		if (dist < minDist)
+		if (dist < minDist && !target->GetIsActionActive(ECharacterActionType::E_Die))
 		{
 			dist = minDist;
 			target = Cast<ACharacterBase>(pawn);
