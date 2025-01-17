@@ -30,7 +30,7 @@ protected:
 private:
 
 	UPROPERTY()
-		int32 PillarNum = 0;
+		int32 PillarMaxCount = 0;
 
 	UPROPERTY()
 		float TotalDurationTime = 0.0f;
