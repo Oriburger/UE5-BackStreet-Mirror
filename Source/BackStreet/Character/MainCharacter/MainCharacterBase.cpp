@@ -215,7 +215,8 @@ void AMainCharacterBase::ZoomIn()
 	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
 
-	OnZoomBegin.Broadcast();
+	OnZoomBegin.Broadcast(); //for ui (blueprint binding 가능)
+	OnAimStarted.Broadcast(); //for action tracker
 }
 
 void AMainCharacterBase::ZoomOut()
@@ -231,7 +232,8 @@ void AMainCharacterBase::ZoomOut()
 	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
 
-	OnZoomEnd.Broadcast();
+	OnZoomEnd.Broadcast(); //for ui (blueprint binding 가능)
+	OnAimEnded.Broadcast(); //for action tracker
 }
 
 void AMainCharacterBase::TryShoot()
@@ -246,7 +248,8 @@ void AMainCharacterBase::TryShoot()
 		&& IsValid(AssetHardPtrInfo.ShootAnimMontageList[0]))
 	{
 		PlayAnimMontage(AssetHardPtrInfo.ShootAnimMontageList[0], 1.0f);
-		OnAttackStarted.Broadcast();
+		
+		OnShootStarted.Broadcast();
 	}
 }
 
@@ -464,6 +467,7 @@ void AMainCharacterBase::TryInvestigate()
 		{
 			PlayAnimMontage(AssetHardPtrInfo.InvestigateAnimMontageList[0]);
 		}
+		OnInteractStarted.Broadcast();
 		InteractionCandidateRef.Get()->Interact();
 		ResetActionState();
 	}

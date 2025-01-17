@@ -8,6 +8,7 @@
 
 // 전투 관련 델리게이트 선언
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttackBeginDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionStateUpdateDelegate, FName, ActionName, uint8, ActionState);
 
 UENUM(BlueprintType)
 enum class EActionState : uint8
@@ -136,6 +137,9 @@ class BACKSTREET_API UActionTrackingComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UActionTrackingComponent();
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FActionStateUpdateDelegate OnActionStateUpdated;
 
 //====================================================================
 //====== Basic Function ==============================================

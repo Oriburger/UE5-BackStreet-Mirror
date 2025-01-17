@@ -28,6 +28,10 @@ public:
 	FDelegateOnActionTrigger OnAttackStarted;
 	FDelegateOnActionTrigger OnDashAttackStarted;
 	FDelegateOnActionTrigger OnJumpAttackStarted;
+	FDelegateOnActionTrigger OnAimStarted;
+	FDelegateOnActionTrigger OnAimEnded;
+	FDelegateOnActionTrigger OnShootStarted;
+	FDelegateOnActionTrigger OnInteractStarted;
 	FDelegateOnActionTrigger OnDamageReceived;
 	FDelegateOnActionTrigger OnSkillStarted;
 	FDelegateOnActionTrigger OnSkillEnded;
