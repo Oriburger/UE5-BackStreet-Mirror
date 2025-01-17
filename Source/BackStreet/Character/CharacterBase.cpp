@@ -131,17 +131,20 @@ void ACharacterBase::ResetLocationInterpTimer()
 void ACharacterBase::PlayHitAnimMontage()
 {
 	if (GetIsActionActive(ECharacterActionType::E_Skill)) return;
-
-	AAIControllerBase* aiControllerRef = nullptr;
-	aiControllerRef = Cast<AAIControllerBase>(Controller);
-
-	if (!IsValid(aiControllerRef) && aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill) return;
+	
+	if (ActorHasTag("Enemy")) 
+	{
+		AAIControllerBase* aiControllerRef = nullptr;
+		aiControllerRef = Cast<AAIControllerBase>(Controller);
+		if (!IsValid(aiControllerRef) && aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill) return;
+	}
 
 	const int32 randomIdx = UKismetMathLibrary::RandomIntegerInRange(0, AssetSoftPtrInfo.HitAnimMontageSoftPtrList.Num() - 1);
 	if (AssetHardPtrInfo.HitAnimMontageList.Num() > 0 && IsValid(AssetHardPtrInfo.HitAnimMontageList[randomIdx]))
 	{
 		PlayAnimMontage(AssetHardPtrInfo.HitAnimMontageList[randomIdx]);
 	}
+	
 }
 
 void ACharacterBase::PlayKnockBackAnimMontage()
