@@ -26,7 +26,6 @@ void USkillManagerComponentBase::BeginPlay()
 	OwnerCharacterRef->WeaponComponent->OnMainWeaponUpdated.AddDynamic(this, &USkillManagerComponentBase::ClearAllSkill);
 
 	//Init Skill Map
-	SkillInfoTable = GameModeRef.Get()->SkillInfoTable;
 	InitSkillInfoCache();
 }
 
@@ -141,7 +140,7 @@ bool USkillManagerComponentBase::TryActivateSkill(int32 TargetSkillID)
 void USkillManagerComponentBase::DeactivateCurrentSkill()
 {
 	ASkillBase* prevSkillBase;
-	if (PrevSkillInfo.PrevActionRef.IsValid())
+	if (PrevSkillInfo.PrevActionRef.IsValid() && IsValid(prevSkillBase))
 	{
 		prevSkillBase = Cast<ASkillBase>(PrevSkillInfo.PrevActionRef);
 		prevSkillBase->DeactivateSkill();

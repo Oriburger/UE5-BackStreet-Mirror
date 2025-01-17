@@ -85,18 +85,6 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 		SetDefaultWeapon();
 	}
 
-	if (NewCharacterID != 0)
-	{
-		SkillManagerComponent->ClearAllSkill();
-		for (int32& skillID : EnemyStat.EnemySkillIDList)
-		{
-			if (skillID != 0)
-			{
-				bool result = SkillManagerComponent->TryAddSkill(skillID);
-				UE_LOG(LogTemp, Warning, TEXT("Add Skill %d --- %d"), skillID, (int32)result);
-			}
-		}
-	}
 	InitFloatingHpWidget();
 	InitTargetingSupportingWidget();
 

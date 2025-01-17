@@ -87,8 +87,12 @@ public:
 		TArray<AActor*> SpawnedActorList;
 
 //======= Ref =========
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		UDataTable* SkillInfoTable;
+
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
 		TMap<int32, FSkillInfo> SkillInventory;
 
 private:
@@ -96,7 +100,6 @@ private:
 	TMap<int32, FSkillStatStruct> SkillInfoCache;
 	TMap<int32, FSkillInfo> SkillInfoCacheMap;
 	TArray<int32> PlayerSkillIDList;
-	UDataTable* SkillInfoTable;
 	FSkillInfo PrevSkillInfo;
 
 protected:

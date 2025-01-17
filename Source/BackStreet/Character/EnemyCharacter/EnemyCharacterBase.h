@@ -80,7 +80,7 @@ protected:
 public:
 	//Calculate probability depend on HitCount
 	UFUNCTION()
-	bool CalculateIgnoreHitProbability(int32 HitCounter);
+		bool CalculateIgnoreHitProbability(int32 HitCounter);
 
 
 // ----- 캐릭터 스탯 및 상태 관련 ---------
