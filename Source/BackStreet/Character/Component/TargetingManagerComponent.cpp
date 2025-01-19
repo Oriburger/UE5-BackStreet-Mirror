@@ -70,7 +70,6 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 	float minDist = FLT_MAX;
 	ACharacterBase* target = nullptr;
 	
-	
 	bool bContainsOldCandidate = false; //타게팅이 잡힌애가 또 트레이스에 잡힌다면?
 	for (FHitResult& result : hitResultList)
 	{
@@ -87,9 +86,11 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 		if (pawn->Tags[1] == OwnerCharacter.Get()->Tags[1]) continue;
 
 		float dist = FVector::Distance(pawn->GetActorLocation(), startLocation);
-		if (dist < minDist && !target->GetIsActionActive(ECharacterActionType::E_Die))
+		if (dist < minDist)
 		{
 			dist = minDist;
+			ACharacterBase* temp = Cast<ACharacterBase>(pawn);
+			if (temp->GetIsActionActive(ECharacterActionType::E_Die)) continue;
 			target = Cast<ACharacterBase>(pawn);
 		}
 	}

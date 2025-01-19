@@ -139,10 +139,9 @@ bool USkillManagerComponentBase::TryActivateSkill(int32 TargetSkillID)
 
 void USkillManagerComponentBase::DeactivateCurrentSkill()
 {
-	ASkillBase* prevSkillBase;
-	if (PrevSkillInfo.PrevActionRef.IsValid() && IsValid(prevSkillBase))
+	if (PrevSkillInfo.PrevActionRef.IsValid())
 	{
-		prevSkillBase = Cast<ASkillBase>(PrevSkillInfo.PrevActionRef);
+		ASkillBase* prevSkillBase = Cast<ASkillBase>(PrevSkillInfo.PrevActionRef);
 		prevSkillBase->DeactivateSkill();
 		prevSkillBase->Destroy();
 	}
