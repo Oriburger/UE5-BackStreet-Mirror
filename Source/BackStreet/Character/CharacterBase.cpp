@@ -654,23 +654,7 @@ void ACharacterBase::TryDashAttack()
 	// Activate dash anim with interp to target location
 	PlayAnimMontage(AssetHardPtrInfo.DashAttackAnimMontage);
 	ActionTrackingComponent->CurrentComboType = EComboType::E_Dash;
-	OnDashAttackStarted.Broadcast();
-}
-
-void ACharacterBase::DashAttack()
-{
-	//init local parameter
-	const float dashLength = 250.0f;
-	FVector targetLocation = GetActorLocation() + GetVelocity().GetSafeNormal() * dashLength;
-
-	//check if there are any obstacle (wall, prop, enemy etc.)
-	FHitResult hitResult;
-	FCollisionQueryParams collisionQueryParams;
-	collisionQueryParams.AddIgnoredActor(this);
-	GetWorld()->LineTraceSingleByChannel(hitResult, HitSceneComponent->GetComponentLocation(), targetLocation, ECollisionChannel::ECC_Camera);
-	targetLocation = hitResult.bBlockingHit ? hitResult.Location : targetLocation;
-
-	SetLocationWithInterp(targetLocation, 2.5f);
+	//OnDashAttackStarted.Broadcast();
 }
 
 bool ACharacterBase::TrySkill(int32 SkillID)
@@ -680,28 +664,6 @@ bool ACharacterBase::TrySkill(int32 SkillID)
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Stun
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_KnockedDown) return false;
-
-
-	/* @@@@@@@@@@ LEGACY SKILL CODE @@@@@@@@@@
-	//스킬을 보유중인지 확인
-	if (!SkillManagerComponentRef.Get()->IsSkillValid(SkillID))
-	{
-		GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Skill is not Valid")), FColor::White);
-		return false;
-	}
-	//스킬을 지닐 수 있는 무기와 현재 장비중인 무기가 일치하는지 확인
-	ASkillBase* skillBase = SkillManagerComponentRef.Get()->GetOwnSkillBase(SkillID);
-	if (skillBase->SkillStat.SkillWeaponStruct.bIsWeaponRequired)
-	{
-		if (!skillBase->SkillStat.SkillWeaponStruct.AvailableWeaponIDList.Contains(WeaponComponent->WeaponID))
-		{
-			GamemodeRef.Get()->PrintSystemMessageDelegate.Broadcast(FName(TEXT("Does't have any weapon")), FColor::White);
-			return false;
-		}
-	}
-	if(skillBase->SkillState.bIsBlocked) return false;
-	*/
-
 
 	CharacterGameplayInfo.bCanAttack = false;
 	SetActionState(ECharacterActionType::E_Skill);

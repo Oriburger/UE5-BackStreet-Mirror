@@ -111,10 +111,6 @@ public:
 	UFUNCTION()
 		void TryDashAttack();
 
-	// called with notify, activate dash logic with interp
-	UFUNCTION(BlueprintCallable)
-		void DashAttack();
-
 	///Input에 Binding 되어 스킬공격을 시도 (AnimMontage를 호출)
 	virtual bool TrySkill(int32 SkillID);
 

@@ -8,6 +8,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateStageEnd, FStageInfo, StageInfo);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateRewardGrant, const TArray<int32>&, RewardID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateSpawnActor, FVector, SpawnLocation, AActor*, NewActor);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateStageClear);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadBegin);
@@ -32,6 +33,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateRewardGrant OnRewardGranted;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateSpawnActor OnActorSpawned;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTimeOver OnTimeIsOver;

@@ -64,10 +64,10 @@ public:
 		void SetIsTargetingActivated(bool NewState) { bIsTargetingActivated = NewState; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class ACharacterBase* GetTargetedCharacter();// {  }
+		class ACharacterBase* GetTargetedCharacter();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class ACharacterBase* GetTargetedCandidate() { return TargetedCandidate.IsValid() ? TargetedCandidate.Get() : nullptr; }
+		class ACharacterBase* GetTargetedCandidate(); 
 
 	UFUNCTION(BlueprintCallable)
 		void SetTargetedCharacter(class ACharacterBase* NewTarget);

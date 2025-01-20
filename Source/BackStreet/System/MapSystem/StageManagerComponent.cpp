@@ -346,6 +346,10 @@ void UStageManagerComponent::SpawnEnemy()
 					Cast<AAIControllerBase>(newEnemy->GetController())->ActivateAI();
 
 					SpawnedActorList.Add(newEnemy);
+					if (OnActorSpawned.IsBound())
+					{
+						OnActorSpawned.Broadcast(spawnLocation, newEnemy);
+					}
 					RemainingEnemyCount += 1;
 				}
 			}
@@ -418,6 +422,11 @@ void UStageManagerComponent::SpawnItemBox()
 										, spawnLocation + FVector(0.0f, 0.0f, 200.0f), FRotator::ZeroRotator);
 			
 			SpawnedActorList.Add(newItemBox);
+			if (OnActorSpawned.IsBound())
+			{
+				//OnActorSpawned.Broadcast(spawnLocation, newItemBox);
+			}
+
 			if (IsValid(newItemBox))
 			{
 				newItemBox->ActivateProjectileMovement();
@@ -447,6 +456,10 @@ void UStageManagerComponent::SpawnPortal(int32 GateCount)
 		if (IsValid(newGate))
 		{
 			SpawnedActorList.Add(newGate);
+			if (OnActorSpawned.IsBound())
+			{
+				//OnActorSpawned.Broadcast(spawnLocation, newGate);
+			}
 			
 			FName directionTag = CurrentStageInfo.PortalDirectionTagList[idx];
 			FVector2D direction = ((directionTag == FName("Up")) ? FVector2D(1, 0)
