@@ -148,11 +148,11 @@ void UTargetingManagerComponent::DeactivateTargeting()
 void UTargetingManagerComponent::UpdateTargetedCandidate()
 {
 	AActor* newCandidate = FindNearEnemyToTarget();
-	
+
 	//후보 업데이트는 다음과 같은 조건일때 수행한다 
 	//기본적으로 netCandidate가 valid할 때 (정상적으로 찾았을때)
 	//현재 공격중이 아닐때 혹은 아무도 없을때
-	if (!TargetedCandidate.IsValid() || OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionReady("Attack"))
+	if (!TargetedCandidate.IsValid() || !OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionInProgress("Attack"))
 	{
 		TargetedCandidate = Cast<ACharacterBase>(newCandidate);
 		OnTargetUpdated.Broadcast(TargetedCandidate.Get());
@@ -188,11 +188,25 @@ void UTargetingManagerComponent::UpdateCameraRotation()
 
 ACharacterBase* UTargetingManagerComponent::GetTargetedCharacter()
 {
-	if (TargetedCharacter.IsValid())
+	if (TargetedCharacter.IsValid() && !TargetedCharacter->GetIsActionActive(ECharacterActionType::E_Die))
 	{
 		return TargetedCharacter.Get();
 	}
 	return nullptr;
+}
+
+ACharacterBase* UTargetingManagerComponent::GetTargetedCandidate()
+{
+	if (TargetedCandidate.IsValid())
+	{
+		if (TargetedCandidate->GetIsActionActive(ECharacterActionType::E_Die))
+		{
+			TargetedCandidate.Reset();
+			return nullptr;
+		}
+		return TargetedCandidate.Get();
+	}
+	return nullptr; 
 }
 
 void UTargetingManagerComponent::SetTargetedCharacter(ACharacterBase* NewTarget)
