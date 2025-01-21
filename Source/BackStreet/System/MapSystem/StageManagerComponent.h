@@ -184,6 +184,10 @@ public:
 		FStageInfo GetCurrentStageInfo() { return CurrentStageInfo; }
 
 private:
+	//Check Reward Duplication for next stage
+	UFUNCTION()
+		void EnsureUniqueStageRewards(FVector2D Coordinate);
+
 	//Grant stage reward
 	UFUNCTION()
 		void GrantStageRewards();

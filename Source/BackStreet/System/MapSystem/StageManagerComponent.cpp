@@ -538,6 +538,9 @@ void UStageManagerComponent::StartStage()
 	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::StartStage : ItemBox"));
 	SpawnItemBox();
 
+	//Check next stage's reward validation
+	EnsureUniqueStageRewards(CurrentStageInfo.Coordinate);
+
 	//Move player to start location
 	ACharacter* playerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	if (IsValid(playerCharacter))
@@ -621,6 +624,57 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	
 	//StageFinished Delegate
 	OnStageFinished.Broadcast(CurrentStageInfo);
+}
+
+void UStageManagerComponent::EnsureUniqueStageRewards(FVector2D Coordinate)
+{
+	UE_LOG(LogTemp, Warning, TEXT("===========UStageManagerComponent::EnsureUniqueStageRewards(%d, %d)==================="), (int32)Coordinate.Y, (int32)Coordinate.X);
+
+	const TArray<FVector2D> directions = { {0.0f, 1.0f}, {1.0f, 0.0f} }; //좌, 우 검색
+	TArray<int32> rewardIDList; //{Left, Right} Stage
+	
+	//현재 Component가 살아있다 -> Owner가 살아있음이 보장 -> GeneratorComponent도 살아있음
+	UStageGeneratorComponent* stageGeneratorRef = ChapterManagerRef.Get()->StageGeneratorComponent;
+
+	//좌, 우 존재 유무 검사
+	for (int32 idx = 0; idx < directions.Num(); idx++)
+	{
+		FVector2D nextCoordinate = Coordinate + directions[idx];
+		bool result = !stageGeneratorRef->GetIsCoordinateInBoundary(nextCoordinate) 
+					|| ChapterManagerRef.Get()->GetStageInfoWithCoordinate(nextCoordinate).bIsBlocked;
+		if (result)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("> One side is blocked, return the function."));
+			return;  //한쪽이 Blocked 되어있거나 맵 경계 밖이라면 수정을 할 필요가 없음
+		}
+	}
+	
+	FStageInfo& leftStageInfo = ChapterManagerRef.Get()->GetStageInfoWithCoordinate(Coordinate + directions[0]);
+	FStageInfo& rightStageInfo = ChapterManagerRef.Get()->GetStageInfoWithCoordinate(Coordinate + directions[1]);
+
+	if (!leftStageInfo.RewardInfoList.IsEmpty()
+		&& leftStageInfo.RewardInfoList.Num() == rightStageInfo.RewardInfoList.Num())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("> first comp - %d, %d"), leftStageInfo.RewardInfoList[0].ItemID, rightStageInfo.RewardInfoList[0].ItemID);
+
+		//정렬 되어있음을 가정
+		for (int32 idx = 0; idx < leftStageInfo.RewardInfoList.Num(); idx++)
+		{
+			if (leftStageInfo.RewardInfoList[idx].ItemID != rightStageInfo.RewardInfoList[idx].ItemID)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("> Difference is detected, return the function"));
+				return;
+			}
+		}
+		
+		//새로운 보상으로 지정한다.
+		for (auto& rewardInfo : rightStageInfo.RewardInfoList)//convert to id list
+			rewardIDList.Add(rewardInfo.ItemID);
+		leftStageInfo.RewardInfoList = stageGeneratorRef->GetRewardListFromCandidates(leftStageInfo.StageType, rewardIDList);
+		leftStageInfo.StageIcon = leftStageInfo.RewardInfoList[0].ItemImage;
+		UE_LOG(LogTemp, Warning, TEXT("> after change - %d, %d"), leftStageInfo.RewardInfoList[0].ItemID, rightStageInfo.RewardInfoList[0].ItemID);
+
+	}
 }
 
 void UStageManagerComponent::GrantStageRewards()
