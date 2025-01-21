@@ -53,7 +53,12 @@ void AEnemyCharacterBase::BeginPlay()
 	SetDefaultWeapon();
 
 	CharacterGameplayInfo.bUseDefaultStat = true;
-	SkillManagerComponent->OnSkillDeactivated.AddDynamic(this, &AEnemyCharacterBase::OnSkillDeactivated);
+
+	if (IsValid(SkillManagerComponent))
+	{
+		SkillManagerComponent->OnSkillDeactivated.Clear();
+		SkillManagerComponent->OnSkillDeactivated.AddDynamic(this, &AEnemyCharacterBase::OnSkillDeactivated);
+	}
 }
 
 void AEnemyCharacterBase::InitAsset(int32 NewCharacterID)

@@ -35,7 +35,6 @@ ACharacterBase::ACharacterBase()
 	SkillManagerComponent = CreateDefaultSubobject<USkillManagerComponentBase>(TEXT("SKILL_MANAGER"));
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
-	WeaponComponent->SetupAttachment(GetMesh(), FName("Weapon_R"));
 
 	BuffNiagaraEmitter = CreateDefaultSubobject<UNiagaraComponent>(TEXT("BUFF_EFFECT"));
 	BuffNiagaraEmitter->SetupAttachment(GetMesh());
@@ -861,12 +860,16 @@ void ACharacterBase::SetAsset()
 	bool result = WeaponComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName("Weapon_R"));
 	if (!result)
 	{
-		//GEngine->AddOnScreenDebugMessage(0, 10, FColor::Yellow, FString("Failed"));
+		UE_LOG(LogTemp, Error, TEXT("ACharacterBase::SetAsset() for %s,  Weapon attachment is falied"), *UKismetSystemLibrary::GetDisplayName(this));
 	}
+	WeaponComponent->SetRelativeLocationAndRotation(FVector(0.0f), FRotator::ZeroRotator);
+	
+	/*
 	FLatentActionInfo latentInfo;
 	latentInfo.CallbackTarget = this;
 	UKismetSystemLibrary::MoveComponentTo(WeaponComponent, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, 0, 0, 0, 0, EMoveComponentAction::Type::Move, latentInfo);
+	*/
 
 	//----Init other asset------------
 	InitMaterialAsset();
