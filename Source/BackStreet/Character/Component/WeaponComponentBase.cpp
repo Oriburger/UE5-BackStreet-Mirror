@@ -165,6 +165,10 @@ void UWeaponComponentBase::InitWeaponAsset()
 		this->SetRelativeScale3D(WeaponAssetInfo.InitialScale);
 		this->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("UWeaponComponentBase::InitWeaponAsset(), %s's weapon is not valid"), *UKismetSystemLibrary::GetDisplayName(GetOwner()));
+	}
 
 	if (IsValid(WeaponTrailParticle))
 	{

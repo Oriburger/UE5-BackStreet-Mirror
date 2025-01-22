@@ -15,6 +15,7 @@
 #include "../../Item/Weapon/Ranged/RangedCombatManager.h"
 #include "../../Item/InteractiveCollisionComponent.h"
 #include "../../System/MapSystem/Stage/GateBase.h"
+#include "../../System/MapSystem/NewChapterManagerBase.h"
 #include "../Component/WeaponComponentBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/AudioComponent.h"
@@ -99,6 +100,9 @@ void AMainCharacterBase::BeginPlay()
 	
 	TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
 	SetAutomaticRotateModeTimer();
+
+	//Crash 방지
+	GamemodeRef.Get()->GetChapterManagerRef()->OnChapterCleared.AddDynamic(this, &AMainCharacterBase::ClearAllTimerHandle);
 }
 
 // Called every frame
@@ -764,7 +768,7 @@ void AMainCharacterBase::SetAutomaticRotateMode()
 void AMainCharacterBase::UpdateCameraPitch(float TargetPitch, float InterpSpeed)
 {
 	FRotator currentRotation = GetControlRotation();
-	if (FMath::IsNearlyEqual(currentRotation.Pitch, TargetPitch, 5.0f))
+	if (FMath::IsNearlyEqual(currentRotation.Pitch, TargetPitch, 5.0f) || GetWorld()->IsPaused())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(CameraRotationAlignmentHandle);
 	}
@@ -947,10 +951,18 @@ void AMainCharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(RollDelayTimerHandle);
 	GetWorldTimerManager().ClearTimer(DashDelayTimerHandle);
 	GetWorldTimerManager().ClearTimer(JumpAttackDebuffTimerHandle);
+	GetWorldTimerManager().ClearTimer(WalkSpeedInterpTimerHandle);
+	GetWorldTimerManager().ClearTimer(FOVInterpHandle);
+	GetWorldTimerManager().ClearTimer(CameraRotationAlignmentHandle);
+	GetWorldTimerManager().ClearTimer(RotationResetTimerHandle);
 
 	BuffEffectResetTimerHandle.Invalidate();
 	FacialEffectResetTimerHandle.Invalidate();
 	RollDelayTimerHandle.Invalidate();
 	DashDelayTimerHandle.Invalidate();
 	JumpAttackDebuffTimerHandle.Invalidate();
+	WalkSpeedInterpTimerHandle.Invalidate();
+	FOVInterpHandle.Invalidate();
+	CameraRotationAlignmentHandle.Invalidate();
+	RotationResetTimerHandle.Invalidate();
 }

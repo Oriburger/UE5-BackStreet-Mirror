@@ -35,6 +35,7 @@ ACharacterBase::ACharacterBase()
 	SkillManagerComponent = CreateDefaultSubobject<USkillManagerComponentBase>(TEXT("SKILL_MANAGER"));
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
+	WeaponComponent->SetupAttachment(HitSceneComponent);
 
 	BuffNiagaraEmitter = CreateDefaultSubobject<UNiagaraComponent>(TEXT("BUFF_EFFECT"));
 	BuffNiagaraEmitter->SetupAttachment(GetMesh());
@@ -847,12 +848,19 @@ void ACharacterBase::SetAsset()
 	GetMesh()->OverrideMaterials.Empty();
 
 	//------ weapon component attachment ----------------------
-	bool result = WeaponComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName("Weapon_R"));
-	if (!result)
+	if (IsValid(GetMesh()->GetSkeletalMeshAsset()))
 	{
-		UE_LOG(LogTemp, Error, TEXT("ACharacterBase::SetAsset() for %s,  Weapon attachment is falied"), *UKismetSystemLibrary::GetDisplayName(this));
+		bool result = WeaponComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName("Weapon_R"));
+		if (!result)
+		{
+			UE_LOG(LogTemp, Error, TEXT("ACharacterBase::SetAsset() for %s,  Weapon attachment is falied"), *UKismetSystemLibrary::GetDisplayName(this));
+		}
+		WeaponComponent->SetRelativeLocationAndRotation(FVector(0.0f), FRotator::ZeroRotator);
 	}
-	WeaponComponent->SetRelativeLocationAndRotation(FVector(0.0f), FRotator::ZeroRotator);
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("ACharacterBase::SetAsset() for %s, skeletal mesh is not valid"), *UKismetSystemLibrary::GetDisplayName(this));
+	}
 
 	//----Init other asset------------
 	InitMaterialAsset();
@@ -1030,6 +1038,7 @@ void ACharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(HitCounterResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(LocationInterpHandle);
 	GetWorldTimerManager().ClearTimer(AirAtkLocationUpdateHandle);
+
 	AtkIntervalHandle.Invalidate();
 	KnockDownDelayTimerHandle.Invalidate();
 	HitCounterResetTimerHandle.Invalidate();
