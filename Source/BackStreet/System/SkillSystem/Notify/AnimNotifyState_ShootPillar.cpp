@@ -40,7 +40,6 @@ void UAnimNotifyState_ShootPillar::NotifyTick(USkeletalMeshComponent* MeshComp, 
 void UAnimNotifyState_ShootPillar::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
 	if (!OwnerCharacterRef.IsValid()) return;
-	UE_LOG(LogTemp, Warning, TEXT("pilalr index : %d"), PillarIndex);
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 
 	if (CumulativeFrameTime > 0.0f)	CumulativeFrameTime = 0.0f;
