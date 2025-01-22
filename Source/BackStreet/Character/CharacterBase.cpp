@@ -863,13 +863,6 @@ void ACharacterBase::SetAsset()
 		UE_LOG(LogTemp, Error, TEXT("ACharacterBase::SetAsset() for %s,  Weapon attachment is falied"), *UKismetSystemLibrary::GetDisplayName(this));
 	}
 	WeaponComponent->SetRelativeLocationAndRotation(FVector(0.0f), FRotator::ZeroRotator);
-	
-	/*
-	FLatentActionInfo latentInfo;
-	latentInfo.CallbackTarget = this;
-	UKismetSystemLibrary::MoveComponentTo(WeaponComponent, FVector(0, 0, 0), FRotator(0, 0, 0)
-		, 0, 0, 0, 0, EMoveComponentAction::Type::Move, latentInfo);
-	*/
 
 	//----Init other asset------------
 	InitMaterialAsset();

@@ -298,6 +298,13 @@ FRotator AMainCharacterBase::GetAimingRotation(FVector BeginLocation)
 void AMainCharacterBase::ResetMovementInputValue()
 {
 	MovementInputValue = FVector2D::ZeroVector;
+
+	if (!bHoldToSprint)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AMainCharacterBase::ResetMovementInputValue()"));
+		FInputActionValue tempValue = FInputActionValue(-1.0f);
+		StopSprint(tempValue);
+	}
 }
 
 void AMainCharacterBase::Move(const FInputActionValue& Value)
@@ -391,7 +398,9 @@ void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 
 void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 {
+	UE_LOG(LogTemp, Warning, TEXT("AMainCharacterBase::StopSprint %d %d, bIsSprinting : %d"), (int32)Value.GetValueType(), (int32)bHoldToSprint, (int32)CharacterGameplayInfo.bIsSprinting);
 	if (!CharacterGameplayInfo.bIsSprinting) return;
+	if (Value.GetValueType() == EInputActionValueType::Boolean && !bHoldToSprint) return;
 
 	CharacterGameplayInfo.bIsSprinting = false;
 	SetWalkSpeedWithInterp(CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed), 0.4f);
