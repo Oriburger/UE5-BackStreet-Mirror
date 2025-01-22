@@ -204,7 +204,7 @@ void UStageManagerComponent::ClearPreviousActors()
 	RemainingEnemyCount = 0;
 }
 
-void UStageManagerComponent::ClearEnemyActors()
+void UStageManagerComponent::ClearPreviousActorsWithTag(FName Tag)
 {
 	//Remove all spawned actors
 	for (int idx = SpawnedActorList.Num() - 1; idx >= 0; idx--)
@@ -216,10 +216,10 @@ void UStageManagerComponent::ClearEnemyActors()
 			if(!IsValid(target) || target->IsActorBeingDestroyed()) SpawnedActorList[idx] = nullptr;
 
 			//need refactor. weapon is not destroyed together when character is destroyed using Destroy().
-			else if (target->ActorHasTag("Enemy"))
+			else if (target->ActorHasTag(Tag))
 			{
 				SpawnedActorList[idx] = nullptr;
-				UGameplayStatics::ApplyDamage(target, 1e8, nullptr, GetOwner(), nullptr);
+				target->Destroy();
 			}
 		}
 	}
@@ -257,7 +257,7 @@ bool UStageManagerComponent::TryUpdateSpawnPointProperty()
 		else if (spawnPoint->Tags[1] == FName("Gate"))
 		{
 			CurrentStageInfo.PortalTransformList.Add(spawnPoint->GetActorTransform());
-			checkf(spawnPoint->Tags.Num() >= 3, TEXT("Portal SpawnPoint의 Tag[2], Direction Tag가 지정되어있지않습니다."));
+			checkf(spawnPoint->Tags.Num() >= 3, TEXT("UStageManagerComponent::TryUpdateSpawnPointProperty() - Portal SpawnPoint의 Tag[2], Direction Tag가 지정되어있지않습니다."));
 			CurrentStageInfo.PortalDirectionTagList.Add(spawnPoint->Tags[2]);
 		}
 		else if (spawnPoint->Tags[1] == FName("Reward"))
@@ -578,7 +578,8 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	CurrentStageInfo.bIsFinished = true;
 
 	//Clear all remaining actors
-	ClearEnemyActors();
+	ClearPreviousActorsWithTag("Point");
+	ClearPreviousActorsWithTag("Enemy");
 
 	//Clear time attack timer handle
 	GetOwner()->GetWorldTimerManager().ClearTimer(TimeAttackTimerHandle);

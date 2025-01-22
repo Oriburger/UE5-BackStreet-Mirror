@@ -102,7 +102,7 @@ protected:
 		void ClearPreviousActors();
 
 	UFUNCTION()
-		void ClearEnemyActors();
+		void ClearPreviousActorsWithTag(FName Tag);
 
 	//Update spawn point member of stage info struct after map load 
 	//There are several points to spawn enemy, player, craftbox etc
