@@ -15,6 +15,7 @@
 #include "../../Item/Weapon/Ranged/RangedCombatManager.h"
 #include "../../Item/InteractiveCollisionComponent.h"
 #include "../../System/MapSystem/Stage/GateBase.h"
+#include "../../System/MapSystem/NewChapterManagerBase.h"
 #include "../Component/WeaponComponentBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/AudioComponent.h"
@@ -99,6 +100,9 @@ void AMainCharacterBase::BeginPlay()
 	
 	TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
 	SetAutomaticRotateModeTimer();
+
+	//Crash 방지
+	GamemodeRef.Get()->GetChapterManagerRef()->OnChapterCleared.AddDynamic(this, &AMainCharacterBase::ClearAllTimerHandle);
 }
 
 // Called every frame
@@ -298,6 +302,13 @@ FRotator AMainCharacterBase::GetAimingRotation(FVector BeginLocation)
 void AMainCharacterBase::ResetMovementInputValue()
 {
 	MovementInputValue = FVector2D::ZeroVector;
+
+	if (!bHoldToSprint)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AMainCharacterBase::ResetMovementInputValue()"));
+		FInputActionValue tempValue = FInputActionValue(-1.0f);
+		StopSprint(tempValue);
+	}
 }
 
 void AMainCharacterBase::Move(const FInputActionValue& Value)
@@ -392,6 +403,7 @@ void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 {
 	if (!CharacterGameplayInfo.bIsSprinting) return;
+	if (Value.GetValueType() == EInputActionValueType::Boolean && !bHoldToSprint) return;
 
 	CharacterGameplayInfo.bIsSprinting = false;
 	SetWalkSpeedWithInterp(CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed), 0.4f);
@@ -518,7 +530,10 @@ void AMainCharacterBase::SnapToCharacter(AActor* Target)
 float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	PlayHitAnimMontage();
+	if (damageAmount > 0.0f)
+	{
+		PlayHitAnimMontage();
+	}
 	return damageAmount;
 }
 
@@ -752,7 +767,7 @@ void AMainCharacterBase::SetAutomaticRotateMode()
 void AMainCharacterBase::UpdateCameraPitch(float TargetPitch, float InterpSpeed)
 {
 	FRotator currentRotation = GetControlRotation();
-	if (FMath::IsNearlyEqual(currentRotation.Pitch, TargetPitch, 5.0f))
+	if (FMath::IsNearlyEqual(currentRotation.Pitch, TargetPitch, 5.0f) || GetWorld()->IsPaused())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(CameraRotationAlignmentHandle);
 	}
@@ -935,10 +950,18 @@ void AMainCharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(RollDelayTimerHandle);
 	GetWorldTimerManager().ClearTimer(DashDelayTimerHandle);
 	GetWorldTimerManager().ClearTimer(JumpAttackDebuffTimerHandle);
+	GetWorldTimerManager().ClearTimer(WalkSpeedInterpTimerHandle);
+	GetWorldTimerManager().ClearTimer(FOVInterpHandle);
+	GetWorldTimerManager().ClearTimer(CameraRotationAlignmentHandle);
+	GetWorldTimerManager().ClearTimer(RotationResetTimerHandle);
 
 	BuffEffectResetTimerHandle.Invalidate();
 	FacialEffectResetTimerHandle.Invalidate();
 	RollDelayTimerHandle.Invalidate();
 	DashDelayTimerHandle.Invalidate();
 	JumpAttackDebuffTimerHandle.Invalidate();
+	WalkSpeedInterpTimerHandle.Invalidate();
+	FOVInterpHandle.Invalidate();
+	CameraRotationAlignmentHandle.Invalidate();
+	RotationResetTimerHandle.Invalidate();
 }

@@ -35,6 +35,7 @@ ACharacterBase::ACharacterBase()
 	SkillManagerComponent = CreateDefaultSubobject<USkillManagerComponentBase>(TEXT("SKILL_MANAGER"));
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
+	WeaponComponent->SetupAttachment(HitSceneComponent);
 
 	BuffNiagaraEmitter = CreateDefaultSubobject<UNiagaraComponent>(TEXT("BUFF_EFFECT"));
 	BuffNiagaraEmitter->SetupAttachment(GetMesh());
@@ -486,16 +487,6 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	HitCounterResetTimerHandle.Invalidate();
 	GetWorldTimerManager().SetTimer(HitCounterResetTimerHandle, this, &ACharacterBase::ResetHitCounter, 1.0f, false, 1.0f);
 
-	// Check knock down condition and set knock down event using retriggable timer
-	//if (Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetWeaponStat().FinalImpactStrength > 0 && Cast<ACharacterBase>(DamageCauser)->WeaponComponent->GetIsFinalCombo())
-	{
-		//KnockDown();
-		/*
-		GetWorldTimerManager().ClearTimer(KnockDownDelayTimerHandle);
-		KnockDownDelayTimerHandle.Invalidate();
-		GetWorldTimerManager().SetTimer(KnockDownDelayTimerHandle, this, &ACharacterBase::KnockDown, 1.0f, false, 0.1f);
-		*/
-	}
 	return DamageAmount;
 }
 
@@ -857,19 +848,19 @@ void ACharacterBase::SetAsset()
 	GetMesh()->OverrideMaterials.Empty();
 
 	//------ weapon component attachment ----------------------
-	bool result = WeaponComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName("Weapon_R"));
-	if (!result)
+	if (IsValid(GetMesh()->GetSkeletalMeshAsset()))
 	{
-		UE_LOG(LogTemp, Error, TEXT("ACharacterBase::SetAsset() for %s,  Weapon attachment is falied"), *UKismetSystemLibrary::GetDisplayName(this));
+		bool result = WeaponComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName("Weapon_R"));
+		if (!result)
+		{
+			UE_LOG(LogTemp, Error, TEXT("ACharacterBase::SetAsset() for %s,  Weapon attachment is falied"), *UKismetSystemLibrary::GetDisplayName(this));
+		}
+		WeaponComponent->SetRelativeLocationAndRotation(FVector(0.0f), FRotator::ZeroRotator);
 	}
-	WeaponComponent->SetRelativeLocationAndRotation(FVector(0.0f), FRotator::ZeroRotator);
-	
-	/*
-	FLatentActionInfo latentInfo;
-	latentInfo.CallbackTarget = this;
-	UKismetSystemLibrary::MoveComponentTo(WeaponComponent, FVector(0, 0, 0), FRotator(0, 0, 0)
-		, 0, 0, 0, 0, EMoveComponentAction::Type::Move, latentInfo);
-	*/
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("ACharacterBase::SetAsset() for %s, skeletal mesh is not valid"), *UKismetSystemLibrary::GetDisplayName(this));
+	}
 
 	//----Init other asset------------
 	InitMaterialAsset();
@@ -1047,6 +1038,7 @@ void ACharacterBase::ClearAllTimerHandle()
 	GetWorldTimerManager().ClearTimer(HitCounterResetTimerHandle);
 	GetWorldTimerManager().ClearTimer(LocationInterpHandle);
 	GetWorldTimerManager().ClearTimer(AirAtkLocationUpdateHandle);
+
 	AtkIntervalHandle.Invalidate();
 	KnockDownDelayTimerHandle.Invalidate();
 	HitCounterResetTimerHandle.Invalidate();

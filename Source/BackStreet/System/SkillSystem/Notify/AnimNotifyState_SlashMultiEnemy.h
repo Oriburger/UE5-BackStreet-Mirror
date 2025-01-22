@@ -33,7 +33,13 @@ public:
 		float SlashSpeedTime = 0.05f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		float DamageMultipiler = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		float InterpSpeed = 20.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		bool bResetTransform = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		bool bContainExtraSlash = false;
@@ -47,6 +53,7 @@ protected:
 
 private:
 	bool bIsInterping = false;
+	FTransform OriginalTransform;
 	float EndPoint = 0.0f;
 	float ElapsedTime = 0.0f;
 	int32 SlashIdx = 0;
