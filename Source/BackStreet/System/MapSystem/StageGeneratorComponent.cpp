@@ -169,7 +169,7 @@ TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidate
 		float cumulativeProbability = 0.0f;
 		for (int32 candidateIdx = 0; candidateIdx < rewardCandidateInfo.RewardItemIDList.Num(); ++candidateIdx)
 		{
-			if (ExceptIDList.Contains(candidateIdx)) continue;
+			if (ExceptIDList.Contains(rewardCandidateInfo.RewardItemIDList[candidateIdx])) continue;
 
 			cumulativeProbability += rewardCandidateInfo.RewardItemProbabilityList[candidateIdx];
 

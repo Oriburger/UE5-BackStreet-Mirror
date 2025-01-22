@@ -147,7 +147,6 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	}
 	if (!bIsCached && WeaponStat.WeaponType == EWeaponType::E_Melee)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("On Main Weapon Updated : %d %d"), WeaponStat.WeaponID, (int32)WeaponStat.WeaponType)
 		OnMainWeaponUpdated.Broadcast();
 	}
 	OnWeaponStateUpdated.Broadcast(WeaponID, WeaponStat.WeaponType, WeaponState);
