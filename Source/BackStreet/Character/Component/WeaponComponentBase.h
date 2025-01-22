@@ -152,7 +152,7 @@ public:
 		uint8 GetMaxStatLevel(EWeaponStatType WeaponStatType);
 
 	//Calculate total damage to target character
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float CalculateTotalDamage(FCharacterGameplayInfo TargetState, bool& bIsFatalAttack);
 
 	UFUNCTION()

@@ -33,6 +33,9 @@ public:
 		float SlashSpeedTime = 0.05f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		float DamageMultipiler = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		float InterpSpeed = 20.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)

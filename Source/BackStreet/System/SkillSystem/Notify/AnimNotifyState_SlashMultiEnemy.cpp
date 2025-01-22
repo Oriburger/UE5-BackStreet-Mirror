@@ -3,6 +3,7 @@
 
 #include "AnimNotifyState_SlashMultiEnemy.h"
 #include "../../../Character/CharacterBase.h"
+#include "../../../Character/Component/WeaponComponentBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "../../../Character/Component/SkillManagerComponentBase.h"
 
@@ -88,8 +89,12 @@ void UAnimNotifyState_SlashMultiEnemy::ApplyDamageWithInterval(AActor* TargetAct
 {
 	bIsInterping = true;
 	if (!IsValid(TargetActor)) return;
+
+	FCharacterGameplayInfo gameplayInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfo();
+	bool bIsFatalAttack = false;
+	float totalDamage = OwnerCharacterRef.Get()->WeaponComponent->CalculateTotalDamage(gameplayInfo, bIsFatalAttack);
 	
-	UGameplayStatics::ApplyDamage(TargetActor, 1.0f, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
+	UGameplayStatics::ApplyDamage(TargetActor, totalDamage * DamageMultipiler, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
 	
 	if (SlashEffectNiagara != nullptr)
 	{
