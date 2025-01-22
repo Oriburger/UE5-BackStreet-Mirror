@@ -102,7 +102,10 @@ void AMainCharacterBase::BeginPlay()
 	SetAutomaticRotateModeTimer();
 
 	//Crash 방지
-	GamemodeRef.Get()->GetChapterManagerRef()->OnChapterCleared.AddDynamic(this, &AMainCharacterBase::ClearAllTimerHandle);
+	if (GamemodeRef.IsValid() && IsValid(GamemodeRef.Get()->GetChapterManagerRef()))
+	{
+		GamemodeRef.Get()->GetChapterManagerRef()->OnChapterCleared.AddDynamic(this, &AMainCharacterBase::ClearAllTimerHandle);
+	}
 }
 
 // Called every frame
