@@ -527,7 +527,10 @@ void AMainCharacterBase::SnapToCharacter(AActor* Target)
 float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	PlayHitAnimMontage();
+	if (damageAmount > 0.0f)
+	{
+		PlayHitAnimMontage();
+	}
 	return damageAmount;
 }
 

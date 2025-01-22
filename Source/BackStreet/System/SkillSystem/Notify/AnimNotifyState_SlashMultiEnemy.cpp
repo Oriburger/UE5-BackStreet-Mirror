@@ -18,6 +18,8 @@ void UAnimNotifyState_SlashMultiEnemy::NotifyBegin(USkeletalMeshComponent* MeshC
 	ElapsedTime = SlashIdx = 0;
 	EndPoint = MeshComp->GetAnimInstance()->Montage_GetPosition(MeshComp->GetAnimInstance()->GetCurrentActiveMontage());
 	EndPoint += TotalDuration;
+
+	OriginalTransform = OwnerCharacterRef.Get()->GetActorTransform();
 }
 
 void UAnimNotifyState_SlashMultiEnemy::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
@@ -32,16 +34,15 @@ void UAnimNotifyState_SlashMultiEnemy::NotifyTick(USkeletalMeshComponent* MeshCo
 	{
 		OwnerCharacterRef.Get()->GetWorldTimerManager().ClearTimer(damageIntervalHandle);
 		damageIntervalHandle.Invalidate();
-		UAnimMontage* test = MeshComp->GetAnimInstance()->GetCurrentActiveMontage();
-		MeshComp->GetAnimInstance()->Montage_JumpToSection("End", test);
+		UAnimMontage* currentMontage = MeshComp->GetAnimInstance()->GetCurrentActiveMontage();
+		MeshComp->GetAnimInstance()->Montage_JumpToSection("End", currentMontage);
 		return;
 	}
-
-
+	
 	if (ElapsedTime >= SlashInterval)
 	{
 		ElapsedTime = 0.0f;
-		const int32 targetIdx = GetZigZagIdxByDistance(SlashIdx, resultList.Num());
+		const int32 targetIdx = resultList.Num() - SlashIdx - 1; // resultList.Num() - GetZigZagIdxByDistance(SlashIdx, resultList.Num()) - 1;
 
 		if (!resultList.IsValidIndex(targetIdx)) return;
 		
@@ -75,6 +76,10 @@ void UAnimNotifyState_SlashMultiEnemy::NotifyEnd(USkeletalMeshComponent* MeshCom
 			if (!IsValid(target)) continue;
 			ApplyDamageWithInterval(target);
 		}
+	}
+	if (bResetTransform)
+	{
+		OwnerCharacterRef.Get()->SetActorTransform(OriginalTransform);
 	}
 	resultList.Empty();
 }
