@@ -402,7 +402,6 @@ void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 
 void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("AMainCharacterBase::StopSprint %d %d, bIsSprinting : %d"), (int32)Value.GetValueType(), (int32)bHoldToSprint, (int32)CharacterGameplayInfo.bIsSprinting);
 	if (!CharacterGameplayInfo.bIsSprinting) return;
 	if (Value.GetValueType() == EInputActionValueType::Boolean && !bHoldToSprint) return;
 
