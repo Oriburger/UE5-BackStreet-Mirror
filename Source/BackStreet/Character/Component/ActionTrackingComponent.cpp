@@ -189,7 +189,10 @@ void UActionTrackingComponent::SetAutoTransitionTimer(FName ActionName, EActionS
 {
 	if (!ActionInfoMap.Contains(ActionName))
 	{
-		UE_LOG(LogTemp, Error, TEXT("UActionTrackingComponent::SetAutoTransitionTimer / %s"), *ActionName.ToString());
+		if (bShowDebugMessage)
+		{
+			UE_LOG(LogTemp, Error, TEXT("UActionTrackingComponent::SetAutoTransitionTimer / %s"), *ActionName.ToString());
+		}
 		return; 
 	}
 	FTimerDelegate timerDelegate;
@@ -210,7 +213,10 @@ EActionState UActionTrackingComponent::GetActionState(FName ActionName)
 {
 	if (!ActionInfoMap.Contains(ActionName))
 	{
-		UE_LOG(LogTemp, Error, TEXT("UActionTrackingComponent::GetActionState - Action / %s / is not found"), *ActionName.ToString());
+		if (bShowDebugMessage)
+		{
+			UE_LOG(LogTemp, Error, TEXT("UActionTrackingComponent::GetActionState - Action / %s / is not found"), *ActionName.ToString());
+		}
 		return EActionState::E_None;
 	}
 	FActionInfo& actionInfo = ActionInfoMap[ActionName];

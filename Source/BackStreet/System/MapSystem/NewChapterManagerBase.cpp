@@ -144,13 +144,13 @@ void ANewChapterManagerBase::InitStageIconTranslationList(FVector2D Threshold)
 	SetStageIconTranslationList(newList);
 }
 
-FStageInfo ANewChapterManagerBase::GetStageInfo(int32 StageIdx)
+FStageInfo& ANewChapterManagerBase::GetStageInfo(int32 StageIdx)
 {
-	if (!CurrentChapterInfo.StageInfoList.IsValidIndex(StageIdx)) return FStageInfo();
+	checkf(CurrentChapterInfo.StageInfoList.IsValidIndex(StageIdx), TEXT("ANewChapterManagerBase::GetStageInfo(%d) is not valid idx for list %d"), StageIdx, CurrentChapterInfo.StageInfoList.Num());
 	return CurrentChapterInfo.StageInfoList[StageIdx];
 }
 
-FStageInfo ANewChapterManagerBase::GetStageInfoWithCoordinate(FVector2D StageCoordinate)
+FStageInfo& ANewChapterManagerBase::GetStageInfoWithCoordinate(FVector2D StageCoordinate)
 {
 	return GetStageInfo(StageGeneratorComponent->GetStageIdx(StageCoordinate));
 }

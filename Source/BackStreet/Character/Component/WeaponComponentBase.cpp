@@ -347,7 +347,6 @@ float UWeaponComponentBase::CalculateAttackFatality(FCharacterGameplayInfo& Game
 
 void UWeaponComponentBase::ApplyWeaponDebuff(ACharacterBase* TargetCharacter, ECharacterDebuffType DebuffType, ECharacterStatType DebuffStatType)
 {
-	UE_LOG(LogTemp, Warning, TEXT("UWeaponComponentBase::ApplyWeaponDebuff #1"));
 	if (DebuffStatType == ECharacterStatType::E_None) return; 
 	if(!OwnerCharacterRef.IsValid() || !IsValid(TargetCharacter)) return;
 
@@ -363,8 +362,6 @@ void UWeaponComponentBase::ApplyWeaponDebuff(ACharacterBase* TargetCharacter, EC
 	{
 		result = TargetCharacter->TryAddNewDebuff(FDebuffInfoStruct(DebuffType, targetTime, targetValue, true), OwnerCharacterRef.Get());
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("UWeaponComponentBase::ApplyWeaponDebuff #3 - type : %d // value : %.2lf // random (%.2lf, %.2lf) // time : %.2lf // result : %d"), (int32)DebuffType, targetValue, probabilityValue * 100.0f, randomSeed, targetTime, (int32)result);
 }
 
 bool UWeaponComponentBase::UpgradeStat(TArray<uint8> NewLevelList)

@@ -30,10 +30,12 @@ public:
 	UFUNCTION()
 		TArray<FStageInfo> Generate();
 
-protected:
+public: //Reward
+	//Generate list using probability value list
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<FItemInfoDataStruct> GetRewardListFromCandidates(EStageCategoryInfo StageType);
+		TArray<FItemInfoDataStruct> GetRewardListFromCandidates(EStageCategoryInfo StageType, TArray<int32> ExceptIDList);
 
+	//Read item info from data table
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FItemInfoDataStruct GetRewardItemInfo(int32 ItemID);
 

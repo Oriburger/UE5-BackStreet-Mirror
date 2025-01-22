@@ -106,14 +106,14 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 		case EStageCategoryInfo::E_Escort:
 		case EStageCategoryInfo::E_EliteEscort:
 			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
-			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType);
+			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType, {});
 			if (stageInfo.RewardInfoList.Num() > 0)
 			{
 				stageInfo.StageIcon = stageInfo.RewardInfoList[0].ItemImage;
 			}
 			break;
 		case EStageCategoryInfo::E_Entry:
-			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType);
+			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType, {});
 			break;
 		}
 
@@ -142,7 +142,7 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 	return CurrentChapterInfo.StageInfoList = result;
 }
 
-TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidates(EStageCategoryInfo StageType)
+TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidates(EStageCategoryInfo StageType, TArray<int32> ExceptIDList)
 {
 	if (!CurrentChapterInfo.StageRewardCandidateInfoMap.Contains(StageType)) return {};
 
@@ -169,6 +169,8 @@ TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidate
 		float cumulativeProbability = 0.0f;
 		for (int32 candidateIdx = 0; candidateIdx < rewardCandidateInfo.RewardItemIDList.Num(); ++candidateIdx)
 		{
+			if (ExceptIDList.Contains(candidateIdx)) continue;
+
 			cumulativeProbability += rewardCandidateInfo.RewardItemProbabilityList[candidateIdx];
 
 			if (randomValue <= cumulativeProbability)
@@ -182,7 +184,7 @@ TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidate
 			}
 		}
 	}
-
+	
 	//check duplicate item's count and add reward info list
 	rewardItemIDList.Sort();
 	rewardItemIDList.Add(-1); 
