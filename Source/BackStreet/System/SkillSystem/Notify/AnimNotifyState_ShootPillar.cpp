@@ -28,9 +28,10 @@ void UAnimNotifyState_ShootPillar::NotifyTick(USkeletalMeshComponent* MeshComp, 
 	bIsShootable = false;
 	CumulativeFrameTime += FrameDeltaTime;
 
-	if (FMath::IsNearlyEqual(CumulativeFrameTime, ShootIntervalTime, 0.03f) && PillarIndex <= PillarMaxCount - 1)
+
+	if (CumulativeFrameTime >= ShootIntervalTime)
 	{
-		CumulativeFrameTime = 0.0f;
+		CumulativeFrameTime = 0.0f; 
 		PillarIndex++;
 		bIsShootable = true;
 	}
