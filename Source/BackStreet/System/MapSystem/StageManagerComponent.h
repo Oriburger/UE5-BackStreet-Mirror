@@ -72,7 +72,7 @@ public:
 		void InitStage(FStageInfo NewStageInfo);
 
 	UFUNCTION()
-		void ClearResource();
+		void ClearPreviousResource();
 
 	//Time attack stage only
 	UFUNCTION(BlueprintCallable, BlueprintPure)

@@ -48,13 +48,8 @@ void UStageManagerComponent::Initialize(FChapterInfo NewChapterInfo)
 
 void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 {
-	if (IsValid(MainAreaRef))
-	{
-		ClearPreviousLevelData();
-	}
-
-	//Clear previous portal
-	ClearPreviousActors();
+	//Clear Previous Stage Resources and Data
+	ClearPreviousResource();
 
 	//Init new stage
 	CurrentStageInfo = NewStageInfo;
@@ -95,10 +90,9 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	PreviousLevel = NewStageInfo.MainLevelAsset;
 	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
 	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 0.25f, true);
-
 }
 
-void UStageManagerComponent::ClearResource()
+void UStageManagerComponent::ClearPreviousResource()
 {
 	ClearPreviousActors();
 	ClearPreviousLevelData();
@@ -166,17 +160,24 @@ void UStageManagerComponent::CreateLevelInstance(TSoftObjectPtr<UWorld> MainLeve
 
 void UStageManagerComponent::ClearPreviousLevelData()
 {
-	if (!IsValid(MainAreaRef) || !IsValid(OuterAreaRef)) return; 
-
-	//Remove previous level instance
-	MainAreaRef->SetIsRequestingUnloadAndRemoval(true);
-	OuterAreaRef->SetIsRequestingUnloadAndRemoval(true);
-
 	//Clear timer
 	GetOwner()->GetWorldTimerManager().ClearTimer(LoadCheckTimerHandle);
 	GetOwner()->GetWorldTimerManager().ClearTimer(TimeAttackTimerHandle);
 	LoadCheckTimerHandle.Invalidate();
 	TimeAttackTimerHandle.Invalidate();
+
+	//Clear Spawn Location Info
+	CurrentStageInfo.ClearSpawnLocationList();
+
+	//Remove previous level instance
+	if (IsValid(MainAreaRef))
+	{
+		MainAreaRef->SetIsRequestingUnloadAndRemoval(true);
+	} 
+	if (IsValid(OuterAreaRef))
+	{
+		OuterAreaRef->SetIsRequestingUnloadAndRemoval(true);
+	}
 }
 
 void UStageManagerComponent::ClearPreviousActors()
@@ -187,16 +188,7 @@ void UStageManagerComponent::ClearPreviousActors()
 		if (SpawnedActorList[idx].IsValid())
 		{
 			AActor* target = SpawnedActorList[idx].Get();
-
-			//need refactor. weapon is not destroyed together when character is destroyed using Destroy().
-			if (IsValid(target) && target->ActorHasTag("Character"))
-			{
-				UGameplayStatics::ApplyDamage(target, 1e8, nullptr, GetOwner(), nullptr);
-			}
-			else
-			{
-				target->Destroy();
-			}
+			target->Destroy();
 			SpawnedActorList[idx] = nullptr;
 		}
 	}
@@ -579,7 +571,6 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 
 	//Clear all remaining actors
 	ClearPreviousActorsWithTag("Point");
-	ClearPreviousActorsWithTag("Enemy");
 
 	//Clear time attack timer handle
 	GetOwner()->GetWorldTimerManager().ClearTimer(TimeAttackTimerHandle);

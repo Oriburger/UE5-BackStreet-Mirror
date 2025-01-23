@@ -57,12 +57,14 @@ void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 	//Set state variable
 	bIsChapterFinished = true;
 
-	//Clear resource
+	//Temporary code : Remove character instance 
 	UGameplayStatics::ApplyDamage(PlayerRef.Get(), 1e8, nullptr, GetOwner(), nullptr);
-	StageManagerComponent->ClearResource();
 
-	//Reward 贸府
-	
+	//Clear resource
+	StageManagerComponent->ClearPreviousResource();
+
+	//Chapter Reward 贸府
+	//~
 
 	//change level to main menu
 	FTimerDelegate openLevelDelegate;
