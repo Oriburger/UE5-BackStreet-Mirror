@@ -226,12 +226,17 @@ bool UStageManagerComponent::TryUpdateSpawnPointProperty()
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Point"), spawnPointList);
 	const FVector zAxisCalibrationValue = FVector(0.0f, 0.0f, 50.0f);
 
+	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::TryUpdateSpawnPointProperty() ---------------"));
+
 	if (spawnPointList.IsEmpty()) return false;
 
+	UE_LOG(LogTemp, Warning, TEXT("> SpawnPointList -------------"));
 	for (AActor*& spawnPoint : spawnPointList)
 	{
-		if (!IsValid(spawnPoint) || !spawnPoint->Tags.IsValidIndex(1)) continue;
-		
+		UE_LOG(LogTemp, Warning, TEXT(" - %s"), *UKismetSystemLibrary::GetDisplayName(spawnPoint));
+		if (!IsValid(spawnPoint) || spawnPoint->IsActorBeingDestroyed() || !spawnPoint->Tags.IsValidIndex(1)) continue;
+		UE_LOG(LogTemp, Warning, TEXT("   ㄴ> Tag : %s"), *spawnPoint->Tags[1].ToString());
+
 		if (spawnPoint->Tags[1] == FName("Enemy"))
 		{
 			CurrentStageInfo.EnemySpawnLocationList.Add(spawnPoint->GetActorLocation() + zAxisCalibrationValue);
@@ -663,6 +668,11 @@ void UStageManagerComponent::EnsureUniqueStageRewards(FVector2D Coordinate)
 		for (auto& rewardInfo : rightStageInfo.RewardInfoList)//convert to id list
 			rewardIDList.Add(rewardInfo.ItemID);
 		leftStageInfo.RewardInfoList = stageGeneratorRef->GetRewardListFromCandidates(leftStageInfo.StageType, rewardIDList);
+		if (leftStageInfo.RewardInfoList.IsEmpty())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("> change reward failed, return to original one"));
+			leftStageInfo.RewardInfoList = rightStageInfo.RewardInfoList;
+		}
 		leftStageInfo.StageIcon = leftStageInfo.RewardInfoList[0].ItemImage;
 		UE_LOG(LogTemp, Warning, TEXT("> after change - %d, %d"), leftStageInfo.RewardInfoList[0].ItemID, rightStageInfo.RewardInfoList[0].ItemID);
 
