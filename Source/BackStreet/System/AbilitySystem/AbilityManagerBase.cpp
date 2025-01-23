@@ -52,7 +52,7 @@ bool UAbilityManagerComponent::TryAddNewAbility(int32 AbilityID)
 
 	//추가 로직
 	FAbilityInfoStruct newAbilityInfo = GetAbilityInfo(AbilityID);
-	if (newAbilityInfo.bIsRepetitive)
+	if (newAbilityInfo.bIsRepetitive && !newAbilityInfo.FuncName.IsNone())
 	{	
 		float variable = newAbilityInfo.VariableInfo.Num() > 0 ? newAbilityInfo.VariableInfo[0].Variable : 1.0f;
 		newAbilityInfo.TimerDelegate.BindUFunction(OwnerCharacterRef.Get(), newAbilityInfo.FuncName, variable, true, AbilityID);
