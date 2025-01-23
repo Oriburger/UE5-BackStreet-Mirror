@@ -206,6 +206,11 @@ void ACharacterBase::UpdateLocation(const FVector TargetValue, const float Inter
 	}
 	currentLocation = FMath::VInterpTo(currentLocation, TargetValue, 0.1f, InterpSpeed);
 	SetActorLocation(currentLocation, false, nullptr, ETeleportType::None);
+	
+	//Prevent pitch turns
+	FRotator newRotation = GetActorRotation();
+	newRotation.Pitch = 0.0f;
+	SetActorRotation(newRotation);
 }
 
 void ACharacterBase::SetAirAttackLocation()
