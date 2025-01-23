@@ -167,7 +167,7 @@ void UStageManagerComponent::ClearPreviousLevelData()
 	TimeAttackTimerHandle.Invalidate();
 
 	//Clear Spawn Location Info
-	CurrentStageInfo.ClearSpawnLocationList();
+	CurrentStageInfo.ClearSpawnLocationInfo();
 
 	//Remove previous level instance
 	if (IsValid(MainAreaRef))
