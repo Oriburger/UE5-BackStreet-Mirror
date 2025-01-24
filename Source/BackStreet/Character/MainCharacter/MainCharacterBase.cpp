@@ -308,7 +308,6 @@ void AMainCharacterBase::ResetMovementInputValue()
 
 	if (!bHoldToSprint)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AMainCharacterBase::ResetMovementInputValue()"));
 		FInputActionValue tempValue = FInputActionValue(-1.0f);
 		StopSprint(tempValue);
 	}
@@ -886,7 +885,16 @@ void AMainCharacterBase::UpdateFieldOfView(const float TargetValue, float Interp
 
 bool AMainCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)
 {
-	if (!Super::TryAddNewDebuff(DebuffInfo, Causer)) return false;
+	bool result = Super::TryAddNewDebuff(DebuffInfo, Causer);
+	if(!result) return false;
+
+	//Stun state management
+	if (DebuffInfo.Type == ECharacterDebuffType::E_Stun)
+	{
+		FInputActionValue tempValue; 
+		if (CharacterGameplayInfo.bIsAiming) ZoomOut();
+		if (CharacterGameplayInfo.bIsSprinting) StopSprint(tempValue);
+	}
 
 	if (AssetManagerBaseRef.IsValid())
 	{
