@@ -106,7 +106,16 @@ float UStageManagerComponent::GetStageRemainingTime()
 void UStageManagerComponent::RegisterActor(AActor* TargetActor)
 {
 	if (!IsValid(TargetActor)) return;
-	SpawnedActorList.Add(TargetActor);
+	SpawnedActorList.AddUnique(TargetActor);
+}
+
+void UStageManagerComponent::RegisterActorList(TArray<AActor*> TargetActorList)
+{
+	for (auto& actor : TargetActorList)
+	{
+		if (!IsValid(actor) || actor->IsActorBeingDestroyed()) continue;
+		RegisterActor(actor);
+	}
 }
 
 void UStageManagerComponent::AddLoadingScreen()
@@ -189,7 +198,6 @@ void UStageManagerComponent::ClearPreviousActors()
 		{
 			AActor* target = SpawnedActorList[idx].Get();
 			target->Destroy();
-			SpawnedActorList[idx] = nullptr;
 		}
 	}
 	SpawnedActorList.Reset();
@@ -210,17 +218,17 @@ void UStageManagerComponent::ClearPreviousActorsWithTag(FName Tag)
 			//need refactor. weapon is not destroyed together when character is destroyed using Destroy().
 			else if (target->ActorHasTag(Tag))
 			{
-				SpawnedActorList[idx] = nullptr;
 				target->Destroy();
+				SpawnedActorList.RemoveAtSwap(idx);
 			}
 		}
 	}
 	RemainingEnemyCount = 0;
 }
 
-bool UStageManagerComponent::TryUpdateSpawnPointProperty()
+TArray<AActor*> UStageManagerComponent::TryUpdateSpawnPointProperty()
 {
-	if (!IsValid(MainAreaRef)) return false;
+	if (!IsValid(MainAreaRef)) return {};
 
 	TArray<AActor*> spawnPointList;
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Point"), spawnPointList);
@@ -228,14 +236,20 @@ bool UStageManagerComponent::TryUpdateSpawnPointProperty()
 
 	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::TryUpdateSpawnPointProperty() ---------------"));
 
-	if (spawnPointList.IsEmpty()) return false;
+	if (spawnPointList.IsEmpty()) return {};
 
 	UE_LOG(LogTemp, Warning, TEXT("> SpawnPointList -------------"));
+	
+	//Clear Spawn Location Info
+	//동적 추가가 필요하면 이 구문을 지우기.
+	CurrentStageInfo.ClearSpawnLocationInfo();
+
 	for (AActor*& spawnPoint : spawnPointList)
 	{
 		UE_LOG(LogTemp, Warning, TEXT(" - %s"), *UKismetSystemLibrary::GetDisplayName(spawnPoint));
 		if (!IsValid(spawnPoint) || spawnPoint->IsActorBeingDestroyed() || !spawnPoint->Tags.IsValidIndex(1)) continue;
 		UE_LOG(LogTemp, Warning, TEXT("   ㄴ> Tag : %s"), *spawnPoint->Tags[1].ToString());
+		UE_LOG(LogTemp, Warning, TEXT("   ㄴ> Location : %s"), *spawnPoint->GetActorLocation().ToCompactString());
 
 		if (spawnPoint->Tags[1] == FName("Enemy"))
 		{
@@ -266,7 +280,7 @@ bool UStageManagerComponent::TryUpdateSpawnPointProperty()
 			CurrentStageInfo.ItemBoxSpawnLocationList.Add(spawnPoint->GetActorLocation());
 		}
 	}
-	return true;
+	return spawnPointList;
 }
 
 void UStageManagerComponent::SpawnEnemy()
@@ -488,9 +502,9 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 		//Update spawn points 
 		//LoadDone이 떠도, 
 		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame : Update Spawn Point"));
-		bool result = TryUpdateSpawnPointProperty();
+		TArray<AActor*> resultList = TryUpdateSpawnPointProperty();
 
-		if (result)
+		if (!resultList.IsEmpty())
 		{
 			//Clear timer and invalidate
 			GetWorld()->GetTimerManager().ClearTimer(LoadCheckTimerHandle);
@@ -499,6 +513,9 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 			//Clear Prev Actors
 			UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame : Clear Previous Actors"));
 			ClearPreviousActors();
+
+			//Register Points
+			RegisterActorList(resultList);
 
 			//Start stage with delay
 			UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame() : Load Done, StartStage"));

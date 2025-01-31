@@ -81,6 +81,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void RegisterActor(AActor* TargetActor);
 
+	UFUNCTION(BlueprintCallable)
+		void RegisterActorList(TArray<AActor*> TargetActorList);
+
 protected:
 	//Add loading screen
 	UFUNCTION()
@@ -107,7 +110,7 @@ protected:
 	//Update spawn point member of stage info struct after map load 
 	//There are several points to spawn enemy, player, craftbox etc
 	UFUNCTION()
-		bool TryUpdateSpawnPointProperty();
+		TArray<AActor*> TryUpdateSpawnPointProperty();
 
 	//Spawn enemy character
 	UFUNCTION()
