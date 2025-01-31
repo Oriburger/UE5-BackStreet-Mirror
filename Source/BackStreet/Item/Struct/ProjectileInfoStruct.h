@@ -29,6 +29,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FName Description;
 
+	//발사체 이름 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText ProjectileNameText;
+
+	//발사체 설명 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText DescriptionText;
+
 	//폭발 타입의 발사체인지? (RadialDamage)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsExplosive = false;
@@ -82,6 +90,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
 		FName ProjectileName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FName ProjectileNameText;
 
 	//스폰할 아이템 스태틱 메시 정보 저장
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
