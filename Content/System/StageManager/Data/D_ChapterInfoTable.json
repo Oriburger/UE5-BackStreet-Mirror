@@ -468,25 +468,7 @@
 		{
 			"E_Entry":
 			{
-				"CompositionNameList": [
-					"easy_small1",
-					"easy_small2",
-					"easy_small3",
-					"easy_small4",
-					"easy_small5",
-					"easy_medium1",
-					"easy_medium2",
-					"easy_medium3",
-					"easy_medium4",
-					"normal_small1",
-					"normal_small2",
-					"normal_small3",
-					"normal_small4",
-					"normal_small5",
-					"mix_normal_small1",
-					"mix_normal_small2",
-					"mix_normal_small3"
-				]
+				"CompositionNameList": []
 			},
 			"E_Exterminate":
 			{
@@ -572,7 +554,25 @@
 			},
 			"E_Escort":
 			{
-				"CompositionNameList": []
+				"CompositionNameList": [
+					"easy_small1",
+					"easy_small2",
+					"easy_small3",
+					"easy_small4",
+					"easy_small5",
+					"easy_medium1",
+					"easy_medium2",
+					"easy_medium3",
+					"easy_medium4",
+					"normal_small1",
+					"normal_small2",
+					"normal_small3",
+					"normal_small4",
+					"normal_small5",
+					"mix_normal_small1",
+					"mix_normal_small2",
+					"mix_normal_small3"
+				]
 			},
 			"E_EliteEscort":
 			{
@@ -1264,17 +1264,17 @@
 		"StageInfoList": [],
 		"StageIconInfoMap":
 		{
-			"E_Entry": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/TX_ICON_Start_a.TX_ICON_Start_a'",
-			"E_Exterminate": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/TX_ICON_Ebattle_a.TX_ICON_Ebattle_a'",
-			"E_EliteExterminate": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/TX_ICON_Battle_a.TX_ICON_Battle_a'",
-			"E_TimeAttack": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
-			"E_EliteTimeAttack": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
-			"E_Escort": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
-			"E_EliteEscort": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
-			"E_Boss": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/TX_ICON_Boss_a.TX_ICON_Boss_a'",
-			"E_Craft": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/TX_ICON_Crafting_a.TX_ICON_Crafting_a'",
-			"E_MiniGame": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/TX_ICON_Random_a.TX_ICON_Random_a'",
-			"E_Gatcha": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/TX_ICON_Random_a.TX_ICON_Random_a'"
+			"E_Entry": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Start_a.TX_ICON_Start_a'",
+			"E_Exterminate": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Ebattle_a.TX_ICON_Ebattle_a'",
+			"E_EliteExterminate": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Battle_a.TX_ICON_Battle_a'",
+			"E_TimeAttack": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
+			"E_EliteTimeAttack": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
+			"E_Escort": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
+			"E_EliteEscort": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
+			"E_Boss": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Boss_a.TX_ICON_Boss_a'",
+			"E_Craft": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Crafting_a.TX_ICON_Crafting_a'",
+			"E_MiniGame": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Random_a.TX_ICON_Random_a'",
+			"E_Gatcha": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Random_a.TX_ICON_Random_a'"
 		},
 		"StageIconTransitionValueList": [],
 		"StageLevelInfoMap":
@@ -1282,7 +1282,7 @@
 			"E_Entry":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter01/Polishing/Chapter01_Entry.Chapter01_Entry"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Entry_Tutorial.Chapter01_Entry_Tutorial"
 				]
 			},
 			"E_Exterminate":

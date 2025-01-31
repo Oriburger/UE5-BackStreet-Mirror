@@ -72,7 +72,7 @@ public:
 		void InitStage(FStageInfo NewStageInfo);
 
 	UFUNCTION()
-		void ClearResource();
+		void ClearPreviousResource();
 
 	//Time attack stage only
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -80,6 +80,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void RegisterActor(AActor* TargetActor);
+
+	UFUNCTION(BlueprintCallable)
+		void RegisterActorList(TArray<AActor*> TargetActorList);
 
 protected:
 	//Add loading screen
@@ -102,12 +105,12 @@ protected:
 		void ClearPreviousActors();
 
 	UFUNCTION()
-		void ClearEnemyActors();
+		void ClearPreviousActorsWithTag(FName Tag);
 
 	//Update spawn point member of stage info struct after map load 
 	//There are several points to spawn enemy, player, craftbox etc
 	UFUNCTION()
-		bool TryUpdateSpawnPointProperty();
+		TArray<AActor*> TryUpdateSpawnPointProperty();
 
 	//Spawn enemy character
 	UFUNCTION()

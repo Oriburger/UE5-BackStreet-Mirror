@@ -203,6 +203,36 @@ public:
 	//Is game over
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bIsGameOver = false;
+
+//---Funciton---------------------------------
+public:
+	void ClearSpawnLocationInfo()
+	{
+		UE_LOG(LogTemp, Warning, TEXT("FStageInfo::ClearSpawnLocationList() invoked"));
+
+		// Clear the EnemySpawnLocationList
+		EnemySpawnLocationList.Empty();
+
+		// Reset Boss Stage variables
+		BossSpawnLocation = FVector::ZeroVector;
+		BossSpawnRotation = FRotator::ZeroRotator;
+
+		// Reset Player start location and rotation
+		PlayerStartLocation = FVector::ZeroVector;
+		PlayerStartRotation = FRotator::ZeroRotator;
+
+		// Clear the ItemBoxSpawnLocationList
+		ItemBoxSpawnLocationList.Empty();
+
+		// Reset RewardSpawnLocation
+		RewardSpawnLocation = FVector::ZeroVector;
+
+		// Clear the PortalTransformList
+		PortalTransformList.Empty();
+
+		// Clear the PortalDirectionTagList
+		PortalDirectionTagList.Empty();
+	}
 };
 
 USTRUCT(BlueprintType)

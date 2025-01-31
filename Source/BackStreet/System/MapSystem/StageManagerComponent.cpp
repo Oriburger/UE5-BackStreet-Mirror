@@ -48,13 +48,8 @@ void UStageManagerComponent::Initialize(FChapterInfo NewChapterInfo)
 
 void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 {
-	if (IsValid(MainAreaRef))
-	{
-		ClearPreviousLevelData();
-	}
-
-	//Clear previous portal
-	ClearPreviousActors();
+	//Clear Previous Stage Resources and Data
+	ClearPreviousResource();
 
 	//Init new stage
 	CurrentStageInfo = NewStageInfo;
@@ -95,10 +90,9 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	PreviousLevel = NewStageInfo.MainLevelAsset;
 	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
 	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 0.25f, true);
-
 }
 
-void UStageManagerComponent::ClearResource()
+void UStageManagerComponent::ClearPreviousResource()
 {
 	ClearPreviousActors();
 	ClearPreviousLevelData();
@@ -112,7 +106,16 @@ float UStageManagerComponent::GetStageRemainingTime()
 void UStageManagerComponent::RegisterActor(AActor* TargetActor)
 {
 	if (!IsValid(TargetActor)) return;
-	SpawnedActorList.Add(TargetActor);
+	SpawnedActorList.AddUnique(TargetActor);
+}
+
+void UStageManagerComponent::RegisterActorList(TArray<AActor*> TargetActorList)
+{
+	for (auto& actor : TargetActorList)
+	{
+		if (!IsValid(actor) || actor->IsActorBeingDestroyed()) continue;
+		RegisterActor(actor);
+	}
 }
 
 void UStageManagerComponent::AddLoadingScreen()
@@ -166,17 +169,24 @@ void UStageManagerComponent::CreateLevelInstance(TSoftObjectPtr<UWorld> MainLeve
 
 void UStageManagerComponent::ClearPreviousLevelData()
 {
-	if (!IsValid(MainAreaRef) || !IsValid(OuterAreaRef)) return; 
-
-	//Remove previous level instance
-	MainAreaRef->SetIsRequestingUnloadAndRemoval(true);
-	OuterAreaRef->SetIsRequestingUnloadAndRemoval(true);
-
 	//Clear timer
 	GetOwner()->GetWorldTimerManager().ClearTimer(LoadCheckTimerHandle);
 	GetOwner()->GetWorldTimerManager().ClearTimer(TimeAttackTimerHandle);
 	LoadCheckTimerHandle.Invalidate();
 	TimeAttackTimerHandle.Invalidate();
+
+	//Clear Spawn Location Info
+	CurrentStageInfo.ClearSpawnLocationInfo();
+
+	//Remove previous level instance
+	if (IsValid(MainAreaRef))
+	{
+		MainAreaRef->SetIsRequestingUnloadAndRemoval(true);
+	} 
+	if (IsValid(OuterAreaRef))
+	{
+		OuterAreaRef->SetIsRequestingUnloadAndRemoval(true);
+	}
 }
 
 void UStageManagerComponent::ClearPreviousActors()
@@ -187,24 +197,14 @@ void UStageManagerComponent::ClearPreviousActors()
 		if (SpawnedActorList[idx].IsValid())
 		{
 			AActor* target = SpawnedActorList[idx].Get();
-
-			//need refactor. weapon is not destroyed together when character is destroyed using Destroy().
-			if (IsValid(target) && target->ActorHasTag("Character"))
-			{
-				UGameplayStatics::ApplyDamage(target, 1e8, nullptr, GetOwner(), nullptr);
-			}
-			else
-			{
-				target->Destroy();
-			}
-			SpawnedActorList[idx] = nullptr;
+			target->Destroy();
 		}
 	}
 	SpawnedActorList.Reset();
 	RemainingEnemyCount = 0;
 }
 
-void UStageManagerComponent::ClearEnemyActors()
+void UStageManagerComponent::ClearPreviousActorsWithTag(FName Tag)
 {
 	//Remove all spawned actors
 	for (int idx = SpawnedActorList.Num() - 1; idx >= 0; idx--)
@@ -216,30 +216,41 @@ void UStageManagerComponent::ClearEnemyActors()
 			if(!IsValid(target) || target->IsActorBeingDestroyed()) SpawnedActorList[idx] = nullptr;
 
 			//need refactor. weapon is not destroyed together when character is destroyed using Destroy().
-			else if (target->ActorHasTag("Enemy"))
+			else if (target->ActorHasTag(Tag))
 			{
-				SpawnedActorList[idx] = nullptr;
-				UGameplayStatics::ApplyDamage(target, 1e8, nullptr, GetOwner(), nullptr);
+				target->Destroy();
+				SpawnedActorList.RemoveAtSwap(idx);
 			}
 		}
 	}
 	RemainingEnemyCount = 0;
 }
 
-bool UStageManagerComponent::TryUpdateSpawnPointProperty()
+TArray<AActor*> UStageManagerComponent::TryUpdateSpawnPointProperty()
 {
-	if (!IsValid(MainAreaRef)) return false;
+	if (!IsValid(MainAreaRef)) return {};
 
 	TArray<AActor*> spawnPointList;
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Point"), spawnPointList);
 	const FVector zAxisCalibrationValue = FVector(0.0f, 0.0f, 50.0f);
 
-	if (spawnPointList.IsEmpty()) return false;
+	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::TryUpdateSpawnPointProperty() ---------------"));
+
+	if (spawnPointList.IsEmpty()) return {};
+
+	UE_LOG(LogTemp, Warning, TEXT("> SpawnPointList -------------"));
+	
+	//Clear Spawn Location Info
+	//동적 추가가 필요하면 이 구문을 지우기.
+	CurrentStageInfo.ClearSpawnLocationInfo();
 
 	for (AActor*& spawnPoint : spawnPointList)
 	{
-		if (!IsValid(spawnPoint) || !spawnPoint->Tags.IsValidIndex(1)) continue;
-		
+		UE_LOG(LogTemp, Warning, TEXT(" - %s"), *UKismetSystemLibrary::GetDisplayName(spawnPoint));
+		if (!IsValid(spawnPoint) || spawnPoint->IsActorBeingDestroyed() || !spawnPoint->Tags.IsValidIndex(1)) continue;
+		UE_LOG(LogTemp, Warning, TEXT("   ㄴ> Tag : %s"), *spawnPoint->Tags[1].ToString());
+		UE_LOG(LogTemp, Warning, TEXT("   ㄴ> Location : %s"), *spawnPoint->GetActorLocation().ToCompactString());
+
 		if (spawnPoint->Tags[1] == FName("Enemy"))
 		{
 			CurrentStageInfo.EnemySpawnLocationList.Add(spawnPoint->GetActorLocation() + zAxisCalibrationValue);
@@ -257,7 +268,7 @@ bool UStageManagerComponent::TryUpdateSpawnPointProperty()
 		else if (spawnPoint->Tags[1] == FName("Gate"))
 		{
 			CurrentStageInfo.PortalTransformList.Add(spawnPoint->GetActorTransform());
-			checkf(spawnPoint->Tags.Num() >= 3, TEXT("Portal SpawnPoint의 Tag[2], Direction Tag가 지정되어있지않습니다."));
+			checkf(spawnPoint->Tags.Num() >= 3, TEXT("UStageManagerComponent::TryUpdateSpawnPointProperty() - Portal SpawnPoint의 Tag[2], Direction Tag가 지정되어있지않습니다."));
 			CurrentStageInfo.PortalDirectionTagList.Add(spawnPoint->Tags[2]);
 		}
 		else if (spawnPoint->Tags[1] == FName("Reward"))
@@ -269,7 +280,7 @@ bool UStageManagerComponent::TryUpdateSpawnPointProperty()
 			CurrentStageInfo.ItemBoxSpawnLocationList.Add(spawnPoint->GetActorLocation());
 		}
 	}
-	return true;
+	return spawnPointList;
 }
 
 void UStageManagerComponent::SpawnEnemy()
@@ -491,9 +502,9 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 		//Update spawn points 
 		//LoadDone이 떠도, 
 		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame : Update Spawn Point"));
-		bool result = TryUpdateSpawnPointProperty();
+		TArray<AActor*> resultList = TryUpdateSpawnPointProperty();
 
-		if (result)
+		if (!resultList.IsEmpty())
 		{
 			//Clear timer and invalidate
 			GetWorld()->GetTimerManager().ClearTimer(LoadCheckTimerHandle);
@@ -502,6 +513,9 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 			//Clear Prev Actors
 			UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame : Clear Previous Actors"));
 			ClearPreviousActors();
+
+			//Register Points
+			RegisterActorList(resultList);
 
 			//Start stage with delay
 			UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame() : Load Done, StartStage"));
@@ -578,7 +592,7 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	CurrentStageInfo.bIsFinished = true;
 
 	//Clear all remaining actors
-	ClearEnemyActors();
+	ClearPreviousActorsWithTag("Point");
 
 	//Clear time attack timer handle
 	GetOwner()->GetWorldTimerManager().ClearTimer(TimeAttackTimerHandle);
@@ -671,6 +685,11 @@ void UStageManagerComponent::EnsureUniqueStageRewards(FVector2D Coordinate)
 		for (auto& rewardInfo : rightStageInfo.RewardInfoList)//convert to id list
 			rewardIDList.Add(rewardInfo.ItemID);
 		leftStageInfo.RewardInfoList = stageGeneratorRef->GetRewardListFromCandidates(leftStageInfo.StageType, rewardIDList);
+		if (leftStageInfo.RewardInfoList.IsEmpty())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("> change reward failed, return to original one"));
+			leftStageInfo.RewardInfoList = rightStageInfo.RewardInfoList;
+		}
 		leftStageInfo.StageIcon = leftStageInfo.RewardInfoList[0].ItemImage;
 		UE_LOG(LogTemp, Warning, TEXT("> after change - %d, %d"), leftStageInfo.RewardInfoList[0].ItemID, rightStageInfo.RewardInfoList[0].ItemID);
 
