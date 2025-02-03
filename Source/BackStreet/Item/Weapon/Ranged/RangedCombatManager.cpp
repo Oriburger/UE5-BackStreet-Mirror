@@ -74,9 +74,9 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride, FVec
 
 	//broadcast delegate
 	const int32 weaponID = WeaponComponentRef.Get()->WeaponID;
-	const EWeaponType weaponType = WeaponComponentRef.Get()->GetWeaponStat().WeaponType;
+	const FWeaponStatStruct weaponStat = WeaponComponentRef.Get()->GetWeaponStat();
 	const FWeaponStateStruct weaponState = WeaponComponentRef.Get()->GetWeaponState();
-	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponType, weaponState);
+	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponStat, weaponState);
 
 	//탄환을 다 썼을 경우, 모든 탄환을 발사한 이후 아래 로직을 처리한다
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player")
@@ -88,19 +88,6 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride, FVec
 	return true;
 }
 
-void URangedCombatManager::AddAmmo(int32 Count)
-{
-	if (WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo) return;
-	
-	//broadcast delegate
-	const int32 weaponID = WeaponComponentRef.Get()->WeaponID;
-	const EWeaponType weaponType = WeaponComponentRef.Get()->GetWeaponStat().WeaponType;
-	FWeaponStateStruct weaponState = WeaponComponentRef.Get()->GetWeaponState();
-	weaponState.RangedWeaponState.CurrentAmmoCount += Count;
-	weaponState.RangedWeaponState.UpdateAmmoValidation(WeaponComponentRef.Get()->GetWeaponStat().RangedWeaponStat.MaxTotalAmmo);
-
-	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponType, weaponState);
-}
 
 AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOverride, FVector FireLocationOverride)
 {	

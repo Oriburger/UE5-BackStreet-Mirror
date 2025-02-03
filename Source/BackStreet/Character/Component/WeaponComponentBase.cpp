@@ -149,7 +149,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	{
 		OnMainWeaponUpdated.Broadcast();
 	}
-	OnWeaponStateUpdated.Broadcast(WeaponID, WeaponStat.WeaponType, WeaponState);
+	OnWeaponStateUpdated.Broadcast(WeaponID, WeaponStat, WeaponState);
 }
 
 void UWeaponComponentBase::InitWeaponAsset()
