@@ -654,7 +654,6 @@ void ACharacterBase::TryDashAttack()
 
 bool ACharacterBase::TrySkill(int32 SkillID)
 {
-	if (!CharacterGameplayInfo.bCanAttack) return false;
 	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Stun
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die
