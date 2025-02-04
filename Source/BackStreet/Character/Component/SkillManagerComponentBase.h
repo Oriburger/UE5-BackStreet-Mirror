@@ -77,7 +77,13 @@ public:
 		TArray<int32> GetPlayerSkillIDList();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetTotalCoolTime(int32 TargetSkillID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetRemainingCoolTime(int32 TargetSkillID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		void GetCoolTimeVariables(int32 TargetSkillID, float& RemainingTime, float& TotalTime);
 
 	//It must be flushed after using.
 	UPROPERTY(BlueprintReadWrite)
