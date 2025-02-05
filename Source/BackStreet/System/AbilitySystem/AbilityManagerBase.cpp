@@ -3,6 +3,7 @@
 
 #include "AbilityManagerBase.h"
 #include "../../Character/CharacterBase.h"
+#include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -263,7 +264,12 @@ bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct T
 		//HP UI 업데이트
 		if (statType == ECharacterStatType::E_MaxHealth)
 		{
-			OwnerCharacterRef.Get()->TakeHeal(0.0f);
+			OwnerCharacterRef.Get()->TakeHeal(0.01f);
+		}
+		else if (statType == ECharacterStatType::E_SubWeaponCapacity)
+		{
+			Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->SwitchWeapon(true, true);
+			Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->SwitchWeapon(false, true);
 		}
 	}
 	return true;

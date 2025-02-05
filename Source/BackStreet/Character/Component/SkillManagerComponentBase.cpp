@@ -131,7 +131,9 @@ bool USkillManagerComponentBase::TryActivateSkill(int32 TargetSkillID)
 		FTimerDelegate timerDelegate;
 		timerDelegate.BindUFunction(this, FName("UpdateSkillValidity"), TargetSkillID, true);
 		UpdateSkillValidity(TargetSkillID, false);
-		GetWorld()->GetTimerManager().SetTimer(CoolTimerHandleMap[TargetSkillID], timerDelegate, skillInfo.CoolTimeValue, false);
+		const float coolTimeAbilityValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_SkillCoolTime) - 1.0f;
+		const float totalCoolTimeValue = FMath::Clamp(skillInfo.CoolTimeValue - skillInfo.CoolTimeValue * coolTimeAbilityValue, 0.1f, 60.0f);
+		GetWorld()->GetTimerManager().SetTimer(CoolTimerHandleMap[TargetSkillID], timerDelegate, totalCoolTimeValue, false);
 	}
 
 	return true;
@@ -206,10 +208,23 @@ TArray<int32> USkillManagerComponentBase::GetPlayerSkillIDList()
 	return PlayerSkillIDList;
 }
 
+float USkillManagerComponentBase::GetTotalCoolTime(int32 TargetSkillID)
+{
+	if (!CoolTimerHandleMap.Contains(TargetSkillID)) return 0.0001f;
+	return GetWorld()->GetTimerManager().GetTimerRemaining(CoolTimerHandleMap[TargetSkillID])
+			+ GetWorld()->GetTimerManager().GetTimerElapsed(CoolTimerHandleMap[TargetSkillID]);
+}
+
 float USkillManagerComponentBase::GetRemainingCoolTime(int32 TargetSkillID)
 {
 	if (!CoolTimerHandleMap.Contains(TargetSkillID)) return 0.0f;
 	return GetWorld()->GetTimerManager().GetTimerRemaining(CoolTimerHandleMap[TargetSkillID]);
+}
+
+void USkillManagerComponentBase::GetCoolTimeVariables(int32 TargetSkillID, float& RemainingTime, float& TotalTime)
+{
+	RemainingTime = GetRemainingCoolTime(TargetSkillID);
+	TotalTime = GetTotalCoolTime(TargetSkillID);
 }
 
 

@@ -29,10 +29,6 @@ public:
 public:
 	UFUNCTION(BlueprintCallable)
 		bool TryFireProjectile(FRotator FireRotationOverride = FRotator::ZeroRotator, FVector FireLocationOverride = FVector::ZeroVector);
-	
-	//Add ammo count
-	UFUNCTION(BlueprintCallable)
-		void AddAmmo(int32 Count);
 
 //------ Basic ---------------------------------
 protected:
