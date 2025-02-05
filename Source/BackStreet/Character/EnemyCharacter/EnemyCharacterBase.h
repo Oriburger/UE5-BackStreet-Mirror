@@ -103,6 +103,8 @@ public:
 	UFUNCTION()
 		void TakeKnockBack(float KnockbackForce, float KnockbackResist);
 
+	virtual	bool TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer);
+
 private:
 	//Set default weapon actor using weapon inventory
 	UFUNCTION()

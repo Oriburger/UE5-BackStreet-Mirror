@@ -151,6 +151,19 @@ void AEnemyCharacterBase::TakeKnockBack(float KnockbackForce, float KnockbackRes
 	}
 }
 
+bool AEnemyCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)
+{
+	bool result = Super::TryAddNewDebuff(DebuffInfo, Causer);
+	if (result && DebuffInfo.Type == ECharacterDebuffType::E_Stun && Causer->ActorHasTag("Player"))
+	{
+		SkillManagerComponent->StopSkillAnimMontage();
+		AAIControllerBase* aiControllerRef = nullptr;
+		aiControllerRef = Cast<AAIControllerBase>(Controller);
+		if (aiControllerRef->GetBehaviorState() == EAIBehaviorType::E_Skill) aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Idle);
+	}
+	return result;
+}
+
 float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
