@@ -223,6 +223,16 @@ void USkillManagerComponentBase::ClearAllSkill()
 
 }
 
+void USkillManagerComponentBase::StopSkillAnimMontage()
+{	
+	UAnimInstance* animInstance = OwnerCharacterRef->GetMesh()->GetAnimInstance();
+	if (IsValid(animInstance) && animInstance->IsAnyMontagePlaying()) 
+	{
+		animInstance->Montage_Stop(0.0f);
+		DeactivateCurrentSkill();
+	}
+}
+
 void USkillManagerComponentBase::UpdateSkillValidity(int32 TargetSkillID, bool NewState)
 {
 	bool bIsInInventory = false;

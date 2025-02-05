@@ -60,6 +60,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void ClearAllSkill();
+
+	UFUNCTION(BlueprintCallable)
+		void StopSkillAnimMontage();
+
 private:
 	//스킬의 사용 가능 여부를 업데이트 한다.
 	UFUNCTION()

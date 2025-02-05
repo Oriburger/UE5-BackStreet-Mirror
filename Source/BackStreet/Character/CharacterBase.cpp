@@ -392,7 +392,13 @@ float ACharacterBase::GetMaxHP()
 bool ACharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)
 {
 	if (!GamemodeRef.IsValid()) return false;
-
+	if (DebuffInfo.Type == ECharacterDebuffType::E_Stun && Causer->ActorHasTag("Player"))
+	{
+		SkillManagerComponent->StopSkillAnimMontage();
+		AAIControllerBase* aiControllerRef = nullptr;
+		aiControllerRef = Cast<AAIControllerBase>(Controller);
+		if(aiControllerRef->GetBehaviorState() == EAIBehaviorType::E_Skill) aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Idle);
+	}
 	bool result = DebuffManagerComponent->SetDebuffTimer(DebuffInfo, Causer);
 	return result;
 }
@@ -654,7 +660,6 @@ void ACharacterBase::TryDashAttack()
 
 bool ACharacterBase::TrySkill(int32 SkillID)
 {
-	if (!CharacterGameplayInfo.bCanAttack) return false;
 	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Skill
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Stun
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die
