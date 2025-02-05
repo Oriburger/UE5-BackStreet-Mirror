@@ -8,7 +8,7 @@
 #define MAX_WEAPON_UPGRADABLE_STAT_IDX 3
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateWeaponUpdated);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDelegateWeaponStateUpdated, int32, WeaponID, EWeaponType, WeaponType, FWeaponStateStruct, NewState);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDelegateWeaponStateUpdated, int32, WeaponID, FWeaponStatStruct, WeaponStat, FWeaponStateStruct, NewState);
 
 UCLASS(Blueprintable)
 class BACKSTREET_API UWeaponComponentBase : public UStaticMeshComponent

@@ -60,6 +60,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void ClearAllSkill();
+
+	UFUNCTION(BlueprintCallable)
+		void StopSkillAnimMontage();
+
 private:
 	//스킬의 사용 가능 여부를 업데이트 한다.
 	UFUNCTION()
@@ -77,7 +81,13 @@ public:
 		TArray<int32> GetPlayerSkillIDList();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetTotalCoolTime(int32 TargetSkillID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetRemainingCoolTime(int32 TargetSkillID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		void GetCoolTimeVariables(int32 TargetSkillID, float& RemainingTime, float& TotalTime);
 
 	//It must be flushed after using.
 	UPROPERTY(BlueprintReadWrite)
