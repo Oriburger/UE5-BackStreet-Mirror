@@ -260,9 +260,25 @@ void AEnemyCharacterBase::SpawnDeathItems()
 {
 	FEnemyDropInfoStruct dropInfo = EnemyStat.DropInfo;
 
-	int32 totalSpawnItemCount = UKismetMathLibrary::RandomIntegerInRange(0, dropInfo.MaxSpawnItemCount);
-	int32 trySpawnCount = 0; //스폰 시도를 한 횟수
+	int32 totalSpawnItemCount = 1;
 
+	// 럭키 드롭 어빌리티 ==================
+	TWeakObjectPtr<ACharacterBase> playerRef = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (playerRef.IsValid())
+	{
+		const float probability = playerRef.Get()->GetStatProbabilityValue(ECharacterStatType::E_LuckyDrop);
+		const float statValue = playerRef.Get()->GetStatTotalValue(ECharacterStatType::E_LuckyDrop);
+
+		if (statValue > 1.0f && FMath::FRand() <= probability)
+		{
+			totalSpawnItemCount *= (int32)statValue;
+		}	
+	}
+
+	
+
+	// 실제 스폰 처리 =====================
+	int32 trySpawnCount = 0; //스폰 시도를 한 횟수
 	TArray<AItemBase*> spawnedItemList;
 
 	while (totalSpawnItemCount)
@@ -280,25 +296,19 @@ void AEnemyCharacterBase::SpawnDeathItems()
 		if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
 		{
 			//임시로 오프셋 넣어둠. 언젠가 Linetrace로 바닥 맞춰주는 로직 추가할 것.
-			AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 10.0f - FVector(0.0f, 0.0f, 50.0f));
-			
+			AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 30.0f - FVector(0.0f, 0.0f, 50.0f));
+
 			if (IsValid(newItem))
 			{
-				spawnedItemList.Add(newItem);
+				//spawnedItemList.Add(newItem);
 				totalSpawnItemCount -= 1;
 			}
 		}
 	}
 
-	ACharacterBase* playerRef = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	for (auto& targetItem : spawnedItemList)
 	{
-		uint8 newAmount = 1;
-		if (IsValid(playerRef) && playerRef->GetStatProbabilityValue(ECharacterStatType::E_LuckyDrop) >= FMath::FRandRange(0.0f, 1.0f))
-		{
-			newAmount = 2;
-		}
-		targetItem->SetItemAmount(newAmount);
+		targetItem->SetItemAmount(1);
 		GamemodeRef.Get()->RegisterActorToStageManager(targetItem);
 		targetItem->ActivateItem();
 		//targetItem->ActivateProjectileMovement(); //텍스쳐만 있는 아이템의 경우에는 바닥을 뚫는 문제가 있음, 추후 개선 필요

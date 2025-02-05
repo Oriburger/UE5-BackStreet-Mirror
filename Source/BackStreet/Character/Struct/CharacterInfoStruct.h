@@ -319,7 +319,7 @@ public:
 	{
 		FStatValueGroup& target = GetStatGroup(StatType);
 		if (!target.bIsContainProbability || NewValue < 0.0f) return false;
-		target.ProbabilityValue = NewValue;
+		target.ProbabilityValue = FMath::Clamp(NewValue, 0.0f, 1.0f);
 		return true;
 	}
 	static FORCEINLINE ECharacterStatType GetDebuffStatType(bool bIsJumpAttacking, bool bIsDashAttacking, ECharacterDebuffType DebuffType)

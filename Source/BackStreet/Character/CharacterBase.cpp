@@ -582,7 +582,24 @@ void ACharacterBase::TryAttack()
 	if (!CharacterGameplayInfo.bCanAttack || !GetIsActionActive(ECharacterActionType::E_Idle)) return;
 
 	int32 nextAnimIdx = ActionTrackingComponent->CurrentComboCount;
-	const float attackSpeed = FMath::Clamp(GetCharacterGameplayInfo().GetTotalValue(ECharacterStatType::E_NormalAttackSpeed) * WeaponComponent->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
+
+	//Calculate attack speed
+	float attackSpeed = 0.0f;
+	switch (ActionTrackingComponent->CurrentComboType)
+	{
+	case EComboType::E_Normal:
+		attackSpeed = GetCharacterGameplayInfo().GetTotalValue(ECharacterStatType::E_NormalAttackSpeed);
+		break;
+	case EComboType::E_Dash:
+		attackSpeed = GetCharacterGameplayInfo().GetTotalValue(ECharacterStatType::E_DashAttackSpeed);
+		break;
+	case EComboType::E_Jump:
+		attackSpeed = GetCharacterGameplayInfo().GetTotalValue(ECharacterStatType::E_JumpAttackSpeed);
+		break;
+	default:
+		UE_LOG(LogTemp, Error, TEXT("ACharacterBase::TryAttack() for %s, ComboType is not valid"), *UKismetSystemLibrary::GetDisplayName(this));
+	}
+	attackSpeed = FMath::Clamp(attackSpeed * WeaponComponent->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
 	//Choose animation which fit battle situation
 	TArray <UAnimMontage*> targetAnimList = GetTargetMeleeAnimMontageList();
@@ -598,7 +615,19 @@ void ACharacterBase::TryAttack()
 		PlayAnimMontage(targetAnimList[nextAnimIdx], attackSpeed + 0.25f);
 		CharacterGameplayInfo.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
 		CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Attack;
-		OnAttackStarted.Broadcast();
+		
+		switch (ActionTrackingComponent->CurrentComboType)
+		{
+		case EComboType::E_Normal:
+			OnAttackStarted.Broadcast();
+			break;
+		case EComboType::E_Dash:
+			OnDashAttackStarted.Broadcast();
+			break;
+		case EComboType::E_Jump:
+			OnJumpAttackStarted.Broadcast();
+			break;
+		}
 	}
 }
 
@@ -646,10 +675,14 @@ void ACharacterBase::TryDashAttack()
 	// Set action state
 	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Attack;
 
+	// Get Total Stat Value
+	float attackSpeed = GetCharacterGameplayInfo().GetTotalValue(ECharacterStatType::E_DashAttackSpeed);
+	attackSpeed = FMath::Clamp(attackSpeed * WeaponComponent->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
+
 	// Activate dash anim with interp to target location
-	PlayAnimMontage(AssetHardPtrInfo.DashAttackAnimMontage);
+	PlayAnimMontage(AssetHardPtrInfo.DashAttackAnimMontage, attackSpeed);
 	ActionTrackingComponent->CurrentComboType = EComboType::E_Dash;
-	//OnDashAttackStarted.Broadcast();
+	OnDashAttackStarted.Broadcast();
 }
 
 bool ACharacterBase::TrySkill(int32 SkillID)

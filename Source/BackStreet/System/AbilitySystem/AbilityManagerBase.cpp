@@ -264,7 +264,7 @@ bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct T
 		//HP UI 업데이트
 		if (statType == ECharacterStatType::E_MaxHealth)
 		{
-			OwnerCharacterRef.Get()->TakeHeal(5.0f);
+			OwnerCharacterRef.Get()->TakeHeal(0.01f);
 		}
 		else if (statType == ECharacterStatType::E_SubWeaponCapacity)
 		{
