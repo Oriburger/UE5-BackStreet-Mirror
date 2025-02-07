@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game\n"
-"POT-Creation-Date: 2025-02-07 05:46\n"
-"PO-Revision-Date: 2025-02-07 05:46\n"
+"POT-Creation-Date: 2025-02-07 07:16\n"
+"PO-Revision-Date: 2025-02-07 07:16\n"
 "Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -1685,6 +1685,13 @@ msgstr "Select the window mode used by the game. "
 msgctxt "ST_EasyGameUICommon,Description"
 msgid "Description"
 msgstr "Description"
+
+#. Key:	ExitGame_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,ExitGame_Warning"
+msgid "Do you really want to exit the game?"
+msgstr "Do you really want to exit the game?"
 
 #. Key:	High_Quality_Setting
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon

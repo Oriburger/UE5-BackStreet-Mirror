@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game\n"
-"POT-Creation-Date: 2025-02-07 05:47\n"
-"PO-Revision-Date: 2025-02-07 05:47\n"
+"POT-Creation-Date: 2025-02-07 07:17\n"
+"PO-Revision-Date: 2025-02-07 07:17\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -1685,6 +1685,13 @@ msgstr "게임에서 사용할 창 모드를 선택합니다."
 msgctxt "ST_EasyGameUICommon,Description"
 msgid "Description"
 msgstr "설명"
+
+#. Key:	ExitGame_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,ExitGame_Warning"
+msgid "Do you really want to exit the game?"
+msgstr "정말로 게임을 종료하시겠습니까?"
 
 #. Key:	High_Quality_Setting
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
