@@ -26,6 +26,18 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FName SkillSubDescription;
 
+	//스킬 이름 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText SkillNameText;
+
+	//스킬 설명 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText SkillDescriptionText;
+
+	//스킬 보조 설명 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText SkillSubDescriptionText;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		UAnimMontage* SkillAnimation;
 	
@@ -70,8 +82,10 @@ public:
 		return GetTypeHash(Other.SkillID);
 	}
 
-	FSkillInfo() : SkillID(0), SkillName(""), IconImage(nullptr), SkillDescription(""), SkillSubDescription(""), SkillAnimation(nullptr), bContainPrevAction(false)
-		, PrevActionClass(nullptr), bIsLifeSpanWithCauser(false), bIsPlayerSkill(false), MaterialID(0), MaterialCount(0), CoolTimeValue(0.0f), bIsValid(true), PrevActionRef(nullptr) { }
+	FSkillInfo() : SkillID(0), SkillName(""), IconImage(nullptr), SkillDescription(""), SkillSubDescription("")
+		, SkillNameText(), SkillDescriptionText(), SkillSubDescriptionText(), SkillAnimation(nullptr), bContainPrevAction(false)
+		, PrevActionClass(nullptr), bIsLifeSpanWithCauser(false), bIsPlayerSkill(false), MaterialID(0), MaterialCount(0), CoolTimeValue(0.0f)
+		, bIsValid(true), PrevActionRef(nullptr) { }
 };
 
 UENUM(BlueprintType)

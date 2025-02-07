@@ -121,6 +121,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FName Description;
 
+	//무기 이름 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText WeaponNameText;
+
+	//무기 설명 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText DescriptionText;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		EWeaponType WeaponType = EWeaponType::E_None;
 
@@ -266,6 +274,10 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
 		FName WeaponName;
+
+	//무기 이름 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText WeaponNameText;
 
 	//스폰할 아이템 스태틱 메시 정보 저장
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")

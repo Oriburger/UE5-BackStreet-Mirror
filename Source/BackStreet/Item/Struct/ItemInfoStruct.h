@@ -53,6 +53,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FName ItemDescription;
 
+	//아이템명 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FText ItemNameText;
+
+	//아이템 설명 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		FText ItemDescriptionText;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		bool bShowInfoWidget = false;
 
