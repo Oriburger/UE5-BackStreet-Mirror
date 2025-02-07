@@ -1,0 +1,2829 @@
+﻿# Game English translation.
+# Fill out your copyright notice in the Description page of Project Settings.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Game\n"
+"POT-Creation-Date: 2025-02-07 05:46\n"
+"PO-Revision-Date: 2025-02-07 05:46\n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Key:	Desc_Aerial_Strike_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Legendary"
+msgid "jump attack speed increases by 40%"
+msgstr "jump attack speed increases by 40%"
+
+#. Key:	Desc_Aerial_Strike_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Normal"
+msgid "jump attack speed increases by 8%"
+msgstr "jump attack speed increases by 8%"
+
+#. Key:	Desc_Aerial_Strike_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Rare"
+msgid "jump attack speed increases by 24%"
+msgstr "jump attack speed increases by 24%"
+
+#. Key:	Desc_Aerial_Throttling_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Legendary"
+msgid "jump attack greatly increases and inflicts slow debuff"
+msgstr "jump attack greatly increases and inflicts slow debuff"
+
+#. Key:	Desc_Aerial_Throttling_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Normal"
+msgid "jump attack slightly increases and inflicts slow debuff"
+msgstr "jump attack slightly increases and inflicts slow debuff"
+
+#. Key:	Desc_Aerial_Throttling_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Rare"
+msgid "jump attack increases and inflicts slow debuff"
+msgstr "jump attack increases and inflicts slow debuff"
+
+#. Key:	Desc_Battery_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Battery_Enhancement_Legendary"
+msgid "max HP increases by 35%"
+msgstr "max HP increases by 35%"
+
+#. Key:	Desc_Battery_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Battery_Enhancement_Normal"
+msgid "max HP increases by 15%"
+msgstr "max HP increases by 15%"
+
+#. Key:	Desc_Battery_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Battery_Enhancement_Rare"
+msgid "max HP increases by 20%"
+msgstr "max HP increases by 20%"
+
+#. Key:	Desc_Critical_Aerial_Attack_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Legendary"
+msgid "jump attack critical hit damage increases by 4.5 times"
+msgstr "jump attack critical hit damage increases by 4.5 times"
+
+#. Key:	Desc_Critical_Aerial_Attack_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Normal"
+msgid "jump attack critical hit damage increases by 2.5 times"
+msgstr "jump attack critical hit damage increases by 2.5 times"
+
+#. Key:	Desc_Critical_Aerial_Attack_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Rare"
+msgid "jump attack critical hit damage increases by 3.5 times"
+msgstr "jump attack critical hit damage increases by 3.5 times"
+
+#. Key:	Desc_Critical_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Dash_Legendary"
+msgid "dash attack critical hit damage increases by 4.5 times"
+msgstr "dash attack critical hit damage increases by 4.5 times"
+
+#. Key:	Desc_Critical_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Dash_Normal"
+msgid "dash attack critical hit damage increases by 2.5 times"
+msgstr "dash attack critical hit damage increases by 2.5 times"
+
+#. Key:	Desc_Critical_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Dash_Rare"
+msgid "dash attack critical hit damage increases by 3.5 times"
+msgstr "dash attack critical hit damage increases by 3.5 times"
+
+#. Key:	Desc_Critical_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Strike_Legendary"
+msgid "normal attack critical hit damage increases by 4 times"
+msgstr "normal attack critical hit damage increases by 4 times"
+
+#. Key:	Desc_Critical_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Strike_Normal"
+msgid "normal attack critical hit damage increases by 2 times"
+msgstr "normal attack critical hit damage increases by 2 times"
+
+#. Key:	Desc_Critical_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Strike_Rare"
+msgid "normal attack critical hit damage increases by 3 times"
+msgstr "normal attack critical hit damage increases by 3 times"
+
+#. Key:	Desc_Dash_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Legendary"
+msgid "dash attack speed increases by 45%"
+msgstr "dash attack speed increases by 45%"
+
+#. Key:	Desc_Dash_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Normal"
+msgid "dash attack speed increases by 8%"
+msgstr "dash attack speed increases by 8%"
+
+#. Key:	Desc_Dash_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Rare"
+msgid "dash attack speed increases by 25%"
+msgstr "dash attack speed increases by 25%"
+
+#. Key:	Desc_Firewall_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Firewall_Enhancement_Legendary"
+msgid "defense power increases by 50%"
+msgstr "defense power increases by 50%"
+
+#. Key:	Desc_Firewall_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Firewall_Enhancement_Normal"
+msgid "defense power increases by 10%"
+msgstr "defense power increases by 10%"
+
+#. Key:	Desc_Firewall_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Firewall_Enhancement_Rare"
+msgid "defense power increases by 30%"
+msgstr "defense power increases by 30%"
+
+#. Key:	Desc_Flame_Aerial_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Legendary"
+msgid "35% chance for jump attack to deal flame damage"
+msgstr "35% chance for jump attack to deal flame damage"
+
+#. Key:	Desc_Flame_Aerial_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Normal"
+msgid "7% chance for jump attack to deal flame damage"
+msgstr "7% chance for jump attack to deal flame damage"
+
+#. Key:	Desc_Flame_Aerial_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Rare"
+msgid "16% chance for jump attack to deal flame damage"
+msgstr "16% chance for jump attack to deal flame damage"
+
+#. Key:	Desc_Flame_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Dash_Legendary"
+msgid "35% chance for dash attack to deal flame damage"
+msgstr "35% chance for dash attack to deal flame damage"
+
+#. Key:	Desc_Flame_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Dash_Normal"
+msgid "7% chance for dash attack to deal flame damage"
+msgstr "7% chance for dash attack to deal flame damage"
+
+#. Key:	Desc_Flame_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Dash_Rare"
+msgid "16% chance for dash attack to deal flame damage"
+msgstr "16% chance for dash attack to deal flame damage"
+
+#. Key:	Desc_Flame_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Strike_Legendary"
+msgid "30% chance for normal attack to deal flame damage"
+msgstr "30% chance for normal attack to deal flame damage"
+
+#. Key:	Desc_Flame_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Strike_Normal"
+msgid "5% chance for normal attack to deal flame damage"
+msgstr "5% chance for normal attack to deal flame damage"
+
+#. Key:	Desc_Flame_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Strike_Rare"
+msgid "15% chance for normal attack to deal flame damage"
+msgstr "15% chance for normal attack to deal flame damage"
+
+#. Key:	Desc_Footwork_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Footwork_Optimization_Legendary"
+msgid "movement speed increases by 40%"
+msgstr "movement speed increases by 40%"
+
+#. Key:	Desc_Footwork_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Footwork_Optimization_Normal"
+msgid "movement speed increases by 15%"
+msgstr "movement speed increases by 15%"
+
+#. Key:	Desc_Footwork_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Footwork_Optimization_Rare"
+msgid "movement speed increases by 26%"
+msgstr "movement speed increases by 26%"
+
+#. Key:	Desc_Freezing_Aerial_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Legendary"
+msgid "jump attack power increases by 27% and has a chance to inflict stun debuff"
+msgstr "jump attack power increases by 27% and has a chance to inflict stun debuff"
+
+#. Key:	Desc_Freezing_Aerial_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Normal"
+msgid "jump attack power increases by 7% and has a chance to inflict stun debuff"
+msgstr "jump attack power increases by 7% and has a chance to inflict stun debuff"
+
+#. Key:	Desc_Freezing_Aerial_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Rare"
+msgid "jump attack power increases by 17% and has a chance to inflict stun debuff"
+msgstr "jump attack power increases by 17% and has a chance to inflict stun debuff"
+
+#. Key:	Desc_Freezing_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Legendary"
+msgid "dash attack power increases by 27% and has a chance to inflict stun debuff"
+msgstr "dash attack power increases by 27% and has a chance to inflict stun debuff"
+
+#. Key:	Desc_Freezing_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Normal"
+msgid "dash attack power increases by 7% and has a chance to inflict stun debuff"
+msgstr "dash attack power increases by 7% and has a chance to inflict stun debuff"
+
+#. Key:	Desc_Freezing_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Rare"
+msgid "dash attack power increases by 17% and has a chance to inflict stun debuff"
+msgstr "dash attack power increases by 17% and has a chance to inflict stun debuff"
+
+#. Key:	Desc_Freezing_Resistance_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Legendary"
+msgid "reduces stun debuff duration by 50%"
+msgstr "reduces stun debuff duration by 50%"
+
+#. Key:	Desc_Freezing_Resistance_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Normal"
+msgid "reduces stun debuff duration by 30%"
+msgstr "reduces stun debuff duration by 30%"
+
+#. Key:	Desc_Freezing_Resistance_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Rare"
+msgid "reduces stun debuff duration by 40%"
+msgstr "reduces stun debuff duration by 40%"
+
+#. Key:	Desc_Freezing_Strike_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Legendary"
+msgid "normal attack stun chance increases by 30%"
+msgstr "normal attack stun chance increases by 30%"
+
+#. Key:	Desc_Freezing_Strike_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Normal"
+msgid "normal attack stun chance increases by 10%"
+msgstr "normal attack stun chance increases by 10%"
+
+#. Key:	Desc_Freezing_Strike_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Rare"
+msgid "normal attack stun chance increases by 20%"
+msgstr "normal attack stun chance increases by 20%"
+
+#. Key:	Desc_Freezing_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Legendary"
+msgid "normal attack power increases by 25% and has a chance to inflict stun debuff"
+msgstr "normal attack power increases by 25% and has a chance to inflict stun debuff"
+
+#. Key:	Desc_Freezing_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Normal"
+msgid "normal attack power increases by 5% and has a chance to inflict stun debuff"
+msgstr "normal attack power increases by 5% and has a chance to inflict stun debuff"
+
+#. Key:	Desc_Freezing_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Rare"
+msgid "normal attack power increases by 15% and has a chance to inflict stun debuff"
+msgstr "normal attack power increases by 15% and has a chance to inflict stun debuff"
+
+#. Key:	Desc_Heal_Pack_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Legendary"
+msgid "10% chance for healing item recovery amount to increase by 45%"
+msgstr "10% chance for healing item recovery amount to increase by 45%"
+
+#. Key:	Desc_Heal_Pack_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Normal"
+msgid "10% chance for healing item recovery amount to increase by 30%"
+msgstr "10% chance for healing item recovery amount to increase by 30%"
+
+#. Key:	Desc_Heal_Pack_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Rare"
+msgid "10% chance for healing item recovery amount to increase by 35%"
+msgstr "10% chance for healing item recovery amount to increase by 35%"
+
+#. Key:	Desc_High-Risk_Oxidation_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Legendary"
+msgid "max HP decreases by 20%, but normal attack deals very strong acidic damage"
+msgstr "max HP decreases by 20%, but normal attack deals very strong acidic damage"
+
+#. Key:	Desc_High-Risk_Oxidation_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Normal"
+msgid "max HP decreases by 20%, but normal attack deals strong acidic damage"
+msgstr "max HP decreases by 20%, but normal attack deals strong acidic damage"
+
+#. Key:	Desc_High-Risk_Oxidation_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Rare"
+msgid "max HP decreases by 20%, but normal attack deals even stronger acidic damage"
+msgstr "max HP decreases by 20%, but normal attack deals even stronger acidic damage"
+
+#. Key:	Desc_Hit_Rate_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Hit_Rate_Enhancement_Legendary"
+msgid "all attack critical hit chance increases by 4%"
+msgstr "all attack critical hit chance increases by 4%"
+
+#. Key:	Desc_Hit_Rate_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Hit_Rate_Enhancement_Normal"
+msgid "all attack critical hit chance increases by 2%"
+msgstr "all attack critical hit chance increases by 2%"
+
+#. Key:	Desc_Hit_Rate_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Hit_Rate_Enhancement_Rare"
+msgid "all attack critical hit chance increases by 3%"
+msgstr "all attack critical hit chance increases by 3%"
+
+#. Key:	Desc_Landing_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Landing_Optimization_Legendary"
+msgid "roll delay decreases by 40%"
+msgstr "roll delay decreases by 40%"
+
+#. Key:	Desc_Landing_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Landing_Optimization_Normal"
+msgid "roll delay decreases by 20%"
+msgstr "roll delay decreases by 20%"
+
+#. Key:	Desc_Landing_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Landing_Optimization_Rare"
+msgid "roll delay decreases by 30%"
+msgstr "roll delay decreases by 30%"
+
+#. Key:	Desc_Lucky_Extra_Drop_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Lucky_Extra_Drop_Legendary"
+msgid "25% chance to obtain 4x crafting materials from defeated enemies"
+msgstr "25% chance to obtain 4x crafting materials from defeated enemies"
+
+#. Key:	Desc_Lucky_Extra_Drop_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Lucky_Extra_Drop_Normal"
+msgid "25% chance to obtain 2x crafting materials from defeated enemies"
+msgstr "25% chance to obtain 2x crafting materials from defeated enemies"
+
+#. Key:	Desc_Lucky_Extra_Drop_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Lucky_Extra_Drop_Rare"
+msgid "25% chance to obtain 3x crafting materials from defeated enemies"
+msgstr "25% chance to obtain 3x crafting materials from defeated enemies"
+
+#. Key:	Desc_Overdrive_Mode
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overdrive_Mode"
+msgid "max HP decreases by 10%, but movement speed increases by 45%"
+msgstr "max HP decreases by 10%, but movement speed increases by 45%"
+
+#. Key:	Desc_Overload_Self_Aerial_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Legendary"
+msgid "jump attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgstr "jump attack speed decreases by 15%, but inflicts very strong slow debuff"
+
+#. Key:	Desc_Overload_Self_Aerial_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Normal"
+msgid "jump attack speed decreases by 15%, but inflicts slow debuff"
+msgstr "jump attack speed decreases by 15%, but inflicts slow debuff"
+
+#. Key:	Desc_Overload_Self_Aerial_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Rare"
+msgid "jump attack speed decreases by 15%, but inflicts strong slow debuff"
+msgstr "jump attack speed decreases by 15%, but inflicts strong slow debuff"
+
+#. Key:	Desc_Overload_Self_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Legendary"
+msgid "dash attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgstr "dash attack speed decreases by 15%, but inflicts very strong slow debuff"
+
+#. Key:	Desc_Overload_Self_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Normal"
+msgid "dash attack speed decreases by 15%, but inflicts strong slow debuff"
+msgstr "dash attack speed decreases by 15%, but inflicts strong slow debuff"
+
+#. Key:	Desc_Overload_Self_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Rare"
+msgid "dash attack speed decreases by 15%, but inflicts even stronger slow debuff"
+msgstr "dash attack speed decreases by 15%, but inflicts even stronger slow debuff"
+
+#. Key:	Desc_Overload_Self_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Legendary"
+msgid "movement speed decreases by 30%, but normal attack power increases by 30%"
+msgstr "movement speed decreases by 30%, but normal attack power increases by 30%"
+
+#. Key:	Desc_Overload_Self_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Normal"
+msgid "movement speed decreases by 30%, but normal attack power increases by 10%"
+msgstr "movement speed decreases by 30%, but normal attack power increases by 10%"
+
+#. Key:	Desc_Overload_Self_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Rare"
+msgid "movement speed decreases by 30%, but normal attack power increases by 20%"
+msgstr "movement speed decreases by 30%, but normal attack power increases by 20%"
+
+#. Key:	Desc_Overload_Self_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Legendary"
+msgid "normal attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgstr "normal attack speed decreases by 15%, but inflicts very strong slow debuff"
+
+#. Key:	Desc_Overload_Self_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Normal"
+msgid "normal attack speed decreases by 15%, but inflicts strong slow debuff"
+msgstr "normal attack speed decreases by 15%, but inflicts strong slow debuff"
+
+#. Key:	Desc_Overload_Self_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Rare"
+msgid "normal attack speed decreases by 15%, but inflicts even stronger slow debuff"
+msgstr "normal attack speed decreases by 15%, but inflicts even stronger slow debuff"
+
+#. Key:	Desc_Oxidation_Aerial_Attack_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Legendary"
+msgid "jump attack deals strong acidic damage"
+msgstr "jump attack deals strong acidic damage"
+
+#. Key:	Desc_Oxidation_Aerial_Attack_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Normal"
+msgid "jump attack deals weak acidic damage"
+msgstr "jump attack deals weak acidic damage"
+
+#. Key:	Desc_Oxidation_Aerial_Attack_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Rare"
+msgid "jump attack deals acidic damage"
+msgstr "jump attack deals acidic damage"
+
+#. Key:	Desc_Oxidation_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Legendary"
+msgid "dash attack deals strong acidic damage"
+msgstr "dash attack deals strong acidic damage"
+
+#. Key:	Desc_Oxidation_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Normal"
+msgid "dash attack deals weak acidic damage"
+msgstr "dash attack deals weak acidic damage"
+
+#. Key:	Desc_Oxidation_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Rare"
+msgid "dash attack deals acidic damage"
+msgstr "dash attack deals acidic damage"
+
+#. Key:	Desc_Oxidation_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Legendary"
+msgid "normal attack deals strong acidic damage"
+msgstr "normal attack deals strong acidic damage"
+
+#. Key:	Desc_Oxidation_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Normal"
+msgid "normal attack deals weak acidic damage"
+msgstr "normal attack deals weak acidic damage"
+
+#. Key:	Desc_Oxidation_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Rare"
+msgid "normal attack deals acidic damage"
+msgstr "normal attack deals acidic damage"
+
+#. Key:	Desc_Precision_Aerial_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Aerial_Strike_Legendary"
+msgid "jump attack critical hit chance increases by 17%"
+msgstr "jump attack critical hit chance increases by 17%"
+
+#. Key:	Desc_Precision_Aerial_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Aerial_Strike_Normal"
+msgid "jump attack critical hit chance increases by 7%"
+msgstr "jump attack critical hit chance increases by 7%"
+
+#. Key:	Desc_Precision_Aerial_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Aerial_Strike_Rare"
+msgid "jump attack critical hit chance increases by 12%"
+msgstr "jump attack critical hit chance increases by 12%"
+
+#. Key:	Desc_Precision_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Dash_Legendary"
+msgid "dash attack critical hit chance increases by 17%"
+msgstr "dash attack critical hit chance increases by 17%"
+
+#. Key:	Desc_Precision_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Dash_Normal"
+msgid "dash attack critical hit chance increases by 7%"
+msgstr "dash attack critical hit chance increases by 7%"
+
+#. Key:	Desc_Precision_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Dash_Rare"
+msgid "dash attack critical hit chance increases by 12%"
+msgstr "dash attack critical hit chance increases by 12%"
+
+#. Key:	Desc_Precision_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Strike_Legendary"
+msgid "normal attack critical hit chance increases by 15%"
+msgstr "normal attack critical hit chance increases by 15%"
+
+#. Key:	Desc_Precision_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Strike_Normal"
+msgid "normal attack critical hit chance increases by 5%"
+msgstr "normal attack critical hit chance increases by 5%"
+
+#. Key:	Desc_Precision_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Strike_Rare"
+msgid "normal attack critical hit chance increases by 10%"
+msgstr "normal attack critical hit chance increases by 10%"
+
+#. Key:	Desc_Skill_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Skill_Optimization_Legendary"
+msgid "overall skill cooldown decreases by 50%"
+msgstr "overall skill cooldown decreases by 50%"
+
+#. Key:	Desc_Skill_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Skill_Optimization_Normal"
+msgid "overall skill cooldown decreases by 10%"
+msgstr "overall skill cooldown decreases by 10%"
+
+#. Key:	Desc_Skill_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Skill_Optimization_Rare"
+msgid "overall skill cooldown decreases by 35%"
+msgstr "overall skill cooldown decreases by 35%"
+
+#. Key:	Desc_Strike_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Legendary"
+msgid "normal attack speed increases by 35%"
+msgstr "normal attack speed increases by 35%"
+
+#. Key:	Desc_Strike_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Normal"
+msgid "normal attack speed increases by 5%"
+msgstr "normal attack speed increases by 5%"
+
+#. Key:	Desc_Strike_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Rare"
+msgid "normal attack speed increases by 20%"
+msgstr "normal attack speed increases by 20%"
+
+#. Key:	Desc_Stunning_Output_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Stunning_Output_Legendary"
+msgid "normal attack has a 3% chance to inflict very strong stun debuff"
+msgstr "normal attack has a 3% chance to inflict very strong stun debuff"
+
+#. Key:	Desc_Stunning_Output_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Stunning_Output_Normal"
+msgid "normal attack has a 1% chance to inflict very strong stun debuff"
+msgstr "normal attack has a 1% chance to inflict very strong stun debuff"
+
+#. Key:	Desc_Stunning_Output_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Stunning_Output_Rare"
+msgid "normal attack has a 2% chance to inflict very strong stun debuff"
+msgstr "normal attack has a 2% chance to inflict very strong stun debuff"
+
+#. Key:	Desc_Sub-Weapon_Slot_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Sub-Weapon_Slot_Enhancement_Legendary"
+msgid "sub-weapon max capacity increases by 3 times"
+msgstr "sub-weapon max capacity increases by 3 times"
+
+#. Key:	Desc_Sub-Weapon_Slot_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Sub-Weapon_Slot_Enhancement_Normal"
+msgid "sub-weapon max capacity increases by 1.5 times"
+msgstr "sub-weapon max capacity increases by 1.5 times"
+
+#. Key:	Desc_Sub-Weapon_Slot_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Sub-Weapon_Slot_Enhancement_Rare"
+msgid "sub-weapon max capacity increases by 2 times"
+msgstr "sub-weapon max capacity increases by 2 times"
+
+#. Key:	Desc_System_Performance_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Legendary"
+msgid "all attack power increases by 3%"
+msgstr "all attack power increases by 3%"
+
+#. Key:	Desc_System_Performance_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Normal"
+msgid "all attack power increases by 1%"
+msgstr "all attack power increases by 1%"
+
+#. Key:	Desc_System_Performance_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Rare"
+msgid "all attack power increases by 2%"
+msgstr "all attack power increases by 2%"
+
+#. Key:	Desc_Throttling_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Legendary"
+msgid "dash attack greatly increases and inflicts slow debuff"
+msgstr "dash attack greatly increases and inflicts slow debuff"
+
+#. Key:	Desc_Throttling_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Normal"
+msgid "dash attack slightly increases and inflicts slow debuff"
+msgstr "dash attack slightly increases and inflicts slow debuff"
+
+#. Key:	Desc_Throttling_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Rare"
+msgid "dash attack increases and inflicts slow debuff"
+msgstr "dash attack increases and inflicts slow debuff"
+
+#. Key:	Desc_Throttling_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Legendary"
+msgid "normal attack greatly increases and inflicts slow debuff"
+msgstr "normal attack greatly increases and inflicts slow debuff"
+
+#. Key:	Desc_Throttling_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Normal"
+msgid "normal attack slightly increases and inflicts slow effect"
+msgstr "normal attack slightly increases and inflicts slow effect"
+
+#. Key:	Desc_Throttling_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Rare"
+msgid "normal attack increases and inflicts slow debuff"
+msgstr "normal attack increases and inflicts slow debuff"
+
+#. Key:	Desc_Toxic_Aerial_Attack_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Legendary"
+msgid "normal attack power decreases by 2%, but jump attack deals very strong acidic damage"
+msgstr "normal attack power decreases by 2%, but jump attack deals very strong acidic damage"
+
+#. Key:	Desc_Toxic_Aerial_Attack_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Normal"
+msgid "normal attack power decreases by 2%, but jump attack deals strong acidic damage"
+msgstr "normal attack power decreases by 2%, but jump attack deals strong acidic damage"
+
+#. Key:	Desc_Toxic_Aerial_Attack_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Rare"
+msgid "normal attack power decreases by 2%, but jump attack deals even stronger acidic damage"
+msgstr "normal attack power decreases by 2%, but jump attack deals even stronger acidic damage"
+
+#. Key:	Desc_Toxic_Oxidation_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Legendary"
+msgid "normal attack power decreases by 2%, but dash attack deals very strong acidic damage"
+msgstr "normal attack power decreases by 2%, but dash attack deals very strong acidic damage"
+
+#. Key:	Desc_Toxic_Oxidation_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Normal"
+msgid "normal attack power decreases by 2%, but dash attack deals strong acidic damage"
+msgstr "normal attack power decreases by 2%, but dash attack deals strong acidic damage"
+
+#. Key:	Desc_Toxic_Oxidation_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Rare"
+msgid "normal attack power decreases by 2%, but dash attack deals even stronger acidic damage"
+msgstr "normal attack power decreases by 2%, but dash attack deals even stronger acidic damage"
+
+#. Key:	Desc_Toxic_Oxidation_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Legendary"
+msgid "defense power decreases by 50%, but normal attack deals very strong acidic damage"
+msgstr "defense power decreases by 50%, but normal attack deals very strong acidic damage"
+
+#. Key:	Desc_Toxic_Oxidation_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Normal"
+msgid "defense power decreases by 50%, but normal attack deals strong acidic damage"
+msgstr "defense power decreases by 50%, but normal attack deals strong acidic damage"
+
+#. Key:	Desc_Toxic_Oxidation_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Rare"
+msgid "defense power decreases by 50%, but normal attack deals even stronger acidic damage"
+msgstr "defense power decreases by 50%, but normal attack deals even stronger acidic damage"
+
+#. Key:	Desc_Transcendent_Critical_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Transcendent_Critical_Legendary"
+msgid "all attack critical hit damage increases by 1.5 times"
+msgstr "all attack critical hit damage increases by 1.5 times"
+
+#. Key:	Desc_Transcendent_Critical_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Transcendent_Critical_Normal"
+msgid "all attack critical hit damage increases by 1.2 times"
+msgstr "all attack critical hit damage increases by 1.2 times"
+
+#. Key:	Desc_Transcendent_Critical_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Transcendent_Critical_Rare"
+msgid "all attack critical hit damage increases by 1.3 times"
+msgstr "all attack critical hit damage increases by 1.3 times"
+
+#. Key:	Grade_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Grade_Legendary"
+msgid "Legendary"
+msgstr "Legendary"
+
+#. Key:	Grade_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Grade_Normal"
+msgid "Normal"
+msgstr "Normal"
+
+#. Key:	Grade_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Grade_Rare"
+msgid "Rare"
+msgstr "Rare"
+
+#. Key:	Name_Aerial_Strike_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Aerial_Strike_Optimization"
+msgid "Aerial Strike Optimization"
+msgstr "Aerial Strike Optimization"
+
+#. Key:	Name_Critical_Aerial_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Aerial_Attack"
+msgid "Critical Aerial Attack"
+msgstr "Critical Aerial Attack"
+
+#. Key:	Name_Critical_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Dash"
+msgid "Critical Dash"
+msgstr "Critical Dash"
+
+#. Key:	Name_Critical_Oxidation_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Oxidation_Strike"
+msgid "Critical Oxidation Strike"
+msgstr "Critical Oxidation Strike"
+
+#. Key:	Name_Critical_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Strike"
+msgid "Critical Strike"
+msgstr "Critical Strike"
+
+#. Key:	Name_Critical_Transcendent
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Transcendent"
+msgid "Transcendent Critical"
+msgstr "Transcendent Critical"
+
+#. Key:	Name_Dash_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Dash_Optimization"
+msgid "Dash Optimization"
+msgstr "Dash Optimization"
+
+#. Key:	Name_Enhancement_Battery
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Enhancement_Battery"
+msgid "Battery Enhancement"
+msgstr "Battery Enhancement"
+
+#. Key:	Name_Enhancement_Heal_Pack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Enhancement_Heal_Pack"
+msgid "Heal Pack Enhancement"
+msgstr "Heal Pack Enhancement"
+
+#. Key:	Name_Enhancement_Sub-Weapon_Slot
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Enhancement_Sub-Weapon_Slot"
+msgid "Sub-Weapon Slot Enhancement"
+msgstr "Sub-Weapon Slot Enhancement"
+
+#. Key:	Name_Firewall_Enhancement
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Firewall_Enhancement"
+msgid "Firewall Enhancement"
+msgstr "Firewall Enhancement"
+
+#. Key:	Name_Flame_Aerial_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Flame_Aerial_Strike"
+msgid "Critical Aerial Flame Strike"
+msgstr "Critical Aerial Flame Strike"
+
+#. Key:	Name_Flame_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Flame_Dash"
+msgid "Flame Dash"
+msgstr "Flame Dash"
+
+#. Key:	Name_Flame_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Flame_Strike"
+msgid "Flame Strike"
+msgstr "Flame Strike"
+
+#. Key:	Name_Footwork_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Footwork_Optimization"
+msgid "Footwork Optimization"
+msgstr "Footwork Optimization"
+
+#. Key:	Name_Freezing_Aerial
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Aerial"
+msgid "Freezing Aerial"
+msgstr "Freezing Aerial"
+
+#. Key:	Name_Freezing_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Dash"
+msgid "Freezing Dash"
+msgstr "Freezing Dash"
+
+#. Key:	Name_Freezing_Resistance
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Resistance"
+msgid "Freezing Resistance"
+msgstr "Freezing Resistance"
+
+#. Key:	Name_Freezing_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Strike"
+msgid "Freezing Strike"
+msgstr "Freezing Strike"
+
+#. Key:	Name_Freezing_Strike_Enhancement
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Strike_Enhancement"
+msgid "Freezing Strike Enhancement"
+msgstr "Freezing Strike Enhancement"
+
+#. Key:	Name_High-Risk_Aerial_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_High-Risk_Aerial_Attack"
+msgid "High-Risk Aerial Attack"
+msgstr "High-Risk Aerial Attack"
+
+#. Key:	Name_High-Risk_Oxidation_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_High-Risk_Oxidation_Dash"
+msgid "High-Risk Oxidation Dash"
+msgstr "High-Risk Oxidation Dash"
+
+#. Key:	Name_High-Risk_Oxidation_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_High-Risk_Oxidation_Strike"
+msgid "High-Risk Oxidation Strike"
+msgstr "High-Risk Oxidation Strike"
+
+#. Key:	Name_Hit_Rate_Enhancement
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Hit_Rate_Enhancement"
+msgid "Hit Rate Enhancement"
+msgstr "Hit Rate Enhancement"
+
+#. Key:	Name_Landing_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Landing_Optimization"
+msgid "Landing Optimization"
+msgstr "Landing Optimization"
+
+#. Key:	Name_Lucky_Extra_Drop
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Lucky_Extra_Drop"
+msgid "Lucky Extra Drop"
+msgstr "Lucky Extra Drop"
+
+#. Key:	Name_Overdrive_Mode
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overdrive_Mode"
+msgid "Overdrive Mode"
+msgstr "Overdrive Mode"
+
+#. Key:	Name_Overload_Self
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overload_Self"
+msgid "Self Overload"
+msgstr "Self Overload"
+
+#. Key:	Name_Overload_Self_Aerial
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overload_Self_Aerial"
+msgid "Self Aerial Overload"
+msgstr "Self Aerial Overload"
+
+#. Key:	Name_Overload_Self_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overload_Self_Dash"
+msgid "Self Overload Dash"
+msgstr "Self Overload Dash"
+
+#. Key:	Name_Overload_Self_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overload_Self_Strike"
+msgid "Self Overload Strike"
+msgstr "Self Overload Strike"
+
+#. Key:	Name_Oxidation_Aerial_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Oxidation_Aerial_Attack"
+msgid "Aerial Oxidation Attack"
+msgstr "Aerial Oxidation Attack"
+
+#. Key:	Name_Oxidation_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Oxidation_Dash"
+msgid "Oxidation Dash"
+msgstr "Oxidation Dash"
+
+#. Key:	Name_Oxidation_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Oxidation_Strike"
+msgid "Oxidation Strike"
+msgstr "Oxidation Strike"
+
+#. Key:	Name_Precision_Aerial_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Precision_Aerial_Strike"
+msgid "Precision Aerial Strike"
+msgstr "Precision Aerial Strike"
+
+#. Key:	Name_Precision_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Precision_Dash"
+msgid "Precision Dash"
+msgstr "Precision Dash"
+
+#. Key:	Name_Precision_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Precision_Strike"
+msgid "Precision Strike"
+msgstr "Precision Strike"
+
+#. Key:	Name_Resistance_Freezing
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Resistance_Freezing"
+msgid "Freezing Resistance"
+msgstr "Freezing Resistance"
+
+#. Key:	Name_Skill_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Skill_Optimization"
+msgid "Skill Optimization"
+msgstr "Skill Optimization"
+
+#. Key:	Name_Strike_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Strike_Optimization"
+msgid "Strike Optimization"
+msgstr "Strike Optimization"
+
+#. Key:	Name_Stunning_Output
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Stunning_Output"
+msgid "Stunning Output"
+msgstr "Stunning Output"
+
+#. Key:	Name_System_Performance_Enhancement
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_System_Performance_Enhancement"
+msgid "System Performance Enhancement"
+msgstr "System Performance Enhancement"
+
+#. Key:	Name_Throttling_Aerial
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Throttling_Aerial"
+msgid "Aerial Throttling"
+msgstr "Aerial Throttling"
+
+#. Key:	Name_Throttling_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Throttling_Dash"
+msgid "Throttling Dash"
+msgstr "Throttling Dash"
+
+#. Key:	Name_Throttling_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Throttling_Strike"
+msgid "Throttling Strike"
+msgstr "Throttling Strike"
+
+#. Key:	Name_Toxic_Aerial_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Toxic_Aerial_Attack"
+msgid "Toxic Aerial Attack"
+msgstr "Toxic Aerial Attack"
+
+#. Key:	Name_Toxic_Oxidation_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Toxic_Oxidation_Dash"
+msgid "Toxic Oxidation Dash"
+msgstr "Toxic Oxidation Dash"
+
+#. Key:	Name_Toxic_Oxidation_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Toxic_Oxidation_Strike"
+msgid "Toxic Oxidation Strike"
+msgstr "Toxic Oxidation Strike"
+
+#. Key:	UI_Choose_New_BoosterChip
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Choose_New_BoosterChip"
+msgid "Select New Boosterchip"
+msgstr "Select New Boosterchip"
+
+#. Key:	UI_RewardWarning
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_RewardWarning"
+msgid "You will forfeit the boosterchip  acquisition. \r\nThis choice is irreversible. \r\nDo you wish to continue?"
+msgstr "You will forfeit the boosterchip  acquisition. \r\nThis choice is irreversible. \r\nDo you wish to continue?"
+
+#. Key:	Ability
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Ability"
+msgid "Ability"
+msgstr "Ability"
+
+#. Key:	Ability_Description
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Ability_Description"
+msgid "Ability_Description"
+msgstr "Ability_Description"
+
+#. Key:	Ability_Name
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Ability_Name"
+msgid "Ability_Name"
+msgstr "Ability_Name"
+
+#. Key:	Button_Apply
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Apply"
+msgid "Apply"
+msgstr "Apply"
+
+#. Key:	Button_Back
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Back"
+msgid "Back"
+msgstr "Back"
+
+#. Key:	Button_Cancel
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Cancel"
+msgid "Cancel"
+msgstr "Cancel"
+
+#. Key:	Button_Continue
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Continue"
+msgid "Continue"
+msgstr "Continue"
+
+#. Key:	Button_Craft
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Craft"
+msgid "Craft"
+msgstr "Craft"
+
+#. Key:	Button_OptionsMenu
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_OptionsMenu"
+msgid "Options"
+msgstr "Options"
+
+#. Key:	Button_Photo_Mode
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Photo_Mode"
+msgid "Photo Mode"
+msgstr "Photo Mode"
+
+#. Key:	Button_Quit
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Quit"
+msgid "Quit"
+msgstr "Quit"
+
+#. Key:	Button_Quit_To_Title_Screen
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Quit_To_Title_Screen"
+msgid "Quit To Title Screen"
+msgstr "Quit To Title Screen"
+
+#. Key:	Button_Reset
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Reset"
+msgid "Reset"
+msgstr "Reset"
+
+#. Key:	Button_Select
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Select"
+msgid "Select"
+msgstr "Select"
+
+#. Key:	Category_Display
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Category_Display"
+msgid "Display"
+msgstr "Display"
+
+#. Key:	Category_Other
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Category_Other"
+msgid "Other"
+msgstr "Other"
+
+#. Key:	Category_Upscaling_AA
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Category_Upscaling_AA"
+msgid "Upscaling & AA"
+msgstr "Upscaling & AA"
+
+#. Key:	Desc_AAMethodSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_AAMethodSetting"
+msgid "Select the method used to remove aliasing and jagged edges in the game.\r\n\r\nUpscaling Method must be set to Off to adjust this setting manually,"
+msgstr "Select the method used to remove aliasing and jagged edges in the game.\r\n\r\nUpscaling Method must be set to Off to adjust this setting manually,"
+
+#. Key:	Desc_AAQualitySetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_AAQualitySetting"
+msgid "Adjust the quality of the choosen anti aliasing method."
+msgstr "Adjust the quality of the choosen anti aliasing method."
+
+#. Key:	Desc_AmbientAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_AmbientAudioSetting"
+msgid "Adjust the volume for the ambient sounds of the environment."
+msgstr "Adjust the volume for the ambient sounds of the environment."
+
+#. Key:	Desc_CameraFOVSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_CameraFOVSetting"
+msgid "Adjust the camera field of view (FOV)"
+msgstr "Adjust the camera field of view (FOV)"
+
+#. Key:	Desc_CameraSensivitySetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_CameraSensivitySetting"
+msgid "Adjust the sensitivity of camera movements."
+msgstr "Adjust the sensitivity of camera movements."
+
+#. Key:	Desc_ContactShadowsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ContactShadowsSetting"
+msgid "Enable Contact Shadows to add subtle shadowing in areas that would not be covered by standard shadow maps, such as small geometry or grass.\r\n \r\nThis setting has minimal impact on performances."
+msgstr "Enable Contact Shadows to add subtle shadowing in areas that would not be covered by standard shadow maps, such as small geometry or grass.\r\n \r\nThis setting has minimal impact on performances."
+
+#. Key:	Desc_EffectsAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_EffectsAudioSetting"
+msgid "Adjust the volume for the in-game effects."
+msgstr "Adjust the volume for the in-game effects."
+
+#. Key:	Desc_EffectsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_EffectsSetting"
+msgid "Adjust the quality of visual effects such as particles."
+msgstr "Adjust the quality of visual effects such as particles."
+
+#. Key:	Desc_FoliageSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_FoliageSetting"
+msgid "Adjust the quality and density of foliage."
+msgstr "Adjust the quality and density of foliage."
+
+#. Key:	Desc_FramerateLimitSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_FramerateLimitSetting"
+msgid "Adjust the framerate limit to the specified value between 30 and 200 fps. \r\n\r\nValues lower than 30 will remove the framerate limit.\r\nVSync must be disabled if you want to adjust the Framerate Limit manually.  "
+msgstr "Adjust the framerate limit to the specified value between 30 and 200 fps. \r\n\r\nValues lower than 30 will remove the framerate limit.\r\nVSync must be disabled if you want to adjust the Framerate Limit manually.  "
+
+#. Key:	Desc_GammaSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_GammaSetting"
+msgid "Adjust the global brightness of the game."
+msgstr "Adjust the global brightness of the game."
+
+#. Key:	Desc_GlobalIlluminationSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_GlobalIlluminationSetting"
+msgid "Adjust the quality of the Global Illumination. \r\n\r\nLumen High and Ultra offer better visual quality with ray-traced global illumination but have a larger impact to performances than DFAO."
+msgstr "Adjust the quality of the Global Illumination. \r\n\r\nLumen High and Ultra offer better visual quality with ray-traced global illumination but have a larger impact to performances than DFAO."
+
+#. Key:	Desc_GraphicsPresetSettings
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_GraphicsPresetSettings"
+msgid "Select a graphics quality preset to quickly adjust all the graphics settings to the desired value."
+msgstr "Select a graphics quality preset to quickly adjust all the graphics settings to the desired value."
+
+#. Key:	Desc_HardwareLumenSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_HardwareLumenSetting"
+msgid "Enable Hardware Ray Tracing for higher quality Lumen Global Illumination and Reflections. \r\n\r\nThis setting has a large impact on performances and require compatible hardware."
+msgstr "Enable Hardware Ray Tracing for higher quality Lumen Global Illumination and Reflections. \r\n\r\nThis setting has a large impact on performances and require compatible hardware."
+
+#. Key:	Desc_HoldToSprintSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_HoldToSprintSetting"
+msgid "Enable holding the sprint button to keep sprinting.\r\nRevert to \"press to sprint\" if disabled."
+msgstr "Enable holding the sprint button to keep sprinting.\r\nRevert to \"press to sprint\" if disabled."
+
+#. Key:	Desc_InvertXAxisSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_InvertXAxisSetting"
+msgid "Enable the inverted camera controls for the X-Axis (left/right)."
+msgstr "Enable the inverted camera controls for the X-Axis (left/right)."
+
+#. Key:	Desc_InvertYAxisSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_InvertYAxisSetting"
+msgid "Enable the inverted camera controls for the Y-Axis (up/down)."
+msgstr "Enable the inverted camera controls for the Y-Axis (up/down)."
+
+#. Key:	Desc_LanguageSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_LanguageSetting"
+msgid "Adjust the language of the game."
+msgstr "Adjust the language of the game."
+
+#. Key:	Desc_MasterAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_MasterAudioSetting"
+msgid "Adjust the volume of all the sounds in the game."
+msgstr "Adjust the volume of all the sounds in the game."
+
+#. Key:	Desc_MotionBlurSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_MotionBlurSetting"
+msgid "Adjust the quality and amount of motion blur displayed on screen. \r\n\r\nThis setting has minimal impact on performances and is recomended to smooth lower framerates."
+msgstr "Adjust the quality and amount of motion blur displayed on screen. \r\n\r\nThis setting has minimal impact on performances and is recomended to smooth lower framerates."
+
+#. Key:	Desc_MusicAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_MusicAudioSetting"
+msgid "Adjust the volume for the musics of the game."
+msgstr "Adjust the volume for the musics of the game."
+
+#. Key:	Desc_PostProcessSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_PostProcessSetting"
+msgid "Adjust the quality of post processing effects. \r\n\r\nThis setting has minimal impact on performances."
+msgstr "Adjust the quality of post processing effects. \r\n\r\nThis setting has minimal impact on performances."
+
+#. Key:	Desc_ReflectionsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ReflectionsSetting"
+msgid "Adjust the quality of the Reflections.\r\n\r\nLumen High and Ultra offer better visual quality with ray-traced reflections but have a larger impact to performancs than the Screen Space Reflections options. \r\n\r\nGlobal Illumination must be set to Lumen High or better for the Lumen Reflections to work."
+msgstr "Adjust the quality of the Reflections.\r\n\r\nLumen High and Ultra offer better visual quality with ray-traced reflections but have a larger impact to performancs than the Screen Space Reflections options. \r\n\r\nGlobal Illumination must be set to Lumen High or better for the Lumen Reflections to work."
+
+#. Key:	Desc_Resolution
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_Resolution"
+msgid "Adjust the displayed resolution of the game.\r\n\r\nWindow Mode must be set to Full Screen or Windowed to be able to change the displayed resolution of the game."
+msgstr "Adjust the displayed resolution of the game.\r\n\r\nWindow Mode must be set to Full Screen or Windowed to be able to change the displayed resolution of the game."
+
+#. Key:	Desc_ResolutionScaleSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ResolutionScaleSetting"
+msgid "Adjust the internal render resolution scale of the game.\r\n\r\nAnti Aliasing Method must be set to Off, FXAA or TAA and Upscaling Method to Off in order to adjust the resolution scale manually."
+msgstr "Adjust the internal render resolution scale of the game.\r\n\r\nAnti Aliasing Method must be set to Off, FXAA or TAA and Upscaling Method to Off in order to adjust the resolution scale manually."
+
+#. Key:	Desc_ShadingSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ShadingSetting"
+msgid "Adjust the shading quality of materials."
+msgstr "Adjust the shading quality of materials."
+
+#. Key:	Desc_ShadowsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ShadowsSetting"
+msgid "Adjust the quality of the shadows and their draw distance. \r\n\r\nThis setting can has a large impact on performances at its highest option. \r\nIt is not recommended to set it to Ultra with Virtual Shadow Maps enabled."
+msgstr "Adjust the quality of the shadows and their draw distance. \r\n\r\nThis setting can has a large impact on performances at its highest option. \r\nIt is not recommended to set it to Ultra with Virtual Shadow Maps enabled."
+
+#. Key:	Desc_TexturesFilteringSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_TexturesFilteringSetting"
+msgid "Adjust the quality of texture filtering. Higher quality settings reduces blur when viewing textures at an angle.\r\n\r\nThis setting has minimal impact to performances."
+msgstr "Adjust the quality of texture filtering. Higher quality settings reduces blur when viewing textures at an angle.\r\n\r\nThis setting has minimal impact to performances."
+
+#. Key:	Desc_TexturesSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_TexturesSetting"
+msgid "Adjust the quality of textures that are allowed to be loaded into the video memory of your graphics card. \r\n\r\nThis setting has minimal impact to performances and won’t have a visual impact if you graphics card has enough video memory. "
+msgstr "Adjust the quality of textures that are allowed to be loaded into the video memory of your graphics card. \r\n\r\nThis setting has minimal impact to performances and won’t have a visual impact if you graphics card has enough video memory. "
+
+#. Key:	Desc_UIAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_UIAudioSetting"
+msgid "Adjust the volume for sounds played by the User Interface."
+msgstr "Adjust the volume for sounds played by the User Interface."
+
+#. Key:	Desc_UpscaleMethodSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_UpscaleMethodSetting"
+msgid "Select the upscaling method used by the game to improve performances at a minimal impact to visuals. "
+msgstr "Select the upscaling method used by the game to improve performances at a minimal impact to visuals. "
+
+#. Key:	Desc_UpscaleQualitySetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_UpscaleQualitySetting"
+msgid "Select the quality to performance balance of the choosen upscaling method. \r\n\r\nHigher quality options will offer better image quality but a smaller performance gain while higher performance options will offer greater performances but with a more degraded image quality.  "
+msgstr "Select the quality to performance balance of the choosen upscaling method. \r\n\r\nHigher quality options will offer better image quality but a smaller performance gain while higher performance options will offer greater performances but with a more degraded image quality.  "
+
+#. Key:	Desc_UpscaleSharpnessSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_UpscaleSharpnessSetting"
+msgid "Adjust the sharpness applied to the image.  "
+msgstr "Adjust the sharpness applied to the image.  "
+
+#. Key:	Desc_ViewDistanceSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ViewDistanceSetting"
+msgid "Adjust the view distance of objects in the world. "
+msgstr "Adjust the view distance of objects in the world. "
+
+#. Key:	Desc_VolumetricsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_VolumetricsSetting"
+msgid "Adjust the quality and resolution of volumetrics effects such as volumetric fog. \r\n\r\nThis setting can have a large impact on performances at its highest option."
+msgstr "Adjust the quality and resolution of volumetrics effects such as volumetric fog. \r\n\r\nThis setting can have a large impact on performances at its highest option."
+
+#. Key:	Desc_VSMShadowsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_VSMShadowsSetting"
+msgid "Enable Virtual Shadow Maps for more accurate and higher resolution shadows with greater draw distances.\r\n \r\nThis setting has a large impact on performances thus using Ultra Shadows Quality is not recommended with Virtual Shadow Maps.  "
+msgstr "Enable Virtual Shadow Maps for more accurate and higher resolution shadows with greater draw distances.\r\n \r\nThis setting has a large impact on performances thus using Ultra Shadows Quality is not recommended with Virtual Shadow Maps.  "
+
+#. Key:	Desc_VSyncSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_VSyncSetting"
+msgid "Select the VSync mode used by the game. \r\n\r\nThe options are dependent of your monitor's refresh rate: 1/1 option will enable vsync at your maximum refresh rate. 1/2 will enable vsync at half your monitor’s refresh rate, and so on. "
+msgstr "Select the VSync mode used by the game. \r\n\r\nThe options are dependent of your monitor's refresh rate: 1/1 option will enable vsync at your maximum refresh rate. 1/2 will enable vsync at half your monitor’s refresh rate, and so on. "
+
+#. Key:	Desc_WindowMode
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_WindowMode"
+msgid "Select the window mode used by the game. "
+msgstr "Select the window mode used by the game. "
+
+#. Key:	Description
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Description"
+msgid "Description"
+msgstr "Description"
+
+#. Key:	High_Quality_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,High_Quality_Setting"
+msgid "High"
+msgstr "High"
+
+#. Key:	LoadGame
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,LoadGame"
+msgid "Load Game"
+msgstr "Load Game"
+
+#. Key:	Low_Quality_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Low_Quality_Setting"
+msgid "Low"
+msgstr "Low"
+
+#. Key:	Medium_Quality_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Medium_Quality_Setting"
+msgid "Medium"
+msgstr "Medium"
+
+#. Key:	NewGame
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,NewGame"
+msgid "New Game"
+msgstr "New Game"
+
+#. Key:	Off_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Off_Setting"
+msgid "Off"
+msgstr "Off"
+
+#. Key:	On_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,On_Setting"
+msgid "On"
+msgstr "On"
+
+#. Key:	Option_AmbientAudioVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_AmbientAudioVolume"
+msgid "Ambient Audio Volume"
+msgstr "Ambient Audio Volume"
+
+#. Key:	Option_AntiAliasingMethod
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_AntiAliasingMethod"
+msgid "Anti Aliasing Method"
+msgstr "Anti Aliasing Method"
+
+#. Key:	Option_AntiAliasingQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_AntiAliasingQuality"
+msgid "Anti Aliasing Quality"
+msgstr "Anti Aliasing Quality"
+
+#. Key:	Option_CameraSensitivity
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_CameraSensitivity"
+msgid "Camera Sensitivity"
+msgstr "Camera Sensitivity"
+
+#. Key:	Option_ContactShadows
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ContactShadows"
+msgid "Contact Shadows"
+msgstr "Contact Shadows"
+
+#. Key:	Option_EffectsAudioVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_EffectsAudioVolume"
+msgid "Effects Audio Volume"
+msgstr "Effects Audio Volume"
+
+#. Key:	Option_EffectsQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_EffectsQuality"
+msgid "Effects Quality"
+msgstr "Effects Quality"
+
+#. Key:	Option_FoliageQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_FoliageQuality"
+msgid "Foliage Quality"
+msgstr "Foliage Quality"
+
+#. Key:	Option_FOV
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_FOV"
+msgid "Camera Field of View"
+msgstr "Camera Field of View"
+
+#. Key:	Option_FramerateLimit
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_FramerateLimit"
+msgid "Framerate Limit"
+msgstr "Framerate Limit"
+
+#. Key:	Option_Gamma
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_Gamma"
+msgid "Gamma"
+msgstr "Gamma"
+
+#. Key:	Option_GlobalIlluminationQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_GlobalIlluminationQuality"
+msgid "Global Illumination Quality"
+msgstr "Global Illumination Quality"
+
+#. Key:	Option_GraphicsPreset
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_GraphicsPreset"
+msgid "Graphics Preset"
+msgstr "Graphics Preset"
+
+#. Key:	Option_HardwareRay-TracingLumen
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_HardwareRay-TracingLumen"
+msgid "Hardware Ray-Tracing Lumen"
+msgstr "Hardware Ray-Tracing Lumen"
+
+#. Key:	Option_HoldToSprint
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_HoldToSprint"
+msgid "Hold To Sprint"
+msgstr "Hold To Sprint"
+
+#. Key:	Option_ImageSharpness
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ImageSharpness"
+msgid "Image Sharpness"
+msgstr "Image Sharpness"
+
+#. Key:	Option_InvertXAxis
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_InvertXAxis"
+msgid "Invert X-Axis"
+msgstr "Invert X-Axis"
+
+#. Key:	Option_InvertYAxis
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_InvertYAxis"
+msgid "Invert Y-Axis"
+msgstr "Invert Y-Axis"
+
+#. Key:	Option_Language
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_Language"
+msgid "Language"
+msgstr "Language"
+
+#. Key:	Option_MasterVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_MasterVolume"
+msgid "Master Volume"
+msgstr "Master Volume"
+
+#. Key:	Option_MotionBlur
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_MotionBlur"
+msgid "Motion Blur"
+msgstr "Motion Blur"
+
+#. Key:	Option_MusicVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_MusicVolume"
+msgid "Music Volume"
+msgstr "Music Volume"
+
+#. Key:	Option_PostProcessing
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_PostProcessing"
+msgid "Post Processing Quality"
+msgstr "Post Processing Quality"
+
+#. Key:	Option_ReflectionQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ReflectionQuality"
+msgid "Reflections Quality"
+msgstr "Reflections Quality"
+
+#. Key:	Option_ResolutionMode
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ResolutionMode"
+msgid "Resolution"
+msgstr "Resolution"
+
+#. Key:	Option_ResolutionScale
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ResolutionScale"
+msgid "Resolution Scale"
+msgstr "Resolution Scale"
+
+#. Key:	Option_ShadingQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ShadingQuality"
+msgid "Shading Quality"
+msgstr "Shading Quality"
+
+#. Key:	Option_ShadowsQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ShadowsQuality"
+msgid "Shadows Quality"
+msgstr "Shadows Quality"
+
+#. Key:	Option_TextureFiltering
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_TextureFiltering"
+msgid "Textures Filtering"
+msgstr "Textures Filtering"
+
+#. Key:	Option_TextureQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_TextureQuality"
+msgid "Textures Quality"
+msgstr "Textures Quality"
+
+#. Key:	Option_UIEffectsVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_UIEffectsVolume"
+msgid "UI Effects Volume"
+msgstr "UI Effects Volume"
+
+#. Key:	Option_UpscalingMethod
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_UpscalingMethod"
+msgid "Upscaling Method"
+msgstr "Upscaling Method"
+
+#. Key:	Option_UpscalingQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_UpscalingQuality"
+msgid "Upscaling Quality"
+msgstr "Upscaling Quality"
+
+#. Key:	Option_View_Distance
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_View_Distance"
+msgid "View Distance"
+msgstr "View Distance"
+
+#. Key:	Option_VirtualShadowMaps
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_VirtualShadowMaps"
+msgid "Virtual Shadow Maps"
+msgstr "Virtual Shadow Maps"
+
+#. Key:	Option_VolumetricEffectsQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_VolumetricEffectsQuality"
+msgid "Volumetric Effects Quality"
+msgstr "Volumetric Effects Quality"
+
+#. Key:	Option_VSync
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_VSync"
+msgid "VSync"
+msgstr "VSync"
+
+#. Key:	Option_WindowMode
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_WindowMode"
+msgid "Window Mode"
+msgstr "Window Mode"
+
+#. Key:	Power
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Power"
+msgid "Power"
+msgstr "Power"
+
+#. Key:	Reset_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Reset_Warning"
+msgid "Do you really want to reset settings ?\r\nAny action is definitive."
+msgstr "Do you really want to reset settings ?\r\nAny action is definitive."
+
+#. Key:	ReturnToTitle_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,ReturnToTitle_Warning"
+msgid "Do you really want to quit?\r\nAny unsaved progress will be lost."
+msgstr "Do you really want to quit?\r\nAny unsaved progress will be lost."
+
+#. Key:	Skill
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill"
+msgid "Skill"
+msgstr "Skill"
+
+#. Key:	Skill_Craft
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Craft"
+msgid "Skill Craft"
+msgstr "Skill Craft"
+
+#. Key:	Skill_Description
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Description"
+msgid "Skill Description"
+msgstr "Skill Description"
+
+#. Key:	Skill_Enforcement
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Enforcement"
+msgid "Skill Enforcement"
+msgstr "Skill Enforcement"
+
+#. Key:	Skill_Name
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Name"
+msgid "Skill Name"
+msgstr "Skill Name"
+
+#. Key:	Skill_Sub_Description
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Sub_Description"
+msgid "Skill Sub Description"
+msgstr "Skill Sub Description"
+
+#. Key:	Speed
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Speed"
+msgid "Speed"
+msgstr "Speed"
+
+#. Key:	Stat
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Stat"
+msgid "Stat"
+msgstr "Stat"
+
+#. Key:	Tab_Audio
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Audio"
+msgid "Audio"
+msgstr "Audio"
+
+#. Key:	Tab_Boosterchip
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Boosterchip"
+msgid "Boosterchip"
+msgstr "Boosterchip"
+
+#. Key:	Tab_Controls
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Controls"
+msgid "Controls"
+msgstr "Controls"
+
+#. Key:	Tab_Gameplay
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Gameplay"
+msgid "Gameplay"
+msgstr "Gameplay"
+
+#. Key:	Tab_Graphics
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Graphics"
+msgid "Graphics"
+msgstr "Graphics"
+
+#. Key:	Tab_Skill
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Skill"
+msgid "Skill"
+msgstr "Skill"
+
+#. Key:	Tab_System
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_System"
+msgid "System"
+msgstr "System"
+
+#. Key:	Tab_Video
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Video"
+msgid "Video"
+msgstr "Video"
+
+#. Key:	UI_Empty
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_Empty"
+msgid "Empty"
+msgstr "Empty"
+
+#. Key:	UI_NotAvailable
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_NotAvailable"
+msgid "Not Available"
+msgstr "Not Available"
+
+#. Key:	UI_WeaponSelect
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_WeaponSelect"
+msgid "Select Default Weapon"
+msgstr "Select Default Weapon"
+
+#. Key:	Ultra_Quality_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Ultra_Quality_Setting"
+msgid "Ultra"
+msgstr "Ultra"
+
+#. Key:	Unsaved_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Unsaved_Warning"
+msgid "Some settings have unsaved modifications.\r\nDo you really want to close ?"
+msgstr "Some settings have unsaved modifications.\r\nDo you really want to close ?"
+
+#. Key:	Upscaling_Balanced
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_Balanced"
+msgid "Balanced"
+msgstr "Balanced"
+
+#. Key:	Upscaling_Performance
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_Performance"
+msgid "Performance"
+msgstr "Performance"
+
+#. Key:	Upscaling_Quality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_Quality"
+msgid "Quality"
+msgstr "Quality"
+
+#. Key:	Upscaling_UltraPerformance
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_UltraPerformance"
+msgid "Ultra Performance"
+msgstr "Ultra Performance"
+
+#. Key:	Upscaling_UltraQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_UltraQuality"
+msgid "Ultra Quality"
+msgstr "Ultra Quality"
+
+#. Key:	Utility
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Utility"
+msgid "Utility"
+msgstr "Utility"
+
+#. Key:	Desc_Bombard
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Bombard"
+msgid "A small bomb crafted by someone. It looks incredibly powerful."
+msgstr "A small bomb crafted by someone. It looks incredibly powerful."
+
+#. Key:	Desc_ChewingGum
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_ChewingGum"
+msgid "A piece of used chewing gum. It could be used as an adhesive."
+msgstr "A piece of used chewing gum. It could be used as an adhesive."
+
+#. Key:	Desc_CigaretteButt
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_CigaretteButt"
+msgid "A cigarette butt with embers still glowing."
+msgstr "A cigarette butt with embers still glowing."
+
+#. Key:	Desc_EMP_Vial
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_EMP_Vial"
+msgid "A small EMP bomb made by someone. It seems highly effective against machines."
+msgstr "A small EMP bomb made by someone. It seems highly effective against machines."
+
+#. Key:	Desc_SodaCan
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_SodaCan"
+msgid "A discarded soda can. It looks quite spoiled."
+msgstr "A discarded soda can. It looks quite spoiled."
+
+#. Key:	Name_BaseballBat
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BaseballBat"
+msgid "Baseball Bat"
+msgstr "Baseball Bat"
+
+#. Key:	Name_BBGun
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BBGun"
+msgid "BB Gun"
+msgstr "BB Gun"
+
+#. Key:	Name_Blade
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Blade"
+msgid "Blade"
+msgstr "Blade"
+
+#. Key:	Name_Bombard
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Bombard"
+msgid "Bombard"
+msgstr "Bombard"
+
+#. Key:	Name_BoosterChip_Action
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Action"
+msgid "Booster Chip (Action)"
+msgstr "Booster Chip (Action)"
+
+#. Key:	Name_BoosterChip_Flame
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Flame"
+msgid "Booster Chip (Flame)"
+msgstr "Booster Chip (Flame)"
+
+#. Key:	Name_BoosterChip_Freezing
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Freezing"
+msgid "Booster Chip (Freezing)"
+msgstr "Booster Chip (Freezing)"
+
+#. Key:	Name_BoosterChip_Item
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Item"
+msgid "Booster Chip (Item)"
+msgstr "Booster Chip (Item)"
+
+#. Key:	Name_BoosterChip_Oxidation
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Oxidation"
+msgid "Booster Chip (Oxidation)"
+msgstr "Booster Chip (Oxidation)"
+
+#. Key:	Name_BoosterChip_Slow
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Slow"
+msgid "Booster Chip (Slow)"
+msgstr "Booster Chip (Slow)"
+
+#. Key:	Name_BoosterChip_SpecialAction
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_SpecialAction"
+msgid "Booster Chip (Special Action)"
+msgstr "Booster Chip (Special Action)"
+
+#. Key:	Name_BrokenGlassBottleBat
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BrokenGlassBottleBat"
+msgid "Broken Glass Bottle Bat"
+msgstr "Broken Glass Bottle Bat"
+
+#. Key:	Name_ChewingGum
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_ChewingGum"
+msgid "Chewing Gum"
+msgstr "Chewing Gum"
+
+#. Key:	Name_CigaretteButt
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_CigaretteButt"
+msgid "Cigarette Butt"
+msgstr "Cigarette Butt"
+
+#. Key:	Name_Common_Ticket
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Common_Ticket"
+msgid "Common Ticket"
+msgstr "Common Ticket"
+
+#. Key:	Name_CraftingMaterial_Gear
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_CraftingMaterial_Gear"
+msgid "Crafting Material [Gear]"
+msgstr "Crafting Material [Gear]"
+
+#. Key:	Name_CraftingMaterial_Screw
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_CraftingMaterial_Screw"
+msgid "Crafting Material [Screw]"
+msgstr "Crafting Material [Screw]"
+
+#. Key:	Name_CraftingMaterial_Spring
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_CraftingMaterial_Spring"
+msgid "Crafting Material [Spring]"
+msgstr "Crafting Material [Spring]"
+
+#. Key:	Name_DoubleBladedLightsaber
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_DoubleBladedLightsaber"
+msgid "Double-Bladed Lightsaber"
+msgstr "Double-Bladed Lightsaber"
+
+#. Key:	Name_EMP_Vial
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_EMP_Vial"
+msgid "EMP Vial"
+msgstr "EMP Vial"
+
+#. Key:	Name_EnergyBlaster
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_EnergyBlaster"
+msgid "Energy Blaster"
+msgstr "Energy Blaster"
+
+#. Key:	Name_GlassBottle
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_GlassBottle"
+msgid "Glass Bottle"
+msgstr "Glass Bottle"
+
+#. Key:	Name_GlassBottleBat
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_GlassBottleBat"
+msgid "Glass Bottle Bat"
+msgstr "Glass Bottle Bat"
+
+#. Key:	Name_HealPack_Large
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_HealPack_Large"
+msgid "Heal Pack (Large)"
+msgstr "Heal Pack (Large)"
+
+#. Key:	Name_HealPack_Medium
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_HealPack_Medium"
+msgid "Heal Pack (Medium)"
+msgstr "Heal Pack (Medium)"
+
+#. Key:	Name_HealPack_Small
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_HealPack_Small"
+msgid "Heal Pack (Small)"
+msgstr "Heal Pack (Small)"
+
+#. Key:	Name_IronHammer
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_IronHammer"
+msgid "Iron Hammer"
+msgstr "Iron Hammer"
+
+#. Key:	Name_Kettlebell
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Kettlebell"
+msgid "Kettlebell"
+msgstr "Kettlebell"
+
+#. Key:	Name_Legendary_Ticket
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Legendary_Ticket"
+msgid "Legendary Ticket"
+msgstr "Legendary Ticket"
+
+#. Key:	Name_Mace
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Mace"
+msgid "Mace"
+msgstr "Mace"
+
+#. Key:	Name_None
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_None"
+msgid "None"
+msgstr "None"
+
+#. Key:	Name_Rare_Ticket
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Rare_Ticket"
+msgid "Rare Ticket"
+msgstr "Rare Ticket"
+
+#. Key:	Name_SodaCan
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_SodaCan"
+msgid "Soda Can"
+msgstr "Soda Can"
+
+#. Key:	Name_TaserStick
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_TaserStick"
+msgid "Taser Stick"
+msgstr "Taser Stick"
+
+#. Key:	Name_UniversalMaterial_Wrench
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_UniversalMaterial_Wrench"
+msgid "Universal Material [Wrench]"
+msgstr "Universal Material [Wrench]"
+
+#. Key:	Desc_Blink
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Desc_Blink"
+msgid "Moves quickly in the direction of the key input in a short, straight dash."
+msgstr "Moves quickly in the direction of the key input in a short, straight dash."
+
+#. Key:	Desc_ForwardSlash
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Desc_ForwardSlash"
+msgid "Slashes forward in a straight line at high speed."
+msgstr "Slashes forward in a straight line at high speed."
+
+#. Key:	Desc_Hellptimization
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Desc_Hellptimization"
+msgid "Emits a Hellptimization wave around the player, reducing the attack power of nearby enemies."
+msgstr "Emits a Hellptimization wave around the player, reducing the attack power of nearby enemies."
+
+#. Key:	Desc_MultiSlash
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Desc_MultiSlash"
+msgid "Searches for enemies within a 10m radius and slashes through them at high speed, starting with the closest target."
+msgstr "Searches for enemies within a 10m radius and slashes through them at high speed, starting with the closest target."
+
+#. Key:	Desc_Teleport
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Desc_Teleport"
+msgid "Teleports above the nearest enemy from the player and strikes downward. If no target is available, teleportation fails."
+msgstr "Teleports above the nearest enemy from the player and strikes downward. If no target is available, teleportation fails."
+
+#. Key:	Desc_WeaknessAnalysis
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Desc_WeaknessAnalysis"
+msgid "Analyzes the weaknesses of nearby enemies, reducing their defense."
+msgstr "Analyzes the weaknesses of nearby enemies, reducing their defense."
+
+#. Key:	Name_Blink
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Name_Blink"
+msgid "Blink"
+msgstr "Blink"
+
+#. Key:	Name_ForwardSlash
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Name_ForwardSlash"
+msgid "Forward Slash"
+msgstr "Forward Slash"
+
+#. Key:	Name_Hellptimization
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Name_Hellptimization"
+msgid "Hellptimization"
+msgstr "Hellptimization"
+
+#. Key:	Name_MultiSlash
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Name_MultiSlash"
+msgid "Multi Slash"
+msgstr "Multi Slash"
+
+#. Key:	Name_Teleport
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Name_Teleport"
+msgid "Teleport"
+msgstr "Teleport"
+
+#. Key:	Name_WeaknessAnalysis
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Name_WeaknessAnalysis"
+msgid "Weakness Analysis"
+msgstr "Weakness Analysis"
+
+#. Key:	Header_AbilityInfo
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_AbilityInfo"
+msgid "About Ability"
+msgstr "About Ability"
+
+#. Key:	Header_BoosterChip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_BoosterChip"
+msgid "About Boosterchip"
+msgstr "About Boosterchip"
+
+#. Key:	Header_ComboInfo
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_ComboInfo"
+msgid "About Combo"
+msgstr "About Combo"
+
+#. Key:	Header_Debuff
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_Debuff"
+msgid "About Debuff"
+msgstr "About Debuff"
+
+#. Key:	Header_Reward
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_Reward"
+msgid "About Item Reward"
+msgstr "About Item Reward"
+
+#. Key:	Header_Stage
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_Stage"
+msgid "About Stagesystem"
+msgstr "About Stagesystem"
+
+#. Key:	Header_SubWeapon
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_SubWeapon"
+msgid "About SubWeapon"
+msgstr "About SubWeapon"
+
+#. Key:	Header_Welcome
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_Welcome"
+msgid "Welcome!"
+msgstr "Welcome!"
+
+#. Key:	Input_Aim
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Aim"
+msgid "Aim"
+msgstr "Aim"
+
+#. Key:	Input_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Attack"
+msgid "Attack"
+msgstr "Attack"
+
+#. Key:	Input_Category_Battle
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Category_Battle"
+msgid "Battle"
+msgstr "Battle"
+
+#. Key:	Input_Category_Movement
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Category_Movement"
+msgid "Movement"
+msgstr "Movement"
+
+#. Key:	Input_Category_World
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Category_World"
+msgid "World"
+msgstr "World"
+
+#. Key:	Input_Interact
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Interact"
+msgid "Interact"
+msgstr "Interact"
+
+#. Key:	Input_Jump
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Jump"
+msgid "Jump"
+msgstr "Jump"
+
+#. Key:	Input_MoveBackward
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_MoveBackward"
+msgid "Move Backward"
+msgstr "Move Backward"
+
+#. Key:	Input_MoveForward
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_MoveForward"
+msgid "Move Forward"
+msgstr "Move Forward"
+
+#. Key:	Input_MoveLeft
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_MoveLeft"
+msgid "Move Left"
+msgstr "Move Left"
+
+#. Key:	Input_MoveRight
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_MoveRight"
+msgid "Move Right"
+msgstr "Move Right"
+
+#. Key:	Input_Roll
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Roll"
+msgid "Roll"
+msgstr "Roll"
+
+#. Key:	Input_Shoot
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Shoot"
+msgid "Shoot"
+msgstr "Shoot"
+
+#. Key:	Input_SkillA
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_SkillA"
+msgid "SkillA"
+msgstr "SkillA"
+
+#. Key:	Input_SkillB
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_SkillB"
+msgid "SkillB"
+msgstr "SkillB"
+
+#. Key:	Input_SkillC
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_SkillC"
+msgid "SkillC"
+msgstr "SkillC"
+
+#. Key:	Input_Sprint
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Sprint"
+msgid "Sprint"
+msgstr "Sprint"
+
+#. Key:	Tutorial_Battle_1
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Battle_1"
+msgid "<Medium.26>[Combat Guide]</>\r\n<Default>Master the art of combat in BackStreet</>. \r\nUse your skills and tactics to overcome enemies and thrive in the desolate city.\r\n\r\n<Medium.24>[Combo Types]</>\r\n- Standard Combo: Chain basic attacks for a steady damage output.\r\n- Dash Combo:  Launch a swift attack while dashing, with the final hit dealing area damage to multiple enemies.\r\n- Air Combo: Strike enemies mid-air for high damage and strategic advantage.\r\n\r\n<Medium.24>[Battle Tips]</>\r\n- Ranged Enemies: Attack from a distance with projectiles. Use agility to close the gap.\r\n- Melee Enemies: Engage in close quarters. Time your attacks to counter them effectively.\r\n- Roll to Evade: Avoid enemy attacks and projectiles by rolling. Perfect timing can save your life.\r\n\r\n<Default>Practice these techniques to dominate the battlefield and prepare for the ultimate challenge!</>"
+msgstr "<Medium.26>[Combat Guide]</>\r\n<Default>Master the art of combat in BackStreet</>. \r\nUse your skills and tactics to overcome enemies and thrive in the desolate city.\r\n\r\n<Medium.24>[Combo Types]</>\r\n- Standard Combo: Chain basic attacks for a steady damage output.\r\n- Dash Combo:  Launch a swift attack while dashing, with the final hit dealing area damage to multiple enemies.\r\n- Air Combo: Strike enemies mid-air for high damage and strategic advantage.\r\n\r\n<Medium.24>[Battle Tips]</>\r\n- Ranged Enemies: Attack from a distance with projectiles. Use agility to close the gap.\r\n- Melee Enemies: Engage in close quarters. Time your attacks to counter them effectively.\r\n- Roll to Evade: Avoid enemy attacks and projectiles by rolling. Perfect timing can save your life.\r\n\r\n<Default>Practice these techniques to dominate the battlefield and prepare for the ultimate challenge!</>"
+
+#. Key:	Tutorial_Boosterchip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Boosterchip"
+msgid "<Medium.26>[Booster Chip Guide]</>\r\n\r\n<Default>Enhance your combat power with over 100 different booster chips for a more powerful gameplay experience.</>\r\n\r\n<Medium.24>[Types of Booster Chips]</>\r\n\r\nCombo Upgrade Type: Enhances the abilities of key combos (basic, jump, dash) and applies debuff effects.\r\nBase Stat Enhancement Chips: Increases core attributes such as attack power, defense, speed, and survivability.\r\n<Medium.24>[How to Obtain]</>\r\n\r\nStage Completion Rewards: Randomly provided upon clearing each stage.\r\n<Medium.24>[How to Use]</>\r\n\r\nAuto-Equip: Automatically activated upon acquisition.\r\n<Default>With over 100 types of booster chips available, strategically combine them to tailor your combat style and maximize your effectiveness on the battlefield!</>"
+msgstr "<Medium.26>[Booster Chip Guide]</>\r\n\r\n<Default>Enhance your combat power with over 100 different booster chips for a more powerful gameplay experience.</>\r\n\r\n<Medium.24>[Types of Booster Chips]</>\r\n\r\nCombo Upgrade Type: Enhances the abilities of key combos (basic, jump, dash) and applies debuff effects.\r\nBase Stat Enhancement Chips: Increases core attributes such as attack power, defense, speed, and survivability.\r\n<Medium.24>[How to Obtain]</>\r\n\r\nStage Completion Rewards: Randomly provided upon clearing each stage.\r\n<Medium.24>[How to Use]</>\r\n\r\nAuto-Equip: Automatically activated upon acquisition.\r\n<Default>With over 100 types of booster chips available, strategically combine them to tailor your combat style and maximize your effectiveness on the battlefield!</>"
+
+#. Key:	Tutorial_Debuff
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Debuff"
+msgid "<Medium.26>[Debuff Guide]</>\r\n<Default>Apply various debuffs to enemies using sub weapons and skills and boosters</>.\r\n\r\n<Medium.24>[Types of Debuffs]</>\r\n- Fire, Corrosion: Inflict continuous damage over time (DoT).\r\n- Slow: Significantly reduce enemy movement speed.\r\n- Attack and Defense Down: Weaken enemy attack power and defense.\r\n- Stun: Temporarily immobilize enemies.\r\n\r\n<Medium.24>[How to Utilize]</>\r\nStrategically apply debuffs using sub weapons and skills to gain the upper hand in battles!\r\n\r\n<Default>Use Debuffs to effectively control and defeat your enemies.</>"
+msgstr "<Medium.26>[Debuff Guide]</>\r\n<Default>Apply various debuffs to enemies using sub weapons and skills and boosters</>.\r\n\r\n<Medium.24>[Types of Debuffs]</>\r\n- Fire, Corrosion: Inflict continuous damage over time (DoT).\r\n- Slow: Significantly reduce enemy movement speed.\r\n- Attack and Defense Down: Weaken enemy attack power and defense.\r\n- Stun: Temporarily immobilize enemies.\r\n\r\n<Medium.24>[How to Utilize]</>\r\nStrategically apply debuffs using sub weapons and skills to gain the upper hand in battles!\r\n\r\n<Default>Use Debuffs to effectively control and defeat your enemies.</>"
+
+#. Key:	Tutorial_Entry
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Entry"
+msgid "<Medium.26>[Welcome!]</>\r\n\r\n<Default>Welcome to BackStreet</>.\r\nTo survive here, you must face off against robots in a desolate city.\r\n\r\n<Medium.24>[Background]</>\r\nYou must defeat the central AI that rules the city, <Medium.24>3COS</>, and recover your lost memories.\r\n\r\n<Medium.24>[Objectives]</>\r\n\r\nBattle hordes of robots to hone your skills and survival instincts.\r\nGrow stronger with skills and booster chips obtained from the city.\r\nLiberate the empty dystopian city through the final showdown."
+msgstr "<Medium.26>[Welcome!]</>\r\n\r\n<Default>Welcome to BackStreet</>.\r\nTo survive here, you must face off against robots in a desolate city.\r\n\r\n<Medium.24>[Background]</>\r\nYou must defeat the central AI that rules the city, <Medium.24>3COS</>, and recover your lost memories.\r\n\r\n<Medium.24>[Objectives]</>\r\n\r\nBattle hordes of robots to hone your skills and survival instincts.\r\nGrow stronger with skills and booster chips obtained from the city.\r\nLiberate the empty dystopian city through the final showdown."
+
+#. Key:	Tutorial_Entry_2
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Entry_2"
+msgid "<Medium.26>[Notice!]</>\r\n<Default>This is a demo version of BackStreet</>.\r\nPlease note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>\r\nLimited access to stages, characters, and abilities. Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>\r\nPlaceholder assets may appear during gameplay. Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>\r\nYour feedback is crucial to improving the game! Report bugs and provide suggestions through our feedback form. Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>\r\nEnjoy the sneak peek of BackStreet, and stay tuned for the full version's release!"
+msgstr "<Medium.26>[Notice!]</>\r\n<Default>This is a demo version of BackStreet</>.\r\nPlease note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>\r\nLimited access to stages, characters, and abilities. Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>\r\nPlaceholder assets may appear during gameplay. Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>\r\nYour feedback is crucial to improving the game! Report bugs and provide suggestions through our feedback form. Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>\r\nEnjoy the sneak peek of BackStreet, and stay tuned for the full version's release!"
+
+#. Key:	Tutorial_Reward_1
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Reward_1"
+msgid "<Medium.26>[Item Reward Guide]</>\r\n\r\n<Default>Receive various item rewards to enhance your survival and power</>.\r\n\r\n<Medium.24>[Healing Packs]</>\r\n- Types: Small, Medium, Large healing packs.\r\n- How to Obtain:\r\n  - Randomly awarded as stage rewards.\r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>\r\n- Purpose: Used to craft and enhance skills.\r\n- How to Obtain:\r\n  - Automatically collected from defeated enemies.\r\n- Skill Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Default>Utilize healing packs and crafting materials effectively to strengthen your character and progress through challenges!</>"
+msgstr "<Medium.26>[Item Reward Guide]</>\r\n\r\n<Default>Receive various item rewards to enhance your survival and power</>.\r\n\r\n<Medium.24>[Healing Packs]</>\r\n- Types: Small, Medium, Large healing packs.\r\n- How to Obtain:\r\n  - Randomly awarded as stage rewards.\r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>\r\n- Purpose: Used to craft and enhance skills.\r\n- How to Obtain:\r\n  - Automatically collected from defeated enemies.\r\n- Skill Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Default>Utilize healing packs and crafting materials effectively to strengthen your character and progress through challenges!</>"
+
+#. Key:	Tutorial_Stage
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Stage"
+msgid "<Medium.26>[Stage System Guide]</>\r\n<Default>Explore various stages across chapters with unique challenges and rewards.</>\r\n\r\n<Medium.24>[Chapter Structure]</>\r\n- Each Chapter consists of approximately 11 stages.\r\n- 2 Craft Stages per chapter, offering a choice between two paths.\r\n- Reward System: All rewards are provided randomly, adding an element of surprise to each playthrough.\r\n\r\n<Medium.24>[Stage Selection]</>\r\n- At certain points in a chapter, you can select between two paths, each with different challenges and rewards.\r\n- Choose wisely, as each path can impact your progression and available resources.\r\n\r\n<Default>Prepare for a thrilling journey where each stage brings new opportunities and risks, and the rewards are always unpredictable!</>"
+msgstr "<Medium.26>[Stage System Guide]</>\r\n<Default>Explore various stages across chapters with unique challenges and rewards.</>\r\n\r\n<Medium.24>[Chapter Structure]</>\r\n- Each Chapter consists of approximately 11 stages.\r\n- 2 Craft Stages per chapter, offering a choice between two paths.\r\n- Reward System: All rewards are provided randomly, adding an element of surprise to each playthrough.\r\n\r\n<Medium.24>[Stage Selection]</>\r\n- At certain points in a chapter, you can select between two paths, each with different challenges and rewards.\r\n- Choose wisely, as each path can impact your progression and available resources.\r\n\r\n<Default>Prepare for a thrilling journey where each stage brings new opportunities and risks, and the rewards are always unpredictable!</>"
+
+#. Key:	Tutorial_SubWeapon
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_SubWeapon"
+msgid "<Medium.26>[Sub Weapon Guide]</>\r\n<Default>Utilize various auxiliary weapons to support your battles</>.\r\nWhen used effectively, they can turn the tide of combat.\r\n\r\n<Medium.24>[How to Use]</>\r\n- During Combos: Press Right-Click to fire instantly during a combo.\r\n- Aimed Use: Press Right-Click to aim, then Left-Click to fire.\r\n\r\n<Medium.24>[How to Obtain, Types of Sub Weapons]</>\r\n- Sub weapons can be found in trash bags scattered throughout the map.\r\n- Bubblegum / Aluminum Cans / Cigarette Butts / etc.."
+msgstr "<Medium.26>[Sub Weapon Guide]</>\r\n<Default>Utilize various auxiliary weapons to support your battles</>.\r\nWhen used effectively, they can turn the tide of combat.\r\n\r\n<Medium.24>[How to Use]</>\r\n- During Combos: Press Right-Click to fire instantly during a combo.\r\n- Aimed Use: Press Right-Click to aim, then Left-Click to fire.\r\n\r\n<Medium.24>[How to Obtain, Types of Sub Weapons]</>\r\n- Sub weapons can be found in trash bags scattered throughout the map.\r\n- Bubblegum / Aluminum Cans / Cigarette Butts / etc.."
+
+#. Key:	UI_Elimate_Enemy
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,UI_Elimate_Enemy"
+msgid "Elimate all enemies."
+msgstr "Elimate all enemies."
+
+#. Key:	UI_ObtainItems
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,UI_ObtainItems"
+msgid "Obtain all items."
+msgstr "Obtain all items."
+
+#. Key:	UI_OpenTrash
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,UI_OpenTrash"
+msgid "Open the trash bag."
+msgstr "Open the trash bag."
+
