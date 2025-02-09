@@ -224,6 +224,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetStatProbabilityValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetProbabilityStatInfo(TargetStatType); }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetStatDefaultValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetStatGroup(TargetStatType).DefaultValue; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetStatMaxValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetMaxStatValue(TargetStatType); }
+
 	UFUNCTION(BlueprintCallable)
 		void InitCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo);
 
