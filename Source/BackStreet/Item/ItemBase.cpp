@@ -55,9 +55,7 @@ AItemBase::AItemBase()
 	ProjectileMovement->bShouldBounce = true;
 	ProjectileMovement->Bounciness = 0.5f;
 	ProjectileMovement->Friction = 0.6f;
-	ProjectileMovement->BounceVelocityStopSimulatingThreshold = 2.0f;
-
-	
+	ProjectileMovement->BounceVelocityStopSimulatingThreshold = 2.0f;	
 }
 
 // Called when the game starts or when spawned
@@ -80,6 +78,7 @@ void AItemBase::InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride)
 
 	if (ItemInfo.ItemID == 0) return;
 
+	ItemInfo.ItemAmount = 1;
 	if (!ItemInfo.ItemMesh.IsNull())
 	{
 		TArray<FSoftObjectPath> assetToStream;
@@ -102,7 +101,6 @@ void AItemBase::InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride)
 void AItemBase::SetItemAmount(int32 NewAmount)
 {
 	if (ItemInfo.ItemType != EItemCategoryInfo::E_SubWeapon && ItemInfo.ItemType != EItemCategoryInfo::E_Craft) return;
-	UE_LOG(LogTemp, Warning, TEXT("AItemBase::SetItemAmount Type : %d, Amount : %d"), (int32)ItemInfo.ItemType, NewAmount);
 	ItemInfo.ItemAmount = NewAmount;
 }
 

@@ -67,7 +67,7 @@ bool UAbilityManagerComponent::TryAddNewAbility(int32 AbilityID)
 
 	TryUpdateCharacterStat(newAbilityInfo, false);
 	ActiveAbilityInfoList.Add(newAbilityInfo);
-	AbilityPickedInfoList[AbilityID / 3] = true;
+	AbilityPickedInfoList[(AbilityID - 1) / 3] = true;
 	OnAbilityUpdated.Broadcast(ActiveAbilityInfoList);
 
 	return true;
@@ -369,8 +369,7 @@ bool UAbilityManagerComponent::InitAbilityInfoListFromTable()
 
 bool UAbilityManagerComponent::CanPickAbility(int32 AbilityID)
 {
-	EAbilityTierType tier = GetAbilityInfo(AbilityID).AbilityTier;
-	return !AbilityPickedInfoList[AbilityID / 3];
+	return !AbilityPickedInfoList[(AbilityID - 1) / 3];
 }
 
 TArray<ECharacterAbilityType> UAbilityManagerComponent::GetActiveAbilityList() const
