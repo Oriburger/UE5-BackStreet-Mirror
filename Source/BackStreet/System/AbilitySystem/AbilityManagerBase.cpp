@@ -59,6 +59,12 @@ bool UAbilityManagerComponent::TryAddNewAbility(int32 AbilityID)
 		newAbilityInfo.TimerDelegate.BindUFunction(OwnerCharacterRef.Get(), newAbilityInfo.FuncName, variable, true, AbilityID);
 		OwnerCharacterRef.Get()->GetWorldTimerManager().SetTimer(newAbilityInfo.TimerHandle, newAbilityInfo.TimerDelegate, 1.0f, true);
 	}
+	//Total Tier 계산
+	if (!AbilityTotalTier.Contains(newAbilityInfo.AbilityType))
+		AbilityTotalTier.Add(newAbilityInfo.AbilityType, 0);
+	AbilityTotalTier[newAbilityInfo.AbilityType] += (int32)newAbilityInfo.AbilityTier;
+	UE_LOG(LogTemp, Warning, TEXT(""))
+
 	TryUpdateCharacterStat(newAbilityInfo, false);
 	ActiveAbilityInfoList.Add(newAbilityInfo);
 	AbilityPickedInfoList[AbilityID / 3] = true;
@@ -95,6 +101,9 @@ bool UAbilityManagerComponent::TryRemoveAbility(int32 AbilityID)
 			OwnerCharacterRef.Get()->GetWorldTimerManager().ClearTimer(targetAbilityInfo.TimerHandle);
 		}
 	}
+
+	//Total Tier 계산
+	AbilityTotalTier[targetAbilityInfo.AbilityType] -= (int32)targetAbilityInfo.AbilityTier;
 
 	bool result = false;
 	TArray<ECharacterStatType> targetStatTypeList; targetAbilityInfo.TargetStatMap.GenerateKeyArray(targetStatTypeList);
@@ -219,6 +228,18 @@ TArray<FAbilityInfoStruct> UAbilityManagerComponent::GetRandomAbilityInfoList(in
 	return selectedAbilities;
 }
 
+int32 UAbilityManagerComponent::GetAbilityTotalTier(EAbilityType AbilityType)
+{
+	if (!AbilityTotalTier.Contains(AbilityType)) return 0;
+	return AbilityTotalTier[AbilityType];
+}
+
+int32 UAbilityManagerComponent::GetAbilityTotalTierThreshold(EAbilityType AbilityType)
+{
+	if (!AbilityTotalTierThreshold.Contains(AbilityType)) return -1;
+	return AbilityTotalTierThreshold[AbilityType];
+}
+
 void UAbilityManagerComponent::UpdateCumulativeProbabilityList()
 {
 	//누적합 배열 재구성
@@ -336,6 +357,11 @@ bool UAbilityManagerComponent::InitAbilityInfoListFromTable()
 		{
 			AbilityInfoList.Add(*abilityInfo);
 			AbilityPickedInfoList.Add(false);
+			
+			if (!AbilityTotalTierThreshold.Contains(abilityInfo->AbilityType))
+				AbilityTotalTierThreshold.Add(abilityInfo->AbilityType, 0);
+			if(abilityInfo->AbilityTier == EAbilityTierType::E_Legendary)
+				AbilityTotalTierThreshold[abilityInfo->AbilityType] += (int32)abilityInfo->AbilityTier;
 		}
 	}
 	return true;
