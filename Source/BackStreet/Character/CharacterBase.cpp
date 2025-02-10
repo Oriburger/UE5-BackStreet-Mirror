@@ -271,12 +271,6 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 	{
 		GamemodeRef.Get()->ActivateSlowHitEffect(0.5f);
 		GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Explosion, GetActorLocation(), 1000.0f);
-
-		//play smash sound
-		if (AssetManagerBaseRef.IsValid())
-		{
-			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 1, "Chop");
-		}
 	}
 	//Test code for knockdown on ground event
 	//UE_LOG(LogTemp, Warning, TEXT("$Land %s  / Speed %.2lf$"), *(this->GetName()), this->GetVelocity().Length());

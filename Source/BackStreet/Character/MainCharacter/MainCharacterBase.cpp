@@ -192,6 +192,12 @@ void AMainCharacterBase::SwitchWeapon(bool bSwitchToSubWeapon, bool bForceApply)
 			return;
 		}
 		WeaponComponent->InitWeapon(subWeaponData.ItemID - 20000); //temp code
+		
+		//play WeaponSwitch Sound
+		if (AssetManagerBaseRef.IsValid())
+		{
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "WeaponSwitch");
+		}
 	}
 	else if (!bSwitchToSubWeapon && WeaponComponent->WeaponStat.WeaponType == EWeaponType::E_Shoot)
 	{
@@ -201,6 +207,12 @@ void AMainCharacterBase::SwitchWeapon(bool bSwitchToSubWeapon, bool bForceApply)
 			return;
 		}
 		WeaponComponent->InitWeapon(mainWeaponData.ItemID - 20000); //temp code
+
+		//play WeaponSwitch Sound
+		if (AssetManagerBaseRef.IsValid())
+		{
+			AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "WeaponSwitch");
+		}
 	}
 }
 
@@ -452,12 +464,6 @@ void AMainCharacterBase::Roll()
 	//ResetRotationToMovement();
 	SetActorRotation(newRotation + FRotator(0.0f, 90.0f, 0.0f));
 	GetMesh()->SetWorldRotation(newRotation);
-
-	// 사운드
-	if (AssetManagerBaseRef.IsValid())
-	{
-		AssetManagerBaseRef.Get()->PlaySingleSound(this, ESoundAssetType::E_Character, 0, "Roll");
-	}
 
 	//애니메이션 
 	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Roll;
