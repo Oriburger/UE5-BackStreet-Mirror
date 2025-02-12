@@ -262,13 +262,12 @@ void AMainCharacterBase::TryShoot()
 	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Shoot) return;
 
 	FRotator shootRotation = GetAimingRotation(WeaponComponent->GetComponentLocation());
-	WeaponComponent->RangedCombatManager->TryFireProjectile(shootRotation);
+	bool result = WeaponComponent->RangedCombatManager->TryFireProjectile(shootRotation);
 
 	if (AssetHardPtrInfo.ShootAnimMontageList[0] > 0
-		&& IsValid(AssetHardPtrInfo.ShootAnimMontageList[0]))
+		&& IsValid(AssetHardPtrInfo.ShootAnimMontageList[0]) && result)
 	{
 		PlayAnimMontage(AssetHardPtrInfo.ShootAnimMontageList[0], 1.0f);
-		
 		OnShootStarted.Broadcast();
 	}
 }
