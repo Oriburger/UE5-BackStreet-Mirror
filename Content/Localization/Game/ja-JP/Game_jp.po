@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_jp\n"
-"POT-Creation-Date: 2025-02-11 10:14\n"
-"PO-Revision-Date: 2025-02-11 10:14\n"
+"POT-Creation-Date: 2025-02-12 01:35\n"
+"PO-Revision-Date: 2025-02-12 01:35\n"
 "Language-Team: \n"
 "Language: ja-JP\n"
 "MIME-Version: 1.0\n"
@@ -1483,6 +1483,20 @@ msgctxt "ST_EasyGameUICommon,Category_Upscaling_AA"
 msgid "Upscaling & AA"
 msgstr "アップスケーリング＆AA"
 
+#. Key:	Craft_Confirm_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Craft_Confirm_Warning"
+msgid "Do you really want to craft?\r\nAny action is definitive."
+msgstr "本当にクラフトしますか？\r\n選択後は取り消せません。"
+
+#. Key:	CraftMaterial_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,CraftMaterial_Warning"
+msgid "Not enough material to craft."
+msgstr "クラフトに必要な素材が不足しています。"
+
 #. Key:	Desc_AAMethodSetting
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2301,6 +2315,13 @@ msgstr "ウルトラ品質"
 msgctxt "ST_EasyGameUICommon,Utility"
 msgid "Utility"
 msgstr "ユーティリティ"
+
+#. Key:	Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Warning"
+msgid "Warning"
+msgstr "警告"
 
 #. Key:	Desc_Bombard
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
