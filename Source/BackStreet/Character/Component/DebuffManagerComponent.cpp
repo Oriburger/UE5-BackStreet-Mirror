@@ -82,7 +82,6 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 		);
 		if (loopAudioComp)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Debuff Sound Play @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
 			DebuffLoopAudioMap.Add(DebuffInfo.Type, loopAudioComp);
 		}
 	}
