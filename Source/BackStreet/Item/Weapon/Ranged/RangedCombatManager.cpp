@@ -22,11 +22,6 @@ void URangedCombatManager::Attack()
 
 	bool result = TryFireProjectile();
 
-	if (AssetManagerRef.IsValid())
-	{
-		AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon
-		, WeaponComponentRef.Get()->WeaponID, result ? "Shoot" : "ShootFail");
-	}
 }
 
 void URangedCombatManager::StopAttack()
@@ -69,6 +64,23 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride, FVec
 			newProjectile->CheckInitialDamageCondition(15.0f, 15.0f, false);
 			newProjectile->ActivateProjectileMovement();
 			SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
+			if (AssetManagerRef.IsValid())
+			{
+				AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon
+					, WeaponComponentRef.Get()->WeaponID, "Shoot");
+			}
+			if (GamemodeRef.IsValid())
+			{
+				GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Hit, OwnerCharacterRef.Get()->GetActorLocation(), 100.0f);
+			}
+		}
+		else
+		{
+			if (AssetManagerRef.IsValid())
+			{
+				AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon
+					, WeaponComponentRef.Get()->WeaponID, "ShootFail");
+			}
 		}
 	}
 
