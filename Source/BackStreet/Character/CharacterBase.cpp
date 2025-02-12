@@ -291,29 +291,12 @@ TArray<UAnimMontage*> ACharacterBase::GetTargetMeleeAnimMontageList()
 	case EWeaponType::E_Melee:
 		if (!ActorHasTag("Enemy"))
 		{
-			if (CharacterGameplayInfo.bIsAirAttacking && GetCharacterMovement()->IsFalling())
+			if (GetCharacterMovement()->IsFalling() && AssetHardPtrInfo.JumpComboAnimMontageList.Num() > 0)
 			{
-				if (AssetHardPtrInfo.AirAttackAnimMontageList.Num() > 0)
-				{
-					nextAnimIdx = ActionTrackingComponent->CurrentComboCount % AssetHardPtrInfo.AirAttackAnimMontageList.Num();
-					targetAnimList = AssetHardPtrInfo.AirAttackAnimMontageList;
-
-					if (ActionTrackingComponent->CurrentComboCount == AssetHardPtrInfo.AirAttackAnimMontageList.Num())
-					{
-						TryDownwardAttack();
-						return {};
-					}
-				}
-			}
-			else if (CharacterGameplayInfo.bIsAirAttacking || GetCharacterMovement()->IsFalling())
-			{
-				ResetAirAtkLocationUpdateTimer();
-				if (IsValid(TargetingManagerComponent) && IsValid(TargetingManagerComponent->GetTargetedCharacter()))
-				{
-					TargetingManagerComponent->GetTargetedCharacter()->ResetAirAtkLocationUpdateTimer();
-				}
-				TryDownwardAttack();
-				return {};
+				nextAnimIdx = ActionTrackingComponent->CurrentComboCount % AssetHardPtrInfo.JumpComboAnimMontageList.Num();
+				targetAnimList = AssetHardPtrInfo.JumpComboAnimMontageList;
+				ActionTrackingComponent->CurrentComboType = EComboType::E_Jump;
+				return targetAnimList;
 			}
 		}
 		//check melee anim type
@@ -596,14 +579,16 @@ void ACharacterBase::TryAttack()
 
 	//Choose animation which fit battle situation
 	TArray <UAnimMontage*> targetAnimList = GetTargetMeleeAnimMontageList();
+
+	//Error exception
 	if (targetAnimList.IsEmpty())
 	{
 		UE_LOG(LogTemp, Error, TEXT("ACharacterBase::TryAttack() - ID : %d, Combo type %d, anim montage list is empty"), CharacterID, (int32)ActionTrackingComponent->CurrentComboType);
 		return;
 	}
-	nextAnimIdx %= targetAnimList.Num();
-	if (targetAnimList.IsValidIndex(nextAnimIdx)
-		&& IsValid(targetAnimList[nextAnimIdx]))
+		
+	// 언젠가 MainCharacter로 이주 필요
+	if (targetAnimList.IsValidIndex(nextAnimIdx) && IsValid(targetAnimList[nextAnimIdx]))
 	{
 		PlayAnimMontage(targetAnimList[nextAnimIdx], attackSpeed + 0.25f);
 		CharacterGameplayInfo.bCanAttack = false; //공격간 Delay,Interval 조절을 위해 세팅
@@ -621,39 +606,6 @@ void ACharacterBase::TryAttack()
 			OnJumpAttackStarted.Broadcast();
 			break;
 		}
-	}
-}
-
-void ACharacterBase::TryUpperAttack()
-{/*
-	if (GetCharacterMovement()->IsFalling()) return;
-	if (CharacterGameplayInfo.bIsAirAttacking) return;
-	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
-
-	CharacterGameplayInfo.bIsAirAttacking = true;
-	ActionTrackingComponent->ResetComboCount();
-
-	//LaunchCharcter is called by anim notify on upper attack animation
-
-	if (IsValid(AssetHardPtrInfo.UpperAttackAnimMontage))
-	{
-		PlayAnimMontage(AssetHardPtrInfo.UpperAttackAnimMontage);
-	}*/
-}
-
-void ACharacterBase::TryDownwardAttack()
-{
-	if (!GetCharacterMovement()->IsFalling()) return;
-
-	CharacterGameplayInfo.bIsAirAttacking = false;
-	CharacterGameplayInfo.bIsDownwardAttacking = true;
-	ActionTrackingComponent->ResetComboCount();
-
-	if (IsValid(AssetHardPtrInfo.DownwardAttackAnimMontage))
-	{
-		PlayAnimMontage(AssetHardPtrInfo.DownwardAttackAnimMontage);
-		ActionTrackingComponent->CurrentComboType = EComboType::E_Jump;
-		OnJumpAttackStarted.Broadcast();
 	}
 }
 

@@ -145,12 +145,6 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void TryUpperAttack() override;
-
-	UFUNCTION(BlueprintCallable)
-		virtual void TryDownwardAttack() override;
-
-	UFUNCTION(BlueprintCallable)
 		virtual bool TrySkill(int32 SkillID) override;
 
 	UFUNCTION(BlueprintCallable)
