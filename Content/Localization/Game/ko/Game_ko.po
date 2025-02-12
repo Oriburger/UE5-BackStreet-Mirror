@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-02-12 02:34\n"
-"PO-Revision-Date: 2025-02-12 02:34\n"
+"POT-Creation-Date: 2025-02-12 09:20\n"
+"PO-Revision-Date: 2025-02-12 09:20\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -39,21 +39,21 @@ msgstr "점프 공격 속도가 24% 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Legendary"
 msgid "jump attack greatly increases and inflicts slow debuff"
-msgstr "점프 공격이 매우 강해지며 슬로우 피해를 입힌다"
+msgstr "점프 공격이 매우 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Aerial_Throttling_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Normal"
 msgid "jump attack slightly increases and inflicts slow debuff"
-msgstr "점프 공격이 조금 강해지며 슬로우 피해를 입힌다"
+msgstr "점프 공격이 조금 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Aerial_Throttling_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Rare"
 msgid "jump attack increases and inflicts slow debuff"
-msgstr "점프 공격이 더 강해지며 슬로우 피해를 입힌다"
+msgstr "점프 공격이 더 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Battery_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -270,21 +270,21 @@ msgstr "이동 속도가 26% 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Legendary"
 msgid "jump attack power increases by 27% and has a chance to inflict stun debuff"
-msgstr "점프 공격력이 27% 증가하며 확률적으로 스턴 피해를 입힌다"
+msgstr "점프 공격력이 27% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Freezing_Aerial_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Normal"
 msgid "jump attack power increases by 7% and has a chance to inflict stun debuff"
-msgstr "점프 공격력이 7% 증가하며 확률적으로 스턴 피해를 입힌다"
+msgstr "점프 공격력이 7% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Freezing_Aerial_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Rare"
 msgid "jump attack power increases by 17% and has a chance to inflict stun debuff"
-msgstr "점프 공격력이 17% 증가하며 확률적으로 스턴 피해를 입힌다"
+msgstr "점프 공격력이 17% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Freezing_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -354,21 +354,21 @@ msgstr "일반 공격 시 스턴 피해를 입힐 확률이 20% 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Legendary"
 msgid "normal attack power increases by 25% and has a chance to inflict stun debuff"
-msgstr "일반 공격력이 25% 증가하며 확률적으로 스턴 피해를 입힌다"
+msgstr "일반 공격력이 25% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Freezing_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Normal"
 msgid "normal attack power increases by 5% and has a chance to inflict stun debuff"
-msgstr "일반 공격력이 5% 증가하며 확률적으로 스턴 피해를 입힌다"
+msgstr "일반 공격력이 5% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Freezing_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Rare"
 msgid "normal attack power increases by 15% and has a chance to inflict stun debuff"
-msgstr "일반 공격력이 15% 증가하며 확률적으로 스턴 피해를 입힌다"
+msgstr "일반 공격력이 15% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Heal_Pack_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -550,21 +550,21 @@ msgstr "이동 속도가 30% 감소하지만, 일반 공격력이 20% 증가한�
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Legendary"
 msgid "normal attack speed decreases by 15%, but inflicts very strong slow debuff"
-msgstr "일반 공격 속도가 15% 감소하지만, 매우 강력한 슬로우 피해가 발생한다"
+msgstr "일반 공격 속도가 15% 감소하지만, 매우 강력한 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Overload_Self_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Normal"
 msgid "normal attack speed decreases by 15%, but inflicts strong slow debuff"
-msgstr "일반 공격 속도가 15% 감소하지만, 강한 슬로우 피해가 발생한다"
+msgstr "일반 공격 속도가 15% 감소하지만, 강한 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Overload_Self_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Rare"
 msgid "normal attack speed decreases by 15%, but inflicts even stronger slow debuff"
-msgstr "일반 공격 속도가 15% 감소하지만, 더욱 강력한 슬로우 피해가 발생한다"
+msgstr "일반 공격 속도가 15% 감소하지만, 더욱 강력한 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Oxidation_Aerial_Attack_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -739,21 +739,21 @@ msgstr "일반 공격 속도가 20% 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Stunning_Output_Legendary"
 msgid "normal attack has a 3% chance to inflict very strong stun debuff"
-msgstr "일반 공격 시 3% 확률로 매우 강한 스턴 피해를 입힌다"
+msgstr "일반 공격 시 3% 확률로 매우 강한 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Stunning_Output_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Stunning_Output_Normal"
 msgid "normal attack has a 1% chance to inflict very strong stun debuff"
-msgstr "일반 공격 시 1% 확률로 매우 강한 스턴 피해를 입힌다"
+msgstr "일반 공격 시 1% 확률로 매우 강한 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Stunning_Output_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Stunning_Output_Rare"
 msgid "normal attack has a 2% chance to inflict very strong stun debuff"
-msgstr "일반 공격 시 2% 확률로 매우 강한 스턴 피해를 입힌다"
+msgstr "일반 공격 시 2% 확률로 매우 강한 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Sub-Weapon_Slot_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -830,14 +830,14 @@ msgstr "일반 공격이 매우 강해지며 슬로우 디버프를 적용한다
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Normal"
 msgid "normal attack slightly increases and inflicts slow effect"
-msgstr "일반 공격이 조금 강해지며 슬로우 피해를 입힌다"
+msgstr "일반 공격이 조금 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Throttling_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Rare"
 msgid "normal attack increases and inflicts slow debuff"
-msgstr "일반 공격이 강해지며 슬로우 피해를 입힌다"
+msgstr "일반 공격이 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Toxic_Aerial_Attack_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
