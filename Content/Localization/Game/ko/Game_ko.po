@@ -1,11 +1,11 @@
-﻿# Game Korean translation.
+﻿# Game_ko Korean translation.
 # Fill out your copyright notice in the Description page of Project Settings.
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Game\n"
-"POT-Creation-Date: 2025-02-10 05:13\n"
-"PO-Revision-Date: 2025-02-10 05:13\n"
+"Project-Id-Version: Game_ko\n"
+"POT-Creation-Date: 2025-02-11 10:15\n"
+"PO-Revision-Date: 2025-02-11 10:15\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -2155,6 +2155,13 @@ msgctxt "ST_EasyGameUICommon,Stat"
 msgid "Stat"
 msgstr "스탯"
 
+#. Key:	Stat_Information
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Stat_Information"
+msgid "Stat Info"
+msgstr "스탯 정보"
+
 #. Key:	Tab_Audio
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2224,6 +2231,13 @@ msgstr "Empty"
 msgctxt "ST_EasyGameUICommon,UI_NotAvailable"
 msgid "Not Available"
 msgstr "Not Available"
+
+#. Key:	UI_SwitchTab
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_SwitchTab"
+msgid "Switch_Tab"
+msgstr "탭 전환"
 
 #. Key:	UI_WeaponSelect
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2569,85 +2583,323 @@ msgid "Universal Material [Wrench]"
 msgstr "만능재료(렌치)"
 
 #. Key:	Desc_Blink
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_Blink"
 msgid "Moves quickly in the direction of the key input in a short, straight dash."
 msgstr "플레이어가 누르는 방향키 방향의 직선 방향으로 짧고 빠르게 이동한다."
 
 #. Key:	Desc_ForwardSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_ForwardSlash"
 msgid "Slashes forward in a straight line at high speed."
 msgstr "직선 앞으로 빠른 속도로 베며 나아간다."
 
 #. Key:	Desc_Hellptimization
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_Hellptimization"
 msgid "Emits a Hellptimization wave around the player, reducing the attack power of nearby enemies."
 msgstr "주변의 적들에게 헬적화 파장을 발산하며 적들의 공격력을 떨어트린다"
 
 #. Key:	Desc_MultiSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_MultiSlash"
 msgid "Searches for enemies within a 10m radius and slashes through them at high speed, starting with the closest target."
 msgstr "반경 10m 안에 있는 적군을 서치하여 가까운 적군부터 빠른 속도로 베어가른다."
 
 #. Key:	Desc_Teleport
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_Teleport"
 msgid "Teleports above the nearest enemy from the player and strikes downward. If no target is available, teleportation fails."
 msgstr "플레이어로 부터 가장 가까이 적의 위로 텔레포트 하여 내려 찍는다. 대상이 없는 경우 텔레포트 하지 못한다."
 
 #. Key:	Desc_WeaknessAnalysis
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_WeaknessAnalysis"
 msgid "Analyzes the weaknesses of nearby enemies, reducing their defense."
 msgstr "주변의 적들의 약점을 분석하여 방어력을 떨어트린다"
 
 #. Key:	Name_Blink
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Blink"
 msgid "Blink"
 msgstr "점멸"
 
 #. Key:	Name_ForwardSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_ForwardSlash"
 msgid "Forward Slash"
 msgstr "전방베기"
 
 #. Key:	Name_Hellptimization
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Hellptimization"
 msgid "Hellptimization"
 msgstr "헬적화"
 
 #. Key:	Name_MultiSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_MultiSlash"
 msgid "Multi Slash"
 msgstr "다중베기"
 
+#. Key:	Name_Stat_BurnResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_BurnResist"
+msgid "Burn Resistance"
+msgstr "화염 저항"
+
+#. Key:	Name_Stat_DashAttackFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackFatality"
+msgid "Dash Attack Critical Rate"
+msgstr "돌진 공격 치명타"
+
+#. Key:	Name_Stat_DashAttackFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackFlame"
+msgid "Dash Attack Flame"
+msgstr "돌진 공격 화염"
+
+#. Key:	Name_Stat_DashAttackPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackPoison"
+msgid "Dash Attack Oxidation"
+msgstr "돌진 공격 산화"
+
+#. Key:	Name_Stat_DashAttackPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackPower"
+msgid "Dash Attack Power"
+msgstr "돌진 공격력"
+
+#. Key:	Name_Stat_DashAttackSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackSlow"
+msgid "Dash Attack Slow"
+msgstr "돌진 공격 슬로우"
+
+#. Key:	Name_Stat_DashAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackSpeed"
+msgid "Dash Attack Speed"
+msgstr "돌진 공격 속도"
+
+#. Key:	Name_Stat_DashAttackStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackStun"
+msgid "Dash Attack Freezing"
+msgstr "돌진 공격 프리징 "
+
+#. Key:	Name_Stat_DebuffTime
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DebuffTime"
+msgid "Debuff Duration"
+msgstr "디버프 시간"
+
+#. Key:	Name_Stat_Defense
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_Defense"
+msgid "Defense"
+msgstr "방어력"
+
+#. Key:	Name_Stat_HealItemPerformance
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_HealItemPerformance"
+msgid "Healing Item Effectiveness"
+msgstr "회복 아이템 성능"
+
+#. Key:	Name_Stat_JumpAttackFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackFatality"
+msgid "Jump Attack Critical Rate"
+msgstr "점프 공격 치명타"
+
+#. Key:	Name_Stat_JumpAttackFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackFlame"
+msgid "Jump Attack Flame"
+msgstr "점프 공격 화염"
+
+#. Key:	Name_Stat_JumpAttackPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackPoison"
+msgid "Jump Attack Oxidation"
+msgstr "점프 공격 산화"
+
+#. Key:	Name_Stat_JumpAttackPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackPower"
+msgid "Jump Attack Power"
+msgstr "점프 공격력"
+
+#. Key:	Name_Stat_JumpAttackSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackSlow"
+msgid "Jump Attack Slow"
+msgstr "점프 공격 슬로우"
+
+#. Key:	Name_Stat_JumpAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackSpeed"
+msgid "Jump Attack Speed"
+msgstr "점프 공격 속도"
+
+#. Key:	Name_Stat_JumpAttackStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackStun"
+msgid "Jump Attack Freezing"
+msgstr "점프 공격 프리징"
+
+#. Key:	Name_Stat_LuckyDrop
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_LuckyDrop"
+msgid "Lucky Drop Rate"
+msgstr "럭키 드롭률"
+
+#. Key:	Name_Stat_MaxHealth
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_MaxHealth"
+msgid "Max Health"
+msgstr "최대 체력"
+
+#. Key:	Name_Stat_MoveSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_MoveSpeed"
+msgid "Movement Speed"
+msgstr "이동 속도"
+
+#. Key:	Name_Stat_NormalAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalAttackSpeed"
+msgid "Normal Attack Speed"
+msgstr "일반 공격 속도"
+
+#. Key:	Name_Stat_NormalFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalFatality"
+msgid "Normal Attack Critical Rate"
+msgstr "일반 공격 치명타"
+
+#. Key:	Name_Stat_NormalFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalFlame"
+msgid "Normal Attack Flame"
+msgstr "일반 공격 화염"
+
+#. Key:	Name_Stat_NormalPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalPoison"
+msgid "Normal Attack Oxidation"
+msgstr "일반 공격 산화"
+
+#. Key:	Name_Stat_NormalPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalPower"
+msgid "Normal Attack Power"
+msgstr "일반 공격력"
+
+#. Key:	Name_Stat_NormalSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalSlow"
+msgid "Normal Attack Slow"
+msgstr "일반 공격 슬로우"
+
+#. Key:	Name_Stat_NormalStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalStun"
+msgid "Normal Attack Freezing"
+msgstr "일반 공격 프리징"
+
+#. Key:	Name_Stat_PoisonResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_PoisonResist"
+msgid "Oxidation Resistance"
+msgstr "산화 저항"
+
+#. Key:	Name_Stat_RollDelay
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_RollDelay"
+msgid "Roll Delay"
+msgstr "구르기 딜레이"
+
+#. Key:	Name_Stat_SkillCoolTime
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SkillCoolTime"
+msgid "Skill Cooldown Time"
+msgstr "스킬 쿨타임"
+
+#. Key:	Name_Stat_SlowResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SlowResist"
+msgid "Slow Resistance"
+msgstr "슬로우 저항"
+
+#. Key:	Name_Stat_StunResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_StunResist"
+msgid "Freezing Resistance"
+msgstr "프리징 저항"
+
+#. Key:	Name_Stat_SubWeaponCapacity
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SubWeaponCapacity"
+msgid "Sub-Weapon Capacity"
+msgstr "보조무기 용량"
+
 #. Key:	Name_Teleport
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Teleport"
 msgid "Teleport"
 msgstr "텔레포트"
 
 #. Key:	Name_WeaknessAnalysis
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_WeaknessAnalysis"
 msgid "Weakness Analysis"
 msgstr "약점분석"

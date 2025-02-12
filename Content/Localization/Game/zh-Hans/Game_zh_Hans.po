@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hans\n"
-"POT-Creation-Date: 2025-02-10 05:24\n"
-"PO-Revision-Date: 2025-02-10 05:24\n"
+"POT-Creation-Date: 2025-02-11 10:15\n"
+"PO-Revision-Date: 2025-02-11 10:15\n"
 "Language-Team: \n"
 "Language: zh-Hans\n"
 "MIME-Version: 1.0\n"
@@ -2155,6 +2155,13 @@ msgctxt "ST_EasyGameUICommon,Stat"
 msgid "Stat"
 msgstr "属性"
 
+#. Key:	Stat_Information
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Stat_Information"
+msgid "Stat Info"
+msgstr "属性信息"
+
 #. Key:	Tab_Audio
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2224,6 +2231,13 @@ msgstr "空"
 msgctxt "ST_EasyGameUICommon,UI_NotAvailable"
 msgid "Not Available"
 msgstr "不可用"
+
+#. Key:	UI_SwitchTab
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_SwitchTab"
+msgid "Switch_Tab"
+msgstr "切换选项卡"
 
 #. Key:	UI_WeaponSelect
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2569,85 +2583,323 @@ msgid "Universal Material [Wrench]"
 msgstr "通用材料 [扳手]"
 
 #. Key:	Desc_Blink
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_Blink"
 msgid "Moves quickly in the direction of the key input in a short, straight dash."
 msgstr "朝键位输入的方向快速短距离冲刺。"
 
 #. Key:	Desc_ForwardSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_ForwardSlash"
 msgid "Slashes forward in a straight line at high speed."
 msgstr "以高速沿直线向前挥砍。"
 
 #. Key:	Desc_Hellptimization
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_Hellptimization"
 msgid "Emits a Hellptimization wave around the player, reducing the attack power of nearby enemies."
 msgstr "向玩家周围释放优化冲击波，降低附近敌人的攻击力。"
 
 #. Key:	Desc_MultiSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_MultiSlash"
 msgid "Searches for enemies within a 10m radius and slashes through them at high speed, starting with the closest target."
 msgstr "在半径10米范围内搜索敌人，以高速依次攻击，从最近的目标开始。"
 
 #. Key:	Desc_Teleport
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_Teleport"
 msgid "Teleports above the nearest enemy from the player and strikes downward. If no target is available, teleportation fails."
 msgstr "传送到距离玩家最近的敌人上方并向下攻击。如果没有目标，传送失败。"
 
 #. Key:	Desc_WeaknessAnalysis
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_WeaknessAnalysis"
 msgid "Analyzes the weaknesses of nearby enemies, reducing their defense."
 msgstr "分析附近敌人的弱点，降低其防御力。"
 
 #. Key:	Name_Blink
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Blink"
 msgid "Blink"
 msgstr "闪现"
 
 #. Key:	Name_ForwardSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_ForwardSlash"
 msgid "Forward Slash"
 msgstr "前向斩击"
 
 #. Key:	Name_Hellptimization
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Hellptimization"
 msgid "Hellptimization"
 msgstr "优化冲击波"
 
 #. Key:	Name_MultiSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_MultiSlash"
 msgid "Multi Slash"
 msgstr "多重斩击"
 
+#. Key:	Name_Stat_BurnResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_BurnResist"
+msgid "Burn Resistance"
+msgstr "火焰抗性"
+
+#. Key:	Name_Stat_DashAttackFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackFatality"
+msgid "Dash Attack Critical Rate"
+msgstr "冲刺攻击暴击率"
+
+#. Key:	Name_Stat_DashAttackFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackFlame"
+msgid "Dash Attack Flame"
+msgstr "冲刺攻击火焰效果"
+
+#. Key:	Name_Stat_DashAttackPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackPoison"
+msgid "Dash Attack Oxidation"
+msgstr "冲刺攻击氧化效果"
+
+#. Key:	Name_Stat_DashAttackPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackPower"
+msgid "Dash Attack Power"
+msgstr "冲刺攻击力"
+
+#. Key:	Name_Stat_DashAttackSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackSlow"
+msgid "Dash Attack Slow"
+msgstr "冲刺攻击减速效果"
+
+#. Key:	Name_Stat_DashAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackSpeed"
+msgid "Dash Attack Speed"
+msgstr "冲刺攻击速度"
+
+#. Key:	Name_Stat_DashAttackStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackStun"
+msgid "Dash Attack Freezing"
+msgstr "冲刺攻击当机效果"
+
+#. Key:	Name_Stat_DebuffTime
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DebuffTime"
+msgid "Debuff Duration"
+msgstr "异常状态持续时间"
+
+#. Key:	Name_Stat_Defense
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_Defense"
+msgid "Defense"
+msgstr "防御力"
+
+#. Key:	Name_Stat_HealItemPerformance
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_HealItemPerformance"
+msgid "Healing Item Effectiveness"
+msgstr "治疗包增强"
+
+#. Key:	Name_Stat_JumpAttackFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackFatality"
+msgid "Jump Attack Critical Rate"
+msgstr "跳跃攻击暴击率"
+
+#. Key:	Name_Stat_JumpAttackFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackFlame"
+msgid "Jump Attack Flame"
+msgstr "跳跃攻击火焰效果"
+
+#. Key:	Name_Stat_JumpAttackPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackPoison"
+msgid "Jump Attack Oxidation"
+msgstr "跳跃攻击氧化效果"
+
+#. Key:	Name_Stat_JumpAttackPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackPower"
+msgid "Jump Attack Power"
+msgstr "跳跃攻击力"
+
+#. Key:	Name_Stat_JumpAttackSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackSlow"
+msgid "Jump Attack Slow"
+msgstr "跳跃攻击减速效果"
+
+#. Key:	Name_Stat_JumpAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackSpeed"
+msgid "Jump Attack Speed"
+msgstr "跳跃攻击速度"
+
+#. Key:	Name_Stat_JumpAttackStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackStun"
+msgid "Jump Attack Freezing"
+msgstr "跳跃攻击当机效果"
+
+#. Key:	Name_Stat_LuckyDrop
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_LuckyDrop"
+msgid "Lucky Drop Rate"
+msgstr "幸运掉落率"
+
+#. Key:	Name_Stat_MaxHealth
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_MaxHealth"
+msgid "Max Health"
+msgstr "最大生命值"
+
+#. Key:	Name_Stat_MoveSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_MoveSpeed"
+msgid "Movement Speed"
+msgstr "移动速度"
+
+#. Key:	Name_Stat_NormalAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalAttackSpeed"
+msgid "Normal Attack Speed"
+msgstr "普通攻击速度"
+
+#. Key:	Name_Stat_NormalFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalFatality"
+msgid "Normal Attack Critical Rate"
+msgstr "普通攻击暴击率"
+
+#. Key:	Name_Stat_NormalFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalFlame"
+msgid "Normal Attack Flame"
+msgstr "普通攻击火焰效果"
+
+#. Key:	Name_Stat_NormalPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalPoison"
+msgid "Normal Attack Oxidation"
+msgstr "普通攻击氧化效果"
+
+#. Key:	Name_Stat_NormalPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalPower"
+msgid "Normal Attack Power"
+msgstr "普通攻击力"
+
+#. Key:	Name_Stat_NormalSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalSlow"
+msgid "Normal Attack Slow"
+msgstr "普通攻击减速效果"
+
+#. Key:	Name_Stat_NormalStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalStun"
+msgid "Normal Attack Freezing"
+msgstr "普通攻击当机效果"
+
+#. Key:	Name_Stat_PoisonResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_PoisonResist"
+msgid "Oxidation Resistance"
+msgstr "氧化抗性"
+
+#. Key:	Name_Stat_RollDelay
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_RollDelay"
+msgid "Roll Delay"
+msgstr "翻滚延迟"
+
+#. Key:	Name_Stat_SkillCoolTime
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SkillCoolTime"
+msgid "Skill Cooldown Time"
+msgstr "技能冷却时间"
+
+#. Key:	Name_Stat_SlowResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SlowResist"
+msgid "Slow Resistance"
+msgstr "减速抗性"
+
+#. Key:	Name_Stat_StunResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_StunResist"
+msgid "Freezing Resistance"
+msgstr "当机抗性"
+
+#. Key:	Name_Stat_SubWeaponCapacity
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SubWeaponCapacity"
+msgid "Sub-Weapon Capacity"
+msgstr "副武器容量"
+
 #. Key:	Name_Teleport
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Teleport"
 msgid "Teleport"
 msgstr "传送"
 
 #. Key:	Name_WeaknessAnalysis
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_WeaknessAnalysis"
 msgid "Weakness Analysis"
 msgstr "弱点分析"
