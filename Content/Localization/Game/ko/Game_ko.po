@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-02-12 01:36\n"
-"PO-Revision-Date: 2025-02-12 01:36\n"
+"POT-Creation-Date: 2025-02-12 02:34\n"
+"PO-Revision-Date: 2025-02-12 02:34\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -2245,6 +2245,13 @@ msgstr "Empty"
 msgctxt "ST_EasyGameUICommon,UI_NotAvailable"
 msgid "Not Available"
 msgstr "Not Available"
+
+#. Key:	UI_Owned_Boosterchip
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_Owned_Boosterchip"
+msgid "Owned Boosterchip"
+msgstr "보유 중인 부스터칩"
 
 #. Key:	UI_SwitchTab
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon

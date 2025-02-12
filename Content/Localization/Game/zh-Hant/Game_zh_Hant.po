@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hant\n"
-"POT-Creation-Date: 2025-02-12 01:36\n"
-"PO-Revision-Date: 2025-02-12 01:36\n"
+"POT-Creation-Date: 2025-02-12 02:34\n"
+"PO-Revision-Date: 2025-02-12 02:34\n"
 "Language-Team: \n"
 "Language: zh-Hant\n"
 "MIME-Version: 1.0\n"
@@ -2245,6 +2245,13 @@ msgstr "空"
 msgctxt "ST_EasyGameUICommon,UI_NotAvailable"
 msgid "Not Available"
 msgstr "不可用"
+
+#. Key:	UI_Owned_Boosterchip
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_Owned_Boosterchip"
+msgid "Owned Boosterchip"
+msgstr "已持有的增幅芯片"
 
 #. Key:	UI_SwitchTab
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
