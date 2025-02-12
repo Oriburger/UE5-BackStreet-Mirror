@@ -58,8 +58,22 @@ TArray<USoundCue*> UAssetManagerBase::GetSoundList(ESoundAssetType SoundType, in
 	{
 		soundList = soundAssetInfoStruct->SoundMap.Find(SoundName)->SoundList;
 	}
-
 	return soundList;
+}
+
+USoundCue* UAssetManagerBase::GetSingleSound(ESoundAssetType SoundType, int32 TargetID, FName SoundName, int32 IndexOverride)
+{
+	TArray<USoundCue*> soundList = GetSoundList(SoundType, TargetID, SoundName);
+	if (!soundList.IsEmpty())
+	{
+		if (IndexOverride == -1)
+		{
+			IndexOverride = UKismetMathLibrary::RandomIntegerInRange(0, soundList.Num() - 1);
+		}
+		return soundList[IndexOverride];
+	}
+	UE_LOG(LogTemp, Warning, TEXT("UAssetManagerBase::GetSingleSound #4"));
+	return nullptr;
 }
 
 FSoundAssetInfoStruct* UAssetManagerBase::GetSystemSoundMapWithID(int32 TargetID)
