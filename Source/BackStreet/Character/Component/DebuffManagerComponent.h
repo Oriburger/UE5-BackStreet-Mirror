@@ -78,10 +78,20 @@ private:
 	UFUNCTION()
 		void ResetStatDebuffState(ECharacterDebuffType DebuffType, FDebuffInfoStruct DebuffInfo);
 
+//====== Sounds ===========================
+private:
+	void GetDebuffSound(ECharacterDebuffType DebuffType, USoundCue*& StartSound, USoundCue*& LoopSound);
+
 //====== Property ===========================
 private:
 	//owner character ref
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
+
+	//Gamemode 약 참조
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+	//Gamemode 약 참조
+	TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
 
 	//Timerhandle map for debuff
 	UPROPERTY()
@@ -93,4 +103,8 @@ private:
 	//Reset value map for resetting debuff
 	UPROPERTY()
 		TMap<ECharacterDebuffType, FDebuffInfoStruct> ResetValueInfoMap;
+
+	// 디버프별 루프 사운드 관리 맵
+	UPROPERTY()
+		TMap<ECharacterDebuffType, UAudioComponent*> DebuffLoopAudioMap;
 };

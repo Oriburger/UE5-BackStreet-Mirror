@@ -101,12 +101,6 @@ public:
 	//Input에 Binding 되어 공격을 시도 (AnimMontage를 호출)
 	virtual void TryAttack();
 
-	//Try Upper Attack
-	virtual	void TryUpperAttack();
-
-	//Try Downer Attack
-	virtual	void TryDownwardAttack();
-
 	//try play dash atk montage
 	UFUNCTION()
 		void TryDashAttack();
@@ -217,6 +211,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FCharacterGameplayInfo GetCharacterGameplayInfo() { return CharacterGameplayInfo; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FStatValueGroup GetCharacterStatGroup(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetStatGroup(TargetStatType); }		
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetStatTotalValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetTotalValue(TargetStatType); }

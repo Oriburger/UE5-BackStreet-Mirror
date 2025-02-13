@@ -3,6 +3,7 @@
 
 #include "DebuffManagerComponent.h"
 #include "../CharacterBase.h"
+#include "../../System/AssetSystem/AssetManagerBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 
 #define MAX_DEBUFF_IDX 10
@@ -40,6 +41,16 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 	float resistValue = -1.0f;
 	float totalDamage = 0.0f;
 
+	USoundCue* startSound;
+	USoundCue* loopSound;
+	GetDebuffSound(DebuffInfo.Type, startSound, loopSound);
+
+	// 시작 사운드 재생 (한 번)
+	if (IsValid(startSound))
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), startSound, GetOwner()->GetActorLocation(), 0.3f);
+	}
+
 	if (GetDebuffIsActive((ECharacterDebuffType)DebuffInfo.Type))
 	{
 		FDebuffInfoStruct resetInfo = GetDebuffResetValue(DebuffInfo.Type);
@@ -55,6 +66,24 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 
 		return SetDebuffTimer({ DebuffInfo.Type, FMath::Min(DebuffInfo.TotalTime + remainTime, MAX_DEBUFF_TIME)
 								, DebuffInfo.Variable, DebuffInfo.bIsPercentage }, Causer);
+	}
+
+	// 루프 사운드 추가 및 실행
+	if (!DebuffLoopAudioMap.Contains(DebuffInfo.Type) && IsValid(loopSound))
+	{
+		UAudioComponent* loopAudioComp = UGameplayStatics::SpawnSoundAttached(
+			loopSound,
+			GetOwner()->GetRootComponent(),
+			NAME_None,
+			FVector::ZeroVector,
+			EAttachLocation::KeepRelativeOffset,
+			true, // 루프 활성화
+			0.5f
+		);
+		if (loopAudioComp)
+		{
+			DebuffLoopAudioMap.Add(DebuffInfo.Type, loopAudioComp);
+		}
 	}
 
 	OwnerCharacterRef.Get()->ActivateDebuffNiagara((uint8)DebuffInfo.Type);
@@ -127,6 +156,19 @@ void UDebuffManagerComponent::ClearDebuffTimer(ECharacterDebuffType DebuffType)
 	FTimerHandle& dotDamageHandle = GetDotDamageTimerHandle(DebuffType);
 	FTimerHandle& resetHandle = GetResetTimerHandle(DebuffType);
 
+	//루프 사운드 제거
+	if (DebuffLoopAudioMap.Contains(DebuffType))
+	{
+		UAudioComponent* loopAudioComp = DebuffLoopAudioMap[DebuffType];
+		if (IsValid(loopAudioComp))
+		{
+			loopAudioComp->Stop();
+			loopAudioComp->DestroyComponent();
+		}
+		// 맵에서 제거
+		DebuffLoopAudioMap.Remove(DebuffType);
+	}
+
 	GetWorld()->GetTimerManager().ClearTimer(dotDamageHandle);
 	GetWorld()->GetTimerManager().ClearTimer(resetHandle);
 	dotDamageHandle.Invalidate();
@@ -158,8 +200,9 @@ void UDebuffManagerComponent::PrintAllDebuff()
 
 void UDebuffManagerComponent::InitDebuffManager()
 {
-	//Initialize the owner character ref
+	//Initialize the owner character ref and gamemode ref
 	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
+	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
 void UDebuffManagerComponent::ApplyDotDamage(ECharacterDebuffType DebuffType, float DamageAmount, AActor* Causer)
@@ -229,3 +272,20 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 	ClearDebuffTimer(DebuffType);
 }
 
+void UDebuffManagerComponent::GetDebuffSound(ECharacterDebuffType DebuffType, USoundCue*& StartSound, USoundCue*& LoopSound)
+{
+	if (!GamemodeRef.IsValid()) return;
+
+	//초기화
+	StartSound = LoopSound = nullptr;
+
+	AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
+	if (AssetManagerBaseRef.IsValid())
+	{
+		FString debuffString = UEnum::GetValueAsString<ECharacterDebuffType>(TEnumAsByte<ECharacterDebuffType>(DebuffType));
+		debuffString.RemoveFromStart("ECharacterDebuffType::E_");
+
+		StartSound = AssetManagerBaseRef.Get()->GetSingleSound(ESoundAssetType::E_System, 3000, FName(debuffString + "_Start"));
+		LoopSound = AssetManagerBaseRef.Get()->GetSingleSound(ESoundAssetType::E_System, 3000, FName(debuffString + "_Loop"));
+	}
+}

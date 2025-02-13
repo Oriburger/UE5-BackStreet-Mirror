@@ -303,7 +303,7 @@ void AEnemyCharacterBase::SpawnDeathItems()
 			|| !dropInfo.ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
 
 		const uint8 itemType = (uint8)dropInfo.SpawnItemTypeList[itemIdx];
-		const int32 itemID = dropInfo.SpawnItemIDList[itemIdx];
+		const int32 itemID = 1; //조합 재료만 나오도록 강제 250210 //dropInfo.SpawnItemIDList[itemIdx];
 		const float spawnProbability = dropInfo.ItemSpawnProbabilityList[itemIdx];
 
 		if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
@@ -313,7 +313,7 @@ void AEnemyCharacterBase::SpawnDeathItems()
 
 			if (IsValid(newItem))
 			{
-				//spawnedItemList.Add(newItem);
+				spawnedItemList.Add(newItem);
 				totalSpawnItemCount -= 1;
 			}
 		}

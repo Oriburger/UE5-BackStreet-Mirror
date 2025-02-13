@@ -1,11 +1,11 @@
-﻿# Game English translation.
+﻿# Game_en English translation.
 # Fill out your copyright notice in the Description page of Project Settings.
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Game\n"
-"POT-Creation-Date: 2025-02-07 07:16\n"
-"PO-Revision-Date: 2025-02-07 07:16\n"
+"Project-Id-Version: Game_en\n"
+"POT-Creation-Date: 2025-02-12 02:33\n"
+"PO-Revision-Date: 2025-02-12 02:33\n"
 "Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -1287,6 +1287,76 @@ msgctxt "ST_Boosterchip,UI_Choose_New_BoosterChip"
 msgid "Select New Boosterchip"
 msgstr "Select New Boosterchip"
 
+#. Key:	UI_Name_Action
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Action"
+msgid "Action"
+msgstr "Action"
+
+#. Key:	UI_Name_Aerial_Combo
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Aerial_Combo"
+msgid "Aerial Combo"
+msgstr "Aerial Combo"
+
+#. Key:	UI_Name_Critical
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Critical"
+msgid "Critical"
+msgstr "Critical"
+
+#. Key:	UI_Name_Currency
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Currency"
+msgid "Currency"
+msgstr "Currency"
+
+#. Key:	UI_Name_DashCombo
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_DashCombo"
+msgid "Dash Combo"
+msgstr "Dash Combo"
+
+#. Key:	UI_Name_Flame
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Flame"
+msgid "Flame"
+msgstr "Flame"
+
+#. Key:	UI_Name_Freezing
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Freezing"
+msgid "Freezing"
+msgstr "Freezing"
+
+#. Key:	UI_Name_NormalCombo
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_NormalCombo"
+msgid "Normal Combo"
+msgstr "Normal Combo"
+
+#. Key:	UI_Name_Oxidation
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Oxidation"
+msgid "Oxidation"
+msgstr "Oxidation"
+
+#. Key:	UI_Name_Slow
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Slow"
+msgid "Slow"
+msgstr "Slow"
+
 #. Key:	UI_RewardWarning
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -1412,6 +1482,20 @@ msgstr "Other"
 msgctxt "ST_EasyGameUICommon,Category_Upscaling_AA"
 msgid "Upscaling & AA"
 msgstr "Upscaling & AA"
+
+#. Key:	Craft_Confirm_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Craft_Confirm_Warning"
+msgid "Do you really want to craft?\r\nAny action is definitive."
+msgstr "Do you really want to craft?\r\nAny action is definitive."
+
+#. Key:	CraftMaterial_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,CraftMaterial_Warning"
+msgid "Not enough material to craft."
+msgstr "Not enough material to craft."
 
 #. Key:	Desc_AAMethodSetting
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2085,6 +2169,13 @@ msgctxt "ST_EasyGameUICommon,Stat"
 msgid "Stat"
 msgstr "Stat"
 
+#. Key:	Stat_Information
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Stat_Information"
+msgid "Stat Info"
+msgstr "Stat Info"
+
 #. Key:	Tab_Audio
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2155,6 +2246,20 @@ msgctxt "ST_EasyGameUICommon,UI_NotAvailable"
 msgid "Not Available"
 msgstr "Not Available"
 
+#. Key:	UI_Owned_Boosterchip
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_Owned_Boosterchip"
+msgid "Owned Boosterchip"
+msgstr "Owned Boosterchip"
+
+#. Key:	UI_SwitchTab
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_SwitchTab"
+msgid "Switch_Tab"
+msgstr "Switch_Tab"
+
 #. Key:	UI_WeaponSelect
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2217,6 +2322,13 @@ msgstr "Ultra Quality"
 msgctxt "ST_EasyGameUICommon,Utility"
 msgid "Utility"
 msgstr "Utility"
+
+#. Key:	Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Warning"
+msgid "Warning"
+msgstr "Warning"
 
 #. Key:	Desc_Bombard
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -2499,85 +2611,323 @@ msgid "Universal Material [Wrench]"
 msgstr "Universal Material [Wrench]"
 
 #. Key:	Desc_Blink
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_Blink"
 msgid "Moves quickly in the direction of the key input in a short, straight dash."
 msgstr "Moves quickly in the direction of the key input in a short, straight dash."
 
 #. Key:	Desc_ForwardSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_ForwardSlash"
 msgid "Slashes forward in a straight line at high speed."
 msgstr "Slashes forward in a straight line at high speed."
 
 #. Key:	Desc_Hellptimization
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_Hellptimization"
 msgid "Emits a Hellptimization wave around the player, reducing the attack power of nearby enemies."
 msgstr "Emits a Hellptimization wave around the player, reducing the attack power of nearby enemies."
 
 #. Key:	Desc_MultiSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_MultiSlash"
 msgid "Searches for enemies within a 10m radius and slashes through them at high speed, starting with the closest target."
 msgstr "Searches for enemies within a 10m radius and slashes through them at high speed, starting with the closest target."
 
 #. Key:	Desc_Teleport
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_Teleport"
 msgid "Teleports above the nearest enemy from the player and strikes downward. If no target is available, teleportation fails."
 msgstr "Teleports above the nearest enemy from the player and strikes downward. If no target is available, teleportation fails."
 
 #. Key:	Desc_WeaknessAnalysis
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_WeaknessAnalysis"
 msgid "Analyzes the weaknesses of nearby enemies, reducing their defense."
 msgstr "Analyzes the weaknesses of nearby enemies, reducing their defense."
 
 #. Key:	Name_Blink
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Blink"
 msgid "Blink"
 msgstr "Blink"
 
 #. Key:	Name_ForwardSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_ForwardSlash"
 msgid "Forward Slash"
 msgstr "Forward Slash"
 
 #. Key:	Name_Hellptimization
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Hellptimization"
 msgid "Hellptimization"
 msgstr "Hellptimization"
 
 #. Key:	Name_MultiSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_MultiSlash"
 msgid "Multi Slash"
 msgstr "Multi Slash"
 
+#. Key:	Name_Stat_BurnResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_BurnResist"
+msgid "Burn Resistance"
+msgstr "Burn Resistance"
+
+#. Key:	Name_Stat_DashAttackFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackFatality"
+msgid "Dash Attack Critical Rate"
+msgstr "Dash Attack Critical Rate"
+
+#. Key:	Name_Stat_DashAttackFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackFlame"
+msgid "Dash Attack Flame"
+msgstr "Dash Attack Flame"
+
+#. Key:	Name_Stat_DashAttackPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackPoison"
+msgid "Dash Attack Oxidation"
+msgstr "Dash Attack Oxidation"
+
+#. Key:	Name_Stat_DashAttackPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackPower"
+msgid "Dash Attack Power"
+msgstr "Dash Attack Power"
+
+#. Key:	Name_Stat_DashAttackSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackSlow"
+msgid "Dash Attack Slow"
+msgstr "Dash Attack Slow"
+
+#. Key:	Name_Stat_DashAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackSpeed"
+msgid "Dash Attack Speed"
+msgstr "Dash Attack Speed"
+
+#. Key:	Name_Stat_DashAttackStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackStun"
+msgid "Dash Attack Freezing"
+msgstr "Dash Attack Freezing"
+
+#. Key:	Name_Stat_DebuffTime
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DebuffTime"
+msgid "Debuff Duration"
+msgstr "Debuff Duration"
+
+#. Key:	Name_Stat_Defense
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_Defense"
+msgid "Defense"
+msgstr "Defense"
+
+#. Key:	Name_Stat_HealItemPerformance
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_HealItemPerformance"
+msgid "Healing Item Effectiveness"
+msgstr "Healing Item Effectiveness"
+
+#. Key:	Name_Stat_JumpAttackFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackFatality"
+msgid "Jump Attack Critical Rate"
+msgstr "Jump Attack Critical Rate"
+
+#. Key:	Name_Stat_JumpAttackFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackFlame"
+msgid "Jump Attack Flame"
+msgstr "Jump Attack Flame"
+
+#. Key:	Name_Stat_JumpAttackPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackPoison"
+msgid "Jump Attack Oxidation"
+msgstr "Jump Attack Oxidation"
+
+#. Key:	Name_Stat_JumpAttackPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackPower"
+msgid "Jump Attack Power"
+msgstr "Jump Attack Power"
+
+#. Key:	Name_Stat_JumpAttackSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackSlow"
+msgid "Jump Attack Slow"
+msgstr "Jump Attack Slow"
+
+#. Key:	Name_Stat_JumpAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackSpeed"
+msgid "Jump Attack Speed"
+msgstr "Jump Attack Speed"
+
+#. Key:	Name_Stat_JumpAttackStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackStun"
+msgid "Jump Attack Freezing"
+msgstr "Jump Attack Freezing"
+
+#. Key:	Name_Stat_LuckyDrop
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_LuckyDrop"
+msgid "Lucky Drop Rate"
+msgstr "Lucky Drop Rate"
+
+#. Key:	Name_Stat_MaxHealth
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_MaxHealth"
+msgid "Max Health"
+msgstr "Max Health"
+
+#. Key:	Name_Stat_MoveSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_MoveSpeed"
+msgid "Movement Speed"
+msgstr "Movement Speed"
+
+#. Key:	Name_Stat_NormalAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalAttackSpeed"
+msgid "Normal Attack Speed"
+msgstr "Normal Attack Speed"
+
+#. Key:	Name_Stat_NormalFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalFatality"
+msgid "Normal Attack Critical Rate"
+msgstr "Normal Attack Critical Rate"
+
+#. Key:	Name_Stat_NormalFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalFlame"
+msgid "Normal Attack Flame"
+msgstr "Normal Attack Flame"
+
+#. Key:	Name_Stat_NormalPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalPoison"
+msgid "Normal Attack Oxidation"
+msgstr "Normal Attack Oxidation"
+
+#. Key:	Name_Stat_NormalPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalPower"
+msgid "Normal Attack Power"
+msgstr "Normal Attack Power"
+
+#. Key:	Name_Stat_NormalSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalSlow"
+msgid "Normal Attack Slow"
+msgstr "Normal Attack Slow"
+
+#. Key:	Name_Stat_NormalStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalStun"
+msgid "Normal Attack Freezing"
+msgstr "Normal Attack Freezing"
+
+#. Key:	Name_Stat_PoisonResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_PoisonResist"
+msgid "Oxidation Resistance"
+msgstr "Oxidation Resistance"
+
+#. Key:	Name_Stat_RollDelay
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_RollDelay"
+msgid "Roll Delay"
+msgstr "Roll Delay"
+
+#. Key:	Name_Stat_SkillCoolTime
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SkillCoolTime"
+msgid "Skill Cooldown Time"
+msgstr "Skill Cooldown Time"
+
+#. Key:	Name_Stat_SlowResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SlowResist"
+msgid "Slow Resistance"
+msgstr "Slow Resistance"
+
+#. Key:	Name_Stat_StunResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_StunResist"
+msgid "Freezing Resistance"
+msgstr "Freezing Resistance"
+
+#. Key:	Name_Stat_SubWeaponCapacity
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SubWeaponCapacity"
+msgid "Sub-Weapon Capacity"
+msgstr "Sub-Weapon Capacity"
+
 #. Key:	Name_Teleport
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Teleport"
 msgid "Teleport"
 msgstr "Teleport"
 
 #. Key:	Name_WeaknessAnalysis
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_WeaknessAnalysis"
 msgid "Weakness Analysis"
 msgstr "Weakness Analysis"

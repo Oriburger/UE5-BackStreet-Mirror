@@ -211,6 +211,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<FAbilityInfoStruct> GetRandomAbilityInfoList(int32 Count, TArray<EAbilityType> TypeList);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetAbilityTotalTier(EAbilityType AbilityType);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetAbilityTotalTierThreshold(EAbilityType AbilityType);
+
 //--------- Property ----------------------------------------------------
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
@@ -230,7 +236,11 @@ private:
 	UPROPERTY()
 		TArray<FAbilityInfoStruct> ActiveAbilityInfoList;
 		TArray<bool> AbilityPickedInfoList;
-	
+		
+	//어빌리티 종류별 토탈 티어 합산 (3: 레전더리, 2: 레어, 1: 일반)
+	TMap<EAbilityType, int32> AbilityTotalTier;
+	TMap<EAbilityType, int32> AbilityTotalTierThreshold;
+
 	//소유자 캐릭터 약참조
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 

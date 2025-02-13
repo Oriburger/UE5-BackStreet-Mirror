@@ -62,6 +62,13 @@
 					"None"
 				],
 				"SoundVolumeList": [ 3.2000000476837158 ]
+			},
+			"WeaponSwitch":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Action/SC_Login_Action_WeaponSwitch_Sub.SC_Login_Action_WeaponSwitch_Sub'"
+				],
+				"SoundVolumeList": [ 1 ]
 			}
 		},
 		"SoundAssetDescription": "None"
@@ -252,23 +259,6 @@
 			{
 				"SoundList": [
 					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Robot_Noise_HeavyA_Cue.SC_Robot_Noise_HeavyA_Cue'"
-				],
-				"SoundVolumeList": [ 1 ]
-			}
-		},
-		"SoundAssetDescription": "None"
-	},
-	{
-		"Name": "1",
-		"SoundType": "E_Character",
-		"TargetID": 1,
-		"SoundTarget": "MainCharacter",
-		"SoundMap":
-		{
-			"Chop":
-			{
-				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/Character/Sound/SC_Chop.SC_Chop'"
 				],
 				"SoundVolumeList": [ 1 ]
 			}

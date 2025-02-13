@@ -1,11 +1,11 @@
-﻿# Game Korean translation.
+﻿# Game_ko Korean translation.
 # Fill out your copyright notice in the Description page of Project Settings.
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Game\n"
-"POT-Creation-Date: 2025-02-07 07:17\n"
-"PO-Revision-Date: 2025-02-07 07:17\n"
+"Project-Id-Version: Game_ko\n"
+"POT-Creation-Date: 2025-02-12 09:20\n"
+"PO-Revision-Date: 2025-02-12 09:20\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -39,21 +39,21 @@ msgstr "점프 공격 속도가 24% 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Legendary"
 msgid "jump attack greatly increases and inflicts slow debuff"
-msgstr "점프 공격이 매우 강해지며 슬로우 피해를 입힌다"
+msgstr "점프 공격이 매우 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Aerial_Throttling_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Normal"
 msgid "jump attack slightly increases and inflicts slow debuff"
-msgstr "점프 공격이 조금 강해지며 슬로우 피해를 입힌다"
+msgstr "점프 공격이 조금 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Aerial_Throttling_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Rare"
 msgid "jump attack increases and inflicts slow debuff"
-msgstr "점프 공격이 더 강해지며 슬로우 피해를 입힌다"
+msgstr "점프 공격이 더 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Battery_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -270,21 +270,21 @@ msgstr "이동 속도가 26% 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Legendary"
 msgid "jump attack power increases by 27% and has a chance to inflict stun debuff"
-msgstr "점프 공격력이 27% 증가하며 확률적으로 스턴 피해를 입힌다"
+msgstr "점프 공격력이 27% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Freezing_Aerial_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Normal"
 msgid "jump attack power increases by 7% and has a chance to inflict stun debuff"
-msgstr "점프 공격력이 7% 증가하며 확률적으로 스턴 피해를 입힌다"
+msgstr "점프 공격력이 7% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Freezing_Aerial_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Rare"
 msgid "jump attack power increases by 17% and has a chance to inflict stun debuff"
-msgstr "점프 공격력이 17% 증가하며 확률적으로 스턴 피해를 입힌다"
+msgstr "점프 공격력이 17% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Freezing_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -354,21 +354,21 @@ msgstr "일반 공격 시 스턴 피해를 입힐 확률이 20% 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Legendary"
 msgid "normal attack power increases by 25% and has a chance to inflict stun debuff"
-msgstr "일반 공격력이 25% 증가하며 확률적으로 스턴 피해를 입힌다"
+msgstr "일반 공격력이 25% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Freezing_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Normal"
 msgid "normal attack power increases by 5% and has a chance to inflict stun debuff"
-msgstr "일반 공격력이 5% 증가하며 확률적으로 스턴 피해를 입힌다"
+msgstr "일반 공격력이 5% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Freezing_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Rare"
 msgid "normal attack power increases by 15% and has a chance to inflict stun debuff"
-msgstr "일반 공격력이 15% 증가하며 확률적으로 스턴 피해를 입힌다"
+msgstr "일반 공격력이 15% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Heal_Pack_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -550,21 +550,21 @@ msgstr "이동 속도가 30% 감소하지만, 일반 공격력이 20% 증가한�
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Legendary"
 msgid "normal attack speed decreases by 15%, but inflicts very strong slow debuff"
-msgstr "일반 공격 속도가 15% 감소하지만, 매우 강력한 슬로우 피해가 발생한다"
+msgstr "일반 공격 속도가 15% 감소하지만, 매우 강력한 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Overload_Self_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Normal"
 msgid "normal attack speed decreases by 15%, but inflicts strong slow debuff"
-msgstr "일반 공격 속도가 15% 감소하지만, 강한 슬로우 피해가 발생한다"
+msgstr "일반 공격 속도가 15% 감소하지만, 강한 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Overload_Self_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Rare"
 msgid "normal attack speed decreases by 15%, but inflicts even stronger slow debuff"
-msgstr "일반 공격 속도가 15% 감소하지만, 더욱 강력한 슬로우 피해가 발생한다"
+msgstr "일반 공격 속도가 15% 감소하지만, 더욱 강력한 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Oxidation_Aerial_Attack_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -739,21 +739,21 @@ msgstr "일반 공격 속도가 20% 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Stunning_Output_Legendary"
 msgid "normal attack has a 3% chance to inflict very strong stun debuff"
-msgstr "일반 공격 시 3% 확률로 매우 강한 스턴 피해를 입힌다"
+msgstr "일반 공격 시 3% 확률로 매우 강한 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Stunning_Output_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Stunning_Output_Normal"
 msgid "normal attack has a 1% chance to inflict very strong stun debuff"
-msgstr "일반 공격 시 1% 확률로 매우 강한 스턴 피해를 입힌다"
+msgstr "일반 공격 시 1% 확률로 매우 강한 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Stunning_Output_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Stunning_Output_Rare"
 msgid "normal attack has a 2% chance to inflict very strong stun debuff"
-msgstr "일반 공격 시 2% 확률로 매우 강한 스턴 피해를 입힌다"
+msgstr "일반 공격 시 2% 확률로 매우 강한 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Sub-Weapon_Slot_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -830,14 +830,14 @@ msgstr "일반 공격이 매우 강해지며 슬로우 디버프를 적용한다
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Normal"
 msgid "normal attack slightly increases and inflicts slow effect"
-msgstr "일반 공격이 조금 강해지며 슬로우 피해를 입힌다"
+msgstr "일반 공격이 조금 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Throttling_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Rare"
 msgid "normal attack increases and inflicts slow debuff"
-msgstr "일반 공격이 강해지며 슬로우 피해를 입힌다"
+msgstr "일반 공격이 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Toxic_Aerial_Attack_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -1287,6 +1287,76 @@ msgctxt "ST_Boosterchip,UI_Choose_New_BoosterChip"
 msgid "Select New Boosterchip"
 msgstr "새 부스터칩을 고르세요"
 
+#. Key:	UI_Name_Action
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Action"
+msgid "Action"
+msgstr "액션"
+
+#. Key:	UI_Name_Aerial_Combo
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Aerial_Combo"
+msgid "Aerial Combo"
+msgstr "공중콤보"
+
+#. Key:	UI_Name_Critical
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Critical"
+msgid "Critical"
+msgstr "치명타"
+
+#. Key:	UI_Name_Currency
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Currency"
+msgid "Currency"
+msgstr "재화"
+
+#. Key:	UI_Name_DashCombo
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_DashCombo"
+msgid "Dash Combo"
+msgstr "돌진콤보"
+
+#. Key:	UI_Name_Flame
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Flame"
+msgid "Flame"
+msgstr "화염"
+
+#. Key:	UI_Name_Freezing
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Freezing"
+msgid "Freezing"
+msgstr "프리징"
+
+#. Key:	UI_Name_NormalCombo
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_NormalCombo"
+msgid "Normal Combo"
+msgstr "일반콤보"
+
+#. Key:	UI_Name_Oxidation
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Oxidation"
+msgid "Oxidation"
+msgstr "산화"
+
+#. Key:	UI_Name_Slow
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Slow"
+msgid "Slow"
+msgstr "슬로우"
+
 #. Key:	UI_RewardWarning
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -1412,6 +1482,20 @@ msgstr "그 외"
 msgctxt "ST_EasyGameUICommon,Category_Upscaling_AA"
 msgid "Upscaling & AA"
 msgstr "업스케일링 & AA"
+
+#. Key:	Craft_Confirm_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Craft_Confirm_Warning"
+msgid "Do you really want to craft?\r\nAny action is definitive."
+msgstr "정말로 조합하시겠습니까? 선택 후 취소할 수 없습니다."
+
+#. Key:	CraftMaterial_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,CraftMaterial_Warning"
+msgid "Not enough material to craft."
+msgstr "조합에 필요한 재료가 부족합니다."
 
 #. Key:	Desc_AAMethodSetting
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2085,6 +2169,13 @@ msgctxt "ST_EasyGameUICommon,Stat"
 msgid "Stat"
 msgstr "스탯"
 
+#. Key:	Stat_Information
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Stat_Information"
+msgid "Stat Info"
+msgstr "스탯 정보"
+
 #. Key:	Tab_Audio
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2155,6 +2246,20 @@ msgctxt "ST_EasyGameUICommon,UI_NotAvailable"
 msgid "Not Available"
 msgstr "Not Available"
 
+#. Key:	UI_Owned_Boosterchip
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_Owned_Boosterchip"
+msgid "Owned Boosterchip"
+msgstr "보유 중인 부스터칩"
+
+#. Key:	UI_SwitchTab
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_SwitchTab"
+msgid "Switch_Tab"
+msgstr "탭 전환"
+
 #. Key:	UI_WeaponSelect
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2217,6 +2322,13 @@ msgstr "최고품질"
 msgctxt "ST_EasyGameUICommon,Utility"
 msgid "Utility"
 msgstr "유틸성"
+
+#. Key:	Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Warning"
+msgid "Warning"
+msgstr "경고"
 
 #. Key:	Desc_Bombard
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -2499,85 +2611,323 @@ msgid "Universal Material [Wrench]"
 msgstr "만능재료(렌치)"
 
 #. Key:	Desc_Blink
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_Blink"
 msgid "Moves quickly in the direction of the key input in a short, straight dash."
 msgstr "플레이어가 누르는 방향키 방향의 직선 방향으로 짧고 빠르게 이동한다."
 
 #. Key:	Desc_ForwardSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_ForwardSlash"
 msgid "Slashes forward in a straight line at high speed."
 msgstr "직선 앞으로 빠른 속도로 베며 나아간다."
 
 #. Key:	Desc_Hellptimization
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_Hellptimization"
 msgid "Emits a Hellptimization wave around the player, reducing the attack power of nearby enemies."
 msgstr "주변의 적들에게 헬적화 파장을 발산하며 적들의 공격력을 떨어트린다"
 
 #. Key:	Desc_MultiSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_MultiSlash"
 msgid "Searches for enemies within a 10m radius and slashes through them at high speed, starting with the closest target."
 msgstr "반경 10m 안에 있는 적군을 서치하여 가까운 적군부터 빠른 속도로 베어가른다."
 
 #. Key:	Desc_Teleport
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_Teleport"
 msgid "Teleports above the nearest enemy from the player and strikes downward. If no target is available, teleportation fails."
 msgstr "플레이어로 부터 가장 가까이 적의 위로 텔레포트 하여 내려 찍는다. 대상이 없는 경우 텔레포트 하지 못한다."
 
 #. Key:	Desc_WeaknessAnalysis
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_WeaknessAnalysis"
 msgid "Analyzes the weaknesses of nearby enemies, reducing their defense."
 msgstr "주변의 적들의 약점을 분석하여 방어력을 떨어트린다"
 
 #. Key:	Name_Blink
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Blink"
 msgid "Blink"
 msgstr "점멸"
 
 #. Key:	Name_ForwardSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_ForwardSlash"
 msgid "Forward Slash"
 msgstr "전방베기"
 
 #. Key:	Name_Hellptimization
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Hellptimization"
 msgid "Hellptimization"
 msgstr "헬적화"
 
 #. Key:	Name_MultiSlash
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_MultiSlash"
 msgid "Multi Slash"
 msgstr "다중베기"
 
+#. Key:	Name_Stat_BurnResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_BurnResist"
+msgid "Burn Resistance"
+msgstr "화염 저항"
+
+#. Key:	Name_Stat_DashAttackFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackFatality"
+msgid "Dash Attack Critical Rate"
+msgstr "돌진 공격 치명타"
+
+#. Key:	Name_Stat_DashAttackFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackFlame"
+msgid "Dash Attack Flame"
+msgstr "돌진 공격 화염"
+
+#. Key:	Name_Stat_DashAttackPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackPoison"
+msgid "Dash Attack Oxidation"
+msgstr "돌진 공격 산화"
+
+#. Key:	Name_Stat_DashAttackPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackPower"
+msgid "Dash Attack Power"
+msgstr "돌진 공격력"
+
+#. Key:	Name_Stat_DashAttackSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackSlow"
+msgid "Dash Attack Slow"
+msgstr "돌진 공격 슬로우"
+
+#. Key:	Name_Stat_DashAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackSpeed"
+msgid "Dash Attack Speed"
+msgstr "돌진 공격 속도"
+
+#. Key:	Name_Stat_DashAttackStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackStun"
+msgid "Dash Attack Freezing"
+msgstr "돌진 공격 프리징 "
+
+#. Key:	Name_Stat_DebuffTime
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DebuffTime"
+msgid "Debuff Duration"
+msgstr "디버프 시간"
+
+#. Key:	Name_Stat_Defense
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_Defense"
+msgid "Defense"
+msgstr "방어력"
+
+#. Key:	Name_Stat_HealItemPerformance
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_HealItemPerformance"
+msgid "Healing Item Effectiveness"
+msgstr "회복 아이템 성능"
+
+#. Key:	Name_Stat_JumpAttackFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackFatality"
+msgid "Jump Attack Critical Rate"
+msgstr "점프 공격 치명타"
+
+#. Key:	Name_Stat_JumpAttackFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackFlame"
+msgid "Jump Attack Flame"
+msgstr "점프 공격 화염"
+
+#. Key:	Name_Stat_JumpAttackPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackPoison"
+msgid "Jump Attack Oxidation"
+msgstr "점프 공격 산화"
+
+#. Key:	Name_Stat_JumpAttackPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackPower"
+msgid "Jump Attack Power"
+msgstr "점프 공격력"
+
+#. Key:	Name_Stat_JumpAttackSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackSlow"
+msgid "Jump Attack Slow"
+msgstr "점프 공격 슬로우"
+
+#. Key:	Name_Stat_JumpAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackSpeed"
+msgid "Jump Attack Speed"
+msgstr "점프 공격 속도"
+
+#. Key:	Name_Stat_JumpAttackStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackStun"
+msgid "Jump Attack Freezing"
+msgstr "점프 공격 프리징"
+
+#. Key:	Name_Stat_LuckyDrop
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_LuckyDrop"
+msgid "Lucky Drop Rate"
+msgstr "럭키 드롭률"
+
+#. Key:	Name_Stat_MaxHealth
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_MaxHealth"
+msgid "Max Health"
+msgstr "최대 체력"
+
+#. Key:	Name_Stat_MoveSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_MoveSpeed"
+msgid "Movement Speed"
+msgstr "이동 속도"
+
+#. Key:	Name_Stat_NormalAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalAttackSpeed"
+msgid "Normal Attack Speed"
+msgstr "일반 공격 속도"
+
+#. Key:	Name_Stat_NormalFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalFatality"
+msgid "Normal Attack Critical Rate"
+msgstr "일반 공격 치명타"
+
+#. Key:	Name_Stat_NormalFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalFlame"
+msgid "Normal Attack Flame"
+msgstr "일반 공격 화염"
+
+#. Key:	Name_Stat_NormalPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalPoison"
+msgid "Normal Attack Oxidation"
+msgstr "일반 공격 산화"
+
+#. Key:	Name_Stat_NormalPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalPower"
+msgid "Normal Attack Power"
+msgstr "일반 공격력"
+
+#. Key:	Name_Stat_NormalSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalSlow"
+msgid "Normal Attack Slow"
+msgstr "일반 공격 슬로우"
+
+#. Key:	Name_Stat_NormalStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalStun"
+msgid "Normal Attack Freezing"
+msgstr "일반 공격 프리징"
+
+#. Key:	Name_Stat_PoisonResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_PoisonResist"
+msgid "Oxidation Resistance"
+msgstr "산화 저항"
+
+#. Key:	Name_Stat_RollDelay
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_RollDelay"
+msgid "Roll Delay"
+msgstr "구르기 딜레이"
+
+#. Key:	Name_Stat_SkillCoolTime
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SkillCoolTime"
+msgid "Skill Cooldown Time"
+msgstr "스킬 쿨타임"
+
+#. Key:	Name_Stat_SlowResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SlowResist"
+msgid "Slow Resistance"
+msgstr "슬로우 저항"
+
+#. Key:	Name_Stat_StunResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_StunResist"
+msgid "Freezing Resistance"
+msgstr "프리징 저항"
+
+#. Key:	Name_Stat_SubWeaponCapacity
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SubWeaponCapacity"
+msgid "Sub-Weapon Capacity"
+msgstr "보조무기 용량"
+
 #. Key:	Name_Teleport
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Teleport"
 msgid "Teleport"
 msgstr "텔레포트"
 
 #. Key:	Name_WeaknessAnalysis
-#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
-#: /Game/UI/Localization/ST_Skill.ST_Skill
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_WeaknessAnalysis"
 msgid "Weakness Analysis"
 msgstr "약점분석"

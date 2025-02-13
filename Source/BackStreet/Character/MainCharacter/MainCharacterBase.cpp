@@ -262,13 +262,12 @@ void AMainCharacterBase::TryShoot()
 	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Shoot) return;
 
 	FRotator shootRotation = GetAimingRotation(WeaponComponent->GetComponentLocation());
-	WeaponComponent->RangedCombatManager->TryFireProjectile(shootRotation);
+	bool result = WeaponComponent->RangedCombatManager->TryFireProjectile(shootRotation);
 
 	if (AssetHardPtrInfo.ShootAnimMontageList[0] > 0
-		&& IsValid(AssetHardPtrInfo.ShootAnimMontageList[0]))
+		&& IsValid(AssetHardPtrInfo.ShootAnimMontageList[0]) && result)
 	{
 		PlayAnimMontage(AssetHardPtrInfo.ShootAnimMontageList[0], 1.0f);
-		
 		OnShootStarted.Broadcast();
 	}
 }
@@ -597,48 +596,6 @@ void AMainCharacterBase::TryAttack()
 	}
 
 	Super::TryAttack();
-}
-
-void AMainCharacterBase::TryUpperAttack()
-{
-	if (GetCharacterMovement()->IsFalling()) return;
-	if (CharacterGameplayInfo.bIsAirAttacking) return;
-	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (CharacterGameplayInfo.bIsSprinting)
-	{
-		SetFieldOfViewWithInterp(90.0f, 0.75f);
-	}
-	AActor* targetedEnemy = TargetingManagerComponent->GetTargetedCharacter();
-
-	//Update upper atk target enemy (cloest pawn)
-	if (!IsValid(targetedEnemy)
-		|| FVector::Distance(GetActorLocation(), targetedEnemy->GetActorLocation()) >= 300.0f)
-	{
-		TargetingManagerComponent->ForceTargetingToNearestCharacter();
-		targetedEnemy = TargetingManagerComponent->GetTargetedCharacter();
-	}
-	
-	if (IsValid(targetedEnemy) && !targetedEnemy->ActorHasTag("Boss")
-		&& FVector::Distance(GetActorLocation(), targetedEnemy->GetActorLocation()) <= 300.0f)
-	{
-		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(targetedEnemy->GetActorLocation(), GetActorLocation());
-		targetedEnemy->SetActorRotation(newRotation);
-		newRotation.Add(0.0f, 180.0f, 0.0f);
-		SetActorRotation(newRotation);
-		SetLocationWithInterp(Cast<ACharacterBase>(targetedEnemy)->HitSceneComponent->GetComponentLocation(), 100.0f);
-
-		Super::TryUpperAttack();
-	}
-}
-
-void AMainCharacterBase::TryDownwardAttack()
-{
-	Super::TryDownwardAttack();
-	if (!GetCharacterMovement()->IsFalling() || !CharacterGameplayInfo.bIsAirAttacking) return;
-	if (IsValid(TargetingManagerComponent->GetTargetedCharacter()))
-	{
-		SetFieldOfViewWithInterp(110.0f, 0.75f);
-	}
 }
 
 bool AMainCharacterBase::TrySkill(int32 SkillID)
