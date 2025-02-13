@@ -317,6 +317,8 @@ void AMainCharacterBase::ResetMovementInputValue()
 {
 	MovementInputValue = FVector2D::ZeroVector;
 
+	bMoveKeyDown = false;
+
 	if (!bHoldToSprint)
 	{
 		FInputActionValue tempValue = FInputActionValue(-1.0f);
@@ -336,7 +338,7 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
-		FVector forwardAxis = FollowingCamera->GetForwardVector();
+		FVector forwardAxis = FollowingCamera->GetRightVector().RotateAngleAxis(-90.0f, GetMesh()->GetUpVector());
 		//!CharacterState.TargetedEnemy.IsValid() ? FollowingCamera->GetForwardVector()
 		//					  : CharacterState.TargetedEnemy.Get()->GetActorLocation() - GetActorLocation();
 		FVector rightAxis = UKismetMathLibrary::RotateAngleAxis(forwardAxis, 90.0f, GetActorUpVector());
@@ -348,6 +350,9 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 
 		OnMoveStarted.Broadcast();
 		SetRotationLagSpeed(Value.Get<FVector2D>());
+
+		//Update MoveKeyDown
+		bMoveKeyDown = true;
 
 		//Update interaction candidate every move
 		if (InteractionCandidateRef.IsValid())

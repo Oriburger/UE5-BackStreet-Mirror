@@ -103,6 +103,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 		class UInputAction* LockToTargetAction;
 
+	// Move Key input check
+	UPROPERTY(BlueprintReadOnly)
+		bool bMoveKeyDown = false;
+
 protected:
 	UFUNCTION()
 		void ResetMovementInputValue();
