@@ -83,6 +83,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
 		FName ProjectileName;
 
+	//발사체 이름 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText ProjectileNameText;
+
+	//발사체 설명 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText DescriptionText;
+
 	//스폰할 아이템 스태틱 메시 정보 저장
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		TSoftObjectPtr<UStaticMesh> ProjectileMesh;

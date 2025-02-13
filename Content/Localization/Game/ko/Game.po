@@ -1,0 +1,2836 @@
+﻿# Game Korean translation.
+# Fill out your copyright notice in the Description page of Project Settings.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Game\n"
+"POT-Creation-Date: 2025-02-07 07:17\n"
+"PO-Revision-Date: 2025-02-07 07:17\n"
+"Language-Team: \n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. Key:	Desc_Aerial_Strike_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Legendary"
+msgid "jump attack speed increases by 40%"
+msgstr "점프 공격 속도가 40% 증가한다"
+
+#. Key:	Desc_Aerial_Strike_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Normal"
+msgid "jump attack speed increases by 8%"
+msgstr "점프 공격 속도가 8% 증가한다"
+
+#. Key:	Desc_Aerial_Strike_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Rare"
+msgid "jump attack speed increases by 24%"
+msgstr "점프 공격 속도가 24% 증가한다"
+
+#. Key:	Desc_Aerial_Throttling_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Legendary"
+msgid "jump attack greatly increases and inflicts slow debuff"
+msgstr "점프 공격이 매우 강해지며 슬로우 피해를 입힌다"
+
+#. Key:	Desc_Aerial_Throttling_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Normal"
+msgid "jump attack slightly increases and inflicts slow debuff"
+msgstr "점프 공격이 조금 강해지며 슬로우 피해를 입힌다"
+
+#. Key:	Desc_Aerial_Throttling_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Rare"
+msgid "jump attack increases and inflicts slow debuff"
+msgstr "점프 공격이 더 강해지며 슬로우 피해를 입힌다"
+
+#. Key:	Desc_Battery_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Battery_Enhancement_Legendary"
+msgid "max HP increases by 35%"
+msgstr "최대 체력이 35% 증가한다"
+
+#. Key:	Desc_Battery_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Battery_Enhancement_Normal"
+msgid "max HP increases by 15%"
+msgstr "최대 체력이 15% 증가한다"
+
+#. Key:	Desc_Battery_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Battery_Enhancement_Rare"
+msgid "max HP increases by 20%"
+msgstr "최대 체력이 20% 증가한다"
+
+#. Key:	Desc_Critical_Aerial_Attack_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Legendary"
+msgid "jump attack critical hit damage increases by 4.5 times"
+msgstr "점프 공격 시 치명타 피해량이 4.5배 증가한다"
+
+#. Key:	Desc_Critical_Aerial_Attack_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Normal"
+msgid "jump attack critical hit damage increases by 2.5 times"
+msgstr "점프 공격 시 치명타 피해량이 2.5배 증가한다"
+
+#. Key:	Desc_Critical_Aerial_Attack_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Rare"
+msgid "jump attack critical hit damage increases by 3.5 times"
+msgstr "점프 공격 시 치명타 피해량이 3.5배 증가한다"
+
+#. Key:	Desc_Critical_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Dash_Legendary"
+msgid "dash attack critical hit damage increases by 4.5 times"
+msgstr "일반 공격 시 치명타 피해량이 4.5배 증가한다"
+
+#. Key:	Desc_Critical_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Dash_Normal"
+msgid "dash attack critical hit damage increases by 2.5 times"
+msgstr "일반 공격 시 치명타 피해량이 2.5배 증가한다"
+
+#. Key:	Desc_Critical_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Dash_Rare"
+msgid "dash attack critical hit damage increases by 3.5 times"
+msgstr "일반 공격 시 치명타 피해량이 3.5배 증가한다"
+
+#. Key:	Desc_Critical_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Strike_Legendary"
+msgid "normal attack critical hit damage increases by 4 times"
+msgstr "일반 공격 시 치명타 피해량이 4배 증가한다"
+
+#. Key:	Desc_Critical_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Strike_Normal"
+msgid "normal attack critical hit damage increases by 2 times"
+msgstr "일반 공격 시 치명타 피해량이 2배 증가한다"
+
+#. Key:	Desc_Critical_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Strike_Rare"
+msgid "normal attack critical hit damage increases by 3 times"
+msgstr "일반 공격 시 치명타 피해량이 3배 증가한다"
+
+#. Key:	Desc_Dash_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Legendary"
+msgid "dash attack speed increases by 45%"
+msgstr "대시 공격 속도가 45% 증가한다"
+
+#. Key:	Desc_Dash_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Normal"
+msgid "dash attack speed increases by 8%"
+msgstr "대시 공격 속도가 8% 증가한다"
+
+#. Key:	Desc_Dash_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Rare"
+msgid "dash attack speed increases by 25%"
+msgstr "대시 공격 속도가 25% 증가한다"
+
+#. Key:	Desc_Firewall_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Firewall_Enhancement_Legendary"
+msgid "defense power increases by 50%"
+msgstr "방어력이 50% 증가한다"
+
+#. Key:	Desc_Firewall_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Firewall_Enhancement_Normal"
+msgid "defense power increases by 10%"
+msgstr "방어력이 10% 증가한다"
+
+#. Key:	Desc_Firewall_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Firewall_Enhancement_Rare"
+msgid "defense power increases by 30%"
+msgstr "방어력이 30% 증가한다"
+
+#. Key:	Desc_Flame_Aerial_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Legendary"
+msgid "35% chance for jump attack to deal flame damage"
+msgstr "35% 확률로 점프 공격이 화염 피해를 가한다"
+
+#. Key:	Desc_Flame_Aerial_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Normal"
+msgid "7% chance for jump attack to deal flame damage"
+msgstr "7% 확률로 점프 공격이 화염 피해를 가한다"
+
+#. Key:	Desc_Flame_Aerial_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Rare"
+msgid "16% chance for jump attack to deal flame damage"
+msgstr "15% 확률로 점프 공격이 화염 피해를 가한다"
+
+#. Key:	Desc_Flame_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Dash_Legendary"
+msgid "35% chance for dash attack to deal flame damage"
+msgstr "35% 확률로 대시 공격이 화염 피해를 가한다"
+
+#. Key:	Desc_Flame_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Dash_Normal"
+msgid "7% chance for dash attack to deal flame damage"
+msgstr "7% 확률로 대시 공격이 화염 피해를 가한다"
+
+#. Key:	Desc_Flame_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Dash_Rare"
+msgid "16% chance for dash attack to deal flame damage"
+msgstr "16% 확률로 대시 공격이 화염 피해를 가한다"
+
+#. Key:	Desc_Flame_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Strike_Legendary"
+msgid "30% chance for normal attack to deal flame damage"
+msgstr "30% 확률로 일반 공격이 화염 피해를 가한다"
+
+#. Key:	Desc_Flame_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Strike_Normal"
+msgid "5% chance for normal attack to deal flame damage"
+msgstr "5% 확률로 일반 공격이 화염 피해를 가한다"
+
+#. Key:	Desc_Flame_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Strike_Rare"
+msgid "15% chance for normal attack to deal flame damage"
+msgstr "15% 확률로 일반 공격이 화염 피해를 가한다"
+
+#. Key:	Desc_Footwork_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Footwork_Optimization_Legendary"
+msgid "movement speed increases by 40%"
+msgstr "이동 속도가 40% 증가한다"
+
+#. Key:	Desc_Footwork_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Footwork_Optimization_Normal"
+msgid "movement speed increases by 15%"
+msgstr "이동 속도가 15% 증가한다"
+
+#. Key:	Desc_Footwork_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Footwork_Optimization_Rare"
+msgid "movement speed increases by 26%"
+msgstr "이동 속도가 26% 증가한다"
+
+#. Key:	Desc_Freezing_Aerial_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Legendary"
+msgid "jump attack power increases by 27% and has a chance to inflict stun debuff"
+msgstr "점프 공격력이 27% 증가하며 확률적으로 스턴 피해를 입힌다"
+
+#. Key:	Desc_Freezing_Aerial_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Normal"
+msgid "jump attack power increases by 7% and has a chance to inflict stun debuff"
+msgstr "점프 공격력이 7% 증가하며 확률적으로 스턴 피해를 입힌다"
+
+#. Key:	Desc_Freezing_Aerial_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Rare"
+msgid "jump attack power increases by 17% and has a chance to inflict stun debuff"
+msgstr "점프 공격력이 17% 증가하며 확률적으로 스턴 피해를 입힌다"
+
+#. Key:	Desc_Freezing_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Legendary"
+msgid "dash attack power increases by 27% and has a chance to inflict stun debuff"
+msgstr "대시 공격력이 27% 증가하며 확률적으로 스턴 디버프를 입힌다"
+
+#. Key:	Desc_Freezing_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Normal"
+msgid "dash attack power increases by 7% and has a chance to inflict stun debuff"
+msgstr "대시 공격력이 7% 증가하며 확률적으로 스턴 디버프를 입힌다"
+
+#. Key:	Desc_Freezing_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Rare"
+msgid "dash attack power increases by 17% and has a chance to inflict stun debuff"
+msgstr "대시 공격력이 17% 증가하며 확률적으로 스턴 디버프를 입힌다"
+
+#. Key:	Desc_Freezing_Resistance_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Legendary"
+msgid "reduces stun debuff duration by 50%"
+msgstr "스턴 피해에 저항력이 50% 증가한다"
+
+#. Key:	Desc_Freezing_Resistance_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Normal"
+msgid "reduces stun debuff duration by 30%"
+msgstr "스턴 피해에 저항력이 30% 증가한다"
+
+#. Key:	Desc_Freezing_Resistance_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Rare"
+msgid "reduces stun debuff duration by 40%"
+msgstr "스턴 피해에 저항력이 40% 증가한다"
+
+#. Key:	Desc_Freezing_Strike_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Legendary"
+msgid "normal attack stun chance increases by 30%"
+msgstr "일반 공격 시 스턴 피해를 입힐 확률이 30% 증가한다"
+
+#. Key:	Desc_Freezing_Strike_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Normal"
+msgid "normal attack stun chance increases by 10%"
+msgstr "일반 공격 시 스턴 피해를 입힐 확률이 10% 증가한다"
+
+#. Key:	Desc_Freezing_Strike_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Rare"
+msgid "normal attack stun chance increases by 20%"
+msgstr "일반 공격 시 스턴 피해를 입힐 확률이 20% 증가한다"
+
+#. Key:	Desc_Freezing_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Legendary"
+msgid "normal attack power increases by 25% and has a chance to inflict stun debuff"
+msgstr "일반 공격력이 25% 증가하며 확률적으로 스턴 피해를 입힌다"
+
+#. Key:	Desc_Freezing_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Normal"
+msgid "normal attack power increases by 5% and has a chance to inflict stun debuff"
+msgstr "일반 공격력이 5% 증가하며 확률적으로 스턴 피해를 입힌다"
+
+#. Key:	Desc_Freezing_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Rare"
+msgid "normal attack power increases by 15% and has a chance to inflict stun debuff"
+msgstr "일반 공격력이 15% 증가하며 확률적으로 스턴 피해를 입힌다"
+
+#. Key:	Desc_Heal_Pack_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Legendary"
+msgid "10% chance for healing item recovery amount to increase by 45%"
+msgstr "10% 확률로 회복 아이템으로 회복되는 양이 40% 늘어난다"
+
+#. Key:	Desc_Heal_Pack_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Normal"
+msgid "10% chance for healing item recovery amount to increase by 30%"
+msgstr "10% 확률로 회복 아이템으로 회복되는 양이 30% 늘어난다"
+
+#. Key:	Desc_Heal_Pack_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Rare"
+msgid "10% chance for healing item recovery amount to increase by 35%"
+msgstr "10% 확률로 회복 아이템으로 회복되는 양이 35% 늘어난다"
+
+#. Key:	Desc_High-Risk_Oxidation_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Legendary"
+msgid "max HP decreases by 20%, but normal attack deals very strong acidic damage"
+msgstr "최대 체력이 20% 줄어들지만, 일반 공격 시 매우 강력한 산성 피해를 입힌다"
+
+#. Key:	Desc_High-Risk_Oxidation_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Normal"
+msgid "max HP decreases by 20%, but normal attack deals strong acidic damage"
+msgstr "최대 체력이 20% 줄어들지만, 일반 공격 시 강한 산성 피해를 입힌다"
+
+#. Key:	Desc_High-Risk_Oxidation_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Rare"
+msgid "max HP decreases by 20%, but normal attack deals even stronger acidic damage"
+msgstr "최대 체력이 20% 줄어들지만, 일반 공격 시 더욱 강력한 산성 피해를 입힌다"
+
+#. Key:	Desc_Hit_Rate_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Hit_Rate_Enhancement_Legendary"
+msgid "all attack critical hit chance increases by 4%"
+msgstr "모든 공격의 치명타 확률이 4% 증가한다"
+
+#. Key:	Desc_Hit_Rate_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Hit_Rate_Enhancement_Normal"
+msgid "all attack critical hit chance increases by 2%"
+msgstr "모든 공격의 치명타 확률이 2% 증가한다"
+
+#. Key:	Desc_Hit_Rate_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Hit_Rate_Enhancement_Rare"
+msgid "all attack critical hit chance increases by 3%"
+msgstr "모든 공격의 치명타 확률이 3% 증가한다"
+
+#. Key:	Desc_Landing_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Landing_Optimization_Legendary"
+msgid "roll delay decreases by 40%"
+msgstr "구르기 딜레이가 40% 감소한다"
+
+#. Key:	Desc_Landing_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Landing_Optimization_Normal"
+msgid "roll delay decreases by 20%"
+msgstr "구르기 딜레이가 20% 감소한다"
+
+#. Key:	Desc_Landing_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Landing_Optimization_Rare"
+msgid "roll delay decreases by 30%"
+msgstr "구르기 딜레이가 30% 감소한다"
+
+#. Key:	Desc_Lucky_Extra_Drop_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Lucky_Extra_Drop_Legendary"
+msgid "25% chance to obtain 4x crafting materials from defeated enemies"
+msgstr "처치 시 25%의 확률로 조합재료(몹 드롭 아이템)을 4배 더 제공한다"
+
+#. Key:	Desc_Lucky_Extra_Drop_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Lucky_Extra_Drop_Normal"
+msgid "25% chance to obtain 2x crafting materials from defeated enemies"
+msgstr "처치 시 25%의 확률로 조합재료(몹 드롭 아이템)을 2배 더 제공한다"
+
+#. Key:	Desc_Lucky_Extra_Drop_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Lucky_Extra_Drop_Rare"
+msgid "25% chance to obtain 3x crafting materials from defeated enemies"
+msgstr "처치 시 25%의 확률로 조합재료(몹 드롭 아이템)을 3배 더 제공한다"
+
+#. Key:	Desc_Overdrive_Mode
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overdrive_Mode"
+msgid "max HP decreases by 10%, but movement speed increases by 45%"
+msgstr "최대 체력이 10% 감소하지만, 이동 속도가 45% 증가한다"
+
+#. Key:	Desc_Overload_Self_Aerial_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Legendary"
+msgid "jump attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgstr "점프 공격 속도가 15% 감소하지만, 매우 강력한 슬로우 디버프를 적용한다"
+
+#. Key:	Desc_Overload_Self_Aerial_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Normal"
+msgid "jump attack speed decreases by 15%, but inflicts slow debuff"
+msgstr "점프 공격 속도가 15% 감소하지만, 슬로우 디버프를 적용한다"
+
+#. Key:	Desc_Overload_Self_Aerial_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Rare"
+msgid "jump attack speed decreases by 15%, but inflicts strong slow debuff"
+msgstr "점프 공격 속도가 15% 감소하지만, 강력한 슬로우 디버프를 적용한다"
+
+#. Key:	Desc_Overload_Self_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Legendary"
+msgid "dash attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgstr "대시 공격 속도가 15% 감소하지만, 매우 강력한 슬로우 디버프를 적용한다"
+
+#. Key:	Desc_Overload_Self_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Normal"
+msgid "dash attack speed decreases by 15%, but inflicts strong slow debuff"
+msgstr "대시 공격 속도가 15% 감소하지만, 강한 슬로우 디버프를 적용한다"
+
+#. Key:	Desc_Overload_Self_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Rare"
+msgid "dash attack speed decreases by 15%, but inflicts even stronger slow debuff"
+msgstr "대시 공격 속도가 15% 감소하지만, 강력한 슬로우 디버프를 적용한다"
+
+#. Key:	Desc_Overload_Self_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Legendary"
+msgid "movement speed decreases by 30%, but normal attack power increases by 30%"
+msgstr "이동 속도가 30% 감소하지만, 일반 공격력이 30% 증가한다"
+
+#. Key:	Desc_Overload_Self_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Normal"
+msgid "movement speed decreases by 30%, but normal attack power increases by 10%"
+msgstr "이동 속도가 30% 감소하지만, 일반 공격력이 10% 증가한다"
+
+#. Key:	Desc_Overload_Self_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Rare"
+msgid "movement speed decreases by 30%, but normal attack power increases by 20%"
+msgstr "이동 속도가 30% 감소하지만, 일반 공격력이 20% 증가한다"
+
+#. Key:	Desc_Overload_Self_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Legendary"
+msgid "normal attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgstr "일반 공격 속도가 15% 감소하지만, 매우 강력한 슬로우 피해가 발생한다"
+
+#. Key:	Desc_Overload_Self_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Normal"
+msgid "normal attack speed decreases by 15%, but inflicts strong slow debuff"
+msgstr "일반 공격 속도가 15% 감소하지만, 강한 슬로우 피해가 발생한다"
+
+#. Key:	Desc_Overload_Self_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Rare"
+msgid "normal attack speed decreases by 15%, but inflicts even stronger slow debuff"
+msgstr "일반 공격 속도가 15% 감소하지만, 더욱 강력한 슬로우 피해가 발생한다"
+
+#. Key:	Desc_Oxidation_Aerial_Attack_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Legendary"
+msgid "jump attack deals strong acidic damage"
+msgstr "점프 공격이 강한 산성 피해를 입힌다"
+
+#. Key:	Desc_Oxidation_Aerial_Attack_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Normal"
+msgid "jump attack deals weak acidic damage"
+msgstr "점프 공격이 약한 산성 피해를 입힌다"
+
+#. Key:	Desc_Oxidation_Aerial_Attack_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Rare"
+msgid "jump attack deals acidic damage"
+msgstr "점프 공격이 산성 피해를 입힌다"
+
+#. Key:	Desc_Oxidation_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Legendary"
+msgid "dash attack deals strong acidic damage"
+msgstr "대시 공격이 강한 산성 피해를 입힌다"
+
+#. Key:	Desc_Oxidation_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Normal"
+msgid "dash attack deals weak acidic damage"
+msgstr "대시 공격이 약한 산성 피해를 입힌다"
+
+#. Key:	Desc_Oxidation_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Rare"
+msgid "dash attack deals acidic damage"
+msgstr "대시 공격이 산성 피해를 입힌다"
+
+#. Key:	Desc_Oxidation_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Legendary"
+msgid "normal attack deals strong acidic damage"
+msgstr "일반 공격이 강한 산성 피해를 입힌다"
+
+#. Key:	Desc_Oxidation_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Normal"
+msgid "normal attack deals weak acidic damage"
+msgstr "일반 공격이 약한 산성 피해를 입힌다"
+
+#. Key:	Desc_Oxidation_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Rare"
+msgid "normal attack deals acidic damage"
+msgstr "일반 공격이 산성 피해를 입힌다"
+
+#. Key:	Desc_Precision_Aerial_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Aerial_Strike_Legendary"
+msgid "jump attack critical hit chance increases by 17%"
+msgstr "점프 공격 시 치명타 확률이 17% 증가한다"
+
+#. Key:	Desc_Precision_Aerial_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Aerial_Strike_Normal"
+msgid "jump attack critical hit chance increases by 7%"
+msgstr "점프 공격 시 치명타 확률이 7% 증가한다"
+
+#. Key:	Desc_Precision_Aerial_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Aerial_Strike_Rare"
+msgid "jump attack critical hit chance increases by 12%"
+msgstr "점프 공격 시 치명타 확률이 12% 증가한다"
+
+#. Key:	Desc_Precision_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Dash_Legendary"
+msgid "dash attack critical hit chance increases by 17%"
+msgstr "대시 공격 시 치명타 확률이 17% 증가한다"
+
+#. Key:	Desc_Precision_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Dash_Normal"
+msgid "dash attack critical hit chance increases by 7%"
+msgstr "대시 공격 시 치명타 확률이 7% 증가한다"
+
+#. Key:	Desc_Precision_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Dash_Rare"
+msgid "dash attack critical hit chance increases by 12%"
+msgstr "대시 공격 시 치명타 확률이 12% 증가한다"
+
+#. Key:	Desc_Precision_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Strike_Legendary"
+msgid "normal attack critical hit chance increases by 15%"
+msgstr "일반 공격 시 치명타 확률이 15% 증가한다"
+
+#. Key:	Desc_Precision_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Strike_Normal"
+msgid "normal attack critical hit chance increases by 5%"
+msgstr "일반 공격 시 치명타 확률이 5% 증가한다"
+
+#. Key:	Desc_Precision_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Strike_Rare"
+msgid "normal attack critical hit chance increases by 10%"
+msgstr "일반 공격 시 치명타 확률이 10% 증가한다"
+
+#. Key:	Desc_Skill_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Skill_Optimization_Legendary"
+msgid "overall skill cooldown decreases by 50%"
+msgstr "전체 스킬 쿨타임이 50% 감소한다"
+
+#. Key:	Desc_Skill_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Skill_Optimization_Normal"
+msgid "overall skill cooldown decreases by 10%"
+msgstr "전체 스킬 쿨타임이 10% 감소한다"
+
+#. Key:	Desc_Skill_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Skill_Optimization_Rare"
+msgid "overall skill cooldown decreases by 35%"
+msgstr "전체 스킬 쿨타임이 35% 감소한다"
+
+#. Key:	Desc_Strike_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Legendary"
+msgid "normal attack speed increases by 35%"
+msgstr "일반 공격 속도가 35% 증가한다"
+
+#. Key:	Desc_Strike_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Normal"
+msgid "normal attack speed increases by 5%"
+msgstr "일반 공격 속도가 5% 증가한다"
+
+#. Key:	Desc_Strike_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Rare"
+msgid "normal attack speed increases by 20%"
+msgstr "일반 공격 속도가 20% 증가한다"
+
+#. Key:	Desc_Stunning_Output_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Stunning_Output_Legendary"
+msgid "normal attack has a 3% chance to inflict very strong stun debuff"
+msgstr "일반 공격 시 3% 확률로 매우 강한 스턴 피해를 입힌다"
+
+#. Key:	Desc_Stunning_Output_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Stunning_Output_Normal"
+msgid "normal attack has a 1% chance to inflict very strong stun debuff"
+msgstr "일반 공격 시 1% 확률로 매우 강한 스턴 피해를 입힌다"
+
+#. Key:	Desc_Stunning_Output_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Stunning_Output_Rare"
+msgid "normal attack has a 2% chance to inflict very strong stun debuff"
+msgstr "일반 공격 시 2% 확률로 매우 강한 스턴 피해를 입힌다"
+
+#. Key:	Desc_Sub-Weapon_Slot_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Sub-Weapon_Slot_Enhancement_Legendary"
+msgid "sub-weapon max capacity increases by 3 times"
+msgstr "보조무기 최대 보유량을 3배로 늘린다"
+
+#. Key:	Desc_Sub-Weapon_Slot_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Sub-Weapon_Slot_Enhancement_Normal"
+msgid "sub-weapon max capacity increases by 1.5 times"
+msgstr "보조무기 최대 보유량을 1.5배로 늘린다"
+
+#. Key:	Desc_Sub-Weapon_Slot_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Sub-Weapon_Slot_Enhancement_Rare"
+msgid "sub-weapon max capacity increases by 2 times"
+msgstr "보조무기 최대 보유량을 2배로 늘린다"
+
+#. Key:	Desc_System_Performance_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Legendary"
+msgid "all attack power increases by 3%"
+msgstr "모든 공격력이 3% 증가한다"
+
+#. Key:	Desc_System_Performance_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Normal"
+msgid "all attack power increases by 1%"
+msgstr "모든 공격력이 1% 증가한다"
+
+#. Key:	Desc_System_Performance_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Rare"
+msgid "all attack power increases by 2%"
+msgstr "모든 공격력이 2% 증가한다"
+
+#. Key:	Desc_Throttling_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Legendary"
+msgid "dash attack greatly increases and inflicts slow debuff"
+msgstr "대시 공격이 매우 강해지며 슬로우 피해를 입힌다"
+
+#. Key:	Desc_Throttling_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Normal"
+msgid "dash attack slightly increases and inflicts slow debuff"
+msgstr "대시 공격이 조금 강해지며 슬로우 디버프를 입힌다"
+
+#. Key:	Desc_Throttling_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Rare"
+msgid "dash attack increases and inflicts slow debuff"
+msgstr "대시 공격이 더 강해지며 슬로우 피해를 입힌다"
+
+#. Key:	Desc_Throttling_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Legendary"
+msgid "normal attack greatly increases and inflicts slow debuff"
+msgstr "일반 공격이 매우 강해지며 슬로우 디버프를 적용한다"
+
+#. Key:	Desc_Throttling_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Normal"
+msgid "normal attack slightly increases and inflicts slow effect"
+msgstr "일반 공격이 조금 강해지며 슬로우 피해를 입힌다"
+
+#. Key:	Desc_Throttling_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Rare"
+msgid "normal attack increases and inflicts slow debuff"
+msgstr "일반 공격이 강해지며 슬로우 피해를 입힌다"
+
+#. Key:	Desc_Toxic_Aerial_Attack_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Legendary"
+msgid "normal attack power decreases by 2%, but jump attack deals very strong acidic damage"
+msgstr "일반 공격력이 2% 감소하지만, 점프 공격 시 매우 강력한 산성 피해를 입힌다"
+
+#. Key:	Desc_Toxic_Aerial_Attack_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Normal"
+msgid "normal attack power decreases by 2%, but jump attack deals strong acidic damage"
+msgstr "일반 공격력이 2% 감소하지만, 점프 공격 시 강력한 산성 피해를 입힌다"
+
+#. Key:	Desc_Toxic_Aerial_Attack_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Rare"
+msgid "normal attack power decreases by 2%, but jump attack deals even stronger acidic damage"
+msgstr "일반 공격력이 2% 감소하지만, 점프 공격 시 더욱 강력한 산성 피해를 입힌다"
+
+#. Key:	Desc_Toxic_Oxidation_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Legendary"
+msgid "normal attack power decreases by 2%, but dash attack deals very strong acidic damage"
+msgstr "일반 공격력이 2% 감소하지만, 대시 공격 시 매우 강력한 산성 피해를 입힌다"
+
+#. Key:	Desc_Toxic_Oxidation_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Normal"
+msgid "normal attack power decreases by 2%, but dash attack deals strong acidic damage"
+msgstr "일반 공격력이 2% 감소하지만, 대시 공격 시 강력한 산성 피해를 입힌다"
+
+#. Key:	Desc_Toxic_Oxidation_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Rare"
+msgid "normal attack power decreases by 2%, but dash attack deals even stronger acidic damage"
+msgstr "일반 공격력이 2% 감소하지만, 대시 공격 시 더욱 강력한 산성 피해를 입힌다"
+
+#. Key:	Desc_Toxic_Oxidation_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Legendary"
+msgid "defense power decreases by 50%, but normal attack deals very strong acidic damage"
+msgstr "방어력이 50% 줄어들지만, 일반 공격 시 매우 강력한 산성 피해를 입힌다"
+
+#. Key:	Desc_Toxic_Oxidation_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Normal"
+msgid "defense power decreases by 50%, but normal attack deals strong acidic damage"
+msgstr "방어력이 50% 줄어들지만, 일반 공격 시 강한 산성 피해를 입힌다"
+
+#. Key:	Desc_Toxic_Oxidation_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Rare"
+msgid "defense power decreases by 50%, but normal attack deals even stronger acidic damage"
+msgstr "방어력이 50% 줄어들지만, 일반 공격 시 더욱 강력한 산성 피해를 입힌다"
+
+#. Key:	Desc_Transcendent_Critical_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Transcendent_Critical_Legendary"
+msgid "all attack critical hit damage increases by 1.5 times"
+msgstr "모든 공격의 치명타 피해량이 1.5배 증가한다"
+
+#. Key:	Desc_Transcendent_Critical_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Transcendent_Critical_Normal"
+msgid "all attack critical hit damage increases by 1.2 times"
+msgstr "모든 공격의 치명타 피해량이 1.2배 증가한다"
+
+#. Key:	Desc_Transcendent_Critical_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Transcendent_Critical_Rare"
+msgid "all attack critical hit damage increases by 1.3 times"
+msgstr "모든 공격의 치명타 피해량이 1.3배 증가한다"
+
+#. Key:	Grade_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Grade_Legendary"
+msgid "Legendary"
+msgstr "전설"
+
+#. Key:	Grade_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Grade_Normal"
+msgid "Normal"
+msgstr "일반"
+
+#. Key:	Grade_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Grade_Rare"
+msgid "Rare"
+msgstr "희귀"
+
+#. Key:	Name_Aerial_Strike_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Aerial_Strike_Optimization"
+msgid "Aerial Strike Optimization"
+msgstr "공중 공격 최적화"
+
+#. Key:	Name_Critical_Aerial_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Aerial_Attack"
+msgid "Critical Aerial Attack"
+msgstr "치명 공중 공격"
+
+#. Key:	Name_Critical_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Dash"
+msgid "Critical Dash"
+msgstr "치명 돌진"
+
+#. Key:	Name_Critical_Oxidation_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Oxidation_Strike"
+msgid "Critical Oxidation Strike"
+msgstr "치명 산화 일격"
+
+#. Key:	Name_Critical_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Strike"
+msgid "Critical Strike"
+msgstr "치명 일격"
+
+#. Key:	Name_Critical_Transcendent
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Transcendent"
+msgid "Transcendent Critical"
+msgstr "초월 치명타"
+
+#. Key:	Name_Dash_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Dash_Optimization"
+msgid "Dash Optimization"
+msgstr "돌진 최적화"
+
+#. Key:	Name_Enhancement_Battery
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Enhancement_Battery"
+msgid "Battery Enhancement"
+msgstr "배터리 강화"
+
+#. Key:	Name_Enhancement_Heal_Pack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Enhancement_Heal_Pack"
+msgid "Heal Pack Enhancement"
+msgstr "힐팩 강화"
+
+#. Key:	Name_Enhancement_Sub-Weapon_Slot
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Enhancement_Sub-Weapon_Slot"
+msgid "Sub-Weapon Slot Enhancement"
+msgstr "보조무기 슬롯 강화"
+
+#. Key:	Name_Firewall_Enhancement
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Firewall_Enhancement"
+msgid "Firewall Enhancement"
+msgstr "방어 성능 강화"
+
+#. Key:	Name_Flame_Aerial_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Flame_Aerial_Strike"
+msgid "Critical Aerial Flame Strike"
+msgstr "공중 화염"
+
+#. Key:	Name_Flame_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Flame_Dash"
+msgid "Flame Dash"
+msgstr "화염 돌진"
+
+#. Key:	Name_Flame_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Flame_Strike"
+msgid "Flame Strike"
+msgstr "화염 일격"
+
+#. Key:	Name_Footwork_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Footwork_Optimization"
+msgid "Footwork Optimization"
+msgstr "보법 최적화"
+
+#. Key:	Name_Freezing_Aerial
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Aerial"
+msgid "Freezing Aerial"
+msgstr "프리징 공중"
+
+#. Key:	Name_Freezing_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Dash"
+msgid "Freezing Dash"
+msgstr "프리징 돌진"
+
+#. Key:	Name_Freezing_Resistance
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Resistance"
+msgid "Freezing Resistance"
+msgstr "프리징 저항"
+
+#. Key:	Name_Freezing_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Strike"
+msgid "Freezing Strike"
+msgstr "프리징 일격"
+
+#. Key:	Name_Freezing_Strike_Enhancement
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Strike_Enhancement"
+msgid "Freezing Strike Enhancement"
+msgstr "프리징 일격 강화"
+
+#. Key:	Name_High-Risk_Aerial_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_High-Risk_Aerial_Attack"
+msgid "High-Risk Aerial Attack"
+msgstr "고위험 공중 공격"
+
+#. Key:	Name_High-Risk_Oxidation_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_High-Risk_Oxidation_Dash"
+msgid "High-Risk Oxidation Dash"
+msgstr "고위험 산화 돌진"
+
+#. Key:	Name_High-Risk_Oxidation_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_High-Risk_Oxidation_Strike"
+msgid "High-Risk Oxidation Strike"
+msgstr "고위험 산화 일격"
+
+#. Key:	Name_Hit_Rate_Enhancement
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Hit_Rate_Enhancement"
+msgid "Hit Rate Enhancement"
+msgstr "히트레이트 최적화"
+
+#. Key:	Name_Landing_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Landing_Optimization"
+msgid "Landing Optimization"
+msgstr "낙법 최적화"
+
+#. Key:	Name_Lucky_Extra_Drop
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Lucky_Extra_Drop"
+msgid "Lucky Extra Drop"
+msgstr "럭키 드롭"
+
+#. Key:	Name_Overdrive_Mode
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overdrive_Mode"
+msgid "Overdrive Mode"
+msgstr "과부하 모드"
+
+#. Key:	Name_Overload_Self
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overload_Self"
+msgid "Self Overload"
+msgstr "자체 전압조절"
+
+#. Key:	Name_Overload_Self_Aerial
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overload_Self_Aerial"
+msgid "Self Aerial Overload"
+msgstr "자체 공중 전압 조절"
+
+#. Key:	Name_Overload_Self_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overload_Self_Dash"
+msgid "Self Overload Dash"
+msgstr "자체 전압조절 돌진"
+
+#. Key:	Name_Overload_Self_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overload_Self_Strike"
+msgid "Self Overload Strike"
+msgstr "자체 전압조절 일격"
+
+#. Key:	Name_Oxidation_Aerial_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Oxidation_Aerial_Attack"
+msgid "Aerial Oxidation Attack"
+msgstr "공중 산화 공격"
+
+#. Key:	Name_Oxidation_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Oxidation_Dash"
+msgid "Oxidation Dash"
+msgstr "산화 돌진"
+
+#. Key:	Name_Oxidation_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Oxidation_Strike"
+msgid "Oxidation Strike"
+msgstr "산화 일격"
+
+#. Key:	Name_Precision_Aerial_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Precision_Aerial_Strike"
+msgid "Precision Aerial Strike"
+msgstr "정밀 공중 히트"
+
+#. Key:	Name_Precision_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Precision_Dash"
+msgid "Precision Dash"
+msgstr "정밀 돌진"
+
+#. Key:	Name_Precision_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Precision_Strike"
+msgid "Precision Strike"
+msgstr "정밀 타격"
+
+#. Key:	Name_Resistance_Freezing
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Resistance_Freezing"
+msgid "Freezing Resistance"
+msgstr "프리징 저항"
+
+#. Key:	Name_Skill_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Skill_Optimization"
+msgid "Skill Optimization"
+msgstr "스킬 최적화"
+
+#. Key:	Name_Strike_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Strike_Optimization"
+msgid "Strike Optimization"
+msgstr "일격 최적화"
+
+#. Key:	Name_Stunning_Output
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Stunning_Output"
+msgid "Stunning Output"
+msgstr "출력 이상"
+
+#. Key:	Name_System_Performance_Enhancement
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_System_Performance_Enhancement"
+msgid "System Performance Enhancement"
+msgstr "시스템 성능 강화"
+
+#. Key:	Name_Throttling_Aerial
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Throttling_Aerial"
+msgid "Aerial Throttling"
+msgstr "공중 쓰로틀링"
+
+#. Key:	Name_Throttling_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Throttling_Dash"
+msgid "Throttling Dash"
+msgstr "쓰로틀링 돌진"
+
+#. Key:	Name_Throttling_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Throttling_Strike"
+msgid "Throttling Strike"
+msgstr "쓰로틀링 일격"
+
+#. Key:	Name_Toxic_Aerial_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Toxic_Aerial_Attack"
+msgid "Toxic Aerial Attack"
+msgstr "유해성 공중 공격"
+
+#. Key:	Name_Toxic_Oxidation_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Toxic_Oxidation_Dash"
+msgid "Toxic Oxidation Dash"
+msgstr "유해성 산화 돌진"
+
+#. Key:	Name_Toxic_Oxidation_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Toxic_Oxidation_Strike"
+msgid "Toxic Oxidation Strike"
+msgstr "유해성 산화 일격"
+
+#. Key:	UI_Choose_New_BoosterChip
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Choose_New_BoosterChip"
+msgid "Select New Boosterchip"
+msgstr "새 부스터칩을 고르세요"
+
+#. Key:	UI_RewardWarning
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_RewardWarning"
+msgid "You will forfeit the boosterchip  acquisition. \r\nThis choice is irreversible. \r\nDo you wish to continue?"
+msgstr "부스터칩 획득이 취소됩니다.\r\n이 선택은 되돌릴 수 없습니다.\r\n계속하시겠습니까?"
+
+#. Key:	Ability
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Ability"
+msgid "Ability"
+msgstr "어빌리티"
+
+#. Key:	Ability_Description
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Ability_Description"
+msgid "Ability_Description"
+msgstr "어빌리티 설명"
+
+#. Key:	Ability_Name
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Ability_Name"
+msgid "Ability_Name"
+msgstr "어빌리티명"
+
+#. Key:	Button_Apply
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Apply"
+msgid "Apply"
+msgstr "적용하기"
+
+#. Key:	Button_Back
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Back"
+msgid "Back"
+msgstr "뒤로가기"
+
+#. Key:	Button_Cancel
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Cancel"
+msgid "Cancel"
+msgstr "취소하기"
+
+#. Key:	Button_Continue
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Continue"
+msgid "Continue"
+msgstr "계속하기"
+
+#. Key:	Button_Craft
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Craft"
+msgid "Craft"
+msgstr "조합하기"
+
+#. Key:	Button_OptionsMenu
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_OptionsMenu"
+msgid "Options"
+msgstr "설정"
+
+#. Key:	Button_Photo_Mode
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Photo_Mode"
+msgid "Photo Mode"
+msgstr "포토 모드"
+
+#. Key:	Button_Quit
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Quit"
+msgid "Quit"
+msgstr "종료하기"
+
+#. Key:	Button_Quit_To_Title_Screen
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Quit_To_Title_Screen"
+msgid "Quit To Title Screen"
+msgstr "타이틀 화면으로"
+
+#. Key:	Button_Reset
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Reset"
+msgid "Reset"
+msgstr "초기화"
+
+#. Key:	Button_Select
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Select"
+msgid "Select"
+msgstr "선택하기"
+
+#. Key:	Category_Display
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Category_Display"
+msgid "Display"
+msgstr "화면"
+
+#. Key:	Category_Other
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Category_Other"
+msgid "Other"
+msgstr "그 외"
+
+#. Key:	Category_Upscaling_AA
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Category_Upscaling_AA"
+msgid "Upscaling & AA"
+msgstr "업스케일링 & AA"
+
+#. Key:	Desc_AAMethodSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_AAMethodSetting"
+msgid "Select the method used to remove aliasing and jagged edges in the game.\r\n\r\nUpscaling Method must be set to Off to adjust this setting manually,"
+msgstr "게임에서 계단 현상(Aliasing)을 제거하는 방법을 선택합니다.\r\n\r\n이 설정을 수동으로 조정하려면 업스케일링 방식을 Off로 설정해야 합니다."
+
+#. Key:	Desc_AAQualitySetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_AAQualitySetting"
+msgid "Adjust the quality of the choosen anti aliasing method."
+msgstr "선택한 안티앨리어싱 방식의 품질을 조정합니다."
+
+#. Key:	Desc_AmbientAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_AmbientAudioSetting"
+msgid "Adjust the volume for the ambient sounds of the environment."
+msgstr "환경의 배경 소리 볼륨을 조정합니다."
+
+#. Key:	Desc_CameraFOVSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_CameraFOVSetting"
+msgid "Adjust the camera field of view (FOV)"
+msgstr "카메라 시야각(FOV)을 조정합니다."
+
+#. Key:	Desc_CameraSensivitySetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_CameraSensivitySetting"
+msgid "Adjust the sensitivity of camera movements."
+msgstr "카메라 움직임의 감도를 조정합니다."
+
+#. Key:	Desc_ContactShadowsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ContactShadowsSetting"
+msgid "Enable Contact Shadows to add subtle shadowing in areas that would not be covered by standard shadow maps, such as small geometry or grass.\r\n \r\nThis setting has minimal impact on performances."
+msgstr "Contact Shadows를 활성화하여 일반적인 그림자 맵으로 커버되지 않는 작은 지형이나 풀과 같은 요소에 미세한 그림자를 추가합니다.\r\n\r\n이 설정은 성능에 미치는 영향이 적습니다."
+
+#. Key:	Desc_EffectsAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_EffectsAudioSetting"
+msgid "Adjust the volume for the in-game effects."
+msgstr "게임 내 효과음의 볼륨을 조정합니다."
+
+#. Key:	Desc_EffectsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_EffectsSetting"
+msgid "Adjust the quality of visual effects such as particles."
+msgstr "시각 효과(입자 효과 등)의 품질을 조정합니다."
+
+#. Key:	Desc_FoliageSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_FoliageSetting"
+msgid "Adjust the quality and density of foliage."
+msgstr "식생의 품질과 밀도를 조정합니다."
+
+#. Key:	Desc_FramerateLimitSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_FramerateLimitSetting"
+msgid "Adjust the framerate limit to the specified value between 30 and 200 fps. \r\n\r\nValues lower than 30 will remove the framerate limit.\r\nVSync must be disabled if you want to adjust the Framerate Limit manually.  "
+msgstr "프레임 속도 제한을 30~200fps 사이의 지정된 값으로 조정합니다.\r\n\r\n30 미만의 값으로 설정하면 프레임 속도 제한이 제거됩니다.\r\nVSync를 비활성화해야 프레임 속도 제한을 수동으로 조정할 수 있습니다."
+
+#. Key:	Desc_GammaSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_GammaSetting"
+msgid "Adjust the global brightness of the game."
+msgstr "게임의 전체 밝기를 조정합니다."
+
+#. Key:	Desc_GlobalIlluminationSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_GlobalIlluminationSetting"
+msgid "Adjust the quality of the Global Illumination. \r\n\r\nLumen High and Ultra offer better visual quality with ray-traced global illumination but have a larger impact to performances than DFAO."
+msgstr "글로벌 일루미네이션의 품질을 조정합니다.\r\n\r\nLumen High 및 Ultra 설정은 광선 추적 글로벌 일루미네이션을 제공하여 더 나은 시각적 품질을 제공하지만, DFAO보다 성능에 더 큰 영향을 미칩니다."
+
+#. Key:	Desc_GraphicsPresetSettings
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_GraphicsPresetSettings"
+msgid "Select a graphics quality preset to quickly adjust all the graphics settings to the desired value."
+msgstr "빠르게 모든 그래픽 설정을 원하는 값으로 조정할 수 있도록 그래픽 품질 프리셋을 선택합니다."
+
+#. Key:	Desc_HardwareLumenSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_HardwareLumenSetting"
+msgid "Enable Hardware Ray Tracing for higher quality Lumen Global Illumination and Reflections. \r\n\r\nThis setting has a large impact on performances and require compatible hardware."
+msgstr "하드웨어 레이 트레이싱을 활성화하여 더 높은 품질의 Lumen 글로벌 일루미네이션과 반사를 제공합니다.\r\n\r\n이 설정은 성능에 큰 영향을 미치며, 호환 가능한 하드웨어가 필요합니다."
+
+#. Key:	Desc_HoldToSprintSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_HoldToSprintSetting"
+msgid "Enable holding the sprint button to keep sprinting.\r\nRevert to \"press to sprint\" if disabled."
+msgstr "달리기 버튼을 길게 눌러 지속적으로 달리도록 설정합니다.\r\n비활성화하면 \"한 번 누르면 달리기\" 방식으로 돌아갑니다."
+
+#. Key:	Desc_InvertXAxisSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_InvertXAxisSetting"
+msgid "Enable the inverted camera controls for the X-Axis (left/right)."
+msgstr "카메라 X축(좌/우) 반전 컨트롤을 활성화합니다."
+
+#. Key:	Desc_InvertYAxisSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_InvertYAxisSetting"
+msgid "Enable the inverted camera controls for the Y-Axis (up/down)."
+msgstr "카메라 Y축(상/하) 반전 컨트롤을 활성화합니다."
+
+#. Key:	Desc_LanguageSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_LanguageSetting"
+msgid "Adjust the language of the game."
+msgstr "게임의 언어를 조정합니다."
+
+#. Key:	Desc_MasterAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_MasterAudioSetting"
+msgid "Adjust the volume of all the sounds in the game."
+msgstr "게임 내 모든 소리의 볼륨을 조정합니다."
+
+#. Key:	Desc_MotionBlurSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_MotionBlurSetting"
+msgid "Adjust the quality and amount of motion blur displayed on screen. \r\n\r\nThis setting has minimal impact on performances and is recomended to smooth lower framerates."
+msgstr "화면에 표시되는 모션 블러의 품질과 양을 조정합니다.\r\n\r\n이 설정은 성능에 미치는 영향이 적으며 낮은 프레임 속도를 부드럽게 하는 데 권장됩니다."
+
+#. Key:	Desc_MusicAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_MusicAudioSetting"
+msgid "Adjust the volume for the musics of the game."
+msgstr "게임 음악의 볼륨을 조정합니다."
+
+#. Key:	Desc_PostProcessSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_PostProcessSetting"
+msgid "Adjust the quality of post processing effects. \r\n\r\nThis setting has minimal impact on performances."
+msgstr "포스트 프로세싱 효과의 품질을 조정합니다.\r\n\r\n이 설정은 성능에 미치는 영향이 적습니다."
+
+#. Key:	Desc_ReflectionsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ReflectionsSetting"
+msgid "Adjust the quality of the Reflections.\r\n\r\nLumen High and Ultra offer better visual quality with ray-traced reflections but have a larger impact to performancs than the Screen Space Reflections options. \r\n\r\nGlobal Illumination must be set to Lumen High or better for the Lumen Reflections to work."
+msgstr "반사의 품질을 조정합니다.\r\n\r\nLumen High 및 Ultra 설정은 광선 추적 반사를 제공하여 더 나은 시각적 품질을 제공하지만, 화면 공간 반사 옵션보다 성능에 더 큰 영향을 미칩니다.\r\n\r\n글로벌 일루미네이션을 Lumen High 이상으로 설정해야 Lumen 반사가 작동합니다."
+
+#. Key:	Desc_Resolution
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_Resolution"
+msgid "Adjust the displayed resolution of the game.\r\n\r\nWindow Mode must be set to Full Screen or Windowed to be able to change the displayed resolution of the game."
+msgstr "게임의 표시 해상도를 조정합니다.\r\n\r\n창 모드는 전체 화면 또는 창 모드로 설정해야 게임의 표시 해상도를 변경할 수 있습니다."
+
+#. Key:	Desc_ResolutionScaleSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ResolutionScaleSetting"
+msgid "Adjust the internal render resolution scale of the game.\r\n\r\nAnti Aliasing Method must be set to Off, FXAA or TAA and Upscaling Method to Off in order to adjust the resolution scale manually."
+msgstr "게임의 내부 렌더링 해상도 배율을 조정합니다.\r\n\r\n안티앨리어싱 방식은 Off, FXAA 또는 TAA로 설정해야 하며 업스케일링 방식은 Off로 설정해야 해상도 배율을 수동으로 조정할 수 있습니다."
+
+#. Key:	Desc_ShadingSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ShadingSetting"
+msgid "Adjust the shading quality of materials."
+msgstr "셰이딩 품질을 조정합니다."
+
+#. Key:	Desc_ShadowsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ShadowsSetting"
+msgid "Adjust the quality of the shadows and their draw distance. \r\n\r\nThis setting can has a large impact on performances at its highest option. \r\nIt is not recommended to set it to Ultra with Virtual Shadow Maps enabled."
+msgstr "그림자의 품질과 렌더링 거리(Draw Distance)를 조정합니다.\r\n\r\n이 설정은 최고 옵션에서 성능에 큰 영향을 미칠 수 있습니다.\r\n가상 그림자 맵(Virtual Shadow Maps)이 활성화된 경우 Ultra 설정을 권장하지 않습니다."
+
+#. Key:	Desc_TexturesFilteringSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_TexturesFilteringSetting"
+msgid "Adjust the quality of texture filtering. Higher quality settings reduces blur when viewing textures at an angle.\r\n\r\nThis setting has minimal impact to performances."
+msgstr "텍스처 필터링 품질을 조정합니다. 높은 품질의 설정은 텍스처를 특정 각도에서 볼 때의 흐려짐을 줄여줍니다.\r\n\r\n이 설정은 성능에 미치는 영향이 적습니다."
+
+#. Key:	Desc_TexturesSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_TexturesSetting"
+msgid "Adjust the quality of textures that are allowed to be loaded into the video memory of your graphics card. \r\n\r\nThis setting has minimal impact to performances and won’t have a visual impact if you graphics card has enough video memory. "
+msgstr "그래픽 카드의 비디오 메모리에 로드될 수 있는 텍스처의 품질을 조정합니다.\r\n\r\n이 설정은 성능에 미치는 영향이 적으며, 그래픽 카드의 비디오 메모리가 충분할 경우 시각적인 영향을 주지 않습니다."
+
+#. Key:	Desc_UIAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_UIAudioSetting"
+msgid "Adjust the volume for sounds played by the User Interface."
+msgstr "사용자 인터페이스(UI) 사운드의 볼륨을 조정합니다."
+
+#. Key:	Desc_UpscaleMethodSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_UpscaleMethodSetting"
+msgid "Select the upscaling method used by the game to improve performances at a minimal impact to visuals. "
+msgstr "게임에서 성능을 개선하면서도 시각적 품질에 미치는 영향을 최소화하는 업스케일링 방식을 선택합니다."
+
+#. Key:	Desc_UpscaleQualitySetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_UpscaleQualitySetting"
+msgid "Select the quality to performance balance of the choosen upscaling method. \r\n\r\nHigher quality options will offer better image quality but a smaller performance gain while higher performance options will offer greater performances but with a more degraded image quality.  "
+msgstr "선택한 업스케일링 방식의 품질과 성능의 균형을 조정합니다.\r\n\r\n높은 품질 옵션은 더 나은 이미지 품질을 제공하지만 성능 향상은 적으며, 높은 성능 옵션은 더 높은 성능을 제공하지만 이미지 품질이 저하됩니다."
+
+#. Key:	Desc_UpscaleSharpnessSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_UpscaleSharpnessSetting"
+msgid "Adjust the sharpness applied to the image.  "
+msgstr "이미지에 적용되는 선명도를 조정합니다."
+
+#. Key:	Desc_ViewDistanceSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ViewDistanceSetting"
+msgid "Adjust the view distance of objects in the world. "
+msgstr "월드 내 객체의 렌더 거리를 조정합니다."
+
+#. Key:	Desc_VolumetricsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_VolumetricsSetting"
+msgid "Adjust the quality and resolution of volumetrics effects such as volumetric fog. \r\n\r\nThis setting can have a large impact on performances at its highest option."
+msgstr "부피감 있는 효과(안개 효과 등)의 품질과 해상도를 조정합니다.\r\n\r\n이 설정은 최고 옵션에서 성능에 큰 영향을 미칠 수 있습니다."
+
+#. Key:	Desc_VSMShadowsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_VSMShadowsSetting"
+msgid "Enable Virtual Shadow Maps for more accurate and higher resolution shadows with greater draw distances.\r\n \r\nThis setting has a large impact on performances thus using Ultra Shadows Quality is not recommended with Virtual Shadow Maps.  "
+msgstr "Virtual Shadow Maps을 활성화하여 더 정확하고 고해상도의 그림자를 더 먼 거리에서도 렌더링할 수 있도록 합니다.\r\n\r\n이 설정은 성능에 큰 영향을 미치므로 Ultra 그림자 품질을 사용할 경우 권장되지 않습니다."
+
+#. Key:	Desc_VSyncSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_VSyncSetting"
+msgid "Select the VSync mode used by the game. \r\n\r\nThe options are dependent of your monitor's refresh rate: 1/1 option will enable vsync at your maximum refresh rate. 1/2 will enable vsync at half your monitor’s refresh rate, and so on. "
+msgstr "게임에서 사용할 VSync 모드를 선택합니다.\r\n\r\n이 옵션은 모니터의 새로 고침 빈도에 따라 다릅니다. 1/1 옵션은 최대 새로 고침 빈도에서 VSync를 활성화합니다. 1/2 옵션은 모니터의 새로 고침 빈도의 절반에서 VSync를 활성화하는 방식입니다."
+
+#. Key:	Desc_WindowMode
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_WindowMode"
+msgid "Select the window mode used by the game. "
+msgstr "게임에서 사용할 창 모드를 선택합니다."
+
+#. Key:	Description
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Description"
+msgid "Description"
+msgstr "설명"
+
+#. Key:	ExitGame_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,ExitGame_Warning"
+msgid "Do you really want to exit the game?"
+msgstr "정말로 게임을 종료하시겠습니까?"
+
+#. Key:	High_Quality_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,High_Quality_Setting"
+msgid "High"
+msgstr "높음"
+
+#. Key:	LoadGame
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,LoadGame"
+msgid "Load Game"
+msgstr "게임 불러오기"
+
+#. Key:	Low_Quality_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Low_Quality_Setting"
+msgid "Low"
+msgstr "낮음"
+
+#. Key:	Medium_Quality_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Medium_Quality_Setting"
+msgid "Medium"
+msgstr "중간"
+
+#. Key:	NewGame
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,NewGame"
+msgid "New Game"
+msgstr "새 게임 시작하기"
+
+#. Key:	Off_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Off_Setting"
+msgid "Off"
+msgstr "끄기"
+
+#. Key:	On_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,On_Setting"
+msgid "On"
+msgstr "켜기"
+
+#. Key:	Option_AmbientAudioVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_AmbientAudioVolume"
+msgid "Ambient Audio Volume"
+msgstr "앰비언트 볼륨"
+
+#. Key:	Option_AntiAliasingMethod
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_AntiAliasingMethod"
+msgid "Anti Aliasing Method"
+msgstr "안티 앨리어싱 메서드"
+
+#. Key:	Option_AntiAliasingQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_AntiAliasingQuality"
+msgid "Anti Aliasing Quality"
+msgstr "안티 앨리어싱 품질"
+
+#. Key:	Option_CameraSensitivity
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_CameraSensitivity"
+msgid "Camera Sensitivity"
+msgstr "카메라 감도"
+
+#. Key:	Option_ContactShadows
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ContactShadows"
+msgid "Contact Shadows"
+msgstr "컨택트 섀도"
+
+#. Key:	Option_EffectsAudioVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_EffectsAudioVolume"
+msgid "Effects Audio Volume"
+msgstr "이펙트 볼륨"
+
+#. Key:	Option_EffectsQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_EffectsQuality"
+msgid "Effects Quality"
+msgstr "이펙트 품질"
+
+#. Key:	Option_FoliageQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_FoliageQuality"
+msgid "Foliage Quality"
+msgstr "식생 품질"
+
+#. Key:	Option_FOV
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_FOV"
+msgid "Camera Field of View"
+msgstr "FOV"
+
+#. Key:	Option_FramerateLimit
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_FramerateLimit"
+msgid "Framerate Limit"
+msgstr "최대 프레임"
+
+#. Key:	Option_Gamma
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_Gamma"
+msgid "Gamma"
+msgstr "감마"
+
+#. Key:	Option_GlobalIlluminationQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_GlobalIlluminationQuality"
+msgid "Global Illumination Quality"
+msgstr "글로벌 일루미네이션 품질"
+
+#. Key:	Option_GraphicsPreset
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_GraphicsPreset"
+msgid "Graphics Preset"
+msgstr "그래픽 프리셋"
+
+#. Key:	Option_HardwareRay-TracingLumen
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_HardwareRay-TracingLumen"
+msgid "Hardware Ray-Tracing Lumen"
+msgstr "하드웨어 레이트레이싱 루멘"
+
+#. Key:	Option_HoldToSprint
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_HoldToSprint"
+msgid "Hold To Sprint"
+msgstr "눌러서 달리기 유지"
+
+#. Key:	Option_ImageSharpness
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ImageSharpness"
+msgid "Image Sharpness"
+msgstr "선명도"
+
+#. Key:	Option_InvertXAxis
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_InvertXAxis"
+msgid "Invert X-Axis"
+msgstr "X축 반전"
+
+#. Key:	Option_InvertYAxis
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_InvertYAxis"
+msgid "Invert Y-Axis"
+msgstr "Y축 반전"
+
+#. Key:	Option_Language
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_Language"
+msgid "Language"
+msgstr "언어"
+
+#. Key:	Option_MasterVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_MasterVolume"
+msgid "Master Volume"
+msgstr "마스터 볼륨"
+
+#. Key:	Option_MotionBlur
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_MotionBlur"
+msgid "Motion Blur"
+msgstr "모션 블러"
+
+#. Key:	Option_MusicVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_MusicVolume"
+msgid "Music Volume"
+msgstr "음악 볼륨"
+
+#. Key:	Option_PostProcessing
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_PostProcessing"
+msgid "Post Processing Quality"
+msgstr "포스트프로세스 품질"
+
+#. Key:	Option_ReflectionQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ReflectionQuality"
+msgid "Reflections Quality"
+msgstr "반사 품질"
+
+#. Key:	Option_ResolutionMode
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ResolutionMode"
+msgid "Resolution"
+msgstr "해상도"
+
+#. Key:	Option_ResolutionScale
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ResolutionScale"
+msgid "Resolution Scale"
+msgstr "해상도 스케일"
+
+#. Key:	Option_ShadingQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ShadingQuality"
+msgid "Shading Quality"
+msgstr "셰이더 품질"
+
+#. Key:	Option_ShadowsQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ShadowsQuality"
+msgid "Shadows Quality"
+msgstr "그림자 품질"
+
+#. Key:	Option_TextureFiltering
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_TextureFiltering"
+msgid "Textures Filtering"
+msgstr "텍스쳐 필터링"
+
+#. Key:	Option_TextureQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_TextureQuality"
+msgid "Textures Quality"
+msgstr "텍스쳐 품질"
+
+#. Key:	Option_UIEffectsVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_UIEffectsVolume"
+msgid "UI Effects Volume"
+msgstr "UI 이펙트 볼륨"
+
+#. Key:	Option_UpscalingMethod
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_UpscalingMethod"
+msgid "Upscaling Method"
+msgstr "업스케일링 메서드"
+
+#. Key:	Option_UpscalingQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_UpscalingQuality"
+msgid "Upscaling Quality"
+msgstr "업스케일링 품질"
+
+#. Key:	Option_View_Distance
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_View_Distance"
+msgid "View Distance"
+msgstr "시야 거리"
+
+#. Key:	Option_VirtualShadowMaps
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_VirtualShadowMaps"
+msgid "Virtual Shadow Maps"
+msgstr "가상 섀도맵"
+
+#. Key:	Option_VolumetricEffectsQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_VolumetricEffectsQuality"
+msgid "Volumetric Effects Quality"
+msgstr "볼류메트릭 이펙트 품질"
+
+#. Key:	Option_VSync
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_VSync"
+msgid "VSync"
+msgstr "수직동기화"
+
+#. Key:	Option_WindowMode
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_WindowMode"
+msgid "Window Mode"
+msgstr "창모드"
+
+#. Key:	Power
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Power"
+msgid "Power"
+msgstr "공격력"
+
+#. Key:	Reset_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Reset_Warning"
+msgid "Do you really want to reset settings ?\r\nAny action is definitive."
+msgstr "설정을 정말 초기화하시겠습니까?\r\n이 작업은 되돌릴 수 없습니다."
+
+#. Key:	ReturnToTitle_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,ReturnToTitle_Warning"
+msgid "Do you really want to quit?\r\nAny unsaved progress will be lost."
+msgstr "정말로 타이틀로 나가시겠습니까?\r\n현재까지의 내용은 저장되지 않습니다."
+
+#. Key:	Skill
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill"
+msgid "Skill"
+msgstr "스킬"
+
+#. Key:	Skill_Craft
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Craft"
+msgid "Skill Craft"
+msgstr "스킬 조합"
+
+#. Key:	Skill_Description
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Description"
+msgid "Skill Description"
+msgstr "스킬 설명"
+
+#. Key:	Skill_Enforcement
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Enforcement"
+msgid "Skill Enforcement"
+msgstr "스킬 강화"
+
+#. Key:	Skill_Name
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Name"
+msgid "Skill Name"
+msgstr "스킬명"
+
+#. Key:	Skill_Sub_Description
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Sub_Description"
+msgid "Skill Sub Description"
+msgstr "스킬 보조 설명"
+
+#. Key:	Speed
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Speed"
+msgid "Speed"
+msgstr "공격 속도"
+
+#. Key:	Stat
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Stat"
+msgid "Stat"
+msgstr "스탯"
+
+#. Key:	Tab_Audio
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Audio"
+msgid "Audio"
+msgstr "오디오"
+
+#. Key:	Tab_Boosterchip
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Boosterchip"
+msgid "Boosterchip"
+msgstr "부스터칩"
+
+#. Key:	Tab_Controls
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Controls"
+msgid "Controls"
+msgstr "조작"
+
+#. Key:	Tab_Gameplay
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Gameplay"
+msgid "Gameplay"
+msgstr "게임플레이"
+
+#. Key:	Tab_Graphics
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Graphics"
+msgid "Graphics"
+msgstr "그래픽"
+
+#. Key:	Tab_Skill
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Skill"
+msgid "Skill"
+msgstr "스킬"
+
+#. Key:	Tab_System
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_System"
+msgid "System"
+msgstr "시스템"
+
+#. Key:	Tab_Video
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Video"
+msgid "Video"
+msgstr "비디오"
+
+#. Key:	UI_Empty
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_Empty"
+msgid "Empty"
+msgstr "Empty"
+
+#. Key:	UI_NotAvailable
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_NotAvailable"
+msgid "Not Available"
+msgstr "Not Available"
+
+#. Key:	UI_WeaponSelect
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_WeaponSelect"
+msgid "Select Default Weapon"
+msgstr "기본 무기를 선택하세요"
+
+#. Key:	Ultra_Quality_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Ultra_Quality_Setting"
+msgid "Ultra"
+msgstr "울트라"
+
+#. Key:	Unsaved_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Unsaved_Warning"
+msgid "Some settings have unsaved modifications.\r\nDo you really want to close ?"
+msgstr "일부 설정이 저장되지 않았습니다.\r\n정말로 닫으시겠습니까?"
+
+#. Key:	Upscaling_Balanced
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_Balanced"
+msgid "Balanced"
+msgstr "균형"
+
+#. Key:	Upscaling_Performance
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_Performance"
+msgid "Performance"
+msgstr "성능"
+
+#. Key:	Upscaling_Quality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_Quality"
+msgid "Quality"
+msgstr "품질"
+
+#. Key:	Upscaling_UltraPerformance
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_UltraPerformance"
+msgid "Ultra Performance"
+msgstr "최고성능"
+
+#. Key:	Upscaling_UltraQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_UltraQuality"
+msgid "Ultra Quality"
+msgstr "최고품질"
+
+#. Key:	Utility
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Utility"
+msgid "Utility"
+msgstr "유틸성"
+
+#. Key:	Desc_Bombard
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Bombard"
+msgid "A small bomb crafted by someone. It looks incredibly powerful."
+msgstr "누군가가 만든 소형 폭탄이다. 정말 강해보인다."
+
+#. Key:	Desc_ChewingGum
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_ChewingGum"
+msgid "A piece of used chewing gum. It could be used as an adhesive."
+msgstr "누군가가 씹던 껌이다. 끈끈이로 쓸 수 있을것 같다."
+
+#. Key:	Desc_CigaretteButt
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_CigaretteButt"
+msgid "A cigarette butt with embers still glowing."
+msgstr "아직 불씨가 살아있는 담배꽁초이다."
+
+#. Key:	Desc_EMP_Vial
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_EMP_Vial"
+msgid "A small EMP bomb made by someone. It seems highly effective against machines."
+msgstr "누군가가 만든 소형 EMP 폭탄이다. 기계에는 치명적일 것 같다."
+
+#. Key:	Desc_SodaCan
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_SodaCan"
+msgid "A discarded soda can. It looks quite spoiled."
+msgstr "누군가가 버린 탄산음료 캔이다. 상당히 상한것 같다."
+
+#. Key:	Name_BaseballBat
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BaseballBat"
+msgid "Baseball Bat"
+msgstr "야구방망이"
+
+#. Key:	Name_BBGun
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BBGun"
+msgid "BB Gun"
+msgstr "BB탄총"
+
+#. Key:	Name_Blade
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Blade"
+msgid "Blade"
+msgstr "블레이드"
+
+#. Key:	Name_Bombard
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Bombard"
+msgid "Bombard"
+msgstr "봄바드"
+
+#. Key:	Name_BoosterChip_Action
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Action"
+msgid "Booster Chip (Action)"
+msgstr "부스터칩(액션)"
+
+#. Key:	Name_BoosterChip_Flame
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Flame"
+msgid "Booster Chip (Flame)"
+msgstr "부스터칩(화염)"
+
+#. Key:	Name_BoosterChip_Freezing
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Freezing"
+msgid "Booster Chip (Freezing)"
+msgstr "부스터칩(프리징)"
+
+#. Key:	Name_BoosterChip_Item
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Item"
+msgid "Booster Chip (Item)"
+msgstr "부스터칩(아이템)"
+
+#. Key:	Name_BoosterChip_Oxidation
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Oxidation"
+msgid "Booster Chip (Oxidation)"
+msgstr "부스터칩(산화)"
+
+#. Key:	Name_BoosterChip_Slow
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Slow"
+msgid "Booster Chip (Slow)"
+msgstr "부스터칩(슬로우)"
+
+#. Key:	Name_BoosterChip_SpecialAction
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_SpecialAction"
+msgid "Booster Chip (Special Action)"
+msgstr "부스터칩(특수액션)"
+
+#. Key:	Name_BrokenGlassBottleBat
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BrokenGlassBottleBat"
+msgid "Broken Glass Bottle Bat"
+msgstr "깨진 유리병 방망이"
+
+#. Key:	Name_ChewingGum
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_ChewingGum"
+msgid "Chewing Gum"
+msgstr "풍선껌"
+
+#. Key:	Name_CigaretteButt
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_CigaretteButt"
+msgid "Cigarette Butt"
+msgstr "담배꽁초"
+
+#. Key:	Name_Common_Ticket
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Common_Ticket"
+msgid "Common Ticket"
+msgstr "일반티켓"
+
+#. Key:	Name_CraftingMaterial_Gear
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_CraftingMaterial_Gear"
+msgid "Crafting Material [Gear]"
+msgstr "조합재료(기어)"
+
+#. Key:	Name_CraftingMaterial_Screw
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_CraftingMaterial_Screw"
+msgid "Crafting Material [Screw]"
+msgstr "조합재료(나사)"
+
+#. Key:	Name_CraftingMaterial_Spring
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_CraftingMaterial_Spring"
+msgid "Crafting Material [Spring]"
+msgstr "조합재료(스프링)"
+
+#. Key:	Name_DoubleBladedLightsaber
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_DoubleBladedLightsaber"
+msgid "Double-Bladed Lightsaber"
+msgstr "양날광선검"
+
+#. Key:	Name_EMP_Vial
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_EMP_Vial"
+msgid "EMP Vial"
+msgstr "EMP바이알"
+
+#. Key:	Name_EnergyBlaster
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_EnergyBlaster"
+msgid "Energy Blaster"
+msgstr "에너지블래스터"
+
+#. Key:	Name_GlassBottle
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_GlassBottle"
+msgid "Glass Bottle"
+msgstr "유리병"
+
+#. Key:	Name_GlassBottleBat
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_GlassBottleBat"
+msgid "Glass Bottle Bat"
+msgstr "유리병 방망이"
+
+#. Key:	Name_HealPack_Large
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_HealPack_Large"
+msgid "Heal Pack (Large)"
+msgstr "힐팩(대형)"
+
+#. Key:	Name_HealPack_Medium
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_HealPack_Medium"
+msgid "Heal Pack (Medium)"
+msgstr "힐팩(중형)"
+
+#. Key:	Name_HealPack_Small
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_HealPack_Small"
+msgid "Heal Pack (Small)"
+msgstr "힐팩(소형)"
+
+#. Key:	Name_IronHammer
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_IronHammer"
+msgid "Iron Hammer"
+msgstr "무쇠망치"
+
+#. Key:	Name_Kettlebell
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Kettlebell"
+msgid "Kettlebell"
+msgstr "케틀벨"
+
+#. Key:	Name_Legendary_Ticket
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Legendary_Ticket"
+msgid "Legendary Ticket"
+msgstr "전설티켓"
+
+#. Key:	Name_Mace
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Mace"
+msgid "Mace"
+msgstr "메이스"
+
+#. Key:	Name_None
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_None"
+msgid "None"
+msgstr "-"
+
+#. Key:	Name_Rare_Ticket
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Rare_Ticket"
+msgid "Rare Ticket"
+msgstr "레어티켓"
+
+#. Key:	Name_SodaCan
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_SodaCan"
+msgid "Soda Can"
+msgstr "소다캔"
+
+#. Key:	Name_TaserStick
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_TaserStick"
+msgid "Taser Stick"
+msgstr "테이저스틱"
+
+#. Key:	Name_UniversalMaterial_Wrench
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_UniversalMaterial_Wrench"
+msgid "Universal Material [Wrench]"
+msgstr "만능재료(렌치)"
+
+#. Key:	Desc_Blink
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Desc_Blink"
+msgid "Moves quickly in the direction of the key input in a short, straight dash."
+msgstr "플레이어가 누르는 방향키 방향의 직선 방향으로 짧고 빠르게 이동한다."
+
+#. Key:	Desc_ForwardSlash
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Desc_ForwardSlash"
+msgid "Slashes forward in a straight line at high speed."
+msgstr "직선 앞으로 빠른 속도로 베며 나아간다."
+
+#. Key:	Desc_Hellptimization
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Desc_Hellptimization"
+msgid "Emits a Hellptimization wave around the player, reducing the attack power of nearby enemies."
+msgstr "주변의 적들에게 헬적화 파장을 발산하며 적들의 공격력을 떨어트린다"
+
+#. Key:	Desc_MultiSlash
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Desc_MultiSlash"
+msgid "Searches for enemies within a 10m radius and slashes through them at high speed, starting with the closest target."
+msgstr "반경 10m 안에 있는 적군을 서치하여 가까운 적군부터 빠른 속도로 베어가른다."
+
+#. Key:	Desc_Teleport
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Desc_Teleport"
+msgid "Teleports above the nearest enemy from the player and strikes downward. If no target is available, teleportation fails."
+msgstr "플레이어로 부터 가장 가까이 적의 위로 텔레포트 하여 내려 찍는다. 대상이 없는 경우 텔레포트 하지 못한다."
+
+#. Key:	Desc_WeaknessAnalysis
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Desc_WeaknessAnalysis"
+msgid "Analyzes the weaknesses of nearby enemies, reducing their defense."
+msgstr "주변의 적들의 약점을 분석하여 방어력을 떨어트린다"
+
+#. Key:	Name_Blink
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Name_Blink"
+msgid "Blink"
+msgstr "점멸"
+
+#. Key:	Name_ForwardSlash
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Name_ForwardSlash"
+msgid "Forward Slash"
+msgstr "전방베기"
+
+#. Key:	Name_Hellptimization
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Name_Hellptimization"
+msgid "Hellptimization"
+msgstr "헬적화"
+
+#. Key:	Name_MultiSlash
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Name_MultiSlash"
+msgid "Multi Slash"
+msgstr "다중베기"
+
+#. Key:	Name_Teleport
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Name_Teleport"
+msgid "Teleport"
+msgstr "텔레포트"
+
+#. Key:	Name_WeaknessAnalysis
+#. SourceLocation:	/Game/UI/Localization/ST_Skill.ST_Skill
+#: /Game/UI/Localization/ST_Skill.ST_Skill
+msgctxt "ST_Skill,Name_WeaknessAnalysis"
+msgid "Weakness Analysis"
+msgstr "약점분석"
+
+#. Key:	Header_AbilityInfo
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_AbilityInfo"
+msgid "About Ability"
+msgstr "어빌리티에 대해"
+
+#. Key:	Header_BoosterChip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_BoosterChip"
+msgid "About Boosterchip"
+msgstr "부스터칩에 대해"
+
+#. Key:	Header_ComboInfo
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_ComboInfo"
+msgid "About Combo"
+msgstr "콤보에 대해"
+
+#. Key:	Header_Debuff
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_Debuff"
+msgid "About Debuff"
+msgstr "디버프에 대해"
+
+#. Key:	Header_Reward
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_Reward"
+msgid "About Item Reward"
+msgstr "아이템 보상에 대해"
+
+#. Key:	Header_Stage
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_Stage"
+msgid "About Stagesystem"
+msgstr "스테이지에 대해"
+
+#. Key:	Header_SubWeapon
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_SubWeapon"
+msgid "About SubWeapon"
+msgstr "보조무기에 대해"
+
+#. Key:	Header_Welcome
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_Welcome"
+msgid "Welcome!"
+msgstr "환영합니다!"
+
+#. Key:	Input_Aim
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Aim"
+msgid "Aim"
+msgstr "조준"
+
+#. Key:	Input_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Attack"
+msgid "Attack"
+msgstr "공격"
+
+#. Key:	Input_Category_Battle
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Category_Battle"
+msgid "Battle"
+msgstr "전투"
+
+#. Key:	Input_Category_Movement
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Category_Movement"
+msgid "Movement"
+msgstr "이동"
+
+#. Key:	Input_Category_World
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Category_World"
+msgid "World"
+msgstr "월드"
+
+#. Key:	Input_Interact
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Interact"
+msgid "Interact"
+msgstr "상호작용"
+
+#. Key:	Input_Jump
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Jump"
+msgid "Jump"
+msgstr "점프"
+
+#. Key:	Input_MoveBackward
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_MoveBackward"
+msgid "Move Backward"
+msgstr "뒤로 이동"
+
+#. Key:	Input_MoveForward
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_MoveForward"
+msgid "Move Forward"
+msgstr "앞으로 이동"
+
+#. Key:	Input_MoveLeft
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_MoveLeft"
+msgid "Move Left"
+msgstr "왼쪽으로 이동"
+
+#. Key:	Input_MoveRight
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_MoveRight"
+msgid "Move Right"
+msgstr "오른쪽으로 이동"
+
+#. Key:	Input_Roll
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Roll"
+msgid "Roll"
+msgstr "구르기"
+
+#. Key:	Input_Shoot
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Shoot"
+msgid "Shoot"
+msgstr "보조무기 발사"
+
+#. Key:	Input_SkillA
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_SkillA"
+msgid "SkillA"
+msgstr "스킬A"
+
+#. Key:	Input_SkillB
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_SkillB"
+msgid "SkillB"
+msgstr "스킬B"
+
+#. Key:	Input_SkillC
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_SkillC"
+msgid "SkillC"
+msgstr "스킬C"
+
+#. Key:	Input_Sprint
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Sprint"
+msgid "Sprint"
+msgstr "달리기"
+
+#. Key:	Tutorial_Battle_1
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Battle_1"
+msgid "<Medium.26>[Combat Guide]</>\r\n<Default>Master the art of combat in BackStreet</>. \r\nUse your skills and tactics to overcome enemies and thrive in the desolate city.\r\n\r\n<Medium.24>[Combo Types]</>\r\n- Standard Combo: Chain basic attacks for a steady damage output.\r\n- Dash Combo:  Launch a swift attack while dashing, with the final hit dealing area damage to multiple enemies.\r\n- Air Combo: Strike enemies mid-air for high damage and strategic advantage.\r\n\r\n<Medium.24>[Battle Tips]</>\r\n- Ranged Enemies: Attack from a distance with projectiles. Use agility to close the gap.\r\n- Melee Enemies: Engage in close quarters. Time your attacks to counter them effectively.\r\n- Roll to Evade: Avoid enemy attacks and projectiles by rolling. Perfect timing can save your life.\r\n\r\n<Default>Practice these techniques to dominate the battlefield and prepare for the ultimate challenge!</>"
+msgstr "<Medium.26>[전투 가이드]</>\r\n\r\n<Default>BackStreet에서 전투 기술을 익히고 마스터하세요.</>  \r\n적을 물리치고 황폐한 도시에서 살아남기 위해 기술과 전략을 활용하세요.\r\n\r\n<Medium.24>[콤보 유형]</>\r\n- 기본 콤보: 기본 공격을 연계하여 꾸준한 피해를 입힙니다.\r\n- 돌진 콤보: 대시하면서 빠르게 공격하며, 마지막 타격은 광역 피해를 입힙니다.\r\n- 공중 콤보: 공중에서 적을 공격하여 높은 피해를 주고 전략적 우위를 확보합니다.\r\n\r\n<Medium.24>[전투 팁]</>\r\n- 원거리 적: 투사체 공격을 활용해 원거리에서 공격합니다. 빠르게 접근하여 상대를 제압하세요.\r\n- 근거리 적: 근접 전투에서 교전합니다. 적의 공격 타이밍을 파악하여 효과적으로 반격하세요.\r\n- 구르기 회피: 적의 공격과 투사체를 피하기 위해 구르기를 사용하세요. 완벽한 타이밍이 생존의 열쇠입니다.\r\n\r\n<Default>이 기술을 연습하여 전장을 지배하고 최종 도전에 대비하세요!</>"
+
+#. Key:	Tutorial_Boosterchip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Boosterchip"
+msgid "<Medium.26>[Booster Chip Guide]</>\r\n\r\n<Default>Enhance your combat power with over 100 different booster chips for a more powerful gameplay experience.</>\r\n\r\n<Medium.24>[Types of Booster Chips]</>\r\n\r\nCombo Upgrade Type: Enhances the abilities of key combos (basic, jump, dash) and applies debuff effects.\r\nBase Stat Enhancement Chips: Increases core attributes such as attack power, defense, speed, and survivability.\r\n<Medium.24>[How to Obtain]</>\r\n\r\nStage Completion Rewards: Randomly provided upon clearing each stage.\r\n<Medium.24>[How to Use]</>\r\n\r\nAuto-Equip: Automatically activated upon acquisition.\r\n<Default>With over 100 types of booster chips available, strategically combine them to tailor your combat style and maximize your effectiveness on the battlefield!</>"
+msgstr "<Medium.26>[부스터칩 가이드]</>\r\n\r\n<Default>100개 이상의 다양한 부스터칩을 활용하여 전투력을 강화하고 더욱 강력한 게임 플레이를 경험하세요.</>\r\n\r\n<Medium.24>[부스터칩 유형]</>\r\n- 콤보 업그레이드형: 주요 콤보(기본, 점프, 돌진)의 능력을 강화하고 디버프 효과를 적용합니다.\r\n- 기본 스탯 강화 칩: 공격력, 방어력, 속도, 생존력 등 핵심 속성을 증가시킵니다.\r\n\r\n<Medium.24>[획득 방법]</>\r\n- 스테이지 클리어 보상: 각 스테이지를 클리어할 때 랜덤으로 지급됩니다.\r\n\r\n<Medium.24>[사용 방법]</>\r\n- 자동 장착: 획득 즉시 자동으로 활성화됩니다.\r\n\r\n<Default>100개 이상의 부스터칩을 전략적으로 조합하여 전투 스타일을 맞추고 전장에서 최고의 효율을 발휘하세요!</>"
+
+#. Key:	Tutorial_Debuff
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Debuff"
+msgid "<Medium.26>[Debuff Guide]</>\r\n<Default>Apply various debuffs to enemies using sub weapons and skills and boosters</>.\r\n\r\n<Medium.24>[Types of Debuffs]</>\r\n- Fire, Corrosion: Inflict continuous damage over time (DoT).\r\n- Slow: Significantly reduce enemy movement speed.\r\n- Attack and Defense Down: Weaken enemy attack power and defense.\r\n- Stun: Temporarily immobilize enemies.\r\n\r\n<Medium.24>[How to Utilize]</>\r\nStrategically apply debuffs using sub weapons and skills to gain the upper hand in battles!\r\n\r\n<Default>Use Debuffs to effectively control and defeat your enemies.</>"
+msgstr "<Medium.26>[디버프 가이드]</>\r\n\r\n<Default>보조 무기, 스킬, 부스터를 활용하여 적에게 다양한 디버프를 적용하세요.</>\r\n\r\n<Medium.24>[디버프 유형]</>\r\n- 화염, 산화: 지속 피해(DoT)를 입힙니다.\r\n- 슬로우: 적의 이동 속도를 크게 감소시킵니다.\r\n- 공격력 및 방어력 감소**: 적의 공격력과 방어력을 약화시킵니다.\r\n- 프리징: 적을 일시적으로 행동 불가 상태로 만듭니다.\r\n\r\n<Medium.24>[활용 방법]</>\r\n- 보조 무기와 스킬을 활용하여 전략적으로 디버프를 적용해 전투에서 우위를 점하세요!\r\n\r\n<Default>디버프를 활용해 적을 효과적으로 제압하고 승리를 쟁취하세요.</>"
+
+#. Key:	Tutorial_Entry
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Entry"
+msgid "<Medium.26>[Welcome!]</>\r\n\r\n<Default>Welcome to BackStreet</>.\r\nTo survive here, you must face off against robots in a desolate city.\r\n\r\n<Medium.24>[Background]</>\r\nYou must defeat the central AI that rules the city, <Medium.24>3COS</>, and recover your lost memories.\r\n\r\n<Medium.24>[Objectives]</>\r\n\r\nBattle hordes of robots to hone your skills and survival instincts.\r\nGrow stronger with skills and booster chips obtained from the city.\r\nLiberate the empty dystopian city through the final showdown."
+msgstr "<Medium.26>[환영합니다!]</>\r\n\r\n<Default>BackStreet에 오신 것을 환영합니다.</>  \r\n이곳에서 살아남기 위해 황폐한 도시에서 로봇들과 맞서 싸워야 합니다.\r\n\r\n<Medium.24>[배경]</>\r\n\r\n당신은 도시를 지배하는 중앙 AI <Medium.24>3COS</>를 무찌르고  \r\n잃어버린 기억을 되찾아야 합니다.\r\n\r\n<Medium.24>[목표]</>\r\n\r\n- 수많은 로봇과 전투를 벌이며 전투 기술과 생존 본능을 연마하세요.\r\n- 도시에서 얻은 스킬과 부스터칩으로 더욱 강해지세요.\r\n- 최종 결전을 통해 텅 빈 디스토피아 도시를 해방하세요!"
+
+#. Key:	Tutorial_Entry_2
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Entry_2"
+msgid "<Medium.26>[Notice!]</>\r\n<Default>This is a demo version of BackStreet</>.\r\nPlease note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>\r\nLimited access to stages, characters, and abilities. Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>\r\nPlaceholder assets may appear during gameplay. Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>\r\nYour feedback is crucial to improving the game! Report bugs and provide suggestions through our feedback form. Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>\r\nEnjoy the sneak peek of BackStreet, and stay tuned for the full version's release!"
+msgstr "<Medium.26>[알림!]</>\r\n\r\n<Default>BackStreet의 데모 버전입니다.</>  \r\n정식 출시 버전과 일부 차이가 있을 수 있습니다.\r\n\r\n<Medium.24>[데모 버전의 특징]</>\r\n- 제한된 스테이지, 캐릭터, 능력 제공\r\n- 일부 기능(고급 AI 행동 및 최종 컷신 등)은 포함되지 않음\r\n\r\n<Medium.24>[알려진 문제점]</>\r\n- 게임 플레이 중 임시 애셋이 표시될 수 있음\r\n- 일부 애니메이션 및 사운드 효과가 아직 작업 중\r\n\r\n<Medium.24>[피드백 요청]</>\r\n- 버그 리포트 및 제안 사항을 피드백 폼을 통해 제출하세요.  \r\n- 커뮤니티 채널에 참여하여 토론 및 최신 정보를 확인하세요.\r\n\r\n- BackStreet 정식 버전 출시를 기대해주세요!"
+
+#. Key:	Tutorial_Reward_1
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Reward_1"
+msgid "<Medium.26>[Item Reward Guide]</>\r\n\r\n<Default>Receive various item rewards to enhance your survival and power</>.\r\n\r\n<Medium.24>[Healing Packs]</>\r\n- Types: Small, Medium, Large healing packs.\r\n- How to Obtain:\r\n  - Randomly awarded as stage rewards.\r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>\r\n- Purpose: Used to craft and enhance skills.\r\n- How to Obtain:\r\n  - Automatically collected from defeated enemies.\r\n- Skill Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Default>Utilize healing packs and crafting materials effectively to strengthen your character and progress through challenges!</>"
+msgstr "<Medium.26>[아이템 보상 가이드]</>\r\n\r\n<Default>다양한 아이템 보상을 획득하여 생존력을 높이고 전투력을 강화하세요.</>\r\n\r\n<Medium.24>[힐팩]</>\r\n\r\n- 종류: 소형, 중형, 대형 힐팩\r\n- 획득 방법:\r\n  - 스테이지 클리어 보상으로 랜덤 지급\r\n  - 게임 중 'F' 키를 사용하여 수집 가능\r\n\r\n<Medium.24>[조합 재료]</>\r\n\r\n- 용도: 스킬 제작 및 강화에 사용됩니다.\r\n- 획득 방법:\r\n  - 처치한 적으로부터 자동 수집됨\r\n- 스킬 조합: 특정 \"조합 스테이지\"에서만 가능\r\n\r\n<Default>힐팩과 조합 재료를 효과적으로 활용하여 캐릭터를 강화하고 도전 과제를 극복하세요!</>"
+
+#. Key:	Tutorial_Stage
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Stage"
+msgid "<Medium.26>[Stage System Guide]</>\r\n<Default>Explore various stages across chapters with unique challenges and rewards.</>\r\n\r\n<Medium.24>[Chapter Structure]</>\r\n- Each Chapter consists of approximately 11 stages.\r\n- 2 Craft Stages per chapter, offering a choice between two paths.\r\n- Reward System: All rewards are provided randomly, adding an element of surprise to each playthrough.\r\n\r\n<Medium.24>[Stage Selection]</>\r\n- At certain points in a chapter, you can select between two paths, each with different challenges and rewards.\r\n- Choose wisely, as each path can impact your progression and available resources.\r\n\r\n<Default>Prepare for a thrilling journey where each stage brings new opportunities and risks, and the rewards are always unpredictable!</>"
+msgstr "<Medium.26>[스테이지 시스템 가이드]</>\r\n\r\n<Default>다양한 챕터의 스테이지를 탐험하며 고유한 도전과 보상을 경험하세요.</>\r\n\r\n<Medium.24>[챕터 구조]</>\r\n\r\n- 각 챕터는 약 11개의 스테이지로 구성됨\r\n- 챕터당 2개의 조합 스테이지 포함 (선택 가능한 두 갈림길 제공)\r\n- 보상 시스템: 모든 보상이 랜덤으로 지급되며, 플레이마다 새로운 경험 제공\r\n\r\n<Medium.24>[스테이지 선택]</>\r\n\r\n- 특정 지점에서 두 가지 경로 중 하나를 선택 가능  \r\n- 경로마다 도전 요소와 보상이 달라지므로 신중하게 선택하세요\r\n\r\n<Default>각 스테이지에서 새로운 기회와 위험이 공존하며, 보상은 예측할 수 없습니다!</>"
+
+#. Key:	Tutorial_SubWeapon
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_SubWeapon"
+msgid "<Medium.26>[Sub Weapon Guide]</>\r\n<Default>Utilize various auxiliary weapons to support your battles</>.\r\nWhen used effectively, they can turn the tide of combat.\r\n\r\n<Medium.24>[How to Use]</>\r\n- During Combos: Press Right-Click to fire instantly during a combo.\r\n- Aimed Use: Press Right-Click to aim, then Left-Click to fire.\r\n\r\n<Medium.24>[How to Obtain, Types of Sub Weapons]</>\r\n- Sub weapons can be found in trash bags scattered throughout the map.\r\n- Bubblegum / Aluminum Cans / Cigarette Butts / etc.."
+msgstr "<Medium.26>[보조 무기 가이드]</>\r\n\r\n<Default>다양한 보조 무기를 활용하여 전투를 지원하세요.</>  \r\n효과적으로 사용하면 전세를 역전할 수 있습니다.\r\n\r\n<Medium.24>[사용 방법]</>\r\n\r\n- 콤보 중 사용: 콤보 도중 우클릭을 눌러 즉시 발사\r\n- 조준 후 사용: 우클릭으로 조준한 후 좌클릭으로 발사\r\n\r\n<Medium.24>[획득 방법 및 보조 무기 종류]</>\r\n\r\n- 맵 곳곳에 있는 쓰레기 봉투를 개봉하여 획득 가능\r\n- 풍선껌 / 알루미늄 캔 / 담배꽁초 / 등 다양한 무기 존재"
+
+#. Key:	UI_Elimate_Enemy
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,UI_Elimate_Enemy"
+msgid "Elimate all enemies."
+msgstr "모든 적을 섬멸하세요"
+
+#. Key:	UI_ObtainItems
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,UI_ObtainItems"
+msgid "Obtain all items."
+msgstr "모든 아이템을 획득하세요"
+
+#. Key:	UI_OpenTrash
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,UI_OpenTrash"
+msgid "Open the trash bag."
+msgstr "쓰레기 봉투를 개봉하세요"
+

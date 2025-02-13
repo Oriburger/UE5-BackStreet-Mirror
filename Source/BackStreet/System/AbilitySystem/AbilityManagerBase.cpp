@@ -271,6 +271,8 @@ bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct T
 			Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->SwitchWeapon(true, true);
 			Cast<AMainCharacterBase>(OwnerCharacterRef.Get())->SwitchWeapon(false, true);
 		}
+
+		OnStatUpdated.Broadcast(statType, ownerInfo.GetStatGroup(statType));
 	}
 	return true;
 }

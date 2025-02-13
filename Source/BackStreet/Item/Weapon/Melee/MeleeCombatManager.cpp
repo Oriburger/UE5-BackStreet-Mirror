@@ -22,11 +22,6 @@ void UMeleeCombatManager::Attack()
 {
 	Super::Attack();
 
-	if (AssetManagerRef.IsValid())
-	{
-		AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon, WeaponComponentRef.Get()->WeaponID, "Wield");
-	}
-
 	GamemodeRef.Get()->GetWorldTimerManager().SetTimer(MeleeAtkTimerHandle, this, &UMeleeCombatManager::MeleeAttack, 0.01f, true);
 	if (MeleeLineTraceQueryParams.GetIgnoredActors().Num() == 0)
 	{

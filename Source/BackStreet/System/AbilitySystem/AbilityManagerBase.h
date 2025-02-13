@@ -77,6 +77,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FName AbilityName;
 
+	//어빌리티명 (현지화 가능)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FText AbilityNameText;
+
 	//Ability's Tier
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		EAbilityTierType AbilityTier = EAbilityTierType::E_None;
@@ -84,6 +88,10 @@ public:
 	//어빌리티 설명
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FName AbilityDescription;
+
+	//어빌리티 설명 (현지화 가능)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FText AbilityDescriptionText;
 
 	//어빌리티의 아이콘
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -119,6 +127,7 @@ public:
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityUpdate, const TArray<FAbilityInfoStruct>&, AbilityInfoList);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateStatUpdate, ECharacterStatType, StatType, FStatValueGroup, StatValue);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BACKSTREET_API UAbilityManagerComponent : public UActorComponent
@@ -131,6 +140,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateAbilityUpdate OnAbilityUpdated;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateStatUpdate OnStatUpdated;
 
 protected:
 	// Called when the game starts
