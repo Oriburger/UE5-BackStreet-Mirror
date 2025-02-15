@@ -58,10 +58,22 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 	{
 		//
 		traceDirection = TargetedCandidate.Get()->GetActorForwardVector() * -1.0f;
-		startLocation = OwnerCharacter.Get()->HitSceneComponent->GetComponentLocation() + traceDirection * 50.0f;;
+		startLocation = OwnerCharacter.Get()->HitSceneComponent->GetComponentLocation() + traceDirection * 50.0f;
 		endLocation = startLocation + traceDirection * MaxFindDistance;
 	}
-	
+
+	// ==== 트레이스를 통해 벽이나 장애물이 있는지 확인한다 ================================
+	TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectType;
+	traceObjectType.Add(UEngineTypes::ConvertToObjectType(ECC_WorldStatic));
+	traceObjectType.Add(UEngineTypes::ConvertToObjectType(ECC_WorldDynamic));
+
+	FHitResult hitResult;
+	bool bIsHit = UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), OwnerCharacter.Get()->GetActorLocation(), endLocation, (RadiusOverride <= 1.0f ? TraceRadius : RadiusOverride) / 3.0f,
+		traceObjectType, true, actorToIgnore, bShowDebugSphere ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResult, true, FColor::Yellow, FColor::Blue, AutoTargetingRate);
+	if (bIsHit)
+	{
+		endLocation = hitResult.Location;
+	}
 
 	//trace 진행
 	UKismetSystemLibrary::SphereTraceMultiByProfile(GetWorld(), startLocation, endLocation, RadiusOverride <= 1.0f ? TraceRadius : RadiusOverride, "Pawn", true
