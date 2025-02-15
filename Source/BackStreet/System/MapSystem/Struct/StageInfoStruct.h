@@ -314,6 +314,9 @@ public:
 //======= Asset =======================
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Map")
+		TSoftObjectPtr<UWorld> TutorialLevel;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Map")
 		TMap<EStageCategoryInfo, FLevelSoftObjectPtrList> StageLevelInfoMap;
 
 	//Outer area level asset

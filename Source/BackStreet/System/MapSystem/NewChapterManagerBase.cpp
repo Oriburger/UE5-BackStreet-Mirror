@@ -6,6 +6,7 @@
 #include "StageManagerComponent.h"
 #include "SlateBasics.h"
 #include "../../Global/BackStreetGameModeBase.h"
+#include "../../Global/BackStreetGameInstance.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "Runtime/UMG/Public/UMG.h"
 
@@ -129,6 +130,7 @@ void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 			CreateGameResultWidget(true);
 		}
 	}
+
 }
 
 void ANewChapterManagerBase::InitStageIconTranslationList(FVector2D Threshold)
@@ -192,6 +194,29 @@ bool ANewChapterManagerBase::GetIsStageBlocked(FVector2D StageCoordinate)
 	int32 stageIdx = StageGeneratorComponent->GetStageIdx(StageCoordinate);
 	if (!CurrentChapterInfo.StageInfoList.IsValidIndex(stageIdx)) return false;
 	return CurrentChapterInfo.StageInfoList[stageIdx].bIsBlocked;
+}
+
+void ANewChapterManagerBase::SetTutorialCompletion(bool bCompleted)
+{
+	// GameInstance 가져오기
+	UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
+	if (gameInstance)
+	{
+		gameInstance->SetTutorialCompletion(bCompleted);
+		return;
+	}
+	UE_LOG(LogTemp, Error, TEXT("ANewChapterManagerBase::SetTutorialCompletion(%d) - game instance is not valid"), (int32)bCompleted);
+}
+
+bool ANewChapterManagerBase::GetTutorialCompletion()
+{
+	UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
+	if (gameInstance)
+	{
+		return gameInstance->GetTutorialCompletion();
+	}
+	UE_LOG(LogTemp, Error, TEXT("ANewChapterManagerBase::GetTutorialCompletion() - game instance is not valid"));
+	return false;
 }
 
 void ANewChapterManagerBase::CreateGameResultWidget(bool bChapterClear)

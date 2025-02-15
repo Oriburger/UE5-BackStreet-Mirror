@@ -468,7 +468,13 @@
 		{
 			"E_Entry":
 			{
-				"CompositionNameList": []
+				"CompositionNameList": [
+					"easy_small1",
+					"easy_small2",
+					"easy_small3",
+					"easy_small4",
+					"easy_small5"
+				]
 			},
 			"E_Exterminate":
 			{
@@ -1277,12 +1283,13 @@
 			"E_Gatcha": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Random_a.TX_ICON_Random_a'"
 		},
 		"StageIconTransitionValueList": [],
+		"TutorialLevel": "/Game/Map/Chapter01/Polishing/Chapter01_Entry_Tutorial.Chapter01_Entry_Tutorial",
 		"StageLevelInfoMap":
 		{
 			"E_Entry":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter01/Polishing/Chapter01_Entry_Tutorial.Chapter01_Entry_Tutorial"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Entry.Chapter01_Entry"
 				]
 			},
 			"E_Exterminate":

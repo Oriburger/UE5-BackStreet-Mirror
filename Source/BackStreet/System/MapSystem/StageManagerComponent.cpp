@@ -69,7 +69,16 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	checkf(!newWorldAssetList.IsEmpty(), TEXT("UStageManagerComponent::InitStage - newWorldAssetList가 지정되어있지않습니다."));
 
 	//Load new level
-	if (newWorldAssetList.Num() == 1 || PreviousLevel.IsNull())
+	UE_LOG(LogTemp, Warning, TEXT("@@@@@@@ Tuto : %d, level valid : %d"), (int32)ChapterManagerRef.Get()->GetTutorialCompletion(), (int32)CurrentChapterInfo.TutorialLevel.IsNull());
+	if (NewStageInfo.StageType == EStageCategoryInfo::E_Entry && !ChapterManagerRef.Get()->GetTutorialCompletion()
+		&& !CurrentChapterInfo.TutorialLevel.IsNull())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("> UStageManagerComponent::InitStage - Tutorial level will be activated"));
+		ChapterManagerRef.Get()->SetTutorialCompletion(true);
+		NewStageInfo.MainLevelAsset = CurrentChapterInfo.TutorialLevel;
+	}
+	
+	else if (newWorldAssetList.Num() == 1 || PreviousLevel.IsNull())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("> UStageManagerComponent::InitStage - Lack of %d's Map Count, It may cause the level reinstancing crash."), (int32)NewStageInfo.StageType);
 		NewStageInfo.MainLevelAsset = newWorldAssetList[0];
