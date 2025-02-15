@@ -138,9 +138,12 @@ void AEnemyCharacterBase::TakeKnockBack(float KnockbackForce, float KnockbackRes
 	if (IsValid(aiControllerRef) && CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill
 		&& aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill)
 	{
+		if (GetIsActionActive(ECharacterActionType::E_Stun))
+		{
+			GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+		}
 		if (effectiveKnockback >= knockbackThreshold)
 		{
-			SetActionState(ECharacterActionType::E_KnockedDown);
 			PlayKnockBackAnimMontage();
 		}
 		else if (effectiveKnockback < knockbackThreshold)
@@ -158,7 +161,7 @@ bool AEnemyCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* 
 	{
 		SkillManagerComponent->StopSkillAnimMontage();
 		AAIControllerBase* aiControllerRef = nullptr;
-		aiControllerRef = Cast<AAIControllerBase>(Controller);
+		aiControllerRef = Cast<AAIControllerBase>(Controller);;
 		if (aiControllerRef->GetBehaviorState() == EAIBehaviorType::E_Skill) aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Idle);
 	}
 	return result;
