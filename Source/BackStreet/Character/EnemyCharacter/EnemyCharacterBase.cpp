@@ -161,7 +161,7 @@ bool AEnemyCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* 
 	{
 		SkillManagerComponent->StopSkillAnimMontage();
 		AAIControllerBase* aiControllerRef = nullptr;
-		aiControllerRef = Cast<AAIControllerBase>(Controller);;
+		aiControllerRef = Cast<AAIControllerBase>(Controller);
 		if (aiControllerRef->GetBehaviorState() == EAIBehaviorType::E_Skill) aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Idle);
 	}
 	return result;
