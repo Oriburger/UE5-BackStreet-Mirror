@@ -108,7 +108,6 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 	case ECharacterDebuffType::E_Stun:
 		OwnerCharacterRef.Get()->StopAttack();
 		characterInfo.CharacterActionState = ECharacterActionType::E_Stun;
-		UE_LOG(LogTemp, Warning, TEXT("UDebuffManagerComponent::SetDebuffTimer"));
 		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 		OwnerCharacterRef.Get()->SetLocationWithInterp(OwnerCharacterRef.Get()->GetActorLocation() - FVector(0.0f, 0.0f, 500.0f), 1.0f, false, true);
 		break;
