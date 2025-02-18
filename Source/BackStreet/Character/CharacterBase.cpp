@@ -992,7 +992,7 @@ void ACharacterBase::ActivateDebuffNiagara(uint8 DebuffType)
 	if (targetEmitterList.IsValidIndex(DebuffType) && targetEmitterList[DebuffType] != nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ACharacterBase::ActivateDebuffNiagara #2- %d"), DebuffType);
-		BuffNiagaraEmitter->SetRelativeLocation(FVector(0.0f, 0.0f, 60.0f));
+		//BuffNiagaraEmitter->SetRelativeLocation(FVector(0.0f, 0.0f, 60.0f));
 		BuffNiagaraEmitter->Deactivate();
 		BuffNiagaraEmitter->SetAsset((targetEmitterList)[DebuffType], true);
 		BuffNiagaraEmitter->Activate();

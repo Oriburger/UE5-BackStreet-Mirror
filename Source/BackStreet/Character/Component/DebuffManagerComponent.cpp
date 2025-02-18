@@ -234,8 +234,6 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 	if (!OwnerCharacterRef.IsValid() || DebuffType == ECharacterDebuffType::E_None) return;
 	if (OwnerCharacterRef.Get()->GetIsActionActive(ECharacterActionType::E_Die)) return;
 
-	//FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
-	//FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterGameplayInfo();
 	FCharacterGameplayInfo& characterInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfoRef();
 
 	FTimerHandle& timerHandle = GetResetTimerHandle(DebuffType);

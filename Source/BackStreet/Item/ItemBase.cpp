@@ -28,9 +28,6 @@ AItemBase::AItemBase()
 	MeshComponent->SetCollisionProfileName("Item", true);
 	SetRootComponent(MeshComponent);
 
-	OutlineMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_OUTLINE_MESH"));
-	OutlineMeshComponent->SetupAttachment(MeshComponent);
-
 	IconWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("ITEM_INFO_WIDGET"));
 	IconWidgetComponent->SetupAttachment(MeshComponent);
 	IconWidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 50.0f));
@@ -153,17 +150,6 @@ void AItemBase::InitializeItemMesh()
 	//MeshComponent->SetRelativeLocation(ItemInfo.InitialLocation);
 	MeshComponent->SetRelativeRotation(ItemInfo.InitialRotation);
 	MeshComponent->SetRelativeScale3D(ItemInfo.InitialScale);
-
-	OutlineMeshComponent->SetStaticMesh(ItemInfo.ItemMesh.Get());
-	OutlineMeshComponent->SetRelativeLocation(FVector(0.0f));
-	OutlineMeshComponent->SetRelativeRotation(FRotator(0.0f));
-	OutlineMeshComponent->SetRelativeScale3D(FVector(1.0f));
-	
-	for (int32 matIdx = 0; matIdx < OutlineMeshComponent->GetNumMaterials(); matIdx++)
-	{
-		if(!IsValid(ItemInfo.OutlineMaterial.Get())) break;
-		OutlineMeshComponent->SetMaterial(matIdx, ItemInfo.OutlineMaterial.Get());
-	}
 	OnItemInitialized.Broadcast(ItemInfo);
 }
 
