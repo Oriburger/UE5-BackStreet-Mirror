@@ -7,6 +7,8 @@
 #include "../../Global/BackStreetGameModeBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
+DEFINE_LOG_CATEGORY(LogAbility);
+
 // Sets default values
 UAbilityManagerComponent::UAbilityManagerComponent()
 {
@@ -25,15 +27,15 @@ void UAbilityManagerComponent::BeginPlay()
 void UAbilityManagerComponent::InitAbilityManager(ACharacterBase* NewCharacter)
 {
 	if (!IsValid(NewCharacter)) return;
-	//UE_LOG(LogTemp, Warning, TEXT("Initialize Ability Manager Success"));
+	//UE_LOG(LogAbility, Log, TEXT("Initialize Ability Manager Success"));
 	OwnerCharacterRef = NewCharacter;
 
 	//초기화 시점에 진행
 	if (!InitAbilityInfoListFromTable())
 	{
-		UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::InitAbilityManager) DataTable is not found!"));
+		UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::InitAbilityManager) DataTable is not found!"));
 	}
-	UE_LOG(LogTemp, Warning, TEXT("InitAbilityManager %d"), AbilityPickedInfoList.Num());
+	UE_LOG(LogAbility, Log, TEXT("InitAbilityManager %d"), AbilityPickedInfoList.Num());
 }
 
 bool UAbilityManagerComponent::TryAddNewAbility(int32 AbilityID)
@@ -47,7 +49,7 @@ bool UAbilityManagerComponent::TryAddNewAbility(int32 AbilityID)
 	{
 		if (!TryRemoveAbility(AbilityID - 1))
 		{
-			UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::TryAddNewAbility %d / prev ability remove failed"), AbilityID);
+			UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::TryAddNewAbility %d / prev ability remove failed"), AbilityID);
 		}	
 	}
 
@@ -63,7 +65,7 @@ bool UAbilityManagerComponent::TryAddNewAbility(int32 AbilityID)
 	if (!AbilityTotalTier.Contains(newAbilityInfo.AbilityType))
 		AbilityTotalTier.Add(newAbilityInfo.AbilityType, 0);
 	AbilityTotalTier[newAbilityInfo.AbilityType] += (int32)newAbilityInfo.AbilityTier;
-	UE_LOG(LogTemp, Warning, TEXT(""))
+	UE_LOG(LogAbility, Log, TEXT(""))
 
 	TryUpdateCharacterStat(newAbilityInfo, false);
 	ActiveAbilityInfoList.Add(newAbilityInfo);
@@ -82,7 +84,7 @@ bool UAbilityManagerComponent::TryRemoveAbility(int32 AbilityID)
 	FCharacterGameplayInfo& ownerInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfoRef();
 	if (!ownerInfo.IsValid())
 	{
-		UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::TryRemoveAbility / ownerInfo is not valid"));
+		UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::TryRemoveAbility / ownerInfo is not valid"));
 		return false;
 	}
 
@@ -90,7 +92,7 @@ bool UAbilityManagerComponent::TryRemoveAbility(int32 AbilityID)
 	FAbilityInfoStruct targetAbilityInfo = ActiveAbilityInfoList[targetAbilityIdx];
 	if (targetAbilityIdx == -1 || !targetAbilityInfo.IsValid())
 	{
-		UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::TryRemoveAbility / AbiliID is not found"));
+		UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::TryRemoveAbility / AbiliID is not found"));
 		return false;
 	}
 	else
@@ -112,7 +114,7 @@ bool UAbilityManagerComponent::TryRemoveAbility(int32 AbilityID)
 		FAbilityValueInfoStruct abilityValue = targetAbilityInfo.TargetStatMap[statType];
 		if (!ownerInfo.StatGroupList.IsValidIndex((int32)statType))
 		{
-			UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat newStat for %d"), (int32)statType);
+			UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat newStat for %d"), (int32)statType);
 			continue;
 		}
 
@@ -150,7 +152,7 @@ TArray<FAbilityInfoStruct> UAbilityManagerComponent::GetRandomAbilityInfoList(in
 {
 	if (AbilityPickedInfoList.IsEmpty())
 	{
-		UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::GetRandomAbilityInfoList, AbilityPickedInfoList is empty"));
+		UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::GetRandomAbilityInfoList, AbilityPickedInfoList is empty"));
 		return {};
 	}
 	
@@ -170,59 +172,74 @@ TArray<FAbilityInfoStruct> UAbilityManagerComponent::GetRandomAbilityInfoList(in
 			candidateGroups.Add(groupIdx);
 		}
 	}
-	while (selectedAbilities.Num() < Count && selectedAbilities.Num() < candidateGroups.Num())
+	if (candidateGroups.IsEmpty())
 	{
-		tryCount += 1; 
+		UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::GetRandomAbilityInfoList, candidateGroups is empty"));
+		return {};
+	}
+	
+	while (selectedAbilities.Num() < Count)
+	{
+		tryCount += 1;
 		if (tryCount >= tryCountThreshold) break;
 
-		const int32 randomCandidateIdx = UKismetMathLibrary::RandomInteger(candidateGroups.Num());
-		const int32 selectedGroupIdx = candidateGroups[randomCandidateIdx];
+		int32 randomCandidateIdx = UKismetMathLibrary::RandomInteger(candidateGroups.Num());
+		int32 selectedGroupIdx = candidateGroups[randomCandidateIdx];
+		int32 resultAbilityIdx = -1;
+
 		if (pickedGroupIdx.Contains(selectedGroupIdx))
 		{
-			continue; 
+			continue;
 		}
 
-		//확률 프로퍼티가 지정되어있지 않을 경우
-		if (CumulativeProbabilityList.Num() < 3)
-		{
-			//랜덤 adder로 티어결정
-			const int32 randomAdder = UKismetMathLibrary::RandomInteger((int32)EAbilityTierType::E_Legendary);
-			const int32 resultAbilityIdx = selectedGroupIdx * 3 + randomAdder + 1;
+		UE_LOG(LogAbility, Log, TEXT("UAbilityManagerComponent::GetRandomAbilityInfoList Loop) Count : %d, selected : %d, left : %d"), Count, selectedAbilities.Num(), candidateGroups.Num());
 
-			if (AbilityInfoList.IsValidIndex(resultAbilityIdx))
+		//만약 잔여 어빌리티가 부족하다면?
+		if (candidateGroups.Num() < Count - selectedAbilities.Num())
+		{
+			UE_LOG(LogAbility, Log, TEXT("Not enough left abilities"));
+			for (auto& candidate : candidateGroups)
+			{
+				selectedGroupIdx = candidate;
+				resultAbilityIdx = GetRandomAbilityIdxUsingGroupIdx(selectedGroupIdx);
+				if (resultAbilityIdx > 0 && AbilityInfoList.IsValidIndex(resultAbilityIdx) && AbilityInfoList[resultAbilityIdx].AbilityId > 0)
+				{
+					selectedAbilities.Add(AbilityInfoList[resultAbilityIdx]);
+					UE_LOG(LogAbility, Log, TEXT("-> Picked"));
+					pickedGroupIdx.Add(selectedGroupIdx);
+				}
+				else
+				{
+					UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::GetRandomAbilityInfoList(%d) auto fill error - selected Group %d / resultAbilityIdx %d / Valid Idx : %d"), Count, selectedGroupIdx, resultAbilityIdx, (int32)AbilityInfoList.IsValidIndex(resultAbilityIdx));
+					if (AbilityInfoList.IsValidIndex(resultAbilityIdx))
+					{
+						UE_LOG(LogAbility, Log, TEXT("ㄴ> Ability Id : %d"), AbilityInfoList[resultAbilityIdx].AbilityId);
+					}
+				}
+			}
+			break;
+		}
+		else
+		{
+			//확률 프로퍼티가 지정되어있지 않을 경우
+			resultAbilityIdx = GetRandomAbilityIdxUsingGroupIdx(selectedGroupIdx);
+			if (resultAbilityIdx > 0 && AbilityInfoList.IsValidIndex(resultAbilityIdx) && AbilityInfoList[resultAbilityIdx].AbilityId > 0)
 			{
 				selectedAbilities.Add(AbilityInfoList[resultAbilityIdx]);
 				pickedGroupIdx.Add(selectedGroupIdx);
+				candidateGroups.RemoveAtSwap(randomCandidateIdx);
 			}
 			else
 			{
-				UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::GetRandomAbilityInfoList(%d) failed - selected Group %d / random Adder %d / resultAbilityIdx %d"), selectedGroupIdx, randomAdder, resultAbilityIdx);
+				UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::GetRandomAbilityInfoList(%d) error with cumulativeprobList - selected Group %d / resultAbilityIdx %d / Valid Idx : %d"), Count, selectedGroupIdx, resultAbilityIdx, (int32)AbilityInfoList.IsValidIndex(resultAbilityIdx));
 			}
 		}
-		//지정된 경우 
-		else
-		{
-			float randomValue = UKismetMathLibrary::RandomFloatInRange(0.0f, TotalProbabilityValue);
-			int32 resultAbilityIdx = -1;
-
-			for (int32 idx = 1; idx < CumulativeProbabilityList.Num(); idx++)
-			{
-				if (randomValue >= CumulativeProbabilityList[idx - 1] && randomValue <= CumulativeProbabilityList[idx])
-				{
-					resultAbilityIdx = selectedGroupIdx * 3 + idx; 
-					pickedGroupIdx.Add(selectedGroupIdx);
-					break;
-				}
-			}
-			if (resultAbilityIdx != -1 && AbilityInfoList.IsValidIndex(resultAbilityIdx))
-			{
-				selectedAbilities.Add(AbilityInfoList[resultAbilityIdx]);
-			}
-			else
-			{
-				UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::GetRandomAbilityInfoList(%d) error with cumulativeprobList - selected Group %d / random Value %.2lf / resultAbilityIdx %d"), selectedGroupIdx, randomValue, resultAbilityIdx);
-			}
-		}
+	}
+	
+	UE_LOG(LogAbility, Log, TEXT("Total Try Count : %d"), tryCount);
+	for (auto& a : selectedAbilities)
+	{
+		UE_LOG(LogAbility, Log, TEXT("Selected Ability %d"), a.AbilityId);
 	}
 
 	return selectedAbilities;
@@ -261,7 +278,7 @@ bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct T
 	FCharacterGameplayInfo& ownerInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfoRef();
 	if (!ownerInfo.IsValid())
 	{
-		UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat / ownerInfo is not valid"));
+		UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat / ownerInfo is not valid"));
 		return false;
 	}
 
@@ -272,7 +289,7 @@ bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct T
 
 		if (!ownerInfo.StatGroupList.IsValidIndex((int32)statType))
 		{
-			UE_LOG(LogTemp, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat newStat for %d is not valid"), (int32)statType);
+			UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat newStat for %d is not valid"), (int32)statType);
 			continue;
 		}
 
@@ -326,6 +343,32 @@ FAbilityInfoStruct UAbilityManagerComponent::GetAbilityInfo(int32 AbilityID, boo
 		}
 	}
 	return FAbilityInfoStruct();
+}
+
+int32 UAbilityManagerComponent::GetRandomAbilityIdxUsingGroupIdx(int32 SelectedGroupIdx)
+{
+	int32 resultAbilityIdx = -1; 
+
+	//랜덤 adder로 티어결정
+	if (CumulativeProbabilityList.Num() < 3)
+	{
+		const int32 randomAdder = UKismetMathLibrary::RandomInteger((int32)EAbilityTierType::E_Legendary);
+		resultAbilityIdx = SelectedGroupIdx * 3 + randomAdder + 1;
+	}
+	//지정된 경우 
+	else
+	{
+		float randomValue = UKismetMathLibrary::RandomFloatInRange(0.0f, TotalProbabilityValue);
+		for (int32 idx = 1; idx < CumulativeProbabilityList.Num(); idx++)
+		{
+			if (randomValue >= CumulativeProbabilityList[idx - 1] && randomValue <= CumulativeProbabilityList[idx])
+			{
+				resultAbilityIdx = SelectedGroupIdx * 3 + idx;
+				break;
+			}
+		}
+	}
+	return resultAbilityIdx;
 }
 
 int32 UAbilityManagerComponent::GetAbilityListIdx(int32 AbilityID, bool bActiveAbilityOnly)
