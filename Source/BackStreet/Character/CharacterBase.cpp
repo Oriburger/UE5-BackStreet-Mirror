@@ -107,20 +107,41 @@ void ACharacterBase::ResetAtkIntervalTimer()
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 }
 
-void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, const bool bAutoReset)
+void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, const bool bAutoReset, const bool bUseSafeInterp, const bool bDrawDebugInfo)
 {
 	FTimerDelegate updateFunctionDelegate;
 
-	//Binding the function with specific values
+	//안정성 강화 코드 (벽뚫 방지)
+	if (bUseSafeInterp)
+	{
+		FHitResult hitResult;
+		FCollisionObjectQueryParams objectQueryParams;
+		objectQueryParams.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldStatic);
+		objectQueryParams.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldDynamic);
+		GetWorld()->LineTraceSingleByObjectType(hitResult, GetActorLocation(), NewValue, objectQueryParams, FCollisionQueryParams::DefaultQueryParam);
+		if (hitResult.bBlockingHit)
+		{
+			FVector direction = (NewValue - GetActorLocation());
+			NewValue = hitResult.ImpactPoint - direction.GetSafeNormal() * FMath::Clamp(direction.Length() * 0.1f, 0.0f, 100.0f);
+		}
+		if (bDrawDebugInfo)
+		{
+			DrawDebugLine(GetWorld(), GetActorLocation(), NewValue, FColor::Red, false, 5.0f);
+			DrawDebugSphere(GetWorld(), hitResult.ImpactPoint, 10.0f, 12, FColor::Red, false, 5.0f);
+		}
+	}
+	if (bDrawDebugInfo)
+	{
+		DrawDebugSphere(GetWorld(), NewValue, 10.0f, 12, FColor::Yellow, false, 5.0f);
+		DrawDebugSphere(GetWorld(), GetActorLocation(), 10.0f, 12, FColor::Orange, false, 5.0f);
+	}
+
+	//위치 업데이트 이벤트 바인딩
 	OnBeginLocationInterp.Broadcast();
 	updateFunctionDelegate.BindUFunction(this, FName("UpdateLocation"), NewValue, InterpSpeed, bAutoReset);
 
-	//Calling MyUsefulFunction after 5 seconds without looping
 	ResetLocationInterpTimer();
-	if (FVector::Distance(GetActorLocation(), NewValue) > 150.0f) //벽뚫기 방지코드
-	{
-		GetWorld()->GetTimerManager().SetTimer(LocationInterpHandle, updateFunctionDelegate, 0.01f, true);
-	}
+	GetWorld()->GetTimerManager().SetTimer(LocationInterpHandle, updateFunctionDelegate, 0.01f, true);
 }
 
 void ACharacterBase::ResetLocationInterpTimer()
@@ -195,7 +216,7 @@ void ACharacterBase::ResetAirAtkLocationUpdateTimer()
 void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset)
 {
 	FVector currentLocation = GetActorLocation();
-	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? 100.0f : 25.0f))
+	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? GetVelocity().Z * 0.01f : 25.0f))
 	{
 		GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 		OnEndLocationInterp.Broadcast();

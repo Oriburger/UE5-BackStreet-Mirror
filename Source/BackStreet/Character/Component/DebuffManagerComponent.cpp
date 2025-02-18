@@ -50,6 +50,8 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 	{
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), startSound, GetOwner()->GetActorLocation(), 0.3f);
 	}
+	// Niagara 디버프 이펙트 활성화
+	OwnerCharacterRef.Get()->ActivateDebuffNiagara((uint8)DebuffInfo.Type);
 
 	if (GetDebuffIsActive((ECharacterDebuffType)DebuffInfo.Type))
 	{
@@ -86,8 +88,6 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 		}
 	}
 
-	OwnerCharacterRef.Get()->ActivateDebuffNiagara((uint8)DebuffInfo.Type);
-
 	/*---- 디버프 타이머 세팅 ----------------------------*/
 	DebuffInfo.Variable = FMath::Min(1.0f, FMath::Abs(DebuffInfo.Variable)); //값 정제
 	characterInfo.CharacterDebuffState |= (1 << (int)DebuffInfo.Type);
@@ -108,7 +108,9 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 	case ECharacterDebuffType::E_Stun:
 		OwnerCharacterRef.Get()->StopAttack();
 		characterInfo.CharacterActionState = ECharacterActionType::E_Stun;
+		UE_LOG(LogTemp, Warning, TEXT("UDebuffManagerComponent::SetDebuffTimer"));
 		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+		OwnerCharacterRef.Get()->SetLocationWithInterp(OwnerCharacterRef.Get()->GetActorLocation() - FVector(0.0f, 0.0f, 500.0f), 1.0f, false, true);
 		break;
 	case ECharacterDebuffType::E_Slow:
 		resistValue = characterInfo.GetTotalValue(ECharacterStatType::E_SlowResist);
