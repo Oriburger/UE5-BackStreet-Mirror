@@ -147,7 +147,7 @@ public:
 
 	//Update Character's world Location using interporlation
 	UFUNCTION(BlueprintCallable)
-		void SetLocationWithInterp(FVector NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
+		void SetLocationWithInterp(FVector NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false, const bool bUseSafeInterp = false, const bool bDrawDebugInfo = false);
 
 	UFUNCTION(BlueprintCallable)
 		void ResetLocationInterpTimer();
@@ -170,14 +170,7 @@ public:
 	//This func is called by downward atk anim montage's notify
 	UFUNCTION(BlueprintCallable)
 		void ResetAirAtkLocationUpdateTimer();
-
-	////Launch event when upperattack
-	//UFUNCTION(BlueprintCallable)
-	//	void LaunchCharacterWithTarget();
-
-	//UFUNCTION(BlueprintCallable)
-	//	void ActivateAirMode(bool bDeactivateFlag = false);	
-
+	
 protected:
 	//interp function
 	//it must not be called alone.

@@ -128,6 +128,7 @@ public:
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityUpdate, const TArray<FAbilityInfoStruct>&, AbilityInfoList);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateStatUpdate, ECharacterStatType, StatType, FStatValueGroup, StatValue);
+DECLARE_LOG_CATEGORY_EXTERN(LogAbility, Log, All);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BACKSTREET_API UAbilityManagerComponent : public UActorComponent
@@ -184,6 +185,9 @@ protected:
 	//배열로부터 AbilityInfo를 불러들임 (활성화 된 것 중에서 찾을지 지정 가능)
 	UFUNCTION()
 		FAbilityInfoStruct GetAbilityInfo(int32 AbilityID, bool bActiveAbilityOnly = false);
+
+	UFUNCTION()
+		int32 GetRandomAbilityIdxUsingGroupIdx(int32 SelectedGroupIdx);
 
 	//배열로부터 AbilityInfoList의 idx를 불러들임 (활성화 된 것 중에서 찾을지 지정 가능)
 	UFUNCTION()

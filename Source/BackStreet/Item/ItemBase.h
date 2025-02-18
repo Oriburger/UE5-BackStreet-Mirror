@@ -39,9 +39,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UStaticMeshComponent* MeshComponent;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UStaticMeshComponent* OutlineMeshComponent;
-
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), BlueprintReadWrite)
 		class UInteractiveCollisionComponent* ItemTriggerVolume;
 
