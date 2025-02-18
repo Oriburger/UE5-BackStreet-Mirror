@@ -75,11 +75,15 @@ void AAIControllerBase::ProcessSight(AActor* Actor, FAIStimulus Stimulus)
 		GetBlackboardComponent()->SetValueAsBool("HasLineOfSight", true);
 		GetBlackboardComponent()->SetValueAsObject("TargetCharacter", Actor);
 	}
-	else
-	{
-		GetBlackboardComponent()->SetValueAsBool("HasLineOfSight", false);
-		GetWorldTimerManager().SetTimer(SightLossTimerHandle, this, &AAIControllerBase::ResetTargetPerception, 1.0f, false, MaxSightAge);
-	}
+
+	// ------ TargetCharacter 잊어버리는 로직 주석처리 ----------
+	/*  
+	* else
+	*{
+	*	GetBlackboardComponent()->SetValueAsBool("HasLineOfSight", false);
+	*	GetWorldTimerManager().SetTimer(SightLossTimerHandle, this, &AAIControllerBase::ResetTargetPerception, 1.0f, false, MaxSightAge);
+	*}
+	*/
 }
 
 void AAIControllerBase::ResetTargetPerception()
