@@ -112,6 +112,15 @@ private:
 
 	bool bIsChapterFinished = false;
 
+
+//========= Save System ================
+public:
+	UFUNCTION(BlueprintCallable)
+		void SetTutorialCompletion(bool bCompleted);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetTutorialCompletion();
+
 //========= Widget =====================
 public:
 	//Result widget

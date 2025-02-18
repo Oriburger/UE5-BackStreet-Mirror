@@ -97,7 +97,7 @@ void UAnimNotifyState_SlashMultiEnemy::ApplyDamageWithInterval(AActor* TargetAct
 
 	FCharacterGameplayInfo gameplayInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfo();
 	bool bIsFatalAttack = false;
-	float totalDamage = OwnerCharacterRef.Get()->WeaponComponent->CalculateTotalDamage(gameplayInfo, bIsFatalAttack);
+	float totalDamage = OwnerCharacterRef.Get()->WeaponComponent->GetWeaponStat().WeaponDamage;
 	
 	UGameplayStatics::ApplyDamage(TargetActor, totalDamage * DamageMultipiler, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
 	
