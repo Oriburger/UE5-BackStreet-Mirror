@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hans\n"
-"POT-Creation-Date: 2025-02-12 02:34\n"
-"PO-Revision-Date: 2025-02-12 02:34\n"
+"POT-Creation-Date: 2025-02-19 06:05\n"
+"PO-Revision-Date: 2025-02-19 06:05\n"
 "Language-Team: \n"
 "Language: zh-Hans\n"
 "MIME-Version: 1.0\n"
@@ -1368,22 +1368,22 @@ msgstr "您将放弃获取增幅芯片。\\\r\\\n此选择不可撤销。\\\r\\\
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 msgctxt "ST_EasyGameUICommon,Ability"
-msgid "Ability"
-msgstr "能力"
+msgid "Boosterchip"
+msgstr "增幅芯片"
 
 #. Key:	Ability_Description
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 msgctxt "ST_EasyGameUICommon,Ability_Description"
-msgid "Ability_Description"
-msgstr "能力描述"
+msgid "Boosterchip Description"
+msgstr "增幅芯片描述"
 
 #. Key:	Ability_Name
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 msgctxt "ST_EasyGameUICommon,Ability_Name"
-msgid "Ability_Name"
-msgstr "能力名称"
+msgid "Boosterchip Name"
+msgstr "增幅芯片名称"
 
 #. Key:	Button_Apply
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1776,6 +1776,13 @@ msgstr "描述"
 msgctxt "ST_EasyGameUICommon,ExitGame_Warning"
 msgid "Do you really want to exit the game?"
 msgstr "你真的要退出游戏吗？"
+
+#. Key:	Guide
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Guide"
+msgid "Guide"
+msgstr "游戏指南"
 
 #. Key:	High_Quality_Setting
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -3111,57 +3118,57 @@ msgstr "冲刺"
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Battle_1"
-msgid "<Medium.26>[Combat Guide]</>\r\n<Default>Master the art of combat in BackStreet</>. \r\nUse your skills and tactics to overcome enemies and thrive in the desolate city.\r\n\r\n<Medium.24>[Combo Types]</>\r\n- Standard Combo: Chain basic attacks for a steady damage output.\r\n- Dash Combo:  Launch a swift attack while dashing, with the final hit dealing area damage to multiple enemies.\r\n- Air Combo: Strike enemies mid-air for high damage and strategic advantage.\r\n\r\n<Medium.24>[Battle Tips]</>\r\n- Ranged Enemies: Attack from a distance with projectiles. Use agility to close the gap.\r\n- Melee Enemies: Engage in close quarters. Time your attacks to counter them effectively.\r\n- Roll to Evade: Avoid enemy attacks and projectiles by rolling. Perfect timing can save your life.\r\n\r\n<Default>Practice these techniques to dominate the battlefield and prepare for the ultimate challenge!</>"
-msgstr "<Medium.26>[战斗指南]</>\r\n<Default>掌握《BackStreet》中的战斗艺术</>。\r\n运用你的技能和战术来战胜敌人，在荒废的城市中生存。\r\n\r\n<Medium.24>[连击类型]</>\r\n- 标准连击：连续使用基本攻击，以稳定输出伤害。\r\n- 冲刺连击：在冲刺时发动迅速攻击，最后一击对多个敌人造成范围伤害。\r\n- 空中连击：在空中攻击敌人，造成高伤害并获得战术优势。\r\n\r\n<Medium.24>[战斗技巧]</>\r\n- 远程敌人：使用投射物远程攻击敌人，并利用敏捷性缩短距离。\r\n- 近战敌人：近距离作战，掌握攻击时机，以有效反击。\r\n- 翻滚躲避：通过翻滚躲避敌人的攻击和投射物，完美的时机能挽救你的生命。\r\n\r\n<Default>练习这些技巧，称霸战场，为终极挑战做好准备！</>"
+msgid "<Bold.24>[Combat Guide]</>\r\n- Master the art of combat in BackStreet.\r\n- Use your skills and tactics to overcome enemies and thrive in the desolate city.\r\n\r\n<Medium.24>[Combo Types]</>\r\n- Standard Combo: Chain basic attacks for a steady damage output.\r\n- Dash Combo:  Launch a swift attack while dashing, with the final hit dealing area damage to multiple enemies.\r\n- Air Combo: Strike enemies mid-air for high damage and strategic advantage.\r\n\r\n<Medium.24>[Battle Tips]</>\r\n- Ranged Enemies: Attack from a distance with projectiles. Use agility to close the gap.\r\n- Melee Enemies: Engage in close quarters. Time your attacks to counter them effectively.\r\n- Roll to Evade: Avoid enemy attacks and projectiles by rolling. Perfect timing can save your life.\r\n\r\n<Bold.22>Practice these techniques to dominate the battlefield and prepare for the ultimate challenge!</>"
+msgstr "<Bold.24>[战斗指南]</>\r\n掌握《BackStreet》中的战斗艺术。\r\n运用你的技能和战术来战胜敌人，在荒废的城市中生存。\r\n\r\n<Medium.24>[连击类型]</>\r\n- 标准连击：连续使用基本攻击，以稳定输出伤害。\r\n- 冲刺连击：在冲刺时发动迅速攻击，最后一击对多个敌人造成范围伤害。\r\n- 空中连击：在空中攻击敌人，造成高伤害并获得战术优势。\r\n\r\n<Medium.24>[战斗技巧]</>\r\n- 远程敌人：使用投射物远程攻击敌人，并利用敏捷性缩短距离。\r\n- 近战敌人：近距离作战，掌握攻击时机，以有效反击。\r\n- 翻滚躲避：通过翻滚躲避敌人的攻击和投射物，完美的时机能挽救你的生命。\r\n\r\n<Bold.22>练习这些技巧，称霸战场，为终极挑战做好准备！</>"
 
 #. Key:	Tutorial_Boosterchip
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Boosterchip"
-msgid "<Medium.26>[Booster Chip Guide]</>\r\n\r\n<Default>Enhance your combat power with over 100 different booster chips for a more powerful gameplay experience.</>\r\n\r\n<Medium.24>[Types of Booster Chips]</>\r\n\r\nCombo Upgrade Type: Enhances the abilities of key combos (basic, jump, dash) and applies debuff effects.\r\nBase Stat Enhancement Chips: Increases core attributes such as attack power, defense, speed, and survivability.\r\n<Medium.24>[How to Obtain]</>\r\n\r\nStage Completion Rewards: Randomly provided upon clearing each stage.\r\n<Medium.24>[How to Use]</>\r\n\r\nAuto-Equip: Automatically activated upon acquisition.\r\n<Default>With over 100 types of booster chips available, strategically combine them to tailor your combat style and maximize your effectiveness on the battlefield!</>"
-msgstr "<Medium.26>[增幅芯片指南]</>\r\n\r\n<Default>使用超过100种不同的增幅芯片来增强战斗能力，打造更强大的游戏体验。</>\r\n\r\n<Medium.24>[增幅芯片类型]</>\r\n\r\n- 连击强化型：增强关键连击（基础、跳跃、冲刺）的能力，并施加负面效果。\r\n- 基础属性强化型：提高攻击力、防御力、速度和生存能力等核心属性。\r\n\r\n<Medium.24>[如何获取]</>\r\n\r\n- 关卡奖励：通关后随机获得。\r\n\r\n<Medium.24>[如何使用]</>\r\n\r\n- 自动装备：获得后自动激活。\r\n\r\n<Default>使用超过100种不同的增幅芯片，策略性地组合它们，以适应你的战斗风格，并在战场上发挥最大作用！</>"
+msgid "<Bold.24>[Booster Chip Guide]</>\r\n- Enhance your combat power with over 100 different booster chips for a more powerful gameplay experience.\r\n\r\n<Medium.24>[Types of Booster Chips]</>\r\n- Combo Upgrade Type: Enhances the abilities of key combos (basic, jump, dash) and applies debuff effects.\r\n- Base Stat Enhancement Chips: Increases core attributes such as attack power, defense, speed, and survivability.\r\n\r\n<Medium.24>[How to Obtain]</>\r\n- Stage Completion Rewards: Randomly provided upon clearing each stage.\r\n\r\n<Medium.24>[How to Use]</>\r\n- Auto-Equip: Automatically activated upon acquisition.\r\n\r\n<Bold.22>With over 100 types of booster chips available, strategically combine them to tailor your combat style and maximize your effectiveness on the battlefield!</>"
+msgstr "<Bold.24>[增幅芯片指南]</>\r\n使用超过100种不同的增幅芯片来增强战斗能力，打造更强大的游戏体验。\r\n\r\n<Medium.24>[增幅芯片类型]</>  \r\n- 连击强化型：增强关键连击（基础、跳跃、冲刺）的能力，并施加负面效果。  \r\n- 基础属性强化型：提高攻击力、防御力、速度和生存能力等核心属性。\r\n\r\n<Medium.24>[如何获取]</>  \r\n- 关卡奖励：通关后随机获得。\r\n\r\n<Medium.24>[如何使用]</>  \r\n- 自动装备：获得后自动激活。\r\n\r\n<Bold.22>使用超过100种不同的增幅芯片，策略性地组合它们，以适应你的战斗风格，并在战场上发挥最大作用！</>"
 
 #. Key:	Tutorial_Debuff
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Debuff"
-msgid "<Medium.26>[Debuff Guide]</>\r\n<Default>Apply various debuffs to enemies using sub weapons and skills and boosters</>.\r\n\r\n<Medium.24>[Types of Debuffs]</>\r\n- Fire, Corrosion: Inflict continuous damage over time (DoT).\r\n- Slow: Significantly reduce enemy movement speed.\r\n- Attack and Defense Down: Weaken enemy attack power and defense.\r\n- Stun: Temporarily immobilize enemies.\r\n\r\n<Medium.24>[How to Utilize]</>\r\nStrategically apply debuffs using sub weapons and skills to gain the upper hand in battles!\r\n\r\n<Default>Use Debuffs to effectively control and defeat your enemies.</>"
-msgstr "<Medium.26>[负面效果指南]</>\r\n<Default>利用副武器、技能和增幅芯片对敌人施加各种负面效果。</>\r\n\r\n<Medium.24>[负面效果类型]</>\r\n- 火焰、腐蚀：持续造成伤害（DoT）。\r\n- 减速：显著降低敌人的移动速度。\r\n- 攻击和防御下降：削弱敌人的攻击力和防御力。\r\n- 眩晕：暂时使敌人无法行动。\r\n\r\n<Medium.24>[如何利用]</>\r\n策略性地使用副武器和技能施加负面效果，在战斗中占据上风！\r\n\r\n<Default>运用负面效果，有效控制并击败敌人。</>"
+msgid "<Bold.24>[Debuff Guide]</>\r\n- Apply various debuffs to enemies using sub weapons and skills and boosters.\r\n\r\n<Medium.24>[Types of Debuffs]</>\r\n- Fire, Corrosion: Inflict continuous damage over time (DoT).\r\n- Slow: Significantly reduce enemy movement speed.\r\n- Attack and Defense Down: Weaken enemy attack power and defense.\r\n- Stun: Temporarily immobilize enemies.\r\n\r\n<Medium.24>[How to Utilize]</>\r\nStrategically apply debuffs using sub weapons and skills to gain the upper hand in battles!\r\n\r\n<Bold.22>Use Debuffs to effectively control and defeat your enemies.</>"
+msgstr "<Bold.24>[负面效果指南]</>\r\n利用副武器、技能和增幅芯片对敌人施加各种负面效果。\r\n\r\n<Medium.24>[负面效果类型]</>  \r\n- 火焰、腐蚀：持续造成伤害（DoT）。  \r\n- 减速：显著降低敌人的移动速度。  \r\n- 攻击和防御下降：削弱敌人的攻击力和防御力。  \r\n- 当机：暂时使敌人无法行动。\r\n\r\n<Medium.24>[如何利用]</>  \r\n策略性地使用副武器和技能施加负面效果，在战斗中占据上风！\r\n\r\n<Bold.22>运用负面效果，有效控制并击败敌人。</>"
 
 #. Key:	Tutorial_Entry
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Entry"
-msgid "<Medium.26>[Welcome!]</>\r\n\r\n<Default>Welcome to BackStreet</>.\r\nTo survive here, you must face off against robots in a desolate city.\r\n\r\n<Medium.24>[Background]</>\r\nYou must defeat the central AI that rules the city, <Medium.24>3COS</>, and recover your lost memories.\r\n\r\n<Medium.24>[Objectives]</>\r\n\r\nBattle hordes of robots to hone your skills and survival instincts.\r\nGrow stronger with skills and booster chips obtained from the city.\r\nLiberate the empty dystopian city through the final showdown."
-msgstr "<Medium.26>[欢迎！]</>\r\n\r\n<Default>欢迎来到《BackStreet》</>。\r\n要在这里生存，你必须在荒废的城市中与机器人作战。\r\n\r\n<Medium.24>[背景]</>\r\n你必须击败统治这座城市的中央 AI——<Medium.24>3COS</>，并找回你失去的记忆。\r\n\r\n<Medium.24>[目标]</>\r\n\r\n- 与成群的机器人作战，磨练你的战斗技能和生存本能。\r\n- 通过在城市中获得技能和增幅芯片来提升自身实力。\r\n- 在最终决战中解放这座荒废的反乌托邦城市。"
+msgid "<Bold.24>[Welcome!]</>\r\n- Welcome to BackStreet.\r\n- To survive here, you must face off against robots in a desolate city.\r\n\r\n<Medium.24>[Background]</>  \r\n- You must defeat the central AI that rules the city, <Medium.26>3COS</>, and recover your lost memories.\r\n\r\n<Medium.24>[Objectives]</>  \r\n- Battle hordes of robots to hone your skills and survival instincts.  \r\n- Grow stronger with skills and booster chips obtained from the city.  \r\n- Liberate the empty dystopian city through the final showdown."
+msgstr "<Bold.24>[欢迎！]</>\r\n欢迎来到《BackStreet》。  \r\n要在这里生存，你必须在荒废的城市中与机器人作战。\r\n\r\n<Medium.24>[背景]</>  \r\n你必须击败统治这座城市的中央 AI——<Medium.24>3COS</>，并找回你失去的记忆。\r\n\r\n<Medium.24>[目标]</>  \r\n- 与成群的机器人作战，磨练你的战斗技能和生存本能。  \r\n- 通过在城市中获得技能和增幅芯片来提升自身实力。  \r\n- 在最终决战中解放这座荒废的反乌托邦城市。  "
 
 #. Key:	Tutorial_Entry_2
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Entry_2"
-msgid "<Medium.26>[Notice!]</>\r\n<Default>This is a demo version of BackStreet</>.\r\nPlease note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>\r\nLimited access to stages, characters, and abilities. Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>\r\nPlaceholder assets may appear during gameplay. Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>\r\nYour feedback is crucial to improving the game! Report bugs and provide suggestions through our feedback form. Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>\r\nEnjoy the sneak peek of BackStreet, and stay tuned for the full version's release!"
-msgstr "<Medium.26>[公告！]</>\r\n<Default>这是《BackStreet》的演示版本</>。\r\n请注意，该版本可能与最终发布版本有所不同。\r\n\r\n<Medium.24>[演示版特点]</>\r\n- 仅能访问部分关卡、角色和技能。\r\n- 一些功能（如高级 AI 行为和最终过场动画）尚未包含。\r\n\r\n<Medium.24>[已知问题]</>\r\n- 游戏过程中可能会出现占位资产。\r\n- 部分动画和音效仍在开发中。\r\n\r\n<Medium.24>[反馈请求]</>\r\n你的反馈对游戏的改进至关重要！请通过反馈表提交 bug 报告和建议，并加入我们的社区频道参与讨论和获取最新消息。\r\n\r\n<Medium.24>[最终说明]</>\r\n请享受《BackStreet》的抢先体验，并期待完整版本的发布！"
+msgid "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Placeholder assets may appear during gameplay.  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
+msgstr "<Bold.24>[公告！]</>\r\n这是《BackStreet》的演示版本。  \r\n请注意，该版本可能与最终发布版本有所不同。\r\n\r\n<Medium.24>[演示版特点]</>  \r\n- 仅能访问部分关卡、角色和技能。  \r\n- 一些功能（如高级 AI 行为和最终过场动画）尚未包含。  \r\n\r\n<Medium.24>[已知问题]</>  \r\n- 游戏过程中可能会出现占位资产。  \r\n- 部分动画和音效仍在开发中。  \r\n\r\n<Medium.24>[反馈请求]</>  \r\n你的反馈对游戏的改进至关重要！  \r\n请通过反馈表提交 bug 报告和建议，并加入我们的社区频道参与讨论和获取最新消息。  \r\n\r\n<Bold.22>请享受《BackStreet》的抢先体验，并期待完整版本的发布！</>"
 
 #. Key:	Tutorial_Reward_1
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Reward_1"
-msgid "<Medium.26>[Item Reward Guide]</>\r\n\r\n<Default>Receive various item rewards to enhance your survival and power</>.\r\n\r\n<Medium.24>[Healing Packs]</>\r\n- Types: Small, Medium, Large healing packs.\r\n- How to Obtain:\r\n  - Randomly awarded as stage rewards.\r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>\r\n- Purpose: Used to craft and enhance skills.\r\n- How to Obtain:\r\n  - Automatically collected from defeated enemies.\r\n- Skill Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Default>Utilize healing packs and crafting materials effectively to strengthen your character and progress through challenges!</>"
-msgstr "<Medium.26>[物品奖励指南]</>\r\n\r\n<Default>获取各种物品奖励，以增强你的生存能力和战斗力</>。\r\n\r\n<Medium.24>[治疗包]</>\r\n- 类型：小型、中型、大型治疗包。\r\n- 获取方式：\r\n  - 作为关卡奖励随机获得。\r\n  - 在游戏过程中按 'F' 键收集。\r\n\r\n<Medium.24>[制作材料]</>\r\n- 作用：用于制作和强化技能。\r\n- 获取方式：\r\n  - 自动从被击败的敌人处收集。\r\n- 技能制作：仅在指定的“制作关卡”中可用。\r\n\r\n<Default>合理使用治疗包和制作材料，强化角色并克服挑战！</>"
+msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Healing Packs]</>  \r\n- Types: Small, Medium, Large healing packs.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skills.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively to strengthen your character and progress through challenges!</>"
+msgstr "<Bold.24>[物品奖励指南]</>\r\n获取各种物品奖励，以增强你的生存能力和战斗力。\r\n\r\n<Medium.24>[治疗包]</>  \r\n- 类型：小型、中型、大型治疗包。  \r\n- 获取方式：  \r\n  - 作为关卡奖励随机获得。  \r\n  - 在游戏过程中按 'F' 键收集。  \r\n\r\n<Medium.24>[制作材料]</>  \r\n- 作用：用于制作和强化技能。  \r\n- 获取方式：  \r\n  - 自动从被击败的敌人处收集。  \r\n- 技能制作：仅在指定的“制作关卡”中可用。  \r\n\r\n<Bold.22>合理使用治疗包和制作材料，强化角色并克服挑战！</>"
 
 #. Key:	Tutorial_Stage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Stage"
-msgid "<Medium.26>[Stage System Guide]</>\r\n<Default>Explore various stages across chapters with unique challenges and rewards.</>\r\n\r\n<Medium.24>[Chapter Structure]</>\r\n- Each Chapter consists of approximately 11 stages.\r\n- 2 Craft Stages per chapter, offering a choice between two paths.\r\n- Reward System: All rewards are provided randomly, adding an element of surprise to each playthrough.\r\n\r\n<Medium.24>[Stage Selection]</>\r\n- At certain points in a chapter, you can select between two paths, each with different challenges and rewards.\r\n- Choose wisely, as each path can impact your progression and available resources.\r\n\r\n<Default>Prepare for a thrilling journey where each stage brings new opportunities and risks, and the rewards are always unpredictable!</>"
-msgstr "<Medium.26>[关卡系统指南]</>\r\n<Default>探索各个章节中的不同关卡，迎接独特挑战并获取奖励。</>\r\n\r\n<Medium.24>[章节结构]</>\r\n- 每个章节大约包含 11 个关卡。\r\n- 每个章节有 2 个制作关卡，玩家可以在两个不同的路线之间进行选择。\r\n- 奖励系统：所有奖励均为随机提供，为每次游戏体验增添惊喜元素。\r\n\r\n<Medium.24>[关卡选择]</>\r\n- 在章节的某些节点，你可以选择两条不同的路径，每条路径都包含不同的挑战和奖励。\r\n- 做出明智的选择，因为你的决定会影响游戏进程和可用资源。\r\n\r\n<Default>为激动人心的冒险做好准备，每个关卡都充满新的机遇和风险，奖励也总是充满未知！</>"
+msgid "<Bold.24>[Stage System Guide]</>\r\n- Explore various stages across chapters with unique challenges and rewards.\r\n\r\n<Medium.24>[Chapter Structure]</>  \r\n- Each Chapter consists of approximately 11 stages.  \r\n- 2 Craft Stages per chapter, offering a choice between two paths.  \r\n- **Reward System**: All rewards are provided randomly, adding an element of surprise to each playthrough.\r\n\r\n<Medium.24>[Stage Selection]</>  \r\n- At certain points in a chapter, you can select between two paths, each with different challenges and rewards.  \r\n- Choose wisely, as each path can impact your progression and available resources.\r\n\r\n<Bold.22>Prepare for a thrilling journey where each stage brings new opportunities and risks, and the rewards are always unpredictable!</>\r\n"
+msgstr "<Bold.24>[关卡系统指南]</>\r\n探索各个章节中的不同关卡，迎接独特挑战并获取奖励。\r\n\r\n<Medium.24>[章节结构]</>  \r\n- 每个章节大约包含 11 个关卡。  \r\n- 每个章节有 2 个制作关卡，玩家可以在两个不同的路线之间进行选择。  \r\n- 奖励系统：所有奖励均为随机提供，为每次游戏体验增添惊喜元素。  \r\n\r\n<Medium.24>[关卡选择]</>  \r\n- 在章节的某些节点，你可以选择两条不同的路径，每条路径都包含不同的挑战和奖励。  \r\n- 做出明智的选择，因为你的决定会影响游戏进程和可用资源。  \r\n\r\n<Bold.22>为激动人心的冒险做好准备，每个关卡都充满新的机遇和风险，奖励也总是充满未知！</>"
 
 #. Key:	Tutorial_SubWeapon
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_SubWeapon"
-msgid "<Medium.26>[Sub Weapon Guide]</>\r\n<Default>Utilize various auxiliary weapons to support your battles</>.\r\nWhen used effectively, they can turn the tide of combat.\r\n\r\n<Medium.24>[How to Use]</>\r\n- During Combos: Press Right-Click to fire instantly during a combo.\r\n- Aimed Use: Press Right-Click to aim, then Left-Click to fire.\r\n\r\n<Medium.24>[How to Obtain, Types of Sub Weapons]</>\r\n- Sub weapons can be found in trash bags scattered throughout the map.\r\n- Bubblegum / Aluminum Cans / Cigarette Butts / etc.."
-msgstr "<Medium.26>[副武器指南]</>\r\n<Default>使用各种辅助武器来支持你的战斗。</>\r\n正确使用时，它们可以扭转战局。\r\n\r\n<Medium.24>[如何使用]</>\r\n- 在连击过程中：按下右键可立即在连击中发射。\r\n- 瞄准射击：按下右键进行瞄准，然后按左键开火。\r\n\r\n<Medium.24>[如何获取，副武器类型]</>\r\n- 副武器可以在地图上散落的垃圾袋中找到。\r\n- 口香糖 / 铝罐 / 香烟烟蒂等..."
+msgid "<Medium.24>[Sub Weapon Guide]</>\r\n- Utilize various auxiliary weapons to support your battles.\r\n- When used effectively, they can turn the tide of combat.\r\n\r\n<Medium.24>[How to Use]</>\r\n- During Combos: Press Right-Click to fire instantly during a combo.\r\n- Aimed Use: Press Right-Click to aim, then Left-Click to fire.\r\n\r\n<Medium.24>[How to Obtain, Types of Sub Weapons]</>\r\n- Sub weapons can be found in trash bags scattered throughout the map.\r\n- Bubblegum / Aluminum Cans / Cigarette Butts / etc.."
+msgstr "<Bold.24>[副武器指南]</>\r\n使用各种辅助武器来支持你的战斗。  \r\n正确使用时，它们可以扭转战局。\r\n\r\n<Medium.24>[如何使用]</>  \r\n- 在连击过程中：按下右键可立即在连击中发射。  \r\n- 瞄准射击：按下右键进行瞄准，然后按左键开火。  \r\n\r\n<Medium.24>[如何获取，副武器类型]</>  \r\n- 副武器可以在地图上散落的垃圾袋中找到。  \r\n- 口香糖 / 铝罐 / 香烟烟蒂等...  "
 
 #. Key:	UI_Elimate_Enemy
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
