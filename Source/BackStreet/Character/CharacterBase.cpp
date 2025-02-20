@@ -63,6 +63,7 @@ void ACharacterBase::BeginPlay()
 		AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
 	}
 	LandedDelegate.AddDynamic(this, &ACharacterBase::OnPlayerLanded);
+	SkillManagerComponent->OnSkillDeactivated.AddDynamic(this, &ACharacterBase::OnSkillDeactivated);
 }
 
 // Called every frame
@@ -295,6 +296,12 @@ void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
 	}
 	//Test code for knockdown on ground event
 	//UE_LOG(LogTemp, Warning, TEXT("$Land %s  / Speed %.2lf$"), *(this->GetName()), this->GetVelocity().Length());
+}
+
+void ACharacterBase::OnSkillDeactivated(FSkillInfo PrevSkillInfo)
+{
+	OnSkillEnded.Broadcast();
+	ResetActionState();
 }
 
 void ACharacterBase::ResetHitCounter()
@@ -653,18 +660,23 @@ void ACharacterBase::TryDashAttack()
 
 bool ACharacterBase::TrySkill(int32 SkillID)
 {
-	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Skill
+	if (ActionTrackingComponent->GetIsActionInProgress("Skill")
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Stun
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_KnockedDown) return false;
 
-	CharacterGameplayInfo.bCanAttack = false;
-	SetActionState(ECharacterActionType::E_Skill);
-	SkillManagerComponent->TryActivateSkill(SkillID);
-	
-	//Reset Combo
-	ActionTrackingComponent->ResetComboCount();
-	return true;
+	bool result = SkillManagerComponent->TryActivateSkill(SkillID);
+	if (result)
+	{
+		//Reset Combo
+		CharacterGameplayInfo.bCanAttack = false;
+		SetActionState(ECharacterActionType::E_Skill);
+
+		ActionTrackingComponent->ResetComboCount();
+		OnSkillStarted.Broadcast();
+	}
+
+	return result;
 }
 
 void ACharacterBase::Attack()

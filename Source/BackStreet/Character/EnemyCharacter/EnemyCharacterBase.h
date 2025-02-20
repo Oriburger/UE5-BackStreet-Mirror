@@ -97,8 +97,7 @@ public:
 	UFUNCTION()
 		void ResetAiBehaviorState();
 
-	UFUNCTION()
-		void OnSkillDeactivated(FSkillInfo SkillInfo) { ResetAiBehaviorState(); }
+	virtual void OnSkillDeactivated(FSkillInfo SkillInfo) override { ResetAiBehaviorState(); }
 
 	UFUNCTION()
 		void TakeKnockBack(float KnockbackForce, float KnockbackResist);
