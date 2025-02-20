@@ -321,7 +321,7 @@ void ACharacterBase::StandUp()
 
 void ACharacterBase::InitCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo)
 {
-	if (CharacterGameplayInfo.bUseDefaultStat)
+	if (NewGameplayInfo.bUseDefaultStat || CharacterGameplayInfo.bUseDefaultStat)
 	{
 		if (!NewGameplayInfo.IsValid()) return;
 		CharacterGameplayInfo = NewGameplayInfo;
@@ -348,6 +348,20 @@ float ACharacterBase::GetMaxHP()
 bool ACharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)
 {
 	if (!GamemodeRef.IsValid()) return false;
+
+	//Resist 스탯 적용
+	switch (DebuffInfo.Type)
+	{
+	case ECharacterDebuffType::E_Stun:
+		DebuffInfo.TotalTime *= (1.0f - FMath::Clamp(GetStatTotalValue(ECharacterStatType::E_StunResist), 0.0f, 1.0f));
+		break;
+	case ECharacterDebuffType::E_Slow:
+	case ECharacterDebuffType::E_Poison:
+	case ECharacterDebuffType::E_Burn:
+		DebuffInfo.Variable *= (1.0f - FMath::Clamp(GetStatTotalValue(ECharacterStatType::E_StunResist), 0.0f, 1.0f));
+		break;
+	}
+
 	bool result = DebuffManagerComponent->SetDebuffTimer(DebuffInfo, Causer);
 	return result;
 }
