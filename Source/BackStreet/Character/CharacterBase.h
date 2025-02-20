@@ -186,6 +186,9 @@ protected:
 		void OnPlayerLanded(const FHitResult& Hit);
 
 	UFUNCTION()
+		virtual void OnSkillDeactivated(FSkillInfo PrevSkillInfo);
+
+	UFUNCTION()
 		void ResetHitCounter();	
 
 	virtual TArray<UAnimMontage*> GetTargetMeleeAnimMontageList();

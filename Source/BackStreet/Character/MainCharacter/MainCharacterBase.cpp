@@ -603,7 +603,7 @@ bool AMainCharacterBase::TrySkill(int32 SkillID)
 	{
 		StopAttack();
 	}
-	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Skill
+	if (ActionTrackingComponent->GetIsActionInProgress("Skill")
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Stun
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die
 		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_KnockedDown) return false;
