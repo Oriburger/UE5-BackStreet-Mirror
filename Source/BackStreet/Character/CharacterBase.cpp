@@ -202,18 +202,6 @@ TArray<FName> ACharacterBase::GetCurrentMontageSlotName()
 	return slotName;
 }
 
-void ACharacterBase::SetAirAtkLocationUpdateTimer()
-{
-	GetWorldTimerManager().SetTimer(AirAtkLocationUpdateHandle, this, &ACharacterBase::SetAirAttackLocation, 0.1, true);
-}
-
-void ACharacterBase::ResetAirAtkLocationUpdateTimer()
-{
-	CharacterGameplayInfo.bIsAirAttacking = false;
-	GetWorldTimerManager().ClearTimer(AirAtkLocationUpdateHandle);
-	AirAtkLocationUpdateHandle.Invalidate();
-}
-
 void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset)
 {
 	FVector currentLocation = GetActorLocation();
@@ -233,43 +221,6 @@ void ACharacterBase::UpdateLocation(const FVector TargetValue, const float Inter
 	FRotator newRotation = GetActorRotation();
 	newRotation.Pitch = 0.0f;
 	SetActorRotation(newRotation);
-}
-
-void ACharacterBase::SetAirAttackLocation()
-{
-	if (!GetCharacterMovement()->IsFalling()) return;
-
-	//Set collision query params
-	FCollisionQueryParams collisionQueryParam;
-	collisionQueryParam.AddIgnoredActor(this);
-
-	//execute linetrace
-	TArray<FHitResult> hitResults;
-	const float jumpHeight = 800.0f;
-
-	TArray<TEnumAsByte<EObjectTypeQuery>> objectTypes;
-	TEnumAsByte<EObjectTypeQuery> worldStatic = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldStatic);
-	TEnumAsByte<EObjectTypeQuery> worldDynamic = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldDynamic);
-	objectTypes.Add(worldStatic);
-	objectTypes.Add(worldDynamic);
-
-	UKismetSystemLibrary::LineTraceMultiForObjects(GetWorld(), GetActorLocation()
-		, GetActorLocation() - FVector(0.0f, 0.0f, jumpHeight), objectTypes, false, { this }
-		, EDrawDebugTrace::None, hitResults, true);
-
-	//For Debug // Do not erase this comment
-	//DrawDebugLine(GetWorld(), GetActorLocation(), GetActorLocation() - FVector(0.0f, 0.0f, jumpHeight), FColor::Yellow
-	//	, false, 800.0f, 1u, 5.0f);
-
-	if (hitResults.Num() > 0)
-	{
-		FHitResult result = hitResults[hitResults.Num() - 1];
-		if (result.bBlockingHit)
-		{
-			float dist = FVector::Distance(result.Location, GetActorLocation());
-			LaunchCharacter({ 0.0f, 0.0f, (jumpHeight - dist) * 5.0f }, true, true);
-		}
-	}
 }
 
 void ACharacterBase::OnPlayerLanded(const FHitResult& Hit)
