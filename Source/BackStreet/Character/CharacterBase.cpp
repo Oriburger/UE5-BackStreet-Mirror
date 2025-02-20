@@ -347,7 +347,7 @@ float ACharacterBase::GetMaxHP()
 
 bool ACharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)
 {
-	if (!GamemodeRef.IsValid()) return false;
+	if (!GamemodeRef.IsValid() || CharacterGameplayInfo.bIsInvincibility) return false;
 
 	//Resist 스탯 적용
 	switch (DebuffInfo.Type)
@@ -361,8 +361,12 @@ bool ACharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Cause
 		DebuffInfo.Variable *= (1.0f - FMath::Clamp(GetStatTotalValue(ECharacterStatType::E_StunResist), 0.0f, 1.0f));
 		break;
 	}
-
 	bool result = DebuffManagerComponent->SetDebuffTimer(DebuffInfo, Causer);
+	if (result && DebuffInfo.Type == ECharacterDebuffType::E_Stun)
+	{
+		SkillManagerComponent->DeactivateCurrentSkill(); //Force Deactivate Skill
+	}
+
 	return result;
 }
 
