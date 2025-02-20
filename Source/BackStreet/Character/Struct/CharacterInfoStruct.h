@@ -111,8 +111,9 @@ public:
 	}
 	inline void UpdateTotalValue()
 	{
-		TotalValue = DefaultValue
-			+ DefaultValue * (AbilityRateValue + SkillRateValue - DebuffRateValue);
+		TotalValue = DefaultValue != 0.0f
+					? DefaultValue + DefaultValue * (AbilityRateValue + SkillRateValue - DebuffRateValue)
+					: (AbilityRateValue + SkillRateValue - DebuffRateValue);
 
 		if (MaxValue != 0.0f)
 		{
