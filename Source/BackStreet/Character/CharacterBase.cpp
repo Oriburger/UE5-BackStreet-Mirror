@@ -839,7 +839,6 @@ void ACharacterBase::SetAsset()
 		{
 			UE_LOG(LogTemp, Error, TEXT("ACharacterBase::SetAsset() for %s,  Weapon attachment is falied"), *UKismetSystemLibrary::GetDisplayName(this));
 		}
-		WeaponComponent->SetRelativeLocationAndRotation(FVector(0.0f), FRotator::ZeroRotator);
 	}
 	else
 	{
