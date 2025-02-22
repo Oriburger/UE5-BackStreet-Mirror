@@ -558,7 +558,8 @@ void AMainCharacterBase::TryAttack()
 	this->Tags.Add("Attack|Common");
 
 	if (CharacterGameplayInfo.bIsSprinting && !CharacterGameplayInfo.bIsAirAttacking
-		&& !CharacterGameplayInfo.bIsDownwardAttacking && !GetCharacterMovement()->IsFalling())
+		&& !CharacterGameplayInfo.bIsDownwardAttacking && !GetCharacterMovement()->IsFalling()
+		&& ActionTrackingComponent->GetIsActionReady	("DashAttack"))
 	{
 		TryDashAttack();
 		return;
