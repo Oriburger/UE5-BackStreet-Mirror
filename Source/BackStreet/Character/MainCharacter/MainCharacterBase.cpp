@@ -99,12 +99,6 @@ void AMainCharacterBase::BeginPlay()
 	
 	TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
 	SetAutomaticRotateModeTimer();
-
-	//Crash 방지
-	if (GamemodeRef.IsValid() && IsValid(GamemodeRef.Get()->GetChapterManagerRef()))
-	{
-		GamemodeRef.Get()->GetChapterManagerRef()->OnChapterCleared.AddDynamic(this, &AMainCharacterBase::ClearAllTimerHandle);
-	}
 }
 
 // Called every frame
@@ -389,7 +383,8 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X * CameraSensivity);
 		AddControllerPitchInput(LookAxisVector.Y * CameraSensivity);
 		SetManualRotateMode();
-		SetAutomaticRotateModeTimer();
+		if (!UGameplayStatics::IsGamePaused(GetWorld()))
+			SetAutomaticRotateModeTimer();
 	}
 }
 
@@ -707,6 +702,7 @@ void AMainCharacterBase::ResetCameraRotation()
 
 void AMainCharacterBase::SetAutomaticRotateModeTimer()
 {
+	if (UGameplayStatics::IsGamePaused(GetWorld())) return;
 	GetWorldTimerManager().ClearTimer(SwitchCameraRotateModeTimerHandle);
 	SwitchCameraRotateModeTimerHandle.Invalidate();
 	GetWorldTimerManager().SetTimer(SwitchCameraRotateModeTimerHandle, this, &AMainCharacterBase::SetAutomaticRotateMode, AutomaticModeSwitchTime);
@@ -714,7 +710,7 @@ void AMainCharacterBase::SetAutomaticRotateModeTimer()
 
 void AMainCharacterBase::SetAutomaticRotateMode()
 {
-	if (TargetingManagerComponent->GetIsTargetingActivated()) return;
+	if (TargetingManagerComponent->GetIsTargetingActivated() || UGameplayStatics::IsGamePaused(GetWorld())) return;
 	
 	float currentPitch = GetControlRotation().Pitch;
 	if (currentPitch <= 0.0f || currentPitch >= 360.0f)
@@ -735,6 +731,12 @@ void AMainCharacterBase::SetAutomaticRotateMode()
 
 void AMainCharacterBase::UpdateCameraPitch(float TargetPitch, float InterpSpeed)
 {
+	if (UGameplayStatics::IsGamePaused(GetWorld()))
+	{
+		SetManualRotateMode();
+		return;
+	}
+
 	FRotator currentRotation = GetControlRotation();
 	if (FMath::IsNearlyEqual(currentRotation.Pitch, TargetPitch, 5.0f) || GetWorld()->IsPaused())
 	{
