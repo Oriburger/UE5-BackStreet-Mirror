@@ -84,6 +84,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void RegisterActorList(TArray<AActor*> TargetActorList);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsLoadingScreenActive() { return bIsLoadingScreenActive; }
+
 protected:
 	//Add loading screen
 	UFUNCTION()
@@ -156,6 +159,7 @@ private:
 	//The status of level instance load
 	//0 : done.   Over 0 : loading 
 	int32 LoadStatus = 0;
+	bool bIsLoadingScreenActive = false;
 
 	//Property for level instance load
 	float LoadTimeOut = 120.0f;

@@ -46,6 +46,13 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 	{
 		int32 stageIdx = StageGeneratorComponent->GetStageIdx(CurrentChapterInfo.CurrentStageCoordinate);
 		StageManagerComponent->InitStage(CurrentChapterInfo.StageInfoList[stageIdx]);
+
+		//MainCharacter 730 Crash ¹æÁö
+		AMainCharacterBase* playerRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		if(IsValid(playerRef))
+		{
+			OnChapterCleared.AddDynamic(playerRef, &AMainCharacterBase::ClearAllTimerHandle);
+		}
 	}
 	else
 	{

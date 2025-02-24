@@ -161,16 +161,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		TArray<FName> GetCurrentMontageSlotName();
 	
-	//Set air atk location update event timer
-	//This func is called by upper atk anim montage's notify
-	UFUNCTION(BlueprintCallable)
-		void SetAirAtkLocationUpdateTimer(); 
-
-	//Disable air atk location update event timer
-	//This func is called by downward atk anim montage's notify
-	UFUNCTION(BlueprintCallable)
-		void ResetAirAtkLocationUpdateTimer();
-	
 protected:
 	//interp function
 	//it must not be called alone.
@@ -179,8 +169,6 @@ protected:
 		void UpdateLocation(const FVector TargetValue, const float InterpSpeed = 1.0f, const bool bAutoReset = false);
 
 	//Set distance from ground for air attack
-	UFUNCTION()
-		void SetAirAttackLocation();
 
 	UFUNCTION()
 		void OnPlayerLanded(const FHitResult& Hit);

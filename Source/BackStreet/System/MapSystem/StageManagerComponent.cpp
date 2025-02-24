@@ -135,6 +135,7 @@ void UStageManagerComponent::AddLoadingScreen()
 	if (IsValid(LoadingWidgetRef))
 	{
 		LoadingWidgetRef->AddToViewport();
+		bIsLoadingScreenActive = true;
 	}
 }
 
@@ -144,6 +145,7 @@ void UStageManagerComponent::RemoveLoadingScreen()
 	if (IsValid(LoadingWidgetRef))
 	{
 		LoadingWidgetRef->Destruct();
+		bIsLoadingScreenActive = false;
 	}
 }
 

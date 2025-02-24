@@ -49,11 +49,12 @@ void AEnemyCharacterBase::BeginPlay()
 	Super::BeginPlay();
 	
 	SpawnDefaultController();
-	InitEnemyCharacter(CharacterID);
-	SetDefaultWeapon();
-
+	
 	CharacterGameplayInfo.bUseDefaultStat = true;
 
+	InitEnemyCharacter(CharacterID);
+	SetDefaultWeapon();
+	
 	if (IsValid(SkillManagerComponent))
 	{
 		SkillManagerComponent->OnSkillDeactivated.Clear();
@@ -81,10 +82,12 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	if (newStat != nullptr)
 	{
 		EnemyStat = *newStat;
-
 		//Set CharacterStat with setting default additional stat bInfinite (infinite use of ammo)
 		FCharacterGameplayInfo newInfo = FCharacterGameplayInfo(EnemyStat.DefaultStat);
+
 		newInfo.CharacterID = NewCharacterID;
+		newInfo.bUseDefaultStat = true;
+
 		InitCharacterGameplayInfo(newInfo);
 		CharacterGameplayInfo.bInfinite = true;
 		SetDefaultWeapon();

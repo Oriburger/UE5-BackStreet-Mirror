@@ -41,8 +41,5 @@ private:
 	UPROPERTY()
 		float CumulativeFrameTime = 0.0f;
 
-	UFUNCTION()
-	void CalculateShootDelayTime();
-
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 };
