@@ -559,7 +559,7 @@ void AMainCharacterBase::TryAttack()
 
 	if (CharacterGameplayInfo.bIsSprinting && !CharacterGameplayInfo.bIsAirAttacking
 		&& !CharacterGameplayInfo.bIsDownwardAttacking && !GetCharacterMovement()->IsFalling()
-		&& ActionTrackingComponent->GetIsActionReady	("DashAttack"))
+		&& ActionTrackingComponent->GetIsActionReady("DashAttack"))
 	{
 		TryDashAttack();
 		return;
