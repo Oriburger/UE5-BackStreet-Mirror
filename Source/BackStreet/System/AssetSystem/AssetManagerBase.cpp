@@ -90,12 +90,13 @@ FSoundAssetInfoStruct* UAssetManagerBase::GetSystemSoundMapWithID(int32 TargetID
 
 FSoundAssetInfoStruct* UAssetManagerBase::GetWeaponSoundMapWithID(int32 TargetID)
 {
-	if (!WeaponSoundAssetTable) return nullptr;
+	if (!WeaponSoundAssetTable || TargetID == 0) return nullptr;
 
 	// Read from dataTable
 	FString rowName = FString::FromInt(TargetID);
 	FSoundAssetInfoStruct* soundAssetInfo = WeaponSoundAssetTable->FindRow<FSoundAssetInfoStruct>(FName(rowName), rowName);
-	checkf(soundAssetInfo != nullptr, TEXT("SoundAssetInfo is not valid"));
+	UE_LOG(LogTemp, Error, TEXT("SoundAssetInfo is not valid"));
+	//checkf(soundAssetInfo != nullptr, TEXT("SoundAssetInfo is not valid"));
 
 	return soundAssetInfo;
 }
