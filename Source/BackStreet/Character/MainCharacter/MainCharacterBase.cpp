@@ -323,7 +323,6 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
-	if (CharacterGameplayInfo.bIsAirAttacking || CharacterGameplayInfo.bIsDownwardAttacking) return;
 
 	// input is a Vector2D
 	MovementInputValue = Value.Get<FVector2D>();
@@ -426,9 +425,10 @@ void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 void AMainCharacterBase::Roll()
 {	
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
+	if (ActionTrackingComponent->GetIsActionInProgress(FName("Skill"))) return; 
 	if (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Attack)) return;
 	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
-	if (!CharacterGameplayInfo.bCanRoll || CharacterGameplayInfo.bIsAirAttacking || CharacterGameplayInfo.bIsDownwardAttacking) return;
+	if (!CharacterGameplayInfo.bCanRoll) return;
 
 	if (GetIsActionActive(ECharacterActionType::E_Attack))
 	{
@@ -488,6 +488,7 @@ void AMainCharacterBase::Dash()
 
 void AMainCharacterBase::TryInvestigate()
 {
+	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 
 	if (InteractionCandidateRef.IsValid())
@@ -506,7 +507,6 @@ void AMainCharacterBase::TryInvestigate()
 void AMainCharacterBase::LockToTarget(const FInputActionValue& Value)
 {
 	if (GetCharacterMovement()->IsFalling()) return;
-	if (CharacterGameplayInfo.bIsAirAttacking || CharacterGameplayInfo.bIsDownwardAttacking) return;
 
 	TargetingManagerComponent->ActivateTargeting();
 }
@@ -599,11 +599,6 @@ bool AMainCharacterBase::TrySkill(int32 SkillID)
 	{
 		StopAttack();
 	}
-	if (ActionTrackingComponent->GetIsActionInProgress("Skill")
-		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Stun
-		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Die
-		|| CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_KnockedDown) return false;
-
 	return Super::TrySkill(SkillID);
 }
 
