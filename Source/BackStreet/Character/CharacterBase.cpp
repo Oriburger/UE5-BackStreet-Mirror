@@ -622,9 +622,9 @@ void ACharacterBase::TryDashAttack()
 	attackSpeed = FMath::Clamp(attackSpeed * WeaponComponent->GetWeaponStat().WeaponAtkSpeedRate, 0.2f, 1.5f);
 
 	// Activate dash anim with interp to target location
+	OnDashAttackStarted.Broadcast();
 	PlayAnimMontage(AssetHardPtrInfo.DashAttackAnimMontage, attackSpeed);
 	ActionTrackingComponent->CurrentComboType = EComboType::E_Dash;
-	OnDashAttackStarted.Broadcast();
 }
 
 bool ACharacterBase::TrySkill(int32 SkillID)

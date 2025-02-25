@@ -32,7 +32,7 @@ void ANewChapterManagerBase::BeginPlay()
 
 void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 {
-	UE_LOG(LogTemp, Warning, TEXT("ANewChapterManagerBase::StartChapter(%d)"), NewChapterID);
+	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::StartChapter(%d)"), NewChapterID);
 
 	//init chapter with generate stage infos
 	bIsChapterFinished = false;
@@ -56,7 +56,7 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ANewChapterManagerBase::StartChapter, Invalid Stage Data %d"), CurrentChapterInfo.StageInfoList.Num());
+		UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::StartChapter, Invalid Stage Data %d"), CurrentChapterInfo.StageInfoList.Num());
 	}
 }
 
@@ -90,7 +90,7 @@ void ANewChapterManagerBase::MoveStage(FVector2D direction)
 {
 	int32 stageIdx = StageGeneratorComponent->GetStageIdx(CurrentChapterInfo.CurrentStageCoordinate + direction);
 	if (!CurrentChapterInfo.StageInfoList.IsValidIndex(stageIdx)) return;
-	UE_LOG(LogTemp, Warning, TEXT("ANewChapterManagerBase::MoveStage,  %s  --(%s)-->  %s"), *CurrentChapterInfo.CurrentStageCoordinate.ToString(), *direction.ToString(), *(CurrentChapterInfo.CurrentStageCoordinate + direction).ToString())
+	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::MoveStage,  %s  --(%s)-->  %s"), *CurrentChapterInfo.CurrentStageCoordinate.ToString(), *direction.ToString(), *(CurrentChapterInfo.CurrentStageCoordinate + direction).ToString())
 	CurrentChapterInfo.CurrentStageCoordinate = CurrentChapterInfo.CurrentStageCoordinate + direction;
 	StageManagerComponent->InitStage(CurrentChapterInfo.StageInfoList[stageIdx]);
 	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
@@ -212,7 +212,7 @@ void ANewChapterManagerBase::SetTutorialCompletion(bool bCompleted)
 		gameInstance->SetTutorialCompletion(bCompleted);
 		return;
 	}
-	UE_LOG(LogTemp, Error, TEXT("ANewChapterManagerBase::SetTutorialCompletion(%d) - game instance is not valid"), (int32)bCompleted);
+	UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::SetTutorialCompletion(%d) - game instance is not valid"), (int32)bCompleted);
 }
 
 bool ANewChapterManagerBase::GetTutorialCompletion()
@@ -222,7 +222,7 @@ bool ANewChapterManagerBase::GetTutorialCompletion()
 	{
 		return gameInstance->GetTutorialCompletion();
 	}
-	UE_LOG(LogTemp, Error, TEXT("ANewChapterManagerBase::GetTutorialCompletion() - game instance is not valid"));
+	UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::GetTutorialCompletion() - game instance is not valid"));
 	return false;
 }
 

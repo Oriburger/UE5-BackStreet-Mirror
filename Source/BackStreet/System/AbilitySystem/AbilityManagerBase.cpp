@@ -7,8 +7,6 @@
 #include "../../Global/BackStreetGameModeBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
-DEFINE_LOG_CATEGORY(LogAbility);
-
 // Sets default values
 UAbilityManagerComponent::UAbilityManagerComponent()
 {

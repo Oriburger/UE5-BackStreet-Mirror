@@ -156,7 +156,7 @@ public:
 		float CalculateTotalDamage(FCharacterGameplayInfo TargetState, bool& bIsFatalAttack);
 
 	UFUNCTION()
-		void ApplyWeaponDebuff(class ACharacterBase* TargetCharacter, ECharacterDebuffType DebuffType, ECharacterStatType DebuffStatType);
+		bool ApplyWeaponDebuff(class ACharacterBase* TargetCharacter, ECharacterDebuffType DebuffType, ECharacterStatType DebuffStatType);
 private:
 	float CalculateAttackFatality(FCharacterGameplayInfo& GameplayInfoRef
 			, bool bIsJumpAttacking = false, bool bIsDashAttacking = false);
