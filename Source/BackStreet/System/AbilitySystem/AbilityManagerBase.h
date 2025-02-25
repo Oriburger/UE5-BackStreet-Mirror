@@ -171,7 +171,7 @@ public:
 		bool TryRemoveAbility(int32 AbilityID);
 
 	//모든 어빌리티 초기화
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void ClearAllAbility();
 
 	UFUNCTION()
