@@ -128,7 +128,6 @@ public:
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityUpdate, const TArray<FAbilityInfoStruct>&, AbilityInfoList);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateStatUpdate, ECharacterStatType, StatType, FStatValueGroup, StatValue);
-DECLARE_LOG_CATEGORY_EXTERN(LogAbility, Log, All);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BACKSTREET_API UAbilityManagerComponent : public UActorComponent

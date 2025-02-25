@@ -54,9 +54,9 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	//Init new stage
 	CurrentStageInfo = NewStageInfo;
 
-	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::InitStage-------------"));
-	UE_LOG(LogTemp, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
-	UE_LOG(LogTemp, Warning, TEXT("> Coordinate : %s"), *CurrentStageInfo.Coordinate.ToString());
+	UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::InitStage-------------"));
+	UE_LOG(LogStage, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
+	UE_LOG(LogStage, Warning, TEXT("> Coordinate : %s"), *CurrentStageInfo.Coordinate.ToString());
 
 	//Update visited craft stage count
 	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft)
@@ -69,18 +69,18 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	checkf(!newWorldAssetList.IsEmpty(), TEXT("UStageManagerComponent::InitStage - newWorldAssetList가 지정되어있지않습니다."));
 
 	//Load new level
-	UE_LOG(LogTemp, Warning, TEXT("@@@@@@@ Tuto : %d, level valid : %d"), (int32)ChapterManagerRef.Get()->GetTutorialCompletion(), (int32)CurrentChapterInfo.TutorialLevel.IsNull());
+	UE_LOG(LogStage, Warning, TEXT("@@@@@@@ Tuto : %d, level valid : %d"), (int32)ChapterManagerRef.Get()->GetTutorialCompletion(), (int32)CurrentChapterInfo.TutorialLevel.IsNull());
 	if (NewStageInfo.StageType == EStageCategoryInfo::E_Entry && !ChapterManagerRef.Get()->GetTutorialCompletion()
 		&& !CurrentChapterInfo.TutorialLevel.IsNull())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("> UStageManagerComponent::InitStage - Tutorial level will be activated"));
+		UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::InitStage - Tutorial level will be activated"));
 		ChapterManagerRef.Get()->SetTutorialCompletion(true);
 		NewStageInfo.MainLevelAsset = CurrentChapterInfo.TutorialLevel;
 	}
 	
 	else if (newWorldAssetList.Num() == 1 || PreviousLevel.IsNull())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("> UStageManagerComponent::InitStage - Lack of %d's Map Count, It may cause the level reinstancing crash."), (int32)NewStageInfo.StageType);
+		UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::InitStage - Lack of %d's Map Count, It may cause the level reinstancing crash."), (int32)NewStageInfo.StageType);
 		NewStageInfo.MainLevelAsset = newWorldAssetList[0];
 	}
 	else
@@ -91,11 +91,11 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 		newWorldAssetList.Find(PreviousLevel, prevLevelIdx);
 		prevLevelIdx = prevLevelIdx == INDEX_NONE ? 0 : prevLevelIdx;
 
-		UE_LOG(LogTemp, Warning, TEXT("> prev : %d, randIdx : %d, result : %d"), prevLevelIdx, randIdxAdder, (prevLevelIdx + randIdxAdder) % newWorldAssetList.Num());
+		UE_LOG(LogStage, Warning, TEXT("> prev : %d, randIdx : %d, result : %d"), prevLevelIdx, randIdxAdder, (prevLevelIdx + randIdxAdder) % newWorldAssetList.Num());
 
 		NewStageInfo.MainLevelAsset = newWorldAssetList[(prevLevelIdx + randIdxAdder) % newWorldAssetList.Num()];
 	}
-	UE_LOG(LogTemp, Warning, TEXT("> MapName : %s"), *NewStageInfo.MainLevelAsset.ToString());
+	UE_LOG(LogStage, Warning, TEXT("> MapName : %s"), *NewStageInfo.MainLevelAsset.ToString());
 	PreviousLevel = NewStageInfo.MainLevelAsset;
 	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
 	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 0.25f, true);
@@ -245,11 +245,11 @@ TArray<AActor*> UStageManagerComponent::TryUpdateSpawnPointProperty()
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Point"), spawnPointList);
 	const FVector zAxisCalibrationValue = FVector(0.0f, 0.0f, 50.0f);
 
-	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::TryUpdateSpawnPointProperty() ---------------"));
+	UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::TryUpdateSpawnPointProperty() ---------------"));
 
 	if (spawnPointList.IsEmpty()) return {};
 
-	UE_LOG(LogTemp, Warning, TEXT("> SpawnPointList -------------"));
+	UE_LOG(LogStage, Warning, TEXT("> SpawnPointList -------------"));
 	
 	//Clear Spawn Location Info
 	//동적 추가가 필요하면 이 구문을 지우기.
@@ -257,10 +257,10 @@ TArray<AActor*> UStageManagerComponent::TryUpdateSpawnPointProperty()
 
 	for (AActor*& spawnPoint : spawnPointList)
 	{
-		UE_LOG(LogTemp, Warning, TEXT(" - %s"), *UKismetSystemLibrary::GetDisplayName(spawnPoint));
+		UE_LOG(LogStage, Warning, TEXT(" - %s"), *UKismetSystemLibrary::GetDisplayName(spawnPoint));
 		if (!IsValid(spawnPoint) || spawnPoint->IsActorBeingDestroyed() || !spawnPoint->Tags.IsValidIndex(1)) continue;
-		UE_LOG(LogTemp, Warning, TEXT("   ㄴ> Tag : %s"), *spawnPoint->Tags[1].ToString());
-		UE_LOG(LogTemp, Warning, TEXT("   ㄴ> Location : %s"), *spawnPoint->GetActorLocation().ToCompactString());
+		UE_LOG(LogStage, Warning, TEXT("   ㄴ> Tag : %s"), *spawnPoint->Tags[1].ToString());
+		UE_LOG(LogStage, Warning, TEXT("   ㄴ> Location : %s"), *spawnPoint->GetActorLocation().ToCompactString());
 
 		if (spawnPoint->Tags[1] == FName("Enemy"))
 		{
@@ -308,7 +308,7 @@ void UStageManagerComponent::SpawnEnemy()
 
 	if (CurrentStageInfo.EnemyCompositionInfo.CompositionNameList.Num() == 0)
 	{
-		UE_LOG(LogTemp, Error, TEXT("UStageManagerComponent::SpawnEnemy : Not enough enemy composition"));
+		UE_LOG(LogStage, Error, TEXT("UStageManagerComponent::SpawnEnemy : Not enough enemy composition"));
 		return;
 	}
 
@@ -326,7 +326,7 @@ void UStageManagerComponent::SpawnEnemy()
 	
 	if (compositionNameList.IsEmpty())
 	{
-		UE_LOG(LogTemp, Error, TEXT("UStageManagerComponent::SpawnEnemy : composition for stage type %d is empty"), (int32)CurrentStageInfo.StageType);
+		UE_LOG(LogStage, Error, TEXT("UStageManagerComponent::SpawnEnemy : composition for stage type %d is empty"), (int32)CurrentStageInfo.StageType);
 		return;
 	}
 
@@ -338,7 +338,7 @@ void UStageManagerComponent::SpawnEnemy()
 
 		if (!CurrentChapterInfo.EnemyCompositionMap.Contains(targetName))
 		{
-			UE_LOG(LogTemp, Error, TEXT("UStageManagerComponent::SpawnEnemy : composition \"%s\" is not found"), *targetName.ToString());
+			UE_LOG(LogStage, Error, TEXT("UStageManagerComponent::SpawnEnemy : composition \"%s\" is not found"), *targetName.ToString());
 			continue;
 		}
 
@@ -347,8 +347,8 @@ void UStageManagerComponent::SpawnEnemy()
 		enemyComposition = CurrentChapterInfo.EnemyCompositionMap[targetName];
 		enemyComposition.EnemySet.GenerateKeyArray(keyArray);
 
-		UE_LOG(LogTemp, Warning, TEXT("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
-		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::SpawnEnemy : composition - %s %d"), *targetName.ToString(), keyArray.Num());
+		UE_LOG(LogStage, Warning, TEXT("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"));
+		UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::SpawnEnemy : composition - %s %d"), *targetName.ToString(), keyArray.Num());
 
 		for (int32& enemyID : keyArray)
 		{
@@ -464,7 +464,7 @@ void UStageManagerComponent::SpawnPortal(int32 GateCount)
 	if (CurrentStageInfo.PortalTransformList.Num() < GateCount
 		|| CurrentStageInfo.PortalDirectionTagList.Num() < GateCount)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::SpawnPortal -> Not Enough Portal Spawn Point!"));
+		UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::SpawnPortal -> Not Enough Portal Spawn Point!"));
 		return;
 	}
 
@@ -512,7 +512,7 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 	{
 		//Update spawn points 
 		//LoadDone이 떠도, 
-		UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame : Update Spawn Point"));
+		UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame : Update Spawn Point"));
 		TArray<AActor*> resultList = TryUpdateSpawnPointProperty();
 
 		if (!resultList.IsEmpty())
@@ -522,20 +522,20 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 			LoadCheckTimerHandle.Invalidate();
 
 			//Clear Prev Actors
-			UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame : Clear Previous Actors"));
+			UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame : Clear Previous Actors"));
 			ClearPreviousActors();
 
 			//Register Points
 			RegisterActorList(resultList);
 
 			//Start stage with delay
-			UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame() : Load Done, StartStage"));
+			UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame() : Load Done, StartStage"));
 			FTimerHandle gameStartDelayHandle;
 			GetWorld()->GetTimerManager().SetTimer(gameStartDelayHandle, this, &UStageManagerComponent::StartStage, 2.0f, false);
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame() : Post load task (UpdateSpawnPointProperty) Failed, Retry..."));
+			UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame() : Post load task (UpdateSpawnPointProperty) Failed, Retry..."));
 			GetWorld()->GetTimerManager().ClearTimer(LoadCheckTimerHandle);
 			GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 2.0f, false);
 		}
@@ -552,15 +552,15 @@ void UStageManagerComponent::StartStage()
 	OnStageLoadDone.Broadcast();
 
 	//Remove loading screen 
-	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::StartStage : Remove loading screen"));
+	UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::StartStage : Remove loading screen"));
 	RemoveLoadingScreen();
 
 	//spawn enemy and portal
-	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::StartStage : SpawnEnemy"));
+	UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::StartStage : SpawnEnemy"));
 	SpawnEnemy();
 
 	//spawn ItemBox
-	UE_LOG(LogTemp, Warning, TEXT("UStageManagerComponent::StartStage : ItemBox"));
+	UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::StartStage : ItemBox"));
 	SpawnItemBox();
 
 	//Check next stage's reward validation
@@ -653,7 +653,7 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 
 void UStageManagerComponent::EnsureUniqueStageRewards(FVector2D Coordinate)
 {
-	UE_LOG(LogTemp, Warning, TEXT("===========UStageManagerComponent::EnsureUniqueStageRewards(%d, %d)==================="), (int32)Coordinate.Y, (int32)Coordinate.X);
+	UE_LOG(LogStage, Warning, TEXT("===========UStageManagerComponent::EnsureUniqueStageRewards(%d, %d)==================="), (int32)Coordinate.Y, (int32)Coordinate.X);
 
 	const TArray<FVector2D> directions = { {0.0f, 1.0f}, {1.0f, 0.0f} }; //좌, 우 검색
 	TArray<int32> rewardIDList; //{Left, Right} Stage
@@ -669,7 +669,7 @@ void UStageManagerComponent::EnsureUniqueStageRewards(FVector2D Coordinate)
 					|| ChapterManagerRef.Get()->GetStageInfoWithCoordinate(nextCoordinate).bIsBlocked;
 		if (result)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("> One side is blocked, return the function."));
+			UE_LOG(LogStage, Warning, TEXT("> One side is blocked, return the function."));
 			return;  //한쪽이 Blocked 되어있거나 맵 경계 밖이라면 수정을 할 필요가 없음
 		}
 	}
@@ -680,14 +680,14 @@ void UStageManagerComponent::EnsureUniqueStageRewards(FVector2D Coordinate)
 	if (!leftStageInfo.RewardInfoList.IsEmpty()
 		&& leftStageInfo.RewardInfoList.Num() == rightStageInfo.RewardInfoList.Num())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("> first comp - %d, %d"), leftStageInfo.RewardInfoList[0].ItemID, rightStageInfo.RewardInfoList[0].ItemID);
+		UE_LOG(LogStage, Warning, TEXT("> first comp - %d, %d"), leftStageInfo.RewardInfoList[0].ItemID, rightStageInfo.RewardInfoList[0].ItemID);
 
 		//정렬 되어있음을 가정
 		for (int32 idx = 0; idx < leftStageInfo.RewardInfoList.Num(); idx++)
 		{
 			if (leftStageInfo.RewardInfoList[idx].ItemID != rightStageInfo.RewardInfoList[idx].ItemID)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("> Difference is detected, return the function"));
+				UE_LOG(LogStage, Warning, TEXT("> Difference is detected, return the function"));
 				return;
 			}
 		}
@@ -698,11 +698,11 @@ void UStageManagerComponent::EnsureUniqueStageRewards(FVector2D Coordinate)
 		leftStageInfo.RewardInfoList = stageGeneratorRef->GetRewardListFromCandidates(leftStageInfo.StageType, rewardIDList);
 		if (leftStageInfo.RewardInfoList.IsEmpty())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("> change reward failed, return to original one"));
+			UE_LOG(LogStage, Warning, TEXT("> change reward failed, return to original one"));
 			leftStageInfo.RewardInfoList = rightStageInfo.RewardInfoList;
 		}
 		leftStageInfo.StageIcon = leftStageInfo.RewardInfoList[0].ItemImage;
-		UE_LOG(LogTemp, Warning, TEXT("> after change - %d, %d"), leftStageInfo.RewardInfoList[0].ItemID, rightStageInfo.RewardInfoList[0].ItemID);
+		UE_LOG(LogStage, Warning, TEXT("> after change - %d, %d"), leftStageInfo.RewardInfoList[0].ItemID, rightStageInfo.RewardInfoList[0].ItemID);
 
 	}
 }
