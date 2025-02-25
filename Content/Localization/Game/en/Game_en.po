@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_en\n"
-"POT-Creation-Date: 2025-02-19 06:05\n"
-"PO-Revision-Date: 2025-02-19 06:05\n"
+"POT-Creation-Date: 2025-02-25 07:59\n"
+"PO-Revision-Date: 2025-02-25 07:59\n"
 "Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -1685,6 +1685,13 @@ msgstr "Adjust the shading quality of materials."
 msgctxt "ST_EasyGameUICommon,Desc_ShadowsSetting"
 msgid "Adjust the quality of the shadows and their draw distance. \r\n\r\nThis setting can has a large impact on performances at its highest option. \r\nIt is not recommended to set it to Ultra with Virtual Shadow Maps enabled."
 msgstr "Adjust the quality of the shadows and their draw distance. \r\n\r\nThis setting can has a large impact on performances at its highest option. \r\nIt is not recommended to set it to Ultra with Virtual Shadow Maps enabled."
+
+#. Key:	Desc_SkillCrafting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_SkillCrafting"
+msgid "You can create skills using combination materials."
+msgstr "You can create skills using combination materials."
 
 #. Key:	Desc_TexturesFilteringSetting
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon

@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_jp\n"
-"POT-Creation-Date: 2025-02-19 06:05\n"
-"PO-Revision-Date: 2025-02-19 06:05\n"
+"POT-Creation-Date: 2025-02-25 07:57\n"
+"PO-Revision-Date: 2025-02-25 07:57\n"
 "Language-Team: \n"
 "Language: ja-JP\n"
 "MIME-Version: 1.0\n"
@@ -1685,6 +1685,13 @@ msgstr "マテリアルのシェーディング品質を調整します。"
 msgctxt "ST_EasyGameUICommon,Desc_ShadowsSetting"
 msgid "Adjust the quality of the shadows and their draw distance. \r\n\r\nThis setting can has a large impact on performances at its highest option. \r\nIt is not recommended to set it to Ultra with Virtual Shadow Maps enabled."
 msgstr "シャドウの品質と描画距離を調整します。\r\n\r\n最高設定ではパフォーマンスに大きな影響を与える可能性があります。\r\nバーチャルシャドウマップが有効な場合はUltra設定にすることは推奨されません。"
+
+#. Key:	Desc_SkillCrafting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_SkillCrafting"
+msgid "You can create skills using combination materials."
+msgstr "組み合わせ材料を使用してスキルを作成できます。"
 
 #. Key:	Desc_TexturesFilteringSetting
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon

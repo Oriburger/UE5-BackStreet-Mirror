@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-02-24 09:31\n"
-"PO-Revision-Date: 2025-02-24 09:31\n"
+"POT-Creation-Date: 2025-02-25 07:58\n"
+"PO-Revision-Date: 2025-02-25 07:58\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -1686,6 +1686,13 @@ msgctxt "ST_EasyGameUICommon,Desc_ShadowsSetting"
 msgid "Adjust the quality of the shadows and their draw distance. \r\n\r\nThis setting can has a large impact on performances at its highest option. \r\nIt is not recommended to set it to Ultra with Virtual Shadow Maps enabled."
 msgstr "그림자의 품질과 렌더링 거리(Draw Distance)를 조정합니다.\r\n\r\n이 설정은 최고 옵션에서 성능에 큰 영향을 미칠 수 있습니다.\r\n가상 그림자 맵(Virtual Shadow Maps)이 활성화된 경우 Ultra 설정을 권장하지 않습니다."
 
+#. Key:	Desc_SkillCrafting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_SkillCrafting"
+msgid "You can create skills using combination materials."
+msgstr "조합 재료를 사용해서 스킬을 만들 수 있습니다."
+
 #. Key:	Desc_TexturesFilteringSetting
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -3147,14 +3154,14 @@ msgstr "<Bold.24>[환영합니다!]</>\r\n- BackStreet에 오신 것을 환영�
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Entry_2"
 msgid "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Placeholder assets may appear during gameplay.  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
-msgstr "<Bold.24>[데모 안내!]</>\r\n\r\nBackStreet의 데모 버전입니다.  \r\n정식 출시 버전과 일부 차이가 있을 수 있습니다.\r\n\r\n<Medium.24>[데모 버전의 특징]</>  \r\n- 제한된 스테이지, 캐릭터, 능력 제공  \r\n- 일부 기능(고급 AI 행동 및 최종 컷신 등)은 포함되지 않음  \r\n\r\n<Medium.24>[알려진 문제점]</>  \r\n- 게임 플레이 중 임시 애셋이 표시될 수 있습니다.  \r\n- 일부 애니메이션 및 사운드 효과가 아직 작업 중입니다.  \r\n\r\n<Medium.24>[피드백 요청]</>  \r\n- 버그 리포트 및 제안 사항을 피드백 폼을 통해 제출하세요.  \r\n- Discord 채널에 참여하여 토론 및 최신 정보를 확인하세요.  \r\n\r\n<Bold.22>BackStreet 정식 버전 출시를 기대해주세요!</>"
+msgstr "<Bold.24>[데모 안내!]</>\r\n\r\nBackStreet의 데모 버전입니다.  \r\n정식 출시 버전과 일부 차이가 있을 수 있습니다.\r\n\r\n<Medium.24>[데모 버전의 특징]</>  \r\n- 스테이지와 캐릭터, 전투 등 대부분의 기능이 제한됩니다.\r\n- 일부 기능(고급 AI 행동 및 최종 컷신 등)은 포함되지 않습니다.\r\n\r\n<Medium.24>[알려진 문제점]</>  \r\n- 게임 플레이 중 임시 애셋이 표시될 수 있습니다.  \r\n- 일부 애니메이션 및 사운드 효과가 아직 작업 중입니다.  \r\n\r\n<Medium.24>[피드백 요청]</>  \r\n- 버그 리포트 및 제안 사항을 피드백 폼을 통해 제출하세요.  \r\n- Discord 채널에 참여하여 토론 및 최신 정보를 확인하세요.  \r\n\r\n<Bold.22>BackStreet 정식 버전 출시를 기대해주세요!</>"
 
 #. Key:	Tutorial_Reward_1
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Reward_1"
 msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Healing Packs]</>  \r\n- Types: Small, Medium, Large healing packs.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skills.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively to strengthen your character and progress through challenges!</>"
-msgstr "<Bold.24>[아이템 보상 가이드]</>\r\n- 다양한 아이템 보상을 획득하여 생존력을 높이고 전투력을 강화하세요.\r\n\r\n<Medium.24>[힐팩]</>  \r\n- 종류: 소형, 중형, 대형 힐팩  \r\n- 획득 방법:  \r\n  - 스테이지 클리어 보상으로 랜덤 지급  \r\n  - 게임 중 'F' 키를 사용하여 수집 가능  \r\n\r\n<Medium.24>[조합 재료]</>  \r\n- 용도: 스킬 제작 및 강화에 사용됩니다.  \r\n- 획득 방법:  \r\n  - 처치한 적으로부터 자동 수집됩니다.  \r\n- 스킬 조합: 특정 \"조합 스테이지\"에서만 가능합니다.  \r\n\r\n<Bold.22>힐팩과 조합 재료를 효과적으로 활용하여 캐릭터를 강화하고 도전 과제를 극복하세요!</>"
+msgstr "<Bold.24>[아이템 보상 가이드]</>\r\n- 다양한 아이템 보상을 획득하여 생존력을 높이고 전투력을 강화하세요.\r\n\r\n<Medium.24>[힐팩]</>  \r\n- 종류: 소형, 중형, 대형 힐팩  \r\n- 획득 방법:  \r\n  - 스테이지 클리어 보상으로 랜덤 지급됩니다. \r\n  - 게임 중 'F' 키를 사용하여 수집할 수 있습니다.\r\n\r\n<Medium.24>[조합 재료]</>  \r\n- 용도: 스킬 제작 및 강화에 사용됩니다.  \r\n- 획득 방법:  \r\n  - 처치한 적으로부터 자동 수집됩니다.  \r\n- 스킬 조합: 특정 \"조합 스테이지\"에서만 가능합니다.  \r\n\r\n<Bold.22>힐팩과 조합 재료를 효과적으로 활용하여 캐릭터를 강화하고 도전 과제를 극복하세요!</>"
 
 #. Key:	Tutorial_Stage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
