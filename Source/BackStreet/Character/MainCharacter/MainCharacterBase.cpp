@@ -717,13 +717,17 @@ void AMainCharacterBase::SetAutomaticRotateMode()
 	}
 	SetCameraVerticalAlignmentWithInterp(currentPitch >= 270.0f ? 360.0f : 0.0f, 0.14f);
 
-	GetWorld()->GetTimerManager().SetTimer(RotationResetTimerHandle, FTimerDelegate::CreateLambda([&]()
+	TWeakObjectPtr<AMainCharacterBase> weakThis(this);
+	GetWorld()->GetTimerManager().SetTimer(RotationResetTimerHandle, FTimerDelegate::CreateLambda([weakThis]()
+	{
+		if (weakThis.IsValid())
 		{
-			CameraBoom->bEnableCameraRotationLag = true;
-			CameraBoom->SetRelativeRotation(FRotator::ZeroRotator);
-			CameraBoom->bUsePawnControlRotation = false;
-			CameraBoom->bInheritYaw = true;
-		}), 1.0f, false /*반복*/);
+			weakThis.Get()->CameraBoom->bEnableCameraRotationLag = true;
+			weakThis.Get()->CameraBoom->SetRelativeRotation(FRotator::ZeroRotator);
+			weakThis.Get()->CameraBoom->bUsePawnControlRotation = false;
+			weakThis.Get()->CameraBoom->bInheritYaw = true;
+		}
+	}), 1.0f, false /*반복*/);
 }
 
 void AMainCharacterBase::UpdateCameraPitch(float TargetPitch, float InterpSpeed)
