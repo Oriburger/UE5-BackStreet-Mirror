@@ -235,8 +235,8 @@ void AMainCharacterBase::ZoomIn()
 void AMainCharacterBase::ZoomOut()
 {
 	if (WeaponComponent->GetWeaponStat().WeaponType != EWeaponType::E_Shoot) return;
-	
-	SwitchWeapon(false);
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Stun) SwitchWeapon(false, true);
+	else SwitchWeapon(false);
 	SetAimingMode(false);
 	//FollowingCamera attach to CameraBoom Component using Interp ===================
 	FLatentActionInfo LatentInfo;
@@ -278,9 +278,10 @@ void AMainCharacterBase::TryShootBySubCombo(FRotator ShootRotation, FVector Shoo
 
 void AMainCharacterBase::SetAimingMode(bool bNewState)
 {
+	if (!GetIsActionActive(ECharacterActionType::E_Stun)) CharacterGameplayInfo.CharacterActionState = bNewState ? ECharacterActionType::E_Shoot : ECharacterActionType::E_Idle;
+
 	GetCharacterMovement()->bOrientRotationToMovement = !bNewState;
 	bUseControllerRotationYaw = bNewState;
-	CharacterGameplayInfo.CharacterActionState = bNewState ? ECharacterActionType::E_Shoot : ECharacterActionType::E_Idle;
 	CharacterGameplayInfo.bIsAiming = bNewState;
 	CharacterGameplayInfo.bIsSprinting = bNewState ? false : CharacterGameplayInfo.bIsSprinting;
 
