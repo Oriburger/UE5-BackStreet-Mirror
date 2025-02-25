@@ -106,9 +106,16 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 		break;
 	//----스탯 조정 디버프-------------------
 	case ECharacterDebuffType::E_Stun:
-		OwnerCharacterRef.Get()->StopAttack();
+		OwnerCharacterRef.Get()->ResetActionState(true);
 		characterInfo.CharacterActionState = ECharacterActionType::E_Stun;
-		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+		if (OwnerCharacterRef->ActorHasTag("Player"))
+		{
+			OwnerCharacterRef.Get()->DisableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		}
+		else if (OwnerCharacterRef->ActorHasTag("Enemy"))
+		{
+			OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+		}
 		break;
 	case ECharacterDebuffType::E_Slow:
 		resistValue = characterInfo.GetTotalValue(ECharacterStatType::E_SlowResist);
@@ -264,7 +271,10 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 	case ECharacterDebuffType::E_Stun:
 		characterInfo.CharacterActionState = ECharacterActionType::E_Idle;
 		OwnerCharacterRef.Get()->ResetActionState(true);
-		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+		if(OwnerCharacterRef.Get()->ActorHasTag("Player"))
+			OwnerCharacterRef.Get()->EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		else if (OwnerCharacterRef.Get()->ActorHasTag("Enemy"))
+			OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 		break;
 	}
 	ClearDebuffTimer(DebuffType);
