@@ -35,7 +35,7 @@ ACharacterBase::ACharacterBase()
 	SkillManagerComponent = CreateDefaultSubobject<USkillManagerComponentBase>(TEXT("SKILL_MANAGER"));
 
 	WeaponComponent = CreateDefaultSubobject<UWeaponComponentBase>(TEXT("WeaponBase"));
-	WeaponComponent->SetupAttachment(HitSceneComponent);
+	WeaponComponent->SetupAttachment(GetMesh());
 
 	BuffNiagaraEmitter = CreateDefaultSubobject<UNiagaraComponent>(TEXT("BUFF_EFFECT"));
 	BuffNiagaraEmitter->SetupAttachment(GetMesh());
@@ -205,7 +205,8 @@ TArray<FName> ACharacterBase::GetCurrentMontageSlotName()
 void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset)
 {
 	FVector currentLocation = GetActorLocation();
-	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? GetVelocity().Z * 0.01f : 25.0f))
+	UE_LOG(LogWeapon, Warning, TEXT("Update Location) Falling : %d, Error : %d"), (int32)(GetCharacterMovement()->IsFalling()), (int32)(GetCharacterMovement()->IsFalling() ? GetVelocity().Length() * 0.02f : 30.0f));
+	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? GetVelocity().Length() * 0.02f : 30.0f))
 	{
 		GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 		OnEndLocationInterp.Broadcast();
