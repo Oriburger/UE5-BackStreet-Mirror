@@ -324,6 +324,7 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
+	if (GetIsActionActive(ECharacterActionType::E_Stun)) return;
 
 	// input is a Vector2D
 	MovementInputValue = Value.Get<FVector2D>();
@@ -430,6 +431,7 @@ void AMainCharacterBase::Roll()
 	if (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Attack)) return;
 	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
 	if (!CharacterGameplayInfo.bCanRoll) return;
+	if (GetIsActionActive(ECharacterActionType::E_Stun)) return;
 
 	if (GetIsActionActive(ECharacterActionType::E_Attack))
 	{
