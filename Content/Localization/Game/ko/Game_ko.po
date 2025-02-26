@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-02-26 00:48\n"
-"PO-Revision-Date: 2025-02-26 00:48\n"
+"POT-Creation-Date: 2025-02-26 03:42\n"
+"PO-Revision-Date: 2025-02-26 03:42\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -312,42 +312,42 @@ msgstr "대시 공격력이 17% 증가하며 확률적으로 스턴 디버프를
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Legendary"
 msgid "reduces stun debuff duration by 50%"
-msgstr "스턴 피해에 저항력이 50% 증가한다"
+msgstr "스턴 디버프에 저항력이 50% 증가한다"
 
 #. Key:	Desc_Freezing_Resistance_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Normal"
 msgid "reduces stun debuff duration by 30%"
-msgstr "스턴 피해에 저항력이 30% 증가한다"
+msgstr "스턴 디버프에 저항력이 30% 증가한다"
 
 #. Key:	Desc_Freezing_Resistance_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Rare"
 msgid "reduces stun debuff duration by 40%"
-msgstr "스턴 피해에 저항력이 40% 증가한다"
+msgstr "스턴 디버프에 저항력이 40% 증가한다"
 
 #. Key:	Desc_Freezing_Strike_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Legendary"
 msgid "normal attack stun chance increases by 30%"
-msgstr "일반 공격 시 스턴 피해를 입힐 확률이 30% 증가한다"
+msgstr "일반 공격 시 스턴 디버프를 입힐 확률이 30% 증가한다"
 
 #. Key:	Desc_Freezing_Strike_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Normal"
 msgid "normal attack stun chance increases by 10%"
-msgstr "일반 공격 시 스턴 피해를 입힐 확률이 10% 증가한다"
+msgstr "일반 공격 시 스턴 디버프를 입힐 확률이 10% 증가한다"
 
 #. Key:	Desc_Freezing_Strike_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Rare"
 msgid "normal attack stun chance increases by 20%"
-msgstr "일반 공격 시 스턴 피해를 입힐 확률이 20% 증가한다"
+msgstr "일반 공격 시 스턴 디버프를 입힐 확률이 20% 증가한다"
 
 #. Key:	Desc_Freezing_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -802,7 +802,7 @@ msgstr "모든 공격력이 2% 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Legendary"
 msgid "dash attack greatly increases and inflicts slow debuff"
-msgstr "대시 공격이 매우 강해지며 슬로우 피해를 입힌다"
+msgstr "대시 공격이 매우 강해지며 슬로우 디버프를 입힌다"
 
 #. Key:	Desc_Throttling_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -816,7 +816,7 @@ msgstr "대시 공격이 조금 강해지며 슬로우 디버프를 입힌다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Rare"
 msgid "dash attack increases and inflicts slow debuff"
-msgstr "대시 공격이 더 강해지며 슬로우 피해를 입힌다"
+msgstr "대시 공격이 더 강해지며 슬로우 디버프를 입힌다"
 
 #. Key:	Desc_Throttling_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -3140,7 +3140,7 @@ msgstr "<Bold.24>[부스터칩 가이드]</>\r\n100개 이상의 다양한 부�
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Debuff"
 msgid "<Bold.24>[Debuff Guide]</>\r\n- Apply various debuffs to enemies using sub weapons and skills and boosters.\r\n\r\n<Medium.24>[Types of Debuffs]</>\r\n- Fire, Corrosion: Inflict continuous damage over time (DoT).\r\n- Slow: Significantly reduce enemy movement speed.\r\n- Attack and Defense Down: Weaken enemy attack power and defense.\r\n- Stun: Temporarily immobilize enemies.\r\n\r\n<Medium.24>[How to Utilize]</>\r\nStrategically apply debuffs using sub weapons and skills to gain the upper hand in battles!\r\n\r\n<Bold.22>Use Debuffs to effectively control and defeat your enemies.</>"
-msgstr "<Bold.24>[디버프 가이드]</>\r\n- 보조 무기, 스킬, 부스터를 활용하여 적에게 다양한 디버프를 적용하세요.\r\n\r\n<Medium.24>[디버프 유형]</>  \r\n- 화염, 산화: 지속 피해(DoT)를 줍니다.  \r\n- 슬로우: 적의 이동 속도를 크게 감소시킵니다.  \r\n- 공격력 및 방어력 감소: 적의 공격력과 방어력을 약화시킵니다.  \r\n- 프리징: 적을 일시적으로 행동 불가 상태로 만듭니다.\r\n\r\n<Medium.24>[활용 방법]</>  \r\n- 보조 무기와 스킬을 활용하여 전략적으로 디버프를 적용해 전투에서 우위를 점하세요.\r\n\r\n<Bold.22>디버프를 활용해 적을 효과적으로 제압하고 승리를 쟁취하세요.</>"
+msgstr "<Bold.24>[디버프 가이드]</>\r\n- 보조 무기, 스킬, 부스터칩를 활용하여 적에게 다양한 디버프를 적용하세요.\r\n\r\n<Medium.24>[디버프 유형]</>  \r\n- 화염, 산화: 지속 피해(DoT)를 줍니다.  \r\n- 슬로우: 적의 이동 속도를 크게 감소시킵니다.  \r\n- 공격력 및 방어력 감소: 적의 공격력과 방어력을 약화시킵니다.  \r\n- 프리징: 적을 일시적으로 행동 불가 상태로 만듭니다.\r\n\r\n<Medium.24>[활용 방법]</>  \r\n- 보조 무기와 스킬을 활용하여 전략적으로 디버프를 적용해 전투에서 우위를 점하세요.\r\n\r\n<Bold.22>디버프를 활용해 적을 효과적으로 제압하고 승리를 쟁취하세요.</>"
 
 #. Key:	Tutorial_Entry
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3175,7 +3175,7 @@ msgstr "<Bold.24>[스테이지 시스템 가이드]</>\r\n- 다양한 챕터의 
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_SubWeapon"
 msgid "<Medium.24>[Sub Weapon Guide]</>\r\n- Utilize various auxiliary weapons to support your battles.\r\n- When used effectively, they can turn the tide of combat.\r\n\r\n<Medium.24>[How to Use]</>\r\n- During Combos: Press Right-Click to fire instantly during a combo.\r\n- Aimed Use: Press Right-Click to aim, then Left-Click to fire.\r\n\r\n<Medium.24>[How to Obtain, Types of Sub Weapons]</>\r\n- Sub weapons can be found in trash bags scattered throughout the map.\r\n- Bubblegum / Aluminum Cans / Cigarette Butts / etc.."
-msgstr "<Bold.24>[보조 무기 가이드]</>\r\n- 다양한 보조 무기를 활용하여 전투를 지원하세요.  \r\n- 효과적으로 사용하면 전세를 역전할 수 있습니다.\r\n\r\n<Medium.24>[사용 방법]</>  \r\n- 콤보 중 사용: 콤보 도중 우클릭을 눌러 즉시 발사하세요.  \r\n- 조준 후 사용: 우클릭으로 조준한 후 좌클릭으로 발사하세요.  \r\n\r\n<Medium.24>[획득 방법 및 보조 무기 종류]</>  \r\n- 맵 곳곳에 있는 쓰레기 봉투를 개봉하여 획득할 수 있습니다.  \r\n- 풍선껌 / 알루미늄 캔 / 담배꽁초 등 다양한 무기가 존재합니다.  "
+msgstr "<Bold.24>[보조 무기 가이드]</>\r\n- 다양한 보조 무기를 활용하여 전투를 지원하세요.  \r\n- 효과적으로 사용하면 전세를 역전할 수 있습니다.\r\n\r\n<Medium.24>[사용 방법]</>  \r\n- 조준 후 사용: 우클릭으로 조준한 후 좌클릭으로 발사하세요.  \r\n\r\n<Medium.24>[획득 방법 및 보조 무기 종류]</>  \r\n- 맵 곳곳에 있는 쓰레기 봉투를 개봉하여 획득할 수 있습니다.  \r\n- 풍선껌 / 알루미늄 캔 / 담배꽁초 등 다양한 무기가 존재합니다.  "
 
 #. Key:	UI_Elimate_Enemy
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial

@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hant\n"
-"POT-Creation-Date: 2025-02-26 00:48\n"
-"PO-Revision-Date: 2025-02-26 00:48\n"
+"POT-Creation-Date: 2025-02-26 03:41\n"
+"PO-Revision-Date: 2025-02-26 03:41\n"
 "Language-Team: \n"
 "Language: zh-Hant\n"
 "MIME-Version: 1.0\n"
@@ -3175,7 +3175,7 @@ msgstr "<Bold.24>[關卡系統指南]</>\r\n探索各個章節中的不同關卡
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_SubWeapon"
 msgid "<Medium.24>[Sub Weapon Guide]</>\r\n- Utilize various auxiliary weapons to support your battles.\r\n- When used effectively, they can turn the tide of combat.\r\n\r\n<Medium.24>[How to Use]</>\r\n- During Combos: Press Right-Click to fire instantly during a combo.\r\n- Aimed Use: Press Right-Click to aim, then Left-Click to fire.\r\n\r\n<Medium.24>[How to Obtain, Types of Sub Weapons]</>\r\n- Sub weapons can be found in trash bags scattered throughout the map.\r\n- Bubblegum / Aluminum Cans / Cigarette Butts / etc.."
-msgstr "<Bold.24>[副武器指南]</>\r\n使用各種輔助武器來支持你的戰鬥。  \r\n正確使用時，它們可以扭轉戰局。\r\n\r\n<Medium.24>[如何使用]</>  \r\n- 在連擊過程中：按下右鍵可立即在連擊中發射。  \r\n- 瞄準射擊：按下右鍵進行瞄準，然後按左鍵開火。  \r\n\r\n<Medium.24>[如何獲取，副武器類型]</>  \r\n- 副武器可以在地圖上散落的垃圾袋中找到。  \r\n- 口香糖 / 鋁罐 / 香菸煙蒂等...  "
+msgstr "<Bold.24>[副武器指南]</>\r\n使用各種輔助武器來支持你的戰鬥。  \r\n正確使用時，它們可以扭轉戰局。\r\n\r\n<Medium.24>[如何使用]</>  \r\n- 瞄準射擊：按下右鍵進行瞄準，然後按左鍵開火。  \r\n\r\n<Medium.24>[如何獲取，副武器類型]</>  \r\n- 副武器可以在地圖上散落的垃圾袋中找到。  \r\n- 口香糖 / 鋁罐 / 香菸煙蒂等...  "
 
 #. Key:	UI_Elimate_Enemy
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
