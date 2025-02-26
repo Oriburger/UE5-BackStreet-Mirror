@@ -606,8 +606,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ],
-						"RewardItemProbabilityList": [ 1, 0.5, 0.20000000298023224, 0.5, 1, 1, 0.5, 1, 1, 1 ]
+						"RewardItemIDList": [ 8, 11, 12, 13, 14, 15, 16, 17 ],
+						"RewardItemProbabilityList": [ 1, 0.5, 1, 1, 0.5, 1, 1, 1 ]
 					}
 				]
 			},
@@ -615,8 +615,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ],
-						"RewardItemProbabilityList": [ 1, 0.5, 0.20000000298023224, 0.5, 1, 1, 0.5, 1, 1, 1 ]
+						"RewardItemIDList": [ 8, 11, 12, 13, 14, 15, 16, 17 ],
+						"RewardItemProbabilityList": [ 1, 0.5, 1, 1, 0.5, 1, 1, 1 ]
 					}
 				]
 			},
@@ -624,8 +624,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 11, 12, 13, 14 ],
-						"RewardItemProbabilityList": [ 1, 1, 1, 1 ]
+						"RewardItemIDList": [ 8, 11, 12, 13, 14, 15, 16, 17 ],
+						"RewardItemProbabilityList": [ 1, 0.5, 1, 1, 0.5, 1, 1, 1 ]
 					}
 				]
 			},
@@ -633,8 +633,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 9, 11, 12, 13, 14, 4 ],
-						"RewardItemProbabilityList": [ 3, 1, 1, 1, 1, 2 ]
+						"RewardItemIDList": [ 8, 11, 12, 13, 14, 15, 16, 17 ],
+						"RewardItemProbabilityList": [ 1, 0.5, 1, 1, 0.5, 1, 1, 1 ]
 					}
 				]
 			},
@@ -642,8 +642,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 9 ],
-						"RewardItemProbabilityList": [ 1 ]
+						"RewardItemIDList": [ 8, 11, 12, 13, 14, 15, 16, 17 ],
+						"RewardItemProbabilityList": [ 1, 0.5, 1, 1, 0.5, 1, 1, 1 ]
 					}
 				]
 			},
@@ -651,8 +651,8 @@
 			{
 				"RewardCandidateInfoList": [
 					{
-						"RewardItemIDList": [ 9 ],
-						"RewardItemProbabilityList": [ 1 ]
+						"RewardItemIDList": [],
+						"RewardItemProbabilityList": []
 					}
 				]
 			}
