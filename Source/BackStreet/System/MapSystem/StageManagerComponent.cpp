@@ -74,7 +74,6 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 		&& !CurrentChapterInfo.TutorialLevel.IsNull())
 	{
 		UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::InitStage - Tutorial level will be activated"));
-		ChapterManagerRef.Get()->SetTutorialCompletion(true);
 		NewStageInfo.MainLevelAsset = CurrentChapterInfo.TutorialLevel;
 	}
 	
@@ -625,6 +624,13 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 
 		//Stage Reward
 		GrantStageRewards();
+
+		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry && !ChapterManagerRef.Get()->GetTutorialCompletion())
+		{
+			UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::FinishStage - Tutorial level will be activated"));
+			ChapterManagerRef.Get()->SetTutorialCompletion(true);
+		}
+
 	}
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
 		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
@@ -696,6 +702,7 @@ void UStageManagerComponent::EnsureUniqueStageRewards(FVector2D Coordinate)
 		for (auto& rewardInfo : rightStageInfo.RewardInfoList)//convert to id list
 			rewardIDList.Add(rewardInfo.ItemID);
 		leftStageInfo.RewardInfoList = stageGeneratorRef->GetRewardListFromCandidates(leftStageInfo.StageType, rewardIDList);
+
 		if (leftStageInfo.RewardInfoList.IsEmpty())
 		{
 			UE_LOG(LogStage, Warning, TEXT("> change reward failed, return to original one"));
