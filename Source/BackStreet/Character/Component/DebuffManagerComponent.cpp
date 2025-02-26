@@ -108,11 +108,7 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 	case ECharacterDebuffType::E_Stun:
 		OwnerCharacterRef.Get()->ResetActionState(true);
 		characterInfo.CharacterActionState = ECharacterActionType::E_Stun;
-		if (OwnerCharacterRef->ActorHasTag("Player"))
-		{
-			OwnerCharacterRef.Get()->DisableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-		}
-		else if (OwnerCharacterRef->ActorHasTag("Enemy"))
+		if (OwnerCharacterRef->ActorHasTag("Enemy"))
 		{
 			OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 		}
@@ -271,10 +267,10 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 	case ECharacterDebuffType::E_Stun:
 		characterInfo.CharacterActionState = ECharacterActionType::E_Idle;
 		OwnerCharacterRef.Get()->ResetActionState(true);
-		if(OwnerCharacterRef.Get()->ActorHasTag("Player"))
-			OwnerCharacterRef.Get()->EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-		else if (OwnerCharacterRef.Get()->ActorHasTag("Enemy"))
-			OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+		//if(OwnerCharacterRef.Get()->ActorHasTag("Player"))
+		//	OwnerCharacterRef.Get()->EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		//else if (OwnerCharacterRef.Get()->ActorHasTag("Enemy"))
+		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 		break;
 	}
 	ClearDebuffTimer(DebuffType);
