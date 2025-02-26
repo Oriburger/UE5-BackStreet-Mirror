@@ -733,7 +733,7 @@ void AMainCharacterBase::SetAutomaticRotateMode()
 
 void AMainCharacterBase::UpdateCameraPitch(float TargetPitch, float InterpSpeed)
 {
-	if (UGameplayStatics::IsGamePaused(GetWorld()))
+	if (UGameplayStatics::IsGamePaused(GetWorld()) || CharacterGameplayInfo.bIsAiming)
 	{
 		SetManualRotateMode();
 		return;
