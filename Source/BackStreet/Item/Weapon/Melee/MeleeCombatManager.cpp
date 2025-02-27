@@ -118,8 +118,7 @@ void UMeleeCombatManager::MeleeAttack()
 			}
 			
 			//Activate Melee Hit Effect
-			ActivateMeleeHitEffect(target->GetActorLocation(), target, bIsFatalAttack 
-				|| (WeaponComponentRef.Get()->WeaponStat.WeaponKnockBackStrength > 3500));
+			ActivateMeleeHitEffect(target->GetActorLocation(), target, bIsFatalAttack);
 
 			//Apply Knockback
 			if (!target->ActorHasTag("Boss")

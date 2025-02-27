@@ -237,5 +237,6 @@ void ANewChapterManagerBase::CreateGameResultWidget(bool bChapterClear)
 
 void ANewChapterManagerBase::OpenMainMenuLevel()
 {
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
 	UGameplayStatics::OpenLevel(GetWorld(), "MainMenuPersistent");
 }
