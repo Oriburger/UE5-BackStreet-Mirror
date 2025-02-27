@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-02-26 03:42\n"
-"PO-Revision-Date: 2025-02-26 03:42\n"
+"POT-Creation-Date: 2025-02-27 06:37\n"
+"PO-Revision-Date: 2025-02-27 06:37\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -39,21 +39,21 @@ msgstr "점프 공격 속도가 24% 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Legendary"
 msgid "jump attack greatly increases and inflicts slow debuff"
-msgstr "점프 공격이 매우 강해지며 슬로우 디버프를 적용한다"
+msgstr "점프 콤보가 매우 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Aerial_Throttling_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Normal"
 msgid "jump attack slightly increases and inflicts slow debuff"
-msgstr "점프 공격이 조금 강해지며 슬로우 디버프를 적용한다"
+msgstr "점프 콤보가 조금 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Aerial_Throttling_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Rare"
 msgid "jump attack increases and inflicts slow debuff"
-msgstr "점프 공격이 더 강해지며 슬로우 디버프를 적용한다"
+msgstr "점프 콤보가 더 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Battery_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -102,63 +102,63 @@ msgstr "점프 공격 시 치명타 피해량이 3.5배 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Dash_Legendary"
 msgid "dash attack critical hit damage increases by 4.5 times"
-msgstr "일반 공격 시 치명타 피해량이 4.5배 증가한다"
+msgstr "돌진 콤보 시 치명타 피해량이 4.5배 증가한다"
 
 #. Key:	Desc_Critical_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Dash_Normal"
 msgid "dash attack critical hit damage increases by 2.5 times"
-msgstr "일반 공격 시 치명타 피해량이 2.5배 증가한다"
+msgstr "돌진 콤보 시 치명타 피해량이 2.5배 증가한다"
 
 #. Key:	Desc_Critical_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Dash_Rare"
 msgid "dash attack critical hit damage increases by 3.5 times"
-msgstr "일반 공격 시 치명타 피해량이 3.5배 증가한다"
+msgstr "돌진 콤보 시 치명타 피해량이 3.5배 증가한다"
 
 #. Key:	Desc_Critical_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Strike_Legendary"
 msgid "normal attack critical hit damage increases by 4 times"
-msgstr "일반 공격 시 치명타 피해량이 4배 증가한다"
+msgstr "일반 콤보 시 치명타 피해량이 4배 증가한다"
 
 #. Key:	Desc_Critical_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Strike_Normal"
 msgid "normal attack critical hit damage increases by 2 times"
-msgstr "일반 공격 시 치명타 피해량이 2배 증가한다"
+msgstr "일반 콤보 시 치명타 피해량이 2배 증가한다"
 
 #. Key:	Desc_Critical_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Strike_Rare"
 msgid "normal attack critical hit damage increases by 3 times"
-msgstr "일반 공격 시 치명타 피해량이 3배 증가한다"
+msgstr "일반 콤보 시 치명타 피해량이 3배 증가한다"
 
 #. Key:	Desc_Dash_Optimization_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Legendary"
 msgid "dash attack speed increases by 45%"
-msgstr "대시 공격 속도가 45% 증가한다"
+msgstr "돌진 콤보 속도가 45% 증가한다"
 
 #. Key:	Desc_Dash_Optimization_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Normal"
 msgid "dash attack speed increases by 8%"
-msgstr "대시 공격 속도가 8% 증가한다"
+msgstr "돌진 콤보 속도가 8% 증가한다"
 
 #. Key:	Desc_Dash_Optimization_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Rare"
 msgid "dash attack speed increases by 25%"
-msgstr "대시 공격 속도가 25% 증가한다"
+msgstr "돌진 콤보 속도가 25% 증가한다"
 
 #. Key:	Desc_Firewall_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -186,63 +186,63 @@ msgstr "방어력이 30% 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Legendary"
 msgid "35% chance for jump attack to deal flame damage"
-msgstr "35% 확률로 점프 공격이 화염 피해를 가한다"
+msgstr "35% 확률로 점프 콤보가 화염 피해를 가한다"
 
 #. Key:	Desc_Flame_Aerial_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Normal"
 msgid "7% chance for jump attack to deal flame damage"
-msgstr "7% 확률로 점프 공격이 화염 피해를 가한다"
+msgstr "7% 확률로 점프 콤보가 화염 피해를 가한다"
 
 #. Key:	Desc_Flame_Aerial_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Rare"
 msgid "16% chance for jump attack to deal flame damage"
-msgstr "15% 확률로 점프 공격이 화염 피해를 가한다"
+msgstr "15% 확률로 점프 콤보가 화염 피해를 가한다"
 
 #. Key:	Desc_Flame_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Legendary"
 msgid "35% chance for dash attack to deal flame damage"
-msgstr "35% 확률로 대시 공격이 화염 피해를 가한다"
+msgstr "35% 확률로 돌진 콤보가 화염 피해를 가한다"
 
 #. Key:	Desc_Flame_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Normal"
 msgid "7% chance for dash attack to deal flame damage"
-msgstr "7% 확률로 대시 공격이 화염 피해를 가한다"
+msgstr "7% 확률로 돌진 콤보가 화염 피해를 가한다"
 
 #. Key:	Desc_Flame_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Rare"
 msgid "16% chance for dash attack to deal flame damage"
-msgstr "16% 확률로 대시 공격이 화염 피해를 가한다"
+msgstr "16% 확률로 돌진 콤보가 화염 피해를 가한다"
 
 #. Key:	Desc_Flame_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Legendary"
 msgid "30% chance for normal attack to deal flame damage"
-msgstr "30% 확률로 일반 공격이 화염 피해를 가한다"
+msgstr "30% 확률로 일반 콤보가 화염 피해를 가한다"
 
 #. Key:	Desc_Flame_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Normal"
 msgid "5% chance for normal attack to deal flame damage"
-msgstr "5% 확률로 일반 공격이 화염 피해를 가한다"
+msgstr "5% 확률로 일반 콤보가 화염 피해를 가한다"
 
 #. Key:	Desc_Flame_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Rare"
 msgid "15% chance for normal attack to deal flame damage"
-msgstr "15% 확률로 일반 공격이 화염 피해를 가한다"
+msgstr "15% 확률로 일반 콤보가 화염 피해를 가한다"
 
 #. Key:	Desc_Footwork_Optimization_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -291,21 +291,21 @@ msgstr "점프 공격력이 17% 증가하며 확률적으로 스턴 디버프를
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Legendary"
 msgid "dash attack power increases by 27% and has a chance to inflict stun debuff"
-msgstr "대시 공격력이 27% 증가하며 확률적으로 스턴 디버프를 입힌다"
+msgstr "돌진 콤보 공격력이 27% 증가하며 확률적으로 스턴 디버프를 입힌다"
 
 #. Key:	Desc_Freezing_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Normal"
 msgid "dash attack power increases by 7% and has a chance to inflict stun debuff"
-msgstr "대시 공격력이 7% 증가하며 확률적으로 스턴 디버프를 입힌다"
+msgstr "돌진 콤보 공격력이 7% 증가하며 확률적으로 스턴 디버프를 입힌다"
 
 #. Key:	Desc_Freezing_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Rare"
 msgid "dash attack power increases by 17% and has a chance to inflict stun debuff"
-msgstr "대시 공격력이 17% 증가하며 확률적으로 스턴 디버프를 입힌다"
+msgstr "돌진 콤보 공격력이 17% 증가하며 확률적으로 스턴 디버프를 입힌다"
 
 #. Key:	Desc_Freezing_Resistance_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -333,42 +333,42 @@ msgstr "스턴 디버프에 저항력이 40% 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Legendary"
 msgid "normal attack stun chance increases by 30%"
-msgstr "일반 공격 시 스턴 디버프를 입힐 확률이 30% 증가한다"
+msgstr "일반 콤보 시 스턴 디버프를 입힐 확률이 30% 증가한다"
 
 #. Key:	Desc_Freezing_Strike_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Normal"
 msgid "normal attack stun chance increases by 10%"
-msgstr "일반 공격 시 스턴 디버프를 입힐 확률이 10% 증가한다"
+msgstr "일반 콤보 시 스턴 디버프를 입힐 확률이 10% 증가한다"
 
 #. Key:	Desc_Freezing_Strike_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Rare"
 msgid "normal attack stun chance increases by 20%"
-msgstr "일반 공격 시 스턴 디버프를 입힐 확률이 20% 증가한다"
+msgstr "일반 콤보 시 스턴 디버프를 입힐 확률이 20% 증가한다"
 
 #. Key:	Desc_Freezing_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Legendary"
 msgid "normal attack power increases by 25% and has a chance to inflict stun debuff"
-msgstr "일반 공격력이 25% 증가하며 확률적으로 스턴 디버프를 적용한다"
+msgstr "일반 콤보 공격력이 25% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Freezing_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Normal"
 msgid "normal attack power increases by 5% and has a chance to inflict stun debuff"
-msgstr "일반 공격력이 5% 증가하며 확률적으로 스턴 디버프를 적용한다"
+msgstr "일반 콤보 공격력이 5% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Freezing_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Rare"
 msgid "normal attack power increases by 15% and has a chance to inflict stun debuff"
-msgstr "일반 공격력이 15% 증가하며 확률적으로 스턴 디버프를 적용한다"
+msgstr "일반 콤보 공격력이 15% 증가하며 확률적으로 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Heal_Pack_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -396,21 +396,21 @@ msgstr "10% 확률로 회복 아이템으로 회복되는 양이 35% 늘어난�
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Legendary"
 msgid "max HP decreases by 20%, but normal attack deals very strong acidic damage"
-msgstr "최대 체력이 20% 줄어들지만, 일반 공격 시 매우 강력한 산성 피해를 입힌다"
+msgstr "최대 체력이 20% 줄어들지만, 일반 콤보 시 매우 강력한 산성 피해를 입힌다"
 
 #. Key:	Desc_High-Risk_Oxidation_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Normal"
 msgid "max HP decreases by 20%, but normal attack deals strong acidic damage"
-msgstr "최대 체력이 20% 줄어들지만, 일반 공격 시 강한 산성 피해를 입힌다"
+msgstr "최대 체력이 20% 줄어들지만, 일반 콤보 시 강한 산성 피해를 입힌다"
 
 #. Key:	Desc_High-Risk_Oxidation_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Rare"
 msgid "max HP decreases by 20%, but normal attack deals even stronger acidic damage"
-msgstr "최대 체력이 20% 줄어들지만, 일반 공격 시 더욱 강력한 산성 피해를 입힌다"
+msgstr "최대 체력이 20% 줄어들지만, 일반 콤보 시 더욱 강력한 산성 피해를 입힌다"
 
 #. Key:	Desc_Hit_Rate_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -508,126 +508,126 @@ msgstr "점프 공격 속도가 15% 감소하지만, 강력한 슬로우 디버�
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Legendary"
 msgid "dash attack speed decreases by 15%, but inflicts very strong slow debuff"
-msgstr "대시 공격 속도가 15% 감소하지만, 매우 강력한 슬로우 디버프를 적용한다"
+msgstr "돌진 콤보 속도가 15% 감소하지만, 매우 강력한 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Overload_Self_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Normal"
 msgid "dash attack speed decreases by 15%, but inflicts strong slow debuff"
-msgstr "대시 공격 속도가 15% 감소하지만, 강한 슬로우 디버프를 적용한다"
+msgstr "돌진 콤보 속도가 15% 감소하지만, 강한 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Overload_Self_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Rare"
 msgid "dash attack speed decreases by 15%, but inflicts even stronger slow debuff"
-msgstr "대시 공격 속도가 15% 감소하지만, 강력한 슬로우 디버프를 적용한다"
+msgstr "돌진 콤보 속도가 15% 감소하지만, 강력한 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Overload_Self_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Legendary"
 msgid "movement speed decreases by 30%, but normal attack power increases by 30%"
-msgstr "이동 속도가 30% 감소하지만, 일반 공격력이 30% 증가한다"
+msgstr "이동 속도가 30% 감소하지만, 일반 콤보 공격력이 30% 증가한다"
 
 #. Key:	Desc_Overload_Self_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Normal"
 msgid "movement speed decreases by 30%, but normal attack power increases by 10%"
-msgstr "이동 속도가 30% 감소하지만, 일반 공격력이 10% 증가한다"
+msgstr "이동 속도가 30% 감소하지만, 일반 콤보 공격력이 10% 증가한다"
 
 #. Key:	Desc_Overload_Self_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Rare"
 msgid "movement speed decreases by 30%, but normal attack power increases by 20%"
-msgstr "이동 속도가 30% 감소하지만, 일반 공격력이 20% 증가한다"
+msgstr "이동 속도가 30% 감소하지만, 일반 콤보 공격력이 20% 증가한다"
 
 #. Key:	Desc_Overload_Self_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Legendary"
 msgid "normal attack speed decreases by 15%, but inflicts very strong slow debuff"
-msgstr "일반 공격 속도가 15% 감소하지만, 매우 강력한 슬로우 디버프를 적용한다"
+msgstr "일반 콤보 속도가 15% 감소하지만, 매우 강력한 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Overload_Self_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Normal"
 msgid "normal attack speed decreases by 15%, but inflicts strong slow debuff"
-msgstr "일반 공격 속도가 15% 감소하지만, 강한 슬로우 디버프를 적용한다"
+msgstr "일반 콤보 속도가 15% 감소하지만, 강한 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Overload_Self_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Rare"
 msgid "normal attack speed decreases by 15%, but inflicts even stronger slow debuff"
-msgstr "일반 공격 속도가 15% 감소하지만, 더욱 강력한 슬로우 디버프를 적용한다"
+msgstr "일반 콤보 속도가 15% 감소하지만, 더욱 강력한 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Oxidation_Aerial_Attack_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Legendary"
 msgid "jump attack deals strong acidic damage"
-msgstr "점프 공격이 강한 산성 피해를 입힌다"
+msgstr "점프 콤보가 강한 산성 피해를 입힌다"
 
 #. Key:	Desc_Oxidation_Aerial_Attack_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Normal"
 msgid "jump attack deals weak acidic damage"
-msgstr "점프 공격이 약한 산성 피해를 입힌다"
+msgstr "점프 콤보가 약한 산성 피해를 입힌다"
 
 #. Key:	Desc_Oxidation_Aerial_Attack_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Rare"
 msgid "jump attack deals acidic damage"
-msgstr "점프 공격이 산성 피해를 입힌다"
+msgstr "점프 콤보가 산성 피해를 입힌다"
 
 #. Key:	Desc_Oxidation_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Legendary"
 msgid "dash attack deals strong acidic damage"
-msgstr "대시 공격이 강한 산성 피해를 입힌다"
+msgstr "돌진 콤보가 강한 산성 피해를 입힌다"
 
 #. Key:	Desc_Oxidation_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Normal"
 msgid "dash attack deals weak acidic damage"
-msgstr "대시 공격이 약한 산성 피해를 입힌다"
+msgstr "돌진 콤보가 약한 산성 피해를 입힌다"
 
 #. Key:	Desc_Oxidation_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Rare"
 msgid "dash attack deals acidic damage"
-msgstr "대시 공격이 산성 피해를 입힌다"
+msgstr "돌진 콤보가 산성 피해를 입힌다"
 
 #. Key:	Desc_Oxidation_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Legendary"
 msgid "normal attack deals strong acidic damage"
-msgstr "일반 공격이 강한 산성 피해를 입힌다"
+msgstr "일반 콤보가 강한 산성 피해를 입힌다"
 
 #. Key:	Desc_Oxidation_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Normal"
 msgid "normal attack deals weak acidic damage"
-msgstr "일반 공격이 약한 산성 피해를 입힌다"
+msgstr "일반 콤보가 약한 산성 피해를 입힌다"
 
 #. Key:	Desc_Oxidation_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Rare"
 msgid "normal attack deals acidic damage"
-msgstr "일반 공격이 산성 피해를 입힌다"
+msgstr "일반 콤보가 산성 피해를 입힌다"
 
 #. Key:	Desc_Precision_Aerial_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -655,42 +655,42 @@ msgstr "점프 공격 시 치명타 확률이 12% 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Dash_Legendary"
 msgid "dash attack critical hit chance increases by 17%"
-msgstr "대시 공격 시 치명타 확률이 17% 증가한다"
+msgstr "돌진 콤보 시 치명타 확률이 17% 증가한다"
 
 #. Key:	Desc_Precision_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Dash_Normal"
 msgid "dash attack critical hit chance increases by 7%"
-msgstr "대시 공격 시 치명타 확률이 7% 증가한다"
+msgstr "돌진 콤보 시 치명타 확률이 7% 증가한다"
 
 #. Key:	Desc_Precision_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Dash_Rare"
 msgid "dash attack critical hit chance increases by 12%"
-msgstr "대시 공격 시 치명타 확률이 12% 증가한다"
+msgstr "돌진 콤보 시 치명타 확률이 12% 증가한다"
 
 #. Key:	Desc_Precision_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Strike_Legendary"
 msgid "normal attack critical hit chance increases by 15%"
-msgstr "일반 공격 시 치명타 확률이 15% 증가한다"
+msgstr "일반 콤보 시 치명타 확률이 15% 증가한다"
 
 #. Key:	Desc_Precision_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Strike_Normal"
 msgid "normal attack critical hit chance increases by 5%"
-msgstr "일반 공격 시 치명타 확률이 5% 증가한다"
+msgstr "일반 콤보 시 치명타 확률이 5% 증가한다"
 
 #. Key:	Desc_Precision_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Strike_Rare"
 msgid "normal attack critical hit chance increases by 10%"
-msgstr "일반 공격 시 치명타 확률이 10% 증가한다"
+msgstr "일반 콤보 시 치명타 확률이 10% 증가한다"
 
 #. Key:	Desc_Skill_Optimization_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -718,42 +718,42 @@ msgstr "전체 스킬 쿨타임이 35% 감소한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Legendary"
 msgid "normal attack speed increases by 35%"
-msgstr "일반 공격 속도가 35% 증가한다"
+msgstr "일반 콤보 속도가 35% 증가한다"
 
 #. Key:	Desc_Strike_Optimization_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Normal"
 msgid "normal attack speed increases by 5%"
-msgstr "일반 공격 속도가 5% 증가한다"
+msgstr "일반 콤보 속도가 5% 증가한다"
 
 #. Key:	Desc_Strike_Optimization_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Rare"
 msgid "normal attack speed increases by 20%"
-msgstr "일반 공격 속도가 20% 증가한다"
+msgstr "일반 콤보 속도가 20% 증가한다"
 
 #. Key:	Desc_Stunning_Output_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Stunning_Output_Legendary"
 msgid "normal attack has a 3% chance to inflict very strong stun debuff"
-msgstr "일반 공격 시 3% 확률로 매우 강한 스턴 디버프를 적용한다"
+msgstr "일반 콤보 시 3% 확률로 매우 강한 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Stunning_Output_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Stunning_Output_Normal"
 msgid "normal attack has a 1% chance to inflict very strong stun debuff"
-msgstr "일반 공격 시 1% 확률로 매우 강한 스턴 디버프를 적용한다"
+msgstr "일반 콤보 시 1% 확률로 매우 강한 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Stunning_Output_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Stunning_Output_Rare"
 msgid "normal attack has a 2% chance to inflict very strong stun debuff"
-msgstr "일반 공격 시 2% 확률로 매우 강한 스턴 디버프를 적용한다"
+msgstr "일반 콤보 시 2% 확률로 매우 강한 스턴 디버프를 적용한다"
 
 #. Key:	Desc_Sub-Weapon_Slot_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -802,105 +802,105 @@ msgstr "모든 공격력이 2% 증가한다"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Legendary"
 msgid "dash attack greatly increases and inflicts slow debuff"
-msgstr "대시 공격이 매우 강해지며 슬로우 디버프를 입힌다"
+msgstr "돌진 콤보가 매우 강해지며 슬로우 디버프를 입힌다"
 
 #. Key:	Desc_Throttling_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Normal"
 msgid "dash attack slightly increases and inflicts slow debuff"
-msgstr "대시 공격이 조금 강해지며 슬로우 디버프를 입힌다"
+msgstr "돌진 콤보가 조금 강해지며 슬로우 디버프를 입힌다"
 
 #. Key:	Desc_Throttling_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Rare"
 msgid "dash attack increases and inflicts slow debuff"
-msgstr "대시 공격이 더 강해지며 슬로우 디버프를 입힌다"
+msgstr "돌진 콤보가 더 강해지며 슬로우 디버프를 입힌다"
 
 #. Key:	Desc_Throttling_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Legendary"
 msgid "normal attack greatly increases and inflicts slow debuff"
-msgstr "일반 공격이 매우 강해지며 슬로우 디버프를 적용한다"
+msgstr "일반 콤보가 매우 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Throttling_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Normal"
 msgid "normal attack slightly increases and inflicts slow effect"
-msgstr "일반 공격이 조금 강해지며 슬로우 디버프를 적용한다"
+msgstr "일반 콤보가 조금 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Throttling_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Rare"
 msgid "normal attack increases and inflicts slow debuff"
-msgstr "일반 공격이 강해지며 슬로우 디버프를 적용한다"
+msgstr "일반 콤보가 강해지며 슬로우 디버프를 적용한다"
 
 #. Key:	Desc_Toxic_Aerial_Attack_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Legendary"
 msgid "normal attack power decreases by 2%, but jump attack deals very strong acidic damage"
-msgstr "일반 공격력이 2% 감소하지만, 점프 공격 시 매우 강력한 산성 피해를 입힌다"
+msgstr "일반 콤보 공격력이 2% 감소하지만, 점프 공격 시 매우 강력한 산성 피해를 입힌다"
 
 #. Key:	Desc_Toxic_Aerial_Attack_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Normal"
 msgid "normal attack power decreases by 2%, but jump attack deals strong acidic damage"
-msgstr "일반 공격력이 2% 감소하지만, 점프 공격 시 강력한 산성 피해를 입힌다"
+msgstr "일반 콤보 공격력이 2% 감소하지만, 점프 공격 시 강력한 산성 피해를 입힌다"
 
 #. Key:	Desc_Toxic_Aerial_Attack_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Rare"
 msgid "normal attack power decreases by 2%, but jump attack deals even stronger acidic damage"
-msgstr "일반 공격력이 2% 감소하지만, 점프 공격 시 더욱 강력한 산성 피해를 입힌다"
+msgstr "일반 콤보 공격력이 2% 감소하지만, 점프 공격 시 더욱 강력한 산성 피해를 입힌다"
 
 #. Key:	Desc_Toxic_Oxidation_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Legendary"
 msgid "normal attack power decreases by 2%, but dash attack deals very strong acidic damage"
-msgstr "일반 공격력이 2% 감소하지만, 대시 공격 시 매우 강력한 산성 피해를 입힌다"
+msgstr "일반 콤보 공격력이 2% 감소하지만, 돌진 콤보 시 매우 강력한 산성 피해를 입힌다"
 
 #. Key:	Desc_Toxic_Oxidation_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Normal"
 msgid "normal attack power decreases by 2%, but dash attack deals strong acidic damage"
-msgstr "일반 공격력이 2% 감소하지만, 대시 공격 시 강력한 산성 피해를 입힌다"
+msgstr "일반 콤보 공격력이 2% 감소하지만, 돌진 콤보 시 강력한 산성 피해를 입힌다"
 
 #. Key:	Desc_Toxic_Oxidation_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Rare"
 msgid "normal attack power decreases by 2%, but dash attack deals even stronger acidic damage"
-msgstr "일반 공격력이 2% 감소하지만, 대시 공격 시 더욱 강력한 산성 피해를 입힌다"
+msgstr "일반 콤보 공격력이 2% 감소하지만, 돌진 콤보 시 더욱 강력한 산성 피해를 입힌다"
 
 #. Key:	Desc_Toxic_Oxidation_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Legendary"
 msgid "defense power decreases by 50%, but normal attack deals very strong acidic damage"
-msgstr "방어력이 50% 줄어들지만, 일반 공격 시 매우 강력한 산성 피해를 입힌다"
+msgstr "방어력이 50% 줄어들지만, 일반 콤보 시 매우 강력한 산성 피해를 입힌다"
 
 #. Key:	Desc_Toxic_Oxidation_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Normal"
 msgid "defense power decreases by 50%, but normal attack deals strong acidic damage"
-msgstr "방어력이 50% 줄어들지만, 일반 공격 시 강한 산성 피해를 입힌다"
+msgstr "방어력이 50% 줄어들지만, 일반 콤보 시 강한 산성 피해를 입힌다"
 
 #. Key:	Desc_Toxic_Oxidation_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Rare"
 msgid "defense power decreases by 50%, but normal attack deals even stronger acidic damage"
-msgstr "방어력이 50% 줄어들지만, 일반 공격 시 더욱 강력한 산성 피해를 입힌다"
+msgstr "방어력이 50% 줄어들지만, 일반 콤보 시 더욱 강력한 산성 피해를 입힌다"
 
 #. Key:	Desc_Transcendent_Critical_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -949,14 +949,14 @@ msgstr "희귀"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Name_Aerial_Strike_Optimization"
 msgid "Aerial Strike Optimization"
-msgstr "공중 공격 최적화"
+msgstr "점프 콤보 최적화"
 
 #. Key:	Name_Critical_Aerial_Attack
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Name_Critical_Aerial_Attack"
 msgid "Critical Aerial Attack"
-msgstr "치명 공중 공격"
+msgstr "치명 점프 콤보"
 
 #. Key:	Name_Critical_Dash
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -1089,7 +1089,7 @@ msgstr "프리징 일격 강화"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Name_High-Risk_Aerial_Attack"
 msgid "High-Risk Aerial Attack"
-msgstr "고위험 공중 공격"
+msgstr "고위험 점프 콤보"
 
 #. Key:	Name_High-Risk_Oxidation_Dash
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -1264,7 +1264,7 @@ msgstr "쓰로틀링 일격"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Name_Toxic_Aerial_Attack"
 msgid "Toxic Aerial Attack"
-msgstr "유해성 공중 공격"
+msgstr "유해성 점프 콤보"
 
 #. Key:	Name_Toxic_Oxidation_Dash
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -2706,49 +2706,49 @@ msgstr "화염 저항"
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_DashAttackFatality"
 msgid "Dash Attack Critical Rate"
-msgstr "돌진 공격 치명타"
+msgstr "돌진 콤보 치명타"
 
 #. Key:	Name_Stat_DashAttackFlame
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_DashAttackFlame"
 msgid "Dash Attack Flame"
-msgstr "돌진 공격 화염"
+msgstr "돌진 콤보 화염"
 
 #. Key:	Name_Stat_DashAttackPoison
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_DashAttackPoison"
 msgid "Dash Attack Oxidation"
-msgstr "돌진 공격 산화"
+msgstr "돌진 콤보 산화"
 
 #. Key:	Name_Stat_DashAttackPower
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_DashAttackPower"
 msgid "Dash Attack Power"
-msgstr "돌진 공격력"
+msgstr "돌진 콤보 공격력"
 
 #. Key:	Name_Stat_DashAttackSlow
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_DashAttackSlow"
 msgid "Dash Attack Slow"
-msgstr "돌진 공격 슬로우"
+msgstr "돌진 콤보 슬로우"
 
 #. Key:	Name_Stat_DashAttackSpeed
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_DashAttackSpeed"
 msgid "Dash Attack Speed"
-msgstr "돌진 공격 속도"
+msgstr "돌진 콤보 속도"
 
 #. Key:	Name_Stat_DashAttackStun
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_DashAttackStun"
 msgid "Dash Attack Freezing"
-msgstr "돌진 공격 프리징 "
+msgstr "돌진 콤보 프리징 "
 
 #. Key:	Name_Stat_DebuffTime
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
@@ -2846,49 +2846,49 @@ msgstr "이동 속도"
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_NormalAttackSpeed"
 msgid "Normal Attack Speed"
-msgstr "일반 공격 속도"
+msgstr "일반 콤보 속도"
 
 #. Key:	Name_Stat_NormalFatality
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_NormalFatality"
 msgid "Normal Attack Critical Rate"
-msgstr "일반 공격 치명타"
+msgstr "일반 콤보 치명타"
 
 #. Key:	Name_Stat_NormalFlame
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_NormalFlame"
 msgid "Normal Attack Flame"
-msgstr "일반 공격 화염"
+msgstr "일반 콤보 화염"
 
 #. Key:	Name_Stat_NormalPoison
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_NormalPoison"
 msgid "Normal Attack Oxidation"
-msgstr "일반 공격 산화"
+msgstr "일반 콤보 산화"
 
 #. Key:	Name_Stat_NormalPower
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_NormalPower"
 msgid "Normal Attack Power"
-msgstr "일반 공격력"
+msgstr "일반 콤보 공격력"
 
 #. Key:	Name_Stat_NormalSlow
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_NormalSlow"
 msgid "Normal Attack Slow"
-msgstr "일반 공격 슬로우"
+msgstr "일반 콤보 슬로우"
 
 #. Key:	Name_Stat_NormalStun
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_NormalStun"
 msgid "Normal Attack Freezing"
-msgstr "일반 공격 프리징"
+msgstr "일반 콤보 프리징"
 
 #. Key:	Name_Stat_PoisonResist
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
@@ -3126,7 +3126,7 @@ msgstr "달리기"
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Battle_1"
 msgid "<Bold.24>[Combat Guide]</>\r\n- Master the art of combat in BackStreet.\r\n- Use your skills and tactics to overcome enemies and thrive in the desolate city.\r\n\r\n<Medium.24>[Combo Types]</>\r\n- Standard Combo: Chain basic attacks for a steady damage output.\r\n- Dash Combo:  Launch a swift attack while dashing, with the final hit dealing area damage to multiple enemies.\r\n- Air Combo: Strike enemies mid-air for high damage and strategic advantage.\r\n\r\n<Medium.24>[Battle Tips]</>\r\n- Ranged Enemies: Attack from a distance with projectiles. Use agility to close the gap.\r\n- Melee Enemies: Engage in close quarters. Time your attacks to counter them effectively.\r\n- Roll to Evade: Avoid enemy attacks and projectiles by rolling. Perfect timing can save your life.\r\n\r\n<Bold.22>Practice these techniques to dominate the battlefield</>\r\n<Bold.22>and prepare for the ultimate challenge!</>"
-msgstr "<Bold.24>[전투 가이드]</>\r\n- BackStreet에서 전투 기술을 익히고 마스터하세요.  \r\n- 적을 물리치고 황폐한 도시에서 살아남기 위해 기술과 전략을 활용하세요.\r\n\r\n<Medium.24>[콤보 유형]</>  \r\n- 기본 콤보: 기본 공격을 연계하여 꾸준한 피해를 줍니다.  \r\n- 돌진 콤보: 대시하면서 빠르게 공격하며, 마지막 타격은 광역 피해를 줍니다.  \r\n- 공중 콤보: 공중에서 적을 공격하여 높은 피해를 주고 전략적 우위를 확보하세요.\r\n\r\n<Medium.24>[전투 팁]</>  \r\n- 원거리 적: 투사체 공격을 활용해 원거리에서 공격하세요. 빠르게 접근하여 상대를 제압하세요.  \r\n- 근거리 적: 근접 전투에서 교전하세요. 적의 공격 타이밍을 파악하여 효과적으로 반격하세요.  \r\n- 구르기 회피: 적의 공격과 투사체를 피하기 위해 구르기를 사용하세요. 완벽한 타이밍이 생존의 열쇠입니다.\r\n\r\n<Bold.22>이 기술을 연습하여 전장을 지배하고 최종 도전에 대비하세요!</>"
+msgstr "<Bold.24>[전투 가이드]</>\r\n- BackStreet에서 전투 기술을 익히고 마스터하세요.  \r\n- 적을 물리치고 황폐한 도시에서 살아남기 위해 기술과 전략을 활용하세요.\r\n\r\n<Medium.24>[콤보 유형]</>  \r\n- 일반 콤보: 기본 공격을 연계하여 꾸준한 피해를 줍니다.  \r\n- 돌진 콤보: 돌진하면서 빠르게 공격하며, 마지막 타격은 광역 피해를 줍니다.  \r\n- 점프 콤보: 공중에서 적을 공격하여 높은 피해를 주고 전략적 우위를 확보하세요.\r\n\r\n<Medium.24>[전투 팁]</>  \r\n- 원거리 적: 투사체 공격을 활용해 원거리에서 공격하세요. 빠르게 접근하여 상대를 제압하세요.  \r\n- 근거리 적: 근접 전투에서 교전하세요. 적의 공격 타이밍을 파악하여 효과적으로 반격하세요.  \r\n- 구르기 회피: 적의 공격과 투사체를 피하기 위해 구르기를 사용하세요. 완벽한 타이밍이 생존의 열쇠입니다.\r\n\r\n<Bold.22>이 기술을 연습하여 전장을 지배하고 최종 도전에 대비하세요!</>"
 
 #. Key:	Tutorial_Boosterchip
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial

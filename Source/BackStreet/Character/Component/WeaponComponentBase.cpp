@@ -318,6 +318,11 @@ uint8 UWeaponComponentBase::GetMaxStatLevel(EWeaponStatType WeaponStatType)
 float UWeaponComponentBase::CalculateTotalDamage(FCharacterGameplayInfo TargetState, bool& bIsFatalAttack)
 {
 	if (!OwnerCharacterRef.IsValid()) return 0.0f;
+	if (OwnerCharacterRef.Get()->ActorHasTag("Enemy"))
+	{
+		return OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_NormalPower) * (WeaponStat.WeaponDamage);
+	}
+
 	bool bIsSkillAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("Skill"));
 	bool bIsDashAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("DashAttack"));
 	bool bIsJumpAttacking = !OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"));
@@ -328,18 +333,14 @@ float UWeaponComponentBase::CalculateTotalDamage(FCharacterGameplayInfo TargetSt
 									(ownerState.GetTotalValue(ECharacterStatType::E_NormalPower)));
 	const float fatalMultiplier = CalculateAttackFatality(ownerState, bIsJumpAttacking, bIsDashAttacking);
 	bIsFatalAttack = (fatalMultiplier > 0.0f);
-
-	if (bIsSkillAttacking)
-	{
-		return OwnerCharacterRef.Get()->ActorHasTag("Player") 
-			? (WeaponStat.WeaponDamage)
-			: (attackPower * (WeaponStat.WeaponDamage)); //적 캐릭터는 Normal Power로 캐릭터의 Atk Multipiler을 표현
-	}
-	return WeaponStat.WeaponDamage
+	
+	return bIsSkillAttacking
+		? (WeaponStat.WeaponDamage)
+		: (WeaponStat.WeaponDamage
 		* (1.0f + FMath::Max(0.0f, attackPower - TargetState.GetTotalValue(ECharacterStatType::E_Defense)))
 		* (WeaponStat.bCriticalApply ? WeaponStat.CriticalDamageRate : 1.0f) // 크리티컬 데미지 적용 여부
 		* (1.0f + fatalMultiplier)
-		+ (WeaponStat.bFixDamageApply ? WeaponStat.FixedDamageAmount : 0.0f);  // 치명적 공격의 추가 배율
+		+ (WeaponStat.bFixDamageApply ? WeaponStat.FixedDamageAmount : 0.0f));  // 치명적 공격의 추가 배율
 }
 
 float UWeaponComponentBase::CalculateAttackFatality(FCharacterGameplayInfo& GameplayInfoRef, bool bIsJumpAttacking, bool bIsDashAttacking)
