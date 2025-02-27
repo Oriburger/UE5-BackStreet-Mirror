@@ -205,7 +205,6 @@ TArray<FName> ACharacterBase::GetCurrentMontageSlotName()
 void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset)
 {
 	FVector currentLocation = GetActorLocation();
-	UE_LOG(LogWeapon, Warning, TEXT("Update Location) Falling : %d, Error : %d"), (int32)(GetCharacterMovement()->IsFalling()), (int32)(GetCharacterMovement()->IsFalling() ? GetVelocity().Length() * 0.02f : 30.0f));
 	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? GetVelocity().Length() * 0.02f : 30.0f))
 	{
 		GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
