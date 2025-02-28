@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hant\n"
-"POT-Creation-Date: 2025-02-26 03:41\n"
-"PO-Revision-Date: 2025-02-26 03:41\n"
+"POT-Creation-Date: 2025-02-28 01:27\n"
+"PO-Revision-Date: 2025-02-28 01:27\n"
 "Language-Team: \n"
 "Language: zh-Hant\n"
 "MIME-Version: 1.0\n"
@@ -332,22 +332,22 @@ msgstr "暈眩效果持續時間減少40%"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Legendary"
-msgid "normal attack stun chance increases by 30%"
-msgstr "普通攻擊的暈眩機率提升30%"
+msgid "normal attack stun chance increases by 10%"
+msgstr "普通攻擊的暈眩機率提升10%"
 
 #. Key:	Desc_Freezing_Strike_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Normal"
-msgid "normal attack stun chance increases by 10%"
-msgstr "普通攻擊的暈眩機率提升10%"
+msgid "normal attack stun chance increases by 2%"
+msgstr "普通攻擊的暈眩機率提升2%"
 
 #. Key:	Desc_Freezing_Strike_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Rare"
-msgid "normal attack stun chance increases by 20%"
-msgstr "普通攻擊的暈眩機率提升20%"
+msgid "normal attack stun chance increases by 5%"
+msgstr "普通攻擊的暈眩機率提升5%"
 
 #. Key:	Desc_Freezing_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -374,22 +374,22 @@ msgstr "普通攻擊威力提升15%，並有機率施加暈眩效果"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Legendary"
-msgid "10% chance for healing item recovery amount to increase by 45%"
-msgstr "治療道具的恢復量有10%機率增加45%"
+msgid "50% chance for healing item recovery amount to increase by 45%"
+msgstr "治療道具的恢復量有50%機率增加45%"
 
 #. Key:	Desc_Heal_Pack_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Normal"
-msgid "10% chance for healing item recovery amount to increase by 30%"
-msgstr "治療道具的恢復量有10%機率增加30%"
+msgid "30% chance for healing item recovery amount to increase by 30%"
+msgstr "治療道具的恢復量有30%機率增加30%"
 
 #. Key:	Desc_Heal_Pack_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Rare"
-msgid "10% chance for healing item recovery amount to increase by 35%"
-msgstr "治療道具的恢復量有10%機率增加35%"
+msgid "40% chance for healing item recovery amount to increase by 35%"
+msgstr "治療道具的恢復量有40%機率增加35%"
 
 #. Key:	Desc_High-Risk_Oxidation_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -479,8 +479,8 @@ msgstr "有25%機率從被擊敗的敵人獲得3倍的製作材料"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overdrive_Mode"
-msgid "max HP decreases by 10%, but movement speed increases by 45%"
-msgstr "最大生命值降低10%，但移動速度提升45%"
+msgid "max HP decreases by 10%, but movement speed increases by 30%"
+msgstr "最大生命值降低10%，但移動速度提升30%"
 
 #. Key:	Desc_Overload_Self_Aerial_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip

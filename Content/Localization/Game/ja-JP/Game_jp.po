@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_jp\n"
-"POT-Creation-Date: 2025-02-26 03:39\n"
-"PO-Revision-Date: 2025-02-26 03:39\n"
+"POT-Creation-Date: 2025-02-28 01:26\n"
+"PO-Revision-Date: 2025-02-28 01:26\n"
 "Language-Team: \n"
 "Language: ja-JP\n"
 "MIME-Version: 1.0\n"
@@ -332,22 +332,22 @@ msgstr "スタンデバフの持続時間を40%短縮する"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Legendary"
-msgid "normal attack stun chance increases by 30%"
-msgstr "通常攻撃のスタン確率が30%増加する"
+msgid "normal attack stun chance increases by 10%"
+msgstr "通常攻撃のスタン確率が10%増加する"
 
 #. Key:	Desc_Freezing_Strike_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Normal"
-msgid "normal attack stun chance increases by 10%"
-msgstr "通常攻撃のスタン確率が10%増加する"
+msgid "normal attack stun chance increases by 2%"
+msgstr "通常攻撃のスタン確率が2%増加する"
 
 #. Key:	Desc_Freezing_Strike_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Rare"
-msgid "normal attack stun chance increases by 20%"
-msgstr "通常攻撃のスタン確率が20%増加する"
+msgid "normal attack stun chance increases by 5%"
+msgstr "通常攻撃のスタン確率が5%増加する"
 
 #. Key:	Desc_Freezing_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -374,22 +374,22 @@ msgstr "通常攻撃の威力が15%増加し、スタンデバフを付与する
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Legendary"
-msgid "10% chance for healing item recovery amount to increase by 45%"
-msgstr "回復アイテムの回復量が10%の確率で45%増加する"
+msgid "50% chance for healing item recovery amount to increase by 45%"
+msgstr "回復アイテムの回復量が50%の確率で45%増加する"
 
 #. Key:	Desc_Heal_Pack_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Normal"
-msgid "10% chance for healing item recovery amount to increase by 30%"
-msgstr "回復アイテムの回復量が10%の確率で30%増加する"
+msgid "30% chance for healing item recovery amount to increase by 30%"
+msgstr "回復アイテムの回復量が30%の確率で30%増加する"
 
 #. Key:	Desc_Heal_Pack_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Rare"
-msgid "10% chance for healing item recovery amount to increase by 35%"
-msgstr "回復アイテムの回復量が10%の確率で35%増加する"
+msgid "40% chance for healing item recovery amount to increase by 35%"
+msgstr "回復アイテムの回復量が40%の確率で35%増加する"
 
 #. Key:	Desc_High-Risk_Oxidation_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -479,8 +479,8 @@ msgstr "倒した敵から25%の確率で3倍のクラフト素材を獲得す�
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overdrive_Mode"
-msgid "max HP decreases by 10%, but movement speed increases by 45%"
-msgstr "最大HPが10%減少するが、移動速度が45%増加する"
+msgid "max HP decreases by 10%, but movement speed increases by 30%"
+msgstr "最大HPが10%減少するが、移動速度が30%増加する"
 
 #. Key:	Desc_Overload_Self_Aerial_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -3133,7 +3133,7 @@ msgstr "<Bold.24>[戦闘ガイド]</>\r\nBackStreetで戦闘技術を極めよ�
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Boosterchip"
 msgid "<Bold.24>[Booster Chip Guide]</>\r\n- Enhance your combat power with over 100 different booster chips for a more powerful gameplay experience.\r\n\r\n<Medium.24>[Types of Booster Chips]</>\r\n- Combo Upgrade Type: Enhances the abilities of key combos (basic, jump, dash) and applies debuff effects.\r\n- Base Stat Enhancement Chips: Increases core attributes such as attack power, defense, speed, and survivability.\r\n\r\n<Medium.24>[How to Obtain]</>\r\n- Stage Completion Rewards: Randomly provided upon clearing each stage.\r\n\r\n<Medium.24>[How to Use]</>\r\n- Auto-Equip: Automatically activated upon acquisition.\r\n\r\n<Bold.22>With over 100 types of booster chips available, strategically combine them</>\r\n<Bold.22> to tailor your combat style and maximize your effectiveness on the battlefield!</>"
-msgstr "<Bold.24>[ブースターチップガイド]</>\r\n- 100種類以上のブースターチップで戦闘力を強化し、より強力なゲームプレイを体験してください。\r\n\r\n<Medium.24>[ブースターチップの種類]</>  \r\n- コンボ強化型: 主要なコンボ（基本、ジャンプ、ダッシュ）の能力を向上させ、デバフ効果を付与します。  \r\n- 基礎ステータス強化型: 攻撃力、防御力、速度、生存能力などの基本属性を向上させます。\r\n\r\n<Medium.24>[入手方法]</>  \r\n- ステージクリア報酬: ステージをクリアするとランダムで提供されます。\r\n\r\n<Medium.24>[使用方法]</>  \r\n- 自動装備: 入手時に自動で有効化されます。\r\n\r\n<Bold.22>100種類以上のブースターチップを戦略的に組み合わせて、自分だけの戦闘スタイルを確立し、戦場での効果を最大化してください！</>"
+msgstr "<Bold.24>[ブースターチップガイド]</>\r\n- 100種類以上のブースターチップで戦闘力を強化し、より強力なゲームプレイを体験してください。\r\n\r\n<Medium.24>[ブースターチップの種類]</>  \r\n- コンボ強化型: 主要なコンボ（基本、ジャンプ、ダッシュ）の能力を向上させ、デバフ効果を付与します。  \r\n- 基礎ステータス強化型: 攻撃力、防御力、速度、生存能力などの基本属性を向上させます。\r\n\r\n<Medium.24>[入手方法]</>  \r\n- ステージクリア報酬: ステージをクリアするとランダムで提供されます。\r\n\r\n<Medium.24>[使用方法]</>  \r\n- 自動装備: 入手時に自動で有効化されます。\r\n\r\n<Bold.22>100種類以上のブースターチップを戦略的に組み合わせて、</>\r\n<Bold.22>自分だけの戦闘スタイルを確立し、戦場での効果を最大化してください！</>"
 
 #. Key:	Tutorial_Debuff
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial

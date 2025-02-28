@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-02-27 06:37\n"
-"PO-Revision-Date: 2025-02-27 06:37\n"
+"POT-Creation-Date: 2025-02-28 01:27\n"
+"PO-Revision-Date: 2025-02-28 01:27\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -332,22 +332,22 @@ msgstr "스턴 디버프에 저항력이 40% 증가한다"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Legendary"
-msgid "normal attack stun chance increases by 30%"
-msgstr "일반 콤보 시 스턴 디버프를 입힐 확률이 30% 증가한다"
+msgid "normal attack stun chance increases by 10%"
+msgstr "일반 콤보 시 스턴 디버프를 입힐 확률이 10% 증가한다"
 
 #. Key:	Desc_Freezing_Strike_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Normal"
-msgid "normal attack stun chance increases by 10%"
-msgstr "일반 콤보 시 스턴 디버프를 입힐 확률이 10% 증가한다"
+msgid "normal attack stun chance increases by 2%"
+msgstr "일반 콤보 시 스턴 디버프를 입힐 확률이 2% 증가한다"
 
 #. Key:	Desc_Freezing_Strike_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Rare"
-msgid "normal attack stun chance increases by 20%"
-msgstr "일반 콤보 시 스턴 디버프를 입힐 확률이 20% 증가한다"
+msgid "normal attack stun chance increases by 5%"
+msgstr "일반 콤보 시 스턴 디버프를 입힐 확률이 5% 증가한다"
 
 #. Key:	Desc_Freezing_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -374,22 +374,22 @@ msgstr "일반 콤보 공격력이 15% 증가하며 확률적으로 스턴 디�
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Legendary"
-msgid "10% chance for healing item recovery amount to increase by 45%"
-msgstr "10% 확률로 회복 아이템으로 회복되는 양이 40% 늘어난다"
+msgid "50% chance for healing item recovery amount to increase by 45%"
+msgstr "50% 확률로 회복 아이템으로 회복되는 양이 40% 늘어난다"
 
 #. Key:	Desc_Heal_Pack_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Normal"
-msgid "10% chance for healing item recovery amount to increase by 30%"
-msgstr "10% 확률로 회복 아이템으로 회복되는 양이 30% 늘어난다"
+msgid "30% chance for healing item recovery amount to increase by 30%"
+msgstr "30% 확률로 회복 아이템으로 회복되는 양이 30% 늘어난다"
 
 #. Key:	Desc_Heal_Pack_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Rare"
-msgid "10% chance for healing item recovery amount to increase by 35%"
-msgstr "10% 확률로 회복 아이템으로 회복되는 양이 35% 늘어난다"
+msgid "40% chance for healing item recovery amount to increase by 35%"
+msgstr "40% 확률로 회복 아이템으로 회복되는 양이 35% 늘어난다"
 
 #. Key:	Desc_High-Risk_Oxidation_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -479,8 +479,8 @@ msgstr "처치 시 25%의 확률로 조합재료(몹 드롭 아이템)을 3배 �
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overdrive_Mode"
-msgid "max HP decreases by 10%, but movement speed increases by 45%"
-msgstr "최대 체력이 10% 감소하지만, 이동 속도가 45% 증가한다"
+msgid "max HP decreases by 10%, but movement speed increases by 30%"
+msgstr "최대 체력이 10% 감소하지만, 이동 속도가 30% 증가한다"
 
 #. Key:	Desc_Overload_Self_Aerial_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -3133,7 +3133,7 @@ msgstr "<Bold.24>[전투 가이드]</>\r\n- BackStreet에서 전투 기술을 �
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Boosterchip"
 msgid "<Bold.24>[Booster Chip Guide]</>\r\n- Enhance your combat power with over 100 different booster chips for a more powerful gameplay experience.\r\n\r\n<Medium.24>[Types of Booster Chips]</>\r\n- Combo Upgrade Type: Enhances the abilities of key combos (basic, jump, dash) and applies debuff effects.\r\n- Base Stat Enhancement Chips: Increases core attributes such as attack power, defense, speed, and survivability.\r\n\r\n<Medium.24>[How to Obtain]</>\r\n- Stage Completion Rewards: Randomly provided upon clearing each stage.\r\n\r\n<Medium.24>[How to Use]</>\r\n- Auto-Equip: Automatically activated upon acquisition.\r\n\r\n<Bold.22>With over 100 types of booster chips available, strategically combine them</>\r\n<Bold.22> to tailor your combat style and maximize your effectiveness on the battlefield!</>"
-msgstr "<Bold.24>[부스터칩 가이드]</>\r\n100개 이상의 다양한 부스터칩을 활용하여 전투력을 강화하고 더욱 강력한 게임 플레이를 경험하세요.\r\n\r\n<Medium.24>[부스터칩 유형]</>  \r\n- 콤보 업그레이드형: 주요 콤보(기본, 점프, 돌진)의 능력을 강화하고 디버프 효과를 적용합니다.  \r\n- 기본 스탯 강화 칩: 공격력, 방어력, 속도, 생존력 등 핵심 속성을 증가시킵니다.\r\n\r\n<Medium.24>[획득 방법]</>  \r\n- 스테이지 클리어 보상: 각 스테이지를 클리어할 때 랜덤으로 지급됩니다.\r\n\r\n<Medium.24>[사용 방법]</>  \r\n- 자동 장착: 획득 즉시 자동으로 활성화됩니다.\r\n\r\n<Bold.22>100개 이상의 부스터칩을 전략적으로 조합하여 전투 스타일을 맞추고 전장에서 최고의 효율을 발휘하세요!</>"
+msgstr "<Bold.24>[부스터칩 가이드]</>\r\n100개 이상의 다양한 부스터칩을 활용하여 전투력을 강화하고 더욱 강력한 게임 플레이를 경험하세요.\r\n\r\n<Medium.24>[부스터칩 유형]</>  \r\n- 콤보 업그레이드형: 주요 콤보(기본, 점프, 돌진)의 능력을 강화하고 디버프 효과를 적용합니다.  \r\n- 기본 스탯 강화 칩: 공격력, 방어력, 속도, 생존력 등 핵심 속성을 증가시킵니다.\r\n\r\n<Medium.24>[획득 방법]</>  \r\n- 스테이지 클리어 보상: 각 스테이지를 클리어할 때 랜덤으로 지급됩니다.\r\n\r\n<Medium.24>[사용 방법]</>  \r\n- 자동 장착: 획득 즉시 자동으로 활성화됩니다.\r\n\r\n<Bold.22>100개 이상의 부스터칩을 전략적으로 조합하여 전투 스타일을 맞추고</>\r\n<Bold.22>전장에서 최고의 효율을 발휘하세요!</>"
 
 #. Key:	Tutorial_Debuff
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
