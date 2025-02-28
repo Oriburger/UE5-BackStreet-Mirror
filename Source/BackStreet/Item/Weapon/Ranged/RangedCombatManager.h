@@ -28,16 +28,12 @@ public:
 //------ Ranged 오버라이더블 ----------------------------
 public:
 	UFUNCTION(BlueprintCallable)
-		bool TryFireProjectile(FRotator FireRotationOverride = FRotator::ZeroRotator);
-	
-	//Add ammo count
-	UFUNCTION(BlueprintCallable)
-		void AddAmmo(int32 Count);
+		bool TryFireProjectile(FRotator FireRotationOverride = FRotator::ZeroRotator, FVector FireLocationOverride = FVector::ZeroVector);
 
 //------ Basic ---------------------------------
 protected:
 	UFUNCTION(BlueprintCallable)
-		class AProjectileBase* CreateProjectile(FRotator FireRotationOverride = FRotator::ZeroRotator);
+		class AProjectileBase* CreateProjectile(FRotator FireRotationOverride = FRotator::ZeroRotator, FVector FireLocationOverride = FVector::ZeroVector);
 
 //------- Getter / Setter ---------------------------
 public:

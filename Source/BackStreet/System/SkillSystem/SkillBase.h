@@ -29,7 +29,7 @@ public:
 //======= User Basic Function =======================
 public:	
 	UFUNCTION()
-		void InitSkill(FSkillStatStruct NewSkillStat, class USkillManagerComponentBase* NewSkillManagerComponent);
+		void InitSkill(FSkillStatStruct NewSkillStat, class USkillManagerComponentBase* NewSkillManagerComponent, FSkillInfo NewSkillInfo = FSkillInfo());
 
 	//Must link with parent function in Blueprint
 	UFUNCTION(BlueprintNativeEvent)
@@ -39,37 +39,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void DeactivateSkill();
 
-	//Destroy the skill
-	UFUNCTION()
-		void DestroySkill();
-
-	UFUNCTION(BlueprintCallable, Blueprintpure)
-		ACharacterBase* GetOwnerCharacterRef();
-
-	UFUNCTION(BlueprintCallable, Blueprintpure)
-		FSkillAssetStruct GetSkillAssetStruct() {return SkillStat.SkillAssetStruct;}
-
-//======= DataTable, Asset =======================
-protected:
-	UFUNCTION(BlueprintCallable)
-		void PlaySingleSound(FName SoundName);
-
 	UFUNCTION(BlueprintCallable)
 		float PlayAnimMontage(ACharacter* Target, FName AnimName);
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		UNiagaraSystem* GetNiagaraEffect(FName EffectName);
+//======= Getter Function =======================
+	UFUNCTION(BlueprintCallable, Blueprintpure)
+		ACharacterBase* GetOwnerCharacterRef();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		UAnimMontage* GetSkillAnimMontage() { return SkillInfo.SkillAnimation; }
+
+//======= DataTable, Asset =======================
 public:	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		FSkillStatStruct SkillStat;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
-		FSkillStateStruct SkillState;
-
-protected:
-	UPROPERTY(VisibleDefaultsOnly, Category = "Gamplay|Data")
-		UDataTable* SkillStatTable;
+		FSkillInfo SkillInfo;
 
 //======= ETC. (Ref) =======================
 protected:
@@ -79,25 +62,9 @@ protected:
 	//SkillManagerComponent Soft Ref
 	TWeakObjectPtr<class USkillManagerComponentBase> SkillManagerComponentRef;
 
-	//AssetManager Soft Ref
-	TWeakObjectPtr<class UAssetManagerBase> AssetManagerBaseRef;
-
 	//OwnerCharacter Soft Ref
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterBaseRef;
 
-//======= Timer =======================
-public:
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		float GetSkillRemainingCoolTime();
-
-protected:
-	//Call after activate skill
-	UFUNCTION(BlueprintCallable)
-		void SetSkillBlockedTimer(float Delay);
-
-	//Reset skill unblocked
-	UFUNCTION(BlueprintCallable)
-		void ResetSkillBlockedTimer();
 private:
 	//Manage skill's cool time
 	FTimerHandle SkillCoolTimeHandle;

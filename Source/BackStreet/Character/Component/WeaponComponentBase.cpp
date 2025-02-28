@@ -147,10 +147,9 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	}
 	if (!bIsCached && WeaponStat.WeaponType == EWeaponType::E_Melee)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("On Main Weapon Updated : %d %d"), WeaponStat.WeaponID, (int32)WeaponStat.WeaponType)
 		OnMainWeaponUpdated.Broadcast();
 	}
-	OnWeaponStateUpdated.Broadcast(WeaponID, WeaponStat.WeaponType, WeaponState);
+	OnWeaponStateUpdated.Broadcast(WeaponID, WeaponStat, WeaponState);
 }
 
 void UWeaponComponentBase::InitWeaponAsset()
@@ -164,6 +163,10 @@ void UWeaponComponentBase::InitWeaponAsset()
 		this->SetRelativeRotation(WeaponAssetInfo.InitialRotation);
 		this->SetRelativeScale3D(WeaponAssetInfo.InitialScale);
 		this->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("UWeaponComponentBase::InitWeaponAsset(), %s's weapon is not valid"), *UKismetSystemLibrary::GetDisplayName(GetOwner()));
 	}
 
 	if (IsValid(WeaponTrailParticle))
@@ -315,20 +318,29 @@ uint8 UWeaponComponentBase::GetMaxStatLevel(EWeaponStatType WeaponStatType)
 float UWeaponComponentBase::CalculateTotalDamage(FCharacterGameplayInfo TargetState, bool& bIsFatalAttack)
 {
 	if (!OwnerCharacterRef.IsValid()) return 0.0f;
+	if (OwnerCharacterRef.Get()->ActorHasTag("Enemy"))
+	{
+		return OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_NormalPower) * (WeaponStat.WeaponDamage);
+	}
+
+	bool bIsSkillAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("Skill"));
 	bool bIsDashAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("DashAttack"));
 	bool bIsJumpAttacking = !OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"));
 
 	FCharacterGameplayInfo& ownerState = OwnerCharacterRef.Get()->GetCharacterGameplayInfoRef();
+	float attackPower = bIsDashAttacking ? ownerState.GetTotalValue(ECharacterStatType::E_DashAttackPower) :
+								(bIsJumpAttacking ? ownerState.GetTotalValue(ECharacterStatType::E_JumpAttackPower) :
+									(ownerState.GetTotalValue(ECharacterStatType::E_NormalPower)));
 	const float fatalMultiplier = CalculateAttackFatality(ownerState, bIsJumpAttacking, bIsDashAttacking);
 	bIsFatalAttack = (fatalMultiplier > 0.0f);
-
-	return WeaponStat.WeaponDamage
-		* (1.0f + FMath::Max(0.0f, ownerState.GetTotalValue(ECharacterStatType::E_NormalPower) - TargetState.GetTotalValue(ECharacterStatType::E_Defense)))
+	
+	return bIsSkillAttacking
+		? (WeaponStat.WeaponDamage)
+		: (WeaponStat.WeaponDamage
+		* (1.0f + FMath::Max(0.0f, attackPower - TargetState.GetTotalValue(ECharacterStatType::E_Defense)))
 		* (WeaponStat.bCriticalApply ? WeaponStat.CriticalDamageRate : 1.0f) // 크리티컬 데미지 적용 여부
-		* (bIsDashAttacking ? (1.0f + ownerState.GetTotalValue(ECharacterStatType::E_DashAttackPower)) : 1.0f) // 대쉬 공격 여부
-		* (bIsJumpAttacking ? (1.0f + ownerState.GetTotalValue(ECharacterStatType::E_JumpAttackPower)) : 1.0f) // 점프 공격 여부
 		* (1.0f + fatalMultiplier)
-		+ (WeaponStat.bFixDamageApply ? WeaponStat.FixedDamageAmount : 0.0f);  // 치명적 공격의 추가 배율
+		+ (WeaponStat.bFixDamageApply ? WeaponStat.FixedDamageAmount : 0.0f));  // 치명적 공격의 추가 배율
 }
 
 float UWeaponComponentBase::CalculateAttackFatality(FCharacterGameplayInfo& GameplayInfoRef, bool bIsJumpAttacking, bool bIsDashAttacking)
@@ -345,11 +357,10 @@ float UWeaponComponentBase::CalculateAttackFatality(FCharacterGameplayInfo& Game
 	return 0.0f;
 }
 
-void UWeaponComponentBase::ApplyWeaponDebuff(ACharacterBase* TargetCharacter, ECharacterDebuffType DebuffType, ECharacterStatType DebuffStatType)
+bool UWeaponComponentBase::ApplyWeaponDebuff(ACharacterBase* TargetCharacter, ECharacterDebuffType DebuffType, ECharacterStatType DebuffStatType)
 {
-	UE_LOG(LogTemp, Warning, TEXT("UWeaponComponentBase::ApplyWeaponDebuff #1"));
-	if (DebuffStatType == ECharacterStatType::E_None) return; 
-	if(!OwnerCharacterRef.IsValid() || !IsValid(TargetCharacter)) return;
+	if (DebuffStatType == ECharacterStatType::E_None) return false; 
+	if (!OwnerCharacterRef.IsValid() || !IsValid(TargetCharacter)) return false;
 
 	float targetValue = OwnerCharacterRef.Get()->GetStatTotalValue(DebuffStatType);
 	float probabilityValue = OwnerCharacterRef.Get()->GetStatProbabilityValue(DebuffStatType);
@@ -363,8 +374,7 @@ void UWeaponComponentBase::ApplyWeaponDebuff(ACharacterBase* TargetCharacter, EC
 	{
 		result = TargetCharacter->TryAddNewDebuff(FDebuffInfoStruct(DebuffType, targetTime, targetValue, true), OwnerCharacterRef.Get());
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("UWeaponComponentBase::ApplyWeaponDebuff #3 - type : %d // value : %.2lf // random (%.2lf, %.2lf) // time : %.2lf // result : %d"), (int32)DebuffType, targetValue, probabilityValue * 100.0f, randomSeed, targetTime, (int32)result);
+	return result;
 }
 
 bool UWeaponComponentBase::UpgradeStat(TArray<uint8> NewLevelList)
@@ -378,16 +388,4 @@ bool UWeaponComponentBase::UpgradeStat(TArray<uint8> NewLevelList)
 	WeaponStat.WeaponAtkSpeedRate = WeaponStat.UpgradableStatInfoMap[EWeaponStatType::E_AttackSpeed].StatInfoByLevel[NewLevelList[1]].StatAdder;
 	WeaponStat.FinalImpactStrength = WeaponStat.UpgradableStatInfoMap[EWeaponStatType::E_FinalAttack].StatInfoByLevel[NewLevelList[2]].StatAdder;
 	return true;
-}
-
-void UWeaponComponentBase::UpdateComboState()
-{
-	WeaponState.ComboCount = (WeaponState.ComboCount + 1);
-	//OwnerCharacterRef.Get()->GetWeaponInventoryRef()->SyncCurrentWeaponInfo(true);
-}
-
-bool UWeaponComponentBase::GetIsFinalCombo()
-{
-	if (!OwnerCharacterRef.IsValid() || OwnerCharacterRef.Get()->GetMaxComboCount() == 0) return false;
-	return GetCurrentComboCnt() % OwnerCharacterRef.Get()->GetMaxComboCount() == 0;
 }

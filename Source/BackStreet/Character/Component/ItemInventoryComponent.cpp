@@ -127,16 +127,16 @@ bool UItemInventoryComponent::TryAddWeapon(int32 ItemID, EItemCategoryInfo ItemC
 		
 		//@@ TEMPORARY CODE @@@@@@@
 		int32 maxAmmoCount = WeaponRef.Get()->GetWeaponStatInfoWithID(ItemID - 20000).RangedWeaponStat.MaxTotalAmmo;
-		maxAmmoCount = maxAmmoCount * (1.0f + OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_SubWeaponCapacity));
+		maxAmmoCount = maxAmmoCount * FMath::Max(1.0f, OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_SubWeaponCapacity));
 		targetState.RangedWeaponState.UpdateAmmoValidation(maxAmmoCount);
 		ItemCount = targetState.RangedWeaponState.CurrentAmmoCount - prevCount;
 
-		UE_LOG(LogTemp, Warning, TEXT("UItemInventoryComponent::TryAddWeapon maxAmmo : %d,  added : %d, after : %d"), maxAmmoCount, ItemCount, targetState.RangedWeaponState.CurrentAmmoCount);
 
 		if (ItemCount <= 0) return false;
 
 		ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, ItemMap[ItemID].ItemAmount + ItemCount);
 		TryUpdateWeaponState(ItemID - 20000, targetState);
+		
 		OnItemAdded.Broadcast(ItemMap[ItemID], ItemCount);
 	}
 	return true;
@@ -238,7 +238,7 @@ FItemInfoDataStruct UItemInventoryComponent::GetSubWeaponInfoData()
 	return FItemInfoDataStruct();
 }
 
-void UItemInventoryComponent::OnWeaponStateUpdated(int32 WeaponID, EWeaponType WeaponType, FWeaponStateStruct NewState)
+void UItemInventoryComponent::OnWeaponStateUpdated(int32 WeaponID, FWeaponStatStruct WeaponStat, FWeaponStateStruct NewState)
 {
 	if (!WeaponStateMap.Contains(WeaponID)) WeaponStateMap.Add(WeaponID, FWeaponStateStruct());
 	if (!ItemMap.Contains(WeaponID + 20000))
@@ -247,7 +247,7 @@ void UItemInventoryComponent::OnWeaponStateUpdated(int32 WeaponID, EWeaponType W
 		return;
 	}
 	
-	if (WeaponType == EWeaponType::E_Shoot)
+	if (WeaponStat.WeaponType == EWeaponType::E_Shoot)
 	{
 		const int32 ammoVariance = NewState.RangedWeaponState.CurrentAmmoCount - ItemMap[WeaponID + 20000].ItemAmount;
 		ItemMap[WeaponID + 20000].ItemAmount = NewState.RangedWeaponState.CurrentAmmoCount;

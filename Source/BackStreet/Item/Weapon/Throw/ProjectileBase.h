@@ -44,7 +44,7 @@ public:
 protected:
 	UFUNCTION()
 		void InitProjectileAsset();
-
+	
 	UFUNCTION()
 		void DestroyWithEffect(FVector Location = FVector(0.0f), bool bContainCameraShake = false);
 
@@ -83,7 +83,7 @@ protected:
 
 //------ 기본 함수  ------------------
 public:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void InitProjectile(class ACharacterBase* NewCharacterRef, FProjectileAssetInfoStruct NewAssetInfo, FProjectileStatStruct NewStatInfo);
 
 	UFUNCTION(BlueprintCallable)
@@ -96,6 +96,10 @@ public:
 	UFUNCTION()
 		void OnProjectileHit(class UPrimitiveComponent* HitComponet, class AActor* OtherActor, class UPrimitiveComponent* OtherComp
 			, FVector NormalImpulse, const FHitResult& Hit);
+
+	//SphereOverlap to handle near actors in case of RangedCombat Attack
+	UFUNCTION()
+		void CheckInitialDamageCondition(float SphereRadius, float Distance, bool bIsCharacterStandard);
 
 	UFUNCTION(BlueprintCallable)
 		void ActivateProjectileMovement();
@@ -124,6 +128,9 @@ private:
 
 	UPROPERTY()
 		FTimerHandle AutoExplodeTimer;
+
+	UPROPERTY()
+		FTimerHandle DestroyWithEffectTimer;
 
 	UPROPERTY()
 		AController* SpawnInstigator;

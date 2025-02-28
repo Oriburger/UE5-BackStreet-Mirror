@@ -19,14 +19,9 @@ URangedCombatManager::URangedCombatManager()
 void URangedCombatManager::Attack()
 {
 	Super::Attack();
-	
+
 	bool result = TryFireProjectile();
 
-	if (AssetManagerRef.IsValid())
-	{
-		AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon
-		, WeaponComponentRef.Get()->WeaponID, result ? "Shoot" : "ShootFail");
-	}
 }
 
 void URangedCombatManager::StopAttack()
@@ -34,7 +29,7 @@ void URangedCombatManager::StopAttack()
 	Super::Attack();
 }
 
-bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
+bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride, FVector FireLocationOverride)
 {
 	if (!OwnerCharacterRef.IsValid()) return false;
 	if (!WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo
@@ -61,20 +56,39 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 			fireRotation = rotationList[idx];
 		}
 		
-		AProjectileBase* newProjectile = CreateProjectile(fireRotation);
+		AProjectileBase* newProjectile = CreateProjectile(fireRotation, FireLocationOverride);
+		
 		//스폰한 발사체가 Valid 하다면 발사
 		if (IsValid(newProjectile))
 		{
+			newProjectile->CheckInitialDamageCondition(15.0f, 15.0f, false);
 			newProjectile->ActivateProjectileMovement();
 			SpawnShootNiagaraEffect(); //발사와 동시에 이미터를 출력한다.
+			if (AssetManagerRef.IsValid())
+			{
+				AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon
+					, WeaponComponentRef.Get()->WeaponID, "Shoot");
+			}
+			if (GamemodeRef.IsValid())
+			{
+				GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Hit, OwnerCharacterRef.Get()->GetActorLocation(), 100.0f);
+			}
+		}
+		else
+		{
+			if (AssetManagerRef.IsValid())
+			{
+				AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon
+					, WeaponComponentRef.Get()->WeaponID, "ShootFail");
+			}
 		}
 	}
 
 	//broadcast delegate
 	const int32 weaponID = WeaponComponentRef.Get()->WeaponID;
-	const EWeaponType weaponType = WeaponComponentRef.Get()->GetWeaponStat().WeaponType;
+	const FWeaponStatStruct weaponStat = WeaponComponentRef.Get()->GetWeaponStat();
 	const FWeaponStateStruct weaponState = WeaponComponentRef.Get()->GetWeaponState();
-	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponType, weaponState);
+	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponStat, weaponState);
 
 	//탄환을 다 썼을 경우, 모든 탄환을 발사한 이후 아래 로직을 처리한다
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player")
@@ -86,21 +100,8 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride)
 	return true;
 }
 
-void URangedCombatManager::AddAmmo(int32 Count)
-{
-	if (WeaponComponentRef.Get()->WeaponStat.RangedWeaponStat.bIsInfiniteAmmo) return;
-	
-	//broadcast delegate
-	const int32 weaponID = WeaponComponentRef.Get()->WeaponID;
-	const EWeaponType weaponType = WeaponComponentRef.Get()->GetWeaponStat().WeaponType;
-	FWeaponStateStruct weaponState = WeaponComponentRef.Get()->GetWeaponState();
-	weaponState.RangedWeaponState.CurrentAmmoCount += Count;
-	weaponState.RangedWeaponState.UpdateAmmoValidation(WeaponComponentRef.Get()->GetWeaponStat().RangedWeaponStat.MaxTotalAmmo);
 
-	WeaponComponentRef.Get()->OnWeaponStateUpdated.Broadcast(weaponID, weaponType, weaponState);
-}
-
-AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOverride)
+AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOverride, FVector FireLocationOverride)
 {	
 	FWeaponStatStruct weaponStat = WeaponComponentRef.Get()->WeaponStat;
 	FWeaponStateStruct weaponState = WeaponComponentRef.Get()->WeaponState;
@@ -108,10 +109,11 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 	FActorSpawnParameters spawmParams;
 	spawmParams.Owner = OwnerCharacterRef.Get(); //Projectile의 소유자는 Player
 	spawmParams.Instigator = OwnerCharacterRef.Get()->GetInstigator();
-	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::DontSpawnIfColliding;
 
-	FVector spawnLocation = OwnerCharacterRef.Get()->WeaponComponent->GetComponentLocation()
-							+ OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 25.0f;
+	FVector spawnLocation = FireLocationOverride.IsNearlyZero(0.01f) ? 
+								OwnerCharacterRef.Get()->WeaponComponent->GetComponentLocation() + OwnerCharacterRef.Get()->GetMesh()->GetRightVector() * 25.0f
+								: FireLocationOverride;
 	FRotator spawnRotation = FireRotationOverride.IsNearlyZero(0.01f) ?
 								OwnerCharacterRef.Get()->GetMesh()->GetComponentRotation()
 								: FireRotationOverride;
@@ -129,8 +131,8 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 	if (IsValid(newProjectile) && WeaponComponentRef.Get()->ProjectileAssetInfo.ProjectileID != 0)
 	{
 		newProjectile->SetOwner(OwnerCharacterRef.Get());
-		newProjectile->InitProjectile(OwnerCharacterRef.Get(), WeaponComponentRef.Get()->ProjectileAssetInfo, WeaponComponentRef.Get()->ProjectileStatInfo);
 		newProjectile->ProjectileStat.DebuffInfo = WeaponComponentRef.Get()->WeaponStat.DebuffInfo;
+		newProjectile->InitProjectile(OwnerCharacterRef.Get(), WeaponComponentRef.Get()->ProjectileAssetInfo, WeaponComponentRef.Get()->ProjectileStatInfo);
 		newProjectile->ProjectileStat.ProjectileDamage = WeaponComponentRef.Get()->WeaponStat.WeaponDamage;
 		return newProjectile;
 	}

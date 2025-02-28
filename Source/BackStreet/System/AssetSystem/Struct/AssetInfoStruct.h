@@ -114,11 +114,14 @@ public:
 
 //--------------- Animation  ------------------------------------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TArray<TSoftObjectPtr<UAnimMontage>> MeleeAttackAnimMontageSoftPtrList;
-
+		TArray<TSoftObjectPtr<UAnimMontage>> NormalComboAnimMontageSoftPtrList;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
-		TSoftObjectPtr<UAnimMontage> UpperAttackAnimMontageSoftPtr;
-
+		TArray<TSoftObjectPtr<UAnimMontage>> JumpComboAnimMontageSoftPtrList;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<TSoftObjectPtr<UAnimMontage>> DashComboAnimMontageSoftPtrList;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		TSoftObjectPtr<UAnimMontage> DownwardAttackAnimMontageSoftPtr;
 
@@ -191,14 +194,16 @@ public:
 
 //------- Animation --------------------------
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
-		TArray<UAnimMontage*> MeleeAttackAnimMontageList;
+		TArray<UAnimMontage*> NormalComboAnimMontageList;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
-		UAnimMontage* UpperAttackAnimMontage;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<UAnimMontage*> JumpComboAnimMontageList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		TArray<UAnimMontage*> DashComboAnimMontageList;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
 		UAnimMontage* DownwardAttackAnimMontage;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
 		UAnimMontage* DashAttackAnimMontage;
 		

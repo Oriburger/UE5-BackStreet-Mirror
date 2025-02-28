@@ -99,7 +99,7 @@ protected:
 public:
 	//Delegate 이벤트
 	UFUNCTION()
-		void OnWeaponStateUpdated(int32 WeaponID, EWeaponType WeaponType, FWeaponStateStruct NewState);
+		void OnWeaponStateUpdated(int32 WeaponID, FWeaponStatStruct WeaponStat, FWeaponStateStruct NewState);
 
 private:
 	//현재 인벤토리의 유효한 무기 ID들을 리스트로 불러온다

@@ -131,6 +131,7 @@ void UActionTrackingComponent::PrintDebugMessage(float DeltaTime)
 		FString str = FString::Printf(TEXT("[Action %s] / State : %s / Cooldown : %.2f"), *actionInfo.ActionName.ToString(), *state, remainingTime);
 		GEngine->AddOnScreenDebugMessage(keyId++, DeltaTime, FColor::Yellow, str);
 	}
+	GEngine->AddOnScreenDebugMessage(keyId++, DeltaTime, FColor::Yellow, FString::Printf(TEXT("[Combo] / Type : %d / Count : %d"), (int32)CurrentComboType, CurrentComboCount));
 	GEngine->AddOnScreenDebugMessage(keyId, DeltaTime, FColor::Yellow, FString("[------- Action Tracking Debug Message -------]"));
 }
 
@@ -168,6 +169,10 @@ void UActionTrackingComponent::TryUpdateActionState(FName ActionName, EActionSta
 	{
 		UE_LOG(LogTemp, Error, TEXT("UActionTrackingComponent::TryUpdateActionState(%s, %d) failed"), *ActionName.ToString(), (int32)NewState);
 	}
+	if (OnActionStateUpdated.IsBound() && NewState != EActionState::E_None)
+	{
+		OnActionStateUpdated.Broadcast(ActionName, (uint8)NewState);
+	}
 	
 	//자동 전환 조건에 따라 타이머를 지정한다.
 	if (NewState == EActionState::E_InProgress && actionInfo.bIsInstantAction)
@@ -184,7 +189,10 @@ void UActionTrackingComponent::SetAutoTransitionTimer(FName ActionName, EActionS
 {
 	if (!ActionInfoMap.Contains(ActionName))
 	{
-		UE_LOG(LogTemp, Error, TEXT("UActionTrackingComponent::SetAutoTransitionTimer / %s"), *ActionName.ToString());
+		if (bShowDebugMessage)
+		{
+			UE_LOG(LogTemp, Error, TEXT("UActionTrackingComponent::SetAutoTransitionTimer / %s"), *ActionName.ToString());
+		}
 		return; 
 	}
 	FTimerDelegate timerDelegate;
@@ -195,11 +203,20 @@ void UActionTrackingComponent::SetAutoTransitionTimer(FName ActionName, EActionS
 	GetWorld()->GetTimerManager().SetTimer(targetHandle, timerDelegate, delayValue, false);
 }
 
+void UActionTrackingComponent::ResetComboCount()
+{
+	CurrentComboType = EComboType::E_Normal;
+	CurrentComboCount = 0;
+}
+
 EActionState UActionTrackingComponent::GetActionState(FName ActionName)
 {
 	if (!ActionInfoMap.Contains(ActionName))
 	{
-		UE_LOG(LogTemp, Error, TEXT("UActionTrackingComponent::GetActionState - Action / %s / is not found"), *ActionName.ToString());
+		if (bShowDebugMessage)
+		{
+			UE_LOG(LogTemp, Error, TEXT("UActionTrackingComponent::GetActionState - Action / %s / is not found"), *ActionName.ToString());
+		}
 		return EActionState::E_None;
 	}
 	FActionInfo& actionInfo = ActionInfoMap[ActionName];

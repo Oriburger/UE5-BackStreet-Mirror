@@ -121,6 +121,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FName Description;
 
+	//무기 이름 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText WeaponNameText;
+
+	//무기 설명 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText DescriptionText;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		EWeaponType WeaponType = EWeaponType::E_None;
 
@@ -171,10 +179,6 @@ public:
 //----- 원거리 Stat ------
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		FRangedWeaponStatStruct RangedWeaponStat;
-
-//-----	스킬 Stat		--------
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<ESkillType> SkillTypeList = { ESkillType::E_None, ESkillType::E_None, ESkillType::E_None };
 };
 
 USTRUCT(BlueprintType)
@@ -205,16 +209,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		int32 CurrentDurability = 10;
 
-	//콤보 수
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		int32 ComboCount = 0;
-
 	//temp, meleeonly
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FRotator SlashRotation = FRotator::ZeroRotator;
 
 //-----Weapon Skill------
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FRangedWeaponStateStruct RangedWeaponState;
 
@@ -275,6 +274,10 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
 		FName WeaponName;
+
+	//무기 이름 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText WeaponNameText;
 
 	//스폰할 아이템 스태틱 메시 정보 저장
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")

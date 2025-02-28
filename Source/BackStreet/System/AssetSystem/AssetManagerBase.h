@@ -22,6 +22,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<USoundCue*> GetSoundList(ESoundAssetType SoundType, int32 TargetID, FName SoundName);
 	
+	//IndexOverride 미지정시 랜덤하게 반환
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		USoundCue* GetSingleSound(ESoundAssetType SoundType, int32 TargetID, FName SoundName, int32 IndexOverride = -1);
+
 	//Play Single Sound
 	UFUNCTION(BlueprintCallable)
 		void PlaySingleSound(AActor* TargetActor, ESoundAssetType SoundType, int32 TargetID, FName SoundName, float VolumeMultiplierOverride = 1.0f, float PitchMultiplier = 1.0f, float StartTime = 0.0f);

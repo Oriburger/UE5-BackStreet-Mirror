@@ -57,28 +57,28 @@
 			"Button":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/UI/Sound/SC_Button.SC_Button'"
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Ui/SC_Login_Ui_Click.SC_Login_Ui_Click'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"Lose":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/UI/Sound/SC_Lose.SC_Lose'"
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Ui/SC_Login_Jingle_Gameover.SC_Login_Jingle_Gameover'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"StageClear":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/System/Sound/ETC/SC_StageClear.SC_StageClear'"
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Ui/SC_Login_Jingle_StageClear.SC_Login_Jingle_StageClear'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
 			"Clear":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/UI/Sound/SC_Clear.SC_Clear'"
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Ui/SC_Login_Jingle_ChapterClear.SC_Login_Jingle_ChapterClear'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
@@ -102,7 +102,7 @@
 			"Gate":
 			{
 				"SoundList": [
-					"/Script/Engine.SoundCue'/Game/System/Sound/ETC/SC_Gate.SC_Gate'"
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_interaction/SC_Login_interaction_Portal_Move.SC_Login_interaction_Portal_Move'"
 				],
 				"SoundVolumeList": [ 0.75 ]
 			},
@@ -112,6 +112,90 @@
 					"/Script/Engine.SoundCue'/Game/System/Sound/ETC/SC_SpawnAbilityBox.SC_SpawnAbilityBox'"
 				],
 				"SoundVolumeList": [ 0.75 ]
+			},
+			"Burn_Start":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Debuff/SC_Login_Debuff_Flame_Start.SC_Login_Debuff_Flame_Start'"
+				],
+				"SoundVolumeList": [ 0.30000001192092896 ]
+			},
+			"Burn_Loop":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Debuff/SC_Login_Debuff_Flame_Loop.SC_Login_Debuff_Flame_Loop'"
+				],
+				"SoundVolumeList": [ 0.5 ]
+			},
+			"Poison_Start":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Debuff/SC_Login_Debuff_Decay_Start.SC_Login_Debuff_Decay_Start'"
+				],
+				"SoundVolumeList": [ 0.30000001192092896 ]
+			},
+			"Poison_Loop":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Debuff/SC_Login_Debuff_Decay_Loop.SC_Login_Debuff_Decay_Loop'"
+				],
+				"SoundVolumeList": [ 0.5 ]
+			},
+			"Slow_Start":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Debuff/SC_Login_Debuff_Slow_Start.SC_Login_Debuff_Slow_Start'"
+				],
+				"SoundVolumeList": [ 0.30000001192092896 ]
+			},
+			"Slow_Loop":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Debuff/SC_Login_Debuff_Slow_Loop.SC_Login_Debuff_Slow_Loop'"
+				],
+				"SoundVolumeList": [ 0.5 ]
+			},
+			"Stun_Start":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Debuff/SC_Login_Debuff_Stun_Start.SC_Login_Debuff_Stun_Start'"
+				],
+				"SoundVolumeList": [ 0.30000001192092896 ]
+			},
+			"Stun_Loop":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Debuff/SC_Login_Debuff_Stun_Start.SC_Login_Debuff_Stun_Start'"
+				],
+				"SoundVolumeList": [ 0.5 ]
+			},
+			"AttackDown_Start":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Debuff/SC_Login_Debuff_Attackdown_Start.SC_Login_Debuff_Attackdown_Start'"
+				],
+				"SoundVolumeList": [ 0.30000001192092896 ]
+			},
+			"AttackDown_Loop":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Debuff/SC_Login_Debuff_Attackdown_Loop.SC_Login_Debuff_Attackdown_Loop'"
+				],
+				"SoundVolumeList": [ 0.5 ]
+			},
+			"DefenseDown_Start":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Debuff/SC_Login_Debuff_Attackdown_Start.SC_Login_Debuff_Attackdown_Start'"
+				],
+				"SoundVolumeList": [ 0.30000001192092896 ]
+			},
+			"DefenseDown_Loop":
+			{
+				"SoundList": [
+					"/Script/Engine.SoundCue'/Game/Sound/SW_Login_Debuff/SC_Login_Debuff_Attackdown_Loop.SC_Login_Debuff_Attackdown_Loop'"
+				],
+				"SoundVolumeList": [ 0.5 ]
 			}
 		},
 		"SoundAssetDescription": "None"

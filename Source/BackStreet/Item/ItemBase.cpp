@@ -28,9 +28,6 @@ AItemBase::AItemBase()
 	MeshComponent->SetCollisionProfileName("Item", true);
 	SetRootComponent(MeshComponent);
 
-	OutlineMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ITEM_OUTLINE_MESH"));
-	OutlineMeshComponent->SetupAttachment(MeshComponent);
-
 	IconWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("ITEM_INFO_WIDGET"));
 	IconWidgetComponent->SetupAttachment(MeshComponent);
 	IconWidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 50.0f));
@@ -55,7 +52,7 @@ AItemBase::AItemBase()
 	ProjectileMovement->bShouldBounce = true;
 	ProjectileMovement->Bounciness = 0.5f;
 	ProjectileMovement->Friction = 0.6f;
-	ProjectileMovement->BounceVelocityStopSimulatingThreshold = 2.0f;
+	ProjectileMovement->BounceVelocityStopSimulatingThreshold = 2.0f;	
 }
 
 // Called when the game starts or when spawned
@@ -64,6 +61,8 @@ void AItemBase::BeginPlay()
 	Super::BeginPlay();
 
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
+	ItemDataInfoTable = GamemodeRef.Get()->ItemInfoTable;
+
 	OnPlayerBeginPickUp.BindUFunction(this, FName("OnItemPicked"));
 	ItemTriggerVolume->OnInteractionBegin.AddDynamic(this, &AItemBase::OnItemPicked);
 	PlayerRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
@@ -76,6 +75,7 @@ void AItemBase::InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride)
 
 	if (ItemInfo.ItemID == 0) return;
 
+	ItemInfo.ItemAmount = 1;
 	if (!ItemInfo.ItemMesh.IsNull())
 	{
 		TArray<FSoftObjectPath> assetToStream;
@@ -98,7 +98,6 @@ void AItemBase::InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride)
 void AItemBase::SetItemAmount(int32 NewAmount)
 {
 	if (ItemInfo.ItemType != EItemCategoryInfo::E_SubWeapon && ItemInfo.ItemType != EItemCategoryInfo::E_Craft) return;
-	UE_LOG(LogTemp, Warning, TEXT("AItemBase::SetItemAmount Type : %d, Amount : %d"), (int32)ItemInfo.ItemType, NewAmount);
 	ItemInfo.ItemAmount = NewAmount;
 }
 
@@ -151,17 +150,6 @@ void AItemBase::InitializeItemMesh()
 	//MeshComponent->SetRelativeLocation(ItemInfo.InitialLocation);
 	MeshComponent->SetRelativeRotation(ItemInfo.InitialRotation);
 	MeshComponent->SetRelativeScale3D(ItemInfo.InitialScale);
-
-	OutlineMeshComponent->SetStaticMesh(ItemInfo.ItemMesh.Get());
-	OutlineMeshComponent->SetRelativeLocation(FVector(0.0f));
-	OutlineMeshComponent->SetRelativeRotation(FRotator(0.0f));
-	OutlineMeshComponent->SetRelativeScale3D(FVector(1.0f));
-	
-	for (int32 matIdx = 0; matIdx < OutlineMeshComponent->GetNumMaterials(); matIdx++)
-	{
-		if(!IsValid(ItemInfo.OutlineMaterial.Get())) break;
-		OutlineMeshComponent->SetMaterial(matIdx, ItemInfo.OutlineMaterial.Get());
-	}
 	OnItemInitialized.Broadcast(ItemInfo);
 }
 

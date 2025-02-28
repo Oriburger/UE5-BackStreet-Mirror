@@ -3,6 +3,7 @@
 
 #include "DebuffManagerComponent.h"
 #include "../CharacterBase.h"
+#include "../../System/AssetSystem/AssetManagerBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 
 #define MAX_DEBUFF_IDX 10
@@ -40,6 +41,10 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 	float resistValue = -1.0f;
 	float totalDamage = 0.0f;
 
+	USoundCue* startSound;
+	USoundCue* loopSound;
+	GetDebuffSound(DebuffInfo.Type, startSound, loopSound);
+
 	if (GetDebuffIsActive((ECharacterDebuffType)DebuffInfo.Type))
 	{
 		FDebuffInfoStruct resetInfo = GetDebuffResetValue(DebuffInfo.Type);
@@ -53,11 +58,35 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 		else
 			ResetValueInfoMap[DebuffInfo.Type] = { DebuffInfo.Type, 0.0f, 0.0f, false };
 
-		return SetDebuffTimer({ DebuffInfo.Type, FMath::Min(DebuffInfo.TotalTime + remainTime, MAX_DEBUFF_TIME)
+		return SetDebuffTimer({ DebuffInfo.Type, FMath::Min(DebuffInfo.TotalTime, MAX_DEBUFF_TIME)
 								, DebuffInfo.Variable, DebuffInfo.bIsPercentage }, Causer);
 	}
 
+	// 시작 사운드 재생
+	if (IsValid(startSound))
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), startSound, GetOwner()->GetActorLocation(), 0.3f);
+	}
+	// Niagara 디버프 이펙트 활성화
 	OwnerCharacterRef.Get()->ActivateDebuffNiagara((uint8)DebuffInfo.Type);
+
+	// 루프 사운드 추가 및 실행
+	if (!DebuffLoopAudioMap.Contains(DebuffInfo.Type) && IsValid(loopSound))
+	{
+		UAudioComponent* loopAudioComp = UGameplayStatics::SpawnSoundAttached(
+			loopSound,
+			GetOwner()->GetRootComponent(),
+			NAME_None,
+			FVector::ZeroVector,
+			EAttachLocation::KeepRelativeOffset,
+			true, // 루프 활성화
+			0.5f
+		);
+		if (loopAudioComp)
+		{
+			DebuffLoopAudioMap.Add(DebuffInfo.Type, loopAudioComp);
+		}
+	}
 
 	/*---- 디버프 타이머 세팅 ----------------------------*/
 	DebuffInfo.Variable = FMath::Min(1.0f, FMath::Abs(DebuffInfo.Variable)); //값 정제
@@ -77,9 +106,12 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 		break;
 	//----스탯 조정 디버프-------------------
 	case ECharacterDebuffType::E_Stun:
-		OwnerCharacterRef.Get()->StopAttack();
+		OwnerCharacterRef.Get()->ResetActionState(true);
 		characterInfo.CharacterActionState = ECharacterActionType::E_Stun;
-		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+		if (OwnerCharacterRef->ActorHasTag("Enemy"))
+		{
+			OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+		}
 		break;
 	case ECharacterDebuffType::E_Slow:
 		resistValue = characterInfo.GetTotalValue(ECharacterStatType::E_SlowResist);
@@ -127,11 +159,25 @@ void UDebuffManagerComponent::ClearDebuffTimer(ECharacterDebuffType DebuffType)
 	FTimerHandle& dotDamageHandle = GetDotDamageTimerHandle(DebuffType);
 	FTimerHandle& resetHandle = GetResetTimerHandle(DebuffType);
 
+	//루프 사운드 제거
+	if (DebuffLoopAudioMap.Contains(DebuffType))
+	{
+		UAudioComponent* loopAudioComp = DebuffLoopAudioMap[DebuffType];
+		if (IsValid(loopAudioComp))
+		{
+			loopAudioComp->Stop();
+			loopAudioComp->DestroyComponent();
+		}
+		// 맵에서 제거
+		DebuffLoopAudioMap.Remove(DebuffType);
+	}
+
 	GetWorld()->GetTimerManager().ClearTimer(dotDamageHandle);
 	GetWorld()->GetTimerManager().ClearTimer(resetHandle);
 	dotDamageHandle.Invalidate();
 	resetHandle.Invalidate();
 
+	OwnerCharacterRef.Get()->DeactivateBuffEffect();
 	OnDebuffRemoved.Broadcast(DebuffType);
 
 	if(ResetValueInfoMap.Contains(DebuffType))
@@ -158,8 +204,9 @@ void UDebuffManagerComponent::PrintAllDebuff()
 
 void UDebuffManagerComponent::InitDebuffManager()
 {
-	//Initialize the owner character ref
+	//Initialize the owner character ref and gamemode ref
 	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
+	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
 void UDebuffManagerComponent::ApplyDotDamage(ECharacterDebuffType DebuffType, float DamageAmount, AActor* Causer)
@@ -191,8 +238,6 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 	if (!OwnerCharacterRef.IsValid() || DebuffType == ECharacterDebuffType::E_None) return;
 	if (OwnerCharacterRef.Get()->GetIsActionActive(ECharacterActionType::E_Die)) return;
 
-	//FCharacterStateStruct characterState = OwnerCharacterRef.Get()->GetCharacterState();
-	//FCharacterStatStruct characterStat = OwnerCharacterRef.Get()->GetCharacterGameplayInfo();
 	FCharacterGameplayInfo& characterInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfoRef();
 
 	FTimerHandle& timerHandle = GetResetTimerHandle(DebuffType);
@@ -202,7 +247,6 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 	characterInfo.CharacterDebuffState &= ~(1 << (int)DebuffType);
 
 	UE_LOG(LogTemp, Warning, TEXT("UDebuffManagerComponent::ResetStatDebuffState - type : %d"), (int32)DebuffType);
-	OwnerCharacterRef.Get()->DeactivateBuffEffect();
 
 	switch ((ECharacterDebuffType)DebuffType)
 	{
@@ -223,9 +267,29 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 	case ECharacterDebuffType::E_Stun:
 		characterInfo.CharacterActionState = ECharacterActionType::E_Idle;
 		OwnerCharacterRef.Get()->ResetActionState(true);
+		//if(OwnerCharacterRef.Get()->ActorHasTag("Player"))
+		//	OwnerCharacterRef.Get()->EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		//else if (OwnerCharacterRef.Get()->ActorHasTag("Enemy"))
 		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 		break;
 	}
 	ClearDebuffTimer(DebuffType);
 }
 
+void UDebuffManagerComponent::GetDebuffSound(ECharacterDebuffType DebuffType, USoundCue*& StartSound, USoundCue*& LoopSound)
+{
+	if (!GamemodeRef.IsValid()) return;
+
+	//초기화
+	StartSound = LoopSound = nullptr;
+
+	AssetManagerBaseRef = GamemodeRef.Get()->GetGlobalAssetManagerBaseRef();
+	if (AssetManagerBaseRef.IsValid())
+	{
+		FString debuffString = UEnum::GetValueAsString<ECharacterDebuffType>(TEnumAsByte<ECharacterDebuffType>(DebuffType));
+		debuffString.RemoveFromStart("ECharacterDebuffType::E_");
+
+		StartSound = AssetManagerBaseRef.Get()->GetSingleSound(ESoundAssetType::E_System, 3000, FName(debuffString + "_Start"));
+		LoopSound = AssetManagerBaseRef.Get()->GetSingleSound(ESoundAssetType::E_System, 3000, FName(debuffString + "_Loop"));
+	}
+}

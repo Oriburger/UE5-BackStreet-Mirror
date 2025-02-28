@@ -21,159 +21,241 @@ USkillManagerComponentBase::USkillManagerComponentBase()
 void USkillManagerComponentBase::BeginPlay()
 {
 	Super::BeginPlay();
-	InitSkillManager();
-}
-
-void USkillManagerComponentBase::InitSkillManager()
-{
-	//Initialize the owner character ref
 	OwnerCharacterRef = Cast<ACharacterBase>(GetOwner());
 	GameModeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	SkillStatTable = GameModeRef.Get()->SkillStatTable;
-	checkf(IsValid(SkillStatTable), TEXT("Failed to get SkillStatDataTable"));
-	OwnerCharacterRef->WeaponComponent->OnMainWeaponUpdated.AddDynamic(this, &USkillManagerComponentBase::InitSkillMap);
-	UE_LOG(LogTemp, Warning, TEXT("USkillManagerComponentBase::InitSkillManager()"));
+	OwnerCharacterRef->WeaponComponent->OnMainWeaponUpdated.AddDynamic(this, &USkillManagerComponentBase::ClearAllSkill);
+
+	//Init Skill Map
+	InitSkillInfoCache();
 }
 
-void USkillManagerComponentBase::InitSkillMap() 
+void USkillManagerComponentBase::InitSkillInfoCache()
 {
-	UE_LOG(LogTemp, Warning, TEXT("InitSkillMap()"));
-}
-
-bool USkillManagerComponentBase::TrySkill(int32 SkillID)
-{
-	if (!IsSkillValid(SkillID)) return false;
-	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	if (!IsValid(skillBase))
+	if (!SkillInfoCacheMap.IsEmpty()) return;
+	if (SkillInfoTable != nullptr)
 	{
-		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::TrySkill(%d) : Skill Base Not Found"), SkillID);
+		TArray<FName> rowNameList = SkillInfoTable->GetRowNames();
+		for (auto& row : rowNameList)
+		{
+			FString contextString = "";
+			FSkillInfo* skillInfo = SkillInfoTable->FindRow<FSkillInfo>(row, contextString);
+			if (skillInfo == nullptr) continue;
+			SkillInfoCacheMap.Add(skillInfo->SkillID, *skillInfo);
+
+			if (skillInfo->bIsPlayerSkill)
+			{
+				PlayerSkillIDList.Add(skillInfo->SkillID);
+			}
+		}
+	}
+}
+
+bool USkillManagerComponentBase::TryAddSkill(int32 NewSkillID)
+{
+	bool bIsInInventory = false;
+	FSkillInfo skillInfo = GetSkillInfoData(NewSkillID, bIsInInventory);
+	if (!skillInfo.IsValid() || bIsInInventory)
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::TryAddSkill %d failed - Reason %d %d"), NewSkillID, !skillInfo.IsValid(), bIsInInventory);
 		return false;
 	}
-	if (skillBase->SkillState.bIsBlocked) return false;
-	if (skillBase->SkillStat.bIsLevelValid)
+	SkillInventory.Add(NewSkillID, skillInfo);
+
+	if (skillInfo.CoolTimeValue > 0.0f && !CoolTimerHandleMap.Contains(NewSkillID))
 	{
-		//if (skillBase->SkillState.SkillLevel == 0) return false;
+		CoolTimerHandleMap.Add(NewSkillID, FTimerHandle());
 	}
-	skillBase->ActivateSkill();
-	OnSkillActivated.Broadcast(SkillID);
+
+	TArray<FSkillInfo> skillInfoList;
+	SkillInventory.GenerateValueArray(skillInfoList);
+	OnSkillInventoryUpdated.Broadcast(skillInfoList);
 	return true;
 }
 
-bool USkillManagerComponentBase::AddSkill(int32 SkillID)
+bool USkillManagerComponentBase::TryRemoveSkill(int32 TargetSkillID)
 {
-	if (IsSkillValid(SkillID)) return false;
+	bool bIsInInventory = false;
+	FSkillInfo skillInfo = GetSkillInfoData(TargetSkillID, bIsInInventory);
+	if (!skillInfo.IsValid() || !bIsInInventory)
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::TryRemoveSkill %d failed"), TargetSkillID);
+		return false;
+	}
+	SkillInventory.Remove(TargetSkillID);
+	if (skillInfo.CoolTimeValue > 0.0f && CoolTimerHandleMap.Contains(TargetSkillID))
+	{
+		CoolTimerHandleMap[TargetSkillID].Invalidate();
+		GetWorld()->GetTimerManager().ClearTimer(CoolTimerHandleMap[TargetSkillID]);
+		CoolTimerHandleMap.Remove(TargetSkillID);
+	}
+	TArray<FSkillInfo> skillInfoList;
+	SkillInventory.GenerateValueArray(skillInfoList);
+	OnSkillInventoryUpdated.Broadcast(skillInfoList);
 	return true;
 }
 
-bool USkillManagerComponentBase::RemoveSkill(int32 SkillID)
+bool USkillManagerComponentBase::TryActivateSkill(int32 TargetSkillID)
 {
+	bool bIsInInventory = false;
+	FSkillInfo skillInfo = GetSkillInfoData(TargetSkillID, bIsInInventory);
+	if (!skillInfo.IsValid() || !bIsInInventory || !OwnerCharacterRef.IsValid())
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::TryActivateSkill %d failed - Reason %d %d %d"), TargetSkillID, !skillInfo.IsValid(), !bIsInInventory, !OwnerCharacterRef.IsValid());
+		return false;
+	}
+	
+	if (PrevSkillInfo.PrevActionRef.IsValid())
+	{
+		UE_LOG(LogTemp, Error, TEXT("USkilllManagercomponentBase::TryActivateSkill prevSkill is not Destroyed - Reason %d"), !PrevSkillInfo.PrevActionRef.IsValid());
+		PrevSkillInfo.PrevActionRef.Get()->Destroy();
+	}
+
+	if (!skillInfo.bContainPrevAction)
+	{
+		OwnerCharacterRef.Get()->PlayAnimMontage(skillInfo.SkillAnimation);
+		PrevSkillInfo = skillInfo;
+	}
+	else if (skillInfo.PrevActionClass != nullptr)
+	{
+		ASkillBase* prevAction = Cast<ASkillBase>(GetWorld()->SpawnActor(skillInfo.PrevActionClass));
+		prevAction->InitSkill(FSkillStatStruct(), this, skillInfo); //제거 필요
+		prevAction->ActivateSkill();
+		PrevSkillInfo = skillInfo;
+	}
+	else return false;
+
+	OnSkillActivated.Broadcast(skillInfo);
+
+	if (skillInfo.CoolTimeValue > 0.0f && CoolTimerHandleMap.Contains(TargetSkillID))
+	{
+		FTimerDelegate timerDelegate;
+		timerDelegate.BindUFunction(this, FName("UpdateSkillValidity"), TargetSkillID, true);
+		UpdateSkillValidity(TargetSkillID, false);
+		const float coolTimeAbilityValue = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_SkillCoolTime) - 1.0f;
+		const float totalCoolTimeValue = FMath::Clamp(skillInfo.CoolTimeValue - skillInfo.CoolTimeValue * coolTimeAbilityValue, 0.1f, 60.0f);
+		GetWorld()->GetTimerManager().SetTimer(CoolTimerHandleMap[TargetSkillID], timerDelegate, totalCoolTimeValue, false);
+	}
+
 	return true;
 }
+
+void USkillManagerComponentBase::DeactivateCurrentSkill()
+{
+	if (PrevSkillInfo.PrevActionRef.IsValid())
+	{
+		ASkillBase* prevSkillBase = Cast<ASkillBase>(PrevSkillInfo.PrevActionRef);
+		prevSkillBase->DeactivateSkill();
+		prevSkillBase->Destroy();
+	}
+	PrevSkillInfo.IsValid();
+	OnSkillDeactivated.Broadcast(PrevSkillInfo);
+
+	PrevSkillInfo = FSkillInfo();
+}
+
+TArray<int32> USkillManagerComponentBase::GetCraftableIDList()
+{
+	TArray<int32> resultList;
+
+	for (int32& id : PlayerSkillIDList)
+	{
+		if (!SkillInventory.Contains(id))
+		{
+			resultList.Add(id);
+		}
+	}
+	return resultList;
+}
+
+FSkillInfo USkillManagerComponentBase::GetSkillInfoData(int32 TargetSkillID, bool& bIsInInventory)
+{
+	if (SkillInventory.Contains(TargetSkillID))
+	{
+		bIsInInventory = true;
+		return SkillInventory[TargetSkillID];
+	}
+
+	//Enemy doesn't use the inventory data. 
+	bIsInInventory = OwnerCharacterRef.IsValid() ? OwnerCharacterRef.Get()->ActorHasTag("Enemy") : false;
+	FString rowName = FString::FromInt(TargetSkillID);
+	if (!SkillInfoCache.Contains(TargetSkillID))
+	{
+		if (SkillInfoTable == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::GetSkillInfoData SkillInfoTable is not found"));
+			return FSkillInfo();
+		}
+		else
+		{
+			FSkillInfo* skillInfo = SkillInfoTable->FindRow<FSkillInfo>(FName(rowName), rowName);
+			if (skillInfo == nullptr)
+			{
+				UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::GetSkillInfoData %d is not found"), TargetSkillID);
+				return FSkillInfo();
+			}
+			skillInfo->bIsValid = true;
+			return SkillInfoCacheMap.Add(TargetSkillID, *skillInfo);
+		}
+		
+	}
+	return SkillInfoCacheMap[TargetSkillID];
+}
+
+TArray<int32> USkillManagerComponentBase::GetPlayerSkillIDList()
+{
+	if(!PlayerSkillIDList.IsEmpty()) return PlayerSkillIDList;
+	InitSkillInfoCache();
+	return PlayerSkillIDList;
+}
+
+float USkillManagerComponentBase::GetTotalCoolTime(int32 TargetSkillID)
+{
+	if (!CoolTimerHandleMap.Contains(TargetSkillID)) return 0.0001f;
+	return GetWorld()->GetTimerManager().GetTimerRemaining(CoolTimerHandleMap[TargetSkillID])
+			+ GetWorld()->GetTimerManager().GetTimerElapsed(CoolTimerHandleMap[TargetSkillID]);
+}
+
+float USkillManagerComponentBase::GetRemainingCoolTime(int32 TargetSkillID)
+{
+	if (!CoolTimerHandleMap.Contains(TargetSkillID)) return 0.0f;
+	return GetWorld()->GetTimerManager().GetTimerRemaining(CoolTimerHandleMap[TargetSkillID]);
+}
+
+void USkillManagerComponentBase::GetCoolTimeVariables(int32 TargetSkillID, float& RemainingTime, float& TotalTime)
+{
+	RemainingTime = GetRemainingCoolTime(TargetSkillID);
+	TotalTime = GetTotalCoolTime(TargetSkillID);
+}
+
 
 bool USkillManagerComponentBase::UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel)
 {
-	if (!GetIsUpgradeTargetValid(SkillID, UpgradeTarget)) return false;
-	if (!IsSkillValid(SkillID)) return false;
-	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	if (!IsValid(skillBase)) return false;
-	//skillBase->SkillState.SkillLevel = NewLevel;
-	skillBase->SkillState.SkillUpgradeInfoMap[UpgradeTarget] = skillBase->SkillStat.LevelInfo[UpgradeTarget].SkillLevelInfoList[NewLevel];
-	OnSkillUpdated.Broadcast();
 	return true;
 }
 
 void USkillManagerComponentBase::ClearAllSkill() 
 {
-	UE_LOG(LogTemp, Warning, TEXT("USkillManagerComponentBase::ClearAllSkill() "));
+
 }
 
-FSkillStatStruct USkillManagerComponentBase::GetSkillInfo(int32 SkillID)
-{
-	FString rowName = FString::FromInt(SkillID);
-	//checkf(IsValid(SkillStatTable), TEXT("SkillStatTable is not valid"));
-	if (!SkillInfoCache.Contains(SkillID))
+void USkillManagerComponentBase::StopSkillAnimMontage()
+{	
+	UAnimInstance* animInstance = OwnerCharacterRef->GetMesh()->GetAnimInstance();
+	if (IsValid(animInstance) && animInstance->IsAnyMontagePlaying()) 
 	{
-		if (SkillStatTable)
-		{
-			FSkillStatStruct* skillStat = SkillStatTable->FindRow<FSkillStatStruct>(FName(rowName), rowName);
-			checkf(skillStat != nullptr, TEXT("SkillStat is not valid"));
-			return SkillInfoCache.Add(SkillID, *skillStat);
-		}
+		animInstance->Montage_Stop(0.0f);
+		DeactivateCurrentSkill();
 	}
-	return SkillInfoCache[SkillID];
 }
 
-ESkillType USkillManagerComponentBase::GetSkillTypeInfo(int32 SkillID)
+void USkillManagerComponentBase::UpdateSkillValidity(int32 TargetSkillID, bool NewState)
 {
-	return GetSkillInfo(SkillID).SkillWeaponStruct.SkillType;
-}
-
-ASkillBase* USkillManagerComponentBase::GetOwnSkillBase(int32 SkillID)
-{
-	return nullptr;
-}
-
-bool USkillManagerComponentBase::IsSkillValid(int32 SkillID)
-{
-	if (GetOwnSkillBase(SkillID) == nullptr) return false;
-	return true;
-}
-
-bool USkillManagerComponentBase::GetIsSkillUpgradable(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel)
-{
-	if (!GetIsUpgradeTargetValid(SkillID, UpgradeTarget)) return false;
-	//최대 레벨보다 크면 업그레이드 불가
-	if(GetOwnSkillStat(SkillID).LevelInfo[UpgradeTarget].SkillLevelInfoList.Num() - 1 < NewLevel) return false;
-	//현재 레벨과 같거나 작은경우 업그레이드 불가
-	if(GetOwnSkillState(SkillID).SkillUpgradeInfoMap[UpgradeTarget].CurrentLevel >= NewLevel) return false;
-	return true;
-}
-
-FSkillStatStruct USkillManagerComponentBase::GetOwnSkillStat(int32 SkillID)
-{
-	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	if(!IsValid(skillBase))
-	{ 
-		return GetSkillInfo(SkillID);
-	}
-	return skillBase->SkillStat;
-}
-
-FSkillStateStruct USkillManagerComponentBase::GetOwnSkillState(int32 SkillID)
-{
-	ASkillBase* skillBase = GetOwnSkillBase(SkillID);
-	if (!IsValid(skillBase))
+	bool bIsInInventory = false;
+	FSkillInfo skillInfo = GetSkillInfoData(TargetSkillID, bIsInInventory);
+	if (!bIsInInventory || !OwnerCharacterRef.IsValid())
 	{
-		return FSkillStateStruct();
+		UE_LOG(LogTemp, Error, TEXT("USkillManagerComponentBase::UpdateSkillValidity %d %d failed - Reason %d %d"), TargetSkillID, (int32)NewState, !bIsInInventory, !OwnerCharacterRef.IsValid());
+		return;
 	}
-	return skillBase->SkillState;
-}
-
-FSkillUpgradeLevelInfo USkillManagerComponentBase::GetCurrentSkillLevelInfo(int32 SkillID, ESkillUpgradeType Target)
-{
-	if (!GetIsUpgradeTargetValid(SkillID, Target)) return FSkillUpgradeLevelInfo();
-	return GetOwnSkillState(SkillID).SkillUpgradeInfoMap[Target];
-}
-
-FSkillUpgradeLevelInfo USkillManagerComponentBase::GetSkillUpgradeLevelInfo(int32 SkillID, ESkillUpgradeType Target, int32 TargetLevel)
-{
-	if (!GetIsUpgradeLevelValid(SkillID, Target, TargetLevel)) return FSkillUpgradeLevelInfo();
-	return GetOwnSkillStat(SkillID).LevelInfo[Target].SkillLevelInfoList[TargetLevel];
-}
-
-bool USkillManagerComponentBase::GetIsUpgradeTargetValid(int32 SkillID, ESkillUpgradeType UpgradeTarget)
-{
-	if (!GetOwnSkillStat(SkillID).LevelInfo.Contains(UpgradeTarget)
-		|| !GetOwnSkillState(SkillID).SkillUpgradeInfoMap.Contains(UpgradeTarget))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("USkillManagerComponentBase::GetIsUpgradeTargetValid(%d, %d) is not valid"), SkillID, (int32)UpgradeTarget);
-		return false;
-	}
-	return true;
-}
-
-bool USkillManagerComponentBase::GetIsUpgradeLevelValid(int32 SkillID, ESkillUpgradeType UpgradeTarget, int32 TargetLevel)
-{
-	if (!GetIsUpgradeTargetValid(SkillID, UpgradeTarget)) return false;
-	return GetOwnSkillStat(SkillID).LevelInfo[UpgradeTarget].SkillLevelInfoList.IsValidIndex(TargetLevel);
+	SkillInventory[TargetSkillID].bIsValid = NewState;
 }

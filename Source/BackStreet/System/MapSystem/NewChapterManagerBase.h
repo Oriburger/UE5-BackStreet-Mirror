@@ -78,10 +78,10 @@ public:
 		void SetStageIconTranslationList(TArray<FVector2D> NewList) { CurrentChapterInfo.StageIconTransitionValueList = NewList; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FStageInfo GetStageInfo(int32 StageIdx);
+		FStageInfo& GetStageInfo(int32 StageIdx);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FStageInfo GetStageInfoWithCoordinate(FVector2D StageCoordinate);
+		FStageInfo& GetStageInfoWithCoordinate(FVector2D StageCoordinate);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FName GetStageTypeName(EStageCategoryInfo StageType);
@@ -111,6 +111,15 @@ private:
 	TWeakObjectPtr<class AMainCharacterBase> PlayerRef;
 
 	bool bIsChapterFinished = false;
+
+
+//========= Save System ================
+public:
+	UFUNCTION(BlueprintCallable)
+		void SetTutorialCompletion(bool bCompleted);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetTutorialCompletion();
 
 //========= Widget =====================
 public:

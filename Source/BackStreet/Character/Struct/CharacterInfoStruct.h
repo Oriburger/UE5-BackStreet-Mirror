@@ -76,6 +76,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float DefaultValue = 0.0f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		float MaxValue = 0.0f;
+
 	// 추가로 확률 정보가 필요한지? 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		bool bIsContainProbability;
@@ -108,8 +111,14 @@ public:
 	}
 	inline void UpdateTotalValue()
 	{
-		TotalValue = DefaultValue
-			+ DefaultValue * (AbilityRateValue + SkillRateValue - DebuffRateValue);
+		TotalValue = DefaultValue != 0.0f
+					? DefaultValue + DefaultValue * (AbilityRateValue + SkillRateValue - DebuffRateValue)
+					: (AbilityRateValue + SkillRateValue - DebuffRateValue);
+
+		if (MaxValue != 0.0f)
+		{
+			TotalValue = FMath::Min(TotalValue, MaxValue);
+		}
 
 		if (TotalValue < 0.0f)
 		{
@@ -119,11 +128,11 @@ public:
 	}
 	inline float GetTotalValue() { return TotalValue; }
 
-	FStatValueGroup(ECharacterStatType NewType) : StatType(NewType), DefaultValue(0.0f), bIsContainProbability(false), ProbabilityValue(1.0f)
-						, DebuffRateValue(0.0f), AbilityRateValue(0.0f), SkillRateValue(0.0f), TotalValue(0.0f) {}
+	FStatValueGroup(ECharacterStatType NewType) : StatType(NewType), DefaultValue(0.0f), MaxValue(0.0f), bIsContainProbability(false)
+					, ProbabilityValue(1.0f), DebuffRateValue(0.0f), AbilityRateValue(0.0f), SkillRateValue(0.0f), TotalValue(0.0f) {}
 
-	FStatValueGroup() : StatType(ECharacterStatType::E_None), DefaultValue(0.0f), bIsContainProbability(false), ProbabilityValue(1.0f)
-						, DebuffRateValue(0.0f), AbilityRateValue(0.0f), SkillRateValue(0.0f), TotalValue(0.0f) {}
+	FStatValueGroup() : StatType(ECharacterStatType::E_None), DefaultValue(0.0f), MaxValue(0.0f), bIsContainProbability(false)
+					, ProbabilityValue(1.0f), DebuffRateValue(0.0f), AbilityRateValue(0.0f), SkillRateValue(0.0f), TotalValue(0.0f) {}
 };
 
 
@@ -172,6 +181,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 0.8f), Category = "Default")
 		float DefaultStunResist = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (UIMin = 0.0f, UIMax = 1.0f), Category = "Default")
+		float DefaultKnockBackResist = 0.0f;
 };
 
 USTRUCT(BlueprintType)
@@ -179,9 +191,9 @@ struct FCharacterGameplayInfo : public FTableRowBase
 {
 public:
 	GENERATED_USTRUCT_BODY()
-//==========================================================
-//====== Stat ==============================================
-	//CharacterBase내 DefaultStat에 의해 초기화가 되는지?
+	//==========================================================
+	//====== Stat ==============================================
+		//CharacterBase내 DefaultStat에 의해 초기화가 되는지?
 	UPROPERTY(EditDefaultsOnly, Category = "Default")
 		bool bUseDefaultStat = false;
 
@@ -199,12 +211,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stat", meta = (EditCondition = "!bUseDefaultStat"))
 		TArray<FStatValueGroup> StatGroupList;
 
-//=========================================================
-//====== State ============================================
-		
-//MaxHP Attack DashAttack JumpAttack AttackSpeed MoveSpeed Defense;
+	//=========================================================
+	//====== State ============================================
 
-	//캐릭터의 디버프 상태 (Bit-Field로 표현)
+	//MaxHP Attack DashAttack JumpAttack AttackSpeed MoveSpeed Defense;
+
+		//캐릭터의 디버프 상태 (Bit-Field로 표현)
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
 		int32 CharacterDebuffState = (1 << 10);
 
@@ -244,9 +256,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "State")
 		int32 HitCounter = 0;
 
-//=========================================================
-//====== 미분류 ============================================
-	//for time-attack stage
+	//=========================================================
+	//====== 미분류 ============================================
+		//for time-attack stage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
 		float ExtraStageTime = 0.0f;
 
@@ -256,13 +268,13 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
 		bool bInfiniteSkillMaterial = false;
-	
+
 	//Extra percentage for universal material
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
 		float ExtraPercentageUnivMaterial = 0.0f;
 
-//=========================================================
-//====== Function =========================================
+	//=========================================================
+	//====== Function =========================================
 	inline bool IsValid() { return CharacterID >= 0; }
 
 	inline FStatValueGroup& GetStatGroup(ECharacterStatType StatType)
@@ -271,13 +283,14 @@ public:
 	}
 	inline void UpdateTotalValues()
 	{
-		for(FStatValueGroup& target : StatGroupList)
+		for (FStatValueGroup& target : StatGroupList)
 			target.UpdateTotalValue();
 	}
 	inline float GetSkillStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).SkillRateValue; }
 	inline float GetDebuffStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).DebuffRateValue; }
 	inline float GetAbilityStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).AbilityRateValue; }
 	inline float GetProbabilityStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).bIsContainProbability ? GetStatGroup(StatType).ProbabilityValue : -1.0f; }
+	inline float GetMaxStatValue(ECharacterStatType StatType){ return GetStatGroup(StatType).MaxValue; }
 	inline bool GetIsContainProbability(ECharacterStatType StatType) {	return GetStatGroup(StatType).bIsContainProbability; }
 	inline float GetTotalValue(ECharacterStatType StatType) 
 	{
@@ -316,7 +329,7 @@ public:
 	{
 		FStatValueGroup& target = GetStatGroup(StatType);
 		if (!target.bIsContainProbability || NewValue < 0.0f) return false;
-		target.ProbabilityValue = NewValue;
+		target.ProbabilityValue = FMath::Clamp(NewValue, 0.0f, 1.0f);
 		return true;
 	}
 	static FORCEINLINE ECharacterStatType GetDebuffStatType(bool bIsJumpAttacking, bool bIsDashAttacking, ECharacterDebuffType DebuffType)
@@ -372,7 +385,7 @@ public:
 		}
 	}
 
-	FCharacterGameplayInfo() : CharacterID(0) , bInfinite(false) , bIsInvincibility(false), StatGroupList(), CharacterDebuffState(1 << 10)
+	FCharacterGameplayInfo() : bUseDefaultStat(false), CharacterID(0) , bInfinite(false) , bIsInvincibility(false), StatGroupList(), CharacterDebuffState(1 << 10)
 		, CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), CurrentSP(0.0f), bCanAttack(false), bCanRoll(false), bIsSprinting(false), bIsAiming(false)
 		, bIsAirAttacking(false), bIsDownwardAttacking(false), HitCounter(0), ExtraStageTime(0.0f), MaxKeepingSkillCount(1)
 		, bInfiniteSkillMaterial(false), ExtraPercentageUnivMaterial(0.0f)
@@ -385,7 +398,7 @@ public:
 		}
 	}
 
-	FCharacterGameplayInfo(FCharacterDefaultStat DefaultStat) : CharacterID(DefaultStat.CharacterID), bInfinite(DefaultStat.bInfinite), bIsInvincibility(DefaultStat.bIsInvincibility)
+	FCharacterGameplayInfo(FCharacterDefaultStat DefaultStat) : bUseDefaultStat(false), CharacterID(DefaultStat.CharacterID), bInfinite(DefaultStat.bInfinite), bIsInvincibility(DefaultStat.bIsInvincibility)
 		, StatGroupList(), CharacterDebuffState(1 << 10), CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), CurrentSP(0.0f), bCanAttack(false), bCanRoll(false)
 		, bIsSprinting(false), bIsAiming(false), bIsAirAttacking(false), bIsDownwardAttacking(false), HitCounter(0), ExtraStageTime(0.0f)
 		, MaxKeepingSkillCount(1), bInfiniteSkillMaterial(false), ExtraPercentageUnivMaterial(0.0f)
@@ -453,36 +466,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* SwitchWeaponAction;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
-		class UInputAction* DropWeaponAction;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
-		class UInputAction* PickSubWeaponAction;
-
 	// Jump Input Action
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* JumpAction;
 
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Action")
 		class UInputAction* SprintAction;
-
-//------------------UI---------------------------------------------------------------------------
-public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
-		class UInputAction* PlayerInfoUIAction;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
-		class UInputAction* ConfirmUIAction;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
-		class UInputAction* CancelUIAction;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
-		class UInputAction* MoveUIAction;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "UI")
-		class UInputAction* SwitchTabUIAction;
 };
 
 //===============================================

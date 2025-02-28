@@ -64,15 +64,12 @@ public:
 		class UItemInventoryComponent* ItemInventory;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UPlayerSkillManagerComponent* SkillManagerComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UAbilityManagerComponent* AbilityManagerComponent; 
 
 // ------- Throw Test -----------
 public:
 	UFUNCTION(BlueprintCallable)
-		void SwitchWeapon(bool bSwitchToSubWeapon);
+		void SwitchWeapon(bool bSwitchToSubWeapon, bool bForceApply = false);
 	
 	UFUNCTION()
 		void ZoomIn();
@@ -82,6 +79,9 @@ public:
 
 	UFUNCTION()
 		void TryShoot();
+
+	UFUNCTION(BlueprintCallable)
+		void TryShootBySubCombo(FRotator ShootRotation, FVector ShootLocation);
 
 	UFUNCTION()
 		void SetAimingMode(bool bNewState);
@@ -102,6 +102,10 @@ public:
 	//Targeting system
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 		class UInputAction* LockToTargetAction;
+
+	// Move Key input check
+	UPROPERTY(BlueprintReadOnly)
+		bool bMoveKeyDown = false;
 
 protected:
 	UFUNCTION()
@@ -145,12 +149,6 @@ public:
 		virtual void TryAttack() override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void TryUpperAttack() override;
-
-	UFUNCTION(BlueprintCallable)
-		virtual void TryDownwardAttack() override;
-
-	UFUNCTION(BlueprintCallable)
 		virtual bool TrySkill(int32 SkillID) override;
 
 	UFUNCTION(BlueprintCallable)
@@ -177,11 +175,17 @@ public:
 			, AController* EventInstigator, AActor* DamageCauser) override;
 
 	UFUNCTION()
-		TArray<class UInteractiveCollisionComponent*> GetNearInteractionComponentList();
+		class UInteractiveCollisionComponent* GetNearInteractionComponent();
+
+protected:
+	UFUNCTION()
+		virtual TArray<UAnimMontage*> GetTargetMeleeAnimMontageList() override;
 
 private:
 	UFUNCTION()
 		void StopDashMovement();
+
+	TWeakObjectPtr<class UInteractiveCollisionComponent> InteractionCandidateRef;
 
 //------- Camera Rotation Support Event ------ 
 
@@ -247,14 +251,24 @@ private:
 	UFUNCTION()
 		void UpdateFieldOfView(const float TargetValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
 
+//-------- EasyUI LoadSettings --------------
+protected:
+	UPROPERTY(BlueprintReadWrite)
+		bool bHoldToSprint;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool bInvertYAxis;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool bInvertXAxis;
+
+	UPROPERTY(BlueprintReadWrite)
+		float CameraSensivity;
+
 // ------- SaveData 관련 --------------------
 protected:
 	UFUNCTION()
 		void SetCharacterStatFromSaveData();
-
-public:
-	UPROPERTY(BlueprintReadOnly, Category = "SaveData")
-		FSaveData SavedData;
 
 // ------- 어빌리티 / 디버프 ---------------
 public:

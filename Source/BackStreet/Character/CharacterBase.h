@@ -28,6 +28,10 @@ public:
 	FDelegateOnActionTrigger OnAttackStarted;
 	FDelegateOnActionTrigger OnDashAttackStarted;
 	FDelegateOnActionTrigger OnJumpAttackStarted;
+	FDelegateOnActionTrigger OnAimStarted;
+	FDelegateOnActionTrigger OnAimEnded;
+	FDelegateOnActionTrigger OnShootStarted;
+	FDelegateOnActionTrigger OnInteractStarted;
 	FDelegateOnActionTrigger OnDamageReceived;
 	FDelegateOnActionTrigger OnSkillStarted;
 	FDelegateOnActionTrigger OnSkillEnded;
@@ -85,8 +89,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UActionTrackingComponent* ActionTrackingComponent;
 
-public:
-	TWeakObjectPtr<class USkillManagerComponentBase> SkillManagerComponentRef;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class USkillManagerComponentBase* SkillManagerComponent;
 
 //========================================================================
 //========= Action =======================================================
@@ -97,19 +101,9 @@ public:
 	//Input에 Binding 되어 공격을 시도 (AnimMontage를 호출)
 	virtual void TryAttack();
 
-	//Try Upper Attack
-	virtual	void TryUpperAttack();
-
-	//Try Downer Attack
-	virtual	void TryDownwardAttack();
-
 	//try play dash atk montage
 	UFUNCTION()
 		void TryDashAttack();
-
-	// called with notify, activate dash logic with interp
-	UFUNCTION(BlueprintCallable)
-		void DashAttack();
 
 	///Input에 Binding 되어 스킬공격을 시도 (AnimMontage를 호출)
 	virtual bool TrySkill(int32 SkillID);
@@ -153,28 +147,20 @@ public:
 
 	//Update Character's world Location using interporlation
 	UFUNCTION(BlueprintCallable)
-		void SetLocationWithInterp(FVector NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false);
+		void SetLocationWithInterp(FVector NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false, const bool bUseSafeInterp = false, const bool bDrawDebugInfo = false);
 
 	UFUNCTION(BlueprintCallable)
 		void ResetLocationInterpTimer();
+
+	UFUNCTION()
+		void PlayHitAnimMontage();
+
+	UFUNCTION()
+		void PlayKnockBackAnimMontage();
+
+	UFUNCTION(BlueprintCallable)
+		TArray<FName> GetCurrentMontageSlotName();
 	
-	//Set air atk location update event timer
-	//This func is called by upper atk anim montage's notify
-	UFUNCTION(BlueprintCallable)
-		void SetAirAtkLocationUpdateTimer(); 
-
-	//Disable air atk location update event timer
-	//This func is called by downward atk anim montage's notify
-	UFUNCTION(BlueprintCallable)
-		void ResetAirAtkLocationUpdateTimer();
-
-	////Launch event when upperattack
-	//UFUNCTION(BlueprintCallable)
-	//	void LaunchCharacterWithTarget();
-
-	//UFUNCTION(BlueprintCallable)
-	//	void ActivateAirMode(bool bDeactivateFlag = false);	
-
 protected:
 	//interp function
 	//it must not be called alone.
@@ -183,14 +169,17 @@ protected:
 		void UpdateLocation(const FVector TargetValue, const float InterpSpeed = 1.0f, const bool bAutoReset = false);
 
 	//Set distance from ground for air attack
-	UFUNCTION()
-		void SetAirAttackLocation();
 
 	UFUNCTION()
 		void OnPlayerLanded(const FHitResult& Hit);
 
 	UFUNCTION()
+		virtual void OnSkillDeactivated(FSkillInfo PrevSkillInfo);
+
+	UFUNCTION()
 		void ResetHitCounter();	
+
+	virtual TArray<UAnimMontage*> GetTargetMeleeAnimMontageList();
 
 	//Knock down with 
 	virtual void KnockDown();
@@ -208,10 +197,19 @@ public:
 		FCharacterGameplayInfo GetCharacterGameplayInfo() { return CharacterGameplayInfo; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FStatValueGroup GetCharacterStatGroup(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetStatGroup(TargetStatType); }		
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetStatTotalValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetTotalValue(TargetStatType); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetStatProbabilityValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetProbabilityStatInfo(TargetStatType); }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetStatDefaultValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetStatGroup(TargetStatType).DefaultValue; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetStatMaxValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetMaxStatValue(TargetStatType); }
 
 	UFUNCTION(BlueprintCallable)
 		void InitCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo);
@@ -234,7 +232,7 @@ public:
 		void UpdateWeaponStat(FWeaponStatStruct NewStat);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetMaxComboCount() { return AssetHardPtrInfo.MeleeAttackAnimMontageList.Num(); }
+		int32 GetMaxComboCount() { return AssetHardPtrInfo.NormalComboAnimMontageList.Num(); }
 		
 //========================================================================
 //====== Asset / Weapon ==================================================

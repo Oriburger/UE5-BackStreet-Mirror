@@ -26,7 +26,6 @@
 #include "../System/MapSystem/Struct/StageInfoStruct.h"
 #include "../System/SkillSystem/Struct/SkillInfoStruct.h"
 #include "../System/CraftingSystem/Struct/CraftingInfoStruct.h"
-#include "../System/SaveSystem/Struct/BackStreetSaveGameStruct.h"
 #include "../System/AssetSystem/Struct/AssetInfoStruct.h"
 
 
@@ -39,6 +38,11 @@
 #define MAX_STAGE_TYPE 5
 #define MAX_GRID_SIZE 3
 
+
+/* ----- Log --------------- */
+DECLARE_LOG_CATEGORY_EXTERN(LogAbility, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogWeapon, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogStage, Log, All);
+
 #define LOG_CALLINFO ANSI_TO_TCHAR(__FUNCTION__)
 #define BS_LOG(LogCat, Verbosity, Format, ...) UE_LOG(LogCat, Verbosity, TEXT("[%s] %s"), LOG_CALLINFO, *FString::Printf(Format, ##__VA_ARGS__))
-DECLARE_LOG_CATEGORY_EXTERN(LogBS, Log, All)

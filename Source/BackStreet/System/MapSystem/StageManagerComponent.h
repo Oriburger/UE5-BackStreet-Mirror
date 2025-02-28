@@ -8,6 +8,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateStageEnd, FStageInfo, StageInfo);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateRewardGrant, const TArray<int32>&, RewardID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateSpawnActor, FVector, SpawnLocation, AActor*, NewActor);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateStageClear);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateLoadBegin);
@@ -32,6 +33,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateRewardGrant OnRewardGranted;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateSpawnActor OnActorSpawned;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateTimeOver OnTimeIsOver;
@@ -68,7 +72,7 @@ public:
 		void InitStage(FStageInfo NewStageInfo);
 
 	UFUNCTION()
-		void ClearResource();
+		void ClearPreviousResource();
 
 	//Time attack stage only
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -76,6 +80,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void RegisterActor(AActor* TargetActor);
+
+	UFUNCTION(BlueprintCallable)
+		void RegisterActorList(TArray<AActor*> TargetActorList);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsLoadingScreenActive() { return bIsLoadingScreenActive; }
 
 protected:
 	//Add loading screen
@@ -98,12 +108,12 @@ protected:
 		void ClearPreviousActors();
 
 	UFUNCTION()
-		void ClearEnemyActors();
+		void ClearPreviousActorsWithTag(FName Tag);
 
 	//Update spawn point member of stage info struct after map load 
 	//There are several points to spawn enemy, player, craftbox etc
 	UFUNCTION()
-		void UpdateSpawnPointProperty();
+		TArray<AActor*> TryUpdateSpawnPointProperty();
 
 	//Spawn enemy character
 	UFUNCTION()
@@ -149,9 +159,10 @@ private:
 	//The status of level instance load
 	//0 : done.   Over 0 : loading 
 	int32 LoadStatus = 0;
+	bool bIsLoadingScreenActive = false;
 
 	//Property for level instance load
-	float LoadTimeOut = 30.0f;
+	float LoadTimeOut = 120.0f;
 	FTimerHandle LoadCheckTimerHandle;
 
 	//For instant loading widget
@@ -180,6 +191,10 @@ public:
 		FStageInfo GetCurrentStageInfo() { return CurrentStageInfo; }
 
 private:
+	//Check Reward Duplication for next stage
+	UFUNCTION()
+		void EnsureUniqueStageRewards(FVector2D Coordinate);
+
 	//Grant stage reward
 	UFUNCTION()
 		void GrantStageRewards();

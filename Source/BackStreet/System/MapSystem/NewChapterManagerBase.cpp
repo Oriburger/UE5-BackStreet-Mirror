@@ -6,6 +6,7 @@
 #include "StageManagerComponent.h"
 #include "SlateBasics.h"
 #include "../../Global/BackStreetGameModeBase.h"
+#include "../../Global/BackStreetGameInstance.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "Runtime/UMG/Public/UMG.h"
 
@@ -31,7 +32,7 @@ void ANewChapterManagerBase::BeginPlay()
 
 void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 {
-	UE_LOG(LogTemp, Warning, TEXT("ANewChapterManagerBase::StartChapter(%d)"), NewChapterID);
+	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::StartChapter(%d)"), NewChapterID);
 
 	//init chapter with generate stage infos
 	bIsChapterFinished = false;
@@ -45,10 +46,17 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 	{
 		int32 stageIdx = StageGeneratorComponent->GetStageIdx(CurrentChapterInfo.CurrentStageCoordinate);
 		StageManagerComponent->InitStage(CurrentChapterInfo.StageInfoList[stageIdx]);
+
+		//MainCharacter 730 Crash 规瘤
+		AMainCharacterBase* playerRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		if(IsValid(playerRef))
+		{
+			OnChapterCleared.AddDynamic(playerRef, &AMainCharacterBase::ClearAllTimerHandle);
+		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ANewChapterManagerBase::StartChapter, Invalid Stage Data %d"), CurrentChapterInfo.StageInfoList.Num());
+		UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::StartChapter, Invalid Stage Data %d"), CurrentChapterInfo.StageInfoList.Num());
 	}
 }
 
@@ -57,12 +65,14 @@ void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 	//Set state variable
 	bIsChapterFinished = true;
 
-	//Clear resource
+	//Temporary code : Remove character instance 
 	UGameplayStatics::ApplyDamage(PlayerRef.Get(), 1e8, nullptr, GetOwner(), nullptr);
-	StageManagerComponent->ClearResource();
 
-	//Reward 贸府
-	
+	//Clear resource
+	StageManagerComponent->ClearPreviousResource();
+
+	//Chapter Reward 贸府
+	//~
 
 	//change level to main menu
 	FTimerDelegate openLevelDelegate;
@@ -80,7 +90,7 @@ void ANewChapterManagerBase::MoveStage(FVector2D direction)
 {
 	int32 stageIdx = StageGeneratorComponent->GetStageIdx(CurrentChapterInfo.CurrentStageCoordinate + direction);
 	if (!CurrentChapterInfo.StageInfoList.IsValidIndex(stageIdx)) return;
-	UE_LOG(LogTemp, Warning, TEXT("ANewChapterManagerBase::MoveStage,  %s  --(%s)-->  %s"), *CurrentChapterInfo.CurrentStageCoordinate.ToString(), *direction.ToString(), *(CurrentChapterInfo.CurrentStageCoordinate + direction).ToString())
+	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::MoveStage,  %s  --(%s)-->  %s"), *CurrentChapterInfo.CurrentStageCoordinate.ToString(), *direction.ToString(), *(CurrentChapterInfo.CurrentStageCoordinate + direction).ToString())
 	CurrentChapterInfo.CurrentStageCoordinate = CurrentChapterInfo.CurrentStageCoordinate + direction;
 	StageManagerComponent->InitStage(CurrentChapterInfo.StageInfoList[stageIdx]);
 	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
@@ -127,6 +137,7 @@ void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 			CreateGameResultWidget(true);
 		}
 	}
+
 }
 
 void ANewChapterManagerBase::InitStageIconTranslationList(FVector2D Threshold)
@@ -144,13 +155,13 @@ void ANewChapterManagerBase::InitStageIconTranslationList(FVector2D Threshold)
 	SetStageIconTranslationList(newList);
 }
 
-FStageInfo ANewChapterManagerBase::GetStageInfo(int32 StageIdx)
+FStageInfo& ANewChapterManagerBase::GetStageInfo(int32 StageIdx)
 {
-	if (!CurrentChapterInfo.StageInfoList.IsValidIndex(StageIdx)) return FStageInfo();
+	checkf(CurrentChapterInfo.StageInfoList.IsValidIndex(StageIdx), TEXT("ANewChapterManagerBase::GetStageInfo(%d) is not valid idx for list %d"), StageIdx, CurrentChapterInfo.StageInfoList.Num());
 	return CurrentChapterInfo.StageInfoList[StageIdx];
 }
 
-FStageInfo ANewChapterManagerBase::GetStageInfoWithCoordinate(FVector2D StageCoordinate)
+FStageInfo& ANewChapterManagerBase::GetStageInfoWithCoordinate(FVector2D StageCoordinate)
 {
 	return GetStageInfo(StageGeneratorComponent->GetStageIdx(StageCoordinate));
 }
@@ -192,6 +203,29 @@ bool ANewChapterManagerBase::GetIsStageBlocked(FVector2D StageCoordinate)
 	return CurrentChapterInfo.StageInfoList[stageIdx].bIsBlocked;
 }
 
+void ANewChapterManagerBase::SetTutorialCompletion(bool bCompleted)
+{
+	// GameInstance 啊廉坷扁
+	UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
+	if (gameInstance)
+	{
+		gameInstance->SetTutorialCompletion(bCompleted);
+		return;
+	}
+	UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::SetTutorialCompletion(%d) - game instance is not valid"), (int32)bCompleted);
+}
+
+bool ANewChapterManagerBase::GetTutorialCompletion()
+{
+	UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
+	if (gameInstance)
+	{
+		return gameInstance->GetTutorialCompletion();
+	}
+	UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::GetTutorialCompletion() - game instance is not valid"));
+	return false;
+}
+
 void ANewChapterManagerBase::CreateGameResultWidget(bool bChapterClear)
 {
 	GameResultWidgetRef = CreateWidget(GetWorld(), bChapterClear ? ChapterClearWidgetClass : GameOverWidgetClass);
@@ -203,5 +237,6 @@ void ANewChapterManagerBase::CreateGameResultWidget(bool bChapterClear)
 
 void ANewChapterManagerBase::OpenMainMenuLevel()
 {
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
 	UGameplayStatics::OpenLevel(GetWorld(), "MainMenuPersistent");
 }

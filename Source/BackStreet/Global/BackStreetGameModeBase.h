@@ -86,14 +86,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|AssetManager")
 		UDataTable* PropSoundAssetTable;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|ItemInventory")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data|ItemInventory")
 		UDataTable* ItemInfoTable;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|CraftingManager")
-		UDataTable* StatUpgradeInfoTable;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data|SkillManager")
-		UDataTable* SkillStatTable;
 
 //------ À§Á¬ ------------------------
 public:

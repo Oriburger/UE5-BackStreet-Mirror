@@ -3,7 +3,6 @@
 #include "../Component/TargetingManagerComponent.h"
 #include "../Component/WeaponComponentBase.h"
 #include "../Component/SkillManagerComponentBase.h"
-#include "../Component/EnemySkillManagerComponent.h"
 #include "../MainCharacter/MainCharacterBase.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../System/MapSystem/NewChapterManagerBase.h"
@@ -25,7 +24,8 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	FloatingHpBar->SetupAttachment(GetCapsuleComponent());
 	FloatingHpBar->SetRelativeLocation(FVector(0.0f, 0.0f, 85.0f));
 	FloatingHpBar->SetWorldRotation(FRotator(0.0f, 180.0f, 0.0f));
-	FloatingHpBar->SetDrawSize({ 80.0f, 10.0f });
+	FloatingHpBar->SetDrawSize({ 100.0f, 20.0f });
+	FloatingHpBar->SetWidgetSpace(EWidgetSpace::Screen);
 	FloatingHpBar->SetVisibility(false);
 
 	TargetingSupportWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("TARGETING_SUPPORT"));
@@ -34,10 +34,8 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 	TargetingSupportWidget->SetWorldRotation(FRotator(0.0f, 180.0f, 0.0f));
 	TargetingSupportWidget->SetRelativeScale3D(FVector(0.15f));
 	TargetingSupportWidget->SetDrawSize({ 500.0f, 500.0f });
+	TargetingSupportWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	TargetingSupportWidget->SetVisibility(false);
-
-	SkillManagerComponent = CreateDefaultSubobject<UEnemySkillManagerComponent>(TEXT("SKILL_MANAGER_"));
-	SkillManagerComponentRef = SkillManagerComponent;
 
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -51,8 +49,17 @@ void AEnemyCharacterBase::BeginPlay()
 	Super::BeginPlay();
 	
 	SpawnDefaultController();
+	
+	CharacterGameplayInfo.bUseDefaultStat = true;
+
 	InitEnemyCharacter(CharacterID);
 	SetDefaultWeapon();
+	
+	if (IsValid(SkillManagerComponent))
+	{
+		SkillManagerComponent->OnSkillDeactivated.Clear();
+		SkillManagerComponent->OnSkillDeactivated.AddDynamic(this, &AEnemyCharacterBase::OnSkillDeactivated);
+	}
 }
 
 void AEnemyCharacterBase::InitAsset(int32 NewCharacterID)
@@ -75,26 +82,15 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	if (newStat != nullptr)
 	{
 		EnemyStat = *newStat;
-
 		//Set CharacterStat with setting default additional stat bInfinite (infinite use of ammo)
 		FCharacterGameplayInfo newInfo = FCharacterGameplayInfo(EnemyStat.DefaultStat);
+
 		newInfo.CharacterID = NewCharacterID;
+		newInfo.bUseDefaultStat = true;
+
 		InitCharacterGameplayInfo(newInfo);
 		CharacterGameplayInfo.bInfinite = true;
 		SetDefaultWeapon();
-	}
-
-	if (NewCharacterID != 0)
-	{
-		SkillManagerComponent->ClearAllSkill();
-		for (int32& skillID : EnemyStat.EnemySkillIDList)
-		{
-			if (skillID != 0)
-			{
-				bool result = SkillManagerComponent->AddSkill(skillID);
-				UE_LOG(LogTemp, Warning, TEXT("Add Skill %d --- %d"), skillID, (int32)result);
-			}
-		}
 	}
 
 	InitFloatingHpWidget();
@@ -106,13 +102,79 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	}
 }
 
+void AEnemyCharacterBase::ResetAiBehaviorState()
+{
+	AAIControllerBase* aiControllerRef;
+	aiControllerRef = Cast<AAIControllerBase>(Controller);
+
+	if (IsValid(aiControllerRef) && aiControllerRef->GetBehaviorState() == EAIBehaviorType::E_Skill)
+	{
+		aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Idle);
+	}
+}
+
 void AEnemyCharacterBase::SetDefaultWeapon()
 {
 	WeaponComponent->InitWeapon(EnemyStat.DefaultWeaponID);
 	if (IsValid(Controller))
 	{
-		Cast<AAIControllerBase>(Controller)->UpdateNewWeapon();
+		AAIControllerBase* controllerRef = Cast<AAIControllerBase>(Controller);
+		if (IsValid(controllerRef))
+		{
+			controllerRef->UpdateNewWeapon();
+		}
 	}
+}
+
+
+void AEnemyCharacterBase::TakeKnockBack(float KnockbackForce, float KnockbackResist)
+{
+	if (IsActorBeingDestroyed()) return;
+	if (GetIsActionActive(ECharacterActionType::E_Die)) return;
+
+	AAIControllerBase* aiControllerRef = nullptr;
+	aiControllerRef = Cast<AAIControllerBase>(Controller);
+
+	float effectiveKnockback = KnockbackForce * (1 - KnockbackResist);
+	const float knockbackThreshold = 3500;
+
+	if (IsValid(aiControllerRef) && CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill
+		&& aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill)
+	{
+		if (GetIsActionActive(ECharacterActionType::E_Stun))
+		{
+			GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+		}
+		if (effectiveKnockback >= knockbackThreshold)
+		{
+			if (GetWorldTimerManager().IsTimerActive(DamageAIDelayTimer))
+			{
+				GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
+			}
+			aiControllerRef->DeactivateAI();
+			SetActionState(ECharacterActionType::E_KnockedDown);
+			PlayKnockBackAnimMontage();
+			GetWorldTimerManager().SetTimer(DamageAIDelayTimer, aiControllerRef, &AAIControllerBase::ActivateAI, 1.0f, false, 5.0f);
+		}
+		else if (effectiveKnockback < knockbackThreshold)
+		{
+			if (GetIsActionActive(ECharacterActionType::E_KnockedDown)) SetActionState(ECharacterActionType::E_Idle);
+			PlayHitAnimMontage();
+		}
+	}
+}
+
+bool AEnemyCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)
+{
+	bool result = Super::TryAddNewDebuff(DebuffInfo, Causer);
+	if (result && DebuffInfo.Type == ECharacterDebuffType::E_Stun && Causer->ActorHasTag("Player"))
+	{
+		SkillManagerComponent->StopSkillAnimMontage();
+		AAIControllerBase* aiControllerRef = nullptr;
+		aiControllerRef = Cast<AAIControllerBase>(Controller);
+		if (aiControllerRef->GetBehaviorState() == EAIBehaviorType::E_Skill) aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Idle);
+	}
+	return result;
 }
 
 float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -130,7 +192,7 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 
 	if (DamageCauser->ActorHasTag("Player"))
 	{
-		//apply fov hit effect by damage amount
+		//apply fov hit effect by damage amountd
 		float fovValue = 90.0f + FMath::Clamp(DamageAmount/100.0f, 0.0f, 1.0f) * 45.0f;
 		if (Cast<AMainCharacterBase>(DamageCauser)->GetCharacterGameplayInfo().bIsDownwardAttacking)
 		{
@@ -146,7 +208,8 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 
 	//Stop AI Logic And Set Reactivation event
 	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(Controller);
-	if (IsValid(aiControllerRef) && CharacterID != 1200 && aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill)
+	if (IsValid(aiControllerRef) && CharacterID != 1200 && aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill 
+		&& CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_KnockedDown)
 	{
 		aiControllerRef->DeactivateAI();
 		GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
@@ -155,17 +218,20 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 
 	//Set Rotation To Causer
 	if (!DamageCauser->ActorHasTag("Boss"))
-	{
+	{	
 		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), DamageCauser->GetActorLocation());
 		newRotation.Pitch = newRotation.Roll = 0.0f;
 		SetActorRotation(newRotation);
 	}
 	
 	//Check IgnoreHit
-	bool ignoreHitResult = CalculateIgnoreHitProbability(CharacterGameplayInfo.HitCounter);
-	if (ignoreHitResult)
-	{	
-		aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Skill);
+	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_KnockedDown)
+	{
+		bool ignoreHitResult = CalculateIgnoreHitProbability(CharacterGameplayInfo.HitCounter);
+		if (ignoreHitResult)
+		{
+			aiControllerRef->SetBehaviorState(EAIBehaviorType::E_Skill);
+		}
 	}
 
 	return damageAmount;
@@ -221,9 +287,25 @@ void AEnemyCharacterBase::SpawnDeathItems()
 {
 	FEnemyDropInfoStruct dropInfo = EnemyStat.DropInfo;
 
-	int32 totalSpawnItemCount = UKismetMathLibrary::RandomIntegerInRange(0, dropInfo.MaxSpawnItemCount);
-	int32 trySpawnCount = 0; //스폰 시도를 한 횟수
+	int32 totalSpawnItemCount = 1;
 
+	// 럭키 드롭 어빌리티 ==================
+	TWeakObjectPtr<ACharacterBase> playerRef = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (playerRef.IsValid())
+	{
+		const float probability = playerRef.Get()->GetStatProbabilityValue(ECharacterStatType::E_LuckyDrop);
+		const float statValue = playerRef.Get()->GetStatTotalValue(ECharacterStatType::E_LuckyDrop);
+
+		if (statValue > 1.0f && FMath::FRand() <= probability)
+		{
+			totalSpawnItemCount *= (int32)statValue;
+		}	
+	}
+
+	
+
+	// 실제 스폰 처리 =====================
+	int32 trySpawnCount = 0; //스폰 시도를 한 횟수
 	TArray<AItemBase*> spawnedItemList;
 
 	while (totalSpawnItemCount)
@@ -235,14 +317,14 @@ void AEnemyCharacterBase::SpawnDeathItems()
 			|| !dropInfo.ItemSpawnProbabilityList.IsValidIndex(itemIdx)) continue;
 
 		const uint8 itemType = (uint8)dropInfo.SpawnItemTypeList[itemIdx];
-		const int32 itemID = dropInfo.SpawnItemIDList[itemIdx];
+		const int32 itemID = 1; //조합 재료만 나오도록 강제 250210 //dropInfo.SpawnItemIDList[itemIdx];
 		const float spawnProbability = dropInfo.ItemSpawnProbabilityList[itemIdx];
 
 		if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
 		{
 			//임시로 오프셋 넣어둠. 언젠가 Linetrace로 바닥 맞춰주는 로직 추가할 것.
-			AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 10.0f - FVector(0.0f, 0.0f, 50.0f));
-			
+			AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 30.0f - FVector(0.0f, 0.0f, 50.0f));
+
 			if (IsValid(newItem))
 			{
 				spawnedItemList.Add(newItem);
@@ -251,15 +333,9 @@ void AEnemyCharacterBase::SpawnDeathItems()
 		}
 	}
 
-	ACharacterBase* playerRef = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	for (auto& targetItem : spawnedItemList)
 	{
-		uint8 newAmount = 1;
-		if (IsValid(playerRef) && playerRef->GetStatProbabilityValue(ECharacterStatType::E_LuckyDrop) >= FMath::FRandRange(0.0f, 1.0f))
-		{
-			newAmount = 2;
-		}
-		targetItem->SetItemAmount(newAmount);
+		targetItem->SetItemAmount(1);
 		GamemodeRef.Get()->RegisterActorToStageManager(targetItem);
 		targetItem->ActivateItem();
 		//targetItem->ActivateProjectileMovement(); //텍스쳐만 있는 아이템의 경우에는 바닥을 뚫는 문제가 있음, 추후 개선 필요
@@ -301,7 +377,6 @@ void AEnemyCharacterBase::KnockDown()
 	Super::KnockDown();
 
 	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(Controller);
-
 	if (IsValid(aiControllerRef))
 	{
 		aiControllerRef->DeactivateAI();
@@ -322,14 +397,12 @@ bool AEnemyCharacterBase::CalculateIgnoreHitProbability(int32 HitCounter)
 	float ignoreHitProbability = baseProb + (HitCounter * increment);
 
 	float result = UKismetMathLibrary::FMin(maxProb, ignoreHitProbability);
-	UE_LOG(LogTemp, Warning, TEXT("CalcIgnoreHit result : %f"), result);
 
 	if (FMath::FRand() <= result)
 	{
 		return true;
 	}
 	else return false;
-	return false;
 }
 
 void AEnemyCharacterBase::SetInstantHpWidgetVisibility()

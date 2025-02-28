@@ -39,9 +39,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UStaticMeshComponent* MeshComponent;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UStaticMeshComponent* OutlineMeshComponent;
-
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), BlueprintReadWrite)
 		class UInteractiveCollisionComponent* ItemTriggerVolume;
 
@@ -100,15 +97,15 @@ public:
 
 // ------ Asset ----------------------------------------------
 protected:
-	//아이템 데이터 테이블 (에셋 정보 포함)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
-		UDataTable* ItemDataInfoTable;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
 		UNiagaraSystem* ItemPickEffect;
 
 // ------ 참조 프로퍼티 ---------------------------------------------
 protected:
+	//editor only, it will be overriden by gamemode's property "itemDataInfoTable"
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		UDataTable* ItemDataInfoTable;
+
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class AMainCharacterBase* GetPlayerRef() { return PlayerRef.Get(); }
 

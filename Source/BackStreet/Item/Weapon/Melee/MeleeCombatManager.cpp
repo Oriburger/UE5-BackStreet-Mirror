@@ -6,6 +6,7 @@
 #include "../../../System/AssetSystem/AssetManagerBase.h"
 #include "../../../Global/BackStreetGameModeBase.h"
 #include "../../../Character/CharacterBase.h"
+#include "../../../Character/EnemyCharacter/EnemyCharacterBase.h"
 #include "../../../Character/Component/ActionTrackingComponent.h"
 #include "../../../Character/Component/WeaponComponentBase.h"
 #include "../../../System/AssetSystem/AssetManagerBase.h"
@@ -20,11 +21,6 @@ UMeleeCombatManager::UMeleeCombatManager()
 void UMeleeCombatManager::Attack()
 {
 	Super::Attack();
-
-	if (AssetManagerRef.IsValid())
-	{
-		AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon, WeaponComponentRef.Get()->WeaponID, "Wield");
-	}
 
 	GamemodeRef.Get()->GetWorldTimerManager().SetTimer(MeleeAtkTimerHandle, this, &UMeleeCombatManager::MeleeAttack, 0.01f, true);
 	if (MeleeLineTraceQueryParams.GetIgnoredActors().Num() == 0)
@@ -85,11 +81,11 @@ void UMeleeCombatManager::MeleeAttack()
 {
 	if (!WeaponComponentRef.IsValid()) return;
 	FHitResult hitResult;
-	bool bIsFinalCombo = WeaponComponentRef.Get()->GetIsFinalCombo();
 	bool bIsMeleeTraceSucceed = false;
 	bool bIsJumpAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("JumpAttack"))
 							|| OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionRecentlyFinished(FName("JumpAttack"));
-	bool bIsDashAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("DashAttack"));
+	bool bIsDashAttacking = OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionInProgress(FName("DashAttack"))
+							|| OwnerCharacterRef.Get()->ActionTrackingComponent->GetIsActionRecentlyFinished(FName("DashAttack"));;
 
 	FCharacterGameplayInfo ownerInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfo();
 
@@ -113,7 +109,12 @@ void UMeleeCombatManager::MeleeAttack()
 			{
 				ECharacterStatType targetStatType = FCharacterGameplayInfo::GetDebuffStatType(bIsJumpAttacking, bIsDashAttacking, debuffType);
 				if (targetStatType == ECharacterStatType::E_None) continue;
-				WeaponComponentRef.Get()->ApplyWeaponDebuff(Cast<ACharacterBase>(target), debuffType, targetStatType);
+			
+				bool result = WeaponComponentRef.Get()->ApplyWeaponDebuff(Cast<ACharacterBase>(target), debuffType, targetStatType);
+				if (result)
+				{
+					UE_LOG(LogWeapon, Warning, TEXT("UMeleeCombatManager::MeleeAttack() - bIsJumpAttack : %d,  bIsDashAttack : %d,  Debuff Stat Type : %d"), (int32)bIsJumpAttacking, (int32)bIsDashAttacking, (int32)targetStatType);
+				}
 			}
 			
 			//Activate Melee Hit Effect
@@ -129,9 +130,6 @@ void UMeleeCombatManager::MeleeAttack()
 			//Apply Damage
 			UGameplayStatics::ApplyDamage(target, totalDamage, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
 			MeleeLineTraceQueryParams.AddIgnoredActor(target);
-
-			//Apply Debuff 
-			Cast<ACharacterBase>(target)->TryAddNewDebuff(WeaponComponentRef.Get()->WeaponStat.DebuffInfo, OwnerCharacterRef.Get());
 		}
 	}
 }
@@ -146,8 +144,8 @@ void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, AActor
 	//Activate Slow Effect (Hit stop)
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player"))
 	{
-		const float dilationValue = WeaponComponentRef.Get()->GetIsFinalCombo() ? 0.08 : 0.75;
-		GamemodeRef.Get()->ActivateSlowHitEffect(dilationValue);
+		const float dilationValue = 0.8;
+		GamemodeRef.Get()->ActivateSlowHitEffect(bImpactEffect ? dilationValue * 2.0f : dilationValue);
 	}
 
 	//Spawn emitter

@@ -1,0 +1,3200 @@
+﻿# Game_zh_Hant Chinese (Traditional) translation.
+# Fill out your copyright notice in the Description page of Project Settings.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Game_zh_Hant\n"
+"POT-Creation-Date: 2025-02-28 01:27\n"
+"PO-Revision-Date: 2025-02-28 01:27\n"
+"Language-Team: \n"
+"Language: zh-Hant\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. Key:	Desc_Aerial_Strike_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Legendary"
+msgid "jump attack speed increases by 40%"
+msgstr "跳躍攻擊速度提升40%"
+
+#. Key:	Desc_Aerial_Strike_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Normal"
+msgid "jump attack speed increases by 8%"
+msgstr "跳躍攻擊速度提升8%"
+
+#. Key:	Desc_Aerial_Strike_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Rare"
+msgid "jump attack speed increases by 24%"
+msgstr "跳躍攻擊速度提升24%"
+
+#. Key:	Desc_Aerial_Throttling_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Legendary"
+msgid "jump attack greatly increases and inflicts slow debuff"
+msgstr "跳躍攻擊大幅提升並施加減速效果"
+
+#. Key:	Desc_Aerial_Throttling_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Normal"
+msgid "jump attack slightly increases and inflicts slow debuff"
+msgstr "跳躍攻擊稍微提升並施加減速效果"
+
+#. Key:	Desc_Aerial_Throttling_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Rare"
+msgid "jump attack increases and inflicts slow debuff"
+msgstr "跳躍攻擊提升並施加減速效果"
+
+#. Key:	Desc_Battery_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Battery_Enhancement_Legendary"
+msgid "max HP increases by 35%"
+msgstr "最大生命值提升35%"
+
+#. Key:	Desc_Battery_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Battery_Enhancement_Normal"
+msgid "max HP increases by 15%"
+msgstr "最大生命值提升15%"
+
+#. Key:	Desc_Battery_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Battery_Enhancement_Rare"
+msgid "max HP increases by 20%"
+msgstr "最大生命值提升20%"
+
+#. Key:	Desc_Critical_Aerial_Attack_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Legendary"
+msgid "jump attack critical hit damage increases by 4.5 times"
+msgstr "跳躍攻擊暴擊傷害提升4.5倍"
+
+#. Key:	Desc_Critical_Aerial_Attack_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Normal"
+msgid "jump attack critical hit damage increases by 2.5 times"
+msgstr "跳躍攻擊暴擊傷害提升2.5倍"
+
+#. Key:	Desc_Critical_Aerial_Attack_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Rare"
+msgid "jump attack critical hit damage increases by 3.5 times"
+msgstr "跳躍攻擊暴擊傷害提升3.5倍"
+
+#. Key:	Desc_Critical_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Dash_Legendary"
+msgid "dash attack critical hit damage increases by 4.5 times"
+msgstr "衝刺攻擊暴擊傷害提升4.5倍"
+
+#. Key:	Desc_Critical_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Dash_Normal"
+msgid "dash attack critical hit damage increases by 2.5 times"
+msgstr "衝刺攻擊暴擊傷害提升2.5倍"
+
+#. Key:	Desc_Critical_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Dash_Rare"
+msgid "dash attack critical hit damage increases by 3.5 times"
+msgstr "衝刺攻擊暴擊傷害提升3.5倍"
+
+#. Key:	Desc_Critical_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Strike_Legendary"
+msgid "normal attack critical hit damage increases by 4 times"
+msgstr "普通攻擊暴擊傷害提升4倍"
+
+#. Key:	Desc_Critical_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Strike_Normal"
+msgid "normal attack critical hit damage increases by 2 times"
+msgstr "普通攻擊暴擊傷害提升2倍"
+
+#. Key:	Desc_Critical_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Critical_Strike_Rare"
+msgid "normal attack critical hit damage increases by 3 times"
+msgstr "普通攻擊暴擊傷害提升3倍"
+
+#. Key:	Desc_Dash_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Legendary"
+msgid "dash attack speed increases by 45%"
+msgstr "衝刺攻擊速度提升45%"
+
+#. Key:	Desc_Dash_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Normal"
+msgid "dash attack speed increases by 8%"
+msgstr "衝刺攻擊速度提升8%"
+
+#. Key:	Desc_Dash_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Rare"
+msgid "dash attack speed increases by 25%"
+msgstr "衝刺攻擊速度提升25%"
+
+#. Key:	Desc_Firewall_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Firewall_Enhancement_Legendary"
+msgid "defense power increases by 50%"
+msgstr "防禦力提升50%"
+
+#. Key:	Desc_Firewall_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Firewall_Enhancement_Normal"
+msgid "defense power increases by 10%"
+msgstr "防禦力提升10%"
+
+#. Key:	Desc_Firewall_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Firewall_Enhancement_Rare"
+msgid "defense power increases by 30%"
+msgstr "防禦力提升30%"
+
+#. Key:	Desc_Flame_Aerial_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Legendary"
+msgid "35% chance for jump attack to deal flame damage"
+msgstr "跳躍攻擊有35%機率造成火焰傷害"
+
+#. Key:	Desc_Flame_Aerial_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Normal"
+msgid "7% chance for jump attack to deal flame damage"
+msgstr "跳躍攻擊有7%機率造成火焰傷害"
+
+#. Key:	Desc_Flame_Aerial_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Rare"
+msgid "16% chance for jump attack to deal flame damage"
+msgstr "跳躍攻擊有16%機率造成火焰傷害"
+
+#. Key:	Desc_Flame_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Dash_Legendary"
+msgid "35% chance for dash attack to deal flame damage"
+msgstr "衝刺攻擊有35%機率造成火焰傷害"
+
+#. Key:	Desc_Flame_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Dash_Normal"
+msgid "7% chance for dash attack to deal flame damage"
+msgstr "衝刺攻擊有7%機率造成火焰傷害"
+
+#. Key:	Desc_Flame_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Dash_Rare"
+msgid "16% chance for dash attack to deal flame damage"
+msgstr "衝刺攻擊有16%機率造成火焰傷害"
+
+#. Key:	Desc_Flame_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Strike_Legendary"
+msgid "30% chance for normal attack to deal flame damage"
+msgstr "普通攻擊有30%機率造成火焰傷害"
+
+#. Key:	Desc_Flame_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Strike_Normal"
+msgid "5% chance for normal attack to deal flame damage"
+msgstr "普通攻擊有5%機率造成火焰傷害"
+
+#. Key:	Desc_Flame_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Flame_Strike_Rare"
+msgid "15% chance for normal attack to deal flame damage"
+msgstr "普通攻擊有15%機率造成火焰傷害"
+
+#. Key:	Desc_Footwork_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Footwork_Optimization_Legendary"
+msgid "movement speed increases by 40%"
+msgstr "移動速度提升40%"
+
+#. Key:	Desc_Footwork_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Footwork_Optimization_Normal"
+msgid "movement speed increases by 15%"
+msgstr "移動速度提升15%"
+
+#. Key:	Desc_Footwork_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Footwork_Optimization_Rare"
+msgid "movement speed increases by 26%"
+msgstr "移動速度提升26%"
+
+#. Key:	Desc_Freezing_Aerial_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Legendary"
+msgid "jump attack power increases by 27% and has a chance to inflict stun debuff"
+msgstr "跳躍攻擊威力提升27%，並有機率施加暈眩效果"
+
+#. Key:	Desc_Freezing_Aerial_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Normal"
+msgid "jump attack power increases by 7% and has a chance to inflict stun debuff"
+msgstr "跳躍攻擊威力提升7%，並有機率施加暈眩效果"
+
+#. Key:	Desc_Freezing_Aerial_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Rare"
+msgid "jump attack power increases by 17% and has a chance to inflict stun debuff"
+msgstr "跳躍攻擊威力提升17%，並有機率施加暈眩效果"
+
+#. Key:	Desc_Freezing_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Legendary"
+msgid "dash attack power increases by 27% and has a chance to inflict stun debuff"
+msgstr "衝刺攻擊威力提升27%，並有機率施加暈眩效果"
+
+#. Key:	Desc_Freezing_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Normal"
+msgid "dash attack power increases by 7% and has a chance to inflict stun debuff"
+msgstr "衝刺攻擊威力提升7%，並有機率施加暈眩效果"
+
+#. Key:	Desc_Freezing_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Rare"
+msgid "dash attack power increases by 17% and has a chance to inflict stun debuff"
+msgstr "衝刺攻擊威力提升17%，並有機率施加暈眩效果"
+
+#. Key:	Desc_Freezing_Resistance_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Legendary"
+msgid "reduces stun debuff duration by 50%"
+msgstr "暈眩效果持續時間減少50%"
+
+#. Key:	Desc_Freezing_Resistance_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Normal"
+msgid "reduces stun debuff duration by 30%"
+msgstr "暈眩效果持續時間減少30%"
+
+#. Key:	Desc_Freezing_Resistance_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Rare"
+msgid "reduces stun debuff duration by 40%"
+msgstr "暈眩效果持續時間減少40%"
+
+#. Key:	Desc_Freezing_Strike_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Legendary"
+msgid "normal attack stun chance increases by 10%"
+msgstr "普通攻擊的暈眩機率提升10%"
+
+#. Key:	Desc_Freezing_Strike_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Normal"
+msgid "normal attack stun chance increases by 2%"
+msgstr "普通攻擊的暈眩機率提升2%"
+
+#. Key:	Desc_Freezing_Strike_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Rare"
+msgid "normal attack stun chance increases by 5%"
+msgstr "普通攻擊的暈眩機率提升5%"
+
+#. Key:	Desc_Freezing_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Legendary"
+msgid "normal attack power increases by 25% and has a chance to inflict stun debuff"
+msgstr "普通攻擊威力提升25%，並有機率施加暈眩效果"
+
+#. Key:	Desc_Freezing_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Normal"
+msgid "normal attack power increases by 5% and has a chance to inflict stun debuff"
+msgstr "普通攻擊威力提升5%，並有機率施加暈眩效果"
+
+#. Key:	Desc_Freezing_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Rare"
+msgid "normal attack power increases by 15% and has a chance to inflict stun debuff"
+msgstr "普通攻擊威力提升15%，並有機率施加暈眩效果"
+
+#. Key:	Desc_Heal_Pack_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Legendary"
+msgid "50% chance for healing item recovery amount to increase by 45%"
+msgstr "治療道具的恢復量有50%機率增加45%"
+
+#. Key:	Desc_Heal_Pack_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Normal"
+msgid "30% chance for healing item recovery amount to increase by 30%"
+msgstr "治療道具的恢復量有30%機率增加30%"
+
+#. Key:	Desc_Heal_Pack_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Heal_Pack_Enhancement_Rare"
+msgid "40% chance for healing item recovery amount to increase by 35%"
+msgstr "治療道具的恢復量有40%機率增加35%"
+
+#. Key:	Desc_High-Risk_Oxidation_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Legendary"
+msgid "max HP decreases by 20%, but normal attack deals very strong acidic damage"
+msgstr "最大生命值降低20%，但普通攻擊造成極強的酸性傷害"
+
+#. Key:	Desc_High-Risk_Oxidation_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Normal"
+msgid "max HP decreases by 20%, but normal attack deals strong acidic damage"
+msgstr "最大生命值降低20%，但普通攻擊造成強烈的酸性傷害"
+
+#. Key:	Desc_High-Risk_Oxidation_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Rare"
+msgid "max HP decreases by 20%, but normal attack deals even stronger acidic damage"
+msgstr "最大生命值降低20%，但普通攻擊造成更強的酸性傷害"
+
+#. Key:	Desc_Hit_Rate_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Hit_Rate_Enhancement_Legendary"
+msgid "all attack critical hit chance increases by 4%"
+msgstr "所有攻擊的暴擊率提升4%"
+
+#. Key:	Desc_Hit_Rate_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Hit_Rate_Enhancement_Normal"
+msgid "all attack critical hit chance increases by 2%"
+msgstr "所有攻擊的暴擊率提升2%"
+
+#. Key:	Desc_Hit_Rate_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Hit_Rate_Enhancement_Rare"
+msgid "all attack critical hit chance increases by 3%"
+msgstr "所有攻擊的暴擊率提升3%"
+
+#. Key:	Desc_Landing_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Landing_Optimization_Legendary"
+msgid "roll delay decreases by 40%"
+msgstr "翻滾延遲減少40%"
+
+#. Key:	Desc_Landing_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Landing_Optimization_Normal"
+msgid "roll delay decreases by 20%"
+msgstr "翻滾延遲減少20%"
+
+#. Key:	Desc_Landing_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Landing_Optimization_Rare"
+msgid "roll delay decreases by 30%"
+msgstr "翻滾延遲減少30%"
+
+#. Key:	Desc_Lucky_Extra_Drop_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Lucky_Extra_Drop_Legendary"
+msgid "25% chance to obtain 4x crafting materials from defeated enemies"
+msgstr "有25%機率從被擊敗的敵人獲得4倍的製作材料"
+
+#. Key:	Desc_Lucky_Extra_Drop_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Lucky_Extra_Drop_Normal"
+msgid "25% chance to obtain 2x crafting materials from defeated enemies"
+msgstr "有25%機率從被擊敗的敵人獲得2倍的製作材料"
+
+#. Key:	Desc_Lucky_Extra_Drop_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Lucky_Extra_Drop_Rare"
+msgid "25% chance to obtain 3x crafting materials from defeated enemies"
+msgstr "有25%機率從被擊敗的敵人獲得3倍的製作材料"
+
+#. Key:	Desc_Overdrive_Mode
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overdrive_Mode"
+msgid "max HP decreases by 10%, but movement speed increases by 30%"
+msgstr "最大生命值降低10%，但移動速度提升30%"
+
+#. Key:	Desc_Overload_Self_Aerial_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Legendary"
+msgid "jump attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgstr "跳躍攻擊速度降低15%，但施加極強的減速效果"
+
+#. Key:	Desc_Overload_Self_Aerial_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Normal"
+msgid "jump attack speed decreases by 15%, but inflicts slow debuff"
+msgstr "跳躍攻擊速度降低15%，但施加減速效果"
+
+#. Key:	Desc_Overload_Self_Aerial_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Rare"
+msgid "jump attack speed decreases by 15%, but inflicts strong slow debuff"
+msgstr "跳躍攻擊速度降低15%，但施加強烈的減速效果"
+
+#. Key:	Desc_Overload_Self_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Legendary"
+msgid "dash attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgstr "衝刺攻擊速度降低15%，但施加極強的減速效果"
+
+#. Key:	Desc_Overload_Self_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Normal"
+msgid "dash attack speed decreases by 15%, but inflicts strong slow debuff"
+msgstr "衝刺攻擊速度降低15%，但施加強烈的減速效果"
+
+#. Key:	Desc_Overload_Self_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Rare"
+msgid "dash attack speed decreases by 15%, but inflicts even stronger slow debuff"
+msgstr "衝刺攻擊速度降低15%，但施加更強的減速效果"
+
+#. Key:	Desc_Overload_Self_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Legendary"
+msgid "movement speed decreases by 30%, but normal attack power increases by 30%"
+msgstr "移動速度降低30%，但普通攻擊威力提升30%"
+
+#. Key:	Desc_Overload_Self_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Normal"
+msgid "movement speed decreases by 30%, but normal attack power increases by 10%"
+msgstr "移動速度降低30%，但普通攻擊威力提升10%"
+
+#. Key:	Desc_Overload_Self_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Rare"
+msgid "movement speed decreases by 30%, but normal attack power increases by 20%"
+msgstr "移動速度降低30%，但普通攻擊威力提升20%"
+
+#. Key:	Desc_Overload_Self_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Legendary"
+msgid "normal attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgstr "普通攻擊速度降低15%，但施加極強的減速效果"
+
+#. Key:	Desc_Overload_Self_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Normal"
+msgid "normal attack speed decreases by 15%, but inflicts strong slow debuff"
+msgstr "普通攻擊速度降低15%，但施加強烈的減速效果"
+
+#. Key:	Desc_Overload_Self_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Rare"
+msgid "normal attack speed decreases by 15%, but inflicts even stronger slow debuff"
+msgstr "普通攻擊速度降低15%，但施加更強的減速效果"
+
+#. Key:	Desc_Oxidation_Aerial_Attack_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Legendary"
+msgid "jump attack deals strong acidic damage"
+msgstr "跳躍攻擊造成強烈的酸性傷害"
+
+#. Key:	Desc_Oxidation_Aerial_Attack_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Normal"
+msgid "jump attack deals weak acidic damage"
+msgstr "跳躍攻擊造成微弱的酸性傷害"
+
+#. Key:	Desc_Oxidation_Aerial_Attack_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Rare"
+msgid "jump attack deals acidic damage"
+msgstr "跳躍攻擊造成酸性傷害"
+
+#. Key:	Desc_Oxidation_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Legendary"
+msgid "dash attack deals strong acidic damage"
+msgstr "衝刺攻擊造成強烈的酸性傷害"
+
+#. Key:	Desc_Oxidation_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Normal"
+msgid "dash attack deals weak acidic damage"
+msgstr "衝刺攻擊造成微弱的酸性傷害"
+
+#. Key:	Desc_Oxidation_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Rare"
+msgid "dash attack deals acidic damage"
+msgstr "衝刺攻擊造成酸性傷害"
+
+#. Key:	Desc_Oxidation_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Legendary"
+msgid "normal attack deals strong acidic damage"
+msgstr "普通攻擊造成強烈的酸性傷害"
+
+#. Key:	Desc_Oxidation_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Normal"
+msgid "normal attack deals weak acidic damage"
+msgstr "普通攻擊造成微弱的酸性傷害"
+
+#. Key:	Desc_Oxidation_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Rare"
+msgid "normal attack deals acidic damage"
+msgstr "普通攻擊造成酸性傷害"
+
+#. Key:	Desc_Precision_Aerial_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Aerial_Strike_Legendary"
+msgid "jump attack critical hit chance increases by 17%"
+msgstr "跳躍攻擊的暴擊率提升17%"
+
+#. Key:	Desc_Precision_Aerial_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Aerial_Strike_Normal"
+msgid "jump attack critical hit chance increases by 7%"
+msgstr "跳躍攻擊的暴擊率提升7%"
+
+#. Key:	Desc_Precision_Aerial_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Aerial_Strike_Rare"
+msgid "jump attack critical hit chance increases by 12%"
+msgstr "跳躍攻擊的暴擊率提升12%"
+
+#. Key:	Desc_Precision_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Dash_Legendary"
+msgid "dash attack critical hit chance increases by 17%"
+msgstr "衝刺攻擊的暴擊率提升17%"
+
+#. Key:	Desc_Precision_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Dash_Normal"
+msgid "dash attack critical hit chance increases by 7%"
+msgstr "衝刺攻擊的暴擊率提升7%"
+
+#. Key:	Desc_Precision_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Dash_Rare"
+msgid "dash attack critical hit chance increases by 12%"
+msgstr "衝刺攻擊的暴擊率提升12%"
+
+#. Key:	Desc_Precision_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Strike_Legendary"
+msgid "normal attack critical hit chance increases by 15%"
+msgstr "普通攻擊的暴擊率提升15%"
+
+#. Key:	Desc_Precision_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Strike_Normal"
+msgid "normal attack critical hit chance increases by 5%"
+msgstr "普通攻擊的暴擊率提升5%"
+
+#. Key:	Desc_Precision_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Precision_Strike_Rare"
+msgid "normal attack critical hit chance increases by 10%"
+msgstr "普通攻擊的暴擊率提升10%"
+
+#. Key:	Desc_Skill_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Skill_Optimization_Legendary"
+msgid "overall skill cooldown decreases by 50%"
+msgstr "所有技能冷卻時間縮短50%"
+
+#. Key:	Desc_Skill_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Skill_Optimization_Normal"
+msgid "overall skill cooldown decreases by 10%"
+msgstr "所有技能冷卻時間縮短10%"
+
+#. Key:	Desc_Skill_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Skill_Optimization_Rare"
+msgid "overall skill cooldown decreases by 35%"
+msgstr "所有技能冷卻時間縮短35%"
+
+#. Key:	Desc_Strike_Optimization_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Legendary"
+msgid "normal attack speed increases by 35%"
+msgstr "普通攻擊速度提升35%"
+
+#. Key:	Desc_Strike_Optimization_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Normal"
+msgid "normal attack speed increases by 5%"
+msgstr "普通攻擊速度提升5%"
+
+#. Key:	Desc_Strike_Optimization_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Rare"
+msgid "normal attack speed increases by 20%"
+msgstr "普通攻擊速度提升20%"
+
+#. Key:	Desc_Stunning_Output_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Stunning_Output_Legendary"
+msgid "normal attack has a 3% chance to inflict very strong stun debuff"
+msgstr "普通攻擊有3%機率施加極強的暈眩效果"
+
+#. Key:	Desc_Stunning_Output_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Stunning_Output_Normal"
+msgid "normal attack has a 1% chance to inflict very strong stun debuff"
+msgstr "普通攻擊有1%機率施加極強的暈眩效果"
+
+#. Key:	Desc_Stunning_Output_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Stunning_Output_Rare"
+msgid "normal attack has a 2% chance to inflict very strong stun debuff"
+msgstr "普通攻擊有2%機率施加極強的暈眩效果"
+
+#. Key:	Desc_Sub-Weapon_Slot_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Sub-Weapon_Slot_Enhancement_Legendary"
+msgid "sub-weapon max capacity increases by 3 times"
+msgstr "副武器最大攜帶量提升3倍"
+
+#. Key:	Desc_Sub-Weapon_Slot_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Sub-Weapon_Slot_Enhancement_Normal"
+msgid "sub-weapon max capacity increases by 1.5 times"
+msgstr "副武器最大攜帶量提升1.5倍"
+
+#. Key:	Desc_Sub-Weapon_Slot_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Sub-Weapon_Slot_Enhancement_Rare"
+msgid "sub-weapon max capacity increases by 2 times"
+msgstr "副武器最大攜帶量提升2倍"
+
+#. Key:	Desc_System_Performance_Enhancement_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Legendary"
+msgid "all attack power increases by 3%"
+msgstr "所有攻擊力提升3%"
+
+#. Key:	Desc_System_Performance_Enhancement_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Normal"
+msgid "all attack power increases by 1%"
+msgstr "所有攻擊力提升1%"
+
+#. Key:	Desc_System_Performance_Enhancement_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Rare"
+msgid "all attack power increases by 2%"
+msgstr "所有攻擊力提升2%"
+
+#. Key:	Desc_Throttling_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Legendary"
+msgid "dash attack greatly increases and inflicts slow debuff"
+msgstr "衝刺攻擊大幅提升並施加減速效果"
+
+#. Key:	Desc_Throttling_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Normal"
+msgid "dash attack slightly increases and inflicts slow debuff"
+msgstr "衝刺攻擊稍微提升並施加減速效果"
+
+#. Key:	Desc_Throttling_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Rare"
+msgid "dash attack increases and inflicts slow debuff"
+msgstr "衝刺攻擊提升並施加減速效果"
+
+#. Key:	Desc_Throttling_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Legendary"
+msgid "normal attack greatly increases and inflicts slow debuff"
+msgstr "普通攻擊大幅提升並施加減速效果"
+
+#. Key:	Desc_Throttling_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Normal"
+msgid "normal attack slightly increases and inflicts slow effect"
+msgstr "普通攻擊稍微提升並施加減速效果"
+
+#. Key:	Desc_Throttling_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Rare"
+msgid "normal attack increases and inflicts slow debuff"
+msgstr "普通攻擊提升並施加減速效果"
+
+#. Key:	Desc_Toxic_Aerial_Attack_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Legendary"
+msgid "normal attack power decreases by 2%, but jump attack deals very strong acidic damage"
+msgstr "普通攻擊威力降低2%，但跳躍攻擊造成極強的酸性傷害"
+
+#. Key:	Desc_Toxic_Aerial_Attack_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Normal"
+msgid "normal attack power decreases by 2%, but jump attack deals strong acidic damage"
+msgstr "普通攻擊威力降低2%，但跳躍攻擊造成強烈的酸性傷害"
+
+#. Key:	Desc_Toxic_Aerial_Attack_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Rare"
+msgid "normal attack power decreases by 2%, but jump attack deals even stronger acidic damage"
+msgstr "普通攻擊威力降低2%，但跳躍攻擊造成更強的酸性傷害"
+
+#. Key:	Desc_Toxic_Oxidation_Dash_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Legendary"
+msgid "normal attack power decreases by 2%, but dash attack deals very strong acidic damage"
+msgstr "普通攻擊威力降低2%，但衝刺攻擊造成極強的酸性傷害"
+
+#. Key:	Desc_Toxic_Oxidation_Dash_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Normal"
+msgid "normal attack power decreases by 2%, but dash attack deals strong acidic damage"
+msgstr "普通攻擊威力降低2%，但衝刺攻擊造成強烈的酸性傷害"
+
+#. Key:	Desc_Toxic_Oxidation_Dash_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Rare"
+msgid "normal attack power decreases by 2%, but dash attack deals even stronger acidic damage"
+msgstr "普通攻擊威力降低2%，但衝刺攻擊造成更強的酸性傷害"
+
+#. Key:	Desc_Toxic_Oxidation_Strike_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Legendary"
+msgid "defense power decreases by 50%, but normal attack deals very strong acidic damage"
+msgstr "防禦力降低50%，但普通攻擊造成極強的酸性傷害"
+
+#. Key:	Desc_Toxic_Oxidation_Strike_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Normal"
+msgid "defense power decreases by 50%, but normal attack deals strong acidic damage"
+msgstr "防禦力降低50%，但普通攻擊造成強烈的酸性傷害"
+
+#. Key:	Desc_Toxic_Oxidation_Strike_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Rare"
+msgid "defense power decreases by 50%, but normal attack deals even stronger acidic damage"
+msgstr "防禦力降低50%，但普通攻擊造成更強的酸性傷害"
+
+#. Key:	Desc_Transcendent_Critical_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Transcendent_Critical_Legendary"
+msgid "all attack critical hit damage increases by 1.5 times"
+msgstr "所有攻擊的暴擊傷害提升1.5倍"
+
+#. Key:	Desc_Transcendent_Critical_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Transcendent_Critical_Normal"
+msgid "all attack critical hit damage increases by 1.2 times"
+msgstr "所有攻擊的暴擊傷害提升1.2倍"
+
+#. Key:	Desc_Transcendent_Critical_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Desc_Transcendent_Critical_Rare"
+msgid "all attack critical hit damage increases by 1.3 times"
+msgstr "所有攻擊的暴擊傷害提升1.3倍"
+
+#. Key:	Grade_Legendary
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Grade_Legendary"
+msgid "Legendary"
+msgstr "傳奇"
+
+#. Key:	Grade_Normal
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Grade_Normal"
+msgid "Normal"
+msgstr "普通"
+
+#. Key:	Grade_Rare
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Grade_Rare"
+msgid "Rare"
+msgstr "稀有"
+
+#. Key:	Name_Aerial_Strike_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Aerial_Strike_Optimization"
+msgid "Aerial Strike Optimization"
+msgstr "空中打擊最佳化"
+
+#. Key:	Name_Critical_Aerial_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Aerial_Attack"
+msgid "Critical Aerial Attack"
+msgstr "暴擊空中攻擊"
+
+#. Key:	Name_Critical_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Dash"
+msgid "Critical Dash"
+msgstr "暴擊衝刺"
+
+#. Key:	Name_Critical_Oxidation_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Oxidation_Strike"
+msgid "Critical Oxidation Strike"
+msgstr "暴擊氧化打擊"
+
+#. Key:	Name_Critical_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Strike"
+msgid "Critical Strike"
+msgstr "暴擊攻擊"
+
+#. Key:	Name_Critical_Transcendent
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Critical_Transcendent"
+msgid "Transcendent Critical"
+msgstr "超越暴擊"
+
+#. Key:	Name_Dash_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Dash_Optimization"
+msgid "Dash Optimization"
+msgstr "衝刺最佳化"
+
+#. Key:	Name_Enhancement_Battery
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Enhancement_Battery"
+msgid "Battery Enhancement"
+msgstr "電池強化"
+
+#. Key:	Name_Enhancement_Heal_Pack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Enhancement_Heal_Pack"
+msgid "Heal Pack Enhancement"
+msgstr "治療包強化"
+
+#. Key:	Name_Enhancement_Sub-Weapon_Slot
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Enhancement_Sub-Weapon_Slot"
+msgid "Sub-Weapon Slot Enhancement"
+msgstr "副武器欄位強化"
+
+#. Key:	Name_Firewall_Enhancement
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Firewall_Enhancement"
+msgid "Firewall Enhancement"
+msgstr "防火牆強化"
+
+#. Key:	Name_Flame_Aerial_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Flame_Aerial_Strike"
+msgid "Critical Aerial Flame Strike"
+msgstr "暴擊空中火焰打擊"
+
+#. Key:	Name_Flame_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Flame_Dash"
+msgid "Flame Dash"
+msgstr "火焰衝刺"
+
+#. Key:	Name_Flame_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Flame_Strike"
+msgid "Flame Strike"
+msgstr "火焰打擊"
+
+#. Key:	Name_Footwork_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Footwork_Optimization"
+msgid "Footwork Optimization"
+msgstr "步法最佳化"
+
+#. Key:	Name_Freezing_Aerial
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Aerial"
+msgid "Freezing Aerial"
+msgstr "當機空中攻擊"
+
+#. Key:	Name_Freezing_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Dash"
+msgid "Freezing Dash"
+msgstr "當機衝刺"
+
+#. Key:	Name_Freezing_Resistance
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Resistance"
+msgid "Freezing Resistance"
+msgstr "抗當機"
+
+#. Key:	Name_Freezing_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Strike"
+msgid "Freezing Strike"
+msgstr "當機打擊"
+
+#. Key:	Name_Freezing_Strike_Enhancement
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Freezing_Strike_Enhancement"
+msgid "Freezing Strike Enhancement"
+msgstr "當機打擊強化"
+
+#. Key:	Name_High-Risk_Aerial_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_High-Risk_Aerial_Attack"
+msgid "High-Risk Aerial Attack"
+msgstr "高風險空中攻擊"
+
+#. Key:	Name_High-Risk_Oxidation_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_High-Risk_Oxidation_Dash"
+msgid "High-Risk Oxidation Dash"
+msgstr "高風險氧化衝刺"
+
+#. Key:	Name_High-Risk_Oxidation_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_High-Risk_Oxidation_Strike"
+msgid "High-Risk Oxidation Strike"
+msgstr "高風險氧化打擊"
+
+#. Key:	Name_Hit_Rate_Enhancement
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Hit_Rate_Enhancement"
+msgid "Hit Rate Enhancement"
+msgstr "命中率提升"
+
+#. Key:	Name_Landing_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Landing_Optimization"
+msgid "Landing Optimization"
+msgstr "著陸最佳化"
+
+#. Key:	Name_Lucky_Extra_Drop
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Lucky_Extra_Drop"
+msgid "Lucky Extra Drop"
+msgstr "幸運額外掉落"
+
+#. Key:	Name_Overdrive_Mode
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overdrive_Mode"
+msgid "Overdrive Mode"
+msgstr "超頻模式"
+
+#. Key:	Name_Overload_Self
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overload_Self"
+msgid "Self Overload"
+msgstr "自我超載"
+
+#. Key:	Name_Overload_Self_Aerial
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overload_Self_Aerial"
+msgid "Self Aerial Overload"
+msgstr "自我空中超載"
+
+#. Key:	Name_Overload_Self_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overload_Self_Dash"
+msgid "Self Overload Dash"
+msgstr "自我超載衝刺"
+
+#. Key:	Name_Overload_Self_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Overload_Self_Strike"
+msgid "Self Overload Strike"
+msgstr "自我超載打擊"
+
+#. Key:	Name_Oxidation_Aerial_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Oxidation_Aerial_Attack"
+msgid "Aerial Oxidation Attack"
+msgstr "空中氧化攻擊"
+
+#. Key:	Name_Oxidation_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Oxidation_Dash"
+msgid "Oxidation Dash"
+msgstr "氧化衝刺"
+
+#. Key:	Name_Oxidation_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Oxidation_Strike"
+msgid "Oxidation Strike"
+msgstr "氧化打擊"
+
+#. Key:	Name_Precision_Aerial_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Precision_Aerial_Strike"
+msgid "Precision Aerial Strike"
+msgstr "精準空中打擊"
+
+#. Key:	Name_Precision_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Precision_Dash"
+msgid "Precision Dash"
+msgstr "精準衝刺"
+
+#. Key:	Name_Precision_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Precision_Strike"
+msgid "Precision Strike"
+msgstr "精準打擊"
+
+#. Key:	Name_Resistance_Freezing
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Resistance_Freezing"
+msgid "Freezing Resistance"
+msgstr "抗當機"
+
+#. Key:	Name_Skill_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Skill_Optimization"
+msgid "Skill Optimization"
+msgstr "技能最佳化"
+
+#. Key:	Name_Strike_Optimization
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Strike_Optimization"
+msgid "Strike Optimization"
+msgstr "打擊最佳化"
+
+#. Key:	Name_Stunning_Output
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Stunning_Output"
+msgid "Stunning Output"
+msgstr "震撼輸出"
+
+#. Key:	Name_System_Performance_Enhancement
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_System_Performance_Enhancement"
+msgid "System Performance Enhancement"
+msgstr "系統效能強化"
+
+#. Key:	Name_Throttling_Aerial
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Throttling_Aerial"
+msgid "Aerial Throttling"
+msgstr "空中節流"
+
+#. Key:	Name_Throttling_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Throttling_Dash"
+msgid "Throttling Dash"
+msgstr "節流衝刺"
+
+#. Key:	Name_Throttling_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Throttling_Strike"
+msgid "Throttling Strike"
+msgstr "節流打擊"
+
+#. Key:	Name_Toxic_Aerial_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Toxic_Aerial_Attack"
+msgid "Toxic Aerial Attack"
+msgstr "劇毒空中攻擊"
+
+#. Key:	Name_Toxic_Oxidation_Dash
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Toxic_Oxidation_Dash"
+msgid "Toxic Oxidation Dash"
+msgstr "劇毒氧化衝刺"
+
+#. Key:	Name_Toxic_Oxidation_Strike
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,Name_Toxic_Oxidation_Strike"
+msgid "Toxic Oxidation Strike"
+msgstr "劇毒氧化打擊"
+
+#. Key:	UI_Choose_New_BoosterChip
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Choose_New_BoosterChip"
+msgid "Select New Boosterchip"
+msgstr "選擇新的增幅芯片"
+
+#. Key:	UI_Name_Action
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Action"
+msgid "Action"
+msgstr "動作"
+
+#. Key:	UI_Name_Aerial_Combo
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Aerial_Combo"
+msgid "Aerial Combo"
+msgstr "跳躍攻擊連擊"
+
+#. Key:	UI_Name_Critical
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Critical"
+msgid "Critical"
+msgstr "致命"
+
+#. Key:	UI_Name_Currency
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Currency"
+msgid "Currency"
+msgstr "貨幣"
+
+#. Key:	UI_Name_DashCombo
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_DashCombo"
+msgid "Dash Combo"
+msgstr "衝刺攻擊連擊"
+
+#. Key:	UI_Name_Flame
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Flame"
+msgid "Flame"
+msgstr "火焰"
+
+#. Key:	UI_Name_Freezing
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Freezing"
+msgid "Freezing"
+msgstr "當機"
+
+#. Key:	UI_Name_NormalCombo
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_NormalCombo"
+msgid "Normal Combo"
+msgstr "普通攻擊連擊"
+
+#. Key:	UI_Name_Oxidation
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Oxidation"
+msgid "Oxidation"
+msgstr "氧化"
+
+#. Key:	UI_Name_Slow
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_Name_Slow"
+msgid "Slow"
+msgstr "減速"
+
+#. Key:	UI_RewardWarning
+#. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+#: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
+msgctxt "ST_Boosterchip,UI_RewardWarning"
+msgid "You will forfeit the boosterchip  acquisition. \r\nThis choice is irreversible. \r\nDo you wish to continue?"
+msgstr "您將放棄獲取增幅芯片。\r\n此選擇不可撤銷。\r\n您確定要繼續嗎？"
+
+#. Key:	Ability
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Ability"
+msgid "Boosterchip"
+msgstr "增幅芯片"
+
+#. Key:	Ability_Description
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Ability_Description"
+msgid "Boosterchip Description"
+msgstr "增幅芯片描述"
+
+#. Key:	Ability_Name
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Ability_Name"
+msgid "Boosterchip Name"
+msgstr "增幅芯片名稱"
+
+#. Key:	Button_Apply
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Apply"
+msgid "Apply"
+msgstr "應用"
+
+#. Key:	Button_Back
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Back"
+msgid "Back"
+msgstr "返回"
+
+#. Key:	Button_Cancel
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Cancel"
+msgid "Cancel"
+msgstr "取消"
+
+#. Key:	Button_Continue
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Continue"
+msgid "Continue"
+msgstr "繼續"
+
+#. Key:	Button_Craft
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Craft"
+msgid "Craft"
+msgstr "製作"
+
+#. Key:	Button_OptionsMenu
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_OptionsMenu"
+msgid "Options"
+msgstr "選項"
+
+#. Key:	Button_Photo_Mode
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Photo_Mode"
+msgid "Photo Mode"
+msgstr "照片模式"
+
+#. Key:	Button_Quit
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Quit"
+msgid "Quit"
+msgstr "退出"
+
+#. Key:	Button_Quit_To_Title_Screen
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Quit_To_Title_Screen"
+msgid "Quit To Title Screen"
+msgstr "返回標題畫面"
+
+#. Key:	Button_Reset
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Reset"
+msgid "Reset"
+msgstr "重置"
+
+#. Key:	Button_Select
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Select"
+msgid "Select"
+msgstr "選擇"
+
+#. Key:	Category_Display
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Category_Display"
+msgid "Display"
+msgstr "顯示"
+
+#. Key:	Category_Other
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Category_Other"
+msgid "Other"
+msgstr "其他"
+
+#. Key:	Category_Upscaling_AA
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Category_Upscaling_AA"
+msgid "Upscaling & AA"
+msgstr "解析度提升與抗鋸齒"
+
+#. Key:	Craft_Confirm_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Craft_Confirm_Warning"
+msgid "Do you really want to craft?\r\nAny action is definitive."
+msgstr "你確定要製作嗎？\r\n操作後無法撤銷。"
+
+#. Key:	CraftMaterial_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,CraftMaterial_Warning"
+msgid "Not enough material to craft."
+msgstr "製作所需的材料不足。"
+
+#. Key:	Desc_AAMethodSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_AAMethodSetting"
+msgid "Select the method used to remove aliasing and jagged edges in the game.\r\n\r\nUpscaling Method must be set to Off to adjust this setting manually,"
+msgstr "選擇用於消除遊戲中的鋸齒和邊緣鋸齒的方式。\r\n\r\n如需手動調整此設置，必須將解析度提升方法設為關閉。"
+
+#. Key:	Desc_AAQualitySetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_AAQualitySetting"
+msgid "Adjust the quality of the choosen anti aliasing method."
+msgstr "調整所選抗鋸齒方式的品質。"
+
+#. Key:	Desc_AmbientAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_AmbientAudioSetting"
+msgid "Adjust the volume for the ambient sounds of the environment."
+msgstr "調整環境音效的音量。"
+
+#. Key:	Desc_CameraFOVSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_CameraFOVSetting"
+msgid "Adjust the camera field of view (FOV)"
+msgstr "調整相機視野範圍 (FOV)。"
+
+#. Key:	Desc_CameraSensivitySetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_CameraSensivitySetting"
+msgid "Adjust the sensitivity of camera movements."
+msgstr "調整相機移動靈敏度。"
+
+#. Key:	Desc_ContactShadowsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ContactShadowsSetting"
+msgid "Enable Contact Shadows to add subtle shadowing in areas that would not be covered by standard shadow maps, such as small geometry or grass.\r\n \r\nThis setting has minimal impact on performances."
+msgstr "啟用接觸陰影，在標準陰影貼圖無法覆蓋的區域（如小型幾何體或草地）添加細微的陰影。\r\n\r\n此設置對性能影響較小。"
+
+#. Key:	Desc_EffectsAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_EffectsAudioSetting"
+msgid "Adjust the volume for the in-game effects."
+msgstr "調整遊戲內效果音的音量。"
+
+#. Key:	Desc_EffectsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_EffectsSetting"
+msgid "Adjust the quality of visual effects such as particles."
+msgstr "調整視覺效果（如粒子效果）的品質。"
+
+#. Key:	Desc_FoliageSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_FoliageSetting"
+msgid "Adjust the quality and density of foliage."
+msgstr "調整植被的品質和密度。"
+
+#. Key:	Desc_FramerateLimitSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_FramerateLimitSetting"
+msgid "Adjust the framerate limit to the specified value between 30 and 200 fps. \r\n\r\nValues lower than 30 will remove the framerate limit.\r\nVSync must be disabled if you want to adjust the Framerate Limit manually.  "
+msgstr "將幀率限制調整至30到200 FPS的指定值。\r\n\r\n低於30的值將取消幀率限制。\r\n如需手動調整幀率限制，必須關閉垂直同步 (VSync)。"
+
+#. Key:	Desc_GammaSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_GammaSetting"
+msgid "Adjust the global brightness of the game."
+msgstr "調整遊戲的整體亮度。"
+
+#. Key:	Desc_GlobalIlluminationSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_GlobalIlluminationSetting"
+msgid "Adjust the quality of the Global Illumination. \r\n\r\nLumen High and Ultra offer better visual quality with ray-traced global illumination but have a larger impact to performances than DFAO."
+msgstr "調整全域照明的品質。\r\n\r\nLumen High 和 Ultra 使用光線追蹤全域照明提供更好的視覺品質，但比 DFAO 對性能影響更大。"
+
+#. Key:	Desc_GraphicsPresetSettings
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_GraphicsPresetSettings"
+msgid "Select a graphics quality preset to quickly adjust all the graphics settings to the desired value."
+msgstr "選擇圖形品質預設，以快速調整所有圖形設定至所需數值。"
+
+#. Key:	Desc_HardwareLumenSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_HardwareLumenSetting"
+msgid "Enable Hardware Ray Tracing for higher quality Lumen Global Illumination and Reflections. \r\n\r\nThis setting has a large impact on performances and require compatible hardware."
+msgstr "啟用硬體光線追蹤，以獲得更高品質的 Lumen 全域照明和反射。\r\n\r\n此設定對性能影響較大，並需要相容的硬體。"
+
+#. Key:	Desc_HoldToSprintSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_HoldToSprintSetting"
+msgid "Enable holding the sprint button to keep sprinting.\r\nRevert to \"press to sprint\" if disabled."
+msgstr "啟用按住衝刺按鈕持續衝刺。\r\n如果禁用，將恢復為“按鍵衝刺”模式。"
+
+#. Key:	Desc_InvertXAxisSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_InvertXAxisSetting"
+msgid "Enable the inverted camera controls for the X-Axis (left/right)."
+msgstr "啟用 X 軸（左右）反向相機控制。"
+
+#. Key:	Desc_InvertYAxisSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_InvertYAxisSetting"
+msgid "Enable the inverted camera controls for the Y-Axis (up/down)."
+msgstr "啟用 Y 軸（上下）反向相機控制。"
+
+#. Key:	Desc_LanguageSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_LanguageSetting"
+msgid "Adjust the language of the game."
+msgstr "調整遊戲語言。"
+
+#. Key:	Desc_MasterAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_MasterAudioSetting"
+msgid "Adjust the volume of all the sounds in the game."
+msgstr "調整遊戲內所有聲音的音量。"
+
+#. Key:	Desc_MotionBlurSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_MotionBlurSetting"
+msgid "Adjust the quality and amount of motion blur displayed on screen. \r\n\r\nThis setting has minimal impact on performances and is recomended to smooth lower framerates."
+msgstr "調整螢幕上顯示的動態模糊品質和強度。\r\n\r\n此設定對性能影響較小，建議用於平滑低幀率畫面。"
+
+#. Key:	Desc_MusicAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_MusicAudioSetting"
+msgid "Adjust the volume for the musics of the game."
+msgstr "調整遊戲音樂的音量。"
+
+#. Key:	Desc_PostProcessSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_PostProcessSetting"
+msgid "Adjust the quality of post processing effects. \r\n\r\nThis setting has minimal impact on performances."
+msgstr "調整後期處理效果的品質。\r\n\r\n此設定對性能影響較小。"
+
+#. Key:	Desc_ReflectionsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ReflectionsSetting"
+msgid "Adjust the quality of the Reflections.\r\n\r\nLumen High and Ultra offer better visual quality with ray-traced reflections but have a larger impact to performancs than the Screen Space Reflections options. \r\n\r\nGlobal Illumination must be set to Lumen High or better for the Lumen Reflections to work."
+msgstr "調整反射效果的品質。\r\n\r\nLumen High 和 Ultra 透過光線追蹤反射提供更好的視覺品質，但比螢幕空間反射選項對性能影響更大。\r\n\r\n全域照明必須設定為 Lumen High 或更高級別，以啟用 Lumen 反射。"
+
+#. Key:	Desc_Resolution
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_Resolution"
+msgid "Adjust the displayed resolution of the game.\r\n\r\nWindow Mode must be set to Full Screen or Windowed to be able to change the displayed resolution of the game."
+msgstr "調整遊戲的顯示解析度。\r\n\r\n必須將視窗模式設定為全螢幕或視窗模式，才能更改遊戲的顯示解析度。"
+
+#. Key:	Desc_ResolutionScaleSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ResolutionScaleSetting"
+msgid "Adjust the internal render resolution scale of the game.\r\n\r\nAnti Aliasing Method must be set to Off, FXAA or TAA and Upscaling Method to Off in order to adjust the resolution scale manually."
+msgstr "調整遊戲的內部渲染解析度比例。\r\n\r\n必須將抗鋸齒方式設定為關閉、FXAA 或 TAA，並將解析度提升方式設定為關閉，才能手動調整解析度比例。"
+
+#. Key:	Desc_ShadingSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ShadingSetting"
+msgid "Adjust the shading quality of materials."
+msgstr "調整材質的陰影品質。"
+
+#. Key:	Desc_ShadowsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ShadowsSetting"
+msgid "Adjust the quality of the shadows and their draw distance. \r\n\r\nThis setting can has a large impact on performances at its highest option. \r\nIt is not recommended to set it to Ultra with Virtual Shadow Maps enabled."
+msgstr "調整陰影的品質及其繪製距離。\r\n\r\n此設定在最高選項時對性能影響較大。\r\n在啟用虛擬陰影貼圖的情況下，不建議將其設為 Ultra。"
+
+#. Key:	Desc_SkillCrafting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_SkillCrafting"
+msgid "You can create skills using combination materials."
+msgstr "你可以使用组合材料来制作技能。"
+
+#. Key:	Desc_TexturesFilteringSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_TexturesFilteringSetting"
+msgid "Adjust the quality of texture filtering. Higher quality settings reduces blur when viewing textures at an angle.\r\n\r\nThis setting has minimal impact to performances."
+msgstr "調整材質過濾品質。較高品質的設定可減少從角度觀看材質時的模糊效果。\r\n\r\n此設定對性能影響較小。"
+
+#. Key:	Desc_TexturesSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_TexturesSetting"
+msgid "Adjust the quality of textures that are allowed to be loaded into the video memory of your graphics card. \r\n\r\nThis setting has minimal impact to performances and won’t have a visual impact if you graphics card has enough video memory. "
+msgstr "調整允許加載到顯示卡視訊記憶體中的材質品質。\r\n\r\n此設定對性能影響較小，如果顯示卡擁有足夠的視訊記憶體，則不會對視覺效果產生影響。"
+
+#. Key:	Desc_UIAudioSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_UIAudioSetting"
+msgid "Adjust the volume for sounds played by the User Interface."
+msgstr "調整使用者介面音效的音量。"
+
+#. Key:	Desc_UpscaleMethodSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_UpscaleMethodSetting"
+msgid "Select the upscaling method used by the game to improve performances at a minimal impact to visuals. "
+msgstr "選擇遊戲用於提升解析度的方法，以在最小視覺影響的情況下提升性能。"
+
+#. Key:	Desc_UpscaleQualitySetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_UpscaleQualitySetting"
+msgid "Select the quality to performance balance of the choosen upscaling method. \r\n\r\nHigher quality options will offer better image quality but a smaller performance gain while higher performance options will offer greater performances but with a more degraded image quality.  "
+msgstr "選擇所選解析度提升方式的品質與性能平衡。\r\n\r\n較高品質選項可提供更好的影像品質，但性能提升較小，而較高性能選項可提供更高的性能，但影像品質下降。"
+
+#. Key:	Desc_UpscaleSharpnessSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_UpscaleSharpnessSetting"
+msgid "Adjust the sharpness applied to the image.  "
+msgstr "調整影像的銳利度。"
+
+#. Key:	Desc_ViewDistanceSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_ViewDistanceSetting"
+msgid "Adjust the view distance of objects in the world. "
+msgstr "調整世界中物件的可視距離。"
+
+#. Key:	Desc_VolumetricsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_VolumetricsSetting"
+msgid "Adjust the quality and resolution of volumetrics effects such as volumetric fog. \r\n\r\nThis setting can have a large impact on performances at its highest option."
+msgstr "調整體積效果（如體積霧）的品質和解析度。\r\n\r\n此設定在最高選項時對性能影響較大。"
+
+#. Key:	Desc_VSMShadowsSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_VSMShadowsSetting"
+msgid "Enable Virtual Shadow Maps for more accurate and higher resolution shadows with greater draw distances.\r\n \r\nThis setting has a large impact on performances thus using Ultra Shadows Quality is not recommended with Virtual Shadow Maps.  "
+msgstr "啟用虛擬陰影貼圖，以獲得更準確和更高解析度的陰影，並增加繪製距離。\r\n\r\n此設定對性能影響較大，因此不建議在啟用虛擬陰影貼圖的情況下使用 Ultra 陰影品質。"
+
+#. Key:	Desc_VSyncSetting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_VSyncSetting"
+msgid "Select the VSync mode used by the game. \r\n\r\nThe options are dependent of your monitor's refresh rate: 1/1 option will enable vsync at your maximum refresh rate. 1/2 will enable vsync at half your monitor’s refresh rate, and so on. "
+msgstr "選擇遊戲使用的垂直同步（VSync）模式。\r\n\r\n選項取決於您的顯示器刷新率：1/1 選項將在最大刷新率下啟用 VSync，1/2 選項將在顯示器刷新率的一半啟用 VSync，依此類推。"
+
+#. Key:	Desc_WindowMode
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Desc_WindowMode"
+msgid "Select the window mode used by the game. "
+msgstr "選擇遊戲的視窗模式。"
+
+#. Key:	Description
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Description"
+msgid "Description"
+msgstr "描述"
+
+#. Key:	ExitGame_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,ExitGame_Warning"
+msgid "Do you really want to exit the game?"
+msgstr "你真的要退出遊戲嗎？"
+
+#. Key:	Guide
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Guide"
+msgid "Guide"
+msgstr "遊戲指南"
+
+#. Key:	High_Quality_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,High_Quality_Setting"
+msgid "High"
+msgstr "高"
+
+#. Key:	LoadGame
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,LoadGame"
+msgid "Load Game"
+msgstr "載入遊戲"
+
+#. Key:	Low_Quality_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Low_Quality_Setting"
+msgid "Low"
+msgstr "低"
+
+#. Key:	Medium_Quality_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Medium_Quality_Setting"
+msgid "Medium"
+msgstr "中"
+
+#. Key:	NewGame
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,NewGame"
+msgid "New Game"
+msgstr "新遊戲"
+
+#. Key:	Off_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Off_Setting"
+msgid "Off"
+msgstr "關閉"
+
+#. Key:	On_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,On_Setting"
+msgid "On"
+msgstr "開啟"
+
+#. Key:	Option_AmbientAudioVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_AmbientAudioVolume"
+msgid "Ambient Audio Volume"
+msgstr "環境音量"
+
+#. Key:	Option_AntiAliasingMethod
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_AntiAliasingMethod"
+msgid "Anti Aliasing Method"
+msgstr "抗鋸齒方式"
+
+#. Key:	Option_AntiAliasingQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_AntiAliasingQuality"
+msgid "Anti Aliasing Quality"
+msgstr "抗鋸齒品質"
+
+#. Key:	Option_CameraSensitivity
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_CameraSensitivity"
+msgid "Camera Sensitivity"
+msgstr "相機靈敏度"
+
+#. Key:	Option_ContactShadows
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ContactShadows"
+msgid "Contact Shadows"
+msgstr "接觸陰影"
+
+#. Key:	Option_EffectsAudioVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_EffectsAudioVolume"
+msgid "Effects Audio Volume"
+msgstr "效果音量"
+
+#. Key:	Option_EffectsQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_EffectsQuality"
+msgid "Effects Quality"
+msgstr "特效品質"
+
+#. Key:	Option_FoliageQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_FoliageQuality"
+msgid "Foliage Quality"
+msgstr "植被品質"
+
+#. Key:	Option_FOV
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_FOV"
+msgid "Camera Field of View"
+msgstr "相機視野範圍"
+
+#. Key:	Option_FramerateLimit
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_FramerateLimit"
+msgid "Framerate Limit"
+msgstr "幀率限制"
+
+#. Key:	Option_Gamma
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_Gamma"
+msgid "Gamma"
+msgstr "伽馬值"
+
+#. Key:	Option_GlobalIlluminationQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_GlobalIlluminationQuality"
+msgid "Global Illumination Quality"
+msgstr "全域照明品質"
+
+#. Key:	Option_GraphicsPreset
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_GraphicsPreset"
+msgid "Graphics Preset"
+msgstr "圖形預設"
+
+#. Key:	Option_HardwareRay-TracingLumen
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_HardwareRay-TracingLumen"
+msgid "Hardware Ray-Tracing Lumen"
+msgstr "硬體光線追蹤 Lumen"
+
+#. Key:	Option_HoldToSprint
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_HoldToSprint"
+msgid "Hold To Sprint"
+msgstr "按住衝刺"
+
+#. Key:	Option_ImageSharpness
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ImageSharpness"
+msgid "Image Sharpness"
+msgstr "影像銳利度"
+
+#. Key:	Option_InvertXAxis
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_InvertXAxis"
+msgid "Invert X-Axis"
+msgstr "反轉 X 軸"
+
+#. Key:	Option_InvertYAxis
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_InvertYAxis"
+msgid "Invert Y-Axis"
+msgstr "反轉 Y 軸"
+
+#. Key:	Option_Language
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_Language"
+msgid "Language"
+msgstr "語言"
+
+#. Key:	Option_MasterVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_MasterVolume"
+msgid "Master Volume"
+msgstr "主音量"
+
+#. Key:	Option_MotionBlur
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_MotionBlur"
+msgid "Motion Blur"
+msgstr "動態模糊"
+
+#. Key:	Option_MusicVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_MusicVolume"
+msgid "Music Volume"
+msgstr "音樂音量"
+
+#. Key:	Option_PostProcessing
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_PostProcessing"
+msgid "Post Processing Quality"
+msgstr "後期處理品質"
+
+#. Key:	Option_ReflectionQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ReflectionQuality"
+msgid "Reflections Quality"
+msgstr "反射品質"
+
+#. Key:	Option_ResolutionMode
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ResolutionMode"
+msgid "Resolution"
+msgstr "解析度"
+
+#. Key:	Option_ResolutionScale
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ResolutionScale"
+msgid "Resolution Scale"
+msgstr "解析度縮放"
+
+#. Key:	Option_ShadingQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ShadingQuality"
+msgid "Shading Quality"
+msgstr "陰影品質"
+
+#. Key:	Option_ShadowsQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_ShadowsQuality"
+msgid "Shadows Quality"
+msgstr "陰影效果品質"
+
+#. Key:	Option_TextureFiltering
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_TextureFiltering"
+msgid "Textures Filtering"
+msgstr "材質過濾"
+
+#. Key:	Option_TextureQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_TextureQuality"
+msgid "Textures Quality"
+msgstr "材質品質"
+
+#. Key:	Option_UIEffectsVolume
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_UIEffectsVolume"
+msgid "UI Effects Volume"
+msgstr "使用者介面音效音量"
+
+#. Key:	Option_UpscalingMethod
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_UpscalingMethod"
+msgid "Upscaling Method"
+msgstr "解析度提升方式"
+
+#. Key:	Option_UpscalingQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_UpscalingQuality"
+msgid "Upscaling Quality"
+msgstr "解析度提升品質"
+
+#. Key:	Option_View_Distance
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_View_Distance"
+msgid "View Distance"
+msgstr "可視距離"
+
+#. Key:	Option_VirtualShadowMaps
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_VirtualShadowMaps"
+msgid "Virtual Shadow Maps"
+msgstr "虛擬陰影貼圖"
+
+#. Key:	Option_VolumetricEffectsQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_VolumetricEffectsQuality"
+msgid "Volumetric Effects Quality"
+msgstr "體積特效品質"
+
+#. Key:	Option_VSync
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_VSync"
+msgid "VSync"
+msgstr "垂直同步"
+
+#. Key:	Option_WindowMode
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Option_WindowMode"
+msgid "Window Mode"
+msgstr "視窗模式"
+
+#. Key:	Power
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Power"
+msgid "Power"
+msgstr "攻擊力"
+
+#. Key:	Reset_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Reset_Warning"
+msgid "Do you really want to reset settings ?\r\nAny action is definitive."
+msgstr "您確定要重置設定嗎？\r\n此操作不可撤銷。"
+
+#. Key:	ReturnToTitle_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,ReturnToTitle_Warning"
+msgid "Do you really want to quit?\r\nAny unsaved progress will be lost."
+msgstr "您確定要退出嗎？\r\n所有未保存的進度都將丟失。"
+
+#. Key:	Skill
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill"
+msgid "Skill"
+msgstr "技能"
+
+#. Key:	Skill_Craft
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Craft"
+msgid "Skill Craft"
+msgstr "技能製作"
+
+#. Key:	Skill_Description
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Description"
+msgid "Skill Description"
+msgstr "技能描述"
+
+#. Key:	Skill_Enforcement
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Enforcement"
+msgid "Skill Enforcement"
+msgstr "技能強化"
+
+#. Key:	Skill_Name
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Name"
+msgid "Skill Name"
+msgstr "技能名稱"
+
+#. Key:	Skill_Sub_Description
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Skill_Sub_Description"
+msgid "Skill Sub Description"
+msgstr "技能附加描述"
+
+#. Key:	Speed
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Speed"
+msgid "Speed"
+msgstr "速度"
+
+#. Key:	Stat
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Stat"
+msgid "Stat"
+msgstr "屬性"
+
+#. Key:	Stat_Information
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Stat_Information"
+msgid "Stat Info"
+msgstr "屬性資訊 "
+
+#. Key:	Tab_Audio
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Audio"
+msgid "Audio"
+msgstr "音訊"
+
+#. Key:	Tab_Boosterchip
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Boosterchip"
+msgid "Boosterchip"
+msgstr "增幅芯片"
+
+#. Key:	Tab_Controls
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Controls"
+msgid "Controls"
+msgstr "控制"
+
+#. Key:	Tab_Gameplay
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Gameplay"
+msgid "Gameplay"
+msgstr "遊戲玩法"
+
+#. Key:	Tab_Graphics
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Graphics"
+msgid "Graphics"
+msgstr "圖形"
+
+#. Key:	Tab_Skill
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Skill"
+msgid "Skill"
+msgstr "技能"
+
+#. Key:	Tab_System
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_System"
+msgid "System"
+msgstr "系統"
+
+#. Key:	Tab_Video
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Tab_Video"
+msgid "Video"
+msgstr "視訊"
+
+#. Key:	UI_Empty
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_Empty"
+msgid "Empty"
+msgstr "空"
+
+#. Key:	UI_NotAvailable
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_NotAvailable"
+msgid "Not Available"
+msgstr "不可用"
+
+#. Key:	UI_Owned_Boosterchip
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_Owned_Boosterchip"
+msgid "Owned Boosterchip"
+msgstr "已持有的增幅芯片"
+
+#. Key:	UI_SwitchTab
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_SwitchTab"
+msgid "Switch_Tab"
+msgstr "切換選項卡"
+
+#. Key:	UI_WeaponSelect
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_WeaponSelect"
+msgid "Select Default Weapon"
+msgstr "選擇預設武器"
+
+#. Key:	Ultra_Quality_Setting
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Ultra_Quality_Setting"
+msgid "Ultra"
+msgstr "終極"
+
+#. Key:	Unsaved_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Unsaved_Warning"
+msgid "Some settings have unsaved modifications.\r\nDo you really want to close ?"
+msgstr "某些設定尚未保存修改。\r\n您確定要關閉嗎？"
+
+#. Key:	Upscaling_Balanced
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_Balanced"
+msgid "Balanced"
+msgstr "平衡"
+
+#. Key:	Upscaling_Performance
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_Performance"
+msgid "Performance"
+msgstr "效能"
+
+#. Key:	Upscaling_Quality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_Quality"
+msgid "Quality"
+msgstr "品質"
+
+#. Key:	Upscaling_UltraPerformance
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_UltraPerformance"
+msgid "Ultra Performance"
+msgstr "終極效能"
+
+#. Key:	Upscaling_UltraQuality
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Upscaling_UltraQuality"
+msgid "Ultra Quality"
+msgstr "終極品質"
+
+#. Key:	Utility
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Utility"
+msgid "Utility"
+msgstr "實用"
+
+#. Key:	Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Warning"
+msgid "Warning"
+msgstr "警告"
+
+#. Key:	Desc_Bombard
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Bombard"
+msgid "A small bomb crafted by someone. It looks incredibly powerful."
+msgstr "某人製作的小型炸彈，看起來極其強大。"
+
+#. Key:	Desc_ChewingGum
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_ChewingGum"
+msgid "A piece of used chewing gum. It could be used as an adhesive."
+msgstr "一塊使用過的口香糖，可能可以當作黏著劑。"
+
+#. Key:	Desc_CigaretteButt
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_CigaretteButt"
+msgid "A cigarette butt with embers still glowing."
+msgstr "一個仍然發光的香菸煙蒂。"
+
+#. Key:	Desc_EMP_Vial
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_EMP_Vial"
+msgid "A small EMP bomb made by someone. It seems highly effective against machines."
+msgstr "某人製作的小型 EMP 炸彈，對機器似乎非常有效。"
+
+#. Key:	Desc_SodaCan
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_SodaCan"
+msgid "A discarded soda can. It looks quite spoiled."
+msgstr "一個被丟棄的汽水罐，看起來相當破舊。"
+
+#. Key:	Name_BaseballBat
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BaseballBat"
+msgid "Baseball Bat"
+msgstr "棒球棒"
+
+#. Key:	Name_BBGun
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BBGun"
+msgid "BB Gun"
+msgstr "BB 槍"
+
+#. Key:	Name_Blade
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Blade"
+msgid "Blade"
+msgstr "刀刃"
+
+#. Key:	Name_Bombard
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Bombard"
+msgid "Bombard"
+msgstr "轟炸"
+
+#. Key:	Name_BoosterChip_Action
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Action"
+msgid "Booster Chip (Action)"
+msgstr "增幅芯片（行動）"
+
+#. Key:	Name_BoosterChip_Flame
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Flame"
+msgid "Booster Chip (Flame)"
+msgstr "增幅芯片（火焰）"
+
+#. Key:	Name_BoosterChip_Freezing
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Freezing"
+msgid "Booster Chip (Freezing)"
+msgstr "增幅芯片（當機）"
+
+#. Key:	Name_BoosterChip_Item
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Item"
+msgid "Booster Chip (Item)"
+msgstr "增幅芯片（道具）"
+
+#. Key:	Name_BoosterChip_Oxidation
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Oxidation"
+msgid "Booster Chip (Oxidation)"
+msgstr "增幅芯片（氧化）"
+
+#. Key:	Name_BoosterChip_Slow
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_Slow"
+msgid "Booster Chip (Slow)"
+msgstr "增幅芯片（減速）"
+
+#. Key:	Name_BoosterChip_SpecialAction
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BoosterChip_SpecialAction"
+msgid "Booster Chip (Special Action)"
+msgstr "增幅芯片（特殊行動）"
+
+#. Key:	Name_BrokenGlassBottleBat
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_BrokenGlassBottleBat"
+msgid "Broken Glass Bottle Bat"
+msgstr "破碎玻璃瓶棒"
+
+#. Key:	Name_ChewingGum
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_ChewingGum"
+msgid "Chewing Gum"
+msgstr "口香糖"
+
+#. Key:	Name_CigaretteButt
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_CigaretteButt"
+msgid "Cigarette Butt"
+msgstr "香菸煙蒂"
+
+#. Key:	Name_Common_Ticket
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Common_Ticket"
+msgid "Common Ticket"
+msgstr "普通票"
+
+#. Key:	Name_CraftingMaterial_Gear
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_CraftingMaterial_Gear"
+msgid "Crafting Material [Gear]"
+msgstr "製作材料 [齒輪]"
+
+#. Key:	Name_CraftingMaterial_Screw
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_CraftingMaterial_Screw"
+msgid "Crafting Material [Screw]"
+msgstr "製作材料 [螺絲]"
+
+#. Key:	Name_CraftingMaterial_Spring
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_CraftingMaterial_Spring"
+msgid "Crafting Material [Spring]"
+msgstr "製作材料 [彈簧]"
+
+#. Key:	Name_DoubleBladedLightsaber
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_DoubleBladedLightsaber"
+msgid "Double-Bladed Lightsaber"
+msgstr "雙刃光劍"
+
+#. Key:	Name_EMP_Vial
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_EMP_Vial"
+msgid "EMP Vial"
+msgstr "EMP 藥劑"
+
+#. Key:	Name_EnergyBlaster
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_EnergyBlaster"
+msgid "Energy Blaster"
+msgstr "能量爆破槍"
+
+#. Key:	Name_GlassBottle
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_GlassBottle"
+msgid "Glass Bottle"
+msgstr "玻璃瓶"
+
+#. Key:	Name_GlassBottleBat
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_GlassBottleBat"
+msgid "Glass Bottle Bat"
+msgstr "玻璃瓶棒"
+
+#. Key:	Name_HealPack_Large
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_HealPack_Large"
+msgid "Heal Pack (Large)"
+msgstr "治療包（大）"
+
+#. Key:	Name_HealPack_Medium
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_HealPack_Medium"
+msgid "Heal Pack (Medium)"
+msgstr "治療包（中）"
+
+#. Key:	Name_HealPack_Small
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_HealPack_Small"
+msgid "Heal Pack (Small)"
+msgstr "治療包（小）"
+
+#. Key:	Name_IronHammer
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_IronHammer"
+msgid "Iron Hammer"
+msgstr "鐵鎚"
+
+#. Key:	Name_Kettlebell
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Kettlebell"
+msgid "Kettlebell"
+msgstr "壺鈴"
+
+#. Key:	Name_Legendary_Ticket
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Legendary_Ticket"
+msgid "Legendary Ticket"
+msgstr "傳奇票"
+
+#. Key:	Name_Mace
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Mace"
+msgid "Mace"
+msgstr "狼牙棒"
+
+#. Key:	Name_None
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_None"
+msgid "None"
+msgstr "無"
+
+#. Key:	Name_Rare_Ticket
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Rare_Ticket"
+msgid "Rare Ticket"
+msgstr "稀有票"
+
+#. Key:	Name_SodaCan
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_SodaCan"
+msgid "Soda Can"
+msgstr "汽水罐"
+
+#. Key:	Name_TaserStick
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_TaserStick"
+msgid "Taser Stick"
+msgstr "電擊棒"
+
+#. Key:	Name_UniversalMaterial_Wrench
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_UniversalMaterial_Wrench"
+msgid "Universal Material [Wrench]"
+msgstr "通用材料 [扳手]"
+
+#. Key:	Desc_Blink
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Desc_Blink"
+msgid "Moves quickly in the direction of the key input in a short, straight dash."
+msgstr "向按鍵輸入的方向快速短距離衝刺。"
+
+#. Key:	Desc_ForwardSlash
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Desc_ForwardSlash"
+msgid "Slashes forward in a straight line at high speed."
+msgstr "以高速沿直線向前揮砍。"
+
+#. Key:	Desc_Hellptimization
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Desc_Hellptimization"
+msgid "Emits a Hellptimization wave around the player, reducing the attack power of nearby enemies."
+msgstr "向玩家周圍釋放優化波，降低附近敵人的攻擊力。"
+
+#. Key:	Desc_MultiSlash
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Desc_MultiSlash"
+msgid "Searches for enemies within a 10m radius and slashes through them at high speed, starting with the closest target."
+msgstr "在半徑10米範圍內搜尋敵人，以高速依次攻擊，從最近的目標開始。"
+
+#. Key:	Desc_Teleport
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Desc_Teleport"
+msgid "Teleports above the nearest enemy from the player and strikes downward. If no target is available, teleportation fails."
+msgstr "傳送到距離玩家最近的敵人上方並向下攻擊。如果沒有目標，傳送將失敗。"
+
+#. Key:	Desc_WeaknessAnalysis
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Desc_WeaknessAnalysis"
+msgid "Analyzes the weaknesses of nearby enemies, reducing their defense."
+msgstr "分析附近敵人的弱點，降低其防禦力。"
+
+#. Key:	Name_Blink
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Blink"
+msgid "Blink"
+msgstr "閃現"
+
+#. Key:	Name_ForwardSlash
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_ForwardSlash"
+msgid "Forward Slash"
+msgstr "前向斬擊"
+
+#. Key:	Name_Hellptimization
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Hellptimization"
+msgid "Hellptimization"
+msgstr "優化波"
+
+#. Key:	Name_MultiSlash
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_MultiSlash"
+msgid "Multi Slash"
+msgstr "多重斬擊"
+
+#. Key:	Name_Stat_BurnResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_BurnResist"
+msgid "Burn Resistance"
+msgstr "火焰抗性"
+
+#. Key:	Name_Stat_DashAttackFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackFatality"
+msgid "Dash Attack Critical Rate"
+msgstr "衝刺攻擊暴擊率 "
+
+#. Key:	Name_Stat_DashAttackFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackFlame"
+msgid "Dash Attack Flame"
+msgstr "衝刺攻擊火焰效果 "
+
+#. Key:	Name_Stat_DashAttackPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackPoison"
+msgid "Dash Attack Oxidation"
+msgstr "衝刺攻擊氧化效果 "
+
+#. Key:	Name_Stat_DashAttackPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackPower"
+msgid "Dash Attack Power"
+msgstr "衝刺攻擊力"
+
+#. Key:	Name_Stat_DashAttackSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackSlow"
+msgid "Dash Attack Slow"
+msgstr "衝刺攻擊減速效果 "
+
+#. Key:	Name_Stat_DashAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackSpeed"
+msgid "Dash Attack Speed"
+msgstr "衝刺攻擊速度 "
+
+#. Key:	Name_Stat_DashAttackStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DashAttackStun"
+msgid "Dash Attack Freezing"
+msgstr "衝刺攻擊當機效果"
+
+#. Key:	Name_Stat_DebuffTime
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_DebuffTime"
+msgid "Debuff Duration"
+msgstr "異常狀態持續時間"
+
+#. Key:	Name_Stat_Defense
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_Defense"
+msgid "Defense"
+msgstr "防禦力 "
+
+#. Key:	Name_Stat_HealItemPerformance
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_HealItemPerformance"
+msgid "Healing Item Effectiveness"
+msgstr "治療包強化"
+
+#. Key:	Name_Stat_JumpAttackFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackFatality"
+msgid "Jump Attack Critical Rate"
+msgstr "跳跃攻击暴击率 "
+
+#. Key:	Name_Stat_JumpAttackFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackFlame"
+msgid "Jump Attack Flame"
+msgstr "跳跃攻击火焰效果"
+
+#. Key:	Name_Stat_JumpAttackPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackPoison"
+msgid "Jump Attack Oxidation"
+msgstr "跳跃攻击毒素效果"
+
+#. Key:	Name_Stat_JumpAttackPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackPower"
+msgid "Jump Attack Power"
+msgstr "跳跃攻击力"
+
+#. Key:	Name_Stat_JumpAttackSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackSlow"
+msgid "Jump Attack Slow"
+msgstr "跳跃攻击减速效果"
+
+#. Key:	Name_Stat_JumpAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackSpeed"
+msgid "Jump Attack Speed"
+msgstr "跳跃攻击速度"
+
+#. Key:	Name_Stat_JumpAttackStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_JumpAttackStun"
+msgid "Jump Attack Freezing"
+msgstr "跳跃攻击当机效果"
+
+#. Key:	Name_Stat_LuckyDrop
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_LuckyDrop"
+msgid "Lucky Drop Rate"
+msgstr "幸运掉落率"
+
+#. Key:	Name_Stat_MaxHealth
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_MaxHealth"
+msgid "Max Health"
+msgstr "最大生命值"
+
+#. Key:	Name_Stat_MoveSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_MoveSpeed"
+msgid "Movement Speed"
+msgstr "移动速度"
+
+#. Key:	Name_Stat_NormalAttackSpeed
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalAttackSpeed"
+msgid "Normal Attack Speed"
+msgstr "普通攻击速度"
+
+#. Key:	Name_Stat_NormalFatality
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalFatality"
+msgid "Normal Attack Critical Rate"
+msgstr "普通攻击暴击率"
+
+#. Key:	Name_Stat_NormalFlame
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalFlame"
+msgid "Normal Attack Flame"
+msgstr "普通攻击火焰效果 "
+
+#. Key:	Name_Stat_NormalPoison
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalPoison"
+msgid "Normal Attack Oxidation"
+msgstr "普通攻击毒素效果"
+
+#. Key:	Name_Stat_NormalPower
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalPower"
+msgid "Normal Attack Power"
+msgstr "普通攻击力 "
+
+#. Key:	Name_Stat_NormalSlow
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalSlow"
+msgid "Normal Attack Slow"
+msgstr "普通攻击减速效果"
+
+#. Key:	Name_Stat_NormalStun
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_NormalStun"
+msgid "Normal Attack Freezing"
+msgstr "普通攻击当机效果"
+
+#. Key:	Name_Stat_PoisonResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_PoisonResist"
+msgid "Oxidation Resistance"
+msgstr "毒素抗性"
+
+#. Key:	Name_Stat_RollDelay
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_RollDelay"
+msgid "Roll Delay"
+msgstr "翻滚延迟"
+
+#. Key:	Name_Stat_SkillCoolTime
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SkillCoolTime"
+msgid "Skill Cooldown Time"
+msgstr "技能冷却时间"
+
+#. Key:	Name_Stat_SlowResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SlowResist"
+msgid "Slow Resistance"
+msgstr "减速抗性"
+
+#. Key:	Name_Stat_StunResist
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_StunResist"
+msgid "Freezing Resistance"
+msgstr "當機抗性"
+
+#. Key:	Name_Stat_SubWeaponCapacity
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Stat_SubWeaponCapacity"
+msgid "Sub-Weapon Capacity"
+msgstr "副武器容量"
+
+#. Key:	Name_Teleport
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_Teleport"
+msgid "Teleport"
+msgstr "傳送"
+
+#. Key:	Name_WeaknessAnalysis
+#. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+#: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
+msgctxt "ST_Skill,Name_WeaknessAnalysis"
+msgid "Weakness Analysis"
+msgstr "弱點分析"
+
+#. Key:	Header_AbilityInfo
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_AbilityInfo"
+msgid "About Ability"
+msgstr "關於能力"
+
+#. Key:	Header_BoosterChip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_BoosterChip"
+msgid "About Boosterchip"
+msgstr "關於增幅芯片"
+
+#. Key:	Header_ComboInfo
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_ComboInfo"
+msgid "About Combo"
+msgstr "關於連擊"
+
+#. Key:	Header_Debuff
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_Debuff"
+msgid "About Debuff"
+msgstr "關於負面效果"
+
+#. Key:	Header_Reward
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_Reward"
+msgid "About Item Reward"
+msgstr "關於物品獎勵"
+
+#. Key:	Header_Stage
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_Stage"
+msgid "About Stagesystem"
+msgstr "關於關卡系統"
+
+#. Key:	Header_SubWeapon
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_SubWeapon"
+msgid "About SubWeapon"
+msgstr "關於副武器"
+
+#. Key:	Header_Welcome
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Header_Welcome"
+msgid "Welcome!"
+msgstr "歡迎！"
+
+#. Key:	Input_Aim
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Aim"
+msgid "Aim"
+msgstr "瞄準"
+
+#. Key:	Input_Attack
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Attack"
+msgid "Attack"
+msgstr "攻擊"
+
+#. Key:	Input_Category_Battle
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Category_Battle"
+msgid "Battle"
+msgstr "戰鬥"
+
+#. Key:	Input_Category_Movement
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Category_Movement"
+msgid "Movement"
+msgstr "移動"
+
+#. Key:	Input_Category_World
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Category_World"
+msgid "World"
+msgstr "世界"
+
+#. Key:	Input_Interact
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Interact"
+msgid "Interact"
+msgstr "互動"
+
+#. Key:	Input_Jump
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Jump"
+msgid "Jump"
+msgstr "跳躍"
+
+#. Key:	Input_MoveBackward
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_MoveBackward"
+msgid "Move Backward"
+msgstr "向後移動"
+
+#. Key:	Input_MoveForward
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_MoveForward"
+msgid "Move Forward"
+msgstr "向前移動"
+
+#. Key:	Input_MoveLeft
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_MoveLeft"
+msgid "Move Left"
+msgstr "向左移動"
+
+#. Key:	Input_MoveRight
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_MoveRight"
+msgid "Move Right"
+msgstr "向右移動"
+
+#. Key:	Input_Roll
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Roll"
+msgid "Roll"
+msgstr "翻滾"
+
+#. Key:	Input_Shoot
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Shoot"
+msgid "Shoot"
+msgstr "射擊"
+
+#. Key:	Input_SkillA
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_SkillA"
+msgid "SkillA"
+msgstr "技能A"
+
+#. Key:	Input_SkillB
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_SkillB"
+msgid "SkillB"
+msgstr "技能B"
+
+#. Key:	Input_SkillC
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_SkillC"
+msgid "SkillC"
+msgstr "技能C"
+
+#. Key:	Input_Sprint
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_Sprint"
+msgid "Sprint"
+msgstr "衝刺"
+
+#. Key:	Tutorial_Battle_1
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Battle_1"
+msgid "<Bold.24>[Combat Guide]</>\r\n- Master the art of combat in BackStreet.\r\n- Use your skills and tactics to overcome enemies and thrive in the desolate city.\r\n\r\n<Medium.24>[Combo Types]</>\r\n- Standard Combo: Chain basic attacks for a steady damage output.\r\n- Dash Combo:  Launch a swift attack while dashing, with the final hit dealing area damage to multiple enemies.\r\n- Air Combo: Strike enemies mid-air for high damage and strategic advantage.\r\n\r\n<Medium.24>[Battle Tips]</>\r\n- Ranged Enemies: Attack from a distance with projectiles. Use agility to close the gap.\r\n- Melee Enemies: Engage in close quarters. Time your attacks to counter them effectively.\r\n- Roll to Evade: Avoid enemy attacks and projectiles by rolling. Perfect timing can save your life.\r\n\r\n<Bold.22>Practice these techniques to dominate the battlefield</>\r\n<Bold.22>and prepare for the ultimate challenge!</>"
+msgstr "<Bold.24>[戰鬥指南]</>\r\n掌握《BackStreet》中的戰鬥藝術。  \r\n運用你的技能和戰術來戰勝敵人，在荒廢的城市中生存。\r\n\r\n<Medium.24>[連擊類型]</>  \r\n- 標準連擊：連續使用基本攻擊，以穩定輸出傷害。  \r\n- 衝刺連擊：在衝刺時發動迅速攻擊，最後一擊對多個敵人造成範圍傷害。  \r\n- 空中連擊：在空中攻擊敵人，造成高傷害並獲得戰術優勢。\r\n\r\n<Medium.24>[戰鬥技巧]</>  \r\n- 遠程敵人：使用投射物遠程攻擊敵人，並利用敏捷性縮短距離。  \r\n- 近戰敵人：近距離作戰，掌握攻擊時機，以有效反擊。  \r\n- 翻滾躲避：透過翻滾躲避敵人的攻擊和投射物，完美的時機能挽救你的生命。\r\n\r\n<Bold.22>練習這些技巧，稱霸戰場，為終極挑戰做好準備！</>"
+
+#. Key:	Tutorial_Boosterchip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Boosterchip"
+msgid "<Bold.24>[Booster Chip Guide]</>\r\n- Enhance your combat power with over 100 different booster chips for a more powerful gameplay experience.\r\n\r\n<Medium.24>[Types of Booster Chips]</>\r\n- Combo Upgrade Type: Enhances the abilities of key combos (basic, jump, dash) and applies debuff effects.\r\n- Base Stat Enhancement Chips: Increases core attributes such as attack power, defense, speed, and survivability.\r\n\r\n<Medium.24>[How to Obtain]</>\r\n- Stage Completion Rewards: Randomly provided upon clearing each stage.\r\n\r\n<Medium.24>[How to Use]</>\r\n- Auto-Equip: Automatically activated upon acquisition.\r\n\r\n<Bold.22>With over 100 types of booster chips available, strategically combine them</>\r\n<Bold.22> to tailor your combat style and maximize your effectiveness on the battlefield!</>"
+msgstr "<Bold.24>[增幅芯片指南]</>\r\n\r\n使用超過100種不同的增幅芯片來增強戰鬥能力，打造更強大的遊戲體驗。\r\n\r\n<Medium.24>[增幅芯片類型]</>  \r\n- 連擊強化型：增強關鍵連擊（基礎、跳躍、衝刺）的能力，並施加負面效果。  \r\n- 基礎屬性強化型：提高攻擊力、防禦力、速度和生存能力等核心屬性。\r\n\r\n<Medium.24>[如何獲取]</>  \r\n- 關卡通關獎勵：通關後隨機獲得。\r\n\r\n<Medium.24>[如何使用]</>  \r\n- 自動裝備：獲取後自動激活。\r\n\r\n<Bold.22>使用超過100種不同的增幅芯片，策略性地組合它們，以適應你的戰鬥風格，</>\r\n<Bold.22>並在戰場上發揮最大作用！</>"
+
+#. Key:	Tutorial_Debuff
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Debuff"
+msgid "<Bold.24>[Debuff Guide]</>\r\n- Apply various debuffs to enemies using sub weapons and skills and boosters.\r\n\r\n<Medium.24>[Types of Debuffs]</>\r\n- Fire, Corrosion: Inflict continuous damage over time (DoT).\r\n- Slow: Significantly reduce enemy movement speed.\r\n- Attack and Defense Down: Weaken enemy attack power and defense.\r\n- Stun: Temporarily immobilize enemies.\r\n\r\n<Medium.24>[How to Utilize]</>\r\nStrategically apply debuffs using sub weapons and skills to gain the upper hand in battles!\r\n\r\n<Bold.22>Use Debuffs to effectively control and defeat your enemies.</>"
+msgstr "<Bold.24>[負面效果指南]</>\r\n利用副武器、技能和增幅芯片對敵人施加各種負面效果。\r\n\r\n<Medium.24>[負面效果類型]</>  \r\n- 火焰、腐蝕：持續造成傷害（DoT）。  \r\n- 減速：顯著降低敵人的移動速度。  \r\n- 攻擊和防禦下降：削弱敵人的攻擊力和防禦力。  \r\n- 當機：暫時使敵人無法行動。\r\n\r\n<Medium.24>[如何利用]</>  \r\n策略性地使用副武器和技能施加負面效果，在戰鬥中佔據上風！\r\n\r\n<Bold.22>運用負面效果，有效控制並擊敗敵人。</>"
+
+#. Key:	Tutorial_Entry
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Entry"
+msgid "<Bold.24>[Welcome!]</>\r\n- Welcome to BackStreet.\r\n- To survive here, you must face off against robots in a desolate city.\r\n\r\n<Medium.24>[Background]</>  \r\n- You must defeat the central AI that rules the city, <Medium.26>3COS</>, and recover your lost memories.\r\n\r\n<Medium.24>[Objectives]</>  \r\n- Battle hordes of robots to hone your skills and survival instincts.  \r\n- Grow stronger with skills and booster chips obtained from the city.  \r\n- Liberate the empty dystopian city through the final showdown."
+msgstr "<Bold.24>[歡迎！]</>\r\n歡迎來到《BackStreet》。  \r\n要在這裡生存，你必須在荒廢的城市中與機器人作戰。\r\n\r\n<Medium.24>[背景]</>  \r\n你必須擊敗統治這座城市的中央 AI——<Medium.24>3COS</>，並找回你失去的記憶。\r\n\r\n<Medium.24>[目標]</>  \r\n- 與成群的機器人作戰，磨練你的戰鬥技能和生存本能。  \r\n- 透過在城市中獲得技能和增幅芯片來提升自身實力。  \r\n- 在最終決戰中解放這座荒廢的反烏托邦城市。  "
+
+#. Key:	Tutorial_Entry_2
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Entry_2"
+msgid "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Placeholder assets may appear during gameplay.  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
+msgstr "<Bold.24>[公告！]</>\r\n這是《BackStreet》的演示版本。  \r\n請注意，此版本可能與最終發布版本有所不同。\r\n\r\n<Medium.24>[演示版特點]</>  \r\n- 只能訪問部分關卡、角色和技能。  \r\n- 一些功能（如高級 AI 行為和最終過場動畫）尚未包含。  \r\n\r\n<Medium.24>[已知問題]</>  \r\n- 遊戲過程中可能會出現佔位資產。  \r\n- 部分動畫和音效仍在開發中。  \r\n\r\n<Medium.24>[反饋請求]</>  \r\n你的反饋對遊戲的改進至關重要！  \r\n請通過反饋表提交 bug 報告和建議，並加入我們的社群頻道參與討論和獲取最新消息。  \r\n\r\n<Bold.22>請享受《BackStreet》的搶先體驗，並期待完整版本的發布！</>"
+
+#. Key:	Tutorial_Reward_1
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Reward_1"
+msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Healing Packs]</>  \r\n- Types: Small, Medium, Large healing packs.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skills.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
+msgstr "<Bold.24>[物品獎勵指南]</>\r\n獲得各種物品獎勵，以增強你的生存能力和戰鬥力。\r\n\r\n<Medium.24>[治療包]</>  \r\n- 類型：小型、中型、大型治療包。  \r\n- 獲取方式：  \r\n  - 作為關卡獎勵隨機獲得。  \r\n  - 在遊戲過程中按 'F' 鍵收集。  \r\n\r\n<Medium.24>[製作材料]</>  \r\n- 作用：用於製作和強化技能。  \r\n- 獲取方式：  \r\n  - 自動從被擊敗的敵人處收集。  \r\n- 技能製作：僅在指定的“製作關卡”中可用。  \r\n\r\n<Bold.22>合理使用治療包和製作材料，強化角色並克服挑戰！</>"
+
+#. Key:	Tutorial_Stage
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_Stage"
+msgid "<Bold.24>[Stage System Guide]</>\r\n- Explore various stages across chapters with unique challenges and rewards.\r\n\r\n<Medium.24>[Chapter Structure]</>  \r\n- Each Chapter consists of approximately 11 stages.  \r\n- 2 Craft Stages per chapter, offering a choice between two paths.  \r\n- Reward System: All rewards are provided randomly, adding an element of surprise to each playthrough.\r\n\r\n<Medium.24>[Stage Selection]</>  \r\n- At certain points in a chapter, you can select between two paths\r\n   , each with different challenges and rewards.  \r\n- Choose wisely, as each path can impact your progression and available resources.\r\n\r\n<Bold.22>Prepare for a thrilling journey where each stage brings </>\r\n<Bold.22>new opportunities and risks, and the rewards are always unpredictable!</>\r\n"
+msgstr "<Bold.24>[關卡系統指南]</>\r\n探索各個章節中的不同關卡，迎接獨特挑戰並獲取獎勵。\r\n\r\n<Medium.24>[章節結構]</>  \r\n- 每個章節約包含 11 個關卡。  \r\n- 每個章節有 2 個製作關卡，玩家可以在兩條不同的路線之間進行選擇。  \r\n- 獎勵系統：所有獎勵均為隨機提供，為每次遊戲體驗增添驚喜元素。  \r\n\r\n<Medium.24>[關卡選擇]</>  \r\n- 在章節的某些節點，你可以選擇兩條不同的路線，每條路線都包含不同的挑戰和獎勵。  \r\n- 做出明智的選擇，因為你的決定會影響遊戲進程和可用資源。  \r\n\r\n<Bold.22>為激動人心的冒險做好準備，每個關卡都充滿新的機遇和風險，獎勵也總是充滿未知！</>"
+
+#. Key:	Tutorial_SubWeapon
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Tutorial_SubWeapon"
+msgid "<Medium.24>[Sub Weapon Guide]</>\r\n- Utilize various auxiliary weapons to support your battles.\r\n- When used effectively, they can turn the tide of combat.\r\n\r\n<Medium.24>[How to Use]</>\r\n- During Combos: Press Right-Click to fire instantly during a combo.\r\n- Aimed Use: Press Right-Click to aim, then Left-Click to fire.\r\n\r\n<Medium.24>[How to Obtain, Types of Sub Weapons]</>\r\n- Sub weapons can be found in trash bags scattered throughout the map.\r\n- Bubblegum / Aluminum Cans / Cigarette Butts / etc.."
+msgstr "<Bold.24>[副武器指南]</>\r\n使用各種輔助武器來支持你的戰鬥。  \r\n正確使用時，它們可以扭轉戰局。\r\n\r\n<Medium.24>[如何使用]</>  \r\n- 瞄準射擊：按下右鍵進行瞄準，然後按左鍵開火。  \r\n\r\n<Medium.24>[如何獲取，副武器類型]</>  \r\n- 副武器可以在地圖上散落的垃圾袋中找到。  \r\n- 口香糖 / 鋁罐 / 香菸煙蒂等...  "
+
+#. Key:	UI_Elimate_Enemy
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,UI_Elimate_Enemy"
+msgid "Elimate all enemies."
+msgstr "消滅所有敵人。"
+
+#. Key:	UI_ObtainItems
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,UI_ObtainItems"
+msgid "Obtain all items."
+msgstr "獲取所有物品。"
+
+#. Key:	UI_OpenTrash
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,UI_OpenTrash"
+msgid "Open the trash bag."
+msgstr "打開垃圾袋。"
+

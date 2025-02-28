@@ -36,9 +36,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|UI")
 		class UWidgetComponent* TargetingSupportWidget;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UEnemySkillManagerComponent* SkillManagerComponent;
-
 // ----- Asset & Stat ---------------------
 	UFUNCTION(BlueprintCallable)
 		virtual void InitAsset(int32 NewCharacterID) override;	
@@ -83,7 +80,7 @@ protected:
 public:
 	//Calculate probability depend on HitCount
 	UFUNCTION()
-	bool CalculateIgnoreHitProbability(int32 HitCounter);
+		bool CalculateIgnoreHitProbability(int32 HitCounter);
 
 
 // ----- 캐릭터 스탯 및 상태 관련 ---------
@@ -96,6 +93,16 @@ public:
 	//적의 스탯 테이블
 	UPROPERTY(EditDefaultsOnly, Category = "Data|Table")
 		UDataTable* EnemyStatTable;
+
+	UFUNCTION()
+		void ResetAiBehaviorState();
+
+	virtual void OnSkillDeactivated(FSkillInfo SkillInfo) override { ResetAiBehaviorState(); }
+
+	UFUNCTION()
+		void TakeKnockBack(float KnockbackForce, float KnockbackResist);
+
+	virtual	bool TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer);
 
 private:
 	//Set default weapon actor using weapon inventory

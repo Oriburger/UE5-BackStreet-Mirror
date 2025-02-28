@@ -8,6 +8,7 @@
 
 // 전투 관련 델리게이트 선언
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttackBeginDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionStateUpdateDelegate, FName, ActionName, uint8, ActionState);
 
 UENUM(BlueprintType)
 enum class EActionState : uint8
@@ -25,6 +26,14 @@ enum class EActionCauserType : uint8
 	E_Owner				UMETA(DisplayName = "Owner"),		//Owner Character
 	E_Weapon			UMETA(DisplayName = "Weapon"),		//Owner's WeaponComponent
 	E_Enemy				UMETA(DisplayName = "Enemy")		//Enemy Character
+};
+
+UENUM(BlueprintType)
+enum class EComboType : uint8
+{
+	E_Normal			UMETA(DisplayName = "Normal"),		//Normal Combo
+	E_Jump				UMETA(DisplayName = "Jump"),		//Jump Combo
+	E_Dash				UMETA(DisplayName = "Dash")			//Dash Combo
 };
 
 USTRUCT(BlueprintType)
@@ -129,6 +138,9 @@ public:
 	// Sets default values for this component's properties
 	UActionTrackingComponent();
 
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FActionStateUpdateDelegate OnActionStateUpdated;
+
 //====================================================================
 //====== Basic Function ==============================================
 protected:
@@ -171,7 +183,6 @@ private:
 	void SetActionResetTimer(FTimerHandle& TimerHandle, float& TimeoutValue, bool& Target);
 	bool bIsEnabled = false;
 
-
 // delegate bind 전용 내부 함수
 protected:
 	UFUNCTION()
@@ -203,6 +214,20 @@ protected:
 		
 //=====================================================================
 //====== etc ==========================================================
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
+		EComboType CurrentComboType = EComboType::E_Normal;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
+		int32 CurrentComboCount = 0;
+
+public:
+	UFUNCTION(BlueprintCallable)
+		int32 UpdateComboCount() { return CurrentComboCount += 1; }
+
+	UFUNCTION(BlueprintCallable)
+		void ResetComboCount();
+
 protected:
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 

@@ -8,7 +8,7 @@
 #define MAX_WEAPON_UPGRADABLE_STAT_IDX 3
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateWeaponUpdated);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDelegateWeaponStateUpdated, int32, WeaponID, EWeaponType, WeaponType, FWeaponStateStruct, NewState);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDelegateWeaponStateUpdated, int32, WeaponID, FWeaponStatStruct, WeaponStat, FWeaponStateStruct, NewState);
 
 UCLASS(Blueprintable)
 class BACKSTREET_API UWeaponComponentBase : public UStaticMeshComponent
@@ -71,20 +71,16 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FWeaponStatStruct GetWeaponStatInfoWithID(int32 TargetWeaponID);
 
-protected:
-	//data table for weapon asset
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* WeaponAssetInfoTable;
-
-	//data table for weapon stat
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* WeaponStatInfoTable;
-
-	//data table for projectile asset
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* ProjectileAssetInfoTable;
 
-	//data table for projectile stat
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
 		UDataTable* ProjectileStatInfoTable;
 
@@ -156,39 +152,20 @@ public:
 		uint8 GetMaxStatLevel(EWeaponStatType WeaponStatType);
 
 	//Calculate total damage to target character
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float CalculateTotalDamage(FCharacterGameplayInfo TargetState, bool& bIsFatalAttack);
 
 	UFUNCTION()
-		void ApplyWeaponDebuff(class ACharacterBase* TargetCharacter, ECharacterDebuffType DebuffType, ECharacterStatType DebuffStatType);
+		bool ApplyWeaponDebuff(class ACharacterBase* TargetCharacter, ECharacterDebuffType DebuffType, ECharacterStatType DebuffStatType);
 private:
 	float CalculateAttackFatality(FCharacterGameplayInfo& GameplayInfoRef
 			, bool bIsJumpAttacking = false, bool bIsDashAttacking = false);
 
 
-// ======		Upgrade		================
+//====== Upgrade ================
 public:	
 	UFUNCTION(BlueprintCallable)
 		bool UpgradeStat(TArray<uint8> NewLevelList);
-
-//-------- Combo ------------------------------------
-public:
-	//increase combo count
-	UFUNCTION(BlueprintCallable)
-		void UpdateComboState();
-
-	//set timer for resetting combo count
-	//UFUNCTION(BlueprintCallable)
-	//	virtual void SetResetComboTimer();
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetCurrentComboCnt() { return WeaponState.ComboCount; }
-
-	UFUNCTION(BlueprintCallable)
-		void ResetComboCnt() { WeaponState.ComboCount = 0; }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsFinalCombo();
 
 //-------- Combat Manager -------------------------------
 public:

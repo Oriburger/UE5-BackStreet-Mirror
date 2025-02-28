@@ -8,7 +8,9 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateEquiped, int32, SkillID);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateSkillUpdated);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillActivated, int32, SkillID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillActivated, FSkillInfo, SkillInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillDeactivated, FSkillInfo, SkillInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateSkillListUpdated, const TArray<FSkillInfo>&, SkillInventory);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BACKSTREET_API USkillManagerComponentBase : public UActorComponent
@@ -26,68 +28,89 @@ public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateSkillActivated OnSkillActivated;
 
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateSkillDeactivated OnSkillDeactivated;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateSkillListUpdated OnSkillInventoryUpdated;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-//======= Basic function ========================
-protected:
-	virtual void InitSkillManager();
-
-	virtual void InitSkillMap();
-
-public:
-	virtual bool TrySkill(int32 SkillID);
-
-	virtual bool AddSkill(int32 SkillID);
-
-	virtual bool RemoveSkill(int32 SkillID);
-
-	virtual bool UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel);
-
-	virtual void ClearAllSkill();
-
-//======== Getter ============================
-public:
-	virtual bool IsSkillValid(int32 SkillID);
-
-	virtual bool GetIsSkillUpgradable(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel);
-
-	virtual ASkillBase* GetOwnSkillBase(int32 SkillID);
-
-public:
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillStatStruct GetSkillInfo(int32 SkillID);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		ESkillType GetSkillTypeInfo(int32 SkillID);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillStatStruct GetOwnSkillStat(int32 SkillID);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillStateStruct GetOwnSkillState(int32 SkillID);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillUpgradeLevelInfo GetCurrentSkillLevelInfo(int32 SkillID, ESkillUpgradeType Target);
 	
+private:
+	void InitSkillInfoCache();
+
+//========== Basic ==============================
+public:
+	UFUNCTION(BlueprintCallable)
+		bool TryAddSkill(int32 NewSkillID);
+
+	UFUNCTION(BlueprintCallable)
+		bool TryRemoveSkill(int32 TargetSkillID);
+
+	UFUNCTION(BlueprintCallable)
+		bool TryActivateSkill(int32 TargetSkillID);
+
+	UFUNCTION(BlueprintCallable)
+		void DeactivateCurrentSkill();
+
+	UFUNCTION(BlueprintCallable)
+		bool UpgradeSkill(int32 SkillID, ESkillUpgradeType UpgradeTarget, uint8 NewLevel);
+
+	UFUNCTION(BlueprintCallable)
+		void ClearAllSkill();
+
+	UFUNCTION(BlueprintCallable)
+		void StopSkillAnimMontage();
+
+private:
+	//스킬의 사용 가능 여부를 업데이트 한다.
+	UFUNCTION()
+		void UpdateSkillValidity(int32 TargetSkillID, bool NewState);
+
+//========== Getter ==============================
+public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FSkillUpgradeLevelInfo GetSkillUpgradeLevelInfo(int32 SkillID, ESkillUpgradeType Target, int32 TargetLevel);
+		TArray<int32> GetCraftableIDList();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsUpgradeTargetValid(int32 SkillID, ESkillUpgradeType UpgradeTarget);
+		FSkillInfo GetSkillInfoData(int32 TargetSkillID, bool& bIsInInventory);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsUpgradeLevelValid(int32 SkillID, ESkillUpgradeType UpgradeTarget, int32 TargetLevel);
+		TArray<int32> GetPlayerSkillIDList();
 
-//======= DataTable =============================================================================
-protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Gamplay|Data")
-		UDataTable* SkillStatTable;
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetTotalCoolTime(int32 TargetSkillID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetRemainingCoolTime(int32 TargetSkillID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		void GetCoolTimeVariables(int32 TargetSkillID, float& RemainingTime, float& TotalTime);
+
+	//It must be flushed after using.
+	UPROPERTY(BlueprintReadWrite)
+		TArray<AActor*> TraceResultCache;
+
+	UPROPERTY(BlueprintReadWrite)
+		TArray<AActor*> SpawnedActorList;
 
 //======= Ref =========
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay|Data")
+		UDataTable* SkillInfoTable;
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		TMap<int32, FSkillInfo> SkillInventory;
+
 private:
+	TMap<int32, FTimerHandle> CoolTimerHandleMap;
 	TMap<int32, FSkillStatStruct> SkillInfoCache;
+	TMap<int32, FSkillInfo> SkillInfoCacheMap;
+	TArray<int32> PlayerSkillIDList;
+	FSkillInfo PrevSkillInfo;
 
 protected:
 	//GameMode Soft Ref
