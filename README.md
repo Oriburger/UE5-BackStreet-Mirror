@@ -1,4 +1,4 @@
-# [주요 변경사항]
+# [v0.0.9.1 주요 변경사항]
 ---
 ## 캐릭터 hit effect가 출력되지 않는 현상 수정
 - Spawn System Attached 제거
