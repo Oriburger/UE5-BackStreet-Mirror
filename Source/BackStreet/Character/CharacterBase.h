@@ -209,6 +209,9 @@ public:
 		float GetStatDefaultValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetStatGroup(TargetStatType).DefaultValue; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetStatDebuffValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetDebuffRateValue(TargetStatType); }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetStatMaxValue(ECharacterStatType TargetStatType) { return CharacterGameplayInfo.GetMaxStatValue(TargetStatType); }
 
 	UFUNCTION(BlueprintCallable)
