@@ -114,8 +114,7 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 		}
 		break;
 	case ECharacterDebuffType::E_Slow:
-		resistValue = characterInfo.GetTotalValue(ECharacterStatType::E_SlowResist);
-		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_MoveSpeed, DebuffInfo.Variable - resistValue);
+		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_MoveSpeed, DebuffInfo.Variable);
 		break;
 	case ECharacterDebuffType::E_AttackDown:
 		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_NormalPower, DebuffInfo.Variable);
@@ -267,9 +266,6 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 	case ECharacterDebuffType::E_Stun:
 		characterInfo.CharacterActionState = ECharacterActionType::E_Idle;
 		OwnerCharacterRef.Get()->ResetActionState(true);
-		//if(OwnerCharacterRef.Get()->ActorHasTag("Player"))
-		//	OwnerCharacterRef.Get()->EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-		//else if (OwnerCharacterRef.Get()->ActorHasTag("Enemy"))
 		OwnerCharacterRef.Get()->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 		break;
 	}
