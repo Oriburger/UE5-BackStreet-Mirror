@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hant\n"
-"POT-Creation-Date: 2025-03-13 05:13\n"
-"PO-Revision-Date: 2025-03-13 05:13\n"
+"POT-Creation-Date: 2025-03-14 05:11\n"
+"PO-Revision-Date: 2025-03-14 05:11\n"
 "Language-Team: \n"
 "Language: zh-Hant\n"
 "MIME-Version: 1.0\n"
@@ -1419,6 +1419,13 @@ msgstr "繼續"
 msgctxt "ST_EasyGameUICommon,Button_Craft"
 msgid "Craft"
 msgstr "製作"
+
+#. Key:	Button_Credit
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Credit"
+msgid "Credits"
+msgstr "製作人員"
 
 #. Key:	Button_OptionsMenu
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
