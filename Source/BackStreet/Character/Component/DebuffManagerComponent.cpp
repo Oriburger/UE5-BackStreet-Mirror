@@ -18,7 +18,6 @@ UDebuffManagerComponent::UDebuffManagerComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-
 // Called when the game starts
 void UDebuffManagerComponent::BeginPlay()
 {
@@ -38,7 +37,6 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 
 	FTimerHandle& timerHandle = GetResetTimerHandle(DebuffInfo.Type);
 	FTimerHandle& dotDamageHandle = GetDotDamageTimerHandle(DebuffInfo.Type);
-	float resistValue = -1.0f;
 	float totalDamage = 0.0f;
 
 	USoundCue* startSound;
@@ -94,13 +92,10 @@ bool UDebuffManagerComponent::SetDebuffTimer(FDebuffInfoStruct DebuffInfo, AActo
 
 	switch (DebuffInfo.Type)
 	{
-		//----데미지 디버프-------------------
+	//----데미지 디버프-------------------
 	case ECharacterDebuffType::E_Burn:
-		resistValue = characterInfo.GetTotalValue(ECharacterStatType::E_BurnResist);
 	case ECharacterDebuffType::E_Poison:
-		resistValue = resistValue != -1.0f ? resistValue : characterInfo.GetTotalValue(ECharacterStatType::E_PoisonResist);
 		totalDamage = (float)(DebuffInfo.bIsPercentage ? characterInfo.GetTotalValue(ECharacterStatType::E_MaxHealth) * DebuffInfo.Variable : DebuffInfo.Variable);
-		totalDamage -= totalDamage * resistValue;
 		dotDamageDelegate.BindUFunction(this, FName("ApplyDotDamage"), DebuffInfo.Type, totalDamage, OwnerCharacterRef.Get());
 		GetWorld()->GetTimerManager().SetTimer(dotDamageHandle, dotDamageDelegate, 1.0f, true);
 		break;
@@ -243,6 +238,7 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 	FTimerHandle& dotDamageHandle = GetDotDamageTimerHandle(DebuffType);
 
 	float ResetVal = FMath::Max(0.001f, DebuffInfo.Variable);
+	float totalMoveSpeed = 0.0f; //for slow debuff
 	characterInfo.CharacterDebuffState &= ~(1 << (int)DebuffType);
 
 	UE_LOG(LogTemp, Warning, TEXT("UDebuffManagerComponent::ResetStatDebuffState - type : %d"), (int32)DebuffType);
@@ -254,6 +250,8 @@ void UDebuffManagerComponent::ResetStatDebuffState(ECharacterDebuffType DebuffTy
 		break;
 	case ECharacterDebuffType::E_Slow:
 		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_MoveSpeed, 0);
+		totalMoveSpeed = OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_MoveSpeed);
+		OwnerCharacterRef.Get()->GetCharacterMovement()->MaxWalkSpeed = totalMoveSpeed;
 		break;
 	case ECharacterDebuffType::E_AttackDown:
 		characterInfo.SetDebuffStatInfo(ECharacterStatType::E_NormalPower, 0);
