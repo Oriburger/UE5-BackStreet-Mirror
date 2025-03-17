@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-03-14 05:11\n"
-"PO-Revision-Date: 2025-03-14 05:11\n"
+"POT-Creation-Date: 2025-03-17 00:55\n"
+"PO-Revision-Date: 2025-03-17 00:55\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -2279,7 +2279,7 @@ msgstr "보유 중인 부스터칩"
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 msgctxt "ST_EasyGameUICommon,UI_RemainingStageCnt"
 msgid "{stagescnt} stages remaining until the final stage."
-msgstr "최종 스테이지까지 {stagescnt}번 남음"
+msgstr "보스까지 {stagescnt}개의 스테이지 남음"
 
 #. Key:	UI_SwitchTab
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon

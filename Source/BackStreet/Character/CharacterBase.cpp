@@ -353,7 +353,9 @@ bool ACharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Cause
 	switch (DebuffInfo.Type)
 	{
 	case ECharacterDebuffType::E_Stun:
-		DebuffInfo.TotalTime *= FMath::Clamp(GetStatTotalValue(ECharacterStatType::E_SlowResist), 0.0f, 1.0f);
+		UE_LOG(LogTemp, Warning, TEXT("TryAddNewDebuff %s %.2lf"), *UEnum::GetValueAsString(DebuffInfo.Type), DebuffInfo.TotalTime);
+		DebuffInfo.TotalTime *= (1.0f - FMath::Clamp(GetStatTotalValue(ECharacterStatType::E_SlowResist), 0.0f, 1.0f));
+		UE_LOG(LogTemp, Warning, TEXT("ㄴ> %.2lf"), DebuffInfo.TotalTime);
 		break;
 	case ECharacterDebuffType::E_Slow:
 		DebuffInfo.Variable *= (1.0f - FMath::Clamp(GetStatTotalValue(ECharacterStatType::E_SlowResist), 0.0f, 1.0f));
