@@ -101,9 +101,9 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 		if (dist < minDist)
 		{
 			dist = minDist;
-			ACharacterBase* temp = Cast<ACharacterBase>(pawn);
-			if (temp->GetIsActionActive(ECharacterActionType::E_Die)) continue;
-			target = Cast<ACharacterBase>(pawn);
+			ACharacterBase* characterRef = Cast<ACharacterBase>(pawn);
+			if (IsValid(characterRef) && characterRef->GetIsActionActive(ECharacterActionType::E_Die)) continue;
+			target = Cast<ACharacterBase>(characterRef);
 		}
 	}
 
