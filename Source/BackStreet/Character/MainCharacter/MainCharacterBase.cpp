@@ -48,6 +48,17 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom->SetRelativeLocation({ 0.0f, 30.0f, 25.0f });
 	CameraBoom->SetWorldRotation({ -45.0f, 0.0f, 0.0f });
 
+	SubCameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("SUB_CAMERA_BOOM"));
+	SubCameraBoom->SetupAttachment(CameraBoom);
+	SubCameraBoom->bUsePawnControlRotation = true;
+	SubCameraBoom->TargetArmLength = 375.0f;
+	SubCameraBoom->bInheritPitch = true;
+	SubCameraBoom->bInheritRoll = false;
+	SubCameraBoom->bInheritYaw = true;
+	SubCameraBoom->bEnableCameraLag = true;
+	SubCameraBoom->bEnableCameraRotationLag = true;
+	SubCameraBoom->CameraRotationLagSpeed = 10.0f;
+	SubCameraBoom->CameraLagSpeed = 10.0f;
 
 	//MainCharacter RangedWeaponAim SpringArm
 	RangedAimBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("RangedWeaponAim_Boom"));
@@ -63,7 +74,7 @@ AMainCharacterBase::AMainCharacterBase()
 
 	//MainCharacter Main Camera
 	FollowingCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FOLLOWING_CAMERA"));
-	FollowingCamera->SetupAttachment(CameraBoom);
+	FollowingCamera->SetupAttachment(SubCameraBoom);
 	FollowingCamera->bAutoActivate = true;
 
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
@@ -241,7 +252,7 @@ void AMainCharacterBase::ZoomOut()
 	//FollowingCamera attach to CameraBoom Component using Interp ===================
 	FLatentActionInfo LatentInfo;
 	LatentInfo.CallbackTarget = this;
-	FollowingCamera->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
+	FollowingCamera->AttachToComponent(SubCameraBoom, FAttachmentTransformRules::KeepWorldTransform);
 	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
 
