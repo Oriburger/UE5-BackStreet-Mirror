@@ -107,6 +107,7 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 	newInfo = ChapterInfoTable->FindRow<FChapterInfo>(FName(rowName), rowName);
 	if (newInfo != nullptr)
 	{
+		ChapterID = NewChapterID;
 		CurrentChapterInfo = *newInfo;
 		StageGeneratorComponent->InitGenerator(CurrentChapterInfo);
 		StageManagerComponent->Initialize(CurrentChapterInfo);
