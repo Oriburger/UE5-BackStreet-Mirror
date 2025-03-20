@@ -392,8 +392,8 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 		}
 
 		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X * CameraSensivity);
-		AddControllerPitchInput(LookAxisVector.Y * CameraSensivity);
+		AddControllerYawInput(LookAxisVector.X * (CameraSensivity + 1.0f));
+		AddControllerPitchInput(LookAxisVector.Y * (CameraSensivity + 1.0f));
 		SetManualRotateMode();
 		if (!UGameplayStatics::IsGamePaused(GetWorld()))
 			SetAutomaticRotateModeTimer();
