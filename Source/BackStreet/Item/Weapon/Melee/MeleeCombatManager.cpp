@@ -49,10 +49,11 @@ TArray<AActor*> UMeleeCombatManager::CheckMeleeAttackTargetWithSphereTrace()
 		, WeaponComponentRef.Get()->GetSocketLocation("End")) + 35.0f;
 
 	TEnumAsByte<EObjectTypeQuery> pawnTypeQuery = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
+	TEnumAsByte<EObjectTypeQuery> interactiveTypeQuery = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel3);
 	TArray<AActor*> overlapResultList, meleeDamageTargetList;
 
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), traceStartPos, traceRadius, { pawnTypeQuery }
-	, ACharacterBase::StaticClass(), IgnoreActorList, overlapResultList);
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), traceStartPos, traceRadius, { pawnTypeQuery, interactiveTypeQuery }
+	, AActor::StaticClass(), IgnoreActorList, overlapResultList);
 
 	//Find target to apply damage in overlap result array
 	//Character - Check if there's any obstacle between causer and target.
@@ -61,17 +62,25 @@ TArray<AActor*> UMeleeCombatManager::CheckMeleeAttackTargetWithSphereTrace()
 	for (auto& target : overlapResultList)
 	{
 		if (!IsValid(target)) continue;
-		if (!target->ActorHasTag("Character")) continue;
+		//if (!target->ActorHasTag("Character")) continue;
 		if (target->ActorHasTag(OwnerCharacterRef.Get()->Tags[1])) continue;
 
+	
 		FHitResult hitResult;
 		GetWorld()->LineTraceSingleByChannel(hitResult, OwnerCharacterRef->GetActorLocation()
 			, target->GetActorLocation(), ECollisionChannel::ECC_Camera, collisionQueryParam);
+
+		UE_LOG(LogTemp, Warning, TEXT("UMeleeCombatManager::CheckMeleeAttackTargetWithSphereTrace() - %s"), *UKismetSystemLibrary::GetDisplayName(target));
 
 		if (hitResult.bBlockingHit && hitResult.GetActor() == target)
 		{
 			IgnoreActorList.Add(target);
 			meleeDamageTargetList.Add(target);
+			UE_LOG(LogTemp, Warning, TEXT("ㄴ> Succeed"));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("ㄴ> Failed,   blockingHit : %d,    hitActor : %s"), (int32)hitResult.bBlockingHit, *UKismetSystemLibrary::GetDisplayName(hitResult.GetActor()));
 		}
 	}
 	return meleeDamageTargetList;
@@ -98,6 +107,14 @@ void UMeleeCombatManager::MeleeAttack()
 		//if target is valid, apply damage
 		if (IsValid(target))
 		{
+			//캐릭터가 아닌 대상에 데미지를 주는 경우
+			if (!target->ActorHasTag("Character"))
+			{
+				UGameplayStatics::ApplyDamage(target, 10.0f, OwnerCharacterRef.Get()->GetController(), OwnerCharacterRef.Get(), nullptr);
+				MeleeLineTraceQueryParams.AddIgnoredActor(target);
+				continue;
+			}
+
 			FCharacterGameplayInfo targetInfo = Cast<ACharacterBase>(target)->GetCharacterGameplayInfo();
 			bool bIsFatalAttack = false;
 			float totalDamage = WeaponComponentRef.Get()->CalculateTotalDamage(targetInfo, bIsFatalAttack);
