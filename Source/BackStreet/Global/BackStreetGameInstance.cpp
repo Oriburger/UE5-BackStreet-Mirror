@@ -15,7 +15,7 @@ void UBackStreetGameInstance::Init()
 	GameProgressManager->Initialize();
 	LoadGameData();
 
-	UE_LOG(LogTemp, Warning, TEXT("UBackStreetGameInstance::Init(), Initial value - %d"), (int32)ProgressData->bIsTutorialDone);
+	UE_LOG(LogTemp, Warning, TEXT("UBackStreetGameInstance::Init(), Initial value - %d"), (int32)GameProgressManager->GetProgressData()->bIsTutorialDone);
 }
 
 void UBackStreetGameInstance::SaveGameData()
@@ -35,7 +35,6 @@ void UBackStreetGameInstance::LoadGameData()
 	if (IsValid(GameProgressManager))
 	{
 		GameProgressManager->LoadProgress();
-		ProgressData = GameProgressManager->GetProgressData();
 	}
 	else
 	{
@@ -62,5 +61,49 @@ bool UBackStreetGameInstance::GetTutorialCompletion()
 		return GameProgressManager->GetTutorialCompletion();
 	}
 	UE_LOG(LogTemp, Error, TEXT("UBackStreetGameInstance::GetTutorialCompletion() - GameProgressManager is not valid"));
+	return false;
+}
+
+void UBackStreetGameInstance::SetFusionCellCount(int32 NewCount)
+{
+	if (IsValid(GameProgressManager))
+	{
+		GameProgressManager->SetFusionCellCount(NewCount);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("UBackStreetGameInstance::SetFusionCellCount(%d) - GameProgressManager is not valid"), NewCount);
+	}
+}
+
+int32 UBackStreetGameInstance::GetFusionCellCount() const
+{
+	if (IsValid(GameProgressManager))
+	{
+		return GameProgressManager->GetFusionCellCount();
+	}
+	UE_LOG(LogTemp, Error, TEXT("UBackStreetGameInstance::GetFusionCellCount() - GameProgressManager is not valid"));
+	return false;
+}
+
+void UBackStreetGameInstance::SetGenesiumCount(int32 NewCount)
+{
+	if (IsValid(GameProgressManager))
+	{
+		GameProgressManager->SetGenesiumCount(NewCount);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("UBackStreetGameInstance::SetGenesiumCount(%d) - GameProgressManager is not valid"), NewCount);
+	}
+}
+
+int32 UBackStreetGameInstance::GetGenesiumCount() const
+{
+	if (IsValid(GameProgressManager))
+	{
+		return GameProgressManager->GetGenesiumCount();
+	}
+	UE_LOG(LogTemp, Error, TEXT("UBackStreetGameInstance::GetGenesiumCount() - GameProgressManager is not valid"));
 	return false;
 }

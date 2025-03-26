@@ -32,16 +32,20 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetTutorialCompletion();
 
+	UFUNCTION(BlueprintCallable)
+		void SetFusionCellCount(int32 NewCount);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetFusionCellCount() const;
+	
+	UFUNCTION(BlueprintCallable)
+		void SetGenesiumCount(int32 NewCount);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetGenesiumCount() const;
+
 //------ PROPERTY ---------------------
 private:
 	UPROPERTY()
 		class UGameProgressManager* GameProgressManager;
-
-	// 내부 데이터
-	UPROPERTY()
-		class UProgressSaveGame* ProgressData;
-
-	// 슬롯 이름 및 인덱스
-	const FString ProgressSlot = TEXT("ProgressSlot");
-	int32 UserIndex = 0;
 };

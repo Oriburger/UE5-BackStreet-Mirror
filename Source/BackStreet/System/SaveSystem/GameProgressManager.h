@@ -25,6 +25,10 @@ public:
     // 진행 데이터 조작 함수
     void SetTutorialCompletion(bool bNewState);
     bool GetTutorialCompletion() const;
+    void SetFusionCellCount(int32 NewCount);
+    int32 GetFusionCellCount() const;
+    void SetGenesiumCount(int32 NewCount);
+    int32 GetGenesiumCount() const;
 
 	class UProgressSaveGame* GetProgressData() const { return ProgressData; }
 

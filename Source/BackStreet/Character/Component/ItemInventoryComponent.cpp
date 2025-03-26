@@ -5,6 +5,7 @@
 #include "WeaponComponentBase.h"
 #include "../CharacterBase.h"
 #include "../MainCharacter/MainCharacterBase.h"
+#include "../../Global/BackStreetGameInstance.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #define MAX_ITEM_COUNT_THRESHOLD 99
 
@@ -56,6 +57,15 @@ void UItemInventoryComponent::InitInventory()
 		if (row)
 		{
 			ItemMap.Add(row->ItemID, *row);
+
+			if (GenesiumID == row->ItemID)
+			{
+				ItemMap[row->ItemID].ItemAmount = GetWorld()->GetGameInstance<UBackStreetGameInstance>()->GetGenesiumCount();
+			}
+			else if (FusionCellID == row->ItemID)
+			{
+				ItemMap[row->ItemID].ItemAmount = GetWorld()->GetGameInstance<UBackStreetGameInstance>()->GetFusionCellCount();
+			}
 		}
 	}
 	
@@ -79,6 +89,16 @@ void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
 		OnItemAdded.Broadcast(ItemMap[ItemID], ItemCnt);
 		ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, ItemMap[ItemID].ItemAmount + ItemCnt);
 	}
+
+	if (GenesiumID == ItemID)
+	{
+		GetWorld()->GetGameInstance<UBackStreetGameInstance>()->SetGenesiumCount(ItemMap[ItemID].ItemAmount);
+	}
+	else if (FusionCellID == ItemID)
+	{
+		GetWorld()->GetGameInstance<UBackStreetGameInstance>()->SetFusionCellCount(ItemMap[ItemID].ItemAmount);
+	}
+
 	OnUpdateItem.Broadcast();
 }
 

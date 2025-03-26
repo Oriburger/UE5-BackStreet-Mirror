@@ -55,3 +55,35 @@ bool UGameProgressManager::GetTutorialCompletion() const
     }
     return false;
 }
+
+void UGameProgressManager::SetFusionCellCount(int32 NewCount)
+{
+    if (!IsValid(ProgressData)) LoadProgress();
+    ProgressData->FusionCellCount = NewCount;
+    SaveProgress();
+}
+
+int32 UGameProgressManager::GetFusionCellCount() const
+{
+    if (ProgressData)
+    {
+        return ProgressData->FusionCellCount;
+    }
+    return false;
+}
+
+void UGameProgressManager::SetGenesiumCount(int32 NewCount)
+{
+    if (!IsValid(ProgressData)) LoadProgress();
+    ProgressData->GenesiumCount = NewCount;
+    SaveProgress();
+}
+
+int32 UGameProgressManager::GetGenesiumCount() const
+{
+    if (ProgressData)
+    {
+        return ProgressData->GenesiumCount;
+    }
+    return false;
+}
