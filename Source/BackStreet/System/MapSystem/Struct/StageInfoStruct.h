@@ -303,7 +303,11 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Config")
 		TArray<FStageInfo> StageInfoList;
-		
+private:
+	UPROPERTY()
+		FStageInfo BossStageInfo;
+	
+public:
 //======= Widget ======================
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widget")
 		TMap<EStageCategoryInfo, UTexture2D*> StageIconInfoMap;
@@ -329,6 +333,19 @@ public:
 
 //======= Function =======================
 public:
+	void Reset()
+	{
+		StageInfoList.Empty();
+		BossStageInfo = FStageInfo();
+		BlockedPosList.Empty();
+		BlockedStageIdxList.Empty();
+		StageLevelInfoMap.Empty();
+		OuterStageLevelList.Empty();
+		StageIconInfoMap.Empty();
+		StageIconTransitionValueList.Empty();
+		CurrentStageCoordinate = FVector2D(0.0f);
+	}
+
 	bool IsValid() { return StageInfoList.Num() > 0; }
 
 	TArray<TSoftObjectPtr<UWorld>> GetWorldList(EStageCategoryInfo StageType)
@@ -345,5 +362,19 @@ public:
 		}
 		return nullptr;
 	}
-
+	FStageInfo GetBossStageInfo() 
+	{ 
+		if (BossStageInfo.StageType != EStageCategoryInfo::E_Boss)
+		{
+			for (auto& stageInfo : StageInfoList)
+			{
+				if (stageInfo.StageType == EStageCategoryInfo::E_Boss)
+				{
+					BossStageInfo = stageInfo;
+					break;
+				}
+			}
+		}
+		return BossStageInfo; 
+	}
 };

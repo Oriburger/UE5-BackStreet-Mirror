@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_jp\n"
-"POT-Creation-Date: 2025-02-28 01:26\n"
-"PO-Revision-Date: 2025-02-28 01:26\n"
+"POT-Creation-Date: 2025-03-14 05:11\n"
+"PO-Revision-Date: 2025-03-14 05:11\n"
 "Language-Team: \n"
 "Language: ja-JP\n"
 "MIME-Version: 1.0\n"
@@ -1420,6 +1420,13 @@ msgctxt "ST_EasyGameUICommon,Button_Craft"
 msgid "Craft"
 msgstr "クラフト"
 
+#. Key:	Button_Credit
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Credit"
+msgid "Credits"
+msgstr "クレジット"
+
 #. Key:	Button_OptionsMenu
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2266,6 +2273,13 @@ msgstr "利用不可"
 msgctxt "ST_EasyGameUICommon,UI_Owned_Boosterchip"
 msgid "Owned Boosterchip"
 msgstr "所持中のブースターチップ"
+
+#. Key:	UI_RemainingStageCnt
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_RemainingStageCnt"
+msgid "{stagescnt} stages remaining until the final stage."
+msgstr "最終ステージまであと{stagescnt}回。"
 
 #. Key:	UI_SwitchTab
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon

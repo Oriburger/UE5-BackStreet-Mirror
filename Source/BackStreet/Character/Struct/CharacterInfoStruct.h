@@ -112,8 +112,9 @@ public:
 	inline void UpdateTotalValue()
 	{
 		TotalValue = DefaultValue != 0.0f
-					? DefaultValue + DefaultValue * (AbilityRateValue + SkillRateValue - DebuffRateValue)
-					: (AbilityRateValue + SkillRateValue - DebuffRateValue);
+					? DefaultValue + DefaultValue * (AbilityRateValue + SkillRateValue)
+					: (AbilityRateValue + SkillRateValue);
+		TotalValue *= (1.0f - DebuffRateValue);
 
 		if (MaxValue != 0.0f)
 		{
@@ -126,6 +127,7 @@ public:
 						, TotalValue, DefaultValue, AbilityRateValue, SkillRateValue, DebuffRateValue);
 		}
 	}
+	inline float GetDebuffRateValue() { return DebuffRateValue; }
 	inline float GetTotalValue() { return TotalValue; }
 
 	FStatValueGroup(ECharacterStatType NewType) : StatType(NewType), DefaultValue(0.0f), MaxValue(0.0f), bIsContainProbability(false)
@@ -292,6 +294,11 @@ public:
 	inline float GetProbabilityStatInfo(ECharacterStatType StatType) { return GetStatGroup(StatType).bIsContainProbability ? GetStatGroup(StatType).ProbabilityValue : -1.0f; }
 	inline float GetMaxStatValue(ECharacterStatType StatType){ return GetStatGroup(StatType).MaxValue; }
 	inline bool GetIsContainProbability(ECharacterStatType StatType) {	return GetStatGroup(StatType).bIsContainProbability; }
+	inline float GetDebuffRateValue(ECharacterStatType StatType)
+	{
+		GetStatGroup(StatType).UpdateTotalValue();
+		return FMath::Clamp(GetStatGroup(StatType).GetDebuffRateValue(), 0.0f, 0.99f);
+	}
 	inline float GetTotalValue(ECharacterStatType StatType) 
 	{
 		GetStatGroup(StatType).UpdateTotalValue();
