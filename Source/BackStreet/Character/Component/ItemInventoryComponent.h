@@ -81,7 +81,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FItemInfoDataStruct GetSubWeaponInfoData();
 	
-//====== Weapon ===========================
+//====== PROPERTY ===========================
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		int32 MaxItemCount = 100; 
@@ -91,6 +91,12 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		int32 MaxMainWeaponCount = 1;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Wealth")
+		int32 GenesiumID;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Wealth")
+		int32 FusionCellID;
 
 protected:
 	UFUNCTION(BlueprintCallable)
