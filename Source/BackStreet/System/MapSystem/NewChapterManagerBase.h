@@ -81,6 +81,9 @@ public:
 		FStageInfo& GetStageInfo(int32 StageIdx);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetMaxChapterID() { return MaxChapterID; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FStageInfo& GetStageInfoWithCoordinate(FVector2D StageCoordinate);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -98,6 +101,9 @@ public:
 
 protected:
 	//Assign on blueprint
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Basic")
+		int32 MaxChapterID = 4;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Data")
 		UDataTable* ChapterInfoTable;
 

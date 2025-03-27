@@ -17,4 +17,10 @@ public:
 
     UPROPERTY()
         bool bIsTutorialDone = false;
+
+    UPROPERTY()
+        int32 FusionCellCount = 0; 
+
+    UPROPERTY()
+        int32 GenesiumCount = 0;
 };
