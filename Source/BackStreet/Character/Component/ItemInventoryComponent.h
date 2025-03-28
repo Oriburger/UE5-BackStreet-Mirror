@@ -50,6 +50,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void RemoveItem(int32 ItemID, uint8 ItemCnt);
 
+protected:
+	UFUNCTION()
+		void OnChapterCleared();
+
 private:
 	//무기를 추가하고 제거한다. WeaponComponent와의 정보 연동을 진행한다
 	bool TryAddWeapon(int32 ItemID, EItemCategoryInfo ItemCategory, int32 ItemCount);
@@ -133,6 +137,8 @@ public:
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+	TWeakObjectPtr<class UBackStreetGameInstance> GameInstanceRef;
 
 	TWeakObjectPtr<class UWeaponComponentBase> WeaponRef;
 
