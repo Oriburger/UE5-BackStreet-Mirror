@@ -4,6 +4,7 @@
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/MapSystem/NewChapterManagerBase.h"
 #include "../System/MapSystem/StageManagerComponent.h"
+#include "../System/SaveSystem/SaveManager.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
 #include "../Item/ItemBase.h"
@@ -27,6 +28,9 @@ void ABackStreetGameModeBase::BeginPlay()
 	//----- Asset Manager 초기화 -------
 	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
 	AssetManagerBase->InitAssetManager(this);
+
+	//----- SaveManager 초기화 -------
+	SpawnAndInitializeSaveManager();
 }
 
 void ABackStreetGameModeBase::InitialzeGame()
@@ -135,6 +139,32 @@ void ABackStreetGameModeBase::CreateDefaultHUD()
 		if (Cast<UCommonActivatableWidget>(combatWidgetRef))
 		{
 			//Cast<UCommonActivatableWidget>(combatWidgetRef)->ActivateWidget();
+		}
+	}
+}
+
+void ABackStreetGameModeBase::SpawnAndInitializeSaveManager()
+{
+	if (SaveManagerRef != nullptr)	return; // 이미 존재하면 스폰하지 않음
+	if (!SaveManagerClassRef)
+	{
+		UE_LOG(LogSaveSystem, Error, TEXT("SaveManagerClassRef가 설정되지 않았습니다!"));
+		return;
+	}
+
+	// 월드에 스폰
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		SaveManagerRef = World->SpawnActor<ASaveManager>(SaveManagerClassRef, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+
+		if (SaveManagerRef)
+		{
+			// 추가 초기화가 필요하다면 여기에 작성
 		}
 	}
 }

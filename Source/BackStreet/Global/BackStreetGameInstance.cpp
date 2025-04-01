@@ -20,11 +20,11 @@ void UBackStreetGameInstance::SaveGameData()
 {
 	if (IsValid(GameProgressManager))
 	{
-		GameProgressManager->SaveProgress();
+		//GameProgressManager->SaveProgress();
 	}
 	else
 	{
-		UE_LOG(LogSaveSystem, Error, TEXT("UBackStreetGameInstance::SaveGameData() - GameProgressManager is not valid"));
+		//UE_LOG(LogSaveSystem, Error, TEXT("UBackStreetGameInstance::SaveGameData() - GameProgressManager is not valid"));
 	}
 }
 
@@ -32,11 +32,11 @@ void UBackStreetGameInstance::LoadGameData()
 {
 	if (IsValid(GameProgressManager))
 	{
-		GameProgressManager->LoadProgress();
+		//GameProgressManager->LoadProgress();
 	}
 	else
 	{
-		UE_LOG(LogSaveSystem, Error, TEXT("UBackStreetGameInstance::LoadGameData() - GameProgressManager is not valid"));
+		//UE_LOG(LogSaveSystem, Error, TEXT("UBackStreetGameInstance::LoadGameData() - GameProgressManager is not valid"));
 	}
 }
 
@@ -44,11 +44,11 @@ void UBackStreetGameInstance::SetTutorialCompletion(bool bCompleted)
 {
 	if (IsValid(GameProgressManager))
 	{
-		GameProgressManager->SetTutorialCompletion(bCompleted);
+		//GameProgressManager->SetTutorialCompletion(bCompleted);
 	}
 	else
 	{
-		UE_LOG(LogSaveSystem, Error, TEXT("UBackStreetGameInstance::SetTutorialCompletion(%d) - GameProgressManager is not valid"), (int32)bCompleted);
+		//UE_LOG(LogSaveSystem, Error, TEXT("UBackStreetGameInstance::SetTutorialCompletion(%d) - GameProgressManager is not valid"), (int32)bCompleted);
 	}
 }
 
@@ -56,7 +56,7 @@ bool UBackStreetGameInstance::GetTutorialCompletion()
 {
 	if (IsValid(GameProgressManager))
 	{
-		return GameProgressManager->GetTutorialCompletion();
+		//return GameProgressManager->GetTutorialCompletion();
 	}
 	return false;
 }
@@ -65,7 +65,7 @@ void UBackStreetGameInstance::SetFusionCellCount(int32 NewCount)
 {
 	if (IsValid(GameProgressManager))
 	{
-		GameProgressManager->SetFusionCellCount(NewCount);
+		//GameProgressManager->SetFusionCellCount(NewCount);
 	}
 	else
 	{
@@ -77,7 +77,7 @@ int32 UBackStreetGameInstance::GetFusionCellCount()
 {
 	if (IsValid(GameProgressManager))
 	{
-		return GameProgressManager->GetFusionCellCount();
+		//return GameProgressManager->GetFusionCellCount();
 	}
 	return 0;
 }
@@ -86,7 +86,7 @@ void UBackStreetGameInstance::SetGenesiumCount(int32 NewCount)
 {
 	if (IsValid(GameProgressManager))
 	{
-		GameProgressManager->SetGenesiumCount(NewCount);
+		//GameProgressManager->SetGenesiumCount(NewCount);
 	}
 	else
 	{
@@ -98,7 +98,7 @@ int32 UBackStreetGameInstance::GetGenesiumCount()
 {	
 	if (IsValid(GameProgressManager))
 	{
-		return GameProgressManager->GetGenesiumCount();
+		//return GameProgressManager->GetGenesiumCount();
 	}
 	return 0;
 }
