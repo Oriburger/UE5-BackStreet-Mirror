@@ -10,6 +10,8 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateClearResource);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateSystemMessage, FName, Message, FColor, TextColor);
 
+class ASaveManager;
+
 UCLASS()
 class BACKSTREET_API ABackStreetGameModeBase : public AGameModeBase
 {
@@ -106,6 +108,25 @@ protected:
 	//For combat hud widget
 	UPROPERTY()
 		class UCommonUserWidget* MainHUDRef;
+
+//------ 저장 매니저 ------------------------
+protected:
+	// 저장 매니저 클래스 지정용 (블루프린트에서 할당 가능)
+	UPROPERTY(EditDefaultsOnly, Category = "Save")
+		TSubclassOf<class ASaveManager> SaveManagerClassRef;
+
+	// 실제로 생성된 SaveManager 인스턴스 참조
+	UPROPERTY()
+		class ASaveManager* SaveManagerRef;
+
+public:
+	// SaveManager 스폰 함수
+	UFUNCTION(BlueprintCallable, Category = "Save")
+		void SpawnAndInitializeSaveManager();
+
+	// SaveManager 접근 함수
+	UFUNCTION(BlueprintCallable, Category = "Save")
+		FORCEINLINE ASaveManager* GetSaveManager() const { return SaveManagerRef; }
 
 //------ 그 외 프로퍼티 ---------------
 public:
