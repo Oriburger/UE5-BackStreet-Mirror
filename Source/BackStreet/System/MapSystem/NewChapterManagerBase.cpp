@@ -65,19 +65,21 @@ void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 	//Set state variable
 	bIsChapterFinished = true;
 
-	//Temporary code : Remove character instance 
-	UGameplayStatics::ApplyDamage(PlayerRef.Get(), 1e8, nullptr, GetOwner(), nullptr);
-
 	//Clear resource
 	StageManagerComponent->ClearPreviousResource();
 
-	//Chapter Reward 처리
-	//~
+	OnChapterCleared.Broadcast();
 
-	//change level to main menu
-	FTimerDelegate openLevelDelegate;
-	openLevelDelegate.BindUFunction(this, "OpenMainMenuLevel");
-	GetWorldTimerManager().SetTimer(OpenLevelDelayHandle, openLevelDelegate, 0.5f, false);
+	//change level to next chapter
+	if (CurrentChapterInfo.ChapterID != MaxChapterID)
+	{
+		StartChapter(CurrentChapterInfo.ChapterID + 1);
+	}
+	else
+	{
+		//나중에 Reward UI로 대체하기
+		OpenNeutralZoneLevel();
+	}
 }
 
 void ANewChapterManagerBase::ResetChapter()
@@ -107,6 +109,7 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 	newInfo = ChapterInfoTable->FindRow<FChapterInfo>(FName(rowName), rowName);
 	if (newInfo != nullptr)
 	{
+		ChapterID = NewChapterID;
 		CurrentChapterInfo = *newInfo;
 		StageGeneratorComponent->InitGenerator(CurrentChapterInfo);
 		StageManagerComponent->Initialize(CurrentChapterInfo);
@@ -126,14 +129,14 @@ void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 	//Game Over
 	if (StageInfo.bIsGameOver)
 	{
-		//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishGame' 
+		//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishChapter' 
 		CreateGameResultWidget(false);
 	}
 	else if (StageInfo.bIsClear)
 	{
 		if (StageInfo.StageType == EStageCategoryInfo::E_Boss)
 		{
-			//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishGame'
+			//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishChapter'
 			CreateGameResultWidget(true);
 		}
 	}
@@ -239,4 +242,10 @@ void ANewChapterManagerBase::OpenMainMenuLevel()
 {
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
 	UGameplayStatics::OpenLevel(GetWorld(), "MainMenuPersistent");
+}
+
+void ANewChapterManagerBase::OpenNeutralZoneLevel()
+{
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
+	UGameplayStatics::OpenLevel(GetWorld(), "NeutralZonePersistent");
 }

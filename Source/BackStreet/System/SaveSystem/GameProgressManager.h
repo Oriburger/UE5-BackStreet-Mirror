@@ -24,15 +24,20 @@ public:
 
     // 진행 데이터 조작 함수
     void SetTutorialCompletion(bool bNewState);
-    bool GetTutorialCompletion() const;
+    bool GetTutorialCompletion();
+    void SetFusionCellCount(int32 NewCount);
+    int32 GetFusionCellCount();
+    void SetGenesiumCount(int32 NewCount);
+    int32 GetGenesiumCount();
 
 	class UProgressSaveGame* GetProgressData() const { return ProgressData; }
 
 private:
     // 내부 데이터
-    class UProgressSaveGame* ProgressData;
+    UPROPERTY()
+        class UProgressSaveGame* ProgressData;
 
     // 슬롯 이름 및 인덱스
-    const FString ProgressSlot = TEXT("ProgressSlot");
+    const FString ProgressSlot = TEXT("GameProgressSlot");
     int32 UserIndex = 0;
 };

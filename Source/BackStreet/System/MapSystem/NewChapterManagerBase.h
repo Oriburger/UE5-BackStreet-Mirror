@@ -46,7 +46,7 @@ public:
 		void StartChapter(int32 NewChapterID);
 
 	//Finish current chapter
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void FinishChapter(bool bChapterClear);
 
 	//?
@@ -81,6 +81,9 @@ public:
 		FStageInfo& GetStageInfo(int32 StageIdx);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetMaxChapterID() { return MaxChapterID; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FStageInfo& GetStageInfoWithCoordinate(FVector2D StageCoordinate);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -98,6 +101,9 @@ public:
 
 protected:
 	//Assign on blueprint
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Basic")
+		int32 MaxChapterID = 4;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Data")
 		UDataTable* ChapterInfoTable;
 
@@ -124,7 +130,7 @@ public:
 //========= Widget =====================
 public:
 	//Result widget
-	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	UPROPERTY(EditDefaultsOnly,  Category = "UI")
 		TSubclassOf<class UUserWidget> ChapterClearWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
@@ -141,6 +147,9 @@ private:
 protected:
 	UFUNCTION()
 		void OpenMainMenuLevel();
+
+	UFUNCTION()
+		void OpenNeutralZoneLevel();
 
 private:
 	FTimerHandle OpenLevelDelayHandle; 
