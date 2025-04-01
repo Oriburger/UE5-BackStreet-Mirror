@@ -64,6 +64,7 @@ void UItemInventoryComponent::InitInventory()
 	ItemTable->GetAllRows(ContextString, allRows);
 
 	ItemMap.Empty();
+	/*
 	for (FItemInfoDataStruct* row : allRows)
 	{
 		if (row)
@@ -83,7 +84,7 @@ void UItemInventoryComponent::InitInventory()
 				}
 			}
 		}
-	}
+	}*/
 	
 	
 }
@@ -246,6 +247,18 @@ int32 UItemInventoryComponent::GetItemAmount(int32 ItemID)
 {
 	if (!ItemMap.Contains(ItemID)) return -1;
 	return ItemMap[ItemID].ItemAmount;
+}
+
+int32 UItemInventoryComponent::GetGenesiumAmount()
+{
+	if (!ItemMap.Contains(GenesiumID)) return -1;
+	return ItemMap[GenesiumID].ItemAmount;
+}
+
+int32 UItemInventoryComponent::GetFusionCellAmount()
+{
+	if (!ItemMap.Contains(FusionCellID)) return -1;
+	return ItemMap[FusionCellID].ItemAmount;
 }
 
 bool UItemInventoryComponent::GetIsItemEnough(int32 ItemID, uint8 NeedItemAmount)
