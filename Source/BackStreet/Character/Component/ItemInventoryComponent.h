@@ -39,20 +39,11 @@ protected:
 
 //======= Logic ============================
 public:
-	//When SavedData already has Inventory data
-	UFUNCTION()
-		void SetItemInventoryFromSaveData();
-
-public:
 	UFUNCTION(BlueprintCallable)
 		void AddItem(int32 ItemID, uint8 ItemCnt);
 
 	UFUNCTION(BlueprintCallable)
 		void RemoveItem(int32 ItemID, uint8 ItemCnt);
-
-protected:
-	UFUNCTION()
-		void OnChapterCleared();
 
 private:
 	//무기를 추가하고 제거한다. WeaponComponent와의 정보 연동을 진행한다

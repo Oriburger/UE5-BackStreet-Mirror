@@ -43,16 +43,6 @@ void UItemInventoryComponent::InitInventory()
 			UE_LOG(LogItem, Error, TEXT("UItemInventoryComponent::InitInventory() - DataTable is null!"));
 			return;
 		}
-		//영구재화 Save 관련 로직
-		if (IsValid(GamemodeRef.Get()->GetChapterManagerRef()))
-		{
-			UE_LOG(LogItem, Log, TEXT("UItemInventoryComponent::InitInventory() - on chapter cleared event bind"));
-			GamemodeRef.Get()->GetChapterManagerRef()->OnChapterCleared.AddDynamic(this, &UItemInventoryComponent::OnChapterCleared);
-		}
-		else
-		{
-			UE_LOG(LogItem, Error, TEXT("UItemInventoryComponent::InitInventory() - ChapterManager is not valid"));
-		}
 	}
 	if (WeaponRef.IsValid())
 	{
@@ -64,34 +54,15 @@ void UItemInventoryComponent::InitInventory()
 	ItemTable->GetAllRows(ContextString, allRows);
 
 	ItemMap.Empty();
-	/*
+	
 	for (FItemInfoDataStruct* row : allRows)
 	{
 		if (row)
 		{
 			ItemMap.Add(row->ItemID, *row);
 			ItemMap[row->ItemID].ItemAmount = 0;
-
-			if (GameInstanceRef.IsValid())
-			{
-				if (GenesiumID == row->ItemID)
-				{
-					ItemMap[row->ItemID].ItemAmount = GameInstanceRef.Get()->GetGenesiumCount();
-				}
-				else if (FusionCellID == row->ItemID)
-				{
-					ItemMap[row->ItemID].ItemAmount = GameInstanceRef.Get()->GetFusionCellCount();
-				}
-			}
 		}
-	}*/
-	
-	
-}
-
-void UItemInventoryComponent::SetItemInventoryFromSaveData()
-{
-	//ItemMap = playerCharacterRef->SavedData.PlayerSaveGameData.ItemMap;
+	}	
 }
 
 void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
@@ -124,28 +95,6 @@ void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
 	
 	OnUpdateItem.Broadcast();
 	OnItemRemoved.Broadcast(ItemMap[ItemID], ItemMap[ItemID].ItemAmount);
-}
-
-void UItemInventoryComponent::OnChapterCleared()
-{
-	if (!GameInstanceRef.IsValid())
-	{
-		UE_LOG(LogItem, Error, TEXT("UItemInventoryComponent::OnChapterCleared() : GameInstanceRef is not valid"));
-		return;
-	}
-
-	UE_LOG(LogItem, Log, TEXT("UItemInventoryComponent::OnChapterCleared()"));
-
-	if (ItemMap.Contains(GenesiumID) && ItemMap[GenesiumID].ItemAmount > 0)
-	{
-		UE_LOG(LogItem, Log, TEXT("UItemInventoryComponent::OnChapterCleared() : Genesium saved %d"), ItemMap[GenesiumID].ItemAmount);
-		GameInstanceRef.Get()->SetGenesiumCount(ItemMap[GenesiumID].ItemAmount);
-	}
-	if (ItemMap.Contains(FusionCellID) && ItemMap[FusionCellID].ItemAmount > 0)
-	{
-		UE_LOG(LogItem, Log, TEXT("UItemInventoryComponent::OnChapterCleared() : FusionCell saved %d"), ItemMap[FusionCellID].ItemAmount);
-		GameInstanceRef.Get()->SetFusionCellCount(ItemMap[FusionCellID].ItemAmount);
-	}
 }
 
 bool UItemInventoryComponent::TryAddWeapon(int32 ItemID, EItemCategoryInfo ItemCategory, int32 ItemCount)
