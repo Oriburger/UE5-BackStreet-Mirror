@@ -7,9 +7,9 @@
 
 void UGameProgressManager::Initialize()
 {
-    LoadProgress();
+ //   LoadProgress();
 }
-
+/*
 void UGameProgressManager::SaveProgress()
 {
     if (!ProgressData)
@@ -80,3 +80,4 @@ int32 UGameProgressManager::GetGenesiumCount()
     UE_LOG(LogSaveSystem, Log, TEXT("UGameProgressManager::GetGenesiumCount()  - %d"), ProgressData->GenesiumCount);
     return ProgressData->GenesiumCount;
 }
+*/

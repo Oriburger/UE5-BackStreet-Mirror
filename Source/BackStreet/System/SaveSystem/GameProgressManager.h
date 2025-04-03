@@ -17,7 +17,7 @@ class BACKSTREET_API UGameProgressManager : public UObject
 public:
     // 초기화
     void Initialize();
-
+    /*
     // 게임 진행 데이터 저장 및 불러오기
     void SaveProgress();
     void LoadProgress();
@@ -39,5 +39,5 @@ private:
 
     // 슬롯 이름 및 인덱스
     const FString ProgressSlot = TEXT("GameProgressSlot");
-    int32 UserIndex = 0;
+    int32 UserIndex = 0;*/
 };
