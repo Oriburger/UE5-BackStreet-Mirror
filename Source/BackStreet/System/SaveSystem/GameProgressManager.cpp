@@ -19,7 +19,7 @@ void UGameProgressManager::SaveProgress()
 
     // 저장 진행
     bool result = UGameplayStatics::SaveGameToSlot(ProgressData, ProgressSlot, UserIndex);
-    UE_LOG(LogTemp, Error, TEXT("UGameProgressManager::SaveProgress() result - %d"), (int32)result);
+    UE_LOG(LogSaveSystem, Error, TEXT("UGameProgressManager::SaveProgress() result - %d"), (int32)result);
 }
 
 void UGameProgressManager::LoadProgress()
@@ -34,7 +34,7 @@ void UGameProgressManager::LoadProgress()
     }
     else
     {
-        ProgressData = Cast<UProgressSaveGame>(UGameplayStatics::CreateSaveGameObject(UProgressSaveGame::StaticClass()));
+        SaveProgress();
     }
 }
 
@@ -42,18 +42,15 @@ void UGameProgressManager::SetTutorialCompletion(bool bNewState)
 {
 	if (!IsValid(ProgressData)) LoadProgress();
 
-    UE_LOG(LogTemp, Warning, TEXT("UGameProgressManager::SetTutorialCompletion(%d) #1"), (int32)bNewState);
+    UE_LOG(LogSaveSystem, Warning, TEXT("UGameProgressManager::SetTutorialCompletion(%d) #1"), (int32)bNewState);
     ProgressData->bIsTutorialDone = bNewState;
     SaveProgress();
 }
 
-bool UGameProgressManager::GetTutorialCompletion() const
+bool UGameProgressManager::GetTutorialCompletion() 
 {
-    if (ProgressData)
-    {
-        return ProgressData->bIsTutorialDone;
-    }
-    return false;
+    if (!IsValid(ProgressData) || !UGameplayStatics::DoesSaveGameExist(ProgressSlot, UserIndex)) return false;
+    return ProgressData->bIsTutorialDone;
 }
 
 void UGameProgressManager::SetFusionCellCount(int32 NewCount)
@@ -63,13 +60,11 @@ void UGameProgressManager::SetFusionCellCount(int32 NewCount)
     SaveProgress();
 }
 
-int32 UGameProgressManager::GetFusionCellCount() const
+int32 UGameProgressManager::GetFusionCellCount() 
 {
-    if (ProgressData)
-    {
-        return ProgressData->FusionCellCount;
-    }
-    return false;
+    if (!IsValid(ProgressData) || !UGameplayStatics::DoesSaveGameExist(ProgressSlot, UserIndex)) return 0;
+    UE_LOG(LogSaveSystem, Log, TEXT("UGameProgressManager::GetFusionCellCount()  - %d"), ProgressData->FusionCellCount);
+    return ProgressData->FusionCellCount;
 }
 
 void UGameProgressManager::SetGenesiumCount(int32 NewCount)
@@ -79,11 +74,9 @@ void UGameProgressManager::SetGenesiumCount(int32 NewCount)
     SaveProgress();
 }
 
-int32 UGameProgressManager::GetGenesiumCount() const
+int32 UGameProgressManager::GetGenesiumCount() 
 {
-    if (ProgressData)
-    {
-        return ProgressData->GenesiumCount;
-    }
-    return false;
+    if (!IsValid(ProgressData) || !UGameplayStatics::DoesSaveGameExist(ProgressSlot, UserIndex)) return 0;
+    UE_LOG(LogSaveSystem, Log, TEXT("UGameProgressManager::GetGenesiumCount()  - %d"), ProgressData->GenesiumCount);
+    return ProgressData->GenesiumCount;
 }
