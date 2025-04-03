@@ -98,6 +98,13 @@ void ANewChapterManagerBase::MoveStage(FVector2D direction)
 	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
 }
 
+void ANewChapterManagerBase::OverwriteChapterInfo(FChapterInfo NewChapterInfo, FStageInfo NewStageInfo)
+{
+	CurrentChapterInfo = NewChapterInfo;
+	StageManagerComponent->OverwriteStageInfo(NewChapterInfo, NewStageInfo);
+	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
+}
+
 void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 {
 	if (ChapterInfoTable == nullptr) return;

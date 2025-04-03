@@ -164,7 +164,7 @@ void ABackStreetGameModeBase::SpawnAndInitializeSaveManager()
 
 		if (SaveManagerRef)
 		{
-			// 추가 초기화가 필요하다면 여기에 작성
+			SaveManagerRef->SetOwner(this);
 		}
 	}
 }

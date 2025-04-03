@@ -2,6 +2,10 @@
 
 #include "SaveManager.h"
 #include "Kismet/GameplayStatics.h"
+#include "../../Global/BackStreetGameModeBase.h"
+#include "../../System/MapSystem/NewChapterManagerBase.h"
+#include "../../System/MapSystem/StageManagerComponent.h"
+#include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "ProgressSaveGame.h"
 
 ASaveManager::ASaveManager()
@@ -12,74 +16,66 @@ ASaveManager::ASaveManager()
 void ASaveManager::BeginPlay()
 {
 	Super::BeginPlay();
-/*
-	if (DoesSaveExist())
+	
+	//Ref 지정
+	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
+	if(GamemodeRef.IsValid())
 	{
-		LoadGameData();
+		ChapterManagerRef = GamemodeRef.Get()->GetChapterManagerRef();
 	}
-	else
+	else 
 	{
-		CreateNewSaveGame();
-		SaveGameData(); // 최초 생성 후 바로 저장
-	}*/
+		UE_LOG(LogSaveSystem, Error, TEXT("ASaveManager::BeginPlay - Gamemode is not valid"));
+	}
+	PlayerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	//델리게이트 바인딩
+	if (ChapterManagerRef.IsValid())
+	{
+		ChapterManagerRef.Get()->OnChapterCleared.AddDynamic(this, &ASaveManager::SaveProgress);
+		ChapterManagerRef.Get()->StageManagerComponent->OnStageCleared.AddDynamic(this, &ASaveManager::SaveProgress);
+	}
+
 }
 
 void ASaveManager::SaveGameData_Implementation()
 {
-	if (!CachedMasterSave)
-	{
-		CreateNewSaveGame();
-	}
-
-	SaveProgress();
-	SaveInventory();
-	SaveAchievement();
-
-	UGameplayStatics::SaveGameToSlot(CachedMasterSave, SaveSlotName, UserIndex);
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveManager::SaveGameData - Called"));
 }
 
 void ASaveManager::LoadGameData_Implementation()
 {
-	if (!DoesSaveExist()) return;
-
-	CachedMasterSave = Cast<UProgressSaveGame>(UGameplayStatics::LoadGameFromSlot(SaveSlotName, UserIndex));
-	if (!CachedMasterSave) return;
-
-	LoadProgress();
-	LoadInventory();
-	LoadAchievement();
-
-	bIsLoaded = true;
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveManager::LoadGameData - Called"));
 }
 
 void ASaveManager::SaveProgress_Implementation()
 {
-	// TODO: 게임 내부 상태에서 값을 받아서 CachedMasterSave->ProgressSave->Data에 저장
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveManager::SaveProgress - Called"));
 }
 
 void ASaveManager::SaveInventory_Implementation()
 {
-	// TODO: 인벤토리 상태 저장
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveManager::SaveInventory - Called"));
 }
 
 void ASaveManager::SaveAchievement_Implementation()
 {
-	// TODO: 업적 상태 저장
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveManager::SaveAchievement - Called"));
 }
 
 void ASaveManager::LoadProgress_Implementation()
 {
-	// TODO: CachedMasterSave->ProgressSave->Data에서 값 꺼내 게임에 반영
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveManager::LoadProgress - Called"));
 }
 
 void ASaveManager::LoadInventory_Implementation()
 {
-	// TODO: 인벤토리 정보 로드
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveManager::LoadInventory - Called"));
 }
 
 void ASaveManager::LoadAchievement_Implementation()
 {
-	// TODO: 업적 정보 로드
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveManager::LoadAchievement - Called"));
 }
 
 bool ASaveManager::DoesSaveExist() const

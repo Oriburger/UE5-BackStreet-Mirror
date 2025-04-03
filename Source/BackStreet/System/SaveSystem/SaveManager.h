@@ -6,23 +6,69 @@
 #include "GameFramework/Actor.h"
 #include "SaveManager.generated.h"
 
-class UMasterSaveGame;
-class UProgressSaveGame;
-class UInventorySaveGame;
-class UAchievementSaveGame;
 
+//======= SaveGame Data =========================
+USTRUCT(BlueprintType)
+struct FProgressSaveData
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bIsTutorialDone;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bIsInGame;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FChapterInfo ChapterInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FStageInfo StageInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FCharacterGameplayInfo CharacterInfo;
+};
+
+USTRUCT(BlueprintType)
+struct FAchievementSaveData
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 KillCount;
+};	
+
+USTRUCT(BlueprintType)
+struct FInventorySaveData
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 GenesiumCount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 FusionCellCount;
+
+};
+
+
+//======== SaveGame Class =========================
 UCLASS()
 class BACKSTREET_API ASaveManager : public AActor
 {
 	GENERATED_BODY()
 
+
 public:
 	ASaveManager();
-
+	
+//======= Basic ======================================
 protected:
 	virtual void BeginPlay() override;
 
-public:
 	// 저장 호출
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void SaveGameData();
@@ -31,6 +77,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void LoadGameData();
 
+//======= 메인 세이브/로드 함수 =========================
+public: 
 	// 내부 분리 저장 함수
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void SaveProgress();
@@ -54,27 +102,21 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Save")
 		int32 UserIndex = 0;
 
-private:
-	UPROPERTY()
-		class UProgressSaveGame* CachedMasterSave;
-	
+//======= 주요 프로퍼티================================
+private:	
 	// 로딩 여부 플래그
 	bool bIsLoaded = false;
-	/*
-	// 내부 SaveGame 객체 캐시
-	UPROPERTY()
-	UProgressSaveGame* ProgressData;
-
-	UPROPERTY()
-	UInventorySaveGame* InventoryData;
-
-	UPROPERTY()
-	UAchievementSaveGame* AchievementData;
-	*/
 
 	// SaveGame이 존재하는지 확인
 	bool DoesSaveExist() const;
 
 	// SaveGame 생성
 	void CreateNewSaveGame();
+
+
+//======= Ref ======================================
+private:
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+	TWeakObjectPtr<class ANewChapterManagerBase> ChapterManagerRef;
+	TWeakObjectPtr<class AMainCharacterBase> PlayerCharacterRef;
 };

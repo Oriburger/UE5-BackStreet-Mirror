@@ -126,6 +126,13 @@ void UStageManagerComponent::RegisterActorList(TArray<AActor*> TargetActorList)
 	}
 }
 
+void UStageManagerComponent::OverwriteStageInfo(FChapterInfo NewChapterInfo, FStageInfo NewStageInfo)
+{
+	CurrentChapterInfo = NewChapterInfo;
+	CurrentStageInfo = NewStageInfo;
+	
+}
+
 void UStageManagerComponent::AddLoadingScreen()
 {
 	UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);

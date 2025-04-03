@@ -57,6 +57,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void MoveStage(FVector2D direction);
 
+	UFUNCTION(BlueprintCallable)
+		void OverwriteChapterInfo(FChapterInfo NewChapterInfo, FStageInfo NewStageInfo);
+
 protected:
 	//Init chapter using data table 
 	//It must be called before "StartChapter"
