@@ -68,9 +68,9 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	TArray<TSoftObjectPtr<UWorld>> newWorldAssetList = CurrentChapterInfo.GetWorldList(NewStageInfo.StageType);
 	checkf(!newWorldAssetList.IsEmpty(), TEXT("UStageManagerComponent::InitStage - newWorldAssetList가 지정되어있지않습니다."));
 
-	//Load new level
-	UE_LOG(LogStage, Warning, TEXT("@@@@@@@ Tuto : %d, level valid : %d"), (int32)ChapterManagerRef.Get()->GetTutorialCompletion(), (int32)CurrentChapterInfo.TutorialLevel.IsNull());
-	if (NewStageInfo.StageType == EStageCategoryInfo::E_Entry && !ChapterManagerRef.Get()->GetTutorialCompletion()
+	// Load new level
+	//	UE_LOG(LogStage, Warning, TEXT("@@@@@@@ Tuto : %d, level valid : %d"), (int32)ChapterManagerRef.Get()->GetTutorialCompletion(), (int32)CurrentChapterInfo.TutorialLevel.IsNull());
+	if (NewStageInfo.StageType == EStageCategoryInfo::E_Entry // && !ChapterManagerRef.Get()->GetTutorialCompletion()
 		&& !CurrentChapterInfo.TutorialLevel.IsNull())
 	{
 		UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::InitStage - Tutorial level will be activated"));
@@ -632,10 +632,10 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 		//Stage Reward
 		GrantStageRewards();
 
-		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry && !ChapterManagerRef.Get()->GetTutorialCompletion())
+		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry) //&& !ChapterManagerRef.Get()->GetTutorialCompletion())
 		{
 			UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::FinishStage - Tutorial level will be activated"));
-			ChapterManagerRef.Get()->SetTutorialCompletion(true);
+			//ChapterManagerRef.Get()->SetTutorialCompletion(true);
 		}
 
 	}

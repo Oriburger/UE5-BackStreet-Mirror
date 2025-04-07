@@ -39,6 +39,10 @@ void ABackStreetGameModeBase::InitialzeGame()
 	if (!IsValid(ChapterManagerRef))
 	{
 		ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
+		if (IsValid(SaveManagerRef))
+		{
+			SaveManagerRef->Initialize();
+		}
 	}
 }
 
@@ -49,6 +53,11 @@ void ABackStreetGameModeBase::StartGame(int32 ChapterID)
 	if (IsValid(ChapterManagerRef))
 	{
 		ChapterManagerRef->StartChapter(ChapterID);
+		SpawnAndInitializeSaveManager();
+		if (IsValid(SaveManagerRef))
+		{
+			SaveManagerRef->Initialize();
+		}
 	}
 }
 
@@ -148,7 +157,7 @@ void ABackStreetGameModeBase::SpawnAndInitializeSaveManager()
 	if (SaveManagerRef != nullptr)	return; // 이미 존재하면 스폰하지 않음
 	if (!SaveManagerClassRef)
 	{
-		UE_LOG(LogSaveSystem, Error, TEXT("SaveManagerClassRef가 설정되지 않았습니다!"));
+		UE_LOG(LogSaveSystem, Error, TEXT("ABackStreetGameModeBase::SpawnAndInitializeSaveManager() - SaveManagerClassRef is not valid"));
 		return;
 	}
 
@@ -165,6 +174,7 @@ void ABackStreetGameModeBase::SpawnAndInitializeSaveManager()
 		if (SaveManagerRef)
 		{
 			SaveManagerRef->SetOwner(this);
+			SaveManagerRef->Initialize();
 		}
 	}
 }

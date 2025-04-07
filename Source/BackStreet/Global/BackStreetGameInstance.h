@@ -16,45 +16,39 @@ class BACKSTREET_API UBackStreetGameInstance : public UGameInstance
 	
 public:
 	virtual void Init() override;
+	
+	//======== SaveGame Data =========================
 
-//------ 게임 저장 -------------------
 public:
-	UFUNCTION()
-		void SaveGameData();
-
-	UFUNCTION()
-		void LoadGameData();
-
-	// 튜토리얼 진행 여부 체크
 	UFUNCTION(BlueprintCallable)
-		void SetTutorialCompletion(bool bCompleted);
+		void SaveGameData(FProgressSaveData NewProgressData, FAchievementSaveData NewAchievementData, FInventorySaveData NewInventoryData);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetTutorialCompletion();
+		void GetSaveGameData(FProgressSaveData& OutProgressData, FAchievementSaveData& OutAchievementData, FInventorySaveData& OutInventoryData);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		void GetProgressSaveData(FProgressSaveData& OutProgressData) { OutProgressData = ProgressSaveData; }
 
-	UFUNCTION(BlueprintCallable)
-		void SetFusionCellCount(int32 NewCount);
-	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetFusionCellCount();
-	
-	UFUNCTION(BlueprintCallable)
-		void SetGenesiumCount(int32 NewCount);
-	
+		void GetAchievementSaveData(FAchievementSaveData& OutAchievementData) { OutAchievementData = AchievementSaveData; }
+
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetGenesiumCount();
+		void GetInventorySaveData(FInventorySaveData& OutInventoryData) { OutInventoryData = InventorySaveData; }
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Save")
+		FProgressSaveData ProgressSaveData;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Save")
+		FAchievementSaveData AchievementSaveData;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Save")
+		FInventorySaveData InventorySaveData;
+	
 
 //------ PROPERTY ---------------------
 private:
-	UPROPERTY()
-		class UGameProgressManager* GameProgressManager;
-	
-	/*
-    // 내부 데이터
-    class UProgressSaveGame* ProgressData;
-
-    // 슬롯 이름 및 인덱스
-    const FString ProgressSlot = TEXT("GameProgressSlot");
-    int32 UserIndex = 0;
-	*/
+	// 레벨 전환 이벤트 핸들러
+	void OnPreLoadMap(const FString& MapName);
+	void OnPostLoadMap(UWorld* LoadedWorld);
 };

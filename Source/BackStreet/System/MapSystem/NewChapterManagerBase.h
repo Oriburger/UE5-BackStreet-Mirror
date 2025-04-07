@@ -117,6 +117,8 @@ private:
 
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
+	TWeakObjectPtr<class UBackStreetGameInstance> GameInstanceRef;
+
 	TWeakObjectPtr<class AMainCharacterBase> PlayerRef;
 
 	bool bIsChapterFinished = false;

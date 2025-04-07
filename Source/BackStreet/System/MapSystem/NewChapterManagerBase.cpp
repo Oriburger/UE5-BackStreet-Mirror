@@ -28,6 +28,7 @@ void ANewChapterManagerBase::BeginPlay()
 
 	StageManagerComponent->OnStageFinished.AddDynamic(this, &ANewChapterManagerBase::OnStageFinished);
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
+	GameInstanceRef = Cast<UBackStreetGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
 
 void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
@@ -219,7 +220,10 @@ void ANewChapterManagerBase::SetTutorialCompletion(bool bCompleted)
 	UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
 	if (gameInstance)
 	{
-		gameInstance->SetTutorialCompletion(bCompleted);
+		// 게임 인스턴스의 ProgressSaveData에 튜토리얼 완료 상태 저장
+		FProgressSaveData progressSaveData;
+		gameInstance->GetProgressSaveData(progressSaveData);
+		progressSaveData.bIsTutorialDone = bCompleted;
 		return;
 	}
 	UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::SetTutorialCompletion(%d) - game instance is not valid"), (int32)bCompleted);
@@ -230,7 +234,10 @@ bool ANewChapterManagerBase::GetTutorialCompletion()
 	UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
 	if (gameInstance)
 	{
-		return gameInstance->GetTutorialCompletion();
+		// 게임 인스턴스의 ProgressSaveData에 튜토리얼 완료 상태 저장
+		FProgressSaveData progressSaveData;
+		gameInstance->GetProgressSaveData(progressSaveData);
+		return progressSaveData.bIsTutorialDone;
 	}
 	UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::GetTutorialCompletion() - game instance is not valid"));
 	return false;

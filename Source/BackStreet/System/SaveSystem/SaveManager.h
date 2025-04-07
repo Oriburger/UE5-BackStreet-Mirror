@@ -29,6 +29,10 @@ protected:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void LoadGameData();
 
+public:
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+		void Initialize();
+
 //======= 메인 세이브/로드 함수 =========================
 public: 
 	// 내부 분리 저장 함수
@@ -54,7 +58,33 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Save")
 		int32 UserIndex = 0;
 
+protected:
+	UFUNCTION(BlueprintNativeEvent)
+		void OnPreLoadMap(const FString& MapName);
+
+	UFUNCTION(BlueprintNativeEvent)
+		void OnPostLoadMap(UWorld* LoadedWorld);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void FetchProgressData();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void FetchAchievementData();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void FetchInventoryData();
+
 //======= 주요 프로퍼티================================
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Save")
+		FProgressSaveData ProgressSaveData;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Save")
+		FAchievementSaveData AchievementSaveData;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Save")
+		FInventorySaveData InventorySaveData;
+
 private:	
 	// 로딩 여부 플래그
 	bool bIsLoaded = false;
@@ -65,10 +95,10 @@ private:
 	// SaveGame 생성
 	void CreateNewSaveGame();
 
-
 //======= Ref ======================================
 private:
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 	TWeakObjectPtr<class ANewChapterManagerBase> ChapterManagerRef;
+	TWeakObjectPtr<class UBackStreetGameInstance> GameInstanceRef;
 	TWeakObjectPtr<class AMainCharacterBase> PlayerCharacterRef;
 };
