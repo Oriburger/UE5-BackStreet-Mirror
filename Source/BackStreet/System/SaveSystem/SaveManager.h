@@ -7,54 +7,6 @@
 #include "SaveManager.generated.h"
 
 
-//======= SaveGame Data =========================
-USTRUCT(BlueprintType)
-struct FProgressSaveData
-{
-	GENERATED_BODY()
-
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool bIsTutorialDone;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool bIsInGame;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FChapterInfo ChapterInfo;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FStageInfo StageInfo;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FCharacterGameplayInfo CharacterInfo;
-};
-
-USTRUCT(BlueprintType)
-struct FAchievementSaveData
-{
-	GENERATED_BODY()
-
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int32 KillCount;
-};	
-
-USTRUCT(BlueprintType)
-struct FInventorySaveData
-{
-	GENERATED_BODY()
-
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int32 GenesiumCount;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int32 FusionCellCount;
-
-};
-
-
 //======== SaveGame Class =========================
 UCLASS()
 class BACKSTREET_API ASaveManager : public AActor

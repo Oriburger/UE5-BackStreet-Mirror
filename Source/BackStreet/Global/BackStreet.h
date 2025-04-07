@@ -27,6 +27,7 @@
 #include "../System/SkillSystem/Struct/SkillInfoStruct.h"
 #include "../System/CraftingSystem/Struct/CraftingInfoStruct.h"
 #include "../System/AssetSystem/Struct/AssetInfoStruct.h"
+#include "../System/SaveSystem/Struct/SaveDataStruct.h"
 
 
 /* ----- Plugin ------------ */
