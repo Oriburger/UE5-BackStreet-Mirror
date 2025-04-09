@@ -181,7 +181,7 @@ public:
 	UFUNCTION()
 		void StartStage();
 
-	//not working yet
+	//Finish current stage
 	UFUNCTION(BlueprintCallable)
 		void FinishStage(bool bStageClear);
 

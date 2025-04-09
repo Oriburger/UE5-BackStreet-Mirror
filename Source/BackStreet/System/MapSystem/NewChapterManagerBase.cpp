@@ -61,6 +61,31 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 	}
 }
 
+void ANewChapterManagerBase::ContinueChapter(bool bLoadResult)
+{
+	if (!bLoadResult)
+	{
+		UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::ContinueChapter, bLoadResult is false"));
+		return;
+	}
+	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::ContinueChapter(%d)"), CurrentChapterInfo.ChapterID);
+	
+	//init chapter with generate stage info
+	
+	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
+
+	//init the first stage and start game
+	if (CurrentChapterInfo.StageInfoList.IsValidIndex(0))
+	{
+		int32 stageIdx = StageGeneratorComponent->GetStageIdx(CurrentChapterInfo.CurrentStageCoordinate);
+		StageManagerComponent->InitStage(CurrentChapterInfo.StageInfoList[stageIdx]);
+	}
+	else
+	{
+		UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::ContinueChapter, Invalid Stage Data %d"), CurrentChapterInfo.StageInfoList.Num());
+	}
+}
+
 void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 {
 	//Set state variable
@@ -101,7 +126,9 @@ void ANewChapterManagerBase::MoveStage(FVector2D direction)
 
 void ANewChapterManagerBase::OverwriteChapterInfo(FChapterInfo NewChapterInfo, FStageInfo NewStageInfo)
 {
+	UE_LOG(LogSaveSystem, Log, TEXT("ANewChapterManagerBase::OverwriteChapterInfo - ChapterID : %d"), NewChapterInfo.ChapterID);
 	CurrentChapterInfo = NewChapterInfo;
+	StageGeneratorComponent->InitGenerator(CurrentChapterInfo);
 	StageManagerComponent->OverwriteStageInfo(NewChapterInfo, NewStageInfo);
 	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
 }
@@ -222,7 +249,7 @@ void ANewChapterManagerBase::SetTutorialCompletion(bool bCompleted)
 	{
 		// 게임 인스턴스의 ProgressSaveData에 튜토리얼 완료 상태 저장
 		FProgressSaveData progressSaveData;
-		gameInstance->GetProgressSaveData(progressSaveData);
+		gameInstance->GetCachedProgressSaveData(progressSaveData);
 		progressSaveData.bIsTutorialDone = bCompleted;
 		return;
 	}
@@ -236,7 +263,7 @@ bool ANewChapterManagerBase::GetTutorialCompletion()
 	{
 		// 게임 인스턴스의 ProgressSaveData에 튜토리얼 완료 상태 저장
 		FProgressSaveData progressSaveData;
-		gameInstance->GetProgressSaveData(progressSaveData);
+		gameInstance->GetCachedProgressSaveData(progressSaveData);
 		return progressSaveData.bIsTutorialDone;
 	}
 	UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::GetTutorialCompletion() - game instance is not valid"));
@@ -254,12 +281,22 @@ void ANewChapterManagerBase::CreateGameResultWidget(bool bChapterClear)
 
 void ANewChapterManagerBase::OpenMainMenuLevel()
 {
+	if (!GamemodeRef.IsValid())
+	{
+		UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::OpenMainMenuLevel() - GamemodeRef is not valid"));
+		return;
+	}
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
-	UGameplayStatics::OpenLevel(GetWorld(), "MainMenuPersistent");
+	GamemodeRef.Get()->RequestOpenLevel("MainMenuPersistent", false);
 }
 
 void ANewChapterManagerBase::OpenNeutralZoneLevel()
 {
+	if (!GamemodeRef.IsValid())
+	{
+		UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::OpenMainMenuLevel() - GamemodeRef is not valid"));
+		return;
+	}
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
-	UGameplayStatics::OpenLevel(GetWorld(), "NeutralZonePersistent");
+	GamemodeRef.Get()->RequestOpenLevel("NeutralZonePersistent", true);
 }

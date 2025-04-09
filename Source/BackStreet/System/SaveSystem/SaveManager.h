@@ -7,6 +7,8 @@
 #include "SaveManager.generated.h"
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateGameLoadDone, bool, bIsSuccess);
+
 //======== SaveGame Class =========================
 UCLASS()
 class BACKSTREET_API ASaveManager : public AActor
@@ -16,6 +18,11 @@ class BACKSTREET_API ASaveManager : public AActor
 
 public:
 	ASaveManager();
+
+//======== Delegate ============
+public:
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateGameLoadDone OnLoadDone;
 	
 //======= Basic ======================================
 protected:
@@ -32,6 +39,13 @@ protected:
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void Initialize();
+
+	UFUNCTION(BlueprintCallable)
+		void RequestLoadGame();
+
+	// 월드 전환 시, SaveManager의 데이터가 유실되기 때문에 GameInstance로 부터 복원을 해주어야한다.
+	UFUNCTION()
+		void RestoreGameDataFromCache();
 
 //======= 메인 세이브/로드 함수 =========================
 public: 
@@ -59,12 +73,6 @@ public:
 		int32 UserIndex = 0;
 
 protected:
-	UFUNCTION(BlueprintNativeEvent)
-		void OnPreLoadMap(const FString& MapName);
-
-	UFUNCTION(BlueprintNativeEvent)
-		void OnPostLoadMap(UWorld* LoadedWorld);
-
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void FetchProgressData();
 
@@ -84,16 +92,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Save")
 		FInventorySaveData InventorySaveData;
-
-private:	
-	// 로딩 여부 플래그
-	bool bIsLoaded = false;
-
-	// SaveGame이 존재하는지 확인
-	bool DoesSaveExist() const;
-
-	// SaveGame 생성
-	void CreateNewSaveGame();
 
 //======= Ref ======================================
 private:

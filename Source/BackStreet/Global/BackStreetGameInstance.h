@@ -21,19 +21,28 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable)
-		void SaveGameData(FProgressSaveData NewProgressData, FAchievementSaveData NewAchievementData, FInventorySaveData NewInventoryData);
+		FString GetCurrentSaveSlotName() { return CurrentSaveSlotName; }
+
+	UFUNCTION(BlueprintCallable)
+		void CacheGameData(FProgressSaveData NewProgressData, FAchievementSaveData NewAchievementData, FInventorySaveData NewInventoryData);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		void GetSaveGameData(FProgressSaveData& OutProgressData, FAchievementSaveData& OutAchievementData, FInventorySaveData& OutInventoryData);
+		void GetCachedSaveGameData(FProgressSaveData& OutProgressData, FAchievementSaveData& OutAchievementData, FInventorySaveData& OutInventoryData);
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		void GetProgressSaveData(FProgressSaveData& OutProgressData) { OutProgressData = ProgressSaveData; }
+		void GetCachedProgressSaveData(FProgressSaveData& OutProgressData) { OutProgressData = ProgressSaveData; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		void GetAchievementSaveData(FAchievementSaveData& OutAchievementData) { OutAchievementData = AchievementSaveData; }
+		void GetCachedAchievementSaveData(FAchievementSaveData& OutAchievementData) { OutAchievementData = AchievementSaveData; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		void GetInventorySaveData(FInventorySaveData& OutInventoryData) { OutInventoryData = InventorySaveData; }
+		void GetCachedInventorySaveData(FInventorySaveData& OutInventoryData) { OutInventoryData = InventorySaveData; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsRequiredToLoad() { return bIsRequiredToLoad; }
+
+	UFUNCTION(BlueprintCallable)
+		void SetIsRequiredToLoad(bool bIsRequired) { bIsRequiredToLoad = bIsRequired; }
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Save")
@@ -51,4 +60,8 @@ private:
 	// 레벨 전환 이벤트 핸들러
 	void OnPreLoadMap(const FString& MapName);
 	void OnPostLoadMap(UWorld* LoadedWorld);
+
+	//Save 관련 변수
+	bool bIsRequiredToLoad = false;
+	FString CurrentSaveSlotName;
 };

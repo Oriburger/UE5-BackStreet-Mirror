@@ -17,7 +17,10 @@ ASaveManager::ASaveManager()
 void ASaveManager::BeginPlay()
 {
 	Super::BeginPlay();
+}
 
+void ASaveManager::Initialize_Implementation()
+{
 	//Ref 지정
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 	if (GamemodeRef.IsValid())
@@ -28,26 +31,22 @@ void ASaveManager::BeginPlay()
 	{
 		UE_LOG(LogSaveSystem, Error, TEXT("ASaveManager::BeginPlay - Gamemode is not valid"));
 	}
+
 	//GameInstanceRef 지정
 	GameInstanceRef = Cast<UBackStreetGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	
-	if (GameInstanceRef.IsValid())
-	{
-		FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &ASaveManager::OnPreLoadMap);
-		FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &ASaveManager::OnPostLoadMap);
-	}
-}
 
-void ASaveManager::Initialize_Implementation()
-{
 	//MainCharacterRef 지정
 	PlayerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 	//델리게이트 바인딩
-	if (ChapterManagerRef.IsValid())
+	if (ChapterManagerRef.IsValid() && IsValid(ChapterManagerRef.Get()->StageManagerComponent))
 	{
 		ChapterManagerRef.Get()->OnChapterCleared.AddDynamic(this, &ASaveManager::SaveProgress);
-		ChapterManagerRef.Get()->StageManagerComponent->OnStageCleared.AddDynamic(this, &ASaveManager::SaveProgress);
+		ChapterManagerRef.Get()->StageManagerComponent->OnStageLoadDone.AddDynamic(this, &ASaveManager::SaveProgress);
+	}
+	else
+	{
+		UE_LOG(LogSaveSystem, Error, TEXT("ASaveManager::Initialize - ChapterManagerRef is not valid"));
 	}
 }
 
@@ -97,29 +96,35 @@ void ASaveManager::LoadAchievement_Implementation()
 	UE_LOG(LogSaveSystem, Log, TEXT("ASaveManager::LoadAchievement - Called"));
 }
 
-void ASaveManager::OnPreLoadMap_Implementation(const FString& MapName)
+void ASaveManager::RequestLoadGame()
 {
-	UE_LOG(LogSaveSystem, Log, TEXT("ASaveManager::OnPreLoadMap - %s"), *MapName);
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveManager::RequestLoadGame - Called"));
 
-	if (PlayerCharacterRef.IsValid())
-	{
-		
-	}
+	//Load Game Data
+	LoadGameData();
+
+	//Set GameInstance to not load data
+	GameInstanceRef.Get()->SetIsRequiredToLoad(false);
+}
+
+void ASaveManager::RestoreGameDataFromCache()
+{
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveManager::RestoreGameData - Called"));
 	
-}
+	//Restore Game Data
+	GameInstanceRef.Get()->GetCachedSaveGameData(ProgressSaveData, AchievementSaveData, InventorySaveData);
+	ChapterManagerRef.Get()->OverwriteChapterInfo(ProgressSaveData.ChapterInfo, ProgressSaveData.StageInfo);
 
-void ASaveManager::OnPostLoadMap_Implementation(UWorld* LoadedWorld)
-{
-	UE_LOG(LogSaveSystem, Log, TEXT("ASaveManager::OnPostLoadMap - Level load done"));
-	// 레벨 전환 완료 시 처리할 로직 추가
+	//LOG
+	UE_LOG(LogSaveSystem, Log, TEXT("[Loaded Data Preview] -------------------"));
+	UE_LOG(LogSaveSystem, Log, TEXT("- ChapterID : %d"), ProgressSaveData.ChapterInfo.ChapterID);
+	UE_LOG(LogSaveSystem, Log, TEXT("- StageCoordinate: %s"), *ProgressSaveData.ChapterInfo.CurrentStageCoordinate.ToString());
+	UE_LOG(LogSaveSystem, Log, TEXT("- StageInfoList: %d"), ProgressSaveData.ChapterInfo.StageInfoList.Num());
+	UE_LOG(LogSaveSystem, Log, TEXT("- CurrentMapName : %s"), *ProgressSaveData.StageInfo.MainLevelAsset.ToString());
+
+	//Set GameInstance to not load data
+	GameInstanceRef.Get()->SetIsRequiredToLoad(false);
 	
-}
-
-bool ASaveManager::DoesSaveExist() const
-{
-	return UGameplayStatics::DoesSaveGameExist(SaveSlotName, UserIndex);
-}
-
-void ASaveManager::CreateNewSaveGame()
-{
+	//Notify Load Done
+	OnLoadDone.Broadcast(true);
 }

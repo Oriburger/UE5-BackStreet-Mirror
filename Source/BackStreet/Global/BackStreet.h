@@ -23,22 +23,20 @@
 #include "../Item/Struct/ItemInfoStruct.h"
 #include "../Item/Struct/WeaponInfoStruct.h"
 #include "../Item/Struct/ProjectileInfoStruct.h"
+#include "../System/SaveSystem/Struct/SaveDataStruct.h"
 #include "../System/MapSystem/Struct/StageInfoStruct.h"
 #include "../System/SkillSystem/Struct/SkillInfoStruct.h"
 #include "../System/CraftingSystem/Struct/CraftingInfoStruct.h"
 #include "../System/AssetSystem/Struct/AssetInfoStruct.h"
-#include "../System/SaveSystem/Struct/SaveDataStruct.h"
-
 
 /* ----- Plugin ------------ */
 #include "CommonUserWidget.h"
 
-#define MAX_CHAPTER_COUNT 1
+#define MAX_CHAPTER_COUNT 4
 #define MAX_ITEM_SPAWN 7
 #define MIN_ITEM_SPAWN 5
 #define MAX_STAGE_TYPE 5
 #define MAX_GRID_SIZE 3
-
 
 /* ----- Log --------------- */
 DECLARE_LOG_CATEGORY_EXTERN(LogAbility, Log, All);

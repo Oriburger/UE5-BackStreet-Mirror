@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/DataTable.h"
+#include "../../../Global/BackStreet.h"
 #include "SaveDataStruct.generated.h"
 
 //======= SaveGame Data =========================
@@ -24,6 +25,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FCharacterGameplayInfo CharacterInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 GenesiumCount = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 FusionCellCount = 0;
 };
 
 USTRUCT(BlueprintType)
@@ -42,10 +49,11 @@ struct FInventorySaveData
 	GENERATED_BODY()
 
 public:
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 GenesiumCount = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 FusionCellCount = 0;
-
+	
 };

@@ -29,13 +29,13 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintCallable)
-		void InitialzeGame();
-
 // ----- Gameplay Manager -------------------
 public:
 	UFUNCTION(BlueprintCallable)
 		void StartGame(int32 ChapterID);
+
+	UFUNCTION(BlueprintCallable)
+		void ContinueGame();
 
 	UFUNCTION(BlueprintCallable)
 		void FinishGame(bool bGameIsOver);
@@ -109,7 +109,7 @@ protected:
 	UPROPERTY()
 		class UCommonUserWidget* MainHUDRef;
 
-//------ 저장 매니저 ------------------------
+//------ 세이브 및 로드 관련 ------------------------
 protected:
 	// 저장 매니저 클래스 지정용 (블루프린트에서 할당 가능)
 	UPROPERTY(EditDefaultsOnly, Category = "Save")
@@ -128,6 +128,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Save")
 		FORCEINLINE ASaveManager* GetSaveManager() const { return SaveManagerRef; }
 
+	UFUNCTION(BlueprintCallable)
+		void RequestOpenLevel(FName MapName, bool bShouldLoadData, FName SaveSlotName = "");
+
 //------ 그 외 프로퍼티 ---------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -142,6 +145,8 @@ protected:
 
 	UPROPERTY()
 		class ANewChapterManagerBase* ChapterManagerRef;
+
+	TWeakObjectPtr<class UBackStreetGameInstance> GameInstanceRef;
 
 public:
 	//현재 게임 모드가 인게임인지 트랜지션인지 확인

@@ -45,6 +45,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void StartChapter(int32 NewChapterID);
 
+	//Continue current chapter
+	UFUNCTION(BlueprintCallable)
+		void ContinueChapter(bool bLoadResult);
+
 	//Finish current chapter
 	UFUNCTION(BlueprintCallable)
 		void FinishChapter(bool bChapterClear);

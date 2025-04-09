@@ -71,7 +71,7 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	// Load new level
 	//	UE_LOG(LogStage, Warning, TEXT("@@@@@@@ Tuto : %d, level valid : %d"), (int32)ChapterManagerRef.Get()->GetTutorialCompletion(), (int32)CurrentChapterInfo.TutorialLevel.IsNull());
 	if (NewStageInfo.StageType == EStageCategoryInfo::E_Entry // && !ChapterManagerRef.Get()->GetTutorialCompletion()
-		&& !CurrentChapterInfo.TutorialLevel.IsNull())
+		&& !CurrentChapterInfo.TutorialLevel.IsNull() && CurrentChapterInfo.ChapterID == 1)
 	{
 		UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::InitStage - Tutorial level will be activated"));
 		NewStageInfo.MainLevelAsset = CurrentChapterInfo.TutorialLevel;
@@ -128,9 +128,9 @@ void UStageManagerComponent::RegisterActorList(TArray<AActor*> TargetActorList)
 
 void UStageManagerComponent::OverwriteStageInfo(FChapterInfo NewChapterInfo, FStageInfo NewStageInfo)
 {
+	UE_LOG(LogSaveSystem, Log, TEXT("UStageManagerComponent::OverwriteStageInfo - Coordinate : %s"), *NewStageInfo.Coordinate.ToString());
 	CurrentChapterInfo = NewChapterInfo;
 	CurrentStageInfo = NewStageInfo;
-	
 }
 
 void UStageManagerComponent::AddLoadingScreen()
@@ -537,6 +537,7 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 			//Start stage with delay
 			UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame() : Load Done, StartStage"));
 			FTimerHandle gameStartDelayHandle;
+			
 			GetWorld()->GetTimerManager().SetTimer(gameStartDelayHandle, this, &UStageManagerComponent::StartStage, 2.0f, false);
 		}
 		else
@@ -551,8 +552,8 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 void UStageManagerComponent::StartStage()
 {
 	//Visit Check
-	if (CurrentStageInfo.bIsVisited) return; 
-	CurrentStageInfo.bIsVisited = true;
+	//if (CurrentStageInfo.bIsVisited) return;
+	//CurrentStageInfo.bIsVisited = true;
 
 	//Load End Broadcast (Safe with latent delay)
 	OnStageLoadDone.Broadcast();
@@ -590,13 +591,13 @@ void UStageManagerComponent::StartStage()
 
 		float extraTime = !PlayerRef.IsValid() ? 0.0f : PlayerRef.Get()->GetCharacterGameplayInfo().ExtraStageTime;
 		GetOwner()->GetWorldTimerManager().SetTimer(TimeAttackTimerHandle, stageOverDelegate, 1.0f, false, CurrentStageInfo.TimeLimitValue + extraTime);
-		
+
 		//UI Event
 		OnTimeAttackStageBegin.Broadcast();
 	}
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft
-			|| CurrentStageInfo.StageType == EStageCategoryInfo::E_MiniGame
-			|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Gatcha)
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_MiniGame
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Gatcha)
 	{
 		FinishStage(true);
 	}
@@ -789,7 +790,6 @@ bool UStageManagerComponent::CheckStageClearStatus()
 		bool bIsTimeLeft = GetRemainingTime() > 0.0f;
 		return RemainingEnemyCount == 0 && bIsTimeLeft;
 	}
-
 	return false;
 }
 
