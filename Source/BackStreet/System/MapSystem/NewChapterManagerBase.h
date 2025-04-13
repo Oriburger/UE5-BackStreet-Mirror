@@ -47,7 +47,7 @@ public:
 
 	//Continue current chapter
 	UFUNCTION(BlueprintCallable)
-		void ContinueChapter(bool bLoadResult);
+		void ContinueChapter();
 
 	//Finish current chapter
 	UFUNCTION(BlueprintCallable)

@@ -16,12 +16,32 @@ class BACKSTREET_API UBackStreetGameInstance : public UGameInstance
 	
 public:
 	virtual void Init() override;
+
+//======== SaveSlot Manager=========================
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Save")
+		TSubclassOf<class ASaveSlotManager> SaveSlotManagerClassRef;
 	
-	//======== SaveGame Data =========================
+	UFUNCTION()
+		bool TrySpawnAndInitializeSaveSlotManager();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class ASaveSlotManager* GetSafeSaveSlotManager();
+
+private:
+	class ASaveSlotManager* SaveSlotManagerRef;
+
+//======== Handling SaveSlot =========================
+protected:
+	//UFUNCTION()
+		//void OnSlotCreated(const FString& NewSlotName);
+
+	//UFUNCTION()
+		//void OnSlotLoaded(const FString& SlotName, bool bIsSuccess);
 
 public:
-	UFUNCTION(BlueprintCallable)
-		FString GetCurrentSaveSlotName() { return CurrentSaveSlotName; }
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FORCEINLINE FString GetCurrentSaveSlotName() const { return CurrentSaveSlotName; }
 
 	UFUNCTION(BlueprintCallable)
 		void CacheGameData(FProgressSaveData NewProgressData, FAchievementSaveData NewAchievementData, FInventorySaveData NewInventoryData);
@@ -38,30 +58,17 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		void GetCachedInventorySaveData(FInventorySaveData& OutInventoryData) { OutInventoryData = InventorySaveData; }
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsRequiredToLoad() { return bIsRequiredToLoad; }
-
-	UFUNCTION(BlueprintCallable)
-		void SetIsRequiredToLoad(bool bIsRequired) { bIsRequiredToLoad = bIsRequired; }
-
+//======== SaveGame Data =========================
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Save")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
 		FProgressSaveData ProgressSaveData;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Save")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
 		FAchievementSaveData AchievementSaveData;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Save")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
 		FInventorySaveData InventorySaveData;
 	
-
-//------ PROPERTY ---------------------
-private:
-	// 레벨 전환 이벤트 핸들러
-	void OnPreLoadMap(const FString& MapName);
-	void OnPostLoadMap(UWorld* LoadedWorld);
-
-	//Save 관련 변수
-	bool bIsRequiredToLoad = false;
-	FString CurrentSaveSlotName;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
+		FString CurrentSaveSlotName;
 };

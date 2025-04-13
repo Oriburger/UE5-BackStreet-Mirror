@@ -35,9 +35,6 @@ void ABackStreetGameModeBase::BeginPlay()
 	
 	//----- GameInstance 초기화 -------
 	GameInstanceRef = Cast<UBackStreetGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-
-	//----- SaveManager 초기화 -------
-	SpawnAndInitializeSaveManager();
 }
 
 void ABackStreetGameModeBase::StartGame(int32 ChapterID)
@@ -47,14 +44,6 @@ void ABackStreetGameModeBase::StartGame(int32 ChapterID)
 	if (IsValid(ChapterManagerRef))
 	{
 		ChapterManagerRef->StartChapter(ChapterID);
-		if (!IsValid(SaveManagerRef))
-		{
-			SpawnAndInitializeSaveManager();
-		}
-		else
-		{
-			SaveManagerRef->Initialize();
-		}
 	}
 	else
 	{
@@ -67,15 +56,7 @@ void ABackStreetGameModeBase::ContinueGame()
 	UE_LOG(LogStage, Warning, TEXT("ABackStreetGameModeBase::ContinueGame()"));
 	if (IsValid(ChapterManagerRef))
 	{
-		if (!IsValid(SaveManagerRef))
-		{
-			SpawnAndInitializeSaveManager();
-		}
-		else
-		{
-			SaveManagerRef->Initialize();
-		}
-		SaveManagerRef->OnLoadDone.AddDynamic(ChapterManagerRef, &ANewChapterManagerBase::ContinueChapter);
+		ChapterManagerRef->ContinueChapter();
 	}
 	else
 	{
@@ -170,33 +151,6 @@ void ABackStreetGameModeBase::CreateDefaultHUD()
 		if (Cast<UCommonActivatableWidget>(combatWidgetRef))
 		{
 			//Cast<UCommonActivatableWidget>(combatWidgetRef)->ActivateWidget();
-		}
-	}
-}
-
-void ABackStreetGameModeBase::SpawnAndInitializeSaveManager()
-{
-	if (SaveManagerRef != nullptr)	return; // 이미 존재하면 스폰하지 않음
-	if (!SaveManagerClassRef)
-	{
-		UE_LOG(LogSaveSystem, Error, TEXT("ABackStreetGameModeBase::SpawnAndInitializeSaveManager() - SaveManagerClassRef is not valid"));
-		return;
-	}
-
-	// 월드에 스폰
-	if (GetWorld())
-	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = this;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-		SaveManagerRef = GetWorld()->SpawnActor<ASaveManager>(SaveManagerClassRef, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
-
-		if (SaveManagerRef)
-		{
-			UE_LOG(LogSaveSystem, Log, TEXT("ABackStreetGameModeBase::SpawnAndInitializeSaveManager() - SaveManager spawned successfully"));
-			SaveManagerRef->SetOwner(this);
-			SaveManagerRef->Initialize();
 		}
 	}
 }

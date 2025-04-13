@@ -110,24 +110,7 @@ protected:
 		class UCommonUserWidget* MainHUDRef;
 
 //------ 세이브 및 로드 관련 ------------------------
-protected:
-	// 저장 매니저 클래스 지정용 (블루프린트에서 할당 가능)
-	UPROPERTY(EditDefaultsOnly, Category = "Save")
-		TSubclassOf<class ASaveManager> SaveManagerClassRef;
-
-	// 실제로 생성된 SaveManager 인스턴스 참조
-	UPROPERTY()
-		class ASaveManager* SaveManagerRef;
-
 public:
-	// SaveManager 스폰 함수
-	UFUNCTION(BlueprintCallable, Category = "Save")
-		void SpawnAndInitializeSaveManager();
-
-	// SaveManager 접근 함수
-	UFUNCTION(BlueprintCallable, Category = "Save")
-		FORCEINLINE ASaveManager* GetSaveManager() const { return SaveManagerRef; }
-
 	UFUNCTION(BlueprintCallable)
 		void RequestOpenLevel(FName MapName, bool bShouldLoadData, FName SaveSlotName = "");
 

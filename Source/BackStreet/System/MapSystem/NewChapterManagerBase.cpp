@@ -61,17 +61,11 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 	}
 }
 
-void ANewChapterManagerBase::ContinueChapter(bool bLoadResult)
+void ANewChapterManagerBase::ContinueChapter()
 {
-	if (!bLoadResult)
-	{
-		UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::ContinueChapter, bLoadResult is false"));
-		return;
-	}
 	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::ContinueChapter(%d)"), CurrentChapterInfo.ChapterID);
 	
 	//init chapter with generate stage info
-	
 	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
 
 	//init the first stage and start game

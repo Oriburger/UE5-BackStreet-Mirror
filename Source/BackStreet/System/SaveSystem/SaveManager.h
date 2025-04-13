@@ -7,8 +7,6 @@
 #include "SaveManager.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateGameLoadDone, bool, bIsSuccess);
-
 //======== SaveGame Class =========================
 UCLASS()
 class BACKSTREET_API ASaveManager : public AActor
@@ -19,10 +17,6 @@ class BACKSTREET_API ASaveManager : public AActor
 public:
 	ASaveManager();
 
-//======== Delegate ============
-public:
-	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateGameLoadDone OnLoadDone;
 	
 //======= Basic ======================================
 protected:
