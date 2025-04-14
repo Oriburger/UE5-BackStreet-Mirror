@@ -12,10 +12,37 @@
 void UBackStreetGameInstance::Init()
 {
 	Super::Init();
+
+	// Initialize World Event
+	FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &UBackStreetGameInstance::OnPreLoadMap);
+	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UBackStreetGameInstance::OnPostLoadMap);
+}
+
+void UBackStreetGameInstance::OnPreLoadMap(const FString& MapName)
+{
+	// 레벨 전환 시작 시 기존 SaveSlotManager 제거
+	SaveSlotManagerRef = nullptr;
+
+	// 인게임인지 여부 체크
+	bIsInGame = MapName.Contains(TEXT("Chapter"));
+}
+
+void UBackStreetGameInstance::OnPostLoadMap(UWorld* LoadedWorld)
+{
+	bool result = TrySpawnAndInitializeSaveSlotManager();
+	if (result)
+	{
+		UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::OnPostLoadMap - SaveSlotManager spawned successfully"));
+	}
+	else
+	{
+		UE_LOG(LogSaveSystem, Error, TEXT("UBackStreetGameInstance::OnPostLoadMap - Failed to spawn SaveSlotManager"));
+	}
 }
 
 bool UBackStreetGameInstance::TrySpawnAndInitializeSaveSlotManager()
 {
+	UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::TrySpawnAndInitializeSaveSlotManager - Attempting to spawn SaveSlotManager"));
 	if (SaveSlotManagerClassRef)
 	{
 		if (!SaveSlotManagerRef)
@@ -53,6 +80,17 @@ ASaveSlotManager* UBackStreetGameInstance::GetSafeSaveSlotManager()
 	}
 	UE_LOG(LogSaveSystem, Error, TEXT("UBackStreetGameInstance::GetSafeSaveSlotManager - SaveSlotManager is not valid"));
 	return nullptr;
+}
+
+void UBackStreetGameInstance::SetCurrentSaveSlotName(FString NewSaveSlotName)
+{
+	if (NewSaveSlotName.IsEmpty())
+	{
+		UE_LOG(LogSaveSystem, Error, TEXT("UBackStreetGameInstance::SetCurrentSaveSlotName - NewSaveSlotName is empty"));
+		return;
+	}
+	CurrentSaveSlotName = NewSaveSlotName;
+	UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::SetCurrentSaveSlotName - SaveSlotName: %s"), *CurrentSaveSlotName);
 }
 
 void UBackStreetGameInstance::CacheGameData(FProgressSaveData NewProgressData, FAchievementSaveData NewAchievementData, FInventorySaveData NewInventoryData)

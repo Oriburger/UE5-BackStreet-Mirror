@@ -19,6 +19,14 @@ public:
 
 //======== SaveSlot Manager=========================
 protected:
+	//기존 세이브 매니저 제거
+	UFUNCTION()
+		void OnPreLoadMap(const FString& MapName);
+
+	//세이브 매니저를 스폰하기 위한 이벤트
+	UFUNCTION()
+		void OnPostLoadMap(UWorld* LoadedWorld);
+
 	UPROPERTY(EditDefaultsOnly, Category = "Save")
 		TSubclassOf<class ASaveSlotManager> SaveSlotManagerClassRef;
 	
@@ -42,6 +50,12 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FORCEINLINE FString GetCurrentSaveSlotName() const { return CurrentSaveSlotName; }
+
+	UFUNCTION(BlueprintCallable)
+		void SetCurrentSaveSlotName(FString NewSaveSlotName);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FORCEINLINE bool GetIsInGame() const { return bIsInGame; }
 
 	UFUNCTION(BlueprintCallable)
 		void CacheGameData(FProgressSaveData NewProgressData, FAchievementSaveData NewAchievementData, FInventorySaveData NewInventoryData);
@@ -71,4 +85,7 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
 		FString CurrentSaveSlotName;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
+		bool bIsInGame = false;
 };

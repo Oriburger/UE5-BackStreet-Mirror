@@ -16,86 +16,77 @@ ASaveSlotManager::ASaveSlotManager()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void ASaveSlotManager::OnPreLoadMap(const FString& MapName)
-{
-	/*
-	UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::OnPreLoadMap - %s"), *MapName);
-	
-	// 레벨 전환 시작 시 처리할 로직 추가
-   // URL 파라미터 파싱
-    FString newSaveSlotName = UGameplayStatics::ParseOption(MapName, TEXT("SaveSlot"));
-    FString shouldLoad = UGameplayStatics::ParseOption(MapName, TEXT("ShouldLoad"));
-
-    // 로그 출력 (디버깅 용도)
-    UE_LOG(LogSaveSystem, Warning, TEXT("UBackStreetGameInstance::OnPreLoadMap - SaveSlot: %s, ShouldLoadData: %s"),
-        *newSaveSlotName, bIsRequiredToLoad ? TEXT("True") : TEXT("False"));
-	
-	CurrentSaveSlotName = newSaveSlotName;
-	*/
-}
-
-void ASaveSlotManager::OnPostLoadMap(UWorld* LoadedWorld)
-{
-	/*
-	// 레벨 전환 완료 시 처리할 로직 추가
-	if (bIsRequiredToLoad)
-	{
-		bIsRequiredToLoad = false;
-
-		// 게임 진행 데이터가 로드된 후에 필요한 작업 수행
-		// 월드 전환 시, SaveManager의 데이터가 유실되기 때문에 복원을 해주어야한다.
-		ASaveManager* saveManager = GetWorld()->GetAuthGameMode<ABackStreetGameModeBase>()->GetSaveManager();
-		if (saveManager)
-		{
-			saveManager->RestoreGameDataFromCache();
-		}
-		else
-		{
-			UE_LOG(LogSaveSystem, Error, TEXT("UBackStreetGameInstance::OnPostLoadMap - SaveManager is not valid"));
-		}
-	}
-*/
-}
-
 void ASaveSlotManager::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::BeginPlay - BeginPlay"));
+
+	// Initialize GameInstance reference
+	GameInstanceRef = Cast<UBackStreetGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
 	// Init variables
 	DefferedInitializeCount = 0;
 
 	// Initialize references
-	InitializeReference();
+	InitializeReference(GameInstanceRef->GetIsInGame());
 
 	// Bind to level load events
 	FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &ASaveSlotManager::OnPreLoadMap);
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &ASaveSlotManager::OnPostLoadMap);
 }
 
-void ASaveSlotManager::InitializeReference()
+void ASaveSlotManager::InitializeReference(bool bIsInGame)
 {
-	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::InitializeReference - Initialize references"));
+
+	// Initialize references
 	GameInstanceRef = Cast<UBackStreetGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (GameInstanceRef.IsValid())
 	{
 		GameInstanceRef->GetCachedSaveGameData(ProgressSaveData, AchievementSaveData, InventorySaveData);
 	}
-	ChapterManagerRef = Cast<ANewChapterManagerBase>(GamemodeRef->GetChapterManagerRef());
-	StageManagerRef = ChapterManagerRef->StageManagerComponent;
-	PlayerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	PlayerInventoryRef = Cast<UItemInventoryComponent>(PlayerCharacterRef->InventoryComponent);
-	PlayerWeaponRef = Cast<UWeaponComponentBase>(PlayerCharacterRef->WeaponComponent);
 
-	if (!GameInstanceRef.IsValid() || !GamemodeRef.IsValid() || !ChapterManagerRef.IsValid() || !StageManagerRef.IsValid() 
-		|| !PlayerCharacterRef.IsValid() || !PlayerInventoryRef.IsValid() || !PlayerWeaponRef.IsValid())
+	// 인게임인지 체크
+	if (bIsInGame)
 	{
-		DefferedInitializeReference();
-		return;
+		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::InitializeReference - In game mode"));
+		GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+		ChapterManagerRef = Cast<ANewChapterManagerBase>(GamemodeRef->GetChapterManagerRef());
+		StageManagerRef = ChapterManagerRef.IsValid() ? ChapterManagerRef->StageManagerComponent : nullptr;
+		PlayerCharacterRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		PlayerInventoryRef = PlayerCharacterRef.IsValid() ? PlayerCharacterRef->ItemInventory : nullptr;
+		PlayerWeaponRef = PlayerCharacterRef.IsValid() ? PlayerCharacterRef->WeaponComponent : nullptr;
+
+		if (!GameInstanceRef.IsValid() || !GamemodeRef.IsValid() || !ChapterManagerRef.IsValid() || !StageManagerRef.IsValid()
+			|| !PlayerCharacterRef.IsValid() || !PlayerInventoryRef.IsValid() || !PlayerWeaponRef.IsValid())
+		{
+			UE_LOG(LogSaveSystem, Error, TEXT("ASaveSlotManager::InitializeReference - One of the references is not valid"));
+			UE_LOG(LogSaveSystem, Error, TEXT("[GameInstanceRef : %d], [GamemodeRef : %d], [ChapterManagerRef : %d], [StageManagerRef : %d], [PlayerCharacterRef : %d], [PlayerInventoryRef : %d], [PlayerWeaponRef : %d]"),
+				GameInstanceRef.IsValid(), GamemodeRef.IsValid(), ChapterManagerRef.IsValid(), StageManagerRef.IsValid(), PlayerCharacterRef.IsValid(), PlayerInventoryRef.IsValid(), PlayerWeaponRef.IsValid());
+			DefferedInitializeReference();
+			return;
+		}
+
+		// Bind to events
+		if (ChapterManagerRef.IsValid() && StageManagerRef.IsValid())
+		{
+			UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::InitializeReference - Bind to events"));
+			ChapterManagerRef->OnChapterCleared.AddDynamic(this, &ASaveSlotManager::SaveGameData);
+			StageManagerRef->OnStageLoadDone.AddDynamic(this, &ASaveSlotManager::SaveGameData);
+		}
+	}
+	else
+	{
+		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::InitializeReference - Not in game mode"));
 	}
 }
 
 void ASaveSlotManager::DefferedInitializeReference()
 {
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::DefferedInitializeReference - DefferedInitializeCount: %d"), DefferedInitializeCount);
+
+	// Check if the references are valid
 	DefferedInitializeCount++;
 	checkf(DefferedInitializeCount < 10, TEXT("ASaveSlotManager::DefferedInitializeReference - DefferedInitializeCount is overed!"));
 
@@ -104,8 +95,30 @@ void ASaveSlotManager::DefferedInitializeReference()
 		GetWorld()->GetTimerManager().ClearTimer(DefferedInitializeTimerHandle);
 	}
 
-	// Defered Initialize
-	GetWorld()->GetTimerManager().SetTimer(DefferedInitializeTimerHandle, this, &ASaveSlotManager::DefferedInitializeReference, DefferedInitializeTime, false);
+    // Defered Initialize using Timer Delegate
+    FTimerDelegate timerDelegate;
+	timerDelegate.BindUObject(this, &ASaveSlotManager::InitializeReference, GameInstanceRef->GetIsInGame());
+    GetWorld()->GetTimerManager().SetTimer(DefferedInitializeTimerHandle, timerDelegate, DefferedInitializeTime, false);
+}
+
+void ASaveSlotManager::SaveGameData_Implementation()
+{
+
+}
+
+FString ASaveSlotManager::GetSaveSlotName() const
+{
+	return GameInstanceRef.IsValid() ? GameInstanceRef->GetCurrentSaveSlotName() : "";
+}
+
+void ASaveSlotManager::SetSaveSlotName(FString NewSaveSlotName)
+{
+	if (!GameInstanceRef.IsValid())
+	{
+		UE_LOG(LogSaveSystem, Error, TEXT("ASaveSlotManager::SetSaveSlotName - GameInstance is not valid"));
+		return;
+	}
+	GameInstanceRef->SetCurrentSaveSlotName(NewSaveSlotName);
 }
 
 void ASaveSlotManager::FetchCachedData()

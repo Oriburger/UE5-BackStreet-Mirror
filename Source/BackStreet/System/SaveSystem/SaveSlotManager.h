@@ -24,10 +24,10 @@ public:
 		FDelegateGameLoadDone OnLoadDone;
 
 protected:
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent)
 		void OnPreLoadMap(const FString& MapName);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent)
 		void OnPostLoadMap(UWorld* LoadedWorld);
 
 	
@@ -36,16 +36,16 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
-		void InitializeReference();
+		void InitializeReference(bool bIsInGame = true);
 
 	UFUNCTION()
 		void DefferedInitializeReference();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
-		float DefferedInitializeTime = 0.25f;
+		float DefferedInitializeTime = 5.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
-		int32 MaxDefferedInitializeCount = 5;
+		int32 MaxDefferedInitializeCount = 100;
 
 private:
 	int32 DefferedInitializeCount = 0;
@@ -55,20 +55,24 @@ private:
 
 //======= SaveGame Data ========================
 public:
-	//UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+		void SaveGameData();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FORCEINLINE bool GetIsInitialized() const { return bIsInitialized; }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FORCEINLINE FString GetSaveSlotName() const;
+
+	UFUNCTION(BlueprintCallable)
+		void SetSaveSlotName(FString NewSaveSlotName);
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Save")
-	FString SaveSlotName;
+		bool bIsRequiredToLoad = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Save")
-	bool bIsRequiredToLoad = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Save")
-	bool bIsInitialized = false;
+		bool bIsInitialized = false;
 
 //======= Cache SaveGame Data ========================
 public:
