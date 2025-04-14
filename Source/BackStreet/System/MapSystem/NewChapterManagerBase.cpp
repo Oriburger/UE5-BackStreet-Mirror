@@ -36,7 +36,6 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::StartChapter(%d)"), NewChapterID);
 
 	//init chapter with generate stage infos
-	bIsInitialized = true;
 	CurrentChapterInfo.bIsChapterInitialized = true;
 	InitChapter(NewChapterID);
 	CurrentChapterInfo.CurrentStageCoordinate = FVector2D(0.0f);
