@@ -23,6 +23,9 @@ public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateGameLoadDone OnLoadDone;
 
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateGameLoadDone OnInitializeDone;
+
 protected:
 	UFUNCTION(BlueprintImplementableEvent)
 		void OnPreLoadMap(const FString& MapName);
@@ -32,6 +35,10 @@ protected:
 
 	
 //======= Basic ======================================
+public:
+	UFUNCTION()
+		void Initialize();	
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -75,16 +82,20 @@ protected:
 		bool bIsInitialized = false;
 
 //======= Cache SaveGame Data ========================
-public:
-    // 🔹 최초 스폰 시 Game Instance에서 Cached 데이터를 Fetch
+protected:
+	// 게임 인스턴스로부터 게임 데이터를 가져옴
+	UFUNCTION()
+		void FetchGameData();
+
+    // 최초 스폰 시 Game Instance에서 Cached 데이터를 Fetch
     UFUNCTION(BlueprintCallable, Category = "Save System")
         void FetchCachedData();
 
-    // 🔹 특정 시점에 Game Instance로 Cache 연산
+    // 특정 시점에 Game Instance로 Cache 연산
     UFUNCTION(BlueprintCallable, Category = "Save System")
         void CacheCurrentGameState();
 
-    // 🔹 Gamemode(ChapterManager, StageManager), PlayerCharacter(WeaponComponent, InventoryComponent)에 데이터 덮어씌우기
+    // Gamemode(ChapterManager, StageManager), PlayerCharacter(WeaponComponent, InventoryComponent)에 데이터 덮어씌우기
     UFUNCTION(BlueprintCallable, Category = "Save System")
         void ApplyCachedData();
 

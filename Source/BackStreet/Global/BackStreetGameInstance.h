@@ -33,11 +33,12 @@ protected:
 	UFUNCTION()
 		bool TrySpawnAndInitializeSaveSlotManager();
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class ASaveSlotManager* GetSafeSaveSlotManager();
-
 private:
 	class ASaveSlotManager* SaveSlotManagerRef;
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class ASaveSlotManager* GetSafeSaveSlotManager();
 
 //======== Handling SaveSlot =========================
 protected:
@@ -55,7 +56,7 @@ public:
 		void SetCurrentSaveSlotName(FString NewSaveSlotName);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FORCEINLINE bool GetIsInGame() const { return bIsInGame; }
+		FORCEINLINE bool GetIsInGame() const { return GetWorld() ? GetWorld()->GetMapName().Contains(TEXT("Chapter")) : false; }
 
 	UFUNCTION(BlueprintCallable)
 		void CacheGameData(FProgressSaveData NewProgressData, FAchievementSaveData NewAchievementData, FInventorySaveData NewInventoryData);

@@ -35,7 +35,7 @@ public:
 		void StartGame(int32 ChapterID);
 
 	UFUNCTION(BlueprintCallable)
-		void ContinueGame();
+		void TryContinueGame();
 
 	UFUNCTION(BlueprintCallable)
 		void FinishGame(bool bGameIsOver);
@@ -60,6 +60,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }
+
+protected:
+	UFUNCTION()
+		void OnSaveManagerLoadDone(bool bIsSuccess);
 
 // ----- Class Info ------------------------------------ 
 public:

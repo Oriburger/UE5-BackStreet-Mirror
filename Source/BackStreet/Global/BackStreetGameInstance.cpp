@@ -23,13 +23,12 @@ void UBackStreetGameInstance::OnPreLoadMap(const FString& MapName)
 	// 레벨 전환 시작 시 기존 SaveSlotManager 제거
 	SaveSlotManagerRef = nullptr;
 
-	// 인게임인지 여부 체크
-	bIsInGame = MapName.Contains(TEXT("Chapter"));
 }
 
 void UBackStreetGameInstance::OnPostLoadMap(UWorld* LoadedWorld)
 {
-	bool result = TrySpawnAndInitializeSaveSlotManager();
+	// SaveSlotManager가 유효한지 체크
+	bool result = IsValid(GetSafeSaveSlotManager());
 	if (result)
 	{
 		UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::OnPostLoadMap - SaveSlotManager spawned successfully"));
@@ -43,6 +42,8 @@ void UBackStreetGameInstance::OnPostLoadMap(UWorld* LoadedWorld)
 bool UBackStreetGameInstance::TrySpawnAndInitializeSaveSlotManager()
 {
 	UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::TrySpawnAndInitializeSaveSlotManager - Attempting to spawn SaveSlotManager"));
+
+
 	if (SaveSlotManagerClassRef)
 	{
 		if (!SaveSlotManagerRef)
@@ -51,7 +52,7 @@ bool UBackStreetGameInstance::TrySpawnAndInitializeSaveSlotManager()
 			if (SaveSlotManagerRef)
 			{
 				// SaveSlotManager 초기화
-				SaveSlotManagerRef->FetchCachedData();
+				SaveSlotManagerRef->Initialize();
 				return true;
 			}
 			else
@@ -69,7 +70,7 @@ bool UBackStreetGameInstance::TrySpawnAndInitializeSaveSlotManager()
 
 ASaveSlotManager* UBackStreetGameInstance::GetSafeSaveSlotManager()
 {
-	if (SaveSlotManagerRef)
+	if (IsValid(SaveSlotManagerRef))
 	{
 		return SaveSlotManagerRef;
 	}

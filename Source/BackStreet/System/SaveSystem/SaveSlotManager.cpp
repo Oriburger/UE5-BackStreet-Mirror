@@ -16,6 +16,20 @@ ASaveSlotManager::ASaveSlotManager()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+void ASaveSlotManager::Initialize()
+{
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::Initialize - Initialize"));
+
+	// Initialize GameInstance reference
+	GameInstanceRef = Cast<UBackStreetGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+	// Init variables
+	DefferedInitializeCount = 0;
+
+	// Initialize references
+	InitializeReference(GameInstanceRef->GetIsInGame());
+}
+
 void ASaveSlotManager::BeginPlay()
 {
 	Super::BeginPlay();
@@ -28,9 +42,6 @@ void ASaveSlotManager::BeginPlay()
 	// Init variables
 	DefferedInitializeCount = 0;
 
-	// Initialize references
-	InitializeReference(GameInstanceRef->GetIsInGame());
-
 	// Bind to level load events
 	FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &ASaveSlotManager::OnPreLoadMap);
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &ASaveSlotManager::OnPostLoadMap);
@@ -38,7 +49,7 @@ void ASaveSlotManager::BeginPlay()
 
 void ASaveSlotManager::InitializeReference(bool bIsInGame)
 {
-	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::InitializeReference - Initialize references"));
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::InitializeReference %d - Initialize references"), bIsInGame);
 
 	// Initialize references
 	GameInstanceRef = Cast<UBackStreetGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
@@ -80,6 +91,9 @@ void ASaveSlotManager::InitializeReference(bool bIsInGame)
 	{
 		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::InitializeReference - Not in game mode"));
 	}
+
+	FetchCachedData();
+	ApplyCachedData(); //SaveCount를 추가해서 NewSlot인지 보기
 }
 
 void ASaveSlotManager::DefferedInitializeReference()
@@ -103,7 +117,7 @@ void ASaveSlotManager::DefferedInitializeReference()
 
 void ASaveSlotManager::SaveGameData_Implementation()
 {
-
+	FetchGameData();
 }
 
 FString ASaveSlotManager::GetSaveSlotName() const
@@ -119,6 +133,15 @@ void ASaveSlotManager::SetSaveSlotName(FString NewSaveSlotName)
 		return;
 	}
 	GameInstanceRef->SetCurrentSaveSlotName(NewSaveSlotName);
+}
+
+void ASaveSlotManager::FetchGameData()
+{
+	// Fetch game data from GameInstance
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::FetchGameData - Fetch game data from GameInstance"));
+	ProgressSaveData.ChapterInfo = ChapterManagerRef->GetCurrentChapterInfo();
+	ProgressSaveData.StageInfo = StageManagerRef->GetCurrentStageInfo();
+	ProgressSaveData.bIsInGame = GameInstanceRef->GetIsInGame();
 }
 
 void ASaveSlotManager::FetchCachedData()
@@ -137,6 +160,8 @@ void ASaveSlotManager::CacheCurrentGameState()
 {
 	if (GameInstanceRef.IsValid())
 	{
+		// Cache current game state
+		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::CacheCurrentGameState - Cache current game state"));
 		GameInstanceRef->CacheGameData(ProgressSaveData, AchievementSaveData, InventorySaveData);
 	}
 	else
@@ -147,20 +172,29 @@ void ASaveSlotManager::CacheCurrentGameState()
 
 void ASaveSlotManager::ApplyCachedData()
 {
-	if (ChapterManagerRef.IsValid())
+	//LOG
+	UE_LOG(LogSaveSystem, Log, TEXT("[ASaveSlotManager::Apply Data Preview] -------------------"));
+	UE_LOG(LogSaveSystem, Log, TEXT("- ChapterID : %d"), ProgressSaveData.ChapterInfo.ChapterID);
+	UE_LOG(LogSaveSystem, Log, TEXT("- StageCoordinate: %s"), *ProgressSaveData.ChapterInfo.CurrentStageCoordinate.ToString());
+	UE_LOG(LogSaveSystem, Log, TEXT("- StageInfoList: %d"), ProgressSaveData.ChapterInfo.StageInfoList.Num());
+	UE_LOG(LogSaveSystem, Log, TEXT("- CurrentMapName : %s"), *ProgressSaveData.StageInfo.MainLevelAsset.ToString());
+
+	if (!ChapterManagerRef.IsValid() || !PlayerCharacterRef.IsValid())
+	{
+		UE_LOG(LogSaveSystem, Error, TEXT("ASaveSlotManager::ApplyCachedData - Ref is not valid - [ChapterManagerRef : %d], [PlayerCharacterRef : %d]"),
+			ChapterManagerRef.IsValid(), PlayerCharacterRef.IsValid());
+
+		bIsInitialized = !GameInstanceRef->GetIsInGame();
+		OnInitializeDone.Broadcast(!GameInstanceRef->GetIsInGame());
+		return;
+	}
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::ApplyCachedData - Apply Cached Data"));
+	
+	// Apply cached data to ChapterManager and PlayerCharacter
+	if (ProgressSaveData.ChapterInfo.bIsChapterInitialized)
 	{
 		ChapterManagerRef->OverwriteChapterInfo(ProgressSaveData.ChapterInfo, ProgressSaveData.StageInfo);
 	}
-	else
-	{
-		UE_LOG(LogSaveSystem, Error, TEXT("ASaveSlotManager::ApplyCachedData - ChapterManagerRef is not valid"));
-	}
-	if (PlayerCharacterRef.IsValid())
-	{
-		//PlayerCharacterRef->SetPlayerProgressData(ProgressSaveData);
-	}
-	else
-	{
-		UE_LOG(LogSaveSystem, Error, TEXT("ASaveSlotManager::ApplyCachedData - PlayerCharacterRef is not valid"));
-	}
+	//PlayerCharacterRef->SetPlayerProgressData(ProgressSaveData);
+	OnInitializeDone.Broadcast(true);
 }

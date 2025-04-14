@@ -79,7 +79,10 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FChapterInfo GetCurrentChapterInfo() { return CurrentChapterInfo; }
+		FORCEINLINE bool GetIsChapterInitialized() const { return CurrentChapterInfo.bIsChapterInitialized; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FORCEINLINE FChapterInfo GetCurrentChapterInfo() { return CurrentChapterInfo; }
 
 	UFUNCTION(BlueprintCallable)
 		void SetStageIconTranslationList(TArray<FVector2D> NewList) { CurrentChapterInfo.StageIconTransitionValueList = NewList; }
@@ -88,16 +91,16 @@ public:
 		FStageInfo& GetStageInfo(int32 StageIdx);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetMaxChapterID() { return MaxChapterID; }
+		FORCEINLINE int32 GetMaxChapterID() { return MaxChapterID; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FStageInfo& GetStageInfoWithCoordinate(FVector2D StageCoordinate);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FName GetStageTypeName(EStageCategoryInfo StageType);
+		FORCEINLINE FName GetStageTypeName(EStageCategoryInfo StageType);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsStageBlocked(FVector2D StageCoordinate);
+		FORCEINLINE bool GetIsStageBlocked(FVector2D StageCoordinate);
 
 	// if you edit this return value, the new result will not be applyed because it is copy value.
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -126,7 +129,6 @@ private:
 	TWeakObjectPtr<class AMainCharacterBase> PlayerRef;
 
 	bool bIsChapterFinished = false;
-
 
 //========= Save System ================
 public:

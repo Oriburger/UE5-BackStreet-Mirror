@@ -5,7 +5,7 @@
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/MapSystem/NewChapterManagerBase.h"
 #include "../System/MapSystem/StageManagerComponent.h"
-#include "../System/SaveSystem/SaveManager.h"
+#include "../System/SaveSystem/SaveSlotManager.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
 #include "../Item/ItemBase.h"
@@ -51,12 +51,12 @@ void ABackStreetGameModeBase::StartGame(int32 ChapterID)
 	}
 }
 
-void ABackStreetGameModeBase::ContinueGame()
+void ABackStreetGameModeBase::TryContinueGame()
 {
 	UE_LOG(LogStage, Warning, TEXT("ABackStreetGameModeBase::ContinueGame()"));
 	if (IsValid(ChapterManagerRef))
 	{
-		ChapterManagerRef->ContinueChapter();
+		GameInstanceRef->GetSafeSaveSlotManager()->OnInitializeDone.AddDynamic(this, &ABackStreetGameModeBase::OnSaveManagerLoadDone);
 	}
 	else
 	{
@@ -131,6 +131,25 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector Spawn
 		return newItem;
 	}
 	return nullptr;
+}
+
+void ABackStreetGameModeBase::OnSaveManagerLoadDone(bool bIsSuccess)
+{
+	if (bIsSuccess)
+	{
+		if (IsValid(ChapterManagerRef))
+		{
+			ChapterManagerRef->ContinueChapter();
+		}
+		else
+		{
+			UE_LOG(LogStage, Error, TEXT("ABackStreetGameModeBase::OnSaveManagerLoadDone - ChapterManagerRef is not valid"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogStage, Error, TEXT("ABackStreetGameModeBase::OnSaveManagerLoadDone - Load failed"));
+	}
 }
 
 UCommonUserWidget* ABackStreetGameModeBase::GetMainHUDRef()
