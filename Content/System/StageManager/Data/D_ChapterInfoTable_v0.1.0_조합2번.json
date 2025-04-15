@@ -1268,6 +1268,63 @@
 			}
 		],
 		"StageInfoList": [],
+		"BossStageInfo":
+		{
+			"StageType": "E_None",
+			"StageIcon": "None",
+			"Coordinate":
+			{
+				"X": 0,
+				"Y": 0
+			},
+			"MainLevelAsset": "None",
+			"OuterLevelAsset": "None",
+			"EnemyCompositionInfo":
+			{
+				"CompositionNameList": []
+			},
+			"RewardInfoList": [],
+			"EnemySpawnLocationList": [],
+			"BossSpawnLocation":
+			{
+				"X": 0,
+				"Y": 0,
+				"Z": 0
+			},
+			"BossSpawnRotation":
+			{
+				"Pitch": 0,
+				"Yaw": 0,
+				"Roll": 0
+			},
+			"PlayerStartLocation":
+			{
+				"X": 0,
+				"Y": 0,
+				"Z": 0
+			},
+			"PlayerStartRotation":
+			{
+				"Pitch": 0,
+				"Yaw": 0,
+				"Roll": 0
+			},
+			"ItemBoxSpawnLocationList": [],
+			"RewardSpawnLocation":
+			{
+				"X": 0,
+				"Y": 0,
+				"Z": 0
+			},
+			"PortalTransformList": [],
+			"PortalDirectionTagList": [],
+			"TimeLimitValue": 0,
+			"bIsBlocked": false,
+			"bIsVisited": false,
+			"bIsFinished": false,
+			"bIsClear": false,
+			"bIsGameOver": false
+		},
 		"StageIconInfoMap":
 		{
 			"E_Entry": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Start_a.TX_ICON_Start_a'",
