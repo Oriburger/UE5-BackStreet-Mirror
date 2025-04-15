@@ -11,11 +11,8 @@ struct FProgressSaveData
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool bIsTutorialDone = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool bIsInGame = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool bIsInitialzed = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FChapterInfo ChapterInfo;
@@ -39,6 +36,9 @@ struct FAchievementSaveData
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool bIsInitialzed = false;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 KillCount = 0;
 };
@@ -49,6 +49,8 @@ struct FInventorySaveData
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool bIsInitialzed = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 GenesiumCount = 0;
@@ -56,4 +58,26 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 FusionCellCount = 0;
 	
+};
+
+USTRUCT(BlueprintType)
+struct FSaveSlotInfo
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool bIsInitialzed = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bIsTutorialDone = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 SaveCount = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString SaveSlotName = TEXT("MasterSaveSlot");
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bIsInGame = false;
 };

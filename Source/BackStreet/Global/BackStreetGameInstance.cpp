@@ -22,7 +22,6 @@ void UBackStreetGameInstance::OnPreLoadMap(const FString& MapName)
 {
 	// 레벨 전환 시작 시 기존 SaveSlotManager 제거
 	SaveSlotManagerRef = nullptr;
-
 }
 
 void UBackStreetGameInstance::OnPostLoadMap(UWorld* LoadedWorld)
@@ -90,7 +89,7 @@ void UBackStreetGameInstance::SetCurrentSaveSlotName(FString NewSaveSlotName)
 		UE_LOG(LogSaveSystem, Error, TEXT("UBackStreetGameInstance::SetCurrentSaveSlotName - NewSaveSlotName is empty"));
 		return;
 	}
-	CurrentSaveSlotName = NewSaveSlotName;
+	SaveSlotInfo.SaveSlotName = NewSaveSlotName;
 	UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::SetCurrentSaveSlotName - SaveSlotName: %s"), *CurrentSaveSlotName);
 }
 

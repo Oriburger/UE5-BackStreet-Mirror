@@ -78,6 +78,9 @@ protected:
 
 //======= 주요 프로퍼티================================
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
+		FSaveSlotInfo SaveSlotInfo;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Save")
 		FProgressSaveData ProgressSaveData;
 

@@ -243,9 +243,9 @@ void ANewChapterManagerBase::SetTutorialCompletion(bool bCompleted)
 	if (gameInstance)
 	{
 		// 게임 인스턴스의 ProgressSaveData에 튜토리얼 완료 상태 저장
-		FProgressSaveData progressSaveData;
-		gameInstance->GetCachedProgressSaveData(progressSaveData);
-		progressSaveData.bIsTutorialDone = bCompleted;
+		FSaveSlotInfo saveSlotInfo;
+		gameInstance->GetCurrentSaveSlotInfo(saveSlotInfo);
+		saveSlotInfo.bIsTutorialDone = bCompleted;
 		return;
 	}
 	UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::SetTutorialCompletion(%d) - game instance is not valid"), (int32)bCompleted);

@@ -49,14 +49,17 @@ protected:
 		//void OnSlotLoaded(const FString& SlotName, bool bIsSuccess);
 
 public:
+	UFUNCTION(BlueprintCallable, Blueprintpure)
+		void GetCurrentSaveSlotInfo(FSaveSlotInfo& OutSaveSlotInfo) { OutSaveSlotInfo = SaveSlotInfo; }
+
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FORCEINLINE FString GetCurrentSaveSlotName() const { return CurrentSaveSlotName; }
+		FORCEINLINE FString GetCurrentSaveSlotName() const { return SaveSlotInfo.SaveSlotName; }
 
 	UFUNCTION(BlueprintCallable)
 		void SetCurrentSaveSlotName(FString NewSaveSlotName);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FORCEINLINE bool GetIsInGame() const { return GetWorld() ? GetWorld()->GetMapName().Contains(TEXT("Chapter")) : false; }
+		FORCEINLINE bool GetIsInGame() { return SaveSlotInfo.bIsInGame = GetWorld() ? GetWorld()->GetMapName().Contains(TEXT("Chapter")) : false; }
 
 	UFUNCTION(BlueprintCallable)
 		void CacheGameData(FProgressSaveData NewProgressData, FAchievementSaveData NewAchievementData, FInventorySaveData NewInventoryData);
@@ -85,8 +88,5 @@ protected:
 		FInventorySaveData InventorySaveData;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
-		FString CurrentSaveSlotName;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
-		bool bIsInGame = false;
+		FSaveSlotInfo SaveSlotInfo;
 };

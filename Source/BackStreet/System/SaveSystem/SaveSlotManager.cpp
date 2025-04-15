@@ -117,6 +117,7 @@ void ASaveSlotManager::DefferedInitializeReference()
 
 void ASaveSlotManager::SaveGameData_Implementation()
 {
+	SaveSlotInfo.bIsInitialized = true;
 	FetchGameData();
 }
 
