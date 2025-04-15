@@ -36,6 +36,8 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 
 	//init chapter with generate stage infos
 	bIsChapterFinished = false;
+	CurrentChapterInfo.Reset();
+
 	InitChapter(NewChapterID);
 	CurrentChapterInfo.CurrentStageCoordinate = FVector2D(0.0f);
 	CurrentChapterInfo.StageInfoList = StageGeneratorComponent->Generate();

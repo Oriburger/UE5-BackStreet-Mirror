@@ -365,6 +365,7 @@ bool UWeaponComponentBase::ApplyWeaponDebuff(ACharacterBase* TargetCharacter, EC
 	float targetValue = OwnerCharacterRef.Get()->GetStatTotalValue(DebuffStatType);
 	float probabilityValue = OwnerCharacterRef.Get()->GetStatProbabilityValue(DebuffStatType);
 	const float debuffTime = 2.5f + OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_DebuffTime);
+
 	//stun은 디버프 길이가 적용이 됨
 	float targetTime = (DebuffType == ECharacterDebuffType::E_Stun) ? debuffTime + targetValue : debuffTime;
 	const float randomSeed = UKismetMathLibrary::RandomFloatInRange(0.0f, 100.0f);

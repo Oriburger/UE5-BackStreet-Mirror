@@ -112,8 +112,9 @@ public:
 	inline void UpdateTotalValue()
 	{
 		TotalValue = DefaultValue != 0.0f
-					? DefaultValue + DefaultValue * (AbilityRateValue + SkillRateValue - DebuffRateValue)
-					: (AbilityRateValue + SkillRateValue - DebuffRateValue);
+					? DefaultValue + DefaultValue * (AbilityRateValue + SkillRateValue)
+					: (AbilityRateValue + SkillRateValue);
+		TotalValue *= (1.0f - DebuffRateValue);
 
 		if (MaxValue != 0.0f)
 		{
@@ -296,7 +297,7 @@ public:
 	inline float GetDebuffRateValue(ECharacterStatType StatType)
 	{
 		GetStatGroup(StatType).UpdateTotalValue();
-		return GetStatGroup(StatType).GetDebuffRateValue();
+		return FMath::Clamp(GetStatGroup(StatType).GetDebuffRateValue(), 0.0f, 0.99f);
 	}
 	inline float GetTotalValue(ECharacterStatType StatType) 
 	{
