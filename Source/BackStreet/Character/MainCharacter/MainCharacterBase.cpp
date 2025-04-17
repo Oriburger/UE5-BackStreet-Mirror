@@ -610,7 +610,7 @@ void AMainCharacterBase::TryAttack()
 				+ FollowingCamera->GetComponentRotation().Yaw;
 			SetActorRotation(FRotator(0.0f, turnAngle, 0.0f));
 		}
-		else if(ActionTrackingComponent->GetIsActionReady("Attack"))
+		else if(ActionTrackingComponent->GetIsActionReady("Attack") && GetCharacterMovement()->IsFalling())
 		{
 			SetActorRotation(FRotator(0.0f, FollowingCamera->GetComponentRotation().Yaw, 0.0f));
 		}
