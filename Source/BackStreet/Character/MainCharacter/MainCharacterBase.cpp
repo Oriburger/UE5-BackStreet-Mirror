@@ -625,6 +625,21 @@ bool AMainCharacterBase::TrySkill(int32 SkillID)
 	{
 		StopAttack();
 	}
+
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
+	{
+		if (MovementInputValue.Length() > 0)
+		{
+			float turnAngle = FMath::RadiansToDegrees(FMath::Atan2(MovementInputValue.X, MovementInputValue.Y))
+				+ FollowingCamera->GetComponentRotation().Yaw;
+			SetActorRotation(FRotator(0.0f, turnAngle, 0.0f));
+		}
+		else
+		{
+			SetActorRotation(FRotator(0.0f, FollowingCamera->GetComponentRotation().Yaw, 0.0f));
+		}
+	}
+
 	return Super::TrySkill(SkillID);
 }
 
