@@ -90,7 +90,7 @@ void UBackStreetGameInstance::SetCurrentSaveSlotName(FString NewSaveSlotName)
 		return;
 	}
 	SaveSlotInfo.SaveSlotName = NewSaveSlotName;
-	UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::SetCurrentSaveSlotName - SaveSlotName: %s"), *CurrentSaveSlotName);
+	UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::SetCurrentSaveSlotName - SaveSlotName: %s"), *SaveSlotInfo.SaveSlotName);
 }
 
 void UBackStreetGameInstance::CacheGameData(FProgressSaveData NewProgressData, FAchievementSaveData NewAchievementData, FInventorySaveData NewInventoryData)

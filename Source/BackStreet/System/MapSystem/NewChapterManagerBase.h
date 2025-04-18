@@ -102,6 +102,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FORCEINLINE bool GetIsStageBlocked(FVector2D StageCoordinate);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FStageInfo GetBossStageInfo() { return CurrentChapterInfo.GetBossStageInfo(); }
+
 	// if you edit this return value, the new result will not be applyed because it is copy value.
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<FStageInfo> GetStageInfoList() { return CurrentChapterInfo.StageInfoList; }

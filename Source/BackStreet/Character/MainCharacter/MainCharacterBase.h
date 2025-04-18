@@ -70,6 +70,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UAbilityManagerComponent* AbilityManagerComponent; 
 
+protected:
+	//스프링암 길이에 따라 캐릭터 폰 비저빌리티 업데이트
+	UFUNCTION()
+		void UpdateVisibilityByDistance();
+
 // ------- Throw Test -----------
 public:
 	UFUNCTION(BlueprintCallable)

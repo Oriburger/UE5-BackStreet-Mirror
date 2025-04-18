@@ -121,6 +121,11 @@ void ASaveSlotManager::SaveGameData_Implementation()
 	FetchGameData();
 }
 
+bool ASaveSlotManager::GetIsInitialized() const
+{
+	return SaveSlotInfo.bIsInitialized;
+}
+
 FString ASaveSlotManager::GetSaveSlotName() const
 {
 	return GameInstanceRef.IsValid() ? GameInstanceRef->GetCurrentSaveSlotName() : "";
@@ -142,7 +147,7 @@ void ASaveSlotManager::FetchGameData()
 	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::FetchGameData - Fetch game data from GameInstance"));
 	ProgressSaveData.ChapterInfo = ChapterManagerRef->GetCurrentChapterInfo();
 	ProgressSaveData.StageInfo = StageManagerRef->GetCurrentStageInfo();
-	ProgressSaveData.bIsInGame = GameInstanceRef->GetIsInGame();
+	SaveSlotInfo.bIsInGame = GameInstanceRef->GetIsInGame();
 }
 
 void ASaveSlotManager::FetchCachedData()
@@ -185,7 +190,7 @@ void ASaveSlotManager::ApplyCachedData()
 		UE_LOG(LogSaveSystem, Error, TEXT("ASaveSlotManager::ApplyCachedData - Ref is not valid - [ChapterManagerRef : %d], [PlayerCharacterRef : %d]"),
 			ChapterManagerRef.IsValid(), PlayerCharacterRef.IsValid());
 
-		bIsInitialized = !GameInstanceRef->GetIsInGame();
+		SaveSlotInfo.bIsInitialized = !GameInstanceRef->GetIsInGame();
 		OnInitializeDone.Broadcast(!GameInstanceRef->GetIsInGame());
 		return;
 	}

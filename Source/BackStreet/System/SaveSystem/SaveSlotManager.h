@@ -66,7 +66,7 @@ public:
 		void SaveGameData();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FORCEINLINE bool GetIsInitialized() const { return bIsInitialized; }
+		FORCEINLINE bool GetIsInitialized() const; 
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FORCEINLINE FString GetSaveSlotName() const;
@@ -77,9 +77,6 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Save")
 		bool bIsRequiredToLoad = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Save")
-		bool bIsInitialized = false;
 
 //======= Cache SaveGame Data ========================
 protected:
@@ -101,6 +98,9 @@ protected:
 
 //======= Property ======================================
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Save")
+		FSaveSlotInfo SaveSlotInfo;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Save")
 		FProgressSaveData ProgressSaveData;
 

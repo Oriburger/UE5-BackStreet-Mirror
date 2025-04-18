@@ -67,7 +67,7 @@ struct FSaveSlotInfo
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		bool bIsInitialzed = false;
+		bool bIsInitialized = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bIsTutorialDone = false;
