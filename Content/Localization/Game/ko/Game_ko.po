@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-02-28 01:27\n"
-"PO-Revision-Date: 2025-02-28 01:27\n"
+"POT-Creation-Date: 2025-03-17 00:55\n"
+"PO-Revision-Date: 2025-03-17 00:55\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -1420,6 +1420,13 @@ msgctxt "ST_EasyGameUICommon,Button_Craft"
 msgid "Craft"
 msgstr "조합하기"
 
+#. Key:	Button_Credit
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Credit"
+msgid "Credits"
+msgstr "제작진"
+
 #. Key:	Button_OptionsMenu
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2266,6 +2273,13 @@ msgstr "Not Available"
 msgctxt "ST_EasyGameUICommon,UI_Owned_Boosterchip"
 msgid "Owned Boosterchip"
 msgstr "보유 중인 부스터칩"
+
+#. Key:	UI_RemainingStageCnt
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,UI_RemainingStageCnt"
+msgid "{stagescnt} stages remaining until the final stage."
+msgstr "보스까지 {stagescnt}개의 스테이지 남음"
 
 #. Key:	UI_SwitchTab
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon

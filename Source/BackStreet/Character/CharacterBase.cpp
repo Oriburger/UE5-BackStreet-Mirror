@@ -349,16 +349,22 @@ bool ACharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Cause
 {
 	if (!GamemodeRef.IsValid() || CharacterGameplayInfo.bIsInvincibility) return false;
 
-	//Resist 스탯 적용
+	//Resist 스탯 적용 (다른 곳에서 하지 않기!!!!!!!!!!)
 	switch (DebuffInfo.Type)
 	{
 	case ECharacterDebuffType::E_Stun:
-		DebuffInfo.TotalTime *= (1.0f - FMath::Clamp(GetStatTotalValue(ECharacterStatType::E_StunResist), 0.0f, 1.0f));
+		UE_LOG(LogTemp, Warning, TEXT("TryAddNewDebuff %s %.2lf"), *UEnum::GetValueAsString(DebuffInfo.Type), DebuffInfo.TotalTime);
+		DebuffInfo.TotalTime *= (1.0f - FMath::Clamp(GetStatTotalValue(ECharacterStatType::E_SlowResist), 0.0f, 1.0f));
+		UE_LOG(LogTemp, Warning, TEXT("ㄴ> %.2lf"), DebuffInfo.TotalTime);
 		break;
 	case ECharacterDebuffType::E_Slow:
+		DebuffInfo.Variable *= (1.0f - FMath::Clamp(GetStatTotalValue(ECharacterStatType::E_SlowResist), 0.0f, 1.0f));
+		break;
 	case ECharacterDebuffType::E_Poison:
+		DebuffInfo.Variable *= (1.0f - FMath::Clamp(GetStatTotalValue(ECharacterStatType::E_PoisonResist), 0.0f, 1.0f));
+		break;
 	case ECharacterDebuffType::E_Burn:
-		DebuffInfo.Variable *= (1.0f - FMath::Clamp(GetStatTotalValue(ECharacterStatType::E_StunResist), 0.0f, 1.0f));
+		DebuffInfo.Variable *= (1.0f - FMath::Clamp(GetStatTotalValue(ECharacterStatType::E_BurnResist), 0.0f, 1.0f));
 		break;
 	}
 	bool result = DebuffManagerComponent->SetDebuffTimer(DebuffInfo, Causer);
