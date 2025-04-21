@@ -48,6 +48,17 @@ AMainCharacterBase::AMainCharacterBase()
 	CameraBoom->SetRelativeLocation({ 0.0f, 30.0f, 25.0f });
 	CameraBoom->SetWorldRotation({ -45.0f, 0.0f, 0.0f });
 
+	SubCameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("SUB_CAMERA_BOOM"));
+	SubCameraBoom->SetupAttachment(CameraBoom);
+	SubCameraBoom->bUsePawnControlRotation = true;
+	SubCameraBoom->TargetArmLength = 375.0f;
+	SubCameraBoom->bInheritPitch = true;
+	SubCameraBoom->bInheritRoll = false;
+	SubCameraBoom->bInheritYaw = true;
+	SubCameraBoom->bEnableCameraLag = true;
+	SubCameraBoom->bEnableCameraRotationLag = true;
+	SubCameraBoom->CameraRotationLagSpeed = 10.0f;
+	SubCameraBoom->CameraLagSpeed = 10.0f;
 
 	//MainCharacter RangedWeaponAim SpringArm
 	RangedAimBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("RangedWeaponAim_Boom"));
@@ -63,7 +74,7 @@ AMainCharacterBase::AMainCharacterBase()
 
 	//MainCharacter Main Camera
 	FollowingCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FOLLOWING_CAMERA"));
-	FollowingCamera->SetupAttachment(CameraBoom);
+	FollowingCamera->SetupAttachment(SubCameraBoom);
 	FollowingCamera->bAutoActivate = true;
 
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
@@ -105,7 +116,12 @@ void AMainCharacterBase::BeginPlay()
 void AMainCharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//UpdateWallThroughEffect();
+
+	//0.1.0.2 임시 코드, 
+	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Die)
+	{
+		UpdateVisibilityByDistance();
+	}
 }
 
 void AMainCharacterBase::InitAsset(int32 NewCharacterID)
@@ -170,6 +186,12 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	}
 }
 
+void AMainCharacterBase::UpdateVisibilityByDistance()
+{
+	const float distance = (FollowingCamera->GetComponentLocation() - GetMesh()->GetComponentLocation()).Length();
+	GetMesh()->SetVisibility(distance > 125.0f);
+}
+
 void AMainCharacterBase::SwitchWeapon(bool bSwitchToSubWeapon, bool bForceApply)
 {
 	if (!IsValid(ItemInventory)) return;
@@ -224,8 +246,8 @@ void AMainCharacterBase::ZoomIn()
 	//FollowingCamera attach to RangedAimBoom Component using Interp ==================
 	FLatentActionInfo LatentInfo;
 	LatentInfo.CallbackTarget = this;
-	FollowingCamera->AttachToComponent(RangedAimBoom, FAttachmentTransformRules::KeepWorldTransform);
-	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
+	SubCameraBoom->AttachToComponent(RangedAimBoom, FAttachmentTransformRules::KeepWorldTransform);
+	UKismetSystemLibrary::MoveComponentTo(SubCameraBoom, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
 
 	OnZoomBegin.Broadcast(); //for ui (blueprint binding 가능)
@@ -241,8 +263,8 @@ void AMainCharacterBase::ZoomOut()
 	//FollowingCamera attach to CameraBoom Component using Interp ===================
 	FLatentActionInfo LatentInfo;
 	LatentInfo.CallbackTarget = this;
-	FollowingCamera->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
-	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
+	SubCameraBoom->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
+	UKismetSystemLibrary::MoveComponentTo(SubCameraBoom, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
 
 	OnZoomEnd.Broadcast(); //for ui (blueprint binding 가능)
@@ -381,8 +403,8 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 		}
 
 		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X * CameraSensivity);
-		AddControllerPitchInput(LookAxisVector.Y * CameraSensivity);
+		AddControllerYawInput(LookAxisVector.X * (CameraSensivity + 1.0f));
+		AddControllerPitchInput(LookAxisVector.Y * (CameraSensivity + 1.0f));
 		SetManualRotateMode();
 		if (!UGameplayStatics::IsGamePaused(GetWorld()))
 			SetAutomaticRotateModeTimer();
@@ -588,7 +610,7 @@ void AMainCharacterBase::TryAttack()
 				+ FollowingCamera->GetComponentRotation().Yaw;
 			SetActorRotation(FRotator(0.0f, turnAngle, 0.0f));
 		}
-		else if(ActionTrackingComponent->GetIsActionReady("Attack"))
+		else if(ActionTrackingComponent->GetIsActionReady("Attack") && GetCharacterMovement()->IsFalling())
 		{
 			SetActorRotation(FRotator(0.0f, FollowingCamera->GetComponentRotation().Yaw, 0.0f));
 		}
@@ -603,6 +625,21 @@ bool AMainCharacterBase::TrySkill(int32 SkillID)
 	{
 		StopAttack();
 	}
+
+	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
+	{
+		if (MovementInputValue.Length() > 0)
+		{
+			float turnAngle = FMath::RadiansToDegrees(FMath::Atan2(MovementInputValue.X, MovementInputValue.Y))
+				+ FollowingCamera->GetComponentRotation().Yaw;
+			SetActorRotation(FRotator(0.0f, turnAngle, 0.0f));
+		}
+		else
+		{
+			SetActorRotation(FRotator(0.0f, FollowingCamera->GetComponentRotation().Yaw, 0.0f));
+		}
+	}
+
 	return Super::TrySkill(SkillID);
 }
 

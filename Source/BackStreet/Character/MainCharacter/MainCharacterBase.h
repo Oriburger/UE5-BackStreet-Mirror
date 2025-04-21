@@ -52,6 +52,10 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		USpringArmComponent* CameraBoom;
 
+	//플레이어 메인 카메라 붐 아래에 부드러운 카메라 렉을 위한 서브붐
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+		USpringArmComponent* SubCameraBoom;
+
 	//플레이어의 메인 카메라
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		UCameraComponent* FollowingCamera;
@@ -65,6 +69,11 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UAbilityManagerComponent* AbilityManagerComponent; 
+
+protected:
+	//스프링암 길이에 따라 캐릭터 폰 비저빌리티 업데이트
+	UFUNCTION()
+		void UpdateVisibilityByDistance();
 
 // ------- Throw Test -----------
 public:

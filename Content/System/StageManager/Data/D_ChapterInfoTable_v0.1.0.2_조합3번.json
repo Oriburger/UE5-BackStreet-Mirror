@@ -1,0 +1,1020 @@
+[
+	{
+		"Name": "1",
+		"ChapterID": 1,
+		"GridSize": 6,
+		"CurrentStageCoordinate":
+		{
+			"X": 0,
+			"Y": 0
+		},
+		"BlockedPosList": [
+			{
+				"X": 2,
+				"Y": 0
+			},
+			{
+				"X": 3,
+				"Y": 0
+			},
+			{
+				"X": 4,
+				"Y": 0
+			},
+			{
+				"X": 5,
+				"Y": 0
+			},
+			{
+				"X": 4,
+				"Y": 1
+			},
+			{
+				"X": 5,
+				"Y": 1
+			},
+			{
+				"X": 0,
+				"Y": 2
+			},
+			{
+				"X": 5,
+				"Y": 2
+			},
+			{
+				"X": 0,
+				"Y": 3
+			},
+			{
+				"X": 5,
+				"Y": 3
+			},
+			{
+				"X": 0,
+				"Y": 4
+			},
+			{
+				"X": 1,
+				"Y": 4
+			},
+			{
+				"X": 0,
+				"Y": 5
+			},
+			{
+				"X": 1,
+				"Y": 5
+			},
+			{
+				"X": 2,
+				"Y": 5
+			},
+			{
+				"X": 3,
+				"Y": 5
+			},
+			{
+				"X": 4,
+				"Y": 5
+			},
+			{
+				"X": 5,
+				"Y": 5
+			}
+		],
+		"BlockedStageIdxList": [],
+		"StageTypeListForLevelIdx": [],
+		"EliteTimeAtkStageTimeOut": 80,
+		"NormalTimeAtkStageTimeOut": 90,
+		"EnemyCompositionMap":
+		{
+			"easy_small1":
+			{
+				"EnemySet":
+				{
+					"1001": 1,
+					"1002": 1
+				}
+			},
+			"easy_small2":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"1002": 1
+				}
+			},
+			"easy_small3":
+			{
+				"EnemySet":
+				{
+					"1001": 1,
+					"1002": 2
+				}
+			},
+			"easy_small4":
+			{
+				"EnemySet":
+				{
+					"1001": 3
+				}
+			},
+			"easy_small5":
+			{
+				"EnemySet":
+				{
+					"1002": 3
+				}
+			},
+			"easy_medium1":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"1002": 2
+				}
+			},
+			"easy_medium2":
+			{
+				"EnemySet":
+				{
+					"1001": 1,
+					"1002": 3
+				}
+			},
+			"easy_medium3":
+			{
+				"EnemySet":
+				{
+					"1001": 3,
+					"1002": 1
+				}
+			},
+			"easy_medium4":
+			{
+				"EnemySet":
+				{
+					"1001": 1,
+					"1002": 4
+				}
+			},
+			"easy_large1":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"1002": 3
+				}
+			},
+			"easy_large2":
+			{
+				"EnemySet":
+				{
+					"1001": 3,
+					"1002": 2
+				}
+			},
+			"easy_large3":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"1002": 4
+				}
+			},
+			"easy_superlarge1":
+			{
+				"EnemySet":
+				{
+					"1001": 4
+				}
+			},
+			"easy_superlarge2":
+			{
+				"EnemySet":
+				{
+					"1002": 6
+				}
+			},
+			"normal_small1":
+			{
+				"EnemySet":
+				{
+					"1100": 2
+				}
+			},
+			"normal_small2":
+			{
+				"EnemySet":
+				{
+					"1100": 1,
+					"1101": 1
+				}
+			},
+			"normal_small3":
+			{
+				"EnemySet":
+				{
+					"1101": 2
+				}
+			},
+			"normal_small4":
+			{
+				"EnemySet":
+				{
+					"1100": 1
+				}
+			},
+			"normal_small5":
+			{
+				"EnemySet":
+				{
+					"1101": 1
+				}
+			},
+			"normal_medium1":
+			{
+				"EnemySet":
+				{
+					"1100": 1,
+					"1101": 2
+				}
+			},
+			"normal_medium2":
+			{
+				"EnemySet":
+				{
+					"1100": 2,
+					"1101": 1
+				}
+			},
+			"normal_medium3":
+			{
+				"EnemySet":
+				{
+					"1101": 2
+				}
+			},
+			"normal_medium4":
+			{
+				"EnemySet":
+				{
+					"1100": 2
+				}
+			},
+			"normal_large1":
+			{
+				"EnemySet":
+				{
+					"1100": 2,
+					"1101": 2
+				}
+			},
+			"normal_large2":
+			{
+				"EnemySet":
+				{
+					"1100": 1,
+					"1101": 3
+				}
+			},
+			"normal_large3":
+			{
+				"EnemySet":
+				{
+					"1101": 3
+				}
+			},
+			"normal_superlarge1":
+			{
+				"EnemySet":
+				{
+					"1101": 5
+				}
+			},
+			"normal_superlarge2":
+			{
+				"EnemySet":
+				{
+					"1100": 3
+				}
+			},
+			"hard_small":
+			{
+				"EnemySet":
+				{
+					"1110": 1
+				}
+			},
+			"hard_medium":
+			{
+				"EnemySet":
+				{
+					"1110": 1
+				}
+			},
+			"hard_large":
+			{
+				"EnemySet":
+				{
+					"1110": 2
+				}
+			},
+			"mix_normal_small1":
+			{
+				"EnemySet":
+				{
+					"1001": 1,
+					"1100": 1
+				}
+			},
+			"mix_normal_small2":
+			{
+				"EnemySet":
+				{
+					"1100": 1,
+					"1002": 1
+				}
+			},
+			"mix_normal_small3":
+			{
+				"EnemySet":
+				{
+					"1001": 1,
+					"1101": 2
+				}
+			},
+			"mix_normal_medium1":
+			{
+				"EnemySet":
+				{
+					"1100": 1,
+					"1101": 1,
+					"1002": 2
+				}
+			},
+			"mix_normal_medium2":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"1101": 2
+				}
+			},
+			"mix_normal_medium3":
+			{
+				"EnemySet":
+				{
+					"1100": 1,
+					"1002": 3
+				}
+			},
+			"mix_normal_large1":
+			{
+				"EnemySet":
+				{
+					"1100": 1,
+					"1101": 1,
+					"1001": 2,
+					"1002": 2
+				}
+			},
+			"mix_normal_large2":
+			{
+				"EnemySet":
+				{
+					"1001": 3,
+					"1101": 2
+				}
+			},
+			"mix_hard_small1":
+			{
+				"EnemySet":
+				{
+					"1110": 1,
+					"1001": 2
+				}
+			},
+			"mix_hard_small2":
+			{
+				"EnemySet":
+				{
+					"1110": 1,
+					"1100": 1
+				}
+			},
+			"mix_hard_small3":
+			{
+				"EnemySet":
+				{
+					"1110": 1,
+					"1001": 2
+				}
+			},
+			"mix_hard_medium1":
+			{
+				"EnemySet":
+				{
+					"1110": 1,
+					"1100": 1,
+					"1002": 2
+				}
+			},
+			"mix_hard_medium2":
+			{
+				"EnemySet":
+				{
+					"1110": 1,
+					"1001": 2,
+					"1002": 2
+				}
+			},
+			"mix_hard_medium3":
+			{
+				"EnemySet":
+				{
+					"1110": 1,
+					"1101": 1,
+					"1002": 2
+				}
+			},
+			"mix_hard_large1":
+			{
+				"EnemySet":
+				{
+					"1110": 1,
+					"1001": 2,
+					"1002": 1
+				}
+			},
+			"mix_hard_large2":
+			{
+				"EnemySet":
+				{
+					"1110": 1,
+					"1100": 1,
+					"1101": 2
+				}
+			},
+			"boss":
+			{
+				"EnemySet":
+				{
+					"1200": 1
+				}
+			}
+		},
+		"StageEnemyCompositionInfoMap":
+		{
+			"E_Entry":
+			{
+				"CompositionNameList": [
+					"easy_small1",
+					"easy_small2",
+					"easy_small3",
+					"easy_small4",
+					"easy_small5"
+				]
+			},
+			"E_Exterminate":
+			{
+				"CompositionNameList": [
+					"easy_medium1",
+					"easy_medium2",
+					"easy_medium3",
+					"easy_medium4",
+					"easy_large1",
+					"easy_large2",
+					"easy_large3",
+					"normal_medium1",
+					"normal_medium2",
+					"normal_medium3",
+					"normal_medium4",
+					"normal_large1",
+					"normal_large2",
+					"normal_large3",
+					"hard_small",
+					"mix_normal_small1",
+					"mix_normal_small2",
+					"mix_normal_small3",
+					"mix_normal_medium1",
+					"mix_normal_medium2",
+					"mix_normal_medium3"
+				]
+			},
+			"E_EliteExterminate":
+			{
+				"CompositionNameList": [
+					"normal_large1",
+					"normal_large2",
+					"normal_large3",
+					"normal_superlarge1",
+					"normal_superlarge2",
+					"hard_small2",
+					"mix_normal_medium1",
+					"mix_normal_medium2",
+					"mix_normal_medium3",
+					"mix_normal_large1",
+					"mix_normal_large2",
+					"mix_normal_large3",
+					"mix_hard_small1",
+					"mix_hard_small2",
+					"mix_hard_small3",
+					"mix_hard_medium1",
+					"mix_hard_medium2"
+				]
+			},
+			"E_TimeAttack":
+			{
+				"CompositionNameList": [
+					"easy_large11",
+					"easy_large12",
+					"easy_large13",
+					"easy_superlarge1",
+					"easy_superlarge2",
+					"normal_superlarge1",
+					"normal_superlarge2",
+					"mix_normal_small1",
+					"mix_normal_small2",
+					"mix_normal_small3",
+					"hard_small"
+				]
+			},
+			"E_EliteTimeAttack":
+			{
+				"CompositionNameList": [
+					"easy_superlarge1",
+					"easy_superlarge2",
+					"normal_large11",
+					"normal_large12",
+					"normal_large13",
+					"normal_superlarge1",
+					"normal_superlarge2",
+					"mix_normal_medium1",
+					"mix_normal_medium2",
+					"mix_normal_medium3",
+					"mix_hard_small1",
+					"mix_hard_small2",
+					"mix_hard_small3"
+				]
+			},
+			"E_Escort":
+			{
+				"CompositionNameList": [
+					"easy_small1",
+					"easy_small2",
+					"easy_small3",
+					"easy_small4",
+					"easy_small5",
+					"easy_medium1",
+					"easy_medium2",
+					"easy_medium3",
+					"easy_medium4",
+					"normal_small1",
+					"normal_small2",
+					"normal_small3",
+					"normal_small4",
+					"normal_small5",
+					"mix_normal_small1",
+					"mix_normal_small2",
+					"mix_normal_small3"
+				]
+			},
+			"E_EliteEscort":
+			{
+				"CompositionNameList": []
+			},
+			"E_Boss":
+			{
+				"CompositionNameList": [
+					"boss"
+				]
+			}
+		},
+		"StageRewardCandidateInfoMap":
+		{
+			"E_Entry":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemIDList": [ 11, 12, 13, 14 ],
+						"RewardItemProbabilityList": [ 1, 1, 1, 1 ]
+					}
+				]
+			},
+			"E_Exterminate":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemIDList": [ 8, 11, 12, 13, 14, 15, 16, 17 ],
+						"RewardItemProbabilityList": [ 1, 0.5, 1, 1, 0.5, 1, 1, 1 ]
+					}
+				]
+			},
+			"E_EliteExterminate":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemIDList": [ 8, 11, 12, 13, 14, 15, 16, 17 ],
+						"RewardItemProbabilityList": [ 1, 0.5, 1, 1, 0.5, 1, 1, 1 ]
+					}
+				]
+			},
+			"E_TimeAttack":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemIDList": [ 8, 11, 12, 13, 14, 15, 16, 17 ],
+						"RewardItemProbabilityList": [ 1, 0.5, 1, 1, 0.5, 1, 1, 1 ]
+					}
+				]
+			},
+			"E_EliteTimeAttack":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemIDList": [ 8, 11, 12, 13, 14, 15, 16, 17 ],
+						"RewardItemProbabilityList": [ 1, 0.5, 1, 1, 0.5, 1, 1, 1 ]
+					}
+				]
+			},
+			"E_Escort":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemIDList": [ 8, 11, 12, 13, 14, 15, 16, 17 ],
+						"RewardItemProbabilityList": [ 1, 0.5, 1, 1, 0.5, 1, 1, 1 ]
+					}
+				]
+			},
+			"E_EliteEscort":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemIDList": [],
+						"RewardItemProbabilityList": []
+					}
+				]
+			}
+		},
+		"MaxItemBoxSpawnCountMap":
+		{
+			"E_Entry": 2,
+			"E_Exterminate": 3,
+			"E_EliteExterminate": 3,
+			"E_TimeAttack": 3,
+			"E_EliteTimeAttack": 3
+		},
+		"StageTemplateList": [
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_Exterminate",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_Exterminate",
+					"E_Craft",
+					"E_Exterminate",
+					"E_Exterminate",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_EliteTimeAttack",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_EliteExterminate",
+					"E_None",
+					"E_None",
+					"E_EliteExterminate",
+					"E_Craft",
+					"E_Exterminate",
+					"E_TimeAttack",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_EliteExterminate",
+					"E_EliteExterminate",
+					"E_Craft",
+					"E_Boss",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_Exterminate",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_Exterminate",
+					"E_Craft",
+					"E_Exterminate",
+					"E_EliteExterminate",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_TimeAttack",
+					"E_Exterminate",
+					"E_Craft",
+					"E_TimeAttack",
+					"E_None",
+					"E_None",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_Exterminate",
+					"E_EliteExterminate",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_Exterminate",
+					"E_TimeAttack",
+					"E_Craft",
+					"E_Boss",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_Exterminate",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_Exterminate",
+					"E_Craft",
+					"E_Exterminate",
+					"E_TimeAttack",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_Exterminate",
+					"E_EliteTimeAttack",
+					"E_Craft",
+					"E_Exterminate",
+					"E_None",
+					"E_None",
+					"E_EliteExterminate",
+					"E_Craft",
+					"E_EliteExterminate",
+					"E_Exterminate",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_EliteTimeAttack",
+					"E_Exterminate",
+					"E_Craft",
+					"E_Boss",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None"
+				]
+			},
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_Exterminate",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_Exterminate",
+					"E_Craft",
+					"E_Exterminate",
+					"E_EliteExterminate",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_EliteExterminate",
+					"E_EliteExterminate",
+					"E_Craft",
+					"E_Exterminate",
+					"E_None",
+					"E_None",
+					"E_Exterminate",
+					"E_Craft",
+					"E_EliteExterminate",
+					"E_EliteExterminate",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_Exterminate",
+					"E_EliteTimeAttack",
+					"E_Craft",
+					"E_Boss",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None",
+					"E_None"
+				]
+			}
+		],
+		"StageInfoList": [],
+		"BossStageInfo":
+		{
+			"StageType": "E_None",
+			"StageIcon": "None",
+			"Coordinate":
+			{
+				"X": 0,
+				"Y": 0
+			},
+			"MainLevelAsset": "None",
+			"OuterLevelAsset": "None",
+			"EnemyCompositionInfo":
+			{
+				"CompositionNameList": []
+			},
+			"RewardInfoList": [],
+			"EnemySpawnLocationList": [],
+			"BossSpawnLocation":
+			{
+				"X": 0,
+				"Y": 0,
+				"Z": 0
+			},
+			"BossSpawnRotation":
+			{
+				"Pitch": 0,
+				"Yaw": 0,
+				"Roll": 0
+			},
+			"PlayerStartLocation":
+			{
+				"X": 0,
+				"Y": 0,
+				"Z": 0
+			},
+			"PlayerStartRotation":
+			{
+				"Pitch": 0,
+				"Yaw": 0,
+				"Roll": 0
+			},
+			"ItemBoxSpawnLocationList": [],
+			"RewardSpawnLocation":
+			{
+				"X": 0,
+				"Y": 0,
+				"Z": 0
+			},
+			"PortalTransformList": [],
+			"PortalDirectionTagList": [],
+			"TimeLimitValue": 0,
+			"bIsBlocked": false,
+			"bIsVisited": false,
+			"bIsFinished": false,
+			"bIsClear": false,
+			"bIsGameOver": false
+		},
+		"StageIconInfoMap":
+		{
+			"E_Entry": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Start_a.TX_ICON_Start_a'",
+			"E_Exterminate": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Ebattle_a.TX_ICON_Ebattle_a'",
+			"E_EliteExterminate": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Battle_a.TX_ICON_Battle_a'",
+			"E_TimeAttack": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
+			"E_EliteTimeAttack": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
+			"E_Escort": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
+			"E_EliteEscort": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
+			"E_Boss": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Boss_a.TX_ICON_Boss_a'",
+			"E_Craft": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Crafting_a.TX_ICON_Crafting_a'",
+			"E_MiniGame": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Random_a.TX_ICON_Random_a'",
+			"E_Gatcha": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Random_a.TX_ICON_Random_a'"
+		},
+		"StageIconTransitionValueList": [],
+		"TutorialLevel": "/Game/Map/Chapter01/Polishing/Chapter01_Entry_Tutorial.Chapter01_Entry_Tutorial",
+		"StageLevelInfoMap":
+		{
+			"E_Entry":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Polishing/Chapter01_Entry.Chapter01_Entry"
+				]
+			},
+			"E_Exterminate":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat10.Chapter01_Combat10"
+				]
+			},
+			"E_EliteExterminate":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat10.Chapter01_Combat10"
+				]
+			},
+			"E_TimeAttack":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08"
+				]
+			},
+			"E_EliteTimeAttack":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08"
+				]
+			},
+			"E_Escort":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Chapter01_Combat07.Chapter01_Combat07"
+				]
+			},
+			"E_EliteEscort":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Chapter01_Combat07.Chapter01_Combat07"
+				]
+			},
+			"E_Boss":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Polishing/Chapter01_Boss.Chapter01_Boss"
+				]
+			},
+			"E_Craft":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Polishing/Chapter01_Craft.Chapter01_Craft"
+				]
+			},
+			"E_MiniGame":
+			{
+				"LevelList": []
+			},
+			"E_Gatcha":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Chapter01_Minigame_.Chapter01_Minigame_"
+				]
+			}
+		},
+		"OuterStageLevelList": [
+			"/Game/Map/Chapter01/Chapter01_OuterArea01.Chapter01_OuterArea01",
+			"/Game/Map/Chapter01/Chapter01_OuterArea02.Chapter01_OuterArea02",
+			"/Game/Map/Chapter01/Chapter01_OuterArea03.Chapter01_OuterArea03"
+		],
+		"BossCharacterClass": "/Script/Engine.BlueprintGeneratedClass'/Game/Character/EnemyCharacter/Blueprint/BP_BossCharacter.BP_BossCharacter_C'"
+	}
+]

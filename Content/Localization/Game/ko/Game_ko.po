@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-03-17 00:55\n"
-"PO-Revision-Date: 2025-03-17 00:55\n"
+"POT-Creation-Date: 2025-04-21 02:06\n"
+"PO-Revision-Date: 2025-04-21 02:06\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -2671,7 +2671,7 @@ msgstr "반경 10m 안에 있는 적군을 서치하여 가까운 적군부터 �
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Desc_Teleport"
 msgid "Teleports above the nearest enemy from the player and strikes downward. If no target is available, teleportation fails."
-msgstr "플레이어로 부터 가장 가까이 적의 위로 텔레포트 하여 내려 찍는다. 대상이 없는 경우 텔레포트 하지 못한다."
+msgstr "플레이어로 부터 가장 가까운 적의 위로 텔레포트 하여 내려 찍는다. 대상이 없는 경우 텔레포트 하지 못한다."
 
 #. Key:	Desc_WeaknessAnalysis
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
