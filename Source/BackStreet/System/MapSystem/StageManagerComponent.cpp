@@ -694,6 +694,12 @@ void UStageManagerComponent::EnsureUniqueStageRewards(FVector2D Coordinate)
 	FStageInfo& leftStageInfo = ChapterManagerRef.Get()->GetStageInfoWithCoordinate(Coordinate + directions[0]);
 	FStageInfo& rightStageInfo = ChapterManagerRef.Get()->GetStageInfoWithCoordinate(Coordinate + directions[1]);
 
+	if (leftStageInfo.StageType == EStageCategoryInfo::E_Craft || rightStageInfo.StageType == EStageCategoryInfo::E_Craft)
+	{
+		UE_LOG(LogStage, Warning, TEXT("> At least one side is Craft stage, return the function."));
+		return;
+	}
+
 	if (!leftStageInfo.RewardInfoList.IsEmpty()
 		&& leftStageInfo.RewardInfoList.Num() == rightStageInfo.RewardInfoList.Num())
 	{
