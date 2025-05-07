@@ -7,124 +7,6 @@
 #include "TimerManager.h"
 #include "AbilityManagerBase.generated.h"
 
-USTRUCT(BlueprintType)
-struct FAbilityValueInfoStruct
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		float Variable = 0.0f;
-
-	// 추가로 확률 정보가 필요한지? 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bIsContainProbability = false;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bIsContainProbability", UIMin = 0.0f, UIMax = 1.0f))
-		float ProbabilityValue = 1.0f;
-
-public:
-	FAbilityValueInfoStruct() : Variable(0.0f), bIsContainProbability(false), ProbabilityValue(0.0f) {}
-};
-
-UENUM(BlueprintType)
-enum class EAbilityTierType : uint8
-{
-	E_None				UMETA(DisplayName = "None"),
-	E_Common			UMETA(DisplayName = "Common"),
-	E_Rare				UMETA(DisplayName = "Rare"),
-	E_Legendary			UMETA(DisplayName = "Legendary"),
-	E_Mythic			UMETA(DisplayName = "Mythic"),
-};
-
-UENUM(BlueprintType)
-enum class EAbilityType : uint8
-{
-	E_None						UMETA(DisplayName = "None"),
-	//Legacy
-	E_BasicStat					UMETA(DisplayName = "BasicStat"),
-	E_Debuff					UMETA(DisplayName = "Debuff"),
-	E_Action					UMETA(DisplayName = "Action"),
-	E_Item						UMETA(DisplayName = "Item"),
-	E_SpecialAction				UMETA(DisplayName = "SpecialAction"),
-
-	//New 
-	E_Flame						UMETA(DisplayName = "Flame"),
-	E_Poison					UMETA(DisplayName = "Poison"),
-	E_Slow						UMETA(DisplayName = "Slow"),
-	E_Stun						UMETA(DisplayName = "Stun"),
-};
-
-USTRUCT(BlueprintType)
-struct FAbilityInfoStruct : public FTableRowBase
-{
-public:
-	GENERATED_USTRUCT_BODY()
-
-	//어빌리티의 ID
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0, UIMax = 10))
-		int32 AbilityId = 0;
-
-	//for Multiple Stat
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TMap<ECharacterStatType, FAbilityValueInfoStruct> TargetStatMap;
-
-	//어빌리티의 분류 (어떤 스탯을 강화할 것인지?)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		EAbilityType AbilityType = EAbilityType::E_None;
-
-	//어빌리티명
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FName AbilityName;
-
-	//어빌리티명 (현지화 가능)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FText AbilityNameText;
-
-	//Ability's Tier
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		EAbilityTierType AbilityTier = EAbilityTierType::E_None;
-
-	//어빌리티 설명
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FName AbilityDescription;
-
-	//어빌리티 설명 (현지화 가능)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FText AbilityDescriptionText;
-
-	//어빌리티의 아이콘
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		UTexture2D* AbilityIcon = nullptr;
-		
-	//반복적인 연산이 필요한지? (도트 힐) , 현재 미사용
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		bool bIsRepetitive = false;
-
-	//Callback 함수명
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		FName FuncName; 
-		
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<FAbilityValueInfoStruct> VariableInfo;	
-
-public:
-	//Repetitive 연산을 위한 TimerHandle
-	FTimerHandle TimerHandle; 
-	FTimerDelegate TimerDelegate;
-
-public:
-	inline bool operator==(const FAbilityInfoStruct& other) const
-	{
-		return AbilityId == other.AbilityId;
-	}
-
-	inline bool IsValid() const
-	{
-		return AbilityId > 0;
-	}
-};
-
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityUpdate, const TArray<FAbilityInfoStruct>&, AbilityInfoList);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateStatUpdate, ECharacterStatType, StatType, FStatValueGroup, StatValue);
@@ -160,7 +42,7 @@ public:
 public:
 	//어빌리티 매니저 초기화, 부모 설정
 	UFUNCTION()
-		void InitAbilityManager(ACharacterBase* NewCharacter);
+		void InitAbilityManager(ACharacterBase* NewCharacter, FAbilityManagerInfoStruct AbilityManagerInfoData = FAbilityManagerInfoStruct());
 
 	//특정 어빌리티를 추가 (실패 시 false)
 	UFUNCTION()
@@ -197,6 +79,31 @@ private:
 	//이전 단계의 어빌리티가 뽑혔는지를 체크한다. 
 	bool CanPickAbility(int32 AbilityID);
 
+//--------- Property ----------------------------------------------------
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		UDataTable* AbilityInfoTable;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		FAbilityManagerInfoStruct AbilityManagerInfo;
+
+private:
+	//어빌리티 종류별 토탈 티어 합산 (3: 레전더리, 2: 레어, 1: 일반)
+	TMap<EAbilityType, int32> AbilityTotalTier;
+	TMap<EAbilityType, int32> AbilityTotalTierThreshold;
+
+	//확률 계산을 위한 누적합 배열
+	TArray<float> CumulativeProbabilityList;
+	void UpdateCumulativeProbabilityList();
+	//ProbabilityInfoMap의 float 값을 모두 더한 값
+	float TotalProbabilityValue = 0.0f;
+
+	//소유자 캐릭터 약참조
+	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
+
+	//GameMode Soft Ref
+	TWeakObjectPtr<class ABackStreetGameModeBase> GameModeRef;
 
 //--------- Getter ----------------------------------------------------
 public:
@@ -208,7 +115,7 @@ public:
 		int32 GetMaxAbilityCount() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		TArray<FAbilityInfoStruct> GetAbilityInfoList() { return ActiveAbilityInfoList; }
+		TArray<FAbilityInfoStruct> GetAbilityInfoList() { return AbilityManagerInfo.ActiveAbilityInfoList; }
 
 	//아직 뽑힌적 없는 무작위의 어빌리티를 반환한다. (개수와 타입 지정 가능)
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -220,43 +127,6 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetAbilityTotalTierThreshold(EAbilityType AbilityType);
 
-//--------- Property ----------------------------------------------------
-public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
-		UDataTable* AbilityInfoTable;
-
-protected:
-	//최대 어빌리티 수
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
-		int32 MaxAbilityCount = 9999999;
-
-	//티어에 따른 등장 확률, 미지정 시 모두 같은 확률 적용
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
-		TMap<EAbilityTierType, float> ProbabilityInfoMap;
-
-private:
-	//현재 플레이어가 소유한 어빌리티의 정보
-	UPROPERTY()
-		TArray<FAbilityInfoStruct> ActiveAbilityInfoList;
-		TArray<bool> AbilityPickedInfoList;
-		
-	//어빌리티 종류별 토탈 티어 합산 (3: 레전더리, 2: 레어, 1: 일반)
-	TMap<EAbilityType, int32> AbilityTotalTier;
-	TMap<EAbilityType, int32> AbilityTotalTierThreshold;
-
-	//소유자 캐릭터 약참조
-	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
-
-	//확률 계산을 위한 누적합 배열
-	TArray<float> CumulativeProbabilityList;
-	void UpdateCumulativeProbabilityList();
-	//ProbabilityInfoMap의 float 값을 모두 더한 값
-	float TotalProbabilityValue = 0.0f;
-
-	//GameMode Soft Ref
-	TWeakObjectPtr<class ABackStreetGameModeBase> GameModeRef;
-
-	//모든 어빌리티의 정보
-	UPROPERTY()
-		TArray<FAbilityInfoStruct> AbilityInfoList;
+	UFUNCTION()
+		FAbilityManagerInfoStruct GetAbilityManagerInfo() const { return AbilityManagerInfo; }
 };

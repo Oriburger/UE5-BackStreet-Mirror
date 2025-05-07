@@ -319,6 +319,22 @@ void ACharacterBase::StandUp()
 	GetWorldTimerManager().ClearTimer(KnockDownAnimMontageHandle);
 }
 
+void ACharacterBase::SetCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo)
+{
+	if (!NewGameplayInfo.IsValid()) return;
+	
+	CharacterGameplayInfo = NewGameplayInfo;
+	CharacterID = NewGameplayInfo.CharacterID;
+	InitAsset(CharacterID);
+
+	CharacterGameplayInfo.UpdateTotalValues();
+	CharacterGameplayInfo.bCanAttack = true;
+	CharacterGameplayInfo.bCanRoll = true;
+	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Idle;
+
+	GetCharacterMovement()->MaxWalkSpeed = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed);
+}
+
 void ACharacterBase::InitCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo)
 {
 	if (NewGameplayInfo.bUseDefaultStat || CharacterGameplayInfo.bUseDefaultStat)

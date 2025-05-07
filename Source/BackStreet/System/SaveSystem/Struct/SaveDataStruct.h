@@ -4,7 +4,7 @@
 #include "../../../Global/BackStreet.h"
 #include "SaveDataStruct.generated.h"
 
-//======= SaveGame Data =========================
+//======= SaveGame Data ===============================
 USTRUCT(BlueprintType)
 struct FProgressSaveData
 {
@@ -24,10 +24,16 @@ public:
 		FCharacterGameplayInfo CharacterInfo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int32 GenesiumCount = 0;
+		FWeaponStatStruct WeaponStatInfo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int32 FusionCellCount = 0;
+		FWeaponStateStruct WeaponStateInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FAbilityManagerInfoStruct AbilityManagerInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FItemInventoryInfoStruct InventoryInfo;
 };
 
 USTRUCT(BlueprintType)
@@ -76,7 +82,7 @@ public:
 		int32 SaveCount = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FString SaveSlotName = TEXT("MasterSaveSlot");
+		FString SaveSlotName = TEXT("");
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bIsInGame = false;

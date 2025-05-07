@@ -56,7 +56,8 @@ void ABackStreetGameModeBase::TryContinueGame()
 	UE_LOG(LogStage, Warning, TEXT("ABackStreetGameModeBase::ContinueGame()"));
 	if (IsValid(ChapterManagerRef))
 	{
-		GameInstanceRef->GetSafeSaveSlotManager()->OnInitializeDone.AddDynamic(this, &ABackStreetGameModeBase::OnSaveManagerLoadDone);
+		ChapterManagerRef->ContinueChapter();
+		ChapterManagerRef->StageManagerComponent->OnStageLoadDone.AddDynamic(this, &ABackStreetGameModeBase::CreateDefaultHUD);
 	}
 	else
 	{
@@ -171,6 +172,13 @@ void ABackStreetGameModeBase::CreateDefaultHUD()
 		{
 			//Cast<UCommonActivatableWidget>(combatWidgetRef)->ActivateWidget();
 		}
+	}
+
+	// 만약, StageLoadDone 이벤트가 바인드 되어있으면 StageLoadDone 이벤트를 제거한다.
+	// StageLoadDone 이벤트는 ContinueChapter을 위해 바인드 되어있다.
+	if (ChapterManagerRef->StageManagerComponent->OnStageLoadDone.IsBound())
+	{
+		ChapterManagerRef->StageManagerComponent->OnStageLoadDone.RemoveDynamic(this, &ABackStreetGameModeBase::CreateDefaultHUD);
 	}
 }
 

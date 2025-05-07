@@ -21,7 +21,7 @@ public:
 	UItemInventoryComponent();
 
 	UFUNCTION()
-		void InitInventory();
+		void InitInventory(FItemInventoryInfoStruct InitialData = FItemInventoryInfoStruct());
 
 	//OnItemUpdated로 수정바람@@ - 240905 @ljh
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
@@ -81,27 +81,16 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FItemInfoDataStruct GetSubWeaponInfoData();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FItemInventoryInfoStruct GetInventoryInfoData() { return InventoryInfoData; }
 	
-//====== PROPERTY ===========================
-public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
-		int32 MaxItemCount = 100; 
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
-		int32 MaxSubWeaponCount = 1;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
-		int32 MaxMainWeaponCount = 1;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Wealth")
-		int32 GenesiumID;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Wealth")
-		int32 FusionCellID;
-
 protected:
 	UFUNCTION(BlueprintCallable)
 		bool TryUpdateWeaponState(int32 WeaponID, FWeaponStateStruct NewState);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Property")
+		FItemInventoryInfoStruct InventoryInfoData;
 
 public:
 	//Delegate 이벤트
@@ -115,20 +104,9 @@ private:
 	//WeaponComponent로부터 불러온다
 	FWeaponStateStruct& GetWeaponState(int32 WeaponID);
 
-	TMap<int32, FWeaponStateStruct> WeaponStateMap;
-
-	int32 CurrSubWeaponCount = 0;
-
-	int32 CurrMainWeaponCount = 0;
-
 //===== Property ==========================
 private:
 	UDataTable* ItemTable;
-
-public:
-	// Item List
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TMap<int32, FItemInfoDataStruct> ItemMap;
 
 	//owner character ref
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;

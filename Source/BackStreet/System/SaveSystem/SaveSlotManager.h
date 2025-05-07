@@ -26,7 +26,6 @@ public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateGameLoadDone OnInitializeDone;
 
-protected:
 	UFUNCTION(BlueprintImplementableEvent)
 		void OnPreLoadMap(const FString& MapName);
 

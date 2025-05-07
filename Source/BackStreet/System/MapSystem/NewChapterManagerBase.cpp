@@ -84,7 +84,6 @@ void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 {
 	//Set state variable
 	bIsChapterFinished = true;
-	CurrentChapterInfo.bIsChapterInitialized = false;
 
 	//Clear resource
 	StageManagerComponent->ClearPreviousResource();
@@ -141,6 +140,7 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 	{
 		ChapterID = NewChapterID;
 		CurrentChapterInfo = *newInfo;
+		CurrentChapterInfo.bIsChapterInitialized = true;
 		StageGeneratorComponent->InitGenerator(CurrentChapterInfo);
 		StageManagerComponent->Initialize(CurrentChapterInfo);
 		InitStageIconTranslationList({20, 65});

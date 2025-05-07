@@ -6,6 +6,7 @@
 #include "../../Global/BackStreetGameInstance.h"
 #include "../../System/MapSystem/NewChapterManagerBase.h"
 #include "../../System/MapSystem/StageManagerComponent.h"
+#include "../../System/AbilitySystem/AbilityManagerBase.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "../../Character/Component/ItemInventoryComponent.h"
 #include "../../Character/Component/WeaponComponentBase.h"
@@ -28,6 +29,8 @@ void ASaveSlotManager::Initialize()
 
 	// Initialize references
 	InitializeReference(GameInstanceRef->GetIsInGame());
+
+	SetSaveSlotName("");
 }
 
 void ASaveSlotManager::BeginPlay()
@@ -143,11 +146,23 @@ void ASaveSlotManager::SetSaveSlotName(FString NewSaveSlotName)
 
 void ASaveSlotManager::FetchGameData()
 {
+	// Switch to main weapon
+	if (PlayerCharacterRef.IsValid())
+	{
+		PlayerCharacterRef->SwitchWeapon(false, true); // Force switch to main weapon
+		UE_LOG(LogSaveSystem, Warning, TEXT("Current Weapon ID : %d"), PlayerCharacterRef->WeaponComponent->WeaponID);
+	}
+
 	// Fetch game data from GameInstance
-	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::FetchGameData - Fetch game data from GameInstance"));
 	ProgressSaveData.ChapterInfo = ChapterManagerRef->GetCurrentChapterInfo();
 	ProgressSaveData.StageInfo = StageManagerRef->GetCurrentStageInfo();
+	ProgressSaveData.CharacterInfo = PlayerCharacterRef->GetCharacterGameplayInfo();
+	ProgressSaveData.WeaponStatInfo = PlayerCharacterRef->WeaponComponent->GetWeaponStat();
+	ProgressSaveData.WeaponStateInfo = PlayerCharacterRef->WeaponComponent->GetWeaponState();
+	ProgressSaveData.AbilityManagerInfo = PlayerCharacterRef->AbilityManagerComponent->GetAbilityManagerInfo();
+	ProgressSaveData.InventoryInfo = PlayerCharacterRef->ItemInventory->GetInventoryInfoData();
 	SaveSlotInfo.bIsInGame = GameInstanceRef->GetIsInGame();
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::FetchGameData - Fetch game data from GameInstance / bIsChapterInitialized : %d"), (int32)ProgressSaveData.ChapterInfo.bIsChapterInitialized);
 }
 
 void ASaveSlotManager::FetchCachedData()
@@ -181,6 +196,7 @@ void ASaveSlotManager::ApplyCachedData()
 	//LOG
 	UE_LOG(LogSaveSystem, Log, TEXT("[ASaveSlotManager::Apply Data Preview] -------------------"));
 	UE_LOG(LogSaveSystem, Log, TEXT("- ChapterID : %d"), ProgressSaveData.ChapterInfo.ChapterID);
+	UE_LOG(LogSaveSystem, Log, TEXT("- SaveSlotName : %d"), *SaveSlotInfo.SaveSlotName);
 	UE_LOG(LogSaveSystem, Log, TEXT("- StageCoordinate: %s"), *ProgressSaveData.ChapterInfo.CurrentStageCoordinate.ToString());
 	UE_LOG(LogSaveSystem, Log, TEXT("- StageInfoList: %d"), ProgressSaveData.ChapterInfo.StageInfoList.Num());
 	UE_LOG(LogSaveSystem, Log, TEXT("- CurrentMapName : %s"), *ProgressSaveData.StageInfo.MainLevelAsset.ToString());
@@ -197,10 +213,26 @@ void ASaveSlotManager::ApplyCachedData()
 	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::ApplyCachedData - Apply Cached Data"));
 	
 	// Apply cached data to ChapterManager and PlayerCharacter
-	if (ProgressSaveData.ChapterInfo.bIsChapterInitialized)
+	if (SaveSlotInfo.bIsInitialized)
 	{
-		ChapterManagerRef->OverwriteChapterInfo(ProgressSaveData.ChapterInfo, ProgressSaveData.StageInfo);
+		if (ProgressSaveData.ChapterInfo.bIsChapterInitialized)
+		{
+			UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::ApplyCachedData - Apply Cached Data to ChapterManager"));
+			ChapterManagerRef->OverwriteChapterInfo(ProgressSaveData.ChapterInfo, ProgressSaveData.StageInfo);
+		}
+		if (PlayerCharacterRef.IsValid())
+		{
+			UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::ApplyCachedData - Apply Cached Data to PlayerCharacter"));
+			PlayerCharacterRef->SetCharacterGameplayInfo(ProgressSaveData.CharacterInfo);
+			PlayerCharacterRef->ItemInventory->InitInventory(ProgressSaveData.InventoryInfo);
+			PlayerCharacterRef->WeaponComponent->InitWeapon(ProgressSaveData.WeaponStatInfo.WeaponID);
+			UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::ApplyCachedData - WeaponID : %d"), ProgressSaveData.WeaponStatInfo.WeaponID);
+			PlayerCharacterRef->WeaponComponent->SetWeaponStat(ProgressSaveData.WeaponStatInfo);
+			PlayerCharacterRef->WeaponComponent->SetWeaponState(ProgressSaveData.WeaponStateInfo);
+			PlayerCharacterRef->AbilityManagerComponent->InitAbilityManager(PlayerCharacterRef.Get(), ProgressSaveData.AbilityManagerInfo);
+		}
 	}
-	//PlayerCharacterRef->SetPlayerProgressData(ProgressSaveData);
+	
+	SaveSlotInfo.bIsInitialized = true;
 	OnInitializeDone.Broadcast(true);
 }
