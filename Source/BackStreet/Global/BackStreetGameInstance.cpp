@@ -89,11 +89,6 @@ ASaveSlotManager* UBackStreetGameInstance::GetSafeSaveSlotManager()
 
 void UBackStreetGameInstance::SetCurrentSaveSlotName(FString NewSaveSlotName)
 {
-	if (NewSaveSlotName.IsEmpty())
-	{
-		UE_LOG(LogSaveSystem, Error, TEXT("UBackStreetGameInstance::SetCurrentSaveSlotName - NewSaveSlotName is empty"));
-		return;
-	}
 	SaveSlotInfo.SaveSlotName = NewSaveSlotName;
 	UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::SetCurrentSaveSlotName - SaveSlotName: %s"), *SaveSlotInfo.SaveSlotName);
 }

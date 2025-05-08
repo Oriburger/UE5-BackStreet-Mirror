@@ -72,7 +72,7 @@ void ANewChapterManagerBase::ContinueChapter()
 	if (CurrentChapterInfo.StageInfoList.IsValidIndex(0))
 	{
 		int32 stageIdx = StageGeneratorComponent->GetStageIdx(CurrentChapterInfo.CurrentStageCoordinate);
-		StageManagerComponent->InitStage(CurrentChapterInfo.StageInfoList[stageIdx]);
+		StageManagerComponent->InitStage(StageManagerComponent->GetCurrentStageInfo());
 	}
 	else
 	{

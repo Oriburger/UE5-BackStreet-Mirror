@@ -156,6 +156,9 @@ void ASaveSlotManager::FetchGameData()
 	// Fetch game data from GameInstance
 	ProgressSaveData.ChapterInfo = ChapterManagerRef->GetCurrentChapterInfo();
 	ProgressSaveData.StageInfo = StageManagerRef->GetCurrentStageInfo();
+
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::FetchGameData - Map Name : %s ,  Is Valid : %d"), *ProgressSaveData.StageInfo.MainLevelAsset.ToString(), (ProgressSaveData.StageInfo.MainLevelAsset.IsValid()));
+
 	ProgressSaveData.CharacterInfo = PlayerCharacterRef->GetCharacterGameplayInfo();
 	ProgressSaveData.WeaponStatInfo = PlayerCharacterRef->WeaponComponent->GetWeaponStat();
 	ProgressSaveData.WeaponStateInfo = PlayerCharacterRef->WeaponComponent->GetWeaponState();
