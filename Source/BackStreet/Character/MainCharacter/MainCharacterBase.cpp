@@ -345,12 +345,12 @@ void AMainCharacterBase::ResetMovementInputValue()
 void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
-	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
-	if (GetIsActionActive(ECharacterActionType::E_Stun)) return;
 
 	// input is a Vector2D
 	MovementInputValue = Value.Get<FVector2D>();
 	if (MovementInputValue == FVector2D::ZeroVector) return;
+	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
+	if (GetIsActionActive(ECharacterActionType::E_Stun)) return;
 
 	if (Controller != nullptr)
 	{
@@ -449,7 +449,6 @@ void AMainCharacterBase::Roll()
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (ActionTrackingComponent->GetIsActionInProgress(FName("Skill"))) return; 
 	if (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Attack)) return;
-	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
 	if (!CharacterGameplayInfo.bCanRoll) return;
 	if (GetIsActionActive(ECharacterActionType::E_Stun)) return;
 
@@ -761,11 +760,12 @@ void AMainCharacterBase::SetAutomaticRotateMode()
 		if (weakThis.IsValid())
 		{
 			weakThis.Get()->CameraBoom->bEnableCameraRotationLag = true;
+			weakThis.Get()->CameraBoom->CameraLagSpeed = weakThis.Get()->NoramlLagSpeed;
 			weakThis.Get()->CameraBoom->SetRelativeRotation(FRotator::ZeroRotator);
 			weakThis.Get()->CameraBoom->bUsePawnControlRotation = false;
 			weakThis.Get()->CameraBoom->bInheritYaw = true;
 		}
-	}), 1.0f, false /*반복*/);
+	}), 1.5f, false /*반복*/);
 }
 
 void AMainCharacterBase::UpdateCameraPitch(float TargetPitch, float InterpSpeed)
