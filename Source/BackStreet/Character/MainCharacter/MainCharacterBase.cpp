@@ -380,6 +380,17 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 		{
 			InteractionCandidateRef.Get()->SetInteractState(true);
 		}
+
+		//Update Camera FOV
+		if (GetCharacterGameplayInfo().bIsSprinting)
+		{
+			float outFOVvalue = UKismetMathLibrary::MapRangeClamped(
+				GetCharacterMovement()->Velocity.Length(), 0.0f
+				, CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed) * 1.25
+				, 90.0f, 105.0f);
+
+			UpdateFieldOfView(outFOVvalue, 0.1f);
+		}
 	}
 }
 
@@ -431,7 +442,6 @@ void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 	ActionTrackingComponent->ResetComboCount();
 	CharacterGameplayInfo.bIsSprinting = true;
 	SetWalkSpeedWithInterp(CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed) * 1.25, 0.75f);
-	SetFieldOfViewWithInterp(105.0f, 0.25f);
 	OnSprintStarted.Broadcast();
 }
 
@@ -881,9 +891,10 @@ void AMainCharacterBase::SetFieldOfViewWithInterp(float NewValue, float InterpSp
 void AMainCharacterBase::UpdateFieldOfView(const float TargetValue, float InterpSpeed, const bool bAutoReset)
 {
 	float currentFieldOfView = FollowingCamera->FieldOfView;
-	if (FMath::IsNearlyEqual(currentFieldOfView, TargetValue, 0.1))
+	if (FMath::IsNearlyEqual(currentFieldOfView, TargetValue, 0.1) && FOVInterpHandle.IsValid())
 	{
 		GetWorldTimerManager().ClearTimer(FOVInterpHandle);
+		FOVInterpHandle.Invalidate();
 		if (bAutoReset)
 		{
 			SetFieldOfViewWithInterp(90.0f, InterpSpeed * 1.5f, false);
