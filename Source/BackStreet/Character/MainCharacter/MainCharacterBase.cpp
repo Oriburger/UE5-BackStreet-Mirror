@@ -332,7 +332,7 @@ FRotator AMainCharacterBase::GetAimingRotation(FVector BeginLocation)
 void AMainCharacterBase::ResetMovementInputValue()
 {
 	MovementInputValue = FVector2D::ZeroVector;
-
+	
 	bMoveKeyDown = false;
 
 	if (!bHoldToSprint)
@@ -379,17 +379,6 @@ void AMainCharacterBase::Move(const FInputActionValue& Value)
 		if (InteractionCandidateRef.IsValid())
 		{
 			InteractionCandidateRef.Get()->SetInteractState(true);
-		}
-
-		//Update Camera FOV
-		if (GetCharacterGameplayInfo().bIsSprinting)
-		{
-			float outFOVvalue = UKismetMathLibrary::MapRangeClamped(
-				GetCharacterMovement()->Velocity.Length(), 0.0f
-				, CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed) * 1.25
-				, 90.0f, 105.0f);
-
-			UpdateFieldOfView(outFOVvalue, 0.1f);
 		}
 	}
 }
@@ -451,8 +440,7 @@ void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 	if (Value.GetValueType() == EInputActionValueType::Boolean && !bHoldToSprint) return;
 
 	CharacterGameplayInfo.bIsSprinting = false;
-	SetWalkSpeedWithInterp(CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed), 0.4f);
-	SetFieldOfViewWithInterp(90.0f, 0.5f);
+	SetWalkSpeedWithInterp(CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed), 0.5f);
 	OnSprintEnd.Broadcast();
 }
 
@@ -879,19 +867,27 @@ void AMainCharacterBase::UpdateWalkSpeed(const float TargetValue, const float In
 void AMainCharacterBase::SetFieldOfViewWithInterp(float NewValue, float InterpSpeed, const bool bAutoReset)
 {
 	FTimerDelegate updateFunctionDelegate;
+	
+	//InterpSpeed가 1.0f 이상일 경우, 타이머를 사용하지 않고 직접적으로 FieldOfView를 업데이트
+	if (InterpSpeed >= 1.0f)
+	{
+		UpdateFieldOfView(NewValue, InterpSpeed, bAutoReset);
+		return;
+	}
 
 	//Binding the function with specific values
 	updateFunctionDelegate.BindUFunction(this, FName("UpdateFieldOfView"), NewValue, InterpSpeed, bAutoReset);
 
 	//Calling MyUsefulFunction after 5 seconds without looping
 	GetWorld()->GetTimerManager().ClearTimer(FOVInterpHandle);
+	FOVInterpHandle.Invalidate();
 	GetWorld()->GetTimerManager().SetTimer(FOVInterpHandle, updateFunctionDelegate, 0.01f, true);
 }
 
 void AMainCharacterBase::UpdateFieldOfView(const float TargetValue, float InterpSpeed, const bool bAutoReset)
 {
 	float currentFieldOfView = FollowingCamera->FieldOfView;
-	if (FMath::IsNearlyEqual(currentFieldOfView, TargetValue, 0.1) && FOVInterpHandle.IsValid())
+	if (FMath::IsNearlyEqual(currentFieldOfView, TargetValue, 0.1) && GetWorldTimerManager().IsTimerActive(FOVInterpHandle))
 	{
 		GetWorldTimerManager().ClearTimer(FOVInterpHandle);
 		FOVInterpHandle.Invalidate();
