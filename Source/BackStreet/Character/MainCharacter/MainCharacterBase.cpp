@@ -896,7 +896,7 @@ void AMainCharacterBase::UpdateFieldOfView(const float TargetValue, float Interp
 			SetFieldOfViewWithInterp(90.0f, InterpSpeed * 1.5f, false);
 		}
 	}
-	currentFieldOfView = FMath::FInterpTo(currentFieldOfView, TargetValue, 0.1f, 1.0f);
+	currentFieldOfView = FMath::FInterpTo(currentFieldOfView, TargetValue, 0.1f, InterpSpeed);
 	FollowingCamera->SetFieldOfView(currentFieldOfView);
 }
 
