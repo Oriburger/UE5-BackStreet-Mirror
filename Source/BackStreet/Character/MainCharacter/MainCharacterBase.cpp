@@ -263,8 +263,8 @@ void AMainCharacterBase::ZoomOut()
 	//FollowingCamera attach to CameraBoom Component using Interp ===================
 	FLatentActionInfo LatentInfo; 
 	LatentInfo.CallbackTarget = this;
-	FollowingCamera->AttachToComponent(SubCameraBoom, FAttachmentTransformRules::KeepWorldTransform);
-	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
+	SubCameraBoom->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
+	UKismetSystemLibrary::MoveComponentTo(SubCameraBoom, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
 
 	OnZoomEnd.Broadcast(); //for ui (blueprint binding 가능)
