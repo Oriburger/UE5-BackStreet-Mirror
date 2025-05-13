@@ -43,6 +43,8 @@
 DECLARE_LOG_CATEGORY_EXTERN(LogAbility, Log, All);
 DECLARE_LOG_CATEGORY_EXTERN(LogWeapon, Log, All);
 DECLARE_LOG_CATEGORY_EXTERN(LogStage, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogItem, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogSaveSystem, Log, All);
 
 #define LOG_CALLINFO ANSI_TO_TCHAR(__FUNCTION__)
 #define BS_LOG(LogCat, Verbosity, Format, ...) UE_LOG(LogCat, Verbosity, TEXT("[%s] %s"), LOG_CALLINFO, *FString::Printf(Format, ##__VA_ARGS__))

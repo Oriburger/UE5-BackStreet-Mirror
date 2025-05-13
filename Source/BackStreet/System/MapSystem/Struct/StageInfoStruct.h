@@ -254,7 +254,7 @@ struct FChapterInfo : public FTableRowBase
 //======= Gameplay ====================
 public:
 	//Table Key
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		int32 ChapterID = 0;
 
 	//grid size for chapter
