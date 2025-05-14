@@ -71,12 +71,6 @@ public:
 		int32 GetItemAmount(int32 ItemID);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		ECraftingItemType ConvertItemIDToCraftingItemType(int32 ItemID) { return static_cast<ECraftingItemType>(ItemID); }
-	
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 ConvertCraftingItemTypeToItemID(ECraftingItemType CraftingItemType){ return static_cast<int32>(CraftingItemType); }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsItemEnough(int32 ItemID, uint8 NeedItemAmount);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
