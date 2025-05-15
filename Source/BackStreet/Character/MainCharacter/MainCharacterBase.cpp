@@ -760,7 +760,6 @@ void AMainCharacterBase::SetAutomaticRotateMode()
 		if (weakThis.IsValid())
 		{
 			weakThis.Get()->CameraBoom->bEnableCameraRotationLag = true;
-			weakThis.Get()->CameraBoom->CameraLagSpeed = weakThis.Get()->NoramlLagSpeed;
 			weakThis.Get()->CameraBoom->SetRelativeRotation(FRotator::ZeroRotator);
 			weakThis.Get()->CameraBoom->bUsePawnControlRotation = false;
 			weakThis.Get()->CameraBoom->bInheritYaw = true;
