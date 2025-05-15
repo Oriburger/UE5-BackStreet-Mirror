@@ -3,6 +3,7 @@
 #include "../Global/BackStreetGameModeBase.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
+#include "../Character/Component/ItemInventoryComponent.h"
 #include "InteractiveCollisionComponent.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
@@ -75,7 +76,11 @@ void AItemBase::InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride)
 
 	if (ItemInfo.ItemID == 0) return;
 
-	ItemInfo.ItemAmount = 1;
+	if (InfoOverride.ItemID == 0 && ItemInfo.ItemType != EItemCategoryInfo::E_SubWeapon)
+	{
+		ItemInfo.ItemAmount = 1;
+	}
+
 	if (!ItemInfo.ItemMesh.IsNull())
 	{
 		TArray<FSoftObjectPath> assetToStream;
@@ -92,6 +97,13 @@ void AItemBase::InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride)
 		}
 	}
 	OnItemInitialized.Broadcast(ItemInfo);
+
+	UE_LOG(LogTemp, Warning, TEXT("AItemBase::InitItem()"));
+	UE_LOG(LogTemp, Warning, TEXT("ItemID : %d"), ItemInfo.ItemID);
+	UE_LOG(LogTemp, Warning, TEXT("ItemImage : %s"), *UKismetSystemLibrary::GetDisplayName(ItemInfo.ItemImage));
+	UE_LOG(LogTemp, Warning, TEXT("ItemType : %d"), (int32)ItemInfo.ItemType);
+	UE_LOG(LogTemp, Warning, TEXT("ItemAmount : %d"), ItemInfo.ItemAmount);
+	
 	ActivateItem();
 }
 
@@ -120,26 +132,61 @@ void AItemBase::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* O
 void AItemBase::OnItemPicked_Implementation()
 {
 	AMainCharacterBase* playerRef = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (!IsValid(playerRef)) return;
 	
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ItemPickEffect, GetActorLocation());
+
+	//제거하면 안된다는 표시를 하는 flag
+	bool bNotDestroy = false;
+	int32 newItemAmount = ItemInfo.ItemAmount;
+	FItemInfoDataStruct currItemInfo = playerRef->ItemInventory->GetSubWeaponInfoData();
+	const int32 targetItemID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
+
+	if (IsValid(playerRef->ItemInventory))
+	{
+		playerRef->ItemInventory->AddItem(ItemInfo.ItemID, ItemInfo.ItemAmount);
+	}
+
 	switch (ItemInfo.ItemType)
 	{
+	case EItemCategoryInfo::E_Ability:
+		ItemInfo.ItemAmount = 1;
+		break;
 	case EItemCategoryInfo::E_Weapon:
+		ItemInfo.ItemAmount = 1;
 		if (playerRef->ActorHasTag("Player"))
 		{
-			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
-			playerRef->EquipWeapon(targetWeaponID);
+			playerRef->EquipWeapon(targetItemID);
 		}
 		break;
 	case EItemCategoryInfo::E_SubWeapon:
-		if (playerRef->ActorHasTag("Player"))
+		if (playerRef->ActorHasTag("Player") && currItemInfo.ItemID != ItemInfo.ItemID)
 		{
-			const int32 targetWeaponID = ItemInfo.ItemID - ITEM_WEAPON_ID_DIFF_VALUE;
-			playerRef->EquipWeapon(targetWeaponID);
+			playerRef->EquipWeapon(targetItemID);
+
+			if (currItemInfo.ItemID != 0 && currItemInfo.ItemType == EItemCategoryInfo::E_SubWeapon)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("CurrItemInfo -----------------"));
+				UE_LOG(LogTemp, Warning, TEXT("CurrItemInfo.ItemID : %d"), currItemInfo.ItemID);
+				UE_LOG(LogTemp, Warning, TEXT("CurrItemImage : %s"), *UKismetSystemLibrary::GetDisplayName(currItemInfo.ItemImage));
+				UE_LOG(LogTemp, Warning, TEXT("CurrItemInfo.ItemType : %d"), (int32)currItemInfo.ItemType);
+				UE_LOG(LogTemp, Warning, TEXT("CurrItemInfo.ItemAmount : %d"), currItemInfo.ItemAmount);
+				UE_LOG(LogTemp, Warning, TEXT("NewItemInfo.ItemID : %d"), ItemInfo.ItemID);
+				UE_LOG(LogTemp, Warning, TEXT("NewItemInfo.ItemImage : %s"), *UKismetSystemLibrary::GetDisplayName(ItemInfo.ItemImage));
+				UE_LOG(LogTemp, Warning, TEXT("NewItemInfo.ItemType : %d"), (int32)ItemInfo.ItemType);
+				UE_LOG(LogTemp, Warning, TEXT("NewItemInfo.ItemAmount : %d"), ItemInfo.ItemAmount);
+
+				InitItem(currItemInfo.ItemID, currItemInfo);
+				bNotDestroy = true;
+			}
 		}
 		break;
+	}	
+
+	if (!bNotDestroy)
+	{
+		Destroy();
 	}
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ItemPickEffect, GetActorLocation());
-	Destroy();
 }
 
 void AItemBase::InitializeItemMesh()

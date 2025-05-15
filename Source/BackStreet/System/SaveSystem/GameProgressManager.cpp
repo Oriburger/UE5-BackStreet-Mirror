@@ -54,29 +54,33 @@ bool UGameProgressManager::GetTutorialCompletion()
 }
 
 void UGameProgressManager::SetFusionCellCount(int32 NewCount)
-{
+{/*
     if (!IsValid(ProgressData)) LoadProgress();
     ProgressData->FusionCellCount = NewCount;
-    SaveProgress();
+    SaveProgress();*/
 }
 
 int32 UGameProgressManager::GetFusionCellCount() 
 {
+    return 0;
+    /*
     if (!IsValid(ProgressData) || !UGameplayStatics::DoesSaveGameExist(ProgressSlot, UserIndex)) return 0;
     UE_LOG(LogSaveSystem, Log, TEXT("UGameProgressManager::GetFusionCellCount()  - %d"), ProgressData->FusionCellCount);
-    return ProgressData->FusionCellCount;
+    return ProgressData->FusionCellCount; */
 }
 
 void UGameProgressManager::SetGenesiumCount(int32 NewCount)
-{
+{/*
     if (!IsValid(ProgressData)) LoadProgress();
     ProgressData->GenesiumCount = NewCount;
-    SaveProgress();
+    SaveProgress(); */
 }
 
 int32 UGameProgressManager::GetGenesiumCount() 
 {
+    return 0;
+    /*
     if (!IsValid(ProgressData) || !UGameplayStatics::DoesSaveGameExist(ProgressSlot, UserIndex)) return 0;
     UE_LOG(LogSaveSystem, Log, TEXT("UGameProgressManager::GetGenesiumCount()  - %d"), ProgressData->GenesiumCount);
-    return ProgressData->GenesiumCount;
+    return ProgressData->GenesiumCount; */
 }

@@ -263,8 +263,8 @@ void AMainCharacterBase::ZoomOut()
 	//FollowingCamera attach to CameraBoom Component using Interp ===================
 	FLatentActionInfo LatentInfo; 
 	LatentInfo.CallbackTarget = this;
-	FollowingCamera->AttachToComponent(SubCameraBoom, FAttachmentTransformRules::KeepWorldTransform);
-	UKismetSystemLibrary::MoveComponentTo(FollowingCamera, FVector(0, 0, 0), FRotator(0, 0, 0)
+	SubCameraBoom->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
+	UKismetSystemLibrary::MoveComponentTo(SubCameraBoom, FVector(0, 0, 0), FRotator(0, 0, 0)
 		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
 
 	OnZoomEnd.Broadcast(); //for ui (blueprint binding 가능)
@@ -332,7 +332,7 @@ FRotator AMainCharacterBase::GetAimingRotation(FVector BeginLocation)
 void AMainCharacterBase::ResetMovementInputValue()
 {
 	MovementInputValue = FVector2D::ZeroVector;
-
+	
 	bMoveKeyDown = false;
 
 	if (!bHoldToSprint)
@@ -345,12 +345,12 @@ void AMainCharacterBase::ResetMovementInputValue()
 void AMainCharacterBase::Move(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
-	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
-	if (GetIsActionActive(ECharacterActionType::E_Stun)) return;
 
 	// input is a Vector2D
 	MovementInputValue = Value.Get<FVector2D>();
 	if (MovementInputValue == FVector2D::ZeroVector) return;
+	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
+	if (GetIsActionActive(ECharacterActionType::E_Stun)) return;
 
 	if (Controller != nullptr)
 	{
@@ -431,7 +431,6 @@ void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 	ActionTrackingComponent->ResetComboCount();
 	CharacterGameplayInfo.bIsSprinting = true;
 	SetWalkSpeedWithInterp(CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed) * 1.25, 0.75f);
-	SetFieldOfViewWithInterp(105.0f, 0.25f);
 	OnSprintStarted.Broadcast();
 }
 
@@ -441,8 +440,7 @@ void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 	if (Value.GetValueType() == EInputActionValueType::Boolean && !bHoldToSprint) return;
 
 	CharacterGameplayInfo.bIsSprinting = false;
-	SetWalkSpeedWithInterp(CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed), 0.4f);
-	SetFieldOfViewWithInterp(90.0f, 0.5f);
+	SetWalkSpeedWithInterp(CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed), 0.5f);
 	OnSprintEnd.Broadcast();
 }
 
@@ -451,7 +449,6 @@ void AMainCharacterBase::Roll()
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (ActionTrackingComponent->GetIsActionInProgress(FName("Skill"))) return; 
 	if (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Attack)) return;
-	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
 	if (!CharacterGameplayInfo.bCanRoll) return;
 	if (GetIsActionActive(ECharacterActionType::E_Stun)) return;
 
@@ -767,7 +764,7 @@ void AMainCharacterBase::SetAutomaticRotateMode()
 			weakThis.Get()->CameraBoom->bUsePawnControlRotation = false;
 			weakThis.Get()->CameraBoom->bInheritYaw = true;
 		}
-	}), 1.0f, false /*반복*/);
+	}), 1.5f, false /*반복*/);
 }
 
 void AMainCharacterBase::UpdateCameraPitch(float TargetPitch, float InterpSpeed)
@@ -869,27 +866,36 @@ void AMainCharacterBase::UpdateWalkSpeed(const float TargetValue, const float In
 void AMainCharacterBase::SetFieldOfViewWithInterp(float NewValue, float InterpSpeed, const bool bAutoReset)
 {
 	FTimerDelegate updateFunctionDelegate;
+	
+	//InterpSpeed가 1.0f 이상일 경우, 타이머를 사용하지 않고 직접적으로 FieldOfView를 업데이트
+	if (InterpSpeed >= 1.0f)
+	{
+		UpdateFieldOfView(NewValue, InterpSpeed, bAutoReset);
+		return;
+	}
 
 	//Binding the function with specific values
 	updateFunctionDelegate.BindUFunction(this, FName("UpdateFieldOfView"), NewValue, InterpSpeed, bAutoReset);
 
 	//Calling MyUsefulFunction after 5 seconds without looping
 	GetWorld()->GetTimerManager().ClearTimer(FOVInterpHandle);
+	FOVInterpHandle.Invalidate();
 	GetWorld()->GetTimerManager().SetTimer(FOVInterpHandle, updateFunctionDelegate, 0.01f, true);
 }
 
 void AMainCharacterBase::UpdateFieldOfView(const float TargetValue, float InterpSpeed, const bool bAutoReset)
 {
 	float currentFieldOfView = FollowingCamera->FieldOfView;
-	if (FMath::IsNearlyEqual(currentFieldOfView, TargetValue, 0.1))
+	if (FMath::IsNearlyEqual(currentFieldOfView, TargetValue, 0.1) && GetWorldTimerManager().IsTimerActive(FOVInterpHandle))
 	{
 		GetWorldTimerManager().ClearTimer(FOVInterpHandle);
+		FOVInterpHandle.Invalidate();
 		if (bAutoReset)
 		{
 			SetFieldOfViewWithInterp(90.0f, InterpSpeed * 1.5f, false);
 		}
 	}
-	currentFieldOfView = FMath::FInterpTo(currentFieldOfView, TargetValue, 0.1f, 1.0f);
+	currentFieldOfView = FMath::FInterpTo(currentFieldOfView, TargetValue, 0.1f, InterpSpeed);
 	FollowingCamera->SetFieldOfView(currentFieldOfView);
 }
 

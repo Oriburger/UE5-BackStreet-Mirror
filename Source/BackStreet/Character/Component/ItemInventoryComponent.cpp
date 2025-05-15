@@ -47,7 +47,7 @@ void UItemInventoryComponent::InitInventory()
 		if (IsValid(GamemodeRef.Get()->GetChapterManagerRef()))
 		{
 			UE_LOG(LogItem, Log, TEXT("UItemInventoryComponent::InitInventory() - on chapter cleared event bind"));
-			GamemodeRef.Get()->GetChapterManagerRef()->OnChapterCleared.AddDynamic(this, &UItemInventoryComponent::OnChapterCleared);
+			//GamemodeRef.Get()->GetChapterManagerRef()->OnChapterCleared.AddDynamic(this, &UItemInventoryComponent::OnChapterCleared);
 		}
 		else
 		{
@@ -229,7 +229,7 @@ TMap<ECraftingItemType, uint8> UItemInventoryComponent::GetAllCraftingItemAmount
 
 	for (ECraftingItemType type : craftingItemTypeList)
 	{
-		int32 itemID = ConvertCraftingItemTypeToItemID(type);
+		int32 itemID = int32(type);
 		if (ItemMap.Contains(itemID))
 		{
 			currItemAmountMap.Add(type, ItemMap[itemID].ItemAmount);
