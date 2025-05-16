@@ -80,7 +80,8 @@ void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 	else
 	{
 		//나중에 Reward UI로 대체하기
-		OpenNeutralZoneLevel();
+		//OpenNeutralZoneLevel();
+		OpenMainMenuLevel();
 	}
 }
 
