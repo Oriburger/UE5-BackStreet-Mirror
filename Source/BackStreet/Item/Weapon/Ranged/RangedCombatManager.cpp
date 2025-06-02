@@ -69,7 +69,7 @@ bool URangedCombatManager::TryFireProjectile(FRotator FireRotationOverride, FVec
 				AssetManagerRef.Get()->PlaySingleSound(OwnerCharacterRef.Get(), ESoundAssetType::E_Weapon
 					, WeaponComponentRef.Get()->WeaponID, "Shoot");
 			}
-			if (GamemodeRef.IsValid())
+			if (GamemodeRef.IsValid() && OwnerCharacterRef.Get()->ActorHasTag("Player"))
 			{
 				GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Hit, OwnerCharacterRef.Get()->GetActorLocation(), 100.0f);
 			}

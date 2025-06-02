@@ -5,6 +5,8 @@
 #include "WeaponComponentBase.h"
 #include "../CharacterBase.h"
 #include "../MainCharacter/MainCharacterBase.h"
+#include "../../System/MapSystem/NewChapterManagerBase.h"
+#include "../../Global/BackStreetGameInstance.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #define MAX_ITEM_COUNT_THRESHOLD 99
 
@@ -28,6 +30,7 @@ void UItemInventoryComponent::BeginPlay()
 		WeaponRef = Cast<UWeaponComponentBase>(OwnerCharacterRef.Get()->WeaponComponent);
 	}
 	GamemodeRef = Cast<ABackStreetGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	GameInstanceRef = GetWorld()->GetGameInstance<UBackStreetGameInstance>();
 }
 
 void UItemInventoryComponent::InitInventory()
@@ -37,8 +40,18 @@ void UItemInventoryComponent::InitInventory()
 		ItemTable = GamemodeRef.Get()->ItemInfoTable;
 		if (!ItemTable)
 		{
-			UE_LOG(LogTemp, Error, TEXT("DataTable is null!"));
+			UE_LOG(LogItem, Error, TEXT("UItemInventoryComponent::InitInventory() - DataTable is null!"));
 			return;
+		}
+		//영구재화 Save 관련 로직
+		if (IsValid(GamemodeRef.Get()->GetChapterManagerRef()))
+		{
+			UE_LOG(LogItem, Log, TEXT("UItemInventoryComponent::InitInventory() - on chapter cleared event bind"));
+			//GamemodeRef.Get()->GetChapterManagerRef()->OnChapterCleared.AddDynamic(this, &UItemInventoryComponent::OnChapterCleared);
+		}
+		else
+		{
+			UE_LOG(LogItem, Error, TEXT("UItemInventoryComponent::InitInventory() - ChapterManager is not valid"));
 		}
 	}
 	if (WeaponRef.IsValid())
@@ -56,8 +69,22 @@ void UItemInventoryComponent::InitInventory()
 		if (row)
 		{
 			ItemMap.Add(row->ItemID, *row);
+			ItemMap[row->ItemID].ItemAmount = 0;
+
+			if (GameInstanceRef.IsValid())
+			{
+				if (GenesiumID == row->ItemID)
+				{
+					ItemMap[row->ItemID].ItemAmount = GameInstanceRef.Get()->GetGenesiumCount();
+				}
+				else if (FusionCellID == row->ItemID)
+				{
+					ItemMap[row->ItemID].ItemAmount = GameInstanceRef.Get()->GetFusionCellCount();
+				}
+			}
 		}
 	}
+	
 	
 }
 
@@ -96,6 +123,28 @@ void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
 	
 	OnUpdateItem.Broadcast();
 	OnItemRemoved.Broadcast(ItemMap[ItemID], ItemMap[ItemID].ItemAmount);
+}
+
+void UItemInventoryComponent::OnChapterCleared()
+{
+	if (!GameInstanceRef.IsValid())
+	{
+		UE_LOG(LogItem, Error, TEXT("UItemInventoryComponent::OnChapterCleared() : GameInstanceRef is not valid"));
+		return;
+	}
+
+	UE_LOG(LogItem, Log, TEXT("UItemInventoryComponent::OnChapterCleared()"));
+
+	if (ItemMap.Contains(GenesiumID) && ItemMap[GenesiumID].ItemAmount > 0)
+	{
+		UE_LOG(LogItem, Log, TEXT("UItemInventoryComponent::OnChapterCleared() : Genesium saved %d"), ItemMap[GenesiumID].ItemAmount);
+		GameInstanceRef.Get()->SetGenesiumCount(ItemMap[GenesiumID].ItemAmount);
+	}
+	if (ItemMap.Contains(FusionCellID) && ItemMap[FusionCellID].ItemAmount > 0)
+	{
+		UE_LOG(LogItem, Log, TEXT("UItemInventoryComponent::OnChapterCleared() : FusionCell saved %d"), ItemMap[FusionCellID].ItemAmount);
+		GameInstanceRef.Get()->SetFusionCellCount(ItemMap[FusionCellID].ItemAmount);
+	}
 }
 
 bool UItemInventoryComponent::TryAddWeapon(int32 ItemID, EItemCategoryInfo ItemCategory, int32 ItemCount)
@@ -180,7 +229,7 @@ TMap<ECraftingItemType, uint8> UItemInventoryComponent::GetAllCraftingItemAmount
 
 	for (ECraftingItemType type : craftingItemTypeList)
 	{
-		int32 itemID = ConvertCraftingItemTypeToItemID(type);
+		int32 itemID = int32(type);
 		if (ItemMap.Contains(itemID))
 		{
 			currItemAmountMap.Add(type, ItemMap[itemID].ItemAmount);
@@ -243,7 +292,7 @@ void UItemInventoryComponent::OnWeaponStateUpdated(int32 WeaponID, FWeaponStatSt
 	if (!WeaponStateMap.Contains(WeaponID)) WeaponStateMap.Add(WeaponID, FWeaponStateStruct());
 	if (!ItemMap.Contains(WeaponID + 20000))
 	{
-		UE_LOG(LogTemp, Error, TEXT("UItemInventoryComponent::OnWeaponStateUpdated %d is not found in itemmap"), WeaponID);
+		UE_LOG(LogItem, Error, TEXT("UItemInventoryComponent::OnWeaponStateUpdated %d is not found in itemmap"), WeaponID);
 		return;
 	}
 	

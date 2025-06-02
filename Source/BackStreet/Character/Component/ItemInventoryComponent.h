@@ -50,6 +50,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void RemoveItem(int32 ItemID, uint8 ItemCnt);
 
+protected:
+	UFUNCTION()
+		void OnChapterCleared();
+
 private:
 	//무기를 추가하고 제거한다. WeaponComponent와의 정보 연동을 진행한다
 	bool TryAddWeapon(int32 ItemID, EItemCategoryInfo ItemCategory, int32 ItemCount);
@@ -67,12 +71,6 @@ public:
 		int32 GetItemAmount(int32 ItemID);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		ECraftingItemType ConvertItemIDToCraftingItemType(int32 ItemID) { return static_cast<ECraftingItemType>(ItemID); }
-	
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 ConvertCraftingItemTypeToItemID(ECraftingItemType CraftingItemType){ return static_cast<int32>(CraftingItemType); }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsItemEnough(int32 ItemID, uint8 NeedItemAmount);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -81,7 +79,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FItemInfoDataStruct GetSubWeaponInfoData();
 	
-//====== Weapon ===========================
+//====== PROPERTY ===========================
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		int32 MaxItemCount = 100; 
@@ -91,6 +89,12 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		int32 MaxMainWeaponCount = 1;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Wealth")
+		int32 GenesiumID;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Wealth")
+		int32 FusionCellID;
 
 protected:
 	UFUNCTION(BlueprintCallable)
@@ -127,6 +131,8 @@ public:
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
 
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+	TWeakObjectPtr<class UBackStreetGameInstance> GameInstanceRef;
 
 	TWeakObjectPtr<class UWeaponComponentBase> WeaponRef;
 
