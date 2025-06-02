@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_jp\n"
-"POT-Creation-Date: 2025-03-14 05:11\n"
-"PO-Revision-Date: 2025-03-14 05:11\n"
+"POT-Creation-Date: 2025-05-16 08:27\n"
+"PO-Revision-Date: 2025-05-16 08:27\n"
 "Language-Team: \n"
 "Language: ja-JP\n"
 "MIME-Version: 1.0\n"
@@ -17,168 +17,168 @@ msgstr ""
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Legendary"
-msgid "jump attack speed increases by 40%"
+msgid "Jump attack speed increases by 40%"
 msgstr "ジャンプ攻撃の速度が40%増加する"
 
 #. Key:	Desc_Aerial_Strike_Optimization_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Normal"
-msgid "jump attack speed increases by 8%"
+msgid "Jump attack speed increases by 8%"
 msgstr "ジャンプ攻撃の速度が8%増加する"
 
 #. Key:	Desc_Aerial_Strike_Optimization_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Rare"
-msgid "jump attack speed increases by 24%"
+msgid "Jump attack speed increases by 24%"
 msgstr "ジャンプ攻撃の速度が24%増加する"
 
 #. Key:	Desc_Aerial_Throttling_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Legendary"
-msgid "jump attack greatly increases and inflicts slow debuff"
+msgid "Jump attack greatly increases and inflicts slow debuff"
 msgstr "ジャンプ攻撃が大幅に増加し、スローデバフを付与する"
 
 #. Key:	Desc_Aerial_Throttling_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Normal"
-msgid "jump attack slightly increases and inflicts slow debuff"
+msgid "Jump attack slightly increases and inflicts slow debuff"
 msgstr "ジャンプ攻撃がわずかに増加し、スローデバフを付与する"
 
 #. Key:	Desc_Aerial_Throttling_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Throttling_Rare"
-msgid "jump attack increases and inflicts slow debuff"
+msgid "Jump attack increases and inflicts slow debuff"
 msgstr "ジャンプ攻撃が増加し、スローデバフを付与する"
 
 #. Key:	Desc_Battery_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Battery_Enhancement_Legendary"
-msgid "max HP increases by 35%"
+msgid "Max HP increases by 35%"
 msgstr "最大HPが35%増加する"
 
 #. Key:	Desc_Battery_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Battery_Enhancement_Normal"
-msgid "max HP increases by 15%"
+msgid "Max HP increases by 15%"
 msgstr "最大HPが15%増加する"
 
 #. Key:	Desc_Battery_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Battery_Enhancement_Rare"
-msgid "max HP increases by 20%"
+msgid "Max HP increases by 20%"
 msgstr "最大HPが20%増加する"
 
 #. Key:	Desc_Critical_Aerial_Attack_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Legendary"
-msgid "jump attack critical hit damage increases by 4.5 times"
+msgid "Jump attack critical hit damage increases by 4.5 times"
 msgstr "ジャンプ攻撃のクリティカルダメージが4.5倍増加する"
 
 #. Key:	Desc_Critical_Aerial_Attack_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Normal"
-msgid "jump attack critical hit damage increases by 2.5 times"
+msgid "Jump attack critical hit damage increases by 2.5 times"
 msgstr "ジャンプ攻撃のクリティカルダメージが2.5倍増加する"
 
 #. Key:	Desc_Critical_Aerial_Attack_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Rare"
-msgid "jump attack critical hit damage increases by 3.5 times"
+msgid "Jump attack critical hit damage increases by 3.5 times"
 msgstr "ジャンプ攻撃のクリティカルダメージが3.5倍増加する"
 
 #. Key:	Desc_Critical_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Dash_Legendary"
-msgid "dash attack critical hit damage increases by 4.5 times"
+msgid "Dash attack critical hit damage increases by 4.5 times"
 msgstr "ダッシュ攻撃のクリティカルダメージが4.5倍増加する"
 
 #. Key:	Desc_Critical_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Dash_Normal"
-msgid "dash attack critical hit damage increases by 2.5 times"
+msgid "Dash attack critical hit damage increases by 2.5 times"
 msgstr "ダッシュ攻撃のクリティカルダメージが2.5倍増加する"
 
 #. Key:	Desc_Critical_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Dash_Rare"
-msgid "dash attack critical hit damage increases by 3.5 times"
+msgid "Dash attack critical hit damage increases by 3.5 times"
 msgstr "ダッシュ攻撃のクリティカルダメージが3.5倍増加する"
 
 #. Key:	Desc_Critical_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Strike_Legendary"
-msgid "normal attack critical hit damage increases by 4 times"
+msgid "Normal attack critical hit damage increases by 4 times"
 msgstr "通常攻撃のクリティカルダメージが4倍増加する"
 
 #. Key:	Desc_Critical_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Strike_Normal"
-msgid "normal attack critical hit damage increases by 2 times"
+msgid "Normal attack critical hit damage increases by 2 times"
 msgstr "通常攻撃のクリティカルダメージが2倍増加する"
 
 #. Key:	Desc_Critical_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Strike_Rare"
-msgid "normal attack critical hit damage increases by 3 times"
+msgid "Normal attack critical hit damage increases by 3 times"
 msgstr "通常攻撃のクリティカルダメージが3倍増加する"
 
 #. Key:	Desc_Dash_Optimization_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Legendary"
-msgid "dash attack speed increases by 45%"
+msgid "Dash attack speed increases by 45%"
 msgstr "ダッシュ攻撃の速度が45%増加する"
 
 #. Key:	Desc_Dash_Optimization_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Normal"
-msgid "dash attack speed increases by 8%"
+msgid "Dash attack speed increases by 8%"
 msgstr "ダッシュ攻撃の速度が8%増加する"
 
 #. Key:	Desc_Dash_Optimization_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Rare"
-msgid "dash attack speed increases by 25%"
+msgid "Dash attack speed increases by 25%"
 msgstr "ダッシュ攻撃の速度が25%増加する"
 
 #. Key:	Desc_Firewall_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Firewall_Enhancement_Legendary"
-msgid "defense power increases by 50%"
+msgid "Defense power increases by 50%"
 msgstr "防御力が50%増加する"
 
 #. Key:	Desc_Firewall_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Firewall_Enhancement_Normal"
-msgid "defense power increases by 10%"
+msgid "Defense power increases by 10%"
 msgstr "防御力が10%増加する"
 
 #. Key:	Desc_Firewall_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Firewall_Enhancement_Rare"
-msgid "defense power increases by 30%"
+msgid "Defense power increases by 30%"
 msgstr "防御力が30%増加する"
 
 #. Key:	Desc_Flame_Aerial_Strike_Legendary
@@ -248,126 +248,126 @@ msgstr "通常攻撃が炎ダメージを与える確率が15%増加する"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Footwork_Optimization_Legendary"
-msgid "movement speed increases by 40%"
+msgid "Movement speed increases by 40%"
 msgstr "移動速度が40%増加する"
 
 #. Key:	Desc_Footwork_Optimization_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Footwork_Optimization_Normal"
-msgid "movement speed increases by 15%"
+msgid "Movement speed increases by 15%"
 msgstr "移動速度が15%増加する"
 
 #. Key:	Desc_Footwork_Optimization_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Footwork_Optimization_Rare"
-msgid "movement speed increases by 26%"
+msgid "Movement speed increases by 26%"
 msgstr "移動速度が26%増加する"
 
 #. Key:	Desc_Freezing_Aerial_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Legendary"
-msgid "jump attack power increases by 27% and has a chance to inflict stun debuff"
+msgid "Jump attack power increases by 27% and has a chance to inflict stun debuff"
 msgstr "ジャンプ攻撃の威力が27%増加し、スタンデバフを付与する可能性がある"
 
 #. Key:	Desc_Freezing_Aerial_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Normal"
-msgid "jump attack power increases by 7% and has a chance to inflict stun debuff"
+msgid "Jump attack power increases by 7% and has a chance to inflict stun debuff"
 msgstr "ジャンプ攻撃の威力が7%増加し、スタンデバフを付与する可能性がある"
 
 #. Key:	Desc_Freezing_Aerial_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Rare"
-msgid "jump attack power increases by 17% and has a chance to inflict stun debuff"
+msgid "Jump attack power increases by 17% and has a chance to inflict stun debuff"
 msgstr "ジャンプ攻撃の威力が17%増加し、スタンデバフを付与する可能性がある"
 
 #. Key:	Desc_Freezing_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Legendary"
-msgid "dash attack power increases by 27% and has a chance to inflict stun debuff"
+msgid "Dash attack power increases by 27% and has a chance to inflict stun debuff"
 msgstr "ダッシュ攻撃の威力が27%増加し、スタンデバフを付与する可能性がある"
 
 #. Key:	Desc_Freezing_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Normal"
-msgid "dash attack power increases by 7% and has a chance to inflict stun debuff"
+msgid "Dash attack power increases by 7% and has a chance to inflict stun debuff"
 msgstr "ダッシュ攻撃の威力が7%増加し、スタンデバフを付与する可能性がある"
 
 #. Key:	Desc_Freezing_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Rare"
-msgid "dash attack power increases by 17% and has a chance to inflict stun debuff"
+msgid "Dash attack power increases by 17% and has a chance to inflict stun debuff"
 msgstr "ダッシュ攻撃の威力が17%増加し、スタンデバフを付与する可能性がある"
 
 #. Key:	Desc_Freezing_Resistance_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Legendary"
-msgid "reduces stun debuff duration by 50%"
+msgid "Reduces stun debuff duration by 50%"
 msgstr "スタンデバフの持続時間を50%短縮する"
 
 #. Key:	Desc_Freezing_Resistance_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Normal"
-msgid "reduces stun debuff duration by 30%"
+msgid "Reduces stun debuff duration by 30%"
 msgstr "スタンデバフの持続時間を30%短縮する"
 
 #. Key:	Desc_Freezing_Resistance_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Resistance_Rare"
-msgid "reduces stun debuff duration by 40%"
+msgid "Reduces stun debuff duration by 40%"
 msgstr "スタンデバフの持続時間を40%短縮する"
 
 #. Key:	Desc_Freezing_Strike_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Legendary"
-msgid "normal attack stun chance increases by 10%"
+msgid "Normal attack stun chance increases by 10%"
 msgstr "通常攻撃のスタン確率が10%増加する"
 
 #. Key:	Desc_Freezing_Strike_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Normal"
-msgid "normal attack stun chance increases by 2%"
+msgid "Normal attack stun chance increases by 2%"
 msgstr "通常攻撃のスタン確率が2%増加する"
 
 #. Key:	Desc_Freezing_Strike_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Enhancement_Rare"
-msgid "normal attack stun chance increases by 5%"
+msgid "Normal attack stun chance increases by 5%"
 msgstr "通常攻撃のスタン確率が5%増加する"
 
 #. Key:	Desc_Freezing_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Legendary"
-msgid "normal attack power increases by 25% and has a chance to inflict stun debuff"
+msgid "Normal attack power increases by 25% and has a chance to inflict stun debuff"
 msgstr "通常攻撃の威力が25%増加し、スタンデバフを付与する可能性がある"
 
 #. Key:	Desc_Freezing_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Normal"
-msgid "normal attack power increases by 5% and has a chance to inflict stun debuff"
+msgid "Normal attack power increases by 5% and has a chance to inflict stun debuff"
 msgstr "通常攻撃の威力が5%増加し、スタンデバフを付与する可能性がある"
 
 #. Key:	Desc_Freezing_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Rare"
-msgid "normal attack power increases by 15% and has a chance to inflict stun debuff"
+msgid "Normal attack power increases by 15% and has a chance to inflict stun debuff"
 msgstr "通常攻撃の威力が15%増加し、スタンデバフを付与する可能性がある"
 
 #. Key:	Desc_Heal_Pack_Enhancement_Legendary
@@ -395,63 +395,63 @@ msgstr "回復アイテムの回復量が40%の確率で35%増加する"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Legendary"
-msgid "max HP decreases by 20%, but normal attack deals very strong acidic damage"
+msgid "Max HP decreases by 20%, but normal attack deals very strong acidic damage"
 msgstr "最大HPが20%減少するが、通常攻撃が非常に強い酸性ダメージを与える"
 
 #. Key:	Desc_High-Risk_Oxidation_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Normal"
-msgid "max HP decreases by 20%, but normal attack deals strong acidic damage"
+msgid "Max HP decreases by 20%, but normal attack deals strong acidic damage"
 msgstr "最大HPが20%減少するが、通常攻撃が強い酸性ダメージを与える"
 
 #. Key:	Desc_High-Risk_Oxidation_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Rare"
-msgid "max HP decreases by 20%, but normal attack deals even stronger acidic damage"
+msgid "Max HP decreases by 20%, but normal attack deals even stronger acidic damage"
 msgstr "最大HPが20%減少するが、通常攻撃がさらに強い酸性ダメージを与える"
 
 #. Key:	Desc_Hit_Rate_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Hit_Rate_Enhancement_Legendary"
-msgid "all attack critical hit chance increases by 4%"
+msgid "All attack critical hit chance increases by 4%"
 msgstr "すべての攻撃のクリティカル率が4%増加する"
 
 #. Key:	Desc_Hit_Rate_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Hit_Rate_Enhancement_Normal"
-msgid "all attack critical hit chance increases by 2%"
+msgid "All attack critical hit chance increases by 2%"
 msgstr "すべての攻撃のクリティカル率が2%増加する"
 
 #. Key:	Desc_Hit_Rate_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Hit_Rate_Enhancement_Rare"
-msgid "all attack critical hit chance increases by 3%"
+msgid "All attack critical hit chance increases by 3%"
 msgstr "すべての攻撃のクリティカル率が3%増加する"
 
 #. Key:	Desc_Landing_Optimization_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Landing_Optimization_Legendary"
-msgid "roll delay decreases by 40%"
+msgid "Roll delay decreases by 40%"
 msgstr "回避のディレイが40%短縮される"
 
 #. Key:	Desc_Landing_Optimization_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Landing_Optimization_Normal"
-msgid "roll delay decreases by 20%"
+msgid "Roll delay decreases by 20%"
 msgstr "回避のディレイが20%短縮される"
 
 #. Key:	Desc_Landing_Optimization_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Landing_Optimization_Rare"
-msgid "roll delay decreases by 30%"
+msgid "Roll delay decreases by 30%"
 msgstr "回避のディレイが30%短縮される"
 
 #. Key:	Desc_Lucky_Extra_Drop_Legendary
@@ -479,448 +479,448 @@ msgstr "倒した敵から25%の確率で3倍のクラフト素材を獲得す�
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overdrive_Mode"
-msgid "max HP decreases by 10%, but movement speed increases by 30%"
+msgid "Max HP decreases by 10%, but movement speed increases by 30%"
 msgstr "最大HPが10%減少するが、移動速度が30%増加する"
 
 #. Key:	Desc_Overload_Self_Aerial_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Legendary"
-msgid "jump attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgid "Jump attack speed decreases by 15%, but inflicts very strong slow debuff"
 msgstr "ジャンプ攻撃の速度が15%低下するが、非常に強いスローデバフを付与する"
 
 #. Key:	Desc_Overload_Self_Aerial_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Normal"
-msgid "jump attack speed decreases by 15%, but inflicts slow debuff"
+msgid "Jump attack speed decreases by 15%, but inflicts slow debuff"
 msgstr "ジャンプ攻撃の速度が15%低下するが、スローデバフを付与する"
 
 #. Key:	Desc_Overload_Self_Aerial_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Rare"
-msgid "jump attack speed decreases by 15%, but inflicts strong slow debuff"
+msgid "Jump attack speed decreases by 15%, but inflicts strong slow debuff"
 msgstr "ジャンプ攻撃の速度が15%低下するが、強いスローデバフを付与する"
 
 #. Key:	Desc_Overload_Self_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Legendary"
-msgid "dash attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgid "Dash attack speed decreases by 15%, but inflicts very strong slow debuff"
 msgstr "ダッシュ攻撃の速度が15%低下するが、非常に強いスローデバフを付与する"
 
 #. Key:	Desc_Overload_Self_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Normal"
-msgid "dash attack speed decreases by 15%, but inflicts strong slow debuff"
+msgid "Dash attack speed decreases by 15%, but inflicts strong slow debuff"
 msgstr "ダッシュ攻撃の速度が15%低下するが、強いスローデバフを付与する"
 
 #. Key:	Desc_Overload_Self_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Rare"
-msgid "dash attack speed decreases by 15%, but inflicts even stronger slow debuff"
+msgid "Dash attack speed decreases by 15%, but inflicts even stronger slow debuff"
 msgstr "ダッシュ攻撃の速度が15%低下するが、さらに強いスローデバフを付与する"
 
 #. Key:	Desc_Overload_Self_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Legendary"
-msgid "movement speed decreases by 30%, but normal attack power increases by 30%"
+msgid "Movement speed decreases by 30%, but normal attack power increases by 30%"
 msgstr "移動速度が30%低下するが、通常攻撃の威力が30%増加する"
 
 #. Key:	Desc_Overload_Self_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Normal"
-msgid "movement speed decreases by 30%, but normal attack power increases by 10%"
+msgid "Movement speed decreases by 30%, but normal attack power increases by 10%"
 msgstr "移動速度が30%低下するが、通常攻撃の威力が10%増加する"
 
 #. Key:	Desc_Overload_Self_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Rare"
-msgid "movement speed decreases by 30%, but normal attack power increases by 20%"
+msgid "Movement speed decreases by 30%, but normal attack power increases by 20%"
 msgstr "移動速度が30%低下するが、通常攻撃の威力が20%増加する"
 
 #. Key:	Desc_Overload_Self_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Legendary"
-msgid "normal attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgid "Normal attack speed decreases by 15%, but inflicts very strong slow debuff"
 msgstr "通常攻撃の速度が15%低下するが、非常に強いスローデバフを付与する"
 
 #. Key:	Desc_Overload_Self_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Normal"
-msgid "normal attack speed decreases by 15%, but inflicts strong slow debuff"
+msgid "Normal attack speed decreases by 15%, but inflicts strong slow debuff"
 msgstr "通常攻撃の速度が15%低下するが、強いスローデバフを付与する"
 
 #. Key:	Desc_Overload_Self_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Rare"
-msgid "normal attack speed decreases by 15%, but inflicts even stronger slow debuff"
+msgid "Normal attack speed decreases by 15%, but inflicts even stronger slow debuff"
 msgstr "通常攻撃の速度が15%低下するが、さらに強いスローデバフを付与する"
 
 #. Key:	Desc_Oxidation_Aerial_Attack_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Legendary"
-msgid "jump attack deals strong acidic damage"
+msgid "Jump attack deals strong acidic damage"
 msgstr "ジャンプ攻撃が強い酸性ダメージを与える"
 
 #. Key:	Desc_Oxidation_Aerial_Attack_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Normal"
-msgid "jump attack deals weak acidic damage"
+msgid "Jump attack deals weak acidic damage"
 msgstr "ジャンプ攻撃が弱い酸性ダメージを与える"
 
 #. Key:	Desc_Oxidation_Aerial_Attack_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Aerial_Attack_Rare"
-msgid "jump attack deals acidic damage"
+msgid "Jump attack deals acidic damage"
 msgstr "ジャンプ攻撃が酸性ダメージを与える"
 
 #. Key:	Desc_Oxidation_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Legendary"
-msgid "dash attack deals strong acidic damage"
+msgid "Dash attack deals strong acidic damage"
 msgstr "ダッシュ攻撃が強い酸性ダメージを与える"
 
 #. Key:	Desc_Oxidation_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Normal"
-msgid "dash attack deals weak acidic damage"
+msgid "Dash attack deals weak acidic damage"
 msgstr "ダッシュ攻撃が弱い酸性ダメージを与える"
 
 #. Key:	Desc_Oxidation_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Dash_Rare"
-msgid "dash attack deals acidic damage"
+msgid "Dash attack deals acidic damage"
 msgstr "ダッシュ攻撃が酸性ダメージを与える"
 
 #. Key:	Desc_Oxidation_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Legendary"
-msgid "normal attack deals strong acidic damage"
+msgid "Normal attack deals strong acidic damage"
 msgstr "通常攻撃が強い酸性ダメージを与える"
 
 #. Key:	Desc_Oxidation_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Normal"
-msgid "normal attack deals weak acidic damage"
+msgid "Normal attack deals weak acidic damage"
 msgstr "通常攻撃が弱い酸性ダメージを与える"
 
 #. Key:	Desc_Oxidation_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Oxidation_Strike_Rare"
-msgid "normal attack deals acidic damage"
+msgid "Normal attack deals acidic damage"
 msgstr "通常攻撃が酸性ダメージを与える"
 
 #. Key:	Desc_Precision_Aerial_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Aerial_Strike_Legendary"
-msgid "jump attack critical hit chance increases by 17%"
+msgid "Jump attack critical hit chance increases by 17%"
 msgstr "ジャンプ攻撃のクリティカル率が17%増加する"
 
 #. Key:	Desc_Precision_Aerial_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Aerial_Strike_Normal"
-msgid "jump attack critical hit chance increases by 7%"
+msgid "Jump attack critical hit chance increases by 7%"
 msgstr "ジャンプ攻撃のクリティカル率が7%増加する"
 
 #. Key:	Desc_Precision_Aerial_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Aerial_Strike_Rare"
-msgid "jump attack critical hit chance increases by 12%"
+msgid "Jump attack critical hit chance increases by 12%"
 msgstr "ジャンプ攻撃のクリティカル率が12%増加する"
 
 #. Key:	Desc_Precision_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Dash_Legendary"
-msgid "dash attack critical hit chance increases by 17%"
+msgid "Dash attack critical hit chance increases by 17%"
 msgstr "ダッシュ攻撃のクリティカル率が17%増加する"
 
 #. Key:	Desc_Precision_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Dash_Normal"
-msgid "dash attack critical hit chance increases by 7%"
+msgid "Dash attack critical hit chance increases by 7%"
 msgstr "ダッシュ攻撃のクリティカル率が7%増加する"
 
 #. Key:	Desc_Precision_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Dash_Rare"
-msgid "dash attack critical hit chance increases by 12%"
+msgid "Dash attack critical hit chance increases by 12%"
 msgstr "ダッシュ攻撃のクリティカル率が12%増加する"
 
 #. Key:	Desc_Precision_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Strike_Legendary"
-msgid "normal attack critical hit chance increases by 15%"
+msgid "Normal attack critical hit chance increases by 15%"
 msgstr "通常攻撃のクリティカル率が15%増加する"
 
 #. Key:	Desc_Precision_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Strike_Normal"
-msgid "normal attack critical hit chance increases by 5%"
+msgid "Normal attack critical hit chance increases by 5%"
 msgstr "通常攻撃のクリティカル率が5%増加する"
 
 #. Key:	Desc_Precision_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Precision_Strike_Rare"
-msgid "normal attack critical hit chance increases by 10%"
+msgid "Normal attack critical hit chance increases by 10%"
 msgstr "通常攻撃のクリティカル率が10%増加する"
 
 #. Key:	Desc_Skill_Optimization_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Skill_Optimization_Legendary"
-msgid "overall skill cooldown decreases by 50%"
+msgid "Overall skill cooldown decreases by 50%"
 msgstr "全体のスキルクールダウンが50%短縮される"
 
 #. Key:	Desc_Skill_Optimization_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Skill_Optimization_Normal"
-msgid "overall skill cooldown decreases by 10%"
+msgid "Overall skill cooldown decreases by 10%"
 msgstr "全体のスキルクールダウンが10%短縮される"
 
 #. Key:	Desc_Skill_Optimization_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Skill_Optimization_Rare"
-msgid "overall skill cooldown decreases by 35%"
+msgid "Overall skill cooldown decreases by 35%"
 msgstr "全体のスキルクールダウンが35%短縮される"
 
 #. Key:	Desc_Strike_Optimization_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Legendary"
-msgid "normal attack speed increases by 35%"
+msgid "Normal attack speed increases by 35%"
 msgstr "通常攻撃の速度が35%増加する"
 
 #. Key:	Desc_Strike_Optimization_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Normal"
-msgid "normal attack speed increases by 5%"
+msgid "Normal attack speed increases by 5%"
 msgstr "通常攻撃の速度が5%増加する"
 
 #. Key:	Desc_Strike_Optimization_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Rare"
-msgid "normal attack speed increases by 20%"
+msgid "Normal attack speed increases by 20%"
 msgstr "通常攻撃の速度が20%増加する"
 
 #. Key:	Desc_Stunning_Output_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Stunning_Output_Legendary"
-msgid "normal attack has a 3% chance to inflict very strong stun debuff"
+msgid "Normal attack has a 3% chance to inflict very strong stun debuff"
 msgstr "通常攻撃が3%の確率で非常に強いスタンデバフを付与する"
 
 #. Key:	Desc_Stunning_Output_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Stunning_Output_Normal"
-msgid "normal attack has a 1% chance to inflict very strong stun debuff"
+msgid "Normal attack has a 1% chance to inflict very strong stun debuff"
 msgstr "通常攻撃が1%の確率で非常に強いスタンデバフを付与する"
 
 #. Key:	Desc_Stunning_Output_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Stunning_Output_Rare"
-msgid "normal attack has a 2% chance to inflict very strong stun debuff"
+msgid "Normal attack has a 2% chance to inflict very strong stun debuff"
 msgstr "通常攻撃が2%の確率で非常に強いスタンデバフを付与する"
 
 #. Key:	Desc_Sub-Weapon_Slot_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Sub-Weapon_Slot_Enhancement_Legendary"
-msgid "sub-weapon max capacity increases by 3 times"
+msgid "Sub-weapon max capacity increases by 3 times"
 msgstr "サブ武器の最大所持数が3倍増加する"
 
 #. Key:	Desc_Sub-Weapon_Slot_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Sub-Weapon_Slot_Enhancement_Normal"
-msgid "sub-weapon max capacity increases by 1.5 times"
+msgid "Sub-weapon max capacity increases by 1.5 times"
 msgstr "サブ武器の最大所持数が1.5倍増加する"
 
 #. Key:	Desc_Sub-Weapon_Slot_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Sub-Weapon_Slot_Enhancement_Rare"
-msgid "sub-weapon max capacity increases by 2 times"
+msgid "Sub-weapon max capacity increases by 2 times"
 msgstr "サブ武器の最大所持数が2倍増加する"
 
 #. Key:	Desc_System_Performance_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Legendary"
-msgid "all attack power increases by 3%"
+msgid "All attack power increases by 3%"
 msgstr "すべての攻撃力が3%増加する"
 
 #. Key:	Desc_System_Performance_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Normal"
-msgid "all attack power increases by 1%"
+msgid "All attack power increases by 1%"
 msgstr "すべての攻撃力が1%増加する"
 
 #. Key:	Desc_System_Performance_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Rare"
-msgid "all attack power increases by 2%"
+msgid "All attack power increases by 2%"
 msgstr "すべての攻撃力が2%増加する"
 
 #. Key:	Desc_Throttling_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Legendary"
-msgid "dash attack greatly increases and inflicts slow debuff"
+msgid "Dash attack greatly increases and inflicts slow debuff"
 msgstr "ダッシュ攻撃が大幅に増加し、スローデバフを付与する"
 
 #. Key:	Desc_Throttling_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Normal"
-msgid "dash attack slightly increases and inflicts slow debuff"
+msgid "Dash attack slightly increases and inflicts slow debuff"
 msgstr "ダッシュ攻撃がわずかに増加し、スローデバフを付与する"
 
 #. Key:	Desc_Throttling_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Dash_Rare"
-msgid "dash attack increases and inflicts slow debuff"
+msgid "Dash attack increases and inflicts slow debuff"
 msgstr "ダッシュ攻撃が増加し、スローデバフを付与する"
 
 #. Key:	Desc_Throttling_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Legendary"
-msgid "normal attack greatly increases and inflicts slow debuff"
+msgid "Normal attack greatly increases and inflicts slow debuff"
 msgstr "通常攻撃が大幅に増加し、スローデバフを付与する"
 
 #. Key:	Desc_Throttling_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Normal"
-msgid "normal attack slightly increases and inflicts slow effect"
+msgid "Normal attack slightly increases and inflicts slow effect"
 msgstr "通常攻撃がわずかに増加し、スロー効果を付与する"
 
 #. Key:	Desc_Throttling_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Throttling_Strike_Rare"
-msgid "normal attack increases and inflicts slow debuff"
+msgid "Normal attack increases and inflicts slow debuff"
 msgstr "通常攻撃が増加し、スローデバフを付与する"
 
 #. Key:	Desc_Toxic_Aerial_Attack_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Legendary"
-msgid "normal attack power decreases by 2%, but jump attack deals very strong acidic damage"
+msgid "Normal attack power decreases by 2%, but jump attack deals very strong acidic damage"
 msgstr "通常攻撃の威力が2%減少するが、ジャンプ攻撃が非常に強い酸性ダメージを与える"
 
 #. Key:	Desc_Toxic_Aerial_Attack_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Normal"
-msgid "normal attack power decreases by 2%, but jump attack deals strong acidic damage"
+msgid "Normal attack power decreases by 2%, but jump attack deals strong acidic damage"
 msgstr "通常攻撃の威力が2%減少するが、ジャンプ攻撃が強い酸性ダメージを与える"
 
 #. Key:	Desc_Toxic_Aerial_Attack_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Aerial_Attack_Rare"
-msgid "normal attack power decreases by 2%, but jump attack deals even stronger acidic damage"
+msgid "Normal attack power decreases by 2%, but jump attack deals even stronger acidic damage"
 msgstr "通常攻撃の威力が2%減少するが、ジャンプ攻撃がさらに強い酸性ダメージを与える"
 
 #. Key:	Desc_Toxic_Oxidation_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Legendary"
-msgid "normal attack power decreases by 2%, but dash attack deals very strong acidic damage"
+msgid "Normal attack power decreases by 2%, but dash attack deals very strong acidic damage"
 msgstr "通常攻撃の威力が2%減少するが、ダッシュ攻撃が非常に強い酸性ダメージを与える"
 
 #. Key:	Desc_Toxic_Oxidation_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Normal"
-msgid "normal attack power decreases by 2%, but dash attack deals strong acidic damage"
+msgid "Normal attack power decreases by 2%, but dash attack deals strong acidic damage"
 msgstr "通常攻撃の威力が2%減少するが、ダッシュ攻撃が強い酸性ダメージを与える"
 
 #. Key:	Desc_Toxic_Oxidation_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Dash_Rare"
-msgid "normal attack power decreases by 2%, but dash attack deals even stronger acidic damage"
+msgid "Normal attack power decreases by 2%, but dash attack deals even stronger acidic damage"
 msgstr "通常攻撃の威力が2%減少するが、ダッシュ攻撃がさらに強い酸性ダメージを与える"
 
 #. Key:	Desc_Toxic_Oxidation_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Legendary"
-msgid "defense power decreases by 50%, but normal attack deals very strong acidic damage"
+msgid "Defense power decreases by 50%, but normal attack deals very strong acidic damage"
 msgstr "防御力が50%減少するが、通常攻撃が非常に強い酸性ダメージを与える"
 
 #. Key:	Desc_Toxic_Oxidation_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Normal"
-msgid "defense power decreases by 50%, but normal attack deals strong acidic damage"
+msgid "Defense power decreases by 50%, but normal attack deals strong acidic damage"
 msgstr "防御力が50%減少するが、通常攻撃が強い酸性ダメージを与える"
 
 #. Key:	Desc_Toxic_Oxidation_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Rare"
-msgid "defense power decreases by 50%, but normal attack deals even stronger acidic damage"
+msgid "Defense power decreases by 50%, but normal attack deals even stronger acidic damage"
 msgstr "防御力が50%減少するが、通常攻撃がさらに強い酸性ダメージを与える"
 
 #. Key:	Desc_Transcendent_Critical_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Transcendent_Critical_Legendary"
-msgid "all attack critical hit damage increases by 1.5 times"
+msgid "All attack critical hit damage increases by 1.5 times"
 msgstr "すべての攻撃のクリティカルダメージが1.5倍増加する"
 
 #. Key:	Desc_Transcendent_Critical_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Transcendent_Critical_Normal"
-msgid "all attack critical hit damage increases by 1.2 times"
+msgid "All attack critical hit damage increases by 1.2 times"
 msgstr "すべての攻撃のクリティカルダメージが1.2倍増加する"
 
 #. Key:	Desc_Transcendent_Critical_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Transcendent_Critical_Rare"
-msgid "all attack critical hit damage increases by 1.3 times"
+msgid "All attack critical hit damage increases by 1.3 times"
 msgstr "すべての攻撃のクリティカルダメージが1.3倍増加する"
 
 #. Key:	Grade_Legendary
@@ -2365,6 +2365,55 @@ msgctxt "ST_Item,Desc_Bombard"
 msgid "A small bomb crafted by someone. It looks incredibly powerful."
 msgstr "誰かが作った小型爆弾。非常に強力に見える。"
 
+#. Key:	Desc_Boosterchip_Action
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Boosterchip_Action"
+msgid "Enhances combo and movement speed. Provides a balanced increase in overall combat ability."
+msgstr "コンボや移動の速度を強化します。全体的な戦闘力をバランスよく高めるチップです。"
+
+#. Key:	Desc_Boosterchip_Flame
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Boosterchip_Flame"
+msgid "Inflicts a flame debuff on enemies, causing strong damage over time with a low probability."
+msgstr "敵に火炎デバフを付与し、低確率で強力な持続ダメージを与えます。"
+
+#. Key:	Desc_Boosterchip_Freezing
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Boosterchip_Freezing"
+msgid "Temporarily stuns enemies, rendering them unable to act. Great for disabling powerful foes or setting up combo chains."
+msgstr "一時的に敵の動きを止めるスタン効果を与えます。危険な敵を抑える、またはコンボの起点を作るのに有効です。"
+
+#. Key:	Desc_Boosterchip_Item
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Boosterchip_Item"
+msgid "Enhances item performance and grants various supportive effects. Specialized for survival and resource efficiency."
+msgstr "アイテムの性能を高め、さまざまな補助効果を付与します。生存力や資源管理に特化しています。"
+
+#. Key:	Desc_Boosterchip_Oxidation
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Boosterchip_Oxidation"
+msgid "Applies an oxidation debuff that deals guaranteed but mild damage over time."
+msgstr "酸化デバフを付与し、確実に弱い持続ダメージを与えます。"
+
+#. Key:	Desc_Boosterchip_Slow
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Boosterchip_Slow"
+msgid "Inflicts a slow debuff that reduces enemy movement speed. Useful for controlling the pace of battle and preventing fast enemies from closing in."
+msgstr "敵の移動速度を大幅に低下させるスロウのデバフを付与します。 すばやい敵を制御し、戦闘の流れを掴むのに役立ちます。"
+
+#. Key:	Desc_Boosterchip_SpecialAction
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Boosterchip_SpecialAction"
+msgid "Enhances critical hit chance and damage during combos. Ideal for combat styles focused on powerful finishing blows."
+msgstr "コンボ中のクリティカル率とクリティカルダメージを強化します。 強力な一撃を狙う戦闘スタイルに適しています。"
+
 #. Key:	Desc_ChewingGum
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
@@ -2385,6 +2434,13 @@ msgstr "まだ火が残っているタバコの吸い殻。"
 msgctxt "ST_Item,Desc_EMP_Vial"
 msgid "A small EMP bomb made by someone. It seems highly effective against machines."
 msgstr "誰かが作った小型EMP爆弾。機械に対して非常に効果的なようだ。"
+
+#. Key:	Desc_HealPack
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_HealPack"
+msgid "Quickly repairs damage taken during combat. HP recovery amount varies depending on size."
+msgstr "戦闘中に受けたダメージを素早く修復する。回復量はサイズによって異なる。"
 
 #. Key:	Desc_SodaCan
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -2425,50 +2481,50 @@ msgstr "ボンバード"
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_BoosterChip_Action"
-msgid "Booster Chip (Action)"
-msgstr "ブースターチップ（アクション）"
+msgid "Action Booster Chip"
+msgstr "アクション・ブースターチップ"
 
 #. Key:	Name_BoosterChip_Flame
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_BoosterChip_Flame"
-msgid "Booster Chip (Flame)"
-msgstr "ブースターチップ（炎）"
+msgid "Flame Booster Chip"
+msgstr "フレイム・ブースターチップ"
 
 #. Key:	Name_BoosterChip_Freezing
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_BoosterChip_Freezing"
-msgid "Booster Chip (Freezing)"
-msgstr "ブースターチップ（冷気）"
+msgid "Freezing Booster Chip"
+msgstr "フリージング・ブースターチップ"
 
 #. Key:	Name_BoosterChip_Item
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_BoosterChip_Item"
-msgid "Booster Chip (Item)"
-msgstr "ブースターチップ（アイテム）"
+msgid "Utility Booster Chip"
+msgstr "ユーティリティ・ブースターチップ"
 
 #. Key:	Name_BoosterChip_Oxidation
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_BoosterChip_Oxidation"
-msgid "Booster Chip (Oxidation)"
-msgstr "ブースターチップ（酸化）"
+msgid "Oxidation Booster Chip"
+msgstr "酸化・ブースターチップ"
 
 #. Key:	Name_BoosterChip_Slow
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_BoosterChip_Slow"
-msgid "Booster Chip (Slow)"
-msgstr "ブースターチップ（スロー）"
+msgid "Slow Booster Chip"
+msgstr "スロー・ブースターチップ"
 
 #. Key:	Name_BoosterChip_SpecialAction
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_BoosterChip_SpecialAction"
-msgid "Booster Chip (Special Action)"
-msgstr "ブースターチップ（特殊アクション）"
+msgid "Critical Booster Chip"
+msgstr "クリティカル・ブースターチップ"
 
 #. Key:	Name_BrokenGlassBottleBat
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -2554,26 +2610,33 @@ msgctxt "ST_Item,Name_GlassBottleBat"
 msgid "Glass Bottle Bat"
 msgstr "ガラス瓶バット"
 
+#. Key:	Name_HealPack
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_HealPack"
+msgid "Portable Repair Kit"
+msgstr "ポータブル修理キット"
+
 #. Key:	Name_HealPack_Large
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Large"
-msgid "Heal Pack (Large)"
-msgstr "ヒールパック（大）"
+msgid "Large Portable Repair Kit"
+msgstr "ポータブル修理キット（大）"
 
 #. Key:	Name_HealPack_Medium
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Medium"
-msgid "Heal Pack (Medium)"
-msgstr "ヒールパック（中）"
+msgid "Medium Portable Repair Kit"
+msgstr "ポータブル修理キット（中）"
 
 #. Key:	Name_HealPack_Small
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Small"
-msgid "Heal Pack (Small)"
-msgstr "ヒールパック（小）"
+msgid "Small Portable Repair Kit"
+msgstr "ポータブル修理キット（小）"
 
 #. Key:	Name_IronHammer
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -2960,6 +3023,20 @@ msgctxt "ST_Skill,Name_WeaknessAnalysis"
 msgid "Weakness Analysis"
 msgstr "弱点分析"
 
+#. Key:	Desc_BossStage
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Desc_BossStage"
+msgid "This is a boss stage. Prepare thoroughly."
+msgstr "ボスとの戦闘ステージです。しっかりと準備しましょう。"
+
+#. Key:	Desc_CraftStage
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Desc_CraftStage"
+msgid "Create skill modules using crafting materials."
+msgstr "クラフト素材を使ってスキルモジュールを作成します。"
+
 #. Key:	Header_AbilityInfo
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3135,6 +3212,20 @@ msgctxt "ST_Tutorial,Input_Sprint"
 msgid "Sprint"
 msgstr "スプリント"
 
+#. Key:	Name_BossStage
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Name_BossStage"
+msgid "Boss Stage"
+msgstr "ボスステージ"
+
+#. Key:	Name_CraftStage
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Name_CraftStage"
+msgid "Crafting Stage"
+msgstr "クラフトステージ"
+
 #. Key:	Tutorial_Battle_1
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3174,8 +3265,8 @@ msgstr "<Bold.24>[お知らせ！]</>\r\nこれはBackStreetのデモ版です�
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Reward_1"
-msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Healing Packs]</>  \r\n- Types: Small, Medium, Large healing packs.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skills.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
-msgstr "<Bold.24>[アイテム報酬ガイド]</>\r\n生存力と戦闘力を強化するさまざまなアイテム報酬を手に入れましょう。\r\n\r\n<Medium.24>[ヒールパック]</>  \r\n- 種類: 小、中、大のヒールパック  \r\n- 入手方法:  \r\n  - ステージ報酬としてランダムに獲得  \r\n  - ゲームプレイ中に'F'キーで収集  \r\n\r\n<Medium.24>[クラフト素材]</>  \r\n- 目的: スキルの作成および強化に使用  \r\n- 入手方法:  \r\n  - 敵を倒すと自動的に収集  \r\n- スキルクラフト: 指定された「クラフトステージ」でのみ利用可能  \r\n\r\n<Bold.22>ヒールパックとクラフト素材をうまく活用してキャラクターを強化し、試練を乗り越えましょう！</>"
+msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Portable Repair Kits]</>  \r\n- Types: Small, Medium, Large Portable Repair Kits.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skill modules.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Module Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
+msgstr "<Bold.24>[アイテム報酬ガイド]</>\r\n生存力と戦闘力を強化するさまざまなアイテム報酬を手に入れましょう。\r\n\r\n<Medium.24>[ポータブル修理キット]</>  \r\n- 種類: 小、中、大のポータブル修理キット\r\n- 入手方法:  \r\n  - ステージ報酬としてランダムに獲得  \r\n  - ゲームプレイ中に'F'キーで収集  \r\n\r\n<Medium.24>[クラフト素材]</>  \r\n- 目的: スキルモジュールの作成および強化に使用\r\n- 入手方法:  \r\n  - 敵を倒すと自動的に収集  \r\n- スキルクラフト: 指定された「クラフトステージ」でのみ利用可能  \r\n\r\n<Bold.22>ヒールパックとクラフト素材をうまく活用してキャラクターを強化し、試練を乗り越えましょう！</>"
 
 #. Key:	Tutorial_Stage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
