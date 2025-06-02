@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-05-16 08:52\n"
-"PO-Revision-Date: 2025-05-16 08:52\n"
+"POT-Creation-Date: 2025-06-02 09:47\n"
+"PO-Revision-Date: 2025-06-02 09:47\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -2614,29 +2614,29 @@ msgstr "유리병 방망이"
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack"
-msgid "Portable Repair Kit"
-msgstr "휴대용 수리 키트"
+msgid "Repair Kit"
+msgstr "수리 키트"
 
 #. Key:	Name_HealPack_Large
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Large"
-msgid "Large Portable Repair Kit"
-msgstr "대형 휴대용 수리 키트"
+msgid "Large Repair Kit"
+msgstr "대형 수리 키트"
 
 #. Key:	Name_HealPack_Medium
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Medium"
-msgid "Medium Portable Repair Kit"
-msgstr "중형 휴대용 수리 키트"
+msgid "Medium Repair Kit"
+msgstr "중형 수리 키트"
 
 #. Key:	Name_HealPack_Small
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Small"
-msgid "Small Portable Repair Kit"
-msgstr "소형 휴대용 수리 키트"
+msgid "Small Repair Kit"
+msgstr "소형 수리 키트"
 
 #. Key:	Name_IronHammer
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -3265,8 +3265,8 @@ msgstr "<Bold.24>[데모 안내!]</>\r\n\r\nBackStreet의 데모 버전입니다
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Reward_1"
-msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Portable Repair Kits]</>  \r\n- Types: Small, Medium, Large Portable Repair Kits.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skill modules.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Module Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
-msgstr "<Bold.24>[아이템 보상 가이드]</>\r\n- 다양한 아이템 보상을 획득하여 생존력을 높이고 전투력을 강화하세요.\r\n\r\n<Medium.24>[휴대용 수리 키트]</>  \r\n- 종류: 소형, 중형, 대형 휴대용 수리 키트\r\n- 획득 방법:  \r\n  - 스테이지 클리어 보상으로 랜덤 지급됩니다. \r\n  - 게임 중 'F' 키를 사용하여 수집할 수 있습니다.\r\n\r\n<Medium.24>[제작 재료]</>  \r\n- 용도: 스킬 모듈 제작 및 강화에 사용됩니다.  \r\n- 획득 방법:  \r\n  - 처치한 적으로부터 자동 수집됩니다.  \r\n- 스킬 모듈 제작: 특정 \"조합 스테이지\"에서만 가능합니다.  \r\n\r\n<Bold.22>휴대용 수리 키트와 조합 재료를 효과적으로 활용하여 캐릭터를 강화하고 도전 과제를 극복하세요!</>"
+msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Repair Kits]</>  \r\n- Types: Small, Medium, Large Repair Kits.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skill modules.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Module Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
+msgstr "<Bold.24>[아이템 보상 가이드]</>\r\n- 다양한 아이템 보상을 획득하여 생존력을 높이고 전투력을 강화하세요.\r\n\r\n<Medium.24>[수리 키트]</>  \r\n- 종류: 소형, 중형, 대형 수리 키트\r\n- 획득 방법:  \r\n  - 스테이지 클리어 보상으로 랜덤 지급됩니다. \r\n  - 게임 중 'F' 키를 사용하여 수집할 수 있습니다.\r\n\r\n<Medium.24>[제작 재료]</>  \r\n- 용도: 스킬 모듈 제작 및 강화에 사용됩니다.  \r\n- 획득 방법:  \r\n  - 처치한 적으로부터 자동 수집됩니다.  \r\n- 스킬 모듈 제작: 특정 \"조합 스테이지\"에서만 가능합니다.  \r\n\r\n<Bold.22>휴대용 수리 키트와 조합 재료를 효과적으로 활용하여 캐릭터를 강화하고 도전 과제를 극복하세요!</>"
 
 #. Key:	Tutorial_Stage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
