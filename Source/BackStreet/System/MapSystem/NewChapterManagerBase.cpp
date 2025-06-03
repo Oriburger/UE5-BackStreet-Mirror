@@ -72,7 +72,7 @@ void ANewChapterManagerBase::ContinueChapter()
 	if (CurrentChapterInfo.StageInfoList.IsValidIndex(0))
 	{
 		int32 stageIdx = StageGeneratorComponent->GetStageIdx(CurrentChapterInfo.CurrentStageCoordinate);
-		StageManagerComponent->InitStage(StageManagerComponent->GetCurrentStageInfo());
+			StageManagerComponent->InitStage(StageManagerComponent->GetCurrentStageInfo());
 	}
 	else
 	{
@@ -98,7 +98,8 @@ void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 	else
 	{
 		//나중에 Reward UI로 대체하기
-		OpenNeutralZoneLevel();
+		//OpenNeutralZoneLevel();
+		OpenMainMenuLevel();
 	}
 }
 

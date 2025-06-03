@@ -113,11 +113,6 @@ void AProjectileBase::InitProjectileAsset()
 
 void AProjectileBase::DestroyWithEffect(FVector Location, bool bContainCameraShake)
 {
-	if (bContainCameraShake)
-	{
-		GamemodeRef.Get()->PlayCameraShakeEffect(ECameraShakeType::E_Hit, Location, 100.0f);
-	}
-
 	FTransform targetTransform = { FRotator::ZeroRotator, Location, {1.0f, 1.0f, 1.0f} };
 	
 	if (AssetManagerBaseRef.IsValid())

@@ -109,7 +109,7 @@ public:
 
 //=============State =================
 	//Item Amount which can not edit in datatable
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 		uint8 ItemAmount = 0;
 };
 

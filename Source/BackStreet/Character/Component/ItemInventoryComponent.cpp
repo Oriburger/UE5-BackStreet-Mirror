@@ -99,7 +99,7 @@ void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
 	{
 		TryRemoveWeapon(ItemID, InventoryInfoData.ItemMap[ItemID].ItemType, ItemCnt);
 	}
-	
+
 	OnUpdateItem.Broadcast();
 	OnItemRemoved.Broadcast(InventoryInfoData.ItemMap[ItemID], InventoryInfoData.ItemMap[ItemID].ItemAmount);
 }
@@ -130,7 +130,7 @@ bool UItemInventoryComponent::TryAddWeapon(int32 ItemID, EItemCategoryInfo ItemC
 		FWeaponStateStruct& targetState = GetWeaponState(ItemID - 20000);
 		int32 prevCount = targetState.RangedWeaponState.CurrentAmmoCount;
 		targetState.RangedWeaponState.CurrentAmmoCount += ItemCount;
-		
+
 		//@@ TEMPORARY CODE @@@@@@@
 		int32 maxAmmoCount = WeaponRef.Get()->GetWeaponStatInfoWithID(ItemID - 20000).RangedWeaponStat.MaxTotalAmmo;
 		maxAmmoCount = maxAmmoCount * FMath::Max(1.0f, OwnerCharacterRef.Get()->GetStatTotalValue(ECharacterStatType::E_SubWeaponCapacity));
@@ -142,7 +142,7 @@ bool UItemInventoryComponent::TryAddWeapon(int32 ItemID, EItemCategoryInfo ItemC
 
 		InventoryInfoData.ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, InventoryInfoData.ItemMap[ItemID].ItemAmount + ItemCount);
 		TryUpdateWeaponState(ItemID - 20000, targetState);
-		
+
 		OnItemAdded.Broadcast(InventoryInfoData.ItemMap[ItemID], ItemCount);
 	}
 	return true;
@@ -182,7 +182,7 @@ void UItemInventoryComponent::GetItemData(int32 ItemID, FItemInfoDataStruct& Ite
 TMap<ECraftingItemType, uint8> UItemInventoryComponent::GetAllCraftingItemAmount()
 {
 	TMap<ECraftingItemType, uint8> currItemAmountMap;
-	TArray< ECraftingItemType> craftingItemTypeList = {ECraftingItemType::E_Screw, ECraftingItemType::E_Spring , ECraftingItemType::E_Gear , ECraftingItemType::E_Wrench };
+	TArray< ECraftingItemType> craftingItemTypeList = { ECraftingItemType::E_Screw, ECraftingItemType::E_Spring , ECraftingItemType::E_Gear , ECraftingItemType::E_Wrench };
 
 	for (ECraftingItemType type : craftingItemTypeList)
 	{
@@ -221,7 +221,7 @@ bool UItemInventoryComponent::GetIsItemEnough(int32 ItemID, uint8 NeedItemAmount
 {
 	if (!InventoryInfoData.ItemMap.Contains(ItemID)) return false;
 
-	if(InventoryInfoData.ItemMap[ItemID].ItemAmount<NeedItemAmount) return false;
+	if (InventoryInfoData.ItemMap[ItemID].ItemAmount < NeedItemAmount) return false;
 	return true;
 }
 
@@ -242,7 +242,7 @@ FItemInfoDataStruct UItemInventoryComponent::GetMainWeaponInfoData()
 
 FItemInfoDataStruct UItemInventoryComponent::GetSubWeaponInfoData()
 {
-	if(InventoryInfoData.CurrSubWeaponCount == 0) FItemInfoDataStruct();
+	if (InventoryInfoData.CurrSubWeaponCount == 0) FItemInfoDataStruct();
 	TArray<int32> keyList;
 	InventoryInfoData.ItemMap.GenerateKeyArray(keyList);
 
@@ -264,7 +264,7 @@ void UItemInventoryComponent::OnWeaponStateUpdated(int32 WeaponID, FWeaponStatSt
 		UE_LOG(LogItem, Error, TEXT("UItemInventoryComponent::OnWeaponStateUpdated %d is not found in InventoryInfoData.ItemMap"), WeaponID);
 		return;
 	}
-	
+
 	if (WeaponStat.WeaponType == EWeaponType::E_Shoot)
 	{
 		const int32 ammoVariance = NewState.RangedWeaponState.CurrentAmmoCount - InventoryInfoData.ItemMap[WeaponID + 20000].ItemAmount;
@@ -313,5 +313,3 @@ FWeaponStateStruct& UItemInventoryComponent::GetWeaponState(int32 WeaponID)
 	}
 	return InventoryInfoData.WeaponStateMap[WeaponID];
 }
-
-
