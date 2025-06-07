@@ -34,6 +34,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FItemInventoryInfoStruct InventoryInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FSkillManagerInfoStruct SkillManagerInfo;
 };
 
 USTRUCT(BlueprintType)

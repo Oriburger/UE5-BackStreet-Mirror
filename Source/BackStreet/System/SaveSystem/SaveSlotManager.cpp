@@ -10,6 +10,7 @@
 #include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "../../Character/Component/ItemInventoryComponent.h"
 #include "../../Character/Component/WeaponComponentBase.h"
+#include "../../Character/Component/SkillManagerComponentBase.h"	
 #include "ProgressSaveGame.h"
 
 ASaveSlotManager::ASaveSlotManager()
@@ -164,6 +165,7 @@ void ASaveSlotManager::FetchGameData()
 	ProgressSaveData.WeaponStateInfo = PlayerCharacterRef->WeaponComponent->GetWeaponState();
 	ProgressSaveData.AbilityManagerInfo = PlayerCharacterRef->AbilityManagerComponent->GetAbilityManagerInfo();
 	ProgressSaveData.InventoryInfo = PlayerCharacterRef->ItemInventory->GetInventoryInfoData();
+	ProgressSaveData.SkillManagerInfo = PlayerCharacterRef->SkillManagerComponent->GetSkillManagerInfo();
 	SaveSlotInfo.bIsInGame = GameInstanceRef->GetIsInGame();
 	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::FetchGameData - Fetch game data from GameInstance / bIsChapterInitialized : %d"), (int32)ProgressSaveData.ChapterInfo.bIsChapterInitialized);
 }
@@ -233,6 +235,7 @@ void ASaveSlotManager::ApplyCachedData()
 			PlayerCharacterRef->WeaponComponent->SetWeaponStat(ProgressSaveData.WeaponStatInfo);
 			PlayerCharacterRef->WeaponComponent->SetWeaponState(ProgressSaveData.WeaponStateInfo);
 			PlayerCharacterRef->AbilityManagerComponent->InitAbilityManager(PlayerCharacterRef.Get(), ProgressSaveData.AbilityManagerInfo);
+			PlayerCharacterRef->SkillManagerComponent->InitSkillManager(ProgressSaveData.SkillManagerInfo);
 		}
 	}
 	
