@@ -55,6 +55,13 @@ private:
 	UFUNCTION()
 		void UpdateCameraRotation();
 
+	UFUNCTION()
+		bool ConeTraceByProfile(const FVector Start, const FVector End, float Radius, FName ProfileName
+			, bool bTraceComplex, const TArray<AActor*>& ActorsToIgnore, EDrawDebugTrace::Type DrawDebugType
+			, TArray<FHitResult>& OutHits, bool bIgnoreSelf, FLinearColor TraceColor = FLinearColor::Red
+			, FLinearColor TraceHitColor = FLinearColor::Green, float DrawTime = 5.0f);
+
+
 // ============ Property & Getter & Setter =======================
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -90,6 +97,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		bool bShowDebugSphere = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		bool bUseConeTrace = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (UIMin = 0.0, UIMax = 1.0, EditCondition = "bUseConeTrace"))
+		float TraceDensity = 0.5f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (UIMin = 0.0, UIMax = 90.0, EditCondition = "bUseConeTrace"))
+		float TraceAngle = 45.0f; //in degree
 		
 private:
 	bool bIsTargetingActivated;

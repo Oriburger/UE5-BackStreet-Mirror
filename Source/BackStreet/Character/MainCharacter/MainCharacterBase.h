@@ -70,6 +70,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UAbilityManagerComponent* AbilityManagerComponent; 
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UTargetingManagerComponent* TargetingManager;
+
 protected:
 	//스프링암 길이에 따라 캐릭터 폰 비저빌리티 업데이트
 	UFUNCTION()
@@ -115,6 +118,10 @@ public:
 	// Move Key input check
 	UPROPERTY(BlueprintReadOnly)
 		bool bMoveKeyDown = false;
+
+	// Movement Input Value
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FVector2D GetCurrentMovementInputValue() { return MovementInputValue; }
 
 protected:
 	UFUNCTION()

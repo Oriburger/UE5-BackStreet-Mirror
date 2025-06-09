@@ -137,7 +137,7 @@ void AEnemyCharacterBase::TakeKnockBack(float KnockbackForce, float KnockbackRes
 
 	float effectiveKnockback = KnockbackForce * (1 - KnockbackResist);
 	const float knockbackThreshold = 3500;
-
+	
 	if (IsValid(aiControllerRef) && CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill
 		&& aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill)
 	{
@@ -162,6 +162,13 @@ void AEnemyCharacterBase::TakeKnockBack(float KnockbackForce, float KnockbackRes
 			PlayHitAnimMontage();
 		}
 	}
+
+	//interp location backward (enemycharacter location - playercharacter location)
+	FVector playerLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	playerLocation.Z = GetActorLocation().Z; //Keep Z axis to prevent falling down
+	float knockbackDistance = FMath::Clamp(effectiveKnockback, 0.0f, 200.0f);
+	if (knockbackDistance <= 0.0f) return;
+	SetLocationWithInterp(GetActorLocation() - (playerLocation - GetActorLocation()).GetSafeNormal() * knockbackDistance, 1.0f, false, true, true);
 }
 
 bool AEnemyCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)
@@ -359,10 +366,10 @@ void AEnemyCharacterBase::SetFacialMaterialEffect(bool NewState)
 void AEnemyCharacterBase::InitTargetingSupportingWidget_Implementation()
 {
 	AMainCharacterBase* playerCharacter = Cast<AMainCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (IsValid(playerCharacter) && IsValid(playerCharacter->TargetingManagerComponent))
+	if (IsValid(playerCharacter) && IsValid(playerCharacter->TargetingManager))
 	{
-		playerCharacter->TargetingManagerComponent->OnTargetUpdated.AddDynamic(this, &AEnemyCharacterBase::OnTargetUpdated);
-		playerCharacter->TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AEnemyCharacterBase::OnTargetingActivated);
+		playerCharacter->TargetingManager->OnTargetUpdated.AddDynamic(this, &AEnemyCharacterBase::OnTargetUpdated);
+		playerCharacter->TargetingManager->OnTargetingActivated.AddDynamic(this, &AEnemyCharacterBase::OnTargetingActivated);
 	}
 }
 

@@ -84,9 +84,6 @@ public:
 		class UDebuffManagerComponent* DebuffManagerComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UTargetingManagerComponent* TargetingManagerComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UActionTrackingComponent* ActionTrackingComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

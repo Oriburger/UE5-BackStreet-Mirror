@@ -138,8 +138,7 @@ void UMeleeCombatManager::MeleeAttack()
 			ActivateMeleeHitEffect(target->GetActorLocation(), target, bIsFatalAttack);
 
 			//Apply Knockback
-			if (!target->ActorHasTag("Boss")
-				&& !ownerInfo.bIsAirAttacking)
+			if (!target->ActorHasTag("Boss") && !ownerInfo.bIsAirAttacking)
 			{
 				OwnerCharacterRef.Get()->ApplyKnockBack(target, WeaponComponentRef.Get()->WeaponStat.WeaponKnockBackStrength);
 			}
@@ -161,8 +160,9 @@ void UMeleeCombatManager::ActivateMeleeHitEffect(const FVector& Location, AActor
 	//Activate Slow Effect (Hit stop)
 	if (OwnerCharacterRef.Get()->ActorHasTag("Player"))
 	{
-		const float dilationValue = 0.8;
-		GamemodeRef.Get()->ActivateSlowHitEffect(bImpactEffect ? dilationValue * 2.0f : dilationValue);
+		const float dilationValue = bImpactEffect ? 0.2 : 0.2f;
+		const float effectLength = bImpactEffect ? 0.15f : 0.0633f;
+		GamemodeRef.Get()->ActivateSlowHitEffect(dilationValue, effectLength	);
 	}
 
 	//Spawn emitter
