@@ -244,8 +244,13 @@ TMap<ECraftingItemType, uint8> UItemInventoryComponent::GetAllCraftingItemAmount
 
 int32 UItemInventoryComponent::GetItemAmount(int32 ItemID)
 {
+<<<<<<< HEAD
 	if (!ItemMap.Contains(ItemID)) return -1;
 	return ItemMap[ItemID].ItemAmount;
+=======
+	if (!InventoryInfoData.ItemMap.Contains(ItemID)) return -1;
+	return InventoryInfoData.ItemMap[ItemID].ItemAmount;
+>>>>>>> 978addf43 ([fix] FORCEINLINE 제거 및 미사용 로직 제거)
 }
 
 bool UItemInventoryComponent::GetIsItemEnough(int32 ItemID, uint8 NeedItemAmount)

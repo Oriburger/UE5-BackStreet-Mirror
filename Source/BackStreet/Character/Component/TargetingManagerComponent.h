@@ -94,10 +94,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		float AutoTargetingRate = 0.25f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bShowDebugSphere = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bUseConeTrace = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (UIMin = 0.0, UIMax = 1.0, EditCondition = "bUseConeTrace"))

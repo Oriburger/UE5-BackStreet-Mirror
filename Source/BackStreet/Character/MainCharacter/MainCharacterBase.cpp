@@ -81,7 +81,7 @@ AMainCharacterBase::AMainCharacterBase()
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
 
 	AbilityManagerComponent = CreateDefaultSubobject<UAbilityManagerComponent>(TEXT("ABILITY_MANAGER"));
-	TargetingManager = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));;
+	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));;
 
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
 	GetCapsuleComponent()->SetCapsuleRadius(41.0f);
@@ -109,7 +109,7 @@ void AMainCharacterBase::BeginPlay()
 	InitCombatUI();
 	ItemInventory->InitInventory();
 	
-	//TargetingManager->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
+	//TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
 	SetAutomaticRotateModeTimer();
 }
 
@@ -391,7 +391,7 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr && !TargetingManager->GetIsTargetingActivated())
+	if (Controller != nullptr && !TargetingManagerComponent->GetIsTargetingActivated())
 	{
 		//Set invert Axis
 		if (bInvertXAxis)
@@ -531,7 +531,7 @@ void AMainCharacterBase::LockToTarget(const FInputActionValue& Value)
 {
 	if (GetCharacterMovement()->IsFalling()) return;
 
-	TargetingManager->ActivateTargeting();
+	TargetingManagerComponent->ActivateTargeting();
 }
 
 void AMainCharacterBase::SnapToCharacter(AActor* Target)
@@ -550,7 +550,7 @@ void AMainCharacterBase::SnapToCharacter(AActor* Target)
 	FVector dirVector = endLocation - startLocation; dirVector.Normalize();
 	SetActorRotation(UKismetMathLibrary::FindLookAtRotation(startLocation, endLocation));
 	SetLocationWithInterp(startLocation + dirVector * (FVector::Distance(startLocation, endLocation) - 75.0f), 2.0f, true);
-	if (GetDistanceTo(TargetingManager->GetTargetedCandidate()) > 400.0f)
+	if (GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) > 400.0f)
 	{
 		SetFieldOfViewWithInterp(130.0f, 3.0f, true);
 	}
@@ -592,20 +592,20 @@ void AMainCharacterBase::TryAttack()
 	//print trageted candidate and targeted character
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green,
 		FString::Printf(TEXT("TargetedCandidate: %s, TargetedCharacter: %s"),
-			*GetNameSafe(TargetingManager->GetTargetedCandidate()),
-			*GetNameSafe(TargetingManager->GetTargetedCharacter())));
+			*GetNameSafe(TargetingManagerComponent->GetTargetedCandidate()),
+			*GetNameSafe(TargetingManagerComponent->GetTargetedCharacter())));
 
 	//Rotate to attack direction using input (1. movement / 2. camera)
 	if (WeaponComponent->GetWeaponStat().WeaponType == EWeaponType::E_Melee)
 	{
-		if (IsValid(TargetingManager->GetTargetedCandidate())
-			&& GetDistanceTo(TargetingManager->GetTargetedCandidate()) >= 200.0f
+		if (IsValid(TargetingManagerComponent->GetTargetedCandidate())
+			&& GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) >= 200.0f
 			// 액션 런치 & 넉백 개선 테스트를 위해 임시 비활성화
 			&& !ActionTrackingComponent->GetIsActionInProgress("Attack")
 			&& !ActionTrackingComponent->GetIsActionInProgress("DashAttack")
 			&& !ActionTrackingComponent->GetIsActionInProgress("JumpAttack"))
 		{
-			SnapToCharacter(TargetingManager->GetTargetedCandidate());
+			SnapToCharacter(TargetingManagerComponent->GetTargetedCandidate());
 			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("SnapToCharacter!!"));
 		}
 		else if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
@@ -757,7 +757,7 @@ void AMainCharacterBase::SetAutomaticRotateModeTimer()
 
 void AMainCharacterBase::SetAutomaticRotateMode()
 {
-	if (TargetingManager->GetIsTargetingActivated() || UGameplayStatics::IsGamePaused(GetWorld())) return;
+	if (TargetingManagerComponent->GetIsTargetingActivated() || UGameplayStatics::IsGamePaused(GetWorld())) return;
 	
 	float currentPitch = GetControlRotation().Pitch;
 	if (currentPitch <= 0.0f || currentPitch >= 360.0f)
