@@ -65,10 +65,10 @@ public:
 		void SaveGameData();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FORCEINLINE bool GetIsInitialized() const; 
+		bool GetIsInitialized() const; 
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FORCEINLINE FString GetSaveSlotName() const;
+		FString GetSaveSlotName() const;
 
 	UFUNCTION(BlueprintCallable)
 		void SetSaveSlotName(FString NewSaveSlotName);

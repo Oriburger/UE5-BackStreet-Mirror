@@ -62,12 +62,6 @@ public:
 		int32 GetItemAmount(int32 ItemID);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FORCEINLINE int32 GetGenesiumAmount();
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FORCEINLINE int32 GetFusionCellAmount();
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
 		ECraftingItemType ConvertItemIDToCraftingItemType(int32 ItemID) { return static_cast<ECraftingItemType>(ItemID); }
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)

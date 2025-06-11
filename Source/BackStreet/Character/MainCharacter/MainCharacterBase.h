@@ -71,7 +71,7 @@ public:
 		class UAbilityManagerComponent* AbilityManagerComponent; 
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UTargetingManagerComponent* TargetingManager;
+		class UTargetingManagerComponent* TargetingManagerComponent;
 
 protected:
 	//스프링암 길이에 따라 캐릭터 폰 비저빌리티 업데이트

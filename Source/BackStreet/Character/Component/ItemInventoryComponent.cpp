@@ -205,18 +205,6 @@ int32 UItemInventoryComponent::GetItemAmount(int32 ItemID)
 	return InventoryInfoData.ItemMap[ItemID].ItemAmount;
 }
 
-int32 UItemInventoryComponent::GetGenesiumAmount()
-{
-	if (!InventoryInfoData.ItemMap.Contains(InventoryInfoData.GenesiumID)) return -1;
-	return InventoryInfoData.ItemMap[InventoryInfoData.GenesiumID].ItemAmount;
-}
-
-int32 UItemInventoryComponent::GetFusionCellAmount()
-{
-	if (!InventoryInfoData.ItemMap.Contains(InventoryInfoData.FusionCellID)) return -1;
-	return InventoryInfoData.ItemMap[InventoryInfoData.FusionCellID].ItemAmount;
-}
-
 bool UItemInventoryComponent::GetIsItemEnough(int32 ItemID, uint8 NeedItemAmount)
 {
 	if (!InventoryInfoData.ItemMap.Contains(ItemID)) return false;

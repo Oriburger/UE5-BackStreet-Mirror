@@ -91,16 +91,16 @@ public:
 		FStageInfo& GetStageInfo(int32 StageIdx);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FORCEINLINE int32 GetMaxChapterID() { return MaxChapterID; }
+		int32 GetMaxChapterID() { return MaxChapterID; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FStageInfo& GetStageInfoWithCoordinate(FVector2D StageCoordinate);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FORCEINLINE FName GetStageTypeName(EStageCategoryInfo StageType);
+		FName GetStageTypeName(EStageCategoryInfo StageType);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FORCEINLINE bool GetIsStageBlocked(FVector2D StageCoordinate);
+		bool GetIsStageBlocked(FVector2D StageCoordinate);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FStageInfo GetBossStageInfo() { return CurrentChapterInfo.GetBossStageInfo(); }
