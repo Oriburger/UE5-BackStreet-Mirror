@@ -81,6 +81,7 @@ AMainCharacterBase::AMainCharacterBase()
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
 
 	AbilityManagerComponent = CreateDefaultSubobject<UAbilityManagerComponent>(TEXT("ABILITY_MANAGER"));
+	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));;
 
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
 	GetCapsuleComponent()->SetCapsuleRadius(41.0f);
@@ -108,7 +109,7 @@ void AMainCharacterBase::BeginPlay()
 	InitCombatUI();
 	ItemInventory->InitInventory();
 	
-	TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
+	//TargetingManagerComponent->OnTargetingActivated.AddDynamic(this, &AMainCharacterBase::OnTargetingStateUpdated);
 	SetAutomaticRotateModeTimer();
 }
 
@@ -492,11 +493,11 @@ void AMainCharacterBase::Roll()
 	{
 		PlayAnimMontage(AssetHardPtrInfo.RollAnimMontageList[0], 1.0f);
 		OnRollStarted.Broadcast();
-		
+
 		CharacterGameplayInfo.bCanRoll = false;
 		GetWorldTimerManager().SetTimer(RollDelayTimerHandle, FTimerDelegate::CreateLambda([=]() {
 			CharacterGameplayInfo.bCanRoll = true;
-		}), CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_RollDelay), false);
+			}), CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_RollDelay), false);
 	}
 }
 
@@ -588,28 +589,40 @@ void AMainCharacterBase::TryAttack()
 		return;
 	}
 
-	//Rotate to attack direction using input (1. movement / 2. camera)
-	if (IsValid(TargetingManagerComponent->GetTargetedCandidate())
-		&& GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) >= 200.0f
-		&& !ActionTrackingComponent->GetIsActionInProgress("Attack")
-		&& !ActionTrackingComponent->GetIsActionInProgress("DashAttack")
-		&& !ActionTrackingComponent->GetIsActionInProgress("JumpAttack")
-		&& WeaponComponent->GetWeaponStat().WeaponType == EWeaponType::E_Melee)
-	{
-		SnapToCharacter(TargetingManagerComponent->GetTargetedCandidate());
-	}
+	//print trageted candidate and targeted character
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green,
+		FString::Printf(TEXT("TargetedCandidate: %s, TargetedCharacter: %s"),
+			*GetNameSafe(TargetingManagerComponent->GetTargetedCandidate()),
+			*GetNameSafe(TargetingManagerComponent->GetTargetedCharacter())));
 
-	else if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
+	//Rotate to attack direction using input (1. movement / 2. camera)
+	if (WeaponComponent->GetWeaponStat().WeaponType == EWeaponType::E_Melee)
 	{
-		if (MovementInputValue.Length() > 0)
+		if (IsValid(TargetingManagerComponent->GetTargetedCandidate())
+			&& GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) >= 200.0f
+			// 액션 런치 & 넉백 개선 테스트를 위해 임시 비활성화
+			&& !ActionTrackingComponent->GetIsActionInProgress("Attack")
+			&& !ActionTrackingComponent->GetIsActionInProgress("DashAttack")
+			&& !ActionTrackingComponent->GetIsActionInProgress("JumpAttack"))
 		{
-			float turnAngle = FMath::RadiansToDegrees(FMath::Atan2(MovementInputValue.X, MovementInputValue.Y))
-				+ FollowingCamera->GetComponentRotation().Yaw;
-			SetActorRotation(FRotator(0.0f, turnAngle, 0.0f));
+			SnapToCharacter(TargetingManagerComponent->GetTargetedCandidate());
+			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("SnapToCharacter!!"));
 		}
-		else if(ActionTrackingComponent->GetIsActionReady("Attack") && GetCharacterMovement()->IsFalling())
+		else if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
 		{
-			SetActorRotation(FRotator(0.0f, FollowingCamera->GetComponentRotation().Yaw, 0.0f));
+			if (MovementInputValue.Length() > 0)
+			{
+				float turnAngle = FMath::RadiansToDegrees(FMath::Atan2(MovementInputValue.X, MovementInputValue.Y))
+					+ FollowingCamera->GetComponentRotation().Yaw;
+				SetActorRotation(FRotator(0.0f, turnAngle, 0.0f));
+			}
+			else if (GetCharacterMovement()->IsFalling()
+				&& (ActionTrackingComponent->GetIsActionReady("Attack")
+					|| ActionTrackingComponent->GetIsActionReady("JumpAttack")
+					|| ActionTrackingComponent->GetIsActionReady("DashAttack")))
+			{
+				SetActorRotation(FRotator(0.0f, FollowingCamera->GetComponentRotation().Yaw, 0.0f));
+			}
 		}
 	}
 

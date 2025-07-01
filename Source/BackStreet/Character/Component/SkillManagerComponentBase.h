@@ -21,6 +21,9 @@ public:
 	// Sets default values for this component's properties
 	USkillManagerComponentBase();
 
+	UFUNCTION()
+		void InitSkillManager(FSkillManagerInfoStruct SkillManagerInfoOverride = FSkillManagerInfoStruct());
+
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateSkillUpdated OnSkillUpdated;
@@ -40,6 +43,8 @@ protected:
 	
 private:
 	void InitSkillInfoCache();
+
+	void RestoreCoolTimeTimer();
 
 //========== Basic ==============================
 public:
@@ -89,6 +94,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		void GetCoolTimeVariables(int32 TargetSkillID, float& RemainingTime, float& TotalTime);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FSkillManagerInfoStruct GetSkillManagerInfo();
+
 	//It must be flushed after using.
 	UPROPERTY(BlueprintReadWrite)
 		TArray<AActor*> TraceResultCache;
@@ -102,15 +110,9 @@ public:
 		UDataTable* SkillInfoTable;
 
 protected:
+	//Skill Info Cache Map
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
-		TMap<int32, FSkillInfo> SkillInventory;
-
-private:
-	TMap<int32, FTimerHandle> CoolTimerHandleMap;
-	TMap<int32, FSkillStatStruct> SkillInfoCache;
-	TMap<int32, FSkillInfo> SkillInfoCacheMap;
-	TArray<int32> PlayerSkillIDList;
-	FSkillInfo PrevSkillInfo;
+		FSkillManagerInfoStruct SkillManagerInfo;
 
 protected:
 	//GameMode Soft Ref

@@ -10,6 +10,8 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateClearResource);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateSystemMessage, FName, Message, FColor, TextColor);
 
+class ASaveManager;
+
 UCLASS()
 class BACKSTREET_API ABackStreetGameModeBase : public AGameModeBase
 {
@@ -27,13 +29,13 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintCallable)
-		void InitialzeGame();
-
 // ----- Gameplay Manager -------------------
 public:
 	UFUNCTION(BlueprintCallable)
 		void StartGame(int32 ChapterID);
+
+	UFUNCTION(BlueprintCallable)
+		void TryContinueGame();
 
 	UFUNCTION(BlueprintCallable)
 		void FinishGame(bool bGameIsOver);
@@ -58,6 +60,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		class UAssetManagerBase* GetGlobalAssetManagerBaseRef() { return AssetManagerBase; }
+
+protected:
+	UFUNCTION()
+		void OnSaveManagerLoadDone(bool bIsSuccess);
 
 // ----- Class Info ------------------------------------ 
 public:
@@ -107,6 +113,11 @@ protected:
 	UPROPERTY()
 		class UCommonUserWidget* MainHUDRef;
 
+//------ 세이브 및 로드 관련 ------------------------
+public:
+	UFUNCTION(BlueprintCallable)
+		void RequestOpenLevel(FName MapName, bool bShouldLoadData, FName SaveSlotName = "");
+
 //------ 그 외 프로퍼티 ---------------
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -121,6 +132,8 @@ protected:
 
 	UPROPERTY()
 		class ANewChapterManagerBase* ChapterManagerRef;
+
+	TWeakObjectPtr<class UBackStreetGameInstance> GameInstanceRef;
 
 public:
 	//현재 게임 모드가 인게임인지 트랜지션인지 확인

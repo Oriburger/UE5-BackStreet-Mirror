@@ -303,6 +303,11 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Config")
 		TArray<FStageInfo> StageInfoList;
+		
+//======= State  =======================
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+		bool bIsChapterInitialized = false;
+
 private:
 	UPROPERTY()
 		FStageInfo BossStageInfo;

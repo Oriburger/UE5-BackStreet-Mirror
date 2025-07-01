@@ -14,7 +14,6 @@ class BACKSTREET_API ACharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
-
 //========================================================================
 //====== Delegate ========================================================
 public:
@@ -82,9 +81,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		class UDebuffManagerComponent* DebuffManagerComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UTargetingManagerComponent* TargetingManagerComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UActionTrackingComponent* ActionTrackingComponent;
@@ -192,6 +188,10 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FCharacterGameplayInfo& GetCharacterGameplayInfoRef() { return CharacterGameplayInfo; }
+
+	//WARNING!!) 세이브 관련 기능에서만 사용할 것
+	UFUNCTION(BlueprintCallable)
+		void SetCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FCharacterGameplayInfo GetCharacterGameplayInfo() { return CharacterGameplayInfo; }

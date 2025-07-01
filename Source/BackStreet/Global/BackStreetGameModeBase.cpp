@@ -1,9 +1,11 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "BackStreetGameModeBase.h"
+#include "BackStreetGameInstance.h"
 #include "../System/AssetSystem/AssetManagerBase.h"
 #include "../System/MapSystem/NewChapterManagerBase.h"
 #include "../System/MapSystem/StageManagerComponent.h"
+#include "../System/SaveSystem/SaveSlotManager.h"
 #include "../Character/CharacterBase.h"
 #include "../Character/MainCharacter/MainCharacterBase.h"
 #include "../Item/ItemBase.h"
@@ -27,24 +29,39 @@ void ABackStreetGameModeBase::BeginPlay()
 	//----- Asset Manager 초기화 -------
 	AssetManagerBase = NewObject<UAssetManagerBase>(this, UAssetManagerBase::StaticClass(), FName("AssetManagerBase"));
 	AssetManagerBase->InitAssetManager(this);
-}
 
-void ABackStreetGameModeBase::InitialzeGame()
-{
-	//------ Initialize Chapter Manager ------------
-	if (!IsValid(ChapterManagerRef))
-	{
-		ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
-	}
+	//----- ChapterManager 초기화 -------
+	ChapterManagerRef = GetWorld()->SpawnActor<ANewChapterManagerBase>(ChapterManagerClass, FTransform());
+	
+	//----- GameInstance 초기화 -------
+	GameInstanceRef = Cast<UBackStreetGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
 
 void ABackStreetGameModeBase::StartGame(int32 ChapterID)
 {
-	InitialzeGame();
+	UE_LOG(LogStage, Warning, TEXT("ABackStreetGameModeBase::StartGame(%d)"), ChapterID);
 
 	if (IsValid(ChapterManagerRef))
 	{
 		ChapterManagerRef->StartChapter(ChapterID);
+	}
+	else
+	{
+		UE_LOG(LogStage, Error, TEXT("ABackStreetGameModeBase::StartGame - ChapterManagerRef is not valid"));
+	}
+}
+
+void ABackStreetGameModeBase::TryContinueGame()
+{
+	UE_LOG(LogStage, Warning, TEXT("ABackStreetGameModeBase::ContinueGame()"));
+	if (IsValid(ChapterManagerRef))
+	{
+		ChapterManagerRef->ContinueChapter();
+		ChapterManagerRef->StageManagerComponent->OnStageLoadDone.AddDynamic(this, &ABackStreetGameModeBase::CreateDefaultHUD);
+	}
+	else
+	{
+		UE_LOG(LogStage, Error, TEXT("ABackStreetGameModeBase::ContinueGame - ChapterManagerRef is not valid"));
 	}
 }
 
@@ -117,6 +134,25 @@ AItemBase* ABackStreetGameModeBase::SpawnItemToWorld(int32 ItemID, FVector Spawn
 	return nullptr;
 }
 
+void ABackStreetGameModeBase::OnSaveManagerLoadDone(bool bIsSuccess)
+{
+	if (bIsSuccess)
+	{
+		if (IsValid(ChapterManagerRef))
+		{
+			ChapterManagerRef->ContinueChapter();
+		}
+		else
+		{
+			UE_LOG(LogStage, Error, TEXT("ABackStreetGameModeBase::OnSaveManagerLoadDone - ChapterManagerRef is not valid"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogStage, Error, TEXT("ABackStreetGameModeBase::OnSaveManagerLoadDone - Load failed"));
+	}
+}
+
 UCommonUserWidget* ABackStreetGameModeBase::GetMainHUDRef()
 {
 	if (IsValid(MainHUDRef)) return MainHUDRef;
@@ -137,4 +173,27 @@ void ABackStreetGameModeBase::CreateDefaultHUD()
 			//Cast<UCommonActivatableWidget>(combatWidgetRef)->ActivateWidget();
 		}
 	}
+
+	// 만약, StageLoadDone 이벤트가 바인드 되어있으면 StageLoadDone 이벤트를 제거한다.
+	// StageLoadDone 이벤트는 ContinueChapter을 위해 바인드 되어있다.
+	if (ChapterManagerRef->StageManagerComponent->OnStageLoadDone.IsBound())
+	{
+		ChapterManagerRef->StageManagerComponent->OnStageLoadDone.RemoveDynamic(this, &ABackStreetGameModeBase::CreateDefaultHUD);
+	}
+}
+
+void ABackStreetGameModeBase::RequestOpenLevel(FName MapName, bool bShouldLoadData, FName SaveSlotName)
+{
+	if (SaveSlotName == TEXT(""))
+	{
+		SaveSlotName = FName(GameInstanceRef.Get()->GetCurrentSaveSlotName());
+	}
+
+	// 파라미터 스트링 생성
+	FString params = FString::Printf(TEXT("?SaveSlot=%s&ShouldLoad=%s"),
+		*SaveSlotName.ToString(),
+		bShouldLoadData ? TEXT("true") : TEXT("false"));
+
+	// 맵 변경
+	UGameplayStatics::OpenLevel(GetWorld(), FName(MapName.ToString() + params));
 }

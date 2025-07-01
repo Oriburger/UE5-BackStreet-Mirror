@@ -30,7 +30,6 @@ ACharacterBase::ACharacterBase()
 	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 115.0f, 90.0f));
 
 	DebuffManagerComponent = CreateDefaultSubobject<UDebuffManagerComponent>(TEXT("DEBUFF_MANAGER"));
-	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));;
 	ActionTrackingComponent = CreateDefaultSubobject<UActionTrackingComponent>(TEXT("ACTION_TRACKER"));
 	SkillManagerComponent = CreateDefaultSubobject<USkillManagerComponentBase>(TEXT("SKILL_MANAGER"));
 
@@ -140,7 +139,7 @@ void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, 
 	//위치 업데이트 이벤트 바인딩
 	OnBeginLocationInterp.Broadcast();
 	updateFunctionDelegate.BindUFunction(this, FName("UpdateLocation"), NewValue, InterpSpeed, bAutoReset);
-
+	
 	ResetLocationInterpTimer();
 	GetWorld()->GetTimerManager().SetTimer(LocationInterpHandle, updateFunctionDelegate, 0.01f, true);
 }
@@ -207,7 +206,7 @@ void ACharacterBase::UpdateLocation(const FVector TargetValue, const float Inter
 	FVector currentLocation = GetActorLocation();
 	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? GetVelocity().Length() * 0.02f : 30.0f))
 	{
-		GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
+		ResetLocationInterpTimer();
 		OnEndLocationInterp.Broadcast();
 		if (bAutoReset)
 		{
@@ -216,7 +215,7 @@ void ACharacterBase::UpdateLocation(const FVector TargetValue, const float Inter
 	}
 	currentLocation = FMath::VInterpTo(currentLocation, TargetValue, 0.1f, InterpSpeed);
 	SetActorLocation(currentLocation, false, nullptr, ETeleportType::None);
-	
+
 	//Prevent pitch turns
 	FRotator newRotation = GetActorRotation();
 	newRotation.Pitch = 0.0f;
@@ -319,6 +318,22 @@ void ACharacterBase::StandUp()
 	GetWorldTimerManager().ClearTimer(KnockDownAnimMontageHandle);
 }
 
+void ACharacterBase::SetCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo)
+{
+	if (!NewGameplayInfo.IsValid()) return;
+	
+	CharacterGameplayInfo = NewGameplayInfo;
+	CharacterID = NewGameplayInfo.CharacterID;
+	InitAsset(CharacterID);
+
+	CharacterGameplayInfo.UpdateTotalValues();
+	CharacterGameplayInfo.bCanAttack = true;
+	CharacterGameplayInfo.bCanRoll = true;
+	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Idle;
+
+	GetCharacterMovement()->MaxWalkSpeed = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed);
+}
+
 void ACharacterBase::InitCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo)
 {
 	if (NewGameplayInfo.bUseDefaultStat || CharacterGameplayInfo.bUseDefaultStat)
@@ -395,7 +410,8 @@ void ACharacterBase::ResetActionState(bool bForceReset)
 	CharacterGameplayInfo.CharacterActionState = ECharacterActionType::E_Idle;
 
 	//Reset Location Interp Timer Handle
-	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
+	//250609 넉백 코드를 위해 비활성화
+	//GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 
 	FWeaponStatStruct currWeaponStat = this->WeaponComponent->GetWeaponStat();
 	this->WeaponComponent->SetWeaponStat(currWeaponStat);
@@ -446,22 +462,9 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(DamageCauser->GetActorLocation(), GetActorLocation());
 	newRotation.Pitch = newRotation.Roll = 0.0f;
 
-	if (DamageCauser->ActorHasTag("Player") && DamageCauser != this)
-	{
-		ACharacterBase* causerTarget = Cast<ACharacterBase>(DamageCauser)->TargetingManagerComponent->GetTargetedCharacter();
-		if (IsValid(causerTarget) && causerTarget == this)
-		{
-			Cast<ACharacterBase>(DamageCauser)->SetActorRotation(newRotation);
-			newRotation.Yaw += 180.0f;
-			if (!ActorHasTag("Boss"))
-			{
-				SetActorRotation(newRotation);
-			}
-		}
-	}
-
 	//Reset Location Interp Timer Handle
-	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
+	//250609 넉백 코드를 위해 비활성화
+	//GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
 
 	// ====== Hit Counter & Knock Down Check ===========================
 	CharacterGameplayInfo.HitCounter += 1;

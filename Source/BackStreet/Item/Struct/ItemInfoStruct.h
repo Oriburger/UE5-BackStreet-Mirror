@@ -113,39 +113,40 @@ public:
 		uint8 ItemAmount = 0;
 };
 
-//아이템 박스 스폰 관련 정보를 담은 구조체
 USTRUCT(BlueprintType)
-struct FItemBoxSpawnInfoStruct : public FTableRowBase
+struct FItemInventoryInfoStruct
 {
 public:
 	GENERATED_USTRUCT_BODY()
 
-	//스테이지 ID
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		int32 StageID = 0;
-
-	//스폰할 아이템 클래스 정보 저장
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<int32> SpawnItemBoxIDList;
-
-	//0~1 값을 지님
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TArray<float> SpawnProbabilityList;
-};
-
-//인벤토리를 구성하는 요소들의 정보를 담은 구조체
-USTRUCT(BlueprintType)	
-struct FInventoryItemInfoStruct
-{
 public:
-	GENERATED_USTRUCT_BODY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		int32 MaxItemCount = 100;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
-		int32 WeaponID = 0;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		int32 MaxSubWeaponCount = 1;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
-		FWeaponStatStruct WeaponStat; 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		int32 MaxMainWeaponCount = 1;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
-		FWeaponStateStruct WeaponState;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Wealth")
+		int32 GenesiumID;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Wealth")
+		int32 FusionCellID;
+
+	UPROPERTY(VisibleAnywhere, Category = "Gameplay")
+		TMap<int32, FWeaponStateStruct> WeaponStateMap;
+
+	UPROPERTY(VisibleAnywhere, Category = "Gameplay")
+		int32 CurrSubWeaponCount = 0;
+
+	UPROPERTY(VisibleAnywhere, Category = "Gameplay")
+		int32 CurrMainWeaponCount = 0;
+
+	UPROPERTY(VisibleAnywhere, Category = "Gameplay")
+		UDataTable* ItemTable;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TMap<int32, FItemInfoDataStruct> ItemMap;
 };

@@ -28,6 +28,7 @@ void ANewChapterManagerBase::BeginPlay()
 
 	StageManagerComponent->OnStageFinished.AddDynamic(this, &ANewChapterManagerBase::OnStageFinished);
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
+	GameInstanceRef = Cast<UBackStreetGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
 
 void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
@@ -35,9 +36,7 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::StartChapter(%d)"), NewChapterID);
 
 	//init chapter with generate stage infos
-	bIsChapterFinished = false;
-	CurrentChapterInfo.Reset();
-
+	CurrentChapterInfo.bIsChapterInitialized = true;
 	InitChapter(NewChapterID);
 	CurrentChapterInfo.CurrentStageCoordinate = FVector2D(0.0f);
 	CurrentChapterInfo.StageInfoList = StageGeneratorComponent->Generate();
@@ -59,6 +58,25 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 	else
 	{
 		UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::StartChapter, Invalid Stage Data %d"), CurrentChapterInfo.StageInfoList.Num());
+	}
+}
+
+void ANewChapterManagerBase::ContinueChapter()
+{
+	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::ContinueChapter(%d)"), CurrentChapterInfo.ChapterID);
+	
+	//init chapter with generate stage info
+	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
+
+	//init the first stage and start game
+	if (CurrentChapterInfo.StageInfoList.IsValidIndex(0))
+	{
+		int32 stageIdx = StageGeneratorComponent->GetStageIdx(CurrentChapterInfo.CurrentStageCoordinate);
+			StageManagerComponent->InitStage(StageManagerComponent->GetCurrentStageInfo());
+	}
+	else
+	{
+		UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::ContinueChapter, Invalid Stage Data %d"), CurrentChapterInfo.StageInfoList.Num());
 	}
 }
 
@@ -101,6 +119,15 @@ void ANewChapterManagerBase::MoveStage(FVector2D direction)
 	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
 }
 
+void ANewChapterManagerBase::OverwriteChapterInfo(FChapterInfo NewChapterInfo, FStageInfo NewStageInfo)
+{
+	UE_LOG(LogSaveSystem, Log, TEXT("ANewChapterManagerBase::OverwriteChapterInfo - ChapterID : %d"), NewChapterInfo.ChapterID);
+	CurrentChapterInfo = NewChapterInfo;
+	StageGeneratorComponent->InitGenerator(CurrentChapterInfo);
+	StageManagerComponent->OverwriteStageInfo(NewChapterInfo, NewStageInfo);
+	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
+}
+
 void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 {
 	if (ChapterInfoTable == nullptr) return;
@@ -114,6 +141,7 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 	{
 		ChapterID = NewChapterID;
 		CurrentChapterInfo = *newInfo;
+		CurrentChapterInfo.bIsChapterInitialized = true;
 		StageGeneratorComponent->InitGenerator(CurrentChapterInfo);
 		StageManagerComponent->Initialize(CurrentChapterInfo);
 		InitStageIconTranslationList({20, 65});
@@ -215,7 +243,10 @@ void ANewChapterManagerBase::SetTutorialCompletion(bool bCompleted)
 	UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
 	if (gameInstance)
 	{
-		gameInstance->SetTutorialCompletion(bCompleted);
+		// 게임 인스턴스의 ProgressSaveData에 튜토리얼 완료 상태 저장
+		FSaveSlotInfo saveSlotInfo;
+		gameInstance->GetCurrentSaveSlotInfo(saveSlotInfo);
+		saveSlotInfo.bIsTutorialDone = bCompleted;
 		return;
 	}
 	UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::SetTutorialCompletion(%d) - game instance is not valid"), (int32)bCompleted);
@@ -226,7 +257,11 @@ bool ANewChapterManagerBase::GetTutorialCompletion()
 	UBackStreetGameInstance* gameInstance = Cast<UBackStreetGameInstance>(GetGameInstance());
 	if (gameInstance)
 	{
-		return gameInstance->GetTutorialCompletion();
+		// 게임 인스턴스의 ProgressSaveData에 튜토리얼 완료 상태 저장
+		FProgressSaveData progressSaveData;
+		gameInstance->GetCachedProgressSaveData(progressSaveData);
+		return true;
+		//return progressSaveData.bIsTutorialDone;
 	}
 	UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::GetTutorialCompletion() - game instance is not valid"));
 	return false;
@@ -243,12 +278,22 @@ void ANewChapterManagerBase::CreateGameResultWidget(bool bChapterClear)
 
 void ANewChapterManagerBase::OpenMainMenuLevel()
 {
+	if (!GamemodeRef.IsValid())
+	{
+		UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::OpenMainMenuLevel() - GamemodeRef is not valid"));
+		return;
+	}
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
-	UGameplayStatics::OpenLevel(GetWorld(), "MainMenuPersistent");
+	GamemodeRef.Get()->RequestOpenLevel("MainMenuPersistent", false);
 }
 
 void ANewChapterManagerBase::OpenNeutralZoneLevel()
 {
+	if (!GamemodeRef.IsValid())
+	{
+		UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::OpenMainMenuLevel() - GamemodeRef is not valid"));
+		return;
+	}
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
-	UGameplayStatics::OpenLevel(GetWorld(), "NeutralZonePersistent");
+	GamemodeRef.Get()->RequestOpenLevel("NeutralZonePersistent", true);
 }

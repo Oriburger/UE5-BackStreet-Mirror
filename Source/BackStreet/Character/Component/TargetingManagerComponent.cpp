@@ -48,18 +48,46 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 	FVector endLocation = startLocation + traceDirection * MaxFindDistance;
 	TArray<FHitResult> hitResultList;
 	TArray<AActor*> actorToIgnore = { OwnerCharacter.Get() };
+	float finalTraceRadius = TraceRadius;
+
+	//미사용 로직
 	if (bIsTargetingActivated && TargetedCharacter.IsValid())
 	{
 		actorToIgnore.Add(TargetedCharacter.Get());
 	}
 
-	//TargetedCandidate가 있다면 && 공격 중일때 (막 끝났을때)
-	if (TargetedCandidate.IsValid() && !OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionReady("Attack"))
+	
+	//공격 중일때 (막 끝났을때)
+	if (!OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionReady("Attack")
+		|| !OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionReady("JumpAttack")
+		|| !OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionReady("DashAttack"))
 	{
-		//
-		traceDirection = TargetedCandidate.Get()->GetActorForwardVector() * -1.0f;
-		startLocation = OwnerCharacter.Get()->HitSceneComponent->GetComponentLocation() + traceDirection * 50.0f;
+		//공	격 중일떄에는 트레이스 범위를	줄이고, 방향은 타겟팅된 캐릭터의 방향으로 트레이스한다.
+		// 타겟팅이 활성화되어있고, 타겟이 있다면 그 타겟의 방향으로 트레이스한다 없다면 메시의 앞방향으로 트레이스
+		traceDirection = TargetedCandidate.IsValid() ? TargetedCandidate.Get()->GetActorForwardVector() * -1.0f :
+			OwnerCharacter.Get()->GetMesh()->GetRightVector();
+		startLocation = OwnerCharacter.Get()->GetActorLocation() + traceDirection * 25.0f;
 		endLocation = startLocation + traceDirection * MaxFindDistance;
+
+		//(Player Only) 이동 입력 중일때  이동 입력이 있을 때는 그 방향으로 트레이스한다.
+		FVector2D movementInputValue = IsValid(Cast<AMainCharacterBase>(OwnerCharacter.Get())) ? Cast<AMainCharacterBase>(OwnerCharacter.Get())->GetCurrentMovementInputValue() : FVector2D::ZeroVector;
+		if (movementInputValue.Length() > 0)
+		{
+			//turnAngle에 맞게 traceDirection를 계산한다. 기준은 Mesh RightVector
+			float turnAngle = FMath::RadiansToDegrees(FMath::Atan2(movementInputValue.X, movementInputValue.Y));
+			traceDirection = UKismetMathLibrary::RotateAngleAxis(FollowingCameraRef.Get()->GetForwardVector(), turnAngle, FVector(0.0f, 0.0f, 1.0f));
+			
+			traceDirection.Normalize(); traceDirection.Z = 0.0f; //Z축은 무시한다.
+			endLocation = startLocation + traceDirection * MaxFindDistance;
+			
+			//draw debug info
+			if (bShowDebugSphere)
+			{
+				//draw movement input value
+				UKismetSystemLibrary::DrawDebugArrow(GetWorld(), startLocation, endLocation, 50.0f, FColor::Red, AutoTargetingRate, 1.0f);
+				UKismetSystemLibrary::DrawDebugSphere(GetWorld(), startLocation, 10.0f, 12, FColor::Green, AutoTargetingRate, 1.0f);
+			}
+		}
 	}
 
 	// ==== 트레이스를 통해 벽이나 장애물이 있는지 확인한다 ================================
@@ -68,7 +96,7 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 	traceObjectType.Add(UEngineTypes::ConvertToObjectType(ECC_WorldDynamic));
 
 	FHitResult hitResult;
-	bool bIsHit = UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), OwnerCharacter.Get()->GetActorLocation(), endLocation, (RadiusOverride <= 1.0f ? TraceRadius : RadiusOverride) / 3.0f,
+	bool bIsHit = UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), OwnerCharacter.Get()->GetActorLocation(), endLocation, (RadiusOverride <= 1.0f ? finalTraceRadius : RadiusOverride) / 3.0f,
 		traceObjectType, true, actorToIgnore, bShowDebugSphere ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResult, true, FColor::Yellow, FColor::Blue, AutoTargetingRate);
 	if (bIsHit)
 	{
@@ -76,8 +104,17 @@ AActor* UTargetingManagerComponent::FindNearEnemyToTarget(float RadiusOverride)
 	}
 
 	//trace 진행
-	UKismetSystemLibrary::SphereTraceMultiByProfile(GetWorld(), startLocation, endLocation, RadiusOverride <= 1.0f ? TraceRadius : RadiusOverride, "Pawn", true
-		, actorToIgnore, bShowDebugSphere ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResultList, true, FColor::Green, FColor::Red, AutoTargetingRate);
+	if (!bUseConeTrace)
+	{
+		UKismetSystemLibrary::SphereTraceMultiByProfile(GetWorld(), startLocation, endLocation, RadiusOverride <= 1.0f ? finalTraceRadius : RadiusOverride, "Pawn", true
+			, actorToIgnore, bShowDebugSphere ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResultList, true, FColor::Green, FColor::Red, AutoTargetingRate);
+	}
+	else
+	{
+		ConeTraceByProfile(startLocation, endLocation, RadiusOverride <= 1.0f ? finalTraceRadius : RadiusOverride, "Pawn", true
+			, actorToIgnore, bShowDebugSphere ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResultList, true, FColor::Green, FColor::Red, AutoTargetingRate);
+	}
+	
 
 	float minDist = FLT_MAX;
 	ACharacterBase* target = nullptr;
@@ -162,13 +199,9 @@ void UTargetingManagerComponent::UpdateTargetedCandidate()
 	AActor* newCandidate = FindNearEnemyToTarget();
 
 	//후보 업데이트는 다음과 같은 조건일때 수행한다 
-	//기본적으로 netCandidate가 valid할 때 (정상적으로 찾았을때)
+	//기본적으로 newCandidate가 valid할 때 (정상적으로 찾았을때)
 	//현재 공격중이 아닐때 혹은 아무도 없을때
-	if (!TargetedCandidate.IsValid() || !OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionInProgress("Attack"))
-	{
-		TargetedCandidate = Cast<ACharacterBase>(newCandidate);
-		OnTargetUpdated.Broadcast(TargetedCandidate.Get());
-	}
+	TargetedCandidate = Cast<ACharacterBase>(newCandidate);
 
 	if (TargetedCandidate.IsValid() && !OwnerCharacter.Get()->GetCharacterGameplayInfo().bIsAirAttacking)
 	{
@@ -179,8 +212,10 @@ void UTargetingManagerComponent::UpdateTargetedCandidate()
 			return;
 		}
 	}
+	OnTargetUpdated.Broadcast(TargetedCandidate.Get());
 }
 
+//미사용 (하드타게팅)
 void UTargetingManagerComponent::UpdateCameraRotation()
 {
 	if (!FollowingCameraRef.IsValid() || !TargetedCharacter.IsValid() || !OwnerCharacter.IsValid()) return;
@@ -197,6 +232,72 @@ void UTargetingManagerComponent::UpdateCameraRotation()
 		OwnerCharacter.Get()->GetController()->SetControlRotation(newRotation);
 	}
 }
+
+bool UTargetingManagerComponent::ConeTraceByProfile(
+	const FVector Start, const FVector End, float Radius, FName ProfileName,
+	bool bTraceComplex, const TArray<AActor*>& ActorsToIgnore,
+	EDrawDebugTrace::Type DrawDebugType, TArray<FHitResult>& OutHits,
+	bool bIgnoreSelf, FLinearColor TraceColor, FLinearColor TraceHitColor, float DrawTime)
+{
+	OutHits.Reset();
+
+	// 기준 방향
+	const FVector forward = (End - Start).GetSafeNormal();
+
+	// 회전 기준 축: Z축 기준 Yaw 회전 (2D 원뿔)
+	const FRotator baseRot = forward.Rotation();
+
+	// 각도 설정
+	const float halfAngleDeg = TraceAngle;
+	const float minAngle = -halfAngleDeg;
+	const float maxAngle = +halfAngleDeg;
+
+	// Density → Step 수 결정 (ex: 0.5f → 4개 등)
+	int32 numSteps = FMath::Clamp(FMath::RoundToInt(FMath::Lerp(1.f, 20.f, TraceDensity)), 1, 360);
+	const float stepAngle = (maxAngle - minAngle) / numSteps;
+
+	// 각도 리스트 구성
+	TArray<float> anglesToTrace;
+	anglesToTrace.AddUnique(minAngle);
+	anglesToTrace.AddUnique(0.0f);
+	anglesToTrace.AddUnique(maxAngle);
+
+	for (int32 i = 1; i < numSteps; ++i)
+	{
+		float angle = minAngle + stepAngle * i;
+		anglesToTrace.AddUnique(angle);
+	}
+
+
+	// 트레이스 실행
+	TArray<AActor*> duplicateCheckActors;
+	for (float angle : anglesToTrace)
+	{
+		// 각도 회전 적용
+		FRotator rotatedYaw = baseRot + FRotator(0, angle, 0);
+		FVector dir = rotatedYaw.Vector();
+		FVector traceEnd = Start + dir * (End - Start).Size();
+
+		TArray<FHitResult> traceHits;
+		UKismetSystemLibrary::SphereTraceMultiByProfile(
+			this, Start, traceEnd, Radius, ProfileName, bTraceComplex, ActorsToIgnore,
+			DrawDebugType, traceHits, bIgnoreSelf, TraceColor, TraceHitColor, DrawTime
+		);
+
+		for (const FHitResult& hit : traceHits)
+		{
+			if (hit.bBlockingHit && IsValid(hit.GetActor()) && !duplicateCheckActors.Contains(hit.GetActor()))
+			{
+				// 중복 검사
+				duplicateCheckActors.Add(hit.GetActor());
+				OutHits.Add(hit);
+			}
+		}
+	}
+
+	return OutHits.Num() > 0;
+}
+
 
 ACharacterBase* UTargetingManagerComponent::GetTargetedCharacter()
 {

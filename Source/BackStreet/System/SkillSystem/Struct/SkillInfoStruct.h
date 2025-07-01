@@ -109,3 +109,37 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		int32 SkillID;
 };
+
+
+USTRUCT(BlueprintType)
+struct FSkillManagerInfoStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		TMap<int32, FSkillInfo> SkillInventory;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		TMap<int32, FTimerHandle> CoolTimerHandleMap;
+
+	//Need to capture cool time value for each skill on save time
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		TMap<int32, float> CoolTimeValueMap;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		TMap<int32, FSkillStatStruct> SkillInfoCache;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		TMap<int32, FSkillInfo> SkillInfoCacheMap;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		TArray<int32> PlayerSkillIDList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		FSkillInfo PrevSkillInfo;
+
+	FSkillManagerInfoStruct()
+		: SkillInventory(), CoolTimerHandleMap(), CoolTimeValueMap(), SkillInfoCache(), SkillInfoCacheMap(), PlayerSkillIDList(), PrevSkillInfo() {
+	};
+};
