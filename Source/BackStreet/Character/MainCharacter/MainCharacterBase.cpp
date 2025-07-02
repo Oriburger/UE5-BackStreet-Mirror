@@ -478,11 +478,12 @@ void AMainCharacterBase::Roll()
 		targetYawValue += 270.0f;
 		newRotation.Yaw = FMath::Fmod(newRotation.Yaw + targetYawValue, 360.0f);
 	}
-	
+	ResetLocationInterpTimer();
+
+
 	// 시점 전환을 위해 제거
 	//Rotation 리셋 로직
 	GetWorldTimerManager().ClearTimer(RotationResetTimerHandle);
-	//ResetRotationToMovement();
 	SetActorRotation(newRotation + FRotator(0.0f, 90.0f, 0.0f));
 	GetMesh()->SetWorldRotation(newRotation);
 

@@ -73,6 +73,7 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	if (NewStageInfo.StageType == EStageCategoryInfo::E_Entry && !ChapterManagerRef.Get()->GetTutorialCompletion()
 		&& !CurrentChapterInfo.TutorialLevel.IsNull())
 	{
+<<<<<<< HEAD
 		UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::InitStage - Tutorial level will be activated"));
 		NewStageInfo.MainLevelAsset = CurrentChapterInfo.TutorialLevel;
 	}
@@ -81,6 +82,38 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	{
 		UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::InitStage - Lack of %d's Map Count, It may cause the level reinstancing crash."), (int32)NewStageInfo.StageType);
 		NewStageInfo.MainLevelAsset = newWorldAssetList[0];
+=======
+		UE_LOG(LogSaveSystem, Log, TEXT("UStageManagerComponent::InitStage - MainLevelAsset is Null"));
+		TArray<TSoftObjectPtr<UWorld>> newWorldAssetList = CurrentChapterInfo.GetWorldList(CurrentStageInfo.StageType);
+		checkf(!newWorldAssetList.IsEmpty(), TEXT("UStageManagerComponent::InitStage - newWorldAssetList가 지정되어있지않습니다."));
+
+		// Load new level
+		//	UE_LOG(LogStage, Warning, TEXT("@@@@@@@ Tuto : %d, level valid : %d"), (int32)ChapterManagerRef.Get()->GetTutorialCompletion(), (int32)CurrentChapterInfo.TutorialLevel.IsNull());
+		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry //&& !ChapterManagerRef.Get()->GetTutorialCompletion()
+			&& !CurrentChapterInfo.TutorialLevel.IsNull() && CurrentChapterInfo.ChapterID == 1)
+		{
+			UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::InitStage - Tutorial level will be activated"));
+			CurrentStageInfo.MainLevelAsset = CurrentChapterInfo.TutorialLevel;
+		}
+
+		else if (newWorldAssetList.Num() == 1 || PreviousLevel.IsNull())
+		{
+			UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::InitStage - Lack of %d's Map Count, It may cause the level reinstancing crash."), (int32)CurrentStageInfo.StageType);
+			CurrentStageInfo.MainLevelAsset = newWorldAssetList[0];
+		}
+		else
+		{
+			int32 prevLevelIdx = -1;
+			int32 randIdxAdder = FMath::RandRange(1, newWorldAssetList.Num() - 1);
+
+			newWorldAssetList.Find(PreviousLevel, prevLevelIdx);
+			prevLevelIdx = prevLevelIdx == INDEX_NONE ? 0 : prevLevelIdx;
+
+			UE_LOG(LogStage, Warning, TEXT("> prev : %d, randIdx : %d, result : %d"), prevLevelIdx, randIdxAdder, (prevLevelIdx + randIdxAdder) % newWorldAssetList.Num());
+
+			CurrentStageInfo.MainLevelAsset = newWorldAssetList[(prevLevelIdx + randIdxAdder) % newWorldAssetList.Num()];
+		}
+>>>>>>> 9fee7c268 ([fix] 세이브 시스템 임시 비활성화, 구르기 시 Interp 캔슬, 디버그룸 오류 수정 등)
 	}
 	else
 	{

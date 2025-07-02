@@ -147,6 +147,7 @@ void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, 
 void ACharacterBase::ResetLocationInterpTimer()
 {
 	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
+	LocationInterpHandle.Invalidate();
 }
 
 void ACharacterBase::PlayHitAnimMontage()
@@ -204,7 +205,7 @@ TArray<FName> ACharacterBase::GetCurrentMontageSlotName()
 void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset)
 {
 	FVector currentLocation = GetActorLocation();
-	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? GetVelocity().Length() * 0.02f : 30.0f))
+	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? GetVelocity().Length() * 0.02f : 50.0f))
 	{
 		ResetLocationInterpTimer();
 		OnEndLocationInterp.Broadcast();
