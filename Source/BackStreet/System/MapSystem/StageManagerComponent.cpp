@@ -73,7 +73,7 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 
 		// Load new level
 		//	UE_LOG(LogStage, Warning, TEXT("@@@@@@@ Tuto : %d, level valid : %d"), (int32)ChapterManagerRef.Get()->GetTutorialCompletion(), (int32)CurrentChapterInfo.TutorialLevel.IsNull());
-		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry && !ChapterManagerRef.Get()->GetTutorialCompletion()
+		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry //&& !ChapterManagerRef.Get()->GetTutorialCompletion()
 			&& !CurrentChapterInfo.TutorialLevel.IsNull() && CurrentChapterInfo.ChapterID == 1)
 		{
 			UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::InitStage - Tutorial level will be activated"));
