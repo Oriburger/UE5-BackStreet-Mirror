@@ -68,7 +68,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	//Stat, State 초기화 
 	int32 oldWeaponID = WeaponID;
 	bool bIsCached = false;
-	WeaponStat.WeaponID = WeaponID = NewWeaponID;
+	WeaponID = NewWeaponID;
 
 	//기존꺼 저장
 	if (oldWeaponID != 0)
@@ -82,6 +82,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 	if (NewWeaponID == 0)
 	{
 		WeaponStat = FWeaponStatStruct();
+		WeaponStat.WeaponID = WeaponID;
 		WeaponState = FWeaponStateStruct();
 		this->SetStaticMesh(nullptr);
 		return;
@@ -92,6 +93,7 @@ void UWeaponComponentBase::InitWeapon(int32 NewWeaponID)
 		WeaponStat = WeaponStatCacheMap.Contains(NewWeaponID)
 					? WeaponStatCacheMap[NewWeaponID]
 					: GetWeaponStatInfoWithID(WeaponID);
+		WeaponStat.WeaponID = WeaponID;
 		WeaponState = WeaponStateCacheMap.Contains(NewWeaponID)
 					? WeaponState = WeaponStateCacheMap[NewWeaponID]
 					: FWeaponStateStruct();
@@ -158,6 +160,8 @@ void UWeaponComponentBase::InitWeaponAsset()
 
 	if (WeaponAssetInfo.WeaponMesh.IsValid())
 	{
+		UE_LOG(LogSaveSystem, Log, TEXT("UWeaponComponentBase::InitWeaponAsset() Mesh name is %s"), *WeaponAssetInfo.WeaponMesh.Get()->GetName());
+
 		this->SetStaticMesh(WeaponAssetInfo.WeaponMesh.Get());
 		this->SetRelativeLocation(WeaponAssetInfo.InitialLocation);
 		this->SetRelativeRotation(WeaponAssetInfo.InitialRotation);

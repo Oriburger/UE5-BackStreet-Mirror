@@ -45,6 +45,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void StartChapter(int32 NewChapterID);
 
+	//Continue current chapter
+	UFUNCTION(BlueprintCallable)
+		void ContinueChapter();
+
 	//Finish current chapter
 	UFUNCTION(BlueprintCallable)
 		void FinishChapter(bool bChapterClear);
@@ -56,6 +60,9 @@ public:
 	//Move next stage
 	UFUNCTION(BlueprintCallable)
 		void MoveStage(FVector2D direction);
+
+	UFUNCTION(BlueprintCallable)
+		void OverwriteChapterInfo(FChapterInfo NewChapterInfo, FStageInfo NewStageInfo);
 
 protected:
 	//Init chapter using data table 
@@ -72,7 +79,10 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FChapterInfo GetCurrentChapterInfo() { return CurrentChapterInfo; }
+		FORCEINLINE bool GetIsChapterInitialized() const { return CurrentChapterInfo.bIsChapterInitialized; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FORCEINLINE FChapterInfo GetCurrentChapterInfo() { return CurrentChapterInfo; }
 
 	UFUNCTION(BlueprintCallable)
 		void SetStageIconTranslationList(TArray<FVector2D> NewList) { CurrentChapterInfo.StageIconTransitionValueList = NewList; }
@@ -117,10 +127,11 @@ private:
 
 	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
 
+	TWeakObjectPtr<class UBackStreetGameInstance> GameInstanceRef;
+
 	TWeakObjectPtr<class AMainCharacterBase> PlayerRef;
 
 	bool bIsChapterFinished = false;
-
 
 //========= Save System ================
 public:

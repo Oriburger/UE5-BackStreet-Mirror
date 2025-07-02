@@ -21,7 +21,7 @@ public:
 	UItemInventoryComponent();
 
 	UFUNCTION()
-		void InitInventory();
+		void InitInventory(FItemInventoryInfoStruct InitialData = FItemInventoryInfoStruct());
 
 	//OnItemUpdated∑Œ ºˆ¡§πŸ∂˜@@ - 240905 @ljh
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
@@ -39,20 +39,11 @@ protected:
 
 //======= Logic ============================
 public:
-	//When SavedData already has Inventory data
-	UFUNCTION()
-		void SetItemInventoryFromSaveData();
-
-public:
 	UFUNCTION(BlueprintCallable)
 		void AddItem(int32 ItemID, uint8 ItemCnt);
 
 	UFUNCTION(BlueprintCallable)
 		void RemoveItem(int32 ItemID, uint8 ItemCnt);
-
-protected:
-	UFUNCTION()
-		void OnChapterCleared();
 
 private:
 	//π´±‚∏¶ √ﬂ∞°«œ∞Ì ¡¶∞≈«—¥Ÿ. WeaponComponentøÕ¿« ¡§∫∏ ø¨µø¿ª ¡¯«‡«—¥Ÿ
@@ -71,15 +62,12 @@ public:
 		int32 GetItemAmount(int32 ItemID);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-<<<<<<< HEAD
-=======
 		ECraftingItemType ConvertItemIDToCraftingItemType(int32 ItemID) { return static_cast<ECraftingItemType>(ItemID); }
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 ConvertCraftingItemTypeToItemID(ECraftingItemType CraftingItemType){ return static_cast<int32>(CraftingItemType); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
->>>>>>> 978addf43 ([fix] FORCEINLINE Ï†úÍ±∞ Î∞è ÎØ∏ÏÇ¨Ïö© Î°úÏßÅ Ï†úÍ±∞)
 		bool GetIsItemEnough(int32 ItemID, uint8 NeedItemAmount);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
@@ -87,27 +75,16 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FItemInfoDataStruct GetSubWeaponInfoData();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FItemInventoryInfoStruct GetInventoryInfoData() { return InventoryInfoData; }
 	
-//====== PROPERTY ===========================
-public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
-		int32 MaxItemCount = 100; 
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
-		int32 MaxSubWeaponCount = 1;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
-		int32 MaxMainWeaponCount = 1;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Wealth")
-		int32 GenesiumID;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Wealth")
-		int32 FusionCellID;
-
 protected:
 	UFUNCTION(BlueprintCallable)
 		bool TryUpdateWeaponState(int32 WeaponID, FWeaponStateStruct NewState);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Property")
+		FItemInventoryInfoStruct InventoryInfoData;
 
 public:
 	//Delegate ¿Ã∫•∆Æ
@@ -121,20 +98,9 @@ private:
 	//WeaponComponent∑Œ∫Œ≈Õ ∫“∑Øø¬¥Ÿ
 	FWeaponStateStruct& GetWeaponState(int32 WeaponID);
 
-	TMap<int32, FWeaponStateStruct> WeaponStateMap;
-
-	int32 CurrSubWeaponCount = 0;
-
-	int32 CurrMainWeaponCount = 0;
-
 //===== Property ==========================
 private:
 	UDataTable* ItemTable;
-
-public:
-	// Item List
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TMap<int32, FItemInfoDataStruct> ItemMap;
 
 	//owner character ref
 	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
