@@ -158,28 +158,31 @@ void UTargetingManagerComponent::ForceTargetingToNearestCharacter()
 	ActivateTargeting();
 }
 
-void UTargetingManagerComponent::ActivateTargeting()
+bool UTargetingManagerComponent::ActivateTargeting()
 {
-	if (!TargetedCandidate.IsValid()) return;
-	if (bIsTargetingActivated && TargetedCharacter == TargetedCandidate)
-	{
-		DeactivateTargeting();
-		return;
-	}
-	TargetedCharacter = TargetedCandidate;
+	if (!TargetedCandidate.IsValid()) return false;
 
+	if (bIsTargetingActivated || TargetedCharacter == TargetedCandidate) return false;
+	
+	SetTargetedCharacter(TargetedCandidate.Get());
+	
 	bIsTargetingActivated = true;
-	//GetOwner()->GetWorldTimerManager().ClearTimer(CameraRotateTimerHandle);
-	//GetOwner()->GetWorldTimerManager().SetTimer(CameraRotateTimerHandle, this, &UTargetingManagerComponent::UpdateCameraRotation, 0.01f, true);
+	GetOwner()->GetWorldTimerManager().ClearTimer(CameraRotateTimerHandle);
+	GetOwner()->GetWorldTimerManager().SetTimer(CameraRotateTimerHandle, this, &UTargetingManagerComponent::UpdateCameraRotation, 0.01f, true);
 
 	TargetedCharacter.Get()->GetCharacterMovement()->bOrientRotationToMovement = false;
 	TargetedCharacter.Get()->GetCharacterMovement()->bUseControllerDesiredRotation = true;
 
 	OnTargetingActivated.Broadcast(true, TargetedCharacter.Get());
+	return true;S
 }
 
 void UTargetingManagerComponent::DeactivateTargeting()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red,
+		FString::Printf(TEXT("Deactivate Targeting")));
+
+	TargetedCharacter.Reset();
 	GetOwner()->GetWorldTimerManager().ClearTimer(CameraRotateTimerHandle);
 	CameraRotateTimerHandle.Invalidate();
 
@@ -189,7 +192,7 @@ void UTargetingManagerComponent::DeactivateTargeting()
 	bIsTargetingActivated = false;
 	if (FollowingCameraRef.IsValid())
 	{
-		//FollowingCameraRef.Get()->SetRelativeLocationAndRotation(FVector::ZeroVector, FRotator::ZeroRotator, false);
+		FollowingCameraRef.Get()->SetRelativeLocationAndRotation(FVector::ZeroVector, FRotator::ZeroRotator, false);
 	}
 	OnTargetingActivated.Broadcast(false, nullptr);
 }
@@ -215,13 +218,15 @@ void UTargetingManagerComponent::UpdateTargetedCandidate()
 	OnTargetUpdated.Broadcast(TargetedCandidate.Get());
 }
 
-//미사용 (하드타게팅)
 void UTargetingManagerComponent::UpdateCameraRotation()
 {
 	if (!FollowingCameraRef.IsValid() || !TargetedCharacter.IsValid() || !OwnerCharacter.IsValid()) return;
-	if (OwnerCharacter.Get()->GetIsActionActive(ECharacterActionType::E_Die) || TargetedCharacter.Get()->GetIsActionActive(ECharacterActionType::E_Die))
+	if (OwnerCharacter.Get()->GetIsActionActive(ECharacterActionType::E_Die) 
+		|| TargetedCharacter.Get()->GetIsActionActive(ECharacterActionType::E_Die)
+		|| FVector::Dist(OwnerCharacter.Get()->GetActorLocation(), TargetedCharacter.Get()->GetActorLocation()) >= TargetingMaintainThreashold)
 	{
 		DeactivateTargeting();
+		Cast<AMainCharacterBase>(OwnerCharacter.Get())->ResetCameraBoom();
 		return;
 	}
 
