@@ -107,7 +107,7 @@ void ACharacterBase::ResetAtkIntervalTimer()
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 }
 
-void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, const bool bAutoReset, const bool bUseSafeInterp, const bool bDrawDebugInfo)
+void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, const bool bAutoReset, const bool bUseSafeInterp, const bool bIgnoreZAxis, const bool bDrawDebugInfo)
 {
 	FTimerDelegate updateFunctionDelegate;
 
@@ -138,7 +138,7 @@ void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, 
 
 	//위치 업데이트 이벤트 바인딩
 	OnBeginLocationInterp.Broadcast();
-	updateFunctionDelegate.BindUFunction(this, FName("UpdateLocation"), NewValue, InterpSpeed, bAutoReset);
+	updateFunctionDelegate.BindUFunction(this, FName("UpdateLocation"), NewValue, InterpSpeed, bAutoReset, bIgnoreZAxis);
 	
 	ResetLocationInterpTimer();
 	GetWorld()->GetTimerManager().SetTimer(LocationInterpHandle, updateFunctionDelegate, 0.01f, true);
@@ -202,19 +202,27 @@ TArray<FName> ACharacterBase::GetCurrentMontageSlotName()
 	return slotName;
 }
 
-void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset)
+void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset, const bool bIgnoreZAxis)
 {
 	FVector currentLocation = GetActorLocation();
+	if (bIgnoreZAxis) 
+	{
+		currentLocation.Z = TargetValue.Z; //Z축은 무시
+	}
 	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? GetVelocity().Length() * 0.02f : 50.0f))
 	{
 		ResetLocationInterpTimer();
 		OnEndLocationInterp.Broadcast();
 		if (bAutoReset)
 		{
-			//SetLocationWithInterp(GetActorLocation() , InterpSpeed * 1.5f, false);
+			//SetLocationWithInterp(GetActorLocation() , InterpSpeed * 1.5f, false, );
 		}
 	}
 	currentLocation = FMath::VInterpTo(currentLocation, TargetValue, 0.1f, InterpSpeed);
+	if (bIgnoreZAxis)
+	{
+		currentLocation.Z = GetActorLocation().Z; //Z축은 무시
+	}
 	SetActorLocation(currentLocation, false, nullptr, ETeleportType::None);
 
 	//Prevent pitch turns
