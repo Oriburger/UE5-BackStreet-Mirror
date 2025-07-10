@@ -174,7 +174,7 @@ bool UTargetingManagerComponent::ActivateTargeting()
 	TargetedCharacter.Get()->GetCharacterMovement()->bUseControllerDesiredRotation = true;
 
 	OnTargetingActivated.Broadcast(true, TargetedCharacter.Get());
-	return true;S
+	return true;
 }
 
 void UTargetingManagerComponent::DeactivateTargeting()
@@ -221,6 +221,7 @@ void UTargetingManagerComponent::UpdateTargetedCandidate()
 void UTargetingManagerComponent::UpdateCameraRotation()
 {
 	if (!FollowingCameraRef.IsValid() || !TargetedCharacter.IsValid() || !OwnerCharacter.IsValid()) return;
+	if (OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionInProgress("Skill")) return;
 	if (OwnerCharacter.Get()->GetIsActionActive(ECharacterActionType::E_Die) 
 		|| TargetedCharacter.Get()->GetIsActionActive(ECharacterActionType::E_Die)
 		|| FVector::Dist(OwnerCharacter.Get()->GetActorLocation(), TargetedCharacter.Get()->GetActorLocation()) >= TargetingMaintainThreashold)
@@ -229,10 +230,13 @@ void UTargetingManagerComponent::UpdateCameraRotation()
 		Cast<AMainCharacterBase>(OwnerCharacter.Get())->ResetCameraBoom();
 		return;
 	}
+	if (!TargetedCharacter.Get()->GetMesh()->IsVisible() || TargetedCharacter.Get()->GetMesh()->bHiddenInGame) return;
 
 	if (FVector::Dist(OwnerCharacter.Get()->GetActorLocation(), TargetedCharacter.Get()->GetActorLocation()) >= 50.0f)
 	{
-		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(FollowingCameraRef.Get()->GetComponentLocation(), TargetedCharacter.Get()->GetActorLocation());
+		FVector targetLocation = TargetedCharacter.Get()->GetActorLocation();
+		targetLocation.Z = OwnerCharacter.Get()->GetActorLocation().Z; //Z축은 무시하고 XY평면에서만 바라본다.
+		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(FollowingCameraRef.Get()->GetComponentLocation(), targetLocation);
 		newRotation.Roll = 0.0f;
 		OwnerCharacter.Get()->GetController()->SetControlRotation(newRotation);
 	}

@@ -101,7 +101,7 @@ public:
 
 	UFUNCTION()
 		void SetAimingMode(bool bNewState);
-
+			
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FRotator GetAimingRotation(FVector BeginLocation);
 

@@ -1,5 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "MainCharacterBase.h"
+#include "../EnemyCharacter/EnemyCharacterBase.h"
 #include "MainCharacterController.h"
 #include "../Component/TargetingManagerComponent.h"
 #include "../Component/ItemInventoryComponent.h"
@@ -570,6 +571,7 @@ void AMainCharacterBase::SnapToCharacter(AActor* Target)
 
 	FVector startLocation = GetActorLocation();
 	FVector endLocation = Target->GetActorLocation();
+	endLocation.Z = Cast<AEnemyCharacterBase>(Target)->HitSceneComponent->GetComponentLocation().Z;
 	FVector dirVector = endLocation - startLocation; dirVector.Normalize();
 	SetActorRotation(UKismetMathLibrary::FindLookAtRotation(startLocation, endLocation));
 	SetLocationWithInterp(startLocation + dirVector * (FVector::Distance(startLocation, endLocation) - 75.0f), 2.0f, true, true, true);
@@ -623,7 +625,7 @@ void AMainCharacterBase::TryAttack()
 		{
 			//액션 런치
 			if (GetDistanceTo(targetCharacter) >= 200.0f
-				&& GetDistanceTo(targetCharacter) <= 500.0f
+				&& GetDistanceTo(targetCharacter) <= 750.0f
 				// 액션 런치 & 넉백 개선 테스트를 위해 임시 비활성화
 				&& !ActionTrackingComponent->GetIsActionInProgress("Attack")
 				&& !ActionTrackingComponent->GetIsActionInProgress("DashAttack")

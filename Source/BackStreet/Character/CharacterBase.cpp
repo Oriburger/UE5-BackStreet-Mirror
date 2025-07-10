@@ -209,7 +209,7 @@ void ACharacterBase::UpdateLocation(const FVector TargetValue, const float Inter
 	{
 		currentLocation.Z = TargetValue.Z; //Z축은 무시
 	}
-	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? GetVelocity().Length() * 0.02f : 50.0f))
+	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? FMath::Abs(GetVelocity().Z) * 0.2f : 50.0f))
 	{
 		ResetLocationInterpTimer();
 		OnEndLocationInterp.Broadcast();
