@@ -40,10 +40,10 @@ public:
 
 	//update target to candidate
 	//and activate camera following event (only in player)
-	UFUNCTION()
-		void ActivateTargeting();
+	UFUNCTION(BlueprintCallable)
+		bool ActivateTargeting();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void DeactivateTargeting();
 
 private:
@@ -82,6 +82,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		bool bAutoTargeting = false;
 
+	//타게팅을 유지하기 위한 거리
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		float TargetingMaintainThreashold = 2500.0f;
 

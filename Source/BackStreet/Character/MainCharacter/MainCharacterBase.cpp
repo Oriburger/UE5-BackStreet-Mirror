@@ -1,5 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "MainCharacterBase.h"
+#include "../EnemyCharacter/EnemyCharacterBase.h"
 #include "MainCharacterController.h"
 #include "../Component/TargetingManagerComponent.h"
 #include "../Component/ItemInventoryComponent.h"
@@ -69,6 +70,16 @@ AMainCharacterBase::AMainCharacterBase()
 	RangedAimBoom->bInheritRoll = false;
 	RangedAimBoom->bInheritYaw = true;
 	RangedAimBoom->SetRelativeLocation({ 0.0f, 80.0f, -10 });	//Set Location
+
+	//MainCharacter RangedWeaponAim SpringArm
+	TargetingModeBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("TargeingMode_Boom"));
+	TargetingModeBoom->SetupAttachment(RootComponent);
+	TargetingModeBoom->TargetArmLength = 150.0f;
+	TargetingModeBoom->bUsePawnControlRotation = true;
+	TargetingModeBoom->bInheritPitch = true;
+	TargetingModeBoom->bInheritRoll = false;
+	TargetingModeBoom->bInheritYaw = true;
+	TargetingModeBoom->SetRelativeLocation({ 0.0f, 80.0f, -10 });	//Set Location
 
 	HitSceneComponent->SetRelativeLocation(FVector(0.0f, 110.0f, 120.0f));
 
@@ -183,7 +194,7 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//SubWeapon
 		EnhancedInputComponent->BindAction(InputActionInfo.ShootAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryShoot);
 		
-		//EnhancedInputComponent->BindAction(LockToTargetAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::LockToTarget);
+		EnhancedInputComponent->BindAction(InputActionInfo.LockOnAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ToggleTargetingMode);
 	}
 }
 
@@ -245,11 +256,7 @@ void AMainCharacterBase::ZoomIn()
 	SetAimingMode(true);
 
 	//FollowingCamera attach to RangedAimBoom Component using Interp ==================
-	FLatentActionInfo LatentInfo;
-	LatentInfo.CallbackTarget = this;
-	SubCameraBoom->AttachToComponent(RangedAimBoom, FAttachmentTransformRules::KeepWorldTransform);
-	UKismetSystemLibrary::MoveComponentTo(SubCameraBoom, FVector(0, 0, 0), FRotator(0, 0, 0)
-		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
+	UpdateMainCameraBoom(RangedAimBoom);
 
 	OnZoomBegin.Broadcast(); //for ui (blueprint binding 가능)
 	OnAimStarted.Broadcast(); //for action tracker
@@ -262,11 +269,7 @@ void AMainCharacterBase::ZoomOut()
 	else SwitchWeapon(false);
 	SetAimingMode(false);
 	//FollowingCamera attach to CameraBoom Component using Interp ===================
-	FLatentActionInfo LatentInfo; 
-	LatentInfo.CallbackTarget = this;
-	SubCameraBoom->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepWorldTransform);
-	UKismetSystemLibrary::MoveComponentTo(SubCameraBoom, FVector(0, 0, 0), FRotator(0, 0, 0)
-		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
+	UpdateMainCameraBoom(CameraBoom);
 
 	OnZoomEnd.Broadcast(); //for ui (blueprint binding 가능)
 	OnAimEnded.Broadcast(); //for action tracker
@@ -528,11 +531,31 @@ void AMainCharacterBase::TryInvestigate()
 	}
 }
 
-void AMainCharacterBase::LockToTarget(const FInputActionValue& Value)
+void AMainCharacterBase::ToggleTargetingMode(const FInputActionValue& Value)
 {
 	if (GetCharacterMovement()->IsFalling()) return;
+	if (CharacterGameplayInfo.bIsAiming) return; //Aim 모드에서는 타겟팅 불가
+	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 
-	TargetingManagerComponent->ActivateTargeting();
+	bool result = false;
+	USpringArmComponent* destinationBoom;
+	if (TargetingManagerComponent->GetIsTargetingActivated())
+	{
+		destinationBoom = CameraBoom;
+		result = true;
+		TargetingManagerComponent->DeactivateTargeting();
+	}
+	else
+	{
+		destinationBoom = TargetingModeBoom;
+		result = TargetingManagerComponent->ActivateTargeting();
+	}
+
+	//FollowingCamera attach to RangedAimBoom Component using Interp ==================
+	if (result)
+	{
+		UpdateMainCameraBoom(destinationBoom);
+	}
 }
 
 void AMainCharacterBase::SnapToCharacter(AActor* Target)
@@ -548,9 +571,10 @@ void AMainCharacterBase::SnapToCharacter(AActor* Target)
 
 	FVector startLocation = GetActorLocation();
 	FVector endLocation = Target->GetActorLocation();
+	endLocation.Z = Cast<AEnemyCharacterBase>(Target)->HitSceneComponent->GetComponentLocation().Z;
 	FVector dirVector = endLocation - startLocation; dirVector.Normalize();
 	SetActorRotation(UKismetMathLibrary::FindLookAtRotation(startLocation, endLocation));
-	SetLocationWithInterp(startLocation + dirVector * (FVector::Distance(startLocation, endLocation) - 75.0f), 2.0f, true);
+	SetLocationWithInterp(startLocation + dirVector * (FVector::Distance(startLocation, endLocation) - 75.0f), 2.0f, true, true, true);
 	if (GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) > 400.0f)
 	{
 		SetFieldOfViewWithInterp(130.0f, 3.0f, true);
@@ -590,24 +614,31 @@ void AMainCharacterBase::TryAttack()
 		return;
 	}
 
-	//print trageted candidate and targeted character
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green,
-		FString::Printf(TEXT("TargetedCandidate: %s, TargetedCharacter: %s"),
-			*GetNameSafe(TargetingManagerComponent->GetTargetedCandidate()),
-			*GetNameSafe(TargetingManagerComponent->GetTargetedCharacter())));
+	ACharacterBase* targetCharacter = TargetingManagerComponent->GetIsTargetingActivated()
+		? Cast<ACharacterBase>(TargetingManagerComponent->GetTargetedCharacter())
+		: Cast<ACharacterBase>(TargetingManagerComponent->GetTargetedCandidate());
 
 	//Rotate to attack direction using input (1. movement / 2. camera)
 	if (WeaponComponent->GetWeaponStat().WeaponType == EWeaponType::E_Melee)
 	{
-		if (IsValid(TargetingManagerComponent->GetTargetedCandidate())
-			&& GetDistanceTo(TargetingManagerComponent->GetTargetedCandidate()) >= 200.0f
-			// 액션 런치 & 넉백 개선 테스트를 위해 임시 비활성화
-			&& !ActionTrackingComponent->GetIsActionInProgress("Attack")
-			&& !ActionTrackingComponent->GetIsActionInProgress("DashAttack")
-			&& !ActionTrackingComponent->GetIsActionInProgress("JumpAttack"))
+		if (IsValid(targetCharacter))
 		{
-			SnapToCharacter(TargetingManagerComponent->GetTargetedCandidate());
-			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("SnapToCharacter!!"));
+			//액션 런치
+			if (GetDistanceTo(targetCharacter) >= 200.0f
+				&& GetDistanceTo(targetCharacter) <= 750.0f
+				// 액션 런치 & 넉백 개선 테스트를 위해 임시 비활성화
+				&& !ActionTrackingComponent->GetIsActionInProgress("Attack")
+				&& !ActionTrackingComponent->GetIsActionInProgress("DashAttack")
+				&& !ActionTrackingComponent->GetIsActionInProgress("JumpAttack"))
+			{
+				SnapToCharacter(targetCharacter);
+			}
+			else
+			{
+				FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), targetCharacter->GetActorLocation());
+				newRotation.Pitch = newRotation.Roll = 0.0f;
+				SetActorRotation(newRotation);
+			}
 		}
 		else if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
 		{
@@ -721,6 +752,17 @@ TArray<UAnimMontage*> AMainCharacterBase::GetTargetMeleeAnimMontageList()
 	return targetAnimList;
 }
 
+void AMainCharacterBase::UpdateMainCameraBoom(USpringArmComponent* TargetBoom)
+{
+	if (!IsValid(TargetBoom)) return;
+	//FollowingCamera attach to TargetBoom Component using Interp ==================
+	FLatentActionInfo LatentInfo;
+	LatentInfo.CallbackTarget = this;
+	SubCameraBoom->AttachToComponent(TargetBoom, FAttachmentTransformRules::KeepWorldTransform);
+	UKismetSystemLibrary::MoveComponentTo(SubCameraBoom, FVector(0, 0, 0), FRotator(0, 0, 0)
+		, true, true, 0.2, false, EMoveComponentAction::Type::Move, LatentInfo);
+}
+
 void AMainCharacterBase::StopDashMovement()
 {
 	const FVector& direction = GetMesh()->GetRightVector();
@@ -746,6 +788,11 @@ void AMainCharacterBase::ResetCameraRotation()
 	FRotator newRotation = CameraBoom->GetRelativeRotation();
 	newRotation.Yaw = newRotation.Roll = 0.0f;
 	CameraBoom->SetRelativeRotation(newRotation);
+}
+
+void AMainCharacterBase::ResetCameraBoom()
+{
+	UpdateMainCameraBoom(CameraBoom);
 }
 
 void AMainCharacterBase::SetAutomaticRotateModeTimer()

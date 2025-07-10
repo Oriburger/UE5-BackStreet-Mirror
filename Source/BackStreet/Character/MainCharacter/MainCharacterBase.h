@@ -64,6 +64,10 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
 		USpringArmComponent* RangedAimBoom;
 
+	//Player SpirngArm for Targeting Mode
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		USpringArmComponent* TargetingModeBoom;
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		class UItemInventoryComponent* ItemInventory;
 
@@ -97,7 +101,7 @@ public:
 
 	UFUNCTION()
 		void SetAimingMode(bool bNewState);
-
+			
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FRotator GetAimingRotation(FVector BeginLocation);
 
@@ -110,10 +114,6 @@ public:
 	//Input Action Infos
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 		FPlayerInputActionInfo InputActionInfo;
-
-	//Targeting system
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
-		class UInputAction* LockToTargetAction;
 
 	// Move Key input check
 	UPROPERTY(BlueprintReadOnly)
@@ -181,7 +181,7 @@ public:
 
 	//Targeting system
 	UFUNCTION()
-		void LockToTarget(const FInputActionValue& Value);
+		void ToggleTargetingMode(const FInputActionValue& Value);
 
 	UFUNCTION()
 		void SnapToCharacter(AActor* Target);
@@ -212,7 +212,13 @@ public:
 	UFUNCTION()
 		void ResetCameraRotation();
 
+	UFUNCTION()
+		void ResetCameraBoom();
+
 protected:
+	UFUNCTION()
+		void UpdateMainCameraBoom(class USpringArmComponent* TargetBoom);
+
 	UFUNCTION()
 		void SetAutomaticRotateModeTimer();
 
