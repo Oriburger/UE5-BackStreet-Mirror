@@ -174,9 +174,6 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//Attack
 		EnhancedInputComponent->BindAction(InputActionInfo.AttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryAttack);
 
-		//Upper Attack
-		//EnhancedInputComponent->BindAction(InputActionInfo.UpperAttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryUpperAttack);
-
 		//Sprint
 		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Sprint);
 		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StopSprint);
@@ -191,9 +188,7 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//Interaction
 		EnhancedInputComponent->BindAction(InputActionInfo.InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
 
-		//SubWeapon
-		EnhancedInputComponent->BindAction(InputActionInfo.ShootAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryShoot);
-		
+		//Lock On Mode
 		EnhancedInputComponent->BindAction(InputActionInfo.LockOnAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ToggleTargetingMode);
 	}
 }
@@ -596,8 +591,15 @@ void AMainCharacterBase::TryAttack()
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Attack
-		&& CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle
-		&& CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Shoot) return;
+		&& CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle)
+	{
+		if (CharacterGameplayInfo.bIsAiming &&
+			CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Shoot)
+		{
+			TryShoot();
+		}
+		return;
+	};
 	if (!CharacterGameplayInfo.bCanAttack) return;
 	if (WeaponComponent->WeaponID == 0)
 	{

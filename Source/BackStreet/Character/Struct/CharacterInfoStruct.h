@@ -463,12 +463,6 @@ public:
 		class UInputAction* AttackAction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
-		class UInputAction* UpperAttackAction;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
-		class UInputAction* ShootAction;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
 		class UInputAction* ZoomAction;
 
 //------------------Action---------------------------------------------------------------------------
