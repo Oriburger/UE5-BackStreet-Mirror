@@ -174,9 +174,6 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//Attack
 		EnhancedInputComponent->BindAction(InputActionInfo.AttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryAttack);
 
-		//Upper Attack
-		//EnhancedInputComponent->BindAction(InputActionInfo.UpperAttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryUpperAttack);
-
 		//Sprint
 		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Sprint);
 		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StopSprint);
@@ -190,10 +187,8 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		//Interaction
 		EnhancedInputComponent->BindAction(InputActionInfo.InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
-
-		//SubWeapon
-		EnhancedInputComponent->BindAction(InputActionInfo.ShootAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryShoot);
 		
+		//Lock On Mode
 		EnhancedInputComponent->BindAction(InputActionInfo.LockOnAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ToggleTargetingMode);
 	}
 }
@@ -596,14 +591,22 @@ void AMainCharacterBase::TryAttack()
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Attack
-		&& CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle
-		&& CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Shoot) return;
+		&& CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle)
+	{
+		if (CharacterGameplayInfo.bIsAiming &&
+			CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Shoot)
+		{
+			TryShoot();
+		}
+		return;
+	};
 	if (!CharacterGameplayInfo.bCanAttack) return;
 	if (WeaponComponent->WeaponID == 0)
 	{
 		GamemodeRef->PrintSystemMessageDelegate.Broadcast(FName(TEXT("무기가 없습니다.")), FColor::White);
 		return;
 	}
+
 	this->Tags.Add("Attack|Common");
 
 	if (CharacterGameplayInfo.bIsSprinting && !CharacterGameplayInfo.bIsAirAttacking
@@ -614,46 +617,51 @@ void AMainCharacterBase::TryAttack()
 		return;
 	}
 
-	ACharacterBase* targetCharacter = TargetingManagerComponent->GetIsTargetingActivated()
-		? Cast<ACharacterBase>(TargetingManagerComponent->GetTargetedCharacter())
-		: Cast<ACharacterBase>(TargetingManagerComponent->GetTargetedCandidate());
+	if (MovementInputValue.Length() > 0)
+	{
+		float turnAngle = FMath::RadiansToDegrees(FMath::Atan2(MovementInputValue.X, MovementInputValue.Y))
+			+ FollowingCamera->GetComponentRotation().Yaw;
+		SetActorRotation(FRotator(0.0f, turnAngle, 0.0f));
+	}
+
+	ACharacterBase* targetCharacter = Cast<ACharacterBase>(TargetingManagerComponent->GetTargetedCharacter());
+	ACharacterBase* targetCandidate = Cast<ACharacterBase>(TargetingManagerComponent->GetTargetedCandidate());
+	const bool bIsTargetingActivated = TargetingManagerComponent->GetIsTargetingActivated();
 
 	//Rotate to attack direction using input (1. movement / 2. camera)
 	if (WeaponComponent->GetWeaponStat().WeaponType == EWeaponType::E_Melee)
 	{
-		if (IsValid(targetCharacter))
+		//액션 런치
+		if (bIsTargetingActivated)
 		{
-			//액션 런치
-			if (GetDistanceTo(targetCharacter) >= 200.0f
-				&& GetDistanceTo(targetCharacter) <= 750.0f
-				// 액션 런치 & 넉백 개선 테스트를 위해 임시 비활성화
+			if (IsValid(targetCharacter) && GetDistanceTo(targetCharacter) >= 200.0f
 				&& !ActionTrackingComponent->GetIsActionInProgress("Attack")
 				&& !ActionTrackingComponent->GetIsActionInProgress("DashAttack")
-				&& !ActionTrackingComponent->GetIsActionInProgress("JumpAttack"))
+				&& !ActionTrackingComponent->GetIsActionInProgress("JumpAttack")
+				&& TargetingManagerComponent->GetIsEnemyInBoundary(targetCharacter->GetActorLocation()))
 			{
+				UE_LOG(LogTemp, Warning, TEXT("SnapToCharacter %s"), *targetCharacter->GetName());
 				SnapToCharacter(targetCharacter);
+				Super::TryAttack();
+				return;
+			}
+		}
+		if (IsValid(targetCandidate) && TargetingManagerComponent->GetIsEnemyInBoundary(targetCandidate->GetActorLocation()))
+		{
+			if (GetDistanceTo(targetCandidate) >= 200.0f
+				&& !ActionTrackingComponent->GetIsActionInProgress("Attack")
+				&& !ActionTrackingComponent->GetIsActionInProgress("DashAttack")
+				&& !ActionTrackingComponent->GetIsActionInProgress("JumpAttack")
+				&& TargetingManagerComponent->GetIsEnemyInBoundary(targetCandidate->GetActorLocation()))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("SnapToCharacter %s"), *targetCandidate->GetName());
+				SnapToCharacter(targetCandidate);
 			}
 			else
 			{
-				FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), targetCharacter->GetActorLocation());
+				FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), targetCandidate->GetActorLocation());
 				newRotation.Pitch = newRotation.Roll = 0.0f;
 				SetActorRotation(newRotation);
-			}
-		}
-		else if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
-		{
-			if (MovementInputValue.Length() > 0)
-			{
-				float turnAngle = FMath::RadiansToDegrees(FMath::Atan2(MovementInputValue.X, MovementInputValue.Y))
-					+ FollowingCamera->GetComponentRotation().Yaw;
-				SetActorRotation(FRotator(0.0f, turnAngle, 0.0f));
-			}
-			else if (GetCharacterMovement()->IsFalling()
-				&& (ActionTrackingComponent->GetIsActionReady("Attack")
-					|| ActionTrackingComponent->GetIsActionReady("JumpAttack")
-					|| ActionTrackingComponent->GetIsActionReady("DashAttack")))
-			{
-				SetActorRotation(FRotator(0.0f, FollowingCamera->GetComponentRotation().Yaw, 0.0f));
 			}
 		}
 	}

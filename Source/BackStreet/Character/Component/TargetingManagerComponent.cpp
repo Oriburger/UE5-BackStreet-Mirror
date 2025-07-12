@@ -336,3 +336,32 @@ void UTargetingManagerComponent::SetTargetedCharacter(ACharacterBase* NewTarget)
 	TargetedCharacter = NewTarget;
 }
 
+bool UTargetingManagerComponent::GetIsEnemyInBoundary(FVector EnemyLocation)
+{
+	if (!OwnerCharacter.IsValid()) return false;
+
+	// 플레이어 위치 및 전방 벡터
+	FVector playerLocation = OwnerCharacter->GetActorLocation();
+	FVector forwardVector = OwnerCharacter->GetMesh()->GetRightVector();
+	FVector toEnemy = (EnemyLocation - playerLocation).GetSafeNormal();
+
+	// 전방 기준으로 적까지의 벡터와의 각도 계산
+	float angleBetween = FMath::RadiansToDegrees(FMath::Acos(FVector::DotProduct(forwardVector, toEnemy)));
+
+	// 기준 각도 설정 (기본 15도, bUseConeTrace가 true면 TraceAngle 사용)
+	float angleLimit = bUseConeTrace ? TraceAngle : 15.0f;
+
+	// 거리 조건 추가
+	bool isWithinDistance = FVector::Dist(playerLocation, EnemyLocation) <= MaxFindDistance;
+
+	// 최종 판별
+	bool isInSightCone = angleBetween <= angleLimit && isWithinDistance;
+
+	UE_LOG(LogTemp, Warning, TEXT("GetIsEnemyInBoundary: %d (Angle: %.2f)"), isInSightCone, angleBetween);
+
+	// 시각화
+	FColor debugColor = isInSightCone ? FColor::Green : FColor::Red;
+	UKismetSystemLibrary::DrawDebugSphere(GetWorld(), EnemyLocation, TraceRadius, 12, debugColor, 0.1f, 1.0f);
+
+	return isInSightCone;
+}
