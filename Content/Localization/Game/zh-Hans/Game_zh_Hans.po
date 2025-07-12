@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hans\n"
-"POT-Creation-Date: 2025-05-16 08:27\n"
-"PO-Revision-Date: 2025-05-16 08:27\n"
+"POT-Creation-Date: 2025-06-02 09:46\n"
+"PO-Revision-Date: 2025-06-02 09:46\n"
 "Language-Team: \n"
 "Language: zh-Hans\n"
 "MIME-Version: 1.0\n"
@@ -2614,29 +2614,29 @@ msgstr "玻璃瓶棒"
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack"
-msgid "Portable Repair Kit"
-msgstr "便携式修复工具包"
+msgid "Repair Kit"
+msgstr "修复工具包"
 
 #. Key:	Name_HealPack_Large
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Large"
-msgid "Large Portable Repair Kit"
-msgstr "便携式修复工具包（大）"
+msgid "Large Repair Kit"
+msgstr "大型修复工具包"
 
 #. Key:	Name_HealPack_Medium
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Medium"
-msgid "Medium Portable Repair Kit"
-msgstr "便携式修复工具包（中）"
+msgid "Medium Repair Kit"
+msgstr "中型修复工具包"
 
 #. Key:	Name_HealPack_Small
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Small"
-msgid "Small Portable Repair Kit"
-msgstr "便携式修复工具包（小）"
+msgid "Small Repair Kit"
+msgstr "小型修复工具包"
 
 #. Key:	Name_IronHammer
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -3265,8 +3265,8 @@ msgstr "<Bold.24>[公告！]</>\r\n这是《BackStreet》的演示版本。  \r\
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Reward_1"
-msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Portable Repair Kits]</>  \r\n- Types: Small, Medium, Large Portable Repair Kits.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skill modules.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Module Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
-msgstr "<Bold.24>[物品奖励指南]</>\r\n获取各种物品奖励，以增强你的生存能力和战斗力。\r\n\r\n<Medium.24>[便携式修复工具包]</>  \r\n- 类型：小型、中型、大型便携式修复工具包。  \r\n- 获取方式：  \r\n  - 作为关卡奖励随机获得。  \r\n  - 在游戏过程中按 'F' 键收集。  \r\n\r\n<Medium.24>[制作材料]</>  \r\n- 作用：用于制作和强化技能模块。\r\n- 获取方式：  \r\n  - 自动从被击败的敌人处收集。  \r\n- 技能制作：仅在指定的“制作关卡”中可用。  \r\n\r\n<Bold.22>合理使用治疗包和制作材料，强化角色并克服挑战！</>"
+msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Repair Kits]</>  \r\n- Types: Small, Medium, Large Repair Kits.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skill modules.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Module Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
+msgstr "<Bold.24>[物品奖励指南]</>\r\n获取各种物品奖励，以增强你的生存能力和战斗力。\r\n\r\n<Medium.24>[修复工具包]</>  \r\n- 类型：小型、中型、大型修复工具包。  \r\n- 获取方式：  \r\n  - 作为关卡奖励随机获得。  \r\n  - 在游戏过程中按 'F' 键收集。  \r\n\r\n<Medium.24>[制作材料]</>  \r\n- 作用：用于制作和强化技能模块。\r\n- 获取方式：  \r\n  - 自动从被击败的敌人处收集。  \r\n- 技能制作：仅在指定的“制作关卡”中可用。  \r\n\r\n<Bold.22>合理使用治疗包和制作材料，强化角色并克服挑战！</>"
 
 #. Key:	Tutorial_Stage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
