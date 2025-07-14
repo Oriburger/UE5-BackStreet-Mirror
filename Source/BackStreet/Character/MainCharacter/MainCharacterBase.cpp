@@ -188,6 +188,9 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//Interaction
 		EnhancedInputComponent->BindAction(InputActionInfo.InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
 		
+		//Reset Camera
+		EnhancedInputComponent->BindAction(InputActionInfo.ResetCameraAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ResetCamera);
+
 		//Lock On Mode
 		EnhancedInputComponent->BindAction(InputActionInfo.LockOnAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ToggleTargetingMode);
 	}
@@ -550,6 +553,7 @@ void AMainCharacterBase::ToggleTargetingMode(const FInputActionValue& Value)
 	if (result)
 	{
 		UpdateMainCameraBoom(destinationBoom);
+		OnLockOnStarted.Broadcast();
 	}
 }
 
@@ -714,6 +718,19 @@ void AMainCharacterBase::Die()
 void AMainCharacterBase::StandUp()
 {
 	Super::StandUp();
+}
+
+void AMainCharacterBase::ResetCamera()
+{
+	if (!IsValid(TargetingManagerComponent)) return; 
+	if (TargetingManagerComponent->GetIsTargetingActivated()) return;
+
+	if (Controller)
+	{
+		float newYawValue = GetMesh()->GetComponentRotation().Yaw + 95.0f;
+		Controller->SetControlRotation(FRotator(-20.0f, newYawValue, 0.0f));
+		OnCameraReset.Broadcast();
+	}
 }
 
 UInteractiveCollisionComponent* AMainCharacterBase::GetNearInteractionComponent()

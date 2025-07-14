@@ -179,6 +179,9 @@ public:
 	UFUNCTION()
 		virtual void StandUp() override;
 
+	UFUNCTION()
+		void ResetCamera();
+
 	//Targeting system
 	UFUNCTION()
 		void ToggleTargetingMode(const FInputActionValue& Value);

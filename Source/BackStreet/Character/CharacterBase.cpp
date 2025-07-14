@@ -99,6 +99,8 @@ void ACharacterBase::InitializeActionTriggerDelegateMap()
 	ActionTriggerDelegateMap.Add("OnSkillStarted", &OnSkillStarted);
 	ActionTriggerDelegateMap.Add("OnSkillEnded", &OnSkillEnded);
 	ActionTriggerDelegateMap.Add("OnDeath", &OnDeath);
+	ActionTriggerDelegateMap.Add("OnCameraReset", &OnCameraReset);
+	ActionTriggerDelegateMap.Add("OnLockOnStarted", &OnLockOnStarted);
 }
 
 void ACharacterBase::ResetAtkIntervalTimer()

@@ -35,6 +35,8 @@ public:
 	FDelegateOnActionTrigger OnSkillStarted;
 	FDelegateOnActionTrigger OnSkillEnded;
 	FDelegateOnActionTrigger OnDeath;
+	FDelegateOnActionTrigger OnCameraReset;
+	FDelegateOnActionTrigger OnLockOnStarted;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateHealthChange OnHealthChanged;
