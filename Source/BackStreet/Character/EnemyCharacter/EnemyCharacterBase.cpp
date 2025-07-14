@@ -74,6 +74,9 @@ void AEnemyCharacterBase::InitAsset(int32 NewCharacterID)
 
 void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 {
+	if (NewCharacterID == 0) return;
+	if (EnemyStatTable == nullptr) return;
+
 	//Read from dataTable
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
@@ -94,7 +97,7 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	}
 
 	InitFloatingHpWidget();
-	InitTargetingSupportingWidget();
+	//InitTargetingSupportingWidget();
 
 	if (NewCharacterID == 1200)
 	{
@@ -116,7 +119,7 @@ void AEnemyCharacterBase::ResetAiBehaviorState()
 void AEnemyCharacterBase::SetDefaultWeapon()
 {
 	WeaponComponent->InitWeapon(EnemyStat.DefaultWeaponID);
-	if (IsValid(Controller))
+	if (IsValid(Controller) && EnemyStat.DefaultWeaponID != 0)
 	{
 		AAIControllerBase* controllerRef = Cast<AAIControllerBase>(Controller);
 		if (IsValid(controllerRef))

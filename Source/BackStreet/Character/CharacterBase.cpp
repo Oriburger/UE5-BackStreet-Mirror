@@ -533,7 +533,7 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 	knockBackDirection *= Strength;
 	knockBackDirection.Z = 1.0f;
 
-	if (Target->ActorHasTag("Enemy"))
+	if (Target->ActorHasTag("Enemy") && !Cast<ACharacterBase>(Target)->GetCharacterGameplayInfo().bIsInvincibility)
 	{
 		AEnemyCharacterBase* knockBackCharacter = Cast<AEnemyCharacterBase>(Target);
 		knockBackCharacter->TakeKnockBack(Strength, DefaultStat.DefaultKnockBackResist);
