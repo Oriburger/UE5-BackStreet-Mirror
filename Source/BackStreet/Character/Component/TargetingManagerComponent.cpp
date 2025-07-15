@@ -224,7 +224,8 @@ void UTargetingManagerComponent::UpdateCameraRotation()
 	if (OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionInProgress("Skill")) return;
 	if (OwnerCharacter.Get()->GetIsActionActive(ECharacterActionType::E_Die) 
 		|| TargetedCharacter.Get()->GetIsActionActive(ECharacterActionType::E_Die)
-		|| FVector::Dist(OwnerCharacter.Get()->GetActorLocation(), TargetedCharacter.Get()->GetActorLocation()) >= TargetingMaintainThreashold)
+		|| FVector::Dist(OwnerCharacter.Get()->GetActorLocation(), TargetedCharacter.Get()->GetActorLocation())
+		   >= TargetingMaintainThreashold * (TargetedCharacter.Get()->ActorHasTag("Boss") ? 2.0f : 1.0f))
 	{
 		DeactivateTargeting();
 		Cast<AMainCharacterBase>(OwnerCharacter.Get())->ResetCameraBoom();
