@@ -99,6 +99,8 @@ void ACharacterBase::InitializeActionTriggerDelegateMap()
 	ActionTriggerDelegateMap.Add("OnSkillStarted", &OnSkillStarted);
 	ActionTriggerDelegateMap.Add("OnSkillEnded", &OnSkillEnded);
 	ActionTriggerDelegateMap.Add("OnDeath", &OnDeath);
+	ActionTriggerDelegateMap.Add("OnCameraReset", &OnCameraReset);
+	ActionTriggerDelegateMap.Add("OnLockOnStarted", &OnLockOnStarted);
 }
 
 void ACharacterBase::ResetAtkIntervalTimer()
@@ -107,7 +109,7 @@ void ACharacterBase::ResetAtkIntervalTimer()
 	GetWorldTimerManager().ClearTimer(AtkIntervalHandle);
 }
 
-void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, const bool bAutoReset, const bool bUseSafeInterp, const bool bDrawDebugInfo)
+void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, const bool bAutoReset, const bool bUseSafeInterp, const bool bIgnoreZAxis, const bool bDrawDebugInfo)
 {
 	FTimerDelegate updateFunctionDelegate;
 
@@ -138,7 +140,7 @@ void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, 
 
 	//위치 업데이트 이벤트 바인딩
 	OnBeginLocationInterp.Broadcast();
-	updateFunctionDelegate.BindUFunction(this, FName("UpdateLocation"), NewValue, InterpSpeed, bAutoReset);
+	updateFunctionDelegate.BindUFunction(this, FName("UpdateLocation"), NewValue, InterpSpeed, bAutoReset, bIgnoreZAxis);
 	
 	ResetLocationInterpTimer();
 	GetWorld()->GetTimerManager().SetTimer(LocationInterpHandle, updateFunctionDelegate, 0.01f, true);
@@ -147,6 +149,7 @@ void ACharacterBase::SetLocationWithInterp(FVector NewValue, float InterpSpeed, 
 void ACharacterBase::ResetLocationInterpTimer()
 {
 	GetWorld()->GetTimerManager().ClearTimer(LocationInterpHandle);
+	LocationInterpHandle.Invalidate();
 }
 
 void ACharacterBase::PlayHitAnimMontage()
@@ -201,19 +204,27 @@ TArray<FName> ACharacterBase::GetCurrentMontageSlotName()
 	return slotName;
 }
 
-void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset)
+void ACharacterBase::UpdateLocation(const FVector TargetValue, const float InterpSpeed, const bool bAutoReset, const bool bIgnoreZAxis)
 {
 	FVector currentLocation = GetActorLocation();
-	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? GetVelocity().Length() * 0.02f : 30.0f))
+	if (bIgnoreZAxis) 
+	{
+		currentLocation.Z = TargetValue.Z; //Z축은 무시
+	}
+	if (currentLocation.Equals(TargetValue, GetCharacterMovement()->IsFalling() ? FMath::Abs(GetVelocity().Z) * 0.2f : 50.0f))
 	{
 		ResetLocationInterpTimer();
 		OnEndLocationInterp.Broadcast();
 		if (bAutoReset)
 		{
-			//SetLocationWithInterp(GetActorLocation() , InterpSpeed * 1.5f, false);
+			//SetLocationWithInterp(GetActorLocation() , InterpSpeed * 1.5f, false, );
 		}
 	}
 	currentLocation = FMath::VInterpTo(currentLocation, TargetValue, 0.1f, InterpSpeed);
+	if (bIgnoreZAxis)
+	{
+		currentLocation.Z = GetActorLocation().Z; //Z축은 무시
+	}
 	SetActorLocation(currentLocation, false, nullptr, ETeleportType::None);
 
 	//Prevent pitch turns
@@ -524,7 +535,7 @@ void ACharacterBase::ApplyKnockBack(AActor* Target, float Strength)
 	knockBackDirection *= Strength;
 	knockBackDirection.Z = 1.0f;
 
-	if (Target->ActorHasTag("Enemy"))
+	if (Target->ActorHasTag("Enemy") && !Cast<ACharacterBase>(Target)->GetCharacterGameplayInfo().bIsInvincibility)
 	{
 		AEnemyCharacterBase* knockBackCharacter = Cast<AEnemyCharacterBase>(Target);
 		knockBackCharacter->TakeKnockBack(Strength, DefaultStat.DefaultKnockBackResist);

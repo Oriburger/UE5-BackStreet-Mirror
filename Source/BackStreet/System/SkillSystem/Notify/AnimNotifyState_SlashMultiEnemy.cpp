@@ -52,7 +52,7 @@ void UAnimNotifyState_SlashMultiEnemy::NotifyTick(USkeletalMeshComponent* MeshCo
 			targetLocation += MoveErrorValueList[UKismetMathLibrary::RandomInteger(MoveErrorValueList.Num())];
 
 			bIsInterping = true;
-			OwnerCharacterRef.Get()->SetLocationWithInterp(targetLocation, InterpSpeed);
+			OwnerCharacterRef.Get()->SetLocationWithInterp(targetLocation, InterpSpeed, false, true, false, false);
 			OwnerCharacterRef.Get()->GetWorldTimerManager().SetTimer(damageIntervalHandle, FTimerDelegate::CreateLambda([=]() {
 				ApplyDamageWithInterval(resultList[targetIdx]);
 				bIsInterping = false;

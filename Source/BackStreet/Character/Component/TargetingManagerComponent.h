@@ -40,10 +40,10 @@ public:
 
 	//update target to candidate
 	//and activate camera following event (only in player)
-	UFUNCTION()
-		void ActivateTargeting();
+	UFUNCTION(BlueprintCallable)
+		bool ActivateTargeting();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void DeactivateTargeting();
 
 private:
@@ -79,20 +79,25 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetTargetedCharacter(class ACharacterBase* NewTarget);
 
+	UFUNCTION(BlueprintCallable)
+		bool GetIsEnemyInBoundary(FVector EnemyLocation);
+
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		bool bAutoTargeting = false;
 
+	//타게팅을 유지하기 위한 거리
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float TargetingMaintainThreashold = 2500.0f;
+		float TargetingMaintainThreashold = 1250.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float MaxFindDistance = 1000.0f;
+		float MaxFindDistance = 750.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float TraceRadius = 400.0f;
+		float TraceRadius = 50.0f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float AutoTargetingRate = 0.25f;
+		float AutoTargetingRate = 0.1f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bShowDebugSphere = false;
@@ -101,7 +106,7 @@ public:
 		bool bUseConeTrace = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (UIMin = 0.0, UIMax = 1.0, EditCondition = "bUseConeTrace"))
-		float TraceDensity = 0.5f;
+		float TraceDensity = 0.35f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (UIMin = 0.0, UIMax = 90.0, EditCondition = "bUseConeTrace"))
 		float TraceAngle = 45.0f; //in degree

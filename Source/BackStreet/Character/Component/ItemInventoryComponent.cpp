@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "ItemInventoryComponent.h"
@@ -108,24 +108,24 @@ bool UItemInventoryComponent::TryAddWeapon(int32 ItemID, EItemCategoryInfo ItemC
 {
 	if (ItemCategory == EItemCategoryInfo::E_Weapon)
 	{
-		//ÀÓ½Ã ÄÚµå
+		//ì„ì‹œ ì½”ë“œ
 		if (InventoryInfoData.CurrMainWeaponCount >= InventoryInfoData.MaxMainWeaponCount) return false;
 		InventoryInfoData.CurrMainWeaponCount += 1;
 		InventoryInfoData.ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, InventoryInfoData.ItemMap[ItemID].ItemAmount + ItemCount);
 	}
 	else if (ItemCategory == EItemCategoryInfo::E_SubWeapon)
 	{
-		//°¡´ÉÇÑ ÃÖ´ë ¼ÒÁö¼ö¸¦ ³Ñ¾ú´Ù¸é? 
+		//ê°€ëŠ¥í•œ ìµœëŒ€ ì†Œì§€ìˆ˜ë¥¼ ë„˜ì—ˆë‹¤ë©´? 
 		if (InventoryInfoData.CurrSubWeaponCount >= InventoryInfoData.MaxSubWeaponCount)
 		{
 			TArray<int32> subWeaponIDList = GetValidWeaponIDList(EWeaponType::E_Shoot);
 			if (!subWeaponIDList.Contains(ItemID) && subWeaponIDList.Num() > 0)
 			{
-				//¸¸¾à »õ·Î Áİ´Â ¹«±â¶ó¸é ¹ö¸®°í ·ÎÁ÷À» ¼öÇà
+				//ë§Œì•½ ìƒˆë¡œ ì¤ëŠ” ë¬´ê¸°ë¼ë©´ ë²„ë¦¬ê³  ë¡œì§ì„ ìˆ˜í–‰
 				RemoveItem(subWeaponIDList[0], 99);
 			}
 		}
-		//¹«±â¸¦ Áİ´Â´Ù (Ä«¿îÆÃ / Á¤º¸ ¿¬µ¿)
+		//ë¬´ê¸°ë¥¼ ì¤ëŠ”ë‹¤ (ì¹´ìš´íŒ… / ì •ë³´ ì—°ë™)
 		InventoryInfoData.CurrSubWeaponCount += 1;
 		FWeaponStateStruct& targetState = GetWeaponState(ItemID - 20000);
 		int32 prevCount = targetState.RangedWeaponState.CurrentAmmoCount;
@@ -156,13 +156,13 @@ bool UItemInventoryComponent::TryRemoveWeapon(int32 ItemID, EItemCategoryInfo It
 	}
 	else if (InventoryInfoData.ItemMap[ItemID].ItemType == EItemCategoryInfo::E_SubWeapon)
 	{
-		//ÅºÈ¯ ¼ö¸¸Å­ ÇöÀç Å¬·¡½º ³» Á¤º¸¿¡¼­ »©°í, WeaponComponent ³» Á¤º¸µµ ¾÷µ¥ÀÌÆ® 
+		//íƒ„í™˜ ìˆ˜ë§Œí¼ í˜„ì¬ í´ë˜ìŠ¤ ë‚´ ì •ë³´ì—ì„œ ë¹¼ê³ , WeaponComponent ë‚´ ì •ë³´ë„ ì—…ë°ì´íŠ¸ 
 		FWeaponStateStruct& weaponStruct = GetWeaponState(ItemID - 20000);
 		weaponStruct.RangedWeaponState.CurrentAmmoCount -= RemoveCount;
 		weaponStruct.RangedWeaponState.CurrentAmmoCount = FMath::Max(0, weaponStruct.RangedWeaponState.CurrentAmmoCount);
 		TryUpdateWeaponState(ItemID - 20000, weaponStruct);
 
-		//ÅºÈ¯ÀÌ ´Ù ¶³¾îÁ³´Ù¸é Ä«¿îÆ® ÁÙÀÌ±â
+		//íƒ„í™˜ì´ ë‹¤ ë–¨ì–´ì¡Œë‹¤ë©´ ì¹´ìš´íŠ¸ ì¤„ì´ê¸°
 		if (weaponStruct.RangedWeaponState.CurrentAmmoCount == 0)
 		{
 			InventoryInfoData.CurrSubWeaponCount = FMath::Max(0, InventoryInfoData.CurrSubWeaponCount - 1);

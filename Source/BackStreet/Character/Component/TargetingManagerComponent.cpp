@@ -158,28 +158,31 @@ void UTargetingManagerComponent::ForceTargetingToNearestCharacter()
 	ActivateTargeting();
 }
 
-void UTargetingManagerComponent::ActivateTargeting()
+bool UTargetingManagerComponent::ActivateTargeting()
 {
-	if (!TargetedCandidate.IsValid()) return;
-	if (bIsTargetingActivated && TargetedCharacter == TargetedCandidate)
-	{
-		DeactivateTargeting();
-		return;
-	}
-	TargetedCharacter = TargetedCandidate;
+	if (!TargetedCandidate.IsValid()) return false;
 
+	if (bIsTargetingActivated || TargetedCharacter == TargetedCandidate) return false;
+	
+	SetTargetedCharacter(TargetedCandidate.Get());
+	
 	bIsTargetingActivated = true;
-	//GetOwner()->GetWorldTimerManager().ClearTimer(CameraRotateTimerHandle);
-	//GetOwner()->GetWorldTimerManager().SetTimer(CameraRotateTimerHandle, this, &UTargetingManagerComponent::UpdateCameraRotation, 0.01f, true);
+	GetOwner()->GetWorldTimerManager().ClearTimer(CameraRotateTimerHandle);
+	GetOwner()->GetWorldTimerManager().SetTimer(CameraRotateTimerHandle, this, &UTargetingManagerComponent::UpdateCameraRotation, 0.01f, true);
 
 	TargetedCharacter.Get()->GetCharacterMovement()->bOrientRotationToMovement = false;
 	TargetedCharacter.Get()->GetCharacterMovement()->bUseControllerDesiredRotation = true;
 
 	OnTargetingActivated.Broadcast(true, TargetedCharacter.Get());
+	return true;
 }
 
 void UTargetingManagerComponent::DeactivateTargeting()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red,
+		FString::Printf(TEXT("Deactivate Targeting")));
+
+	TargetedCharacter.Reset();
 	GetOwner()->GetWorldTimerManager().ClearTimer(CameraRotateTimerHandle);
 	CameraRotateTimerHandle.Invalidate();
 
@@ -189,7 +192,7 @@ void UTargetingManagerComponent::DeactivateTargeting()
 	bIsTargetingActivated = false;
 	if (FollowingCameraRef.IsValid())
 	{
-		//FollowingCameraRef.Get()->SetRelativeLocationAndRotation(FVector::ZeroVector, FRotator::ZeroRotator, false);
+		FollowingCameraRef.Get()->SetRelativeLocationAndRotation(FVector::ZeroVector, FRotator::ZeroRotator, false);
 	}
 	OnTargetingActivated.Broadcast(false, nullptr);
 }
@@ -215,19 +218,25 @@ void UTargetingManagerComponent::UpdateTargetedCandidate()
 	OnTargetUpdated.Broadcast(TargetedCandidate.Get());
 }
 
-//미사용 (하드타게팅)
 void UTargetingManagerComponent::UpdateCameraRotation()
 {
 	if (!FollowingCameraRef.IsValid() || !TargetedCharacter.IsValid() || !OwnerCharacter.IsValid()) return;
-	if (OwnerCharacter.Get()->GetIsActionActive(ECharacterActionType::E_Die) || TargetedCharacter.Get()->GetIsActionActive(ECharacterActionType::E_Die))
+	if (OwnerCharacter.Get()->ActionTrackingComponent->GetIsActionInProgress("Skill")) return;
+	if (OwnerCharacter.Get()->GetIsActionActive(ECharacterActionType::E_Die) 
+		|| TargetedCharacter.Get()->GetIsActionActive(ECharacterActionType::E_Die)
+		|| FVector::Dist(OwnerCharacter.Get()->GetActorLocation(), TargetedCharacter.Get()->GetActorLocation()) >= TargetingMaintainThreashold)
 	{
 		DeactivateTargeting();
+		Cast<AMainCharacterBase>(OwnerCharacter.Get())->ResetCameraBoom();
 		return;
 	}
+	if (!TargetedCharacter.Get()->GetMesh()->IsVisible() || TargetedCharacter.Get()->GetMesh()->bHiddenInGame) return;
 
 	if (FVector::Dist(OwnerCharacter.Get()->GetActorLocation(), TargetedCharacter.Get()->GetActorLocation()) >= 50.0f)
 	{
-		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(FollowingCameraRef.Get()->GetComponentLocation(), TargetedCharacter.Get()->GetActorLocation());
+		FVector targetLocation = TargetedCharacter.Get()->GetActorLocation();
+		targetLocation.Z = OwnerCharacter.Get()->GetActorLocation().Z; //Z축은 무시하고 XY평면에서만 바라본다.
+		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(FollowingCameraRef.Get()->GetComponentLocation(), targetLocation);
 		newRotation.Roll = 0.0f;
 		OwnerCharacter.Get()->GetController()->SetControlRotation(newRotation);
 	}
@@ -327,3 +336,32 @@ void UTargetingManagerComponent::SetTargetedCharacter(ACharacterBase* NewTarget)
 	TargetedCharacter = NewTarget;
 }
 
+bool UTargetingManagerComponent::GetIsEnemyInBoundary(FVector EnemyLocation)
+{
+	if (!OwnerCharacter.IsValid()) return false;
+
+	// 플레이어 위치 및 전방 벡터
+	FVector playerLocation = OwnerCharacter->GetActorLocation();
+	FVector forwardVector = OwnerCharacter->GetMesh()->GetRightVector();
+	FVector toEnemy = (EnemyLocation - playerLocation).GetSafeNormal();
+
+	// 전방 기준으로 적까지의 벡터와의 각도 계산
+	float angleBetween = FMath::RadiansToDegrees(FMath::Acos(FVector::DotProduct(forwardVector, toEnemy)));
+
+	// 기준 각도 설정 (기본 15도, bUseConeTrace가 true면 TraceAngle 사용)
+	float angleLimit = bUseConeTrace ? TraceAngle : 15.0f;
+
+	// 거리 조건 추가
+	bool isWithinDistance = FVector::Dist(playerLocation, EnemyLocation) <= MaxFindDistance;
+
+	// 최종 판별
+	bool isInSightCone = angleBetween <= angleLimit && isWithinDistance;
+
+	UE_LOG(LogTemp, Warning, TEXT("GetIsEnemyInBoundary: %d (Angle: %.2f)"), isInSightCone, angleBetween);
+
+	// 시각화
+	FColor debugColor = isInSightCone ? FColor::Green : FColor::Red;
+	UKismetSystemLibrary::DrawDebugSphere(GetWorld(), EnemyLocation, TraceRadius, 12, debugColor, 0.1f, 1.0f);
+
+	return isInSightCone;
+}

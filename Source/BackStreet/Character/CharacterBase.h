@@ -35,6 +35,8 @@ public:
 	FDelegateOnActionTrigger OnSkillStarted;
 	FDelegateOnActionTrigger OnSkillEnded;
 	FDelegateOnActionTrigger OnDeath;
+	FDelegateOnActionTrigger OnCameraReset;
+	FDelegateOnActionTrigger OnLockOnStarted;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateHealthChange OnHealthChanged;
@@ -143,7 +145,7 @@ public:
 
 	//Update Character's world Location using interporlation
 	UFUNCTION(BlueprintCallable)
-		void SetLocationWithInterp(FVector NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false, const bool bUseSafeInterp = false, const bool bDrawDebugInfo = false);
+	void SetLocationWithInterp(FVector NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false, const bool bUseSafeInterp = false, const bool bIgnoreZAxis = false, const bool bDrawDebugInfo = false);
 
 	UFUNCTION(BlueprintCallable)
 		void ResetLocationInterpTimer();
@@ -162,7 +164,7 @@ protected:
 	//it must not be called alone.
 	//if you set the value of bAutoReset false, you have to call this function to reset to original value
 	UFUNCTION()
-		void UpdateLocation(const FVector TargetValue, const float InterpSpeed = 1.0f, const bool bAutoReset = false);
+		void UpdateLocation(const FVector TargetValue, const float InterpSpeed = 1.0f, const bool bAutoReset = false, const bool bIgnoreZAxis = false);
 
 	//Set distance from ground for air attack
 
