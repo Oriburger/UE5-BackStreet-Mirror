@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_jp\n"
-"POT-Creation-Date: 2025-07-15 03:43\n"
-"PO-Revision-Date: 2025-07-15 03:43\n"
+"POT-Creation-Date: 2025-07-15 05:07\n"
+"PO-Revision-Date: 2025-07-15 05:07\n"
 "Language-Team: \n"
 "Language: ja-JP\n"
 "MIME-Version: 1.0\n"
@@ -1433,6 +1433,13 @@ msgstr "クラフト"
 msgctxt "ST_EasyGameUICommon,Button_Credit"
 msgid "Credits"
 msgstr "クレジット"
+
+#. Key:	Button_Discard
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Discard"
+msgid "Discard"
+msgstr "削除する"
 
 #. Key:	Button_OptionsMenu
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon

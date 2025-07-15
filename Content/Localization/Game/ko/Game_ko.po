@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-07-15 03:44\n"
-"PO-Revision-Date: 2025-07-15 03:44\n"
+"POT-Creation-Date: 2025-07-15 05:08\n"
+"PO-Revision-Date: 2025-07-15 05:08\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -1433,6 +1433,13 @@ msgstr "제작하기"
 msgctxt "ST_EasyGameUICommon,Button_Credit"
 msgid "Credits"
 msgstr "제작진"
+
+#. Key:	Button_Discard
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Discard"
+msgid "Discard"
+msgstr "버리기"
 
 #. Key:	Button_OptionsMenu
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon

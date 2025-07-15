@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_en\n"
-"POT-Creation-Date: 2025-05-16 08:27\n"
-"PO-Revision-Date: 2025-05-16 08:27\n"
+"POT-Creation-Date: 2025-07-15 05:06\n"
+"PO-Revision-Date: 2025-07-15 05:06\n"
 "Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -1385,6 +1385,13 @@ msgctxt "ST_EasyGameUICommon,Ability_Name"
 msgid "Ability_Name"
 msgstr "Boosterchip Name"
 
+#. Key:	Button_AboutOfficialRelease
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_AboutOfficialRelease"
+msgid "About the Full Version"
+msgstr "About the Full Version"
+
 #. Key:	Button_Apply
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1426,6 +1433,13 @@ msgstr "Craft"
 msgctxt "ST_EasyGameUICommon,Button_Credit"
 msgid "Credits"
 msgstr "Credits"
+
+#. Key:	Button_Discard
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Discard"
+msgid "Discard"
+msgstr "Discard"
 
 #. Key:	Button_OptionsMenu
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2614,29 +2628,29 @@ msgstr "Glass Bottle Bat"
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack"
-msgid "Portable Repair Kit"
-msgstr "Portable Repair Kit"
+msgid "Repair Kit"
+msgstr "Repair Kit"
 
 #. Key:	Name_HealPack_Large
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Large"
-msgid "Large Portable Repair Kit"
-msgstr "Large Portable Repair Kit"
+msgid "Large Repair Kit"
+msgstr "Large Repair Kit"
 
 #. Key:	Name_HealPack_Medium
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Medium"
-msgid "Medium Portable Repair Kit"
-msgstr "Medium Portable Repair Kit"
+msgid "Medium Repair Kit"
+msgstr "Medium Repair Kit"
 
 #. Key:	Name_HealPack_Small
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Small"
-msgid "Small Portable Repair Kit"
-msgstr "Small Portable Repair Kit"
+msgid "Small Repair Kit"
+msgstr "Small Repair Kit"
 
 #. Key:	Name_IronHammer
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -3023,6 +3037,48 @@ msgctxt "ST_Skill,Name_WeaknessAnalysis"
 msgid "Weakness Analysis"
 msgstr "Weakness Analysis"
 
+#. Key:	Demo_Header_NewChapter
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_NewChapter"
+msgid "Chapter and Environment Expansion"
+msgstr "Chapter and Environment Expansion"
+
+#. Key:	Demo_Header_NewEnemy
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_NewEnemy"
+msgid "Enhanced Enemy Diversity and Interaction"
+msgstr "Enhanced Enemy Diversity and Interaction"
+
+#. Key:	Demo_Header_Permanent_Upgrade
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_Permanent_Upgrade"
+msgid "Permanent Character Upgrade System"
+msgstr "Permanent Character Upgrade System"
+
+#. Key:	Demo_OfficialVersion_Enemy
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_Enemy"
+msgid "<Medium.24>[Enemy Diversity & Tactical Interaction]</>\r\n\r\n- The full version introduces various combat patterns\r\n   that require specific sub-weapons or skills.\r\n- Each encounter demands constant decision-making and strategic\r\n   adaptation."
+msgstr "<Medium.24>[Enemy Diversity & Tactical Interaction]</>\r\n\r\n- The full version introduces various combat patterns\r\n   that require specific sub-weapons or skills.\r\n- Each encounter demands constant decision-making and strategic\r\n   adaptation."
+
+#. Key:	Demo_OfficialVersion_NewChapter
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_NewChapter"
+msgid "<Medium.24>[Chapter & Environment Expansion]</>\r\n\r\n- More chapters and regions are added in the full release.\r\n- Enemy types and patterns vary by chapter, with each zone featuring\r\n   unique combat rules and modifiers.\r\n- Strategic mechanics such as gear/sub-weapon pre-equipping\r\n   and auto resource refill are added."
+msgstr "<Medium.24>[Chapter & Environment Expansion]</>\r\n\r\n- More chapters and regions are added in the full release.\r\n- Enemy types and patterns vary by chapter, with each zone featuring\r\n   unique combat rules and modifiers.\r\n- Strategic mechanics such as gear/sub-weapon pre-equipping\r\n   and auto resource refill are added."
+
+#. Key:	Demo_OfficialVersion_Permanent
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_Permanent"
+msgid "<Medium.24>[Permanent Character Upgrade]</>\r\n\r\n- Players can permanently enhance their character stats \r\n   through repeated play.\r\n- The upgrade tree includes action gauge max value, skill multipliers\r\n  , sub-weapon slots, and debuff duration.\r\n- Customize and grow your own combat style with every run."
+msgstr "<Medium.24>[Permanent Character Upgrade]</>\r\n\r\n- Players can permanently enhance their character stats \r\n   through repeated play.\r\n- The upgrade tree includes action gauge max value, skill multipliers\r\n  , sub-weapon slots, and debuff duration.\r\n- Customize and grow your own combat style with every run."
+
 #. Key:	Desc_BossStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3142,6 +3198,13 @@ msgctxt "ST_Tutorial,Input_Jump"
 msgid "Jump"
 msgstr "Jump"
 
+#. Key:	Input_LockOn
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_LockOn"
+msgid "Lock-On"
+msgstr "Lock-On"
+
 #. Key:	Input_MoveBackward
 #. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
 #: /Game/UI/Localization/ST_Input.ST_Input
@@ -3169,6 +3232,13 @@ msgstr "Move Left"
 msgctxt "ST_Tutorial,Input_MoveRight"
 msgid "Move Right"
 msgstr "Move Right"
+
+#. Key:	Input_ResetCamera
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_ResetCamera"
+msgid "Reset Camera"
+msgstr "Reset Camera"
 
 #. Key:	Input_Roll
 #. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
@@ -3258,15 +3328,15 @@ msgstr "<Bold.24>[Welcome!]</>\r\n- Welcome to BackStreet.\r\n- To survive here,
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Entry_2"
-msgid "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Placeholder assets may appear during gameplay.  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
-msgstr "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Placeholder assets may appear during gameplay.  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
+msgid "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
+msgstr "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
 
 #. Key:	Tutorial_Reward_1
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Reward_1"
-msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Portable Repair Kits]</>  \r\n- Types: Small, Medium, Large Portable Repair Kits.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skill modules.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Module Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
-msgstr "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Portable Repair Kits]</>  \r\n- Types: Small, Medium, Large Portable Repair Kits.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skill modules.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Module Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
+msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Repair Kits]</>  \r\n- Types: Small, Medium, Large Repair Kits.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skill modules.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Module Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
+msgstr "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Repair Kits]</>  \r\n- Types: Small, Medium, Large Repair Kits.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skill modules.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Module Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
 
 #. Key:	Tutorial_Stage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
