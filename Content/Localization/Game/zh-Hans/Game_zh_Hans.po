@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hans\n"
-"POT-Creation-Date: 2025-06-02 09:46\n"
-"PO-Revision-Date: 2025-06-02 09:46\n"
+"POT-Creation-Date: 2025-07-15 05:07\n"
+"PO-Revision-Date: 2025-07-15 05:07\n"
 "Language-Team: \n"
 "Language: zh-Hans\n"
 "MIME-Version: 1.0\n"
@@ -1385,6 +1385,13 @@ msgctxt "ST_EasyGameUICommon,Ability_Name"
 msgid "Boosterchip Name"
 msgstr "增幅芯片名称"
 
+#. Key:	Button_AboutOfficialRelease
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_AboutOfficialRelease"
+msgid "About the Full Version"
+msgstr "了解正式版"
+
 #. Key:	Button_Apply
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1426,6 +1433,13 @@ msgstr "制作"
 msgctxt "ST_EasyGameUICommon,Button_Credit"
 msgid "Credits"
 msgstr "制作人员"
+
+#. Key:	Button_Discard
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Discard"
+msgid "Discard"
+msgstr "删除"
 
 #. Key:	Button_OptionsMenu
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -3023,6 +3037,48 @@ msgctxt "ST_Skill,Name_WeaknessAnalysis"
 msgid "Weakness Analysis"
 msgstr "弱点分析"
 
+#. Key:	Demo_Header_NewChapter
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_NewChapter"
+msgid "Chapter and Environment Expansion"
+msgstr "章节与环境扩展"
+
+#. Key:	Demo_Header_NewEnemy
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_NewEnemy"
+msgid "Enhanced Enemy Diversity and Interaction"
+msgstr "敌人多样性与战术互动"
+
+#. Key:	Demo_Header_Permanent_Upgrade
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_Permanent_Upgrade"
+msgid "Permanent Character Upgrade System"
+msgstr "角色永久强化"
+
+#. Key:	Demo_OfficialVersion_Enemy
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_Enemy"
+msgid "<Medium.24>[Enemy Diversity & Tactical Interaction]</>\r\n\r\n- The full version introduces various combat patterns\r\n   that require specific sub-weapons or skills.\r\n- Each encounter demands constant decision-making and strategic\r\n   adaptation."
+msgstr "<Medium.24>[敌人多样性与战术互动]</>\r\n\r\n- 正式版将引入需要特定副武器或技能的多种战斗模式。\r\n- 每一场战斗都要求不断判断与策略应对。"
+
+#. Key:	Demo_OfficialVersion_NewChapter
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_NewChapter"
+msgid "<Medium.24>[Chapter & Environment Expansion]</>\r\n\r\n- More chapters and regions are added in the full release.\r\n- Enemy types and patterns vary by chapter, with each zone featuring\r\n   unique combat rules and modifiers.\r\n- Strategic mechanics such as gear/sub-weapon pre-equipping\r\n   and auto resource refill are added."
+msgstr "<Medium.24>[章节与环境扩展]</>\r\n\r\n- 正式版将新增更多章节和区域。\r\n- 每个章节的敌人类型与战斗模式均有所不同，且包含专属战斗规则。\r\n- 装备/副武器预设、资源自动补充等将成为重要的策略元素。"
+
+#. Key:	Demo_OfficialVersion_Permanent
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_Permanent"
+msgid "<Medium.24>[Permanent Character Upgrade]</>\r\n\r\n- Players can permanently enhance their character stats \r\n   through repeated play.\r\n- The upgrade tree includes action gauge max value, skill multipliers\r\n  , sub-weapon slots, and debuff duration.\r\n- Customize and grow your own combat style with every run."
+msgstr "<Medium.24>[角色永久强化]</>\r\n\r\n- 玩家可通过重复游玩永久提升角色属性。\r\n- 强化树包括行动条上限、技能倍率、副武器槽位、减益持续时间等内容。\r\n- 构建并完善你的个性化战斗风格。"
+
 #. Key:	Desc_BossStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3142,6 +3198,13 @@ msgctxt "ST_Tutorial,Input_Jump"
 msgid "Jump"
 msgstr "跳跃"
 
+#. Key:	Input_LockOn
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_LockOn"
+msgid "Lock-On"
+msgstr "锁定"
+
 #. Key:	Input_MoveBackward
 #. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
 #: /Game/UI/Localization/ST_Input.ST_Input
@@ -3169,6 +3232,13 @@ msgstr "向左移动"
 msgctxt "ST_Tutorial,Input_MoveRight"
 msgid "Move Right"
 msgstr "向右移动"
+
+#. Key:	Input_ResetCamera
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_ResetCamera"
+msgid "Reset Camera"
+msgstr "重置摄像机"
 
 #. Key:	Input_Roll
 #. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
@@ -3258,8 +3328,8 @@ msgstr "<Bold.24>[欢迎！]</>\r\n欢迎来到《BackStreet》。  \r\n要在�
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Entry_2"
-msgid "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Placeholder assets may appear during gameplay.  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
-msgstr "<Bold.24>[公告！]</>\r\n这是《BackStreet》的演示版本。  \r\n请注意，该版本可能与最终发布版本有所不同。\r\n\r\n<Medium.24>[演示版特点]</>  \r\n- 仅能访问部分关卡、角色和技能。  \r\n- 一些功能（如高级 AI 行为和最终过场动画）尚未包含。  \r\n\r\n<Medium.24>[已知问题]</>  \r\n- 游戏过程中可能会出现占位资产。  \r\n- 部分动画和音效仍在开发中。  \r\n\r\n<Medium.24>[反馈请求]</>  \r\n你的反馈对游戏的改进至关重要！  \r\n请通过反馈表提交 bug 报告和建议，并加入我们的社区频道参与讨论和获取最新消息。  \r\n\r\n<Bold.22>请享受《BackStreet》的抢先体验，并期待完整版本的发布！</>"
+msgid "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
+msgstr "<Bold.24>[公告！]</>\r\n这是《BackStreet》的演示版本。  \r\n请注意，该版本可能与最终发布版本有所不同。\r\n\r\n<Medium.24>[演示版特点]</>  \r\n- 仅能访问部分关卡、角色和技能。  \r\n- 一些功能（如高级 AI 行为和最终过场动画）尚未包含。  \r\n\r\n<Medium.24>[已知问题]</>  \r\n- 部分动画和音效仍在开发中。  \r\n\r\n<Medium.24>[反馈请求]</>  \r\n你的反馈对游戏的改进至关重要！  \r\n请通过反馈表提交 bug 报告和建议，并加入我们的社区频道参与讨论和获取最新消息。  \r\n\r\n<Bold.22>请享受《BackStreet》的抢先体验，并期待完整版本的发布！</>"
 
 #. Key:	Tutorial_Reward_1
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
