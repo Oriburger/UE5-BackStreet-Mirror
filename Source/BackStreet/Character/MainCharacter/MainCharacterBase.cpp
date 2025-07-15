@@ -627,6 +627,10 @@ void AMainCharacterBase::TryAttack()
 			+ FollowingCamera->GetComponentRotation().Yaw;
 		SetActorRotation(FRotator(0.0f, turnAngle, 0.0f));
 	}
+	else
+	{
+		SetActorRotation(FRotator(0.0f, FollowingCamera->GetComponentRotation().Yaw, 0.0f));
+	}
 
 	ACharacterBase* targetCharacter = Cast<ACharacterBase>(TargetingManagerComponent->GetTargetedCharacter());
 	ACharacterBase* targetCandidate = Cast<ACharacterBase>(TargetingManagerComponent->GetTargetedCandidate());
@@ -638,7 +642,7 @@ void AMainCharacterBase::TryAttack()
 		//액션 런치
 		if (bIsTargetingActivated)
 		{
-			if (IsValid(targetCharacter) && GetDistanceTo(targetCharacter) >= 200.0f
+			if (IsValid(targetCharacter) && GetDistanceTo(targetCharacter) >= 50.0f
 				&& !ActionTrackingComponent->GetIsActionInProgress("Attack")
 				&& !ActionTrackingComponent->GetIsActionInProgress("DashAttack")
 				&& !ActionTrackingComponent->GetIsActionInProgress("JumpAttack")
