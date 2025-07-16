@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-07-15 05:08\n"
-"PO-Revision-Date: 2025-07-15 05:08\n"
+"POT-Creation-Date: 2025-07-16 02:01\n"
+"PO-Revision-Date: 2025-07-16 02:01\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -1362,7 +1362,7 @@ msgstr "슬로우"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,UI_RewardWarning"
 msgid "You will forfeit the boosterchip  acquisition. \r\nThis choice is irreversible. \r\nDo you wish to continue?"
-msgstr "부스터칩 획득이 취소됩니다.\r\n이 선택은 되돌릴 수 없습니다.\r\n계속하시겠습니까?"
+msgstr "부스터칩을 버립니다.\r\n이 선택은 되돌릴 수 없습니다.\r\n계속하시겠습니까?"
 
 #. Key:	Ability
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
