@@ -450,17 +450,14 @@ public:
 	// Look Input Action
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Basic")
 		class UInputAction* LookAction;
+		
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Basic")
+		class UInputAction* LockOnAction;
 
 //------------------Combat---------------------------------------------------------------------------
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
 		class UInputAction* AttackAction;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
-		class UInputAction* UpperAttackAction;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
-		class UInputAction* ShootAction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Combat")
 		class UInputAction* ZoomAction;
@@ -481,9 +478,9 @@ public:
 		class UInputAction* SprintAction;
 };
 
-//===============================================
-//====== Enemy CharacterInfo  ==========================
-//===============================================
+//=========================================================
+//====== Enemy CharacterInfo  =============================
+//=========================================================
 
 USTRUCT(BlueprintType)
 struct FEnemyDropInfoStruct
@@ -533,4 +530,152 @@ struct FEnemyStatStruct : public FTableRowBase
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Skill")
 		TArray<int32> EnemySkillIDList; 
+};
+
+//==========================================================================
+//============   Ability   =================================================
+//==========================================================================
+
+USTRUCT(BlueprintType)
+struct FAbilityValueInfoStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float Variable = 0.0f;
+
+	// 추가로 확률 정보가 필요한지? 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	bool bIsContainProbability = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bIsContainProbability", UIMin = 0.0f, UIMax = 1.0f))
+	float ProbabilityValue = 1.0f;
+
+public:
+	FAbilityValueInfoStruct() : Variable(0.0f), bIsContainProbability(false), ProbabilityValue(0.0f) {}
+};
+
+UENUM(BlueprintType)
+enum class EAbilityTierType : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_Common			UMETA(DisplayName = "Common"),
+	E_Rare				UMETA(DisplayName = "Rare"),
+	E_Legendary			UMETA(DisplayName = "Legendary"),
+	E_Mythic			UMETA(DisplayName = "Mythic"),
+};
+
+UENUM(BlueprintType)
+enum class EAbilityType : uint8
+{
+	E_None						UMETA(DisplayName = "None"),
+	//Legacy
+	E_BasicStat					UMETA(DisplayName = "BasicStat"),
+	E_Debuff					UMETA(DisplayName = "Debuff"),
+	E_Action					UMETA(DisplayName = "Action"),
+	E_Item						UMETA(DisplayName = "Item"),
+	E_SpecialAction				UMETA(DisplayName = "SpecialAction"),
+
+	//New 
+	E_Flame						UMETA(DisplayName = "Flame"),
+	E_Poison					UMETA(DisplayName = "Poison"),
+	E_Slow						UMETA(DisplayName = "Slow"),
+	E_Stun						UMETA(DisplayName = "Stun"),
+};
+
+USTRUCT(BlueprintType)
+struct FAbilityInfoStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	//어빌리티의 ID
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (UIMin = 0, UIMax = 10))
+		int32 AbilityId = 0;
+
+	//for Multiple Stat
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TMap<ECharacterStatType, FAbilityValueInfoStruct> TargetStatMap;
+
+	//어빌리티의 분류 (어떤 스탯을 강화할 것인지?)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		EAbilityType AbilityType = EAbilityType::E_None;
+
+	//어빌리티명
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FName AbilityName;
+
+	//어빌리티명 (현지화 가능)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FText AbilityNameText;
+
+	//Ability's Tier
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		EAbilityTierType AbilityTier = EAbilityTierType::E_None;
+
+	//어빌리티 설명
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FName AbilityDescription;
+
+	//어빌리티 설명 (현지화 가능)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FText AbilityDescriptionText;
+
+	//어빌리티의 아이콘
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		UTexture2D* AbilityIcon = nullptr;
+
+	//반복적인 연산이 필요한지? (도트 힐) , 현재 미사용
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool bIsRepetitive = false;
+
+	//Callback 함수명
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		FName FuncName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		TArray<FAbilityValueInfoStruct> VariableInfo;
+
+public:
+	//Repetitive 연산을 위한 TimerHandle
+	FTimerHandle TimerHandle;
+	FTimerDelegate TimerDelegate;
+
+public:
+	inline bool operator==(const FAbilityInfoStruct& other) const
+	{
+		return AbilityId == other.AbilityId;
+	}
+
+	inline bool IsValid() const
+	{
+		return AbilityId > 0;
+	}
+};
+
+USTRUCT(BlueprintType)
+struct FAbilityManagerInfoStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	//최대 어빌리티 수
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		int32 MaxAbilityCount = 9999999;
+
+	//티어에 따른 등장 확률, 미지정 시 모두 같은 확률 적용
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		TMap<EAbilityTierType, float> ProbabilityInfoMap;
+
+	//현재 플레이어가 소유한 어빌리티의 정보
+	UPROPERTY(VisibleDefaultsOnly)
+		TArray<FAbilityInfoStruct> ActiveAbilityInfoList;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		TArray<bool> AbilityPickedInfoList;
+
+	//모든 어빌리티의 정보
+	UPROPERTY()
+		TArray<FAbilityInfoStruct> AbilityInfoList;
 };

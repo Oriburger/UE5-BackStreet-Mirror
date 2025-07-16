@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_jp\n"
-"POT-Creation-Date: 2025-05-16 08:27\n"
-"PO-Revision-Date: 2025-05-16 08:27\n"
+"POT-Creation-Date: 2025-07-15 05:07\n"
+"PO-Revision-Date: 2025-07-15 05:07\n"
 "Language-Team: \n"
 "Language: ja-JP\n"
 "MIME-Version: 1.0\n"
@@ -1385,6 +1385,13 @@ msgctxt "ST_EasyGameUICommon,Ability_Name"
 msgid "Boosterchip Name"
 msgstr "アビリティ名"
 
+#. Key:	Button_AboutOfficialRelease
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_AboutOfficialRelease"
+msgid "About the Full Version"
+msgstr "製品版の詳細"
+
 #. Key:	Button_Apply
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1426,6 +1433,13 @@ msgstr "クラフト"
 msgctxt "ST_EasyGameUICommon,Button_Credit"
 msgid "Credits"
 msgstr "クレジット"
+
+#. Key:	Button_Discard
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Discard"
+msgid "Discard"
+msgstr "削除する"
 
 #. Key:	Button_OptionsMenu
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2614,29 +2628,29 @@ msgstr "ガラス瓶バット"
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack"
-msgid "Portable Repair Kit"
-msgstr "ポータブル修理キット"
+msgid "Repair Kit"
+msgstr "修理キット"
 
 #. Key:	Name_HealPack_Large
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Large"
-msgid "Large Portable Repair Kit"
-msgstr "ポータブル修理キット（大）"
+msgid "Large Repair Kit"
+msgstr "大型修理キット"
 
 #. Key:	Name_HealPack_Medium
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Medium"
-msgid "Medium Portable Repair Kit"
-msgstr "ポータブル修理キット（中）"
+msgid "Medium Repair Kit"
+msgstr "中型修理キット"
 
 #. Key:	Name_HealPack_Small
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Small"
-msgid "Small Portable Repair Kit"
-msgstr "ポータブル修理キット（小）"
+msgid "Small Repair Kit"
+msgstr "小型修理キット"
 
 #. Key:	Name_IronHammer
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -3023,6 +3037,48 @@ msgctxt "ST_Skill,Name_WeaknessAnalysis"
 msgid "Weakness Analysis"
 msgstr "弱点分析"
 
+#. Key:	Demo_Header_NewChapter
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_NewChapter"
+msgid "Chapter and Environment Expansion"
+msgstr "チャプターと環境の拡張"
+
+#. Key:	Demo_Header_NewEnemy
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_NewEnemy"
+msgid "Enhanced Enemy Diversity and Interaction"
+msgstr "敵の多様性と戦術的インタラクション"
+
+#. Key:	Demo_Header_Permanent_Upgrade
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_Permanent_Upgrade"
+msgid "Permanent Character Upgrade System"
+msgstr "キャラクターの永久強化"
+
+#. Key:	Demo_OfficialVersion_Enemy
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_Enemy"
+msgid "<Medium.24>[Enemy Diversity & Tactical Interaction]</>\r\n\r\n- The full version introduces various combat patterns\r\n   that require specific sub-weapons or skills.\r\n- Each encounter demands constant decision-making and strategic\r\n   adaptation."
+msgstr "<Medium.24>[敵の多様性と戦術的インタラクション]</>\r\n\r\n- 特定のサブ武器やスキルが必要となる多様な戦闘パターンが導入されます。\r\n- 繰り返しの戦闘においても、常に判断と戦略的選択が求められます。"
+
+#. Key:	Demo_OfficialVersion_NewChapter
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_NewChapter"
+msgid "<Medium.24>[Chapter & Environment Expansion]</>\r\n\r\n- More chapters and regions are added in the full release.\r\n- Enemy types and patterns vary by chapter, with each zone featuring\r\n   unique combat rules and modifiers.\r\n- Strategic mechanics such as gear/sub-weapon pre-equipping\r\n   and auto resource refill are added."
+msgstr "<Medium.24>[チャプターと環境の拡張]</>\r\n\r\n- 正式版では、さらに多くのチャプターとエリアが追加されます。\r\n- チャプターごとに異なる敵の種類やパターン、戦闘条件が登場します。\r\n- 装備や副武器の事前装備、自動リソース補充などが戦略要素として加わります。"
+
+#. Key:	Demo_OfficialVersion_Permanent
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_Permanent"
+msgid "<Medium.24>[Permanent Character Upgrade]</>\r\n\r\n- Players can permanently enhance their character stats \r\n   through repeated play.\r\n- The upgrade tree includes action gauge max value, skill multipliers\r\n  , sub-weapon slots, and debuff duration.\r\n- Customize and grow your own combat style with every run."
+msgstr "<Medium.24>[キャラクターの永久強化]</>\r\n\r\n- プレイヤーは繰り返しのプレイを通じてキャラクターの\r\n  ステータスを永久的に強化できます。\r\n- 強化ツリーには、アクションゲージの最大値、スキル倍率、副武器スロット\r\n  、デバフ効果の持続時間などが含まれます。\r\n- 自分だけの戦闘スタイルを構築し、成長させましょう。"
+
 #. Key:	Desc_BossStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3142,6 +3198,13 @@ msgctxt "ST_Tutorial,Input_Jump"
 msgid "Jump"
 msgstr "ジャンプ"
 
+#. Key:	Input_LockOn
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_LockOn"
+msgid "Lock-On"
+msgstr "ロックオン"
+
 #. Key:	Input_MoveBackward
 #. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
 #: /Game/UI/Localization/ST_Input.ST_Input
@@ -3169,6 +3232,13 @@ msgstr "左へ移動"
 msgctxt "ST_Tutorial,Input_MoveRight"
 msgid "Move Right"
 msgstr "右へ移動"
+
+#. Key:	Input_ResetCamera
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_ResetCamera"
+msgid "Reset Camera"
+msgstr "カメラリセット"
 
 #. Key:	Input_Roll
 #. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
@@ -3258,15 +3328,15 @@ msgstr "<Bold.24>[ようこそ！]</>\r\nBackStreetへようこそ。  \r\nこ�
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Entry_2"
-msgid "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Placeholder assets may appear during gameplay.  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
-msgstr "<Bold.24>[お知らせ！]</>\r\nこれはBackStreetのデモ版です。  \r\n最終リリースとは異なる可能性があることをご了承ください。\r\n\r\n<Medium.24>[デモ版の特徴]</>  \r\n- ステージ、キャラクター、スキルへのアクセスが制限されています。  \r\n- 高度なAIの挙動や最終カットシーンなど、一部の機能はまだ含まれていません。  \r\n\r\n<Medium.24>[既知の問題]</>  \r\n- ゲームプレイ中にプレースホルダーアセットが表示される場合があります。  \r\n- 一部のアニメーションや効果音は開発中です。  \r\n\r\n<Medium.24>[フィードバックのお願い]</>  \r\nゲームの改善には皆さんのフィードバックが不可欠です！  \r\nバグ報告や提案をフィードバックフォームで送信してください。  \r\nコミュニティチャンネルに参加して、ディスカッションや最新情報をチェックしましょう。  \r\n\r\n<Bold.22>BackStreetのデモ版をお楽しみください！正式リリースをお待ちください。</>"
+msgid "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
+msgstr "<Bold.24>[お知らせ！]</>\r\nこれはBackStreetのデモ版です。  \r\n最終リリースとは異なる可能性があることをご了承ください。\r\n\r\n<Medium.24>[デモ版の特徴]</>  \r\n- ステージ、キャラクター、スキルへのアクセスが制限されています。  \r\n- 高度なAIの挙動や最終カットシーンなど、一部の機能はまだ含まれていません。  \r\n\r\n<Medium.24>[既知の問題]</>   \r\n- 一部のアニメーションや効果音は開発中です。  \r\n\r\n<Medium.24>[フィードバックのお願い]</>  \r\nゲームの改善には皆さんのフィードバックが不可欠です！  \r\nバグ報告や提案をフィードバックフォームで送信してください。  \r\nコミュニティチャンネルに参加して、ディスカッションや最新情報をチェックしましょう。  \r\n\r\n<Bold.22>BackStreetのデモ版をお楽しみください！正式リリースをお待ちください。</>"
 
 #. Key:	Tutorial_Reward_1
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Reward_1"
-msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Portable Repair Kits]</>  \r\n- Types: Small, Medium, Large Portable Repair Kits.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skill modules.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Module Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
-msgstr "<Bold.24>[アイテム報酬ガイド]</>\r\n生存力と戦闘力を強化するさまざまなアイテム報酬を手に入れましょう。\r\n\r\n<Medium.24>[ポータブル修理キット]</>  \r\n- 種類: 小、中、大のポータブル修理キット\r\n- 入手方法:  \r\n  - ステージ報酬としてランダムに獲得  \r\n  - ゲームプレイ中に'F'キーで収集  \r\n\r\n<Medium.24>[クラフト素材]</>  \r\n- 目的: スキルモジュールの作成および強化に使用\r\n- 入手方法:  \r\n  - 敵を倒すと自動的に収集  \r\n- スキルクラフト: 指定された「クラフトステージ」でのみ利用可能  \r\n\r\n<Bold.22>ヒールパックとクラフト素材をうまく活用してキャラクターを強化し、試練を乗り越えましょう！</>"
+msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Repair Kits]</>  \r\n- Types: Small, Medium, Large Repair Kits.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skill modules.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Module Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
+msgstr "<Bold.24>[アイテム報酬ガイド]</>\r\n生存力と戦闘力を強化するさまざまなアイテム報酬を手に入れましょう。\r\n\r\n<Medium.24>[修理キット]</>  \r\n- 種類: 小型、中型、大型修理キット\r\n- 入手方法:  \r\n  - ステージ報酬としてランダムに獲得  \r\n  - ゲームプレイ中に'F'キーで収集  \r\n\r\n<Medium.24>[クラフト素材]</>  \r\n- 目的: スキルモジュールの作成および強化に使用\r\n- 入手方法:  \r\n  - 敵を倒すと自動的に収集  \r\n- スキルクラフト: 指定された「クラフトステージ」でのみ利用可能  \r\n\r\n<Bold.22>ヒールパックとクラフト素材をうまく活用してキャラクターを強化し、試練を乗り越えましょう！</>"
 
 #. Key:	Tutorial_Stage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial

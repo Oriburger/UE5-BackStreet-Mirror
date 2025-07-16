@@ -15,6 +15,7 @@ public:
     // 기본 생성자
     UProgressSaveGame();
 
+    /*
     UPROPERTY()
         bool bIsTutorialDone = false;
 
@@ -22,5 +23,5 @@ public:
         int32 FusionCellCount = 0; 
 
     UPROPERTY()
-        int32 GenesiumCount = 0;
+        int32 GenesiumCount = 0;*/
 };

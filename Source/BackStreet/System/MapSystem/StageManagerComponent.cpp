@@ -65,38 +65,47 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 	}
 
 	//Check level asset list is not empty	
-	TArray<TSoftObjectPtr<UWorld>> newWorldAssetList = CurrentChapterInfo.GetWorldList(NewStageInfo.StageType);
-	checkf(!newWorldAssetList.IsEmpty(), TEXT("UStageManagerComponent::InitStage - newWorldAssetList가 지정되어있지않습니다."));
+	if (NewStageInfo.MainLevelAsset.IsNull())
+	{
+		UE_LOG(LogSaveSystem, Log, TEXT("UStageManagerComponent::InitStage - MainLevelAsset is Null"));
+		TArray<TSoftObjectPtr<UWorld>> newWorldAssetList = CurrentChapterInfo.GetWorldList(CurrentStageInfo.StageType);
+		checkf(!newWorldAssetList.IsEmpty(), TEXT("UStageManagerComponent::InitStage - newWorldAssetList가 지정되어있지않습니다."));
 
-	//Load new level
-	UE_LOG(LogStage, Warning, TEXT("@@@@@@@ Tuto : %d, level valid : %d"), (int32)ChapterManagerRef.Get()->GetTutorialCompletion(), (int32)CurrentChapterInfo.TutorialLevel.IsNull());
-	if (NewStageInfo.StageType == EStageCategoryInfo::E_Entry && !ChapterManagerRef.Get()->GetTutorialCompletion()
-		&& !CurrentChapterInfo.TutorialLevel.IsNull())
-	{
-		UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::InitStage - Tutorial level will be activated"));
-		NewStageInfo.MainLevelAsset = CurrentChapterInfo.TutorialLevel;
-	}
-	
-	else if (newWorldAssetList.Num() == 1 || PreviousLevel.IsNull())
-	{
-		UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::InitStage - Lack of %d's Map Count, It may cause the level reinstancing crash."), (int32)NewStageInfo.StageType);
-		NewStageInfo.MainLevelAsset = newWorldAssetList[0];
+		// Load new level
+		//	UE_LOG(LogStage, Warning, TEXT("@@@@@@@ Tuto : %d, level valid : %d"), (int32)ChapterManagerRef.Get()->GetTutorialCompletion(), (int32)CurrentChapterInfo.TutorialLevel.IsNull());
+		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry //&& !ChapterManagerRef.Get()->GetTutorialCompletion()
+			&& !CurrentChapterInfo.TutorialLevel.IsNull() && CurrentChapterInfo.ChapterID == 1)
+		{
+			UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::InitStage - Tutorial level will be activated"));
+			CurrentStageInfo.MainLevelAsset = CurrentChapterInfo.TutorialLevel;
+		}
+
+		else if (newWorldAssetList.Num() == 1 || PreviousLevel.IsNull())
+		{
+			UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::InitStage - Lack of %d's Map Count, It may cause the level reinstancing crash."), (int32)CurrentStageInfo.StageType);
+			CurrentStageInfo.MainLevelAsset = newWorldAssetList[0];
+		}
+		else
+		{
+			int32 prevLevelIdx = -1;
+			int32 randIdxAdder = FMath::RandRange(1, newWorldAssetList.Num() - 1);
+
+			newWorldAssetList.Find(PreviousLevel, prevLevelIdx);
+			prevLevelIdx = prevLevelIdx == INDEX_NONE ? 0 : prevLevelIdx;
+
+			UE_LOG(LogStage, Warning, TEXT("> prev : %d, randIdx : %d, result : %d"), prevLevelIdx, randIdxAdder, (prevLevelIdx + randIdxAdder) % newWorldAssetList.Num());
+
+			CurrentStageInfo.MainLevelAsset = newWorldAssetList[(prevLevelIdx + randIdxAdder) % newWorldAssetList.Num()];
+		}
 	}
 	else
 	{
-		int32 prevLevelIdx = -1;
-		int32 randIdxAdder = FMath::RandRange(1, newWorldAssetList.Num() - 1);
-
-		newWorldAssetList.Find(PreviousLevel, prevLevelIdx);
-		prevLevelIdx = prevLevelIdx == INDEX_NONE ? 0 : prevLevelIdx;
-
-		UE_LOG(LogStage, Warning, TEXT("> prev : %d, randIdx : %d, result : %d"), prevLevelIdx, randIdxAdder, (prevLevelIdx + randIdxAdder) % newWorldAssetList.Num());
-
-		NewStageInfo.MainLevelAsset = newWorldAssetList[(prevLevelIdx + randIdxAdder) % newWorldAssetList.Num()];
+		UE_LOG(LogSaveSystem, Log, TEXT("UStageManagerComponent::InitStage - MainLevelAsset is valid"));
 	}
-	UE_LOG(LogStage, Warning, TEXT("> MapName : %s"), *NewStageInfo.MainLevelAsset.ToString());
-	PreviousLevel = NewStageInfo.MainLevelAsset;
-	CreateLevelInstance(NewStageInfo.MainLevelAsset, NewStageInfo.OuterLevelAsset);
+	
+	UE_LOG(LogStage, Warning, TEXT("> MapName : %s"), *CurrentStageInfo.MainLevelAsset.ToString());
+	PreviousLevel = CurrentStageInfo.MainLevelAsset;
+	CreateLevelInstance(CurrentStageInfo.MainLevelAsset, CurrentStageInfo.OuterLevelAsset);
 	GetWorld()->GetTimerManager().SetTimer(LoadCheckTimerHandle, this, &UStageManagerComponent::CheckLoadStatusAndStartGame, 0.25f, true);
 }
 
@@ -124,6 +133,13 @@ void UStageManagerComponent::RegisterActorList(TArray<AActor*> TargetActorList)
 		if (!IsValid(actor) || actor->IsActorBeingDestroyed()) continue;
 		RegisterActor(actor);
 	}
+}
+
+void UStageManagerComponent::OverwriteStageInfo(FChapterInfo NewChapterInfo, FStageInfo NewStageInfo)
+{
+	UE_LOG(LogSaveSystem, Log, TEXT("UStageManagerComponent::OverwriteStageInfo - Coordinate : %s"), *NewStageInfo.Coordinate.ToString());
+	CurrentChapterInfo = NewChapterInfo;
+	CurrentStageInfo = NewStageInfo;
 }
 
 void UStageManagerComponent::AddLoadingScreen()
@@ -532,6 +548,7 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 			//Start stage with delay
 			UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::CheckLoadStatusAndStartGame() : Load Done, StartStage"));
 			FTimerHandle gameStartDelayHandle;
+			
 			GetWorld()->GetTimerManager().SetTimer(gameStartDelayHandle, this, &UStageManagerComponent::StartStage, 2.0f, false);
 		}
 		else
@@ -546,8 +563,8 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 void UStageManagerComponent::StartStage()
 {
 	//Visit Check
-	if (CurrentStageInfo.bIsVisited) return; 
-	CurrentStageInfo.bIsVisited = true;
+	//if (CurrentStageInfo.bIsVisited) return;
+	//CurrentStageInfo.bIsVisited = true;
 
 	//Load End Broadcast (Safe with latent delay)
 	OnStageLoadDone.Broadcast();
@@ -585,13 +602,13 @@ void UStageManagerComponent::StartStage()
 
 		float extraTime = !PlayerRef.IsValid() ? 0.0f : PlayerRef.Get()->GetCharacterGameplayInfo().ExtraStageTime;
 		GetOwner()->GetWorldTimerManager().SetTimer(TimeAttackTimerHandle, stageOverDelegate, 1.0f, false, CurrentStageInfo.TimeLimitValue + extraTime);
-		
+
 		//UI Event
 		OnTimeAttackStageBegin.Broadcast();
 	}
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft
-			|| CurrentStageInfo.StageType == EStageCategoryInfo::E_MiniGame
-			|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Gatcha)
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_MiniGame
+		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Gatcha)
 	{
 		FinishStage(true);
 	}
@@ -628,10 +645,10 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 		//Stage Reward
 		GrantStageRewards();
 
-		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry && !ChapterManagerRef.Get()->GetTutorialCompletion())
+		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry) //&& !ChapterManagerRef.Get()->GetTutorialCompletion())
 		{
 			UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::FinishStage - Tutorial level will be activated"));
-			ChapterManagerRef.Get()->SetTutorialCompletion(true);
+			//ChapterManagerRef.Get()->SetTutorialCompletion(true);
 		}
 
 	}
@@ -825,7 +842,6 @@ bool UStageManagerComponent::CheckStageClearStatus()
 		bool bIsTimeLeft = GetRemainingTime() > 0.0f;
 		return RemainingEnemyCount == 0 && bIsTimeLeft;
 	}
-
 	return false;
 }
 

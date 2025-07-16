@@ -74,6 +74,9 @@ void AEnemyCharacterBase::InitAsset(int32 NewCharacterID)
 
 void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 {
+	if (NewCharacterID == 0) return;
+	if (EnemyStatTable == nullptr) return;
+
 	//Read from dataTable
 	FString rowName = FString::FromInt(NewCharacterID);
 	FEnemyStatStruct* newStat = EnemyStatTable->FindRow<FEnemyStatStruct>(FName(rowName), rowName);
@@ -94,7 +97,7 @@ void AEnemyCharacterBase::InitEnemyCharacter(int32 NewCharacterID)
 	}
 
 	InitFloatingHpWidget();
-	InitTargetingSupportingWidget();
+	//InitTargetingSupportingWidget();
 
 	if (NewCharacterID == 1200)
 	{
@@ -116,7 +119,7 @@ void AEnemyCharacterBase::ResetAiBehaviorState()
 void AEnemyCharacterBase::SetDefaultWeapon()
 {
 	WeaponComponent->InitWeapon(EnemyStat.DefaultWeaponID);
-	if (IsValid(Controller))
+	if (IsValid(Controller) && EnemyStat.DefaultWeaponID != 0)
 	{
 		AAIControllerBase* controllerRef = Cast<AAIControllerBase>(Controller);
 		if (IsValid(controllerRef))
@@ -136,8 +139,8 @@ void AEnemyCharacterBase::TakeKnockBack(float KnockbackForce, float KnockbackRes
 	aiControllerRef = Cast<AAIControllerBase>(Controller);
 
 	float effectiveKnockback = KnockbackForce * (1 - KnockbackResist);
-	const float knockbackThreshold = 3500;
-
+	const float knockbackThreshold = 750;
+	
 	if (IsValid(aiControllerRef) && CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Skill
 		&& aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill)
 	{
@@ -162,6 +165,15 @@ void AEnemyCharacterBase::TakeKnockBack(float KnockbackForce, float KnockbackRes
 			PlayHitAnimMontage();
 		}
 	}
+
+	//interp location backward (enemycharacter location - playercharacter location)
+	FVector playerLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	playerLocation.Z = GetActorLocation().Z; //Keep Z axis to prevent falling down
+	
+	float knockbackDistance = UKismetMathLibrary::MapRangeClamped(effectiveKnockback, 0.0f, knockbackThreshold, 0.0f, 200.0f);
+
+	if (knockbackDistance <= 0.0f) return;
+	SetLocationWithInterp(GetActorLocation() - (playerLocation - GetActorLocation()).GetSafeNormal() * knockbackDistance, 1.0f, false, true, true);
 }
 
 bool AEnemyCharacterBase::TryAddNewDebuff(FDebuffInfoStruct DebuffInfo, AActor* Causer)

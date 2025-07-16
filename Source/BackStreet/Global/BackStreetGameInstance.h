@@ -17,44 +17,76 @@ class BACKSTREET_API UBackStreetGameInstance : public UGameInstance
 public:
 	virtual void Init() override;
 
-//------ 게임 저장 -------------------
-public:
+//======== SaveSlot Manager=========================
+protected:
+	//기존 세이브 매니저 제거
 	UFUNCTION()
-		void SaveGameData();
+		void OnPreLoadMap(const FString& MapName);
 
+	//세이브 매니저를 스폰하기 위한 이벤트
 	UFUNCTION()
-		void LoadGameData();
+		void OnPostLoadMap(UWorld* LoadedWorld);
 
-	// 튜토리얼 진행 여부 체크
-	UFUNCTION(BlueprintCallable)
-		void SetTutorialCompletion(bool bCompleted);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetTutorialCompletion();
-
-	UFUNCTION(BlueprintCallable)
-		void SetFusionCellCount(int32 NewCount);
+	UPROPERTY(EditDefaultsOnly, Category = "Save")
+		TSubclassOf<class ASaveSlotManager> SaveSlotManagerClassRef;
 	
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetFusionCellCount();
-	
-	UFUNCTION(BlueprintCallable)
-		void SetGenesiumCount(int32 NewCount);
-	
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetGenesiumCount();
+	UFUNCTION()
+		bool TrySpawnAndInitializeSaveSlotManager();
 
-//------ PROPERTY ---------------------
 private:
-	UPROPERTY()
-		class UGameProgressManager* GameProgressManager;
-	
-	/*
-    // 내부 데이터
-    class UProgressSaveGame* ProgressData;
+	class ASaveSlotManager* SaveSlotManagerRef;
 
-    // 슬롯 이름 및 인덱스
-    const FString ProgressSlot = TEXT("GameProgressSlot");
-    int32 UserIndex = 0;
-	*/
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		class ASaveSlotManager* GetSafeSaveSlotManager();
+
+//======== Handling SaveSlot =========================
+protected:
+	//UFUNCTION()
+		//void OnSlotCreated(const FString& NewSlotName);
+
+	//UFUNCTION()
+		//void OnSlotLoaded(const FString& SlotName, bool bIsSuccess);
+
+public:
+	UFUNCTION(BlueprintCallable, Blueprintpure)
+		void GetCurrentSaveSlotInfo(FSaveSlotInfo& OutSaveSlotInfo) { OutSaveSlotInfo = SaveSlotInfo; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FORCEINLINE FString GetCurrentSaveSlotName() const { return SaveSlotInfo.SaveSlotName; }
+
+	UFUNCTION(BlueprintCallable)
+		void SetCurrentSaveSlotName(FString NewSaveSlotName);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FORCEINLINE bool GetIsInGame() { return SaveSlotInfo.bIsInGame = GetWorld() ? GetWorld()->GetMapName().Contains(TEXT("Chapter")) : false; }
+
+	UFUNCTION(BlueprintCallable)
+		void CacheGameData(FProgressSaveData NewProgressData, FAchievementSaveData NewAchievementData, FInventorySaveData NewInventoryData);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		void GetCachedSaveGameData(FProgressSaveData& OutProgressData, FAchievementSaveData& OutAchievementData, FInventorySaveData& OutInventoryData);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		void GetCachedProgressSaveData(FProgressSaveData& OutProgressData) { OutProgressData = ProgressSaveData; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		void GetCachedAchievementSaveData(FAchievementSaveData& OutAchievementData) { OutAchievementData = AchievementSaveData; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		void GetCachedInventorySaveData(FInventorySaveData& OutInventoryData) { OutInventoryData = InventorySaveData; }
+
+//======== SaveGame Data =========================
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
+		FProgressSaveData ProgressSaveData;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
+		FAchievementSaveData AchievementSaveData;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
+		FInventorySaveData InventorySaveData;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
+		FSaveSlotInfo SaveSlotInfo;
 };

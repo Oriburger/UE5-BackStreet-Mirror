@@ -14,7 +14,6 @@ class BACKSTREET_API ACharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
-
 //========================================================================
 //====== Delegate ========================================================
 public:
@@ -36,6 +35,8 @@ public:
 	FDelegateOnActionTrigger OnSkillStarted;
 	FDelegateOnActionTrigger OnSkillEnded;
 	FDelegateOnActionTrigger OnDeath;
+	FDelegateOnActionTrigger OnCameraReset;
+	FDelegateOnActionTrigger OnLockOnStarted;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateHealthChange OnHealthChanged;
@@ -82,9 +83,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		class UDebuffManagerComponent* DebuffManagerComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		class UTargetingManagerComponent* TargetingManagerComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		class UActionTrackingComponent* ActionTrackingComponent;
@@ -147,7 +145,7 @@ public:
 
 	//Update Character's world Location using interporlation
 	UFUNCTION(BlueprintCallable)
-		void SetLocationWithInterp(FVector NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false, const bool bUseSafeInterp = false, const bool bDrawDebugInfo = false);
+	void SetLocationWithInterp(FVector NewValue, float InterpSpeed = 1.0f, const bool bAutoReset = false, const bool bUseSafeInterp = false, const bool bIgnoreZAxis = false, const bool bDrawDebugInfo = false);
 
 	UFUNCTION(BlueprintCallable)
 		void ResetLocationInterpTimer();
@@ -166,7 +164,7 @@ protected:
 	//it must not be called alone.
 	//if you set the value of bAutoReset false, you have to call this function to reset to original value
 	UFUNCTION()
-		void UpdateLocation(const FVector TargetValue, const float InterpSpeed = 1.0f, const bool bAutoReset = false);
+		void UpdateLocation(const FVector TargetValue, const float InterpSpeed = 1.0f, const bool bAutoReset = false, const bool bIgnoreZAxis = false);
 
 	//Set distance from ground for air attack
 
@@ -192,6 +190,10 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FCharacterGameplayInfo& GetCharacterGameplayInfoRef() { return CharacterGameplayInfo; }
+
+	//WARNING!!) 세이브 관련 기능에서만 사용할 것
+	UFUNCTION(BlueprintCallable)
+		void SetCharacterGameplayInfo(FCharacterGameplayInfo NewGameplayInfo);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FCharacterGameplayInfo GetCharacterGameplayInfo() { return CharacterGameplayInfo; }

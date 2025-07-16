@@ -84,6 +84,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void RegisterActorList(TArray<AActor*> TargetActorList);
 
+	UFUNCTION(BlueprintCallable)
+		void OverwriteStageInfo(FChapterInfo NewChapterInfo, FStageInfo NewStageInfo);
+
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		bool GetIsLoadingScreenActive() { return bIsLoadingScreenActive; }
 
@@ -178,7 +181,7 @@ public:
 	UFUNCTION()
 		void StartStage();
 
-	//not working yet
+	//Finish current stage
 	UFUNCTION(BlueprintCallable)
 		void FinishStage(bool bStageClear);
 

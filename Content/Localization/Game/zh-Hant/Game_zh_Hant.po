@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hant\n"
-"POT-Creation-Date: 2025-05-16 08:27\n"
-"PO-Revision-Date: 2025-05-16 08:27\n"
+"POT-Creation-Date: 2025-07-15 05:07\n"
+"PO-Revision-Date: 2025-07-15 05:07\n"
 "Language-Team: \n"
 "Language: zh-Hant\n"
 "MIME-Version: 1.0\n"
@@ -1385,6 +1385,13 @@ msgctxt "ST_EasyGameUICommon,Ability_Name"
 msgid "Boosterchip Name"
 msgstr "增幅芯片名稱"
 
+#. Key:	Button_AboutOfficialRelease
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_AboutOfficialRelease"
+msgid "About the Full Version"
+msgstr "了解正式版"
+
 #. Key:	Button_Apply
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1426,6 +1433,13 @@ msgstr "製作"
 msgctxt "ST_EasyGameUICommon,Button_Credit"
 msgid "Credits"
 msgstr "製作人員"
+
+#. Key:	Button_Discard
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Discard"
+msgid "Discard"
+msgstr "刪除"
 
 #. Key:	Button_OptionsMenu
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2614,29 +2628,29 @@ msgstr "玻璃瓶棒"
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack"
-msgid "Portable Repair Kit"
-msgstr "便攜式修復工具包"
+msgid "Repair Kit"
+msgstr "修復工具包"
 
 #. Key:	Name_HealPack_Large
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Large"
-msgid "Large Portable Repair Kit"
-msgstr "便攜式修復工具包（大）"
+msgid "Large Repair Kit"
+msgstr "大型修復工具包"
 
 #. Key:	Name_HealPack_Medium
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Medium"
-msgid "Medium Portable Repair Kit"
-msgstr "便攜式修復工具包（中）"
+msgid "Medium Repair Kit"
+msgstr "中型修復工具包"
 
 #. Key:	Name_HealPack_Small
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Name_HealPack_Small"
-msgid "Small Portable Repair Kit"
-msgstr "便攜式修復工具包（小）"
+msgid "Small Repair Kit"
+msgstr "小型修復工具包"
 
 #. Key:	Name_IronHammer
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -3023,6 +3037,48 @@ msgctxt "ST_Skill,Name_WeaknessAnalysis"
 msgid "Weakness Analysis"
 msgstr "弱點分析"
 
+#. Key:	Demo_Header_NewChapter
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_NewChapter"
+msgid "Chapter and Environment Expansion"
+msgstr "章節與環境擴展"
+
+#. Key:	Demo_Header_NewEnemy
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_NewEnemy"
+msgid "Enhanced Enemy Diversity and Interaction"
+msgstr "敵人多樣性與戰術互動"
+
+#. Key:	Demo_Header_Permanent_Upgrade
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_Permanent_Upgrade"
+msgid "Permanent Character Upgrade System"
+msgstr "角色永久強化"
+
+#. Key:	Demo_OfficialVersion_Enemy
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_Enemy"
+msgid "<Medium.24>[Enemy Diversity & Tactical Interaction]</>\r\n\r\n- The full version introduces various combat patterns\r\n   that require specific sub-weapons or skills.\r\n- Each encounter demands constant decision-making and strategic\r\n   adaptation."
+msgstr "<Medium.24>[敵人多樣性與戰術互動]</>\r\n\r\n- 正式版將導入需特定副武器或技能應對的多種戰鬥模式。\r\n- 每場戰鬥都需要持續判斷與策略調整。"
+
+#. Key:	Demo_OfficialVersion_NewChapter
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_NewChapter"
+msgid "<Medium.24>[Chapter & Environment Expansion]</>\r\n\r\n- More chapters and regions are added in the full release.\r\n- Enemy types and patterns vary by chapter, with each zone featuring\r\n   unique combat rules and modifiers.\r\n- Strategic mechanics such as gear/sub-weapon pre-equipping\r\n   and auto resource refill are added."
+msgstr "<Medium.24>[章節與環境擴展]</>\r\n\r\n- 正式版將加入更多章節與區域。\r\n- 敵人類型與戰鬥模式將隨章節進展而改變，每章亦具備獨特戰鬥規則。\r\n- 裝備/副武器的預設、自動資源補充等將成為戰略要素。"
+
+#. Key:	Demo_OfficialVersion_Permanent
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_Permanent"
+msgid "<Medium.24>[Permanent Character Upgrade]</>\r\n\r\n- Players can permanently enhance their character stats \r\n   through repeated play.\r\n- The upgrade tree includes action gauge max value, skill multipliers\r\n  , sub-weapon slots, and debuff duration.\r\n- Customize and grow your own combat style with every run."
+msgstr "<Medium.24>[角色永久強化]</>\r\n\r\n- 玩家可透過重複遊玩永久提升角色屬性。\r\n- 強化樹包含行動條上限、技能倍率、副武器欄位、減益效果持續時間等。\r\n- 打造屬於你自己的戰鬥風格並持續強化。"
+
 #. Key:	Desc_BossStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3142,6 +3198,13 @@ msgctxt "ST_Tutorial,Input_Jump"
 msgid "Jump"
 msgstr "跳躍"
 
+#. Key:	Input_LockOn
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_LockOn"
+msgid "Lock-On"
+msgstr "鎖定"
+
 #. Key:	Input_MoveBackward
 #. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
 #: /Game/UI/Localization/ST_Input.ST_Input
@@ -3169,6 +3232,13 @@ msgstr "向左移動"
 msgctxt "ST_Tutorial,Input_MoveRight"
 msgid "Move Right"
 msgstr "向右移動"
+
+#. Key:	Input_ResetCamera
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_ResetCamera"
+msgid "Reset Camera"
+msgstr "重置攝影機"
 
 #. Key:	Input_Roll
 #. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
@@ -3258,15 +3328,15 @@ msgstr "<Bold.24>[歡迎！]</>\r\n歡迎來到《BackStreet》。  \r\n要在�
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Entry_2"
-msgid "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Placeholder assets may appear during gameplay.  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
-msgstr "<Bold.24>[公告！]</>\r\n這是《BackStreet》的演示版本。  \r\n請注意，此版本可能與最終發布版本有所不同。\r\n\r\n<Medium.24>[演示版特點]</>  \r\n- 只能訪問部分關卡、角色和技能。  \r\n- 一些功能（如高級 AI 行為和最終過場動畫）尚未包含。  \r\n\r\n<Medium.24>[已知問題]</>  \r\n- 遊戲過程中可能會出現佔位資產。  \r\n- 部分動畫和音效仍在開發中。  \r\n\r\n<Medium.24>[反饋請求]</>  \r\n你的反饋對遊戲的改進至關重要！  \r\n請通過反饋表提交 bug 報告和建議，並加入我們的社群頻道參與討論和獲取最新消息。  \r\n\r\n<Bold.22>請享受《BackStreet》的搶先體驗，並期待完整版本的發布！</>"
+msgid "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
+msgstr "<Bold.24>[公告！]</>\r\n這是《BackStreet》的演示版本。  \r\n請注意，此版本可能與最終發布版本有所不同。\r\n\r\n<Medium.24>[演示版特點]</>  \r\n- 只能訪問部分關卡、角色和技能。  \r\n- 一些功能（如高級 AI 行為和最終過場動畫）尚未包含。  \r\n\r\n<Medium.24>[已知問題]</>   \r\n- 部分動畫和音效仍在開發中。  \r\n\r\n<Medium.24>[反饋請求]</>  \r\n你的反饋對遊戲的改進至關重要！  \r\n請通過反饋表提交 bug 報告和建議，並加入我們的社群頻道參與討論和獲取最新消息。  \r\n\r\n<Bold.22>請享受《BackStreet》的搶先體驗，並期待完整版本的發布！</>"
 
 #. Key:	Tutorial_Reward_1
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Reward_1"
-msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Portable Repair Kits]</>  \r\n- Types: Small, Medium, Large Portable Repair Kits.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skill modules.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Module Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
-msgstr "<Bold.24>[物品獎勵指南]</>\r\n獲得各種物品獎勵，以增強你的生存能力和戰鬥力。\r\n\r\n<Medium.24>[便攜式修復工具包]</>  \r\n- 類型：小型、中型、大型便攜式修復工具包。  \r\n- 獲取方式：  \r\n  - 作為關卡獎勵隨機獲得。  \r\n  - 在遊戲過程中按 'F' 鍵收集。  \r\n\r\n<Medium.24>[製作材料]</>  \r\n- 作用：用於製作和強化技能模組。\r\n- 獲取方式：  \r\n  - 自動從被擊敗的敵人處收集。  \r\n- 技能製作：僅在指定的“製作關卡”中可用。  \r\n\r\n<Bold.22>合理使用治療包和製作材料，強化角色並克服挑戰！</>"
+msgid "<Bold.24>[Item Reward Guide]</>\r\n- Receive various item rewards to enhance your survival and power.\r\n\r\n<Medium.24>[Repair Kits]</>  \r\n- Types: Small, Medium, Large Repair Kits.  \r\n- How to Obtain:  \r\n  - Randomly awarded as stage rewards.  \r\n  - Collected during gameplay using the 'F' key.\r\n\r\n<Medium.24>[Crafting Materials]</>  \r\n- Purpose: Used to craft and enhance skill modules.  \r\n- How to Obtain:  \r\n  - Automatically collected from defeated enemies.  \r\n- Skill Module Craft: Available exclusively at designated \"Crafting Stages\".\r\n\r\n<Bold.22>Utilize healing packs and crafting materials effectively </>\r\n<Bold.22>to strengthen your character and progress through challenges!</>"
+msgstr "<Bold.24>[物品獎勵指南]</>\r\n獲得各種物品獎勵，以增強你的生存能力和戰鬥力。\r\n\r\n<Medium.24>[修復工具包]</>  \r\n- 類型：小型、中型、大型修復工具包。  \r\n- 獲取方式：  \r\n  - 作為關卡獎勵隨機獲得。  \r\n  - 在遊戲過程中按 'F' 鍵收集。  \r\n\r\n<Medium.24>[製作材料]</>  \r\n- 作用：用於製作和強化技能模組。\r\n- 獲取方式：  \r\n  - 自動從被擊敗的敵人處收集。  \r\n- 技能製作：僅在指定的“製作關卡”中可用。  \r\n\r\n<Bold.22>合理使用治療包和製作材料，強化角色並克服挑戰！</>"
 
 #. Key:	Tutorial_Stage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
