@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-06-02 09:47\n"
-"PO-Revision-Date: 2025-06-02 09:47\n"
+"POT-Creation-Date: 2025-07-16 02:01\n"
+"PO-Revision-Date: 2025-07-16 02:01\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -1362,7 +1362,7 @@ msgstr "슬로우"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,UI_RewardWarning"
 msgid "You will forfeit the boosterchip  acquisition. \r\nThis choice is irreversible. \r\nDo you wish to continue?"
-msgstr "부스터칩 획득이 취소됩니다.\r\n이 선택은 되돌릴 수 없습니다.\r\n계속하시겠습니까?"
+msgstr "부스터칩을 버립니다.\r\n이 선택은 되돌릴 수 없습니다.\r\n계속하시겠습니까?"
 
 #. Key:	Ability
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1384,6 +1384,13 @@ msgstr "어빌리티 설명"
 msgctxt "ST_EasyGameUICommon,Ability_Name"
 msgid "Boosterchip Name"
 msgstr "어빌리티명"
+
+#. Key:	Button_AboutOfficialRelease
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_AboutOfficialRelease"
+msgid "About the Full Version"
+msgstr "정식 버전 알아보기"
 
 #. Key:	Button_Apply
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1426,6 +1433,13 @@ msgstr "제작하기"
 msgctxt "ST_EasyGameUICommon,Button_Credit"
 msgid "Credits"
 msgstr "제작진"
+
+#. Key:	Button_Discard
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Discard"
+msgid "Discard"
+msgstr "버리기"
 
 #. Key:	Button_OptionsMenu
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -3023,6 +3037,48 @@ msgctxt "ST_Skill,Name_WeaknessAnalysis"
 msgid "Weakness Analysis"
 msgstr "약점분석"
 
+#. Key:	Demo_Header_NewChapter
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_NewChapter"
+msgid "Chapter and Environment Expansion"
+msgstr "챕터 확장 (새로운 지역)"
+
+#. Key:	Demo_Header_NewEnemy
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_NewEnemy"
+msgid "Enhanced Enemy Diversity and Interaction"
+msgstr "적 다양성과 전투 상호작용 강화"
+
+#. Key:	Demo_Header_Permanent_Upgrade
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_Header_Permanent_Upgrade"
+msgid "Permanent Character Upgrade System"
+msgstr "캐릭터 영구 강화"
+
+#. Key:	Demo_OfficialVersion_Enemy
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_Enemy"
+msgid "<Medium.24>[Enemy Diversity & Tactical Interaction]</>\r\n\r\n- The full version introduces various combat patterns\r\n   that require specific sub-weapons or skills.\r\n- Each encounter demands constant decision-making and strategic\r\n   adaptation."
+msgstr "<Medium.24>[적 다양성과 전투 상호작용 강화]</>\r\n\r\n- 특정 보조무기나 스킬을 요구하는 다양한 전투 패턴이 도입됩니다.\r\n- 반복 전투 속에서도 끊임없는 판단과 전략적 선택이 요구됩니다."
+
+#. Key:	Demo_OfficialVersion_NewChapter
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_NewChapter"
+msgid "<Medium.24>[Chapter & Environment Expansion]</>\r\n\r\n- More chapters and regions are added in the full release.\r\n- Enemy types and patterns vary by chapter, with each zone featuring\r\n   unique combat rules and modifiers.\r\n- Strategic mechanics such as gear/sub-weapon pre-equipping\r\n   and auto resource refill are added."
+msgstr "<Medium.24>[챕터 확장 (새로운 지역)]</>\r\n\r\n- 정식 버전에서는 더 많은 챕터 및 지역이 추가됩니다.\r\n- 각 챕터마다 등장 적의 유형과 패턴, 전투 규칙이 달라집니다.\r\n- 장비/보조무기 사전 장착  등이 전략 요소로 반영됩니다."
+
+#. Key:	Demo_OfficialVersion_Permanent
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Demo_OfficialVersion_Permanent"
+msgid "<Medium.24>[Permanent Character Upgrade]</>\r\n\r\n- Players can permanently enhance their character stats \r\n   through repeated play.\r\n- The upgrade tree includes action gauge max value, skill multipliers\r\n  , sub-weapon slots, and debuff duration.\r\n- Customize and grow your own combat style with every run."
+msgstr "<Medium.24>[캐릭터 영구 강화]</>\r\n\r\n- 플레이어는 반복 플레이를 통해 캐릭터 능력치를 영구적으로 강화할 수 있습니다.\r\n- 강화 트리에는 액션 게이지 최대치, 스킬 계수, 보조무기 슬롯, 디버프 지속시간 등이 포함됩니다.\r\n- 자신만의 전투 스타일을 점차 완성해 나갈 수 있습니다."
+
 #. Key:	Desc_BossStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3142,6 +3198,13 @@ msgctxt "ST_Tutorial,Input_Jump"
 msgid "Jump"
 msgstr "점프"
 
+#. Key:	Input_LockOn
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_LockOn"
+msgid "Lock-On"
+msgstr "락온"
+
 #. Key:	Input_MoveBackward
 #. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
 #: /Game/UI/Localization/ST_Input.ST_Input
@@ -3169,6 +3232,13 @@ msgstr "왼쪽으로 이동"
 msgctxt "ST_Tutorial,Input_MoveRight"
 msgid "Move Right"
 msgstr "오른쪽으로 이동"
+
+#. Key:	Input_ResetCamera
+#. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
+#: /Game/UI/Localization/ST_Input.ST_Input
+msgctxt "ST_Tutorial,Input_ResetCamera"
+msgid "Reset Camera"
+msgstr "시점 초기화"
 
 #. Key:	Input_Roll
 #. SourceLocation:	/Game/UI/Localization/ST_Input.ST_Input
@@ -3258,8 +3328,8 @@ msgstr "<Bold.24>[환영합니다!]</>\r\n- BackStreet에 오신 것을 환영�
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Tutorial_Entry_2"
-msgid "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Placeholder assets may appear during gameplay.  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
-msgstr "<Bold.24>[데모 안내!]</>\r\n\r\nBackStreet의 데모 버전입니다.  \r\n정식 출시 버전과 일부 차이가 있을 수 있습니다.\r\n\r\n<Medium.24>[데모 버전의 특징]</>  \r\n- 스테이지와 캐릭터, 전투 등 대부분의 기능이 제한됩니다.\r\n- 일부 기능(고급 AI 행동 및 최종 컷신 등)은 포함되지 않습니다.\r\n\r\n<Medium.24>[알려진 문제점]</>  \r\n- 게임 플레이 중 임시 애셋이 표시될 수 있습니다.  \r\n- 일부 애니메이션 및 사운드 효과가 아직 작업 중입니다.  \r\n\r\n<Medium.24>[피드백 요청]</>  \r\n- 버그 리포트 및 제안 사항을 피드백 폼을 통해 제출하세요.  \r\n- Discord 채널에 참여하여 토론 및 최신 정보를 확인하세요.  \r\n\r\n<Bold.22>BackStreet 정식 버전 출시를 기대해주세요!</>"
+msgid "<Bold.24>[Notice!]</>\r\n- This is a demo version of BackStreet.\r\n- Please note that it may differ from the final release.\r\n\r\n<Medium.24>[Features in the Demo]</>  \r\n- Limited access to stages, characters, and abilities.  \r\n- Some features, such as advanced AI behaviors and final cutscenes, are not yet included.\r\n\r\n<Medium.24>[Known Issues]</>  \r\n- Certain animations and sound effects are in progress.\r\n\r\n<Medium.24>[Feedback Request]</>  \r\n- Your feedback is crucial to improving the game!  \r\n- Report bugs and provide suggestions through our feedback form.  \r\n- Join our community channels for discussions and updates.\r\n\r\n<Medium.24>[Final Note]</>  \r\n- Enjoy the sneak peek of BackStreet, and stay tuned for the full version's release!\r\n"
+msgstr "<Bold.24>[데모 안내!]</>\r\n\r\nBackStreet의 데모 버전입니다.  \r\n정식 출시 버전과 일부 차이가 있을 수 있습니다.\r\n\r\n<Medium.24>[데모 버전의 특징]</>  \r\n- 스테이지와 캐릭터, 전투 등 대부분의 기능이 제한됩니다.\r\n- 일부 기능(고급 AI 행동 및 최종 컷신 등)은 포함되지 않습니다.\r\n\r\n<Medium.24>[알려진 문제점]</>  \r\n- 일부 애니메이션 및 사운드 효과가 아직 작업 중입니다.  \r\n\r\n<Medium.24>[피드백 요청]</>  \r\n- 버그 리포트 및 제안 사항을 피드백 폼을 통해 제출하세요.  \r\n- Discord 채널에 참여하여 토론 및 최신 정보를 확인하세요.  \r\n\r\n<Bold.22>BackStreet 정식 버전 출시를 기대해주세요!</>"
 
 #. Key:	Tutorial_Reward_1
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial

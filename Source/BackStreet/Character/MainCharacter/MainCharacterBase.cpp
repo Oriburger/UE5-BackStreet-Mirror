@@ -175,7 +175,7 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(InputActionInfo.AttackAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryAttack);
 
 		//Sprint
-		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::Sprint);
+		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Started, this, &AMainCharacterBase::Sprint);
 		EnhancedInputComponent->BindAction(InputActionInfo.SprintAction, ETriggerEvent::Completed, this, &AMainCharacterBase::StopSprint);
 
 		//Jump
@@ -188,9 +188,6 @@ void AMainCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		//Interaction
 		EnhancedInputComponent->BindAction(InputActionInfo.InvestigateAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::TryInvestigate);
 		
-		//Reset Camera
-		EnhancedInputComponent->BindAction(InputActionInfo.ResetCameraAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ResetCamera);
-
 		//Lock On Mode
 		EnhancedInputComponent->BindAction(InputActionInfo.LockOnAction, ETriggerEvent::Triggered, this, &AMainCharacterBase::ToggleTargetingMode);
 	}
@@ -417,7 +414,9 @@ void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))) return;
+	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))
+		|| !ActionTrackingComponent->GetIsActionReady(FName("DashAttack"))
+		|| !ActionTrackingComponent->GetIsActionReady(FName("Attack"))) return;
 
 	Jump();
 	OnJumpStarted.Broadcast();
@@ -426,7 +425,12 @@ void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
-	if (CharacterGameplayInfo.bIsSprinting) return;
+	if (CharacterGameplayInfo.bIsSprinting)
+	{
+		if (!bHoldToSprint) StopSprint(FInputActionValue(-1.0f));
+		return;
+	}
+	if (!ActionTrackingComponent->GetIsActionReady(FName("Sprint"))) return;
 	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
 	if (GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero()) return;
 	
@@ -439,6 +443,7 @@ void AMainCharacterBase::Sprint(const FInputActionValue& Value)
 void AMainCharacterBase::StopSprint(const FInputActionValue& Value)
 {
 	if (!CharacterGameplayInfo.bIsSprinting) return;
+	if (!ActionTrackingComponent->GetIsActionInProgress(FName("Sprint"))) return;
 	if (Value.GetValueType() == EInputActionValueType::Boolean && !bHoldToSprint) return;
 
 	CharacterGameplayInfo.bIsSprinting = false;
@@ -499,7 +504,7 @@ void AMainCharacterBase::Roll()
 		CharacterGameplayInfo.bCanRoll = false;
 		GetWorldTimerManager().SetTimer(RollDelayTimerHandle, FTimerDelegate::CreateLambda([=]() {
 			CharacterGameplayInfo.bCanRoll = true;
-			}), CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_RollDelay), false);
+		}), CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_RollDelay), false);
 	}
 }
 
@@ -534,6 +539,17 @@ void AMainCharacterBase::ToggleTargetingMode(const FInputActionValue& Value)
 	if (GetCharacterMovement()->IsFalling()) return;
 	if (CharacterGameplayInfo.bIsAiming) return; //Aim 모드에서는 타겟팅 불가
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
+	if (!TargetingManagerComponent->GetIsTargetingActivated()
+		&& !IsValid(TargetingManagerComponent->GetTargetedCandidate()))
+	{
+		if (Controller)
+		{
+			float newYawValue = GetMesh()->GetComponentRotation().Yaw + 95.0f;
+			Controller->SetControlRotation(FRotator(-20.0f, newYawValue, 0.0f));
+			OnLockOnStarted.Broadcast();
+		}
+		return;
+	}
 
 	bool result = false;
 	USpringArmComponent* destinationBoom;
@@ -627,6 +643,10 @@ void AMainCharacterBase::TryAttack()
 			+ FollowingCamera->GetComponentRotation().Yaw;
 		SetActorRotation(FRotator(0.0f, turnAngle, 0.0f));
 	}
+	else
+	{
+		SetActorRotation(FRotator(0.0f, FollowingCamera->GetComponentRotation().Yaw, 0.0f));
+	}
 
 	ACharacterBase* targetCharacter = Cast<ACharacterBase>(TargetingManagerComponent->GetTargetedCharacter());
 	ACharacterBase* targetCandidate = Cast<ACharacterBase>(TargetingManagerComponent->GetTargetedCandidate());
@@ -638,7 +658,7 @@ void AMainCharacterBase::TryAttack()
 		//액션 런치
 		if (bIsTargetingActivated)
 		{
-			if (IsValid(targetCharacter) && GetDistanceTo(targetCharacter) >= 200.0f
+			if (IsValid(targetCharacter) && GetDistanceTo(targetCharacter) >= 50.0f
 				&& !ActionTrackingComponent->GetIsActionInProgress("Attack")
 				&& !ActionTrackingComponent->GetIsActionInProgress("DashAttack")
 				&& !ActionTrackingComponent->GetIsActionInProgress("JumpAttack")
@@ -718,19 +738,6 @@ void AMainCharacterBase::Die()
 void AMainCharacterBase::StandUp()
 {
 	Super::StandUp();
-}
-
-void AMainCharacterBase::ResetCamera()
-{
-	if (!IsValid(TargetingManagerComponent)) return; 
-	if (TargetingManagerComponent->GetIsTargetingActivated()) return;
-
-	if (Controller)
-	{
-		float newYawValue = GetMesh()->GetComponentRotation().Yaw + 95.0f;
-		Controller->SetControlRotation(FRotator(-20.0f, newYawValue, 0.0f));
-		OnCameraReset.Broadcast();
-	}
 }
 
 UInteractiveCollisionComponent* AMainCharacterBase::GetNearInteractionComponent()
