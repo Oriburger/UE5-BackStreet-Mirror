@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_en\n"
-"POT-Creation-Date: 2025-07-15 05:06\n"
-"PO-Revision-Date: 2025-07-15 05:06\n"
+"POT-Creation-Date: 2025-07-17 02:01\n"
+"PO-Revision-Date: 2025-07-17 02:01\n"
 "Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -2456,6 +2456,27 @@ msgctxt "ST_Item,Desc_HealPack"
 msgid "Quickly repairs damage taken during combat. HP recovery amount varies depending on size."
 msgstr "Quickly repairs damage taken during combat. HP recovery amount varies depending on size."
 
+#. Key:	Desc_HealPack_Large
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_HealPack_Large"
+msgid "Restores a large amount of HP."
+msgstr "Restores a large amount of HP."
+
+#. Key:	Desc_HealPack_Medium
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_HealPack_Medium"
+msgid "Restores a moderate amount of HP."
+msgstr "Restores a moderate amount of HP."
+
+#. Key:	Desc_HealPack_Small
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_HealPack_Small"
+msgid "Restores a small amount of HP."
+msgstr "Restores a small amount of HP."
+
 #. Key:	Desc_SodaCan
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
@@ -3079,6 +3100,13 @@ msgctxt "ST_Tutorial,Demo_OfficialVersion_Permanent"
 msgid "<Medium.24>[Permanent Character Upgrade]</>\r\n\r\n- Players can permanently enhance their character stats \r\n   through repeated play.\r\n- The upgrade tree includes action gauge max value, skill multipliers\r\n  , sub-weapon slots, and debuff duration.\r\n- Customize and grow your own combat style with every run."
 msgstr "<Medium.24>[Permanent Character Upgrade]</>\r\n\r\n- Players can permanently enhance their character stats \r\n   through repeated play.\r\n- The upgrade tree includes action gauge max value, skill multipliers\r\n  , sub-weapon slots, and debuff duration.\r\n- Customize and grow your own combat style with every run."
 
+#. Key:	Desc_BoosterCipTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Desc_BoosterCipTip"
+msgid "Press Tab to view the booster chips you’ve obtained. Collect them to become even stronger."
+msgstr "Press Tab to view the booster chips you’ve obtained. Collect them to become even stronger."
+
 #. Key:	Desc_BossStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3092,6 +3120,27 @@ msgstr "This is a boss stage. Prepare thoroughly."
 msgctxt "ST_Tutorial,Desc_CraftStage"
 msgid "Create skill modules using crafting materials."
 msgstr "Create skill modules using crafting materials."
+
+#. Key:	Desc_CurrencyTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Desc_CurrencyTip"
+msgid "Collect gears to craft new skill modules. They might also serve as currency?"
+msgstr "Collect gears to craft new skill modules. They might also serve as currency?"
+
+#. Key:	Desc_DebuffTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Desc_DebuffTip"
+msgid "Different types of sub-weapons can apply various debuffs to enemies."
+msgstr "Different types of sub-weapons can apply various debuffs to enemies."
+
+#. Key:	Desc_StageSelectionTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Desc_StageSelectionTip"
+msgid "After clearing a stage, you’ll be able to choose the next one. Head toward your preferred path."
+msgstr "After clearing a stage, you’ll be able to choose the next one. Head toward your preferred path."
 
 #. Key:	Header_AbilityInfo
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3289,12 +3338,40 @@ msgctxt "ST_Tutorial,Name_BossStage"
 msgid "Boss Stage"
 msgstr "Boss Stage"
 
+#. Key:	Name_BossterChipTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Name_BossterChipTip"
+msgid "Booster Chip Tip"
+msgstr "Booster Chip Tip"
+
 #. Key:	Name_CraftStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Name_CraftStage"
 msgid "Crafting Stage"
 msgstr "Crafting Stage"
+
+#. Key:	Name_CurrencyTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Name_CurrencyTip"
+msgid "Currency Tip"
+msgstr "Currency Tip"
+
+#. Key:	Name_DebuffTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Name_DebuffTip"
+msgid "Debuff Tip"
+msgstr "Debuff Tip"
+
+#. Key:	Name_StageSelectionTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Name_StageSelectionTip"
+msgid "Stage Selection Tip"
+msgstr "Stage Selection Tip"
 
 #. Key:	Tutorial_Battle_1
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial

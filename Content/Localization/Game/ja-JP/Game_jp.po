@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_jp\n"
-"POT-Creation-Date: 2025-07-15 05:07\n"
-"PO-Revision-Date: 2025-07-15 05:07\n"
+"POT-Creation-Date: 2025-07-17 02:01\n"
+"PO-Revision-Date: 2025-07-17 02:01\n"
 "Language-Team: \n"
 "Language: ja-JP\n"
 "MIME-Version: 1.0\n"
@@ -2456,6 +2456,27 @@ msgctxt "ST_Item,Desc_HealPack"
 msgid "Quickly repairs damage taken during combat. HP recovery amount varies depending on size."
 msgstr "戦闘中に受けたダメージを素早く修復する。回復量はサイズによって異なる。"
 
+#. Key:	Desc_HealPack_Large
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_HealPack_Large"
+msgid "Restores a large amount of HP."
+msgstr "体力を大きく回復する。"
+
+#. Key:	Desc_HealPack_Medium
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_HealPack_Medium"
+msgid "Restores a moderate amount of HP."
+msgstr "体力を適度に回復する。"
+
+#. Key:	Desc_HealPack_Small
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_HealPack_Small"
+msgid "Restores a small amount of HP."
+msgstr "体力を少し回復する。"
+
 #. Key:	Desc_SodaCan
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
@@ -3079,6 +3100,13 @@ msgctxt "ST_Tutorial,Demo_OfficialVersion_Permanent"
 msgid "<Medium.24>[Permanent Character Upgrade]</>\r\n\r\n- Players can permanently enhance their character stats \r\n   through repeated play.\r\n- The upgrade tree includes action gauge max value, skill multipliers\r\n  , sub-weapon slots, and debuff duration.\r\n- Customize and grow your own combat style with every run."
 msgstr "<Medium.24>[キャラクターの永久強化]</>\r\n\r\n- プレイヤーは繰り返しのプレイを通じてキャラクターの\r\n  ステータスを永久的に強化できます。\r\n- 強化ツリーには、アクションゲージの最大値、スキル倍率、副武器スロット\r\n  、デバフ効果の持続時間などが含まれます。\r\n- 自分だけの戦闘スタイルを構築し、成長させましょう。"
 
+#. Key:	Desc_BoosterCipTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Desc_BoosterCipTip"
+msgid "Press Tab to view the booster chips you’ve obtained. Collect them to become even stronger."
+msgstr "Tabキーを押して取得したブースターチップを確認しましょう。集めてさらに強くなろう！"
+
 #. Key:	Desc_BossStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3092,6 +3120,27 @@ msgstr "ボスとの戦闘ステージです。しっかりと準備しましょ
 msgctxt "ST_Tutorial,Desc_CraftStage"
 msgid "Create skill modules using crafting materials."
 msgstr "クラフト素材を使ってスキルモジュールを作成します。"
+
+#. Key:	Desc_CurrencyTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Desc_CurrencyTip"
+msgid "Collect gears to craft new skill modules. They might also serve as currency?"
+msgstr "ギアを集めて新しいスキルモジュールを作成しましょう。通貨としても使えるかもしれません。"
+
+#. Key:	Desc_DebuffTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Desc_DebuffTip"
+msgid "Different types of sub-weapons can apply various debuffs to enemies."
+msgstr "サブ武器の種類によって、さまざまなデバフを敵に与えることができます。"
+
+#. Key:	Desc_StageSelectionTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Desc_StageSelectionTip"
+msgid "After clearing a stage, you’ll be able to choose the next one. Head toward your preferred path."
+msgstr "ステージクリア後に次のステージを選ぶことができます。好きなルートを進んでみましょう。"
 
 #. Key:	Header_AbilityInfo
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3289,12 +3338,40 @@ msgctxt "ST_Tutorial,Name_BossStage"
 msgid "Boss Stage"
 msgstr "ボスステージ"
 
+#. Key:	Name_BossterChipTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Name_BossterChipTip"
+msgid "Booster Chip Tip"
+msgstr "ブースターチップのヒント"
+
 #. Key:	Name_CraftStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Name_CraftStage"
 msgid "Crafting Stage"
 msgstr "クラフトステージ"
+
+#. Key:	Name_CurrencyTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Name_CurrencyTip"
+msgid "Currency Tip"
+msgstr "通貨ヒント"
+
+#. Key:	Name_DebuffTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Name_DebuffTip"
+msgid "Debuff Tip"
+msgstr "デバフのヒント"
+
+#. Key:	Name_StageSelectionTip
+#. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
+#: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
+msgctxt "ST_Tutorial,Name_StageSelectionTip"
+msgid "Stage Selection Tip"
+msgstr "ステージ選択のヒント"
 
 #. Key:	Tutorial_Battle_1
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
