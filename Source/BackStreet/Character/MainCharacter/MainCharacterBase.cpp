@@ -304,7 +304,7 @@ void AMainCharacterBase::SetAimingMode(bool bNewState)
 	GetCharacterMovement()->bOrientRotationToMovement = !bNewState;
 	bUseControllerRotationYaw = bNewState;
 	CharacterGameplayInfo.bIsAiming = bNewState;
-	CharacterGameplayInfo.bIsSprinting = bNewState ? false : CharacterGameplayInfo.bIsSprinting;
+	StopSprint(FInputActionValue(-1.0f)); //Aim 시, Sprint를 중지
 
 	const float moveSpeed = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MoveSpeed);
 	const float aimMoveSpeed = bNewState ? moveSpeed * 0.3f : moveSpeed;
@@ -413,10 +413,14 @@ void AMainCharacterBase::Look(const FInputActionValue& Value)
 void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 {
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
-	if (CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle) return;
-	if (!ActionTrackingComponent->GetIsActionReady(FName("JumpAttack"))
-		|| !ActionTrackingComponent->GetIsActionReady(FName("DashAttack"))
-		|| !ActionTrackingComponent->GetIsActionReady(FName("Attack"))) return;
+	if (GetCharacterMovement()->IsFalling()) return;
+	if (!ActionTrackingComponent->GetIsActionReady(FName("Skill"))
+		|| !ActionTrackingComponent->GetIsActionReady(FName("Roll"))
+		|| !ActionTrackingComponent->GetIsActionReady(FName("Aim"))) return;
+	
+	ResetActionState(true);
+	ActionTrackingComponent->ResetComboCount();
+	GetMesh()->GetAnimInstance()->Montage_Stop(0.1f);
 
 	Jump();
 	OnJumpStarted.Broadcast();
@@ -614,7 +618,7 @@ void AMainCharacterBase::TryAttack()
 		&& CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_Idle)
 	{
 		if (CharacterGameplayInfo.bIsAiming &&
-			CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Shoot)
+			ActionTrackingComponent->GetIsActionReady("Shoot"))
 		{
 			TryShoot();
 		}
@@ -699,8 +703,10 @@ bool AMainCharacterBase::TrySkill(int32 SkillID)
 	{
 		StopAttack();
 	}
+	
+	bool result = Super::TrySkill(SkillID);
 
-	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
+	if (result && CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Idle)
 	{
 		if (MovementInputValue.Length() > 0)
 		{
@@ -714,7 +720,7 @@ bool AMainCharacterBase::TrySkill(int32 SkillID)
 		}
 	}
 
-	return Super::TrySkill(SkillID);
+	return result;
 }
 
 void AMainCharacterBase::Attack()
