@@ -70,17 +70,10 @@ TArray<AActor*> UMeleeCombatManager::CheckMeleeAttackTargetWithSphereTrace()
 		GetWorld()->LineTraceSingleByChannel(hitResult, OwnerCharacterRef->GetActorLocation()
 			, target->GetActorLocation(), ECollisionChannel::ECC_Camera, collisionQueryParam);
 
-		UE_LOG(LogTemp, Warning, TEXT("UMeleeCombatManager::CheckMeleeAttackTargetWithSphereTrace() - %s"), *UKismetSystemLibrary::GetDisplayName(target));
-
 		if (hitResult.bBlockingHit && hitResult.GetActor() == target)
 		{
 			IgnoreActorList.Add(target);
-			meleeDamageTargetList.Add(target);
-			UE_LOG(LogTemp, Warning, TEXT("¤¤> Succeed"));
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("¤¤> Failed,   blockingHit : %d,    hitActor : %s"), (int32)hitResult.bBlockingHit, *UKismetSystemLibrary::GetDisplayName(hitResult.GetActor()));
+			meleeDamageTargetList.Add(target);    
 		}
 	}
 	return meleeDamageTargetList;
