@@ -22,17 +22,7 @@ enum class EItemCategoryInfo : uint8
 	E_Ability				UMETA(DisplayName = "Ability"),
 	E_Craft					UMETA(DisplayName = "Craft"),
 	E_Research				UMETA(DisplayName = "Research"),
-	E_GatchaTicket			UMETA(DisplayName = "GatchaTicket"),
-};
-
-UENUM(BlueprintType)
-enum class ECraftingItemType : uint8
-{
-	E_None				UMETA(DisplayName = "None"),
-	E_Screw				UMETA(DisplayName = "Screw"),
-	E_Spring			UMETA(DisplayName = "Spring"),
-	E_Gear				UMETA(DisplayName = "Gear"),
-	E_Wrench			UMETA(DisplayName = "Wrench"),
+	E_Skill					UMETA(DisplayName = "Skill"),
 };
 
 //아이템 박스 스폰 관련 정보를 담은 구조체
@@ -62,7 +52,16 @@ public:
 		FText ItemDescriptionText;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		bool bShowMesh = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		bool bShowIcon = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		bool bShowInfoWidget = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		bool bSupportAutoTurn = false;
 
 	//Item life type
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")

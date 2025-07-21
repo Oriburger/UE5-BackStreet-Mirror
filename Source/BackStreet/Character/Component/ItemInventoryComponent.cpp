@@ -179,26 +179,6 @@ void UItemInventoryComponent::GetItemData(int32 ItemID, FItemInfoDataStruct& Ite
 	}
 }
 
-TMap<ECraftingItemType, uint8> UItemInventoryComponent::GetAllCraftingItemAmount()
-{
-	TMap<ECraftingItemType, uint8> currItemAmountMap;
-	TArray< ECraftingItemType> craftingItemTypeList = { ECraftingItemType::E_Screw, ECraftingItemType::E_Spring , ECraftingItemType::E_Gear , ECraftingItemType::E_Wrench };
-
-	for (ECraftingItemType type : craftingItemTypeList)
-	{
-		int32 itemID = ConvertCraftingItemTypeToItemID(type);
-		if (InventoryInfoData.ItemMap.Contains(itemID))
-		{
-			currItemAmountMap.Add(type, InventoryInfoData.ItemMap[itemID].ItemAmount);
-		}
-		else
-		{
-			currItemAmountMap.Add(type, 0);
-		}
-	}
-	return currItemAmountMap;
-}
-
 int32 UItemInventoryComponent::GetItemAmount(int32 ItemID)
 {
 	if (!InventoryInfoData.ItemMap.Contains(ItemID)) return -1;
