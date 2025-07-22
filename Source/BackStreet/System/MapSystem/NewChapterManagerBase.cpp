@@ -204,28 +204,24 @@ FName ANewChapterManagerBase::GetStageTypeName(EStageCategoryInfo StageType)
 {
 	switch (StageType)
 	{
-	case EStageCategoryInfo::E_Boss:
-		return FName("E_Boss");
-	case EStageCategoryInfo::E_Exterminate:
-		return FName("E_Exterminate");
-	case EStageCategoryInfo::E_EliteExterminate:
-		return FName("E_Combat");
-	case EStageCategoryInfo::E_Craft:
-		return FName("E_Craft");
-	case EStageCategoryInfo::E_TimeAttack:
-		return FName("E_TimeAttack");
-	case EStageCategoryInfo::E_EliteTimeAttack:
-		return FName("E_EliteTimeAttack");
-	case EStageCategoryInfo::E_Escort:
-		return FName("E_Escort");
-	case EStageCategoryInfo::E_EliteEscort:
-		return FName("E_EliteEscort");
+	case EStageCategoryInfo::E_None:
+		return FName("E_None");
 	case EStageCategoryInfo::E_Entry:
 		return FName("E_Entry");
-	case EStageCategoryInfo::E_Gatcha:
-		return FName("E_Gatcha");
-	case EStageCategoryInfo::E_MiniGame:
-		return FName("E_MiniGame");
+	case EStageCategoryInfo::E_Boss:
+		return FName("E_Boss");
+	case EStageCategoryInfo::E_Craft:
+		return FName("E_Craft");
+	case EStageCategoryInfo::E_Easy:
+		return FName("E_Easy");
+	case EStageCategoryInfo::E_Normal:
+		return FName("E_Normal");
+	case EStageCategoryInfo::E_Hard:
+		return FName("E_Hard");
+	case EStageCategoryInfo::E_Expert:
+		return FName("E_Expert");
+	case EStageCategoryInfo::E_Nightmare:
+		return FName("E_Nightmare");
 	}
 	return FName("None");
 }

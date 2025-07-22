@@ -52,8 +52,6 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 	}
 	UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate(), template idx : %d"), templateIdx);
 
-	TArray<TSoftObjectPtr<UWorld> > shuffledCombatWorldList = GetShuffledWorldList();
-
 	//this is not total stage count in grid, but vertical stage count.
 	const int32 stageCount = FMath::Pow(CurrentChapterInfo.GridSize, 2.0f);
 	int32 nextCombatWorldIdx = 0;
@@ -75,57 +73,60 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 			stageInfo.StageType = stageTypeList[UKismetMathLibrary::RandomInteger(stageTypeList.Num())];
 		}
 
+		TArray<TSoftObjectPtr<UWorld> > shuffledCombatWorldList = GetShuffledWorldList(stageInfo.StageType);
+
 		//2. set stage coordinate and level
 		stageInfo.Coordinate = GetStageCoordinate(stageIdx);
+		UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate() - Stage Idx : %d,  stageCoordinate : %s"), stageIdx, *stageInfo.Coordinate.ToString());
+
 
 		//3. set default icon
 		if (CurrentChapterInfo.StageIconInfoMap.Contains(stageInfo.StageType))
 		{
 			stageInfo.StageIcon = *CurrentChapterInfo.StageIconInfoMap.Find(stageInfo.StageType);
+			UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate() - Stage Icon : %s"), *stageInfo.StageIcon->GetName());
 		}
 
-		//4. set reward and stage's special property
-		if (stageInfo.StageType == EStageCategoryInfo::E_TimeAttack) stageInfo.StageType = EStageCategoryInfo::E_Exterminate;
-		else if (stageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack) stageInfo.StageType = EStageCategoryInfo::E_EliteExterminate;
-
+		/*
 		switch (stageInfo.StageType)
 		{
-		case EStageCategoryInfo::E_TimeAttack:
-		case EStageCategoryInfo::E_EliteTimeAttack:
-			/*
-			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
-			stageInfo.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
-			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType);
-			if (stageInfo.RewardInfoList.Num() > 0)
-			{
-				stageInfo.StageIcon = stageInfo.RewardInfoList[0].ItemImage;
-			}
-			break;*/
-		case EStageCategoryInfo::E_Exterminate:
-		case EStageCategoryInfo::E_EliteExterminate:
-		case EStageCategoryInfo::E_Escort:
-		case EStageCategoryInfo::E_EliteEscort:
+			case EStageCategoryInfo::E_TimeAttack:
+			case EStageCategoryInfo::E_EliteTimeAttack:
+				nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
+				stageInfo.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
+				stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType);
+				if (stageInfo.RewardInfoList.Num() > 0)
+				{
+					stageInfo.StageIcon = stageInfo.RewardInfoList[0].ItemImage;
+				}
+				break;
+			
+		}*/
+
+		//4. set reward and stage's special property
+		if (stageInfo.GetIsCombatStage(false))
+		{
 			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
 			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType, {});
 			if (stageInfo.RewardInfoList.Num() > 0)
 			{
 				stageInfo.StageIcon = stageInfo.RewardInfoList[0].ItemImage;
 			}
-			break;
-		case EStageCategoryInfo::E_Entry:
+			UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate() - Stage Type : %d, Reward Count : %d"), (int32)stageInfo.StageType, stageInfo.RewardInfoList.Num());
+		}
+		else if (stageInfo.StageType == EStageCategoryInfo::E_Entry)
+		{
 			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType, {});
-			break;
+			UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate() - Stage Type : %d, Reward Count : %d"), (int32)stageInfo.StageType, stageInfo.RewardInfoList.Num());
 		}
 
 		//5. set enemy composition
-		if (stageInfo.StageType == EStageCategoryInfo::E_Boss || stageInfo.StageType == EStageCategoryInfo::E_Exterminate
-			|| stageInfo.StageType == EStageCategoryInfo::E_EliteExterminate || stageInfo.StageType == EStageCategoryInfo::E_TimeAttack
-			|| stageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack || stageInfo.StageType == EStageCategoryInfo::E_Entry
-			|| stageInfo.StageType == EStageCategoryInfo::E_EliteEscort || stageInfo.StageType == EStageCategoryInfo::E_Escort)
+		if (stageInfo.GetIsCombatStage())
 		{
 			checkf(CurrentChapterInfo.StageEnemyCompositionInfoMap.Contains(stageInfo.StageType), TEXT("EnemyCompositionInfoMap is empty"));
 			stageInfo.EnemyCompositionInfo = *CurrentChapterInfo.StageEnemyCompositionInfoMap.Find(stageInfo.StageType);
 		}
+		UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate() - Stage Type : %d, Enemy Composition Count : %d"), (int32)stageInfo.StageType, stageInfo.EnemyCompositionInfo.CompositionNameList.Num());
 		result.Add(stageInfo);
 	}
 
@@ -271,15 +272,19 @@ TSoftObjectPtr<UWorld> UStageGeneratorComponent::GetRandomWorld(TArray<TSoftObje
 	return WorldList[idx];
 }
 
-TArray<TSoftObjectPtr<UWorld>> UStageGeneratorComponent::GetShuffledWorldList()
+TArray<TSoftObjectPtr<UWorld>> UStageGeneratorComponent::GetShuffledWorldList(EStageCategoryInfo StageCategory)
 {
 	//Temporary code for BIC -----
-	checkf(CurrentChapterInfo.StageLevelInfoMap.Contains(EStageCategoryInfo::E_Exterminate), TEXT("StageLevelInfoMap is not valid for exterminate stage"));
-	FLevelSoftObjectPtrList levelInfo = *CurrentChapterInfo.StageLevelInfoMap.Find(EStageCategoryInfo::E_Exterminate);
+	if (!CurrentChapterInfo.StageLevelInfoMap.Contains(StageCategory))
+	{
+		UE_LOG(LogStage, Error, TEXT("StageLevelInfoMap is not valid for exterminate stage"));
+		return {};
+	}
+	FLevelSoftObjectPtrList levelInfo = *CurrentChapterInfo.StageLevelInfoMap.Find(StageCategory);
 	
 	levelInfo.LevelList.Sort([this](const TSoftObjectPtr<UWorld> item1, const TSoftObjectPtr<UWorld> item2) {
 		return FMath::FRand() < 0.5f;
 	});
-	CurrentChapterInfo.StageLevelInfoMap[EStageCategoryInfo::E_Exterminate] = levelInfo;
+	CurrentChapterInfo.StageLevelInfoMap[StageCategory] = levelInfo;
 	return levelInfo.LevelList;
 }

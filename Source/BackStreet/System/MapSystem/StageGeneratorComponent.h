@@ -66,7 +66,7 @@ protected:
 
 	//Return the randomly shuffled list of world for each stage
 	UFUNCTION(BlueprintCallable)
-		TArray<TSoftObjectPtr<UWorld> > GetShuffledWorldList();
+		TArray<TSoftObjectPtr<UWorld> > GetShuffledWorldList(EStageCategoryInfo StageCategory);
 	
 private:
 	FChapterInfo CurrentChapterInfo;

@@ -7,23 +7,15 @@ UENUM(BlueprintType)
 enum class EStageCategoryInfo : uint8
 {
 	E_None				  	UMETA(DisplayName = "None"),
-	E_Lobby					UMETA(DisplayName = "Lobby"),
-
 	E_Entry					UMETA(DisplayName = "Entry"),
-	E_Exterminate			UMETA(DisplayName = "Exterminate"),
-	E_EliteExterminate		UMETA(DisplayName = "EliteExterminate"),
-
-	E_TimeAttack			UMETA(DisplayName = "TimeAttack"),
-	E_EliteTimeAttack		UMETA(DisplayName = "EliteTimeAttack"),
-
-	E_Escort				UMETA(DisplayName = "Escort"),
-	E_EliteEscort			UMETA(DisplayName = "EliteEscort"),
-
 	E_Boss					UMETA(DisplayName = "Boss"),
-
 	E_Craft					UMETA(DisplayName = "Craft"),
-	E_MiniGame				UMETA(DisplayName = "MiniGame"),
-	E_Gatcha				UMETA(DisplayName = "Gatcha"),
+
+	E_Easy					UMETA(DisplayName = "Easy"),
+	E_Normal				UMETA(DisplayName = "Normal"),
+	E_Hard					UMETA(DisplayName = "Hard"),
+	E_Expert				UMETA(DisplayName = "Expert"),
+	E_Nightmare				UMETA(DisplayName = "Nightmare"),
 };
 
 UENUM(BlueprintType)
@@ -232,6 +224,12 @@ public:
 
 		// Clear the PortalDirectionTagList
 		PortalDirectionTagList.Empty();
+	}
+
+	inline bool GetIsCombatStage(bool bContainBossAndEntryStage = true) const
+	{
+		return (StageType >= EStageCategoryInfo::E_Easy && StageType <= EStageCategoryInfo::E_Nightmare)
+			|| (bContainBossAndEntryStage && (StageType == EStageCategoryInfo::E_Boss || StageType == EStageCategoryInfo::E_Entry));
 	}
 };
 

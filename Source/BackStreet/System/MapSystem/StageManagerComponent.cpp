@@ -312,14 +312,7 @@ TArray<AActor*> UStageManagerComponent::TryUpdateSpawnPointProperty()
 void UStageManagerComponent::SpawnEnemy()
 {
 	//Basic condition (stage type check and data count check
-	if (CurrentStageInfo.StageType != EStageCategoryInfo::E_Entry
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_TimeAttack
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Exterminate
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Escort
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteTimeAttack
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteExterminate
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteEscort
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss) return;
+	if (!CurrentStageInfo.GetIsCombatStage()) return;
 
 	if (CurrentStageInfo.EnemyCompositionInfo.CompositionNameList.Num() == 0)
 	{
@@ -421,14 +414,7 @@ void UStageManagerComponent::SpawnItemBox()
 {
 	//Basic condition (stage type check and data count check
 	if (!IsValid(ItemBoxClass)) return;
-	if (CurrentStageInfo.StageType != EStageCategoryInfo::E_Entry
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_TimeAttack
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Exterminate
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Escort
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteTimeAttack
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteExterminate
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteEscort
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss) return;
+	if (CurrentStageInfo.GetIsCombatStage()) return;
 	
 	//Check data is valid
 	if (!CurrentChapterInfo.MaxItemBoxSpawnCountMap.Contains(CurrentStageInfo.StageType))
@@ -593,7 +579,7 @@ void UStageManagerComponent::StartStage()
 		playerCharacter->GetController()->SetControlRotation(CurrentStageInfo.PlayerStartRotation);
 	}
 
-	//Start timer if stage type if timeattack
+	/* Start timer if stage type if timeattack
 	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
 		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 	{
@@ -605,10 +591,8 @@ void UStageManagerComponent::StartStage()
 
 		//UI Event
 		OnTimeAttackStageBegin.Broadcast();
-	}
-	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_MiniGame
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Gatcha)
+	}*/
+	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft)
 	{
 		FinishStage(true);
 	}
@@ -634,10 +618,7 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 		
 	}
 
-	if (bStageClear &&
-		(CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteExterminate))
+	if (bStageClear && CurrentStageInfo.GetIsCombatStage())
 	{
 		//Stage Clear UI Update using delegate
 		OnStageCleared.Broadcast();
@@ -652,6 +633,7 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 		}
 
 	}
+	/*
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
 		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 	{
@@ -671,7 +653,7 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 		}
 		//TimeAttack UI Event
 		OnTimeAttackStageEnd.Broadcast();
-	}
+	}*/
 	
 	//StageFinished Delegate
 	OnStageFinished.Broadcast(CurrentStageInfo);
@@ -826,22 +808,17 @@ void UStageManagerComponent::UpdateEnemyCountAndCheckClear()
 bool UStageManagerComponent::CheckStageClearStatus()
 {
 	//Basic condition (stage type check)
-	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteExterminate
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Escort
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteEscort
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Boss
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteExterminate)
+	if (CurrentStageInfo.GetIsCombatStage())
 	{
 		return RemainingEnemyCount == 0;
 	}
+	/*
 	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
 		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
 	{
 		bool bIsTimeLeft = GetRemainingTime() > 0.0f;
 		return RemainingEnemyCount == 0 && bIsTimeLeft;
-	}
+	}*/
 	return false;
 }
 
