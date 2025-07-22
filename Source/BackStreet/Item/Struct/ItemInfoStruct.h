@@ -51,17 +51,21 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		FText ItemDescriptionText;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		bool bShowMesh = false;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
 		bool bShowIcon = false;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		bool bShowInfoWidget = false;
+		bool bSupportIconTurn = false;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
-		bool bSupportAutoTurn = false;
+		bool bShowMesh = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		bool bSupportMeshTurn = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
+		bool bShowInfoWidget = false;
 
 	//Item life type
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
