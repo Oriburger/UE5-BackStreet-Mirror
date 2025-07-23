@@ -76,10 +76,10 @@ struct FStageRewardCandidateInfo
 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
-		TArray<int32> RewardItemIDList;
+		int32 RewardItemID;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Gameplay")
-		TArray<float> RewardItemProbabilityList;
+		float RewardItemProbability;
 };
 
 USTRUCT(BlueprintType)
@@ -120,7 +120,7 @@ public:
 
 	//Map location in 2nd array (현재 선형으로 1차원 X값만 사용)
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		FVector2D Coordinate = FVector2D::ZeroVector;
+		int32 Coordinate = 0;
 
 	//Main level of this stage
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -226,10 +226,11 @@ public:
 		PortalDirectionTagList.Empty();
 	}
 
-	inline bool GetIsCombatStage(bool bContainBossAndEntryStage = true) const
+	inline bool GetIsCombatStage(bool bContainBossStage = true) const
 	{
 		return (StageType >= EStageCategoryInfo::E_Easy && StageType <= EStageCategoryInfo::E_Nightmare)
-			|| (bContainBossAndEntryStage && (StageType == EStageCategoryInfo::E_Boss || StageType == EStageCategoryInfo::E_Entry));
+			|| (bContainBossStage && (StageType == EStageCategoryInfo::E_Boss))
+			|| StageType == EStageCategoryInfo::E_Entry;
 	}
 };
 
@@ -257,17 +258,10 @@ public:
 
 	//grid size for chapter
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 1, UIMax = 5), Category = "Category")
-		int32 GridSize = 3;
+		int32 StageCount = 9;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Config")
-		FVector2D CurrentStageCoordinate = FVector2D(0.0f);	
-
-	//blocked stage list, this value determines shape of chapter
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
-		TArray<FVector2D> BlockedPosList;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
-		TArray<int32> BlockedStageIdxList;
+		int32 CurrentStageCoordinate = 0;
 
 	//Possible stage type per stage level
 	//This list's length is must be fit to stage's count(gridsize * 2 - 1)
@@ -294,6 +288,18 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
 		TMap<EStageCategoryInfo, int32> MaxItemBoxSpawnCountMap;
+
+	//스킬이 보상으로 나오는 스테이지의 개수
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
+		int32 MaxSkillRewardCount = 2;
+
+	//확정적으로 스킬 보상이 나오는 스테이지 ID 리스트
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
+		TArray<int32> FixedSkillRewardStageIDList;
+
+	// 스킬 보상이 랜덤하게 나올수 있는 스테이지 타입 리스트
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
+		TArray<EStageCategoryInfo> RandomSkillStageTypeList;
 
 	//Stage template list. If this value is set, this overrides the above values(blocked~, stage tyep~)
 	UPROPERTY(EditDefaultsOnly, meta = (UIMin = 1, UIMax = 5), Category = "Config")
@@ -340,13 +346,11 @@ public:
 	{
 		StageInfoList.Empty();
 		BossStageInfo = FStageInfo();
-		BlockedPosList.Empty();
-		BlockedStageIdxList.Empty();
 		StageLevelInfoMap.Empty();
 		OuterStageLevelList.Empty();
 		StageIconInfoMap.Empty();
 		StageIconTransitionValueList.Empty();
-		CurrentStageCoordinate = FVector2D(0.0f);
+		CurrentStageCoordinate = 0;
 	}
 
 	bool IsValid() { return StageInfoList.Num() > 0; }
