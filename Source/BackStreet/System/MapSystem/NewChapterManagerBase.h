@@ -127,6 +127,9 @@ private:
 
 	bool bIsChapterFinished = false;
 
+	//현재까지 획득한 스킬 보상 횟수
+	int32 CurrentSkillRewardCount = 0;
+
 //========= Save System ================
 public:
 	UFUNCTION(BlueprintCallable)

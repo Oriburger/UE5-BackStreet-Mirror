@@ -49,7 +49,7 @@ private:
 //========== Basic ==============================
 public:
 	UFUNCTION(BlueprintCallable)
-		bool TryAddSkill(int32 NewSkillID);
+		bool TryAddSkill(int32 NewSkillID, bool& bIsInInventory);
 
 	UFUNCTION(BlueprintCallable)
 		bool TryRemoveSkill(int32 TargetSkillID);
@@ -78,6 +78,9 @@ private:
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<int32> GetCraftableIDList();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<int32> GetOwnedSkillIDList();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FSkillInfo GetSkillInfoData(int32 TargetSkillID, bool& bIsInInventory);

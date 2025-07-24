@@ -100,9 +100,8 @@ void USkillManagerComponentBase::RestoreCoolTimeTimer()
 	
 }
 
-bool USkillManagerComponentBase::TryAddSkill(int32 NewSkillID)
+bool USkillManagerComponentBase::TryAddSkill(int32 NewSkillID, bool& bIsInInventory)
 {
-	bool bIsInInventory = false;
 	FSkillInfo skillInfo = GetSkillInfoData(NewSkillID, bIsInInventory);
 	if (!skillInfo.IsValid() || bIsInInventory)
 	{
@@ -219,6 +218,13 @@ TArray<int32> USkillManagerComponentBase::GetCraftableIDList()
 			resultList.Add(id);
 		}
 	}
+	return resultList;
+}
+
+TArray<int32> USkillManagerComponentBase::GetOwnedSkillIDList()
+{
+	TArray<int32> resultList;
+	SkillManagerInfo.SkillInventory.GenerateKeyArray(resultList);
 	return resultList;
 }
 

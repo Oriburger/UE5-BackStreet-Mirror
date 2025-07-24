@@ -116,7 +116,6 @@ void ANewChapterManagerBase::MoveStage(int32 GateIdx)
 	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::MoveStage"));
 	CurrentChapterInfo.CurrentStageCoordinate = CurrentChapterInfo.CurrentStageCoordinate + 1;
 	
-	//보상을 선택한 경우, 해당 보상만 남기고 나머지는 삭제한다.
 	if (CurrentChapterInfo.StageInfoList[stageIdx].GetIsCombatStage(false)
 		&& CurrentChapterInfo.StageInfoList.IsValidIndex(GateIdx))
 	{
@@ -161,6 +160,7 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 		InitStageIconTranslationList({20, 65});
 		OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
 	}
+	CurrentSkillRewardCount = 0;
 }
 
 void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)

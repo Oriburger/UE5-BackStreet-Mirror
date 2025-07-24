@@ -587,7 +587,6 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	if (!CurrentStageInfo.bIsGameOver && CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss)
 	{
 		SpawnPortal(2);
-		
 	}
 
 	if (bStageClear && CurrentStageInfo.GetIsCombatStage(false))
@@ -664,13 +663,6 @@ bool UStageManagerComponent::CheckStageClearStatus()
 	{
 		return RemainingEnemyCount == 0;
 	}
-	/*
-	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
-	{
-		bool bIsTimeLeft = GetRemainingTime() > 0.0f;
-		return RemainingEnemyCount == 0 && bIsTimeLeft;
-	}*/
 	return false;
 }
 

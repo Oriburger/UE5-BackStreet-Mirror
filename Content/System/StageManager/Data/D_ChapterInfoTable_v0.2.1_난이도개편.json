@@ -2,7 +2,6 @@
 	{
 		"Name": "1",
 		"ChapterID": 1,
-		"GridSize": 5,
 		"StageCount": 9,
 		"CurrentStageCoordinate": 0,
 		"StageTypeListForLevelIdx": [],
@@ -295,10 +294,10 @@
 			{
 				"EnemySet":
 				{
-					"1100": 1,
+					"1100": 2,
 					"1101": 1,
 					"1001": 2,
-					"1002": 2
+					"1002": 1
 				}
 			},
 			"mix_normal_large2":
@@ -364,7 +363,7 @@
 			{
 				"EnemySet":
 				{
-					"1110": 1,
+					"1110": 2,
 					"1001": 2,
 					"1002": 1
 				}
@@ -373,7 +372,7 @@
 			{
 				"EnemySet":
 				{
-					"1110": 1,
+					"1110": 2,
 					"1100": 1,
 					"1101": 2
 				}
@@ -386,8 +385,10 @@
 				}
 			}
 		},
-		"StageEnemyCompositionInfoMap": {
-			"E_Entry": {
+		"StageEnemyCompositionInfoMap":
+		{
+			"E_Entry":
+			{
 				"CompositionNameList": [
 					"easy_small1",
 					"easy_small2",
@@ -396,7 +397,8 @@
 					"easy_small5"
 				]
 			},
-			"E_Easy": {
+			"E_Easy":
+			{
 				"CompositionNameList": [
 					"easy_medium1",
 					"easy_medium2",
@@ -407,7 +409,8 @@
 					"easy_large3"
 				]
 			},
-			"E_Normal": {
+			"E_Normal":
+			{
 				"CompositionNameList": [
 					"normal_small1",
 					"normal_small2",
@@ -431,7 +434,8 @@
 					"mix_normal_medium3"
 				]
 			},
-			"E_Hard": {
+			"E_Hard":
+			{
 				"CompositionNameList": [
 					"normal_superlarge1",
 					"normal_superlarge2",
@@ -448,7 +452,8 @@
 					"hard_large"
 				]
 			},
-			"E_Expert": {
+			"E_Expert":
+			{
 				"CompositionNameList": [
 					"normal_superlarge1",
 					"normal_superlarge2",
@@ -465,7 +470,8 @@
 					"hard_large"
 				]
 			},
-			"E_Nightmare": {
+			"E_Nightmare":
+			{
 				"CompositionNameList": [
 					"normal_superlarge1",
 					"normal_superlarge2",
@@ -477,218 +483,10 @@
 					"hard_large"
 				]
 			},
-			"E_Boss": {
+			"E_Boss":
+			{
 				"CompositionNameList": [
 					"boss"
-				]
-			}
-		},
-		"StageRewardCandidateInfoMap":
-		{
-			"E_Entry":
-			{
-				"RewardCandidateInfoList": [
-					{
-						"RewardItemID": 11,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 12,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 13,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 14,
-						"RewardItemProbability": 1
-					}
-				]
-			},
-			"E_Easy":
-			{
-				"RewardCandidateInfoList": [
-					{
-						"RewardItemID": 8,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 11,
-						"RewardItemProbability": 0.5
-					},
-					{
-						"RewardItemID": 12,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 13,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 14,
-						"RewardItemProbability": 0.5
-					},
-					{
-						"RewardItemID": 15,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 16,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 17,
-						"RewardItemProbability": 1
-					}
-				]
-			},
-			"E_Normal":
-			{
-				"RewardCandidateInfoList": [
-					{
-						"RewardItemID": 8,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 11,
-						"RewardItemProbability": 0.5
-					},
-					{
-						"RewardItemID": 12,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 13,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 14,
-						"RewardItemProbability": 0.5
-					},
-					{
-						"RewardItemID": 15,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 16,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 17,
-						"RewardItemProbability": 1
-					}
-				]
-			},
-			"E_Hard":
-			{
-				"RewardCandidateInfoList": [
-					{
-						"RewardItemID": 8,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 11,
-						"RewardItemProbability": 0.5
-					},
-					{
-						"RewardItemID": 12,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 13,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 14,
-						"RewardItemProbability": 0.5
-					},
-					{
-						"RewardItemID": 15,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 16,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 17,
-						"RewardItemProbability": 1
-					}
-				]
-			},
-			"E_Expert":
-			{
-				"RewardCandidateInfoList": [
-					{
-						"RewardItemID": 8,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 11,
-						"RewardItemProbability": 0.5
-					},
-					{
-						"RewardItemID": 12,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 13,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 14,
-						"RewardItemProbability": 0.5
-					},
-					{
-						"RewardItemID": 15,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 16,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 17,
-						"RewardItemProbability": 1
-					}
-				]
-			},
-			"E_Nightmare":
-			{
-				"RewardCandidateInfoList": [
-					{
-						"RewardItemID": 8,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 11,
-						"RewardItemProbability": 0.5
-					},
-					{
-						"RewardItemID": 12,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 13,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 14,
-						"RewardItemProbability": 0.5
-					},
-					{
-						"RewardItemID": 15,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 16,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 17,
-						"RewardItemProbability": 1
-					}
 				]
 			}
 		},
@@ -717,6 +515,224 @@
 			}
 		],
 		"StageInfoList": [],
+		"StageRewardCandidateInfoMap": {
+			"E_Entry": {
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 1
+					}
+				]
+			},
+			"E_Easy": {
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					}
+				]
+			},
+			"E_Normal": {
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					}
+				]
+			},
+			"E_Hard": {
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 10000,
+						"RewardItemProbability": 1.75
+					}
+				]
+			},
+			"E_Expert": {
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 10000,
+						"RewardItemProbability": 1.75
+					}
+				]
+			},
+			"E_Nightmare": {
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 10000,
+						"RewardItemProbability": 1.75
+					}
+				]
+			}
+		},
+		"FixedSkillRewardStageIDList": [],
+		"SkillItemID": 10000,
+		"MaxSkillRewardCount": 2,
+		"CurrentSkillRewardCount": 0,
 		"bIsChapterInitialized": false,
 		"BossStageInfo":
 		{
@@ -765,7 +781,6 @@
 			"PortalTransformList": [],
 			"PortalDirectionTagList": [],
 			"TimeLimitValue": 0,
-			"bIsBlocked": false,
 			"bIsVisited": false,
 			"bIsFinished": false,
 			"bIsClear": false,

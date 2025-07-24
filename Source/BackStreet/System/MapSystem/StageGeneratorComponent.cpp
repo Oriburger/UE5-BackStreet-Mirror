@@ -90,7 +90,17 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 		if (stageInfo.GetIsCombatStage(false))
 		{
 			nextCombatWorldIdx = stageCoordinate % stageCount;
+			const bool bIsFixedSkillRewardStage =	(CurrentChapterInfo.CurrentSkillRewardCount < CurrentChapterInfo.MaxSkillRewardCount
+													&& CurrentChapterInfo.FixedSkillRewardStageIDList.Contains(stageIdx));
+			
 			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType, {});
+			//고정 스킬 보상 스테이지를 설정한다.
+			if (bIsFixedSkillRewardStage)
+			{
+				stageInfo.RewardInfoList.Insert(GetRewardItemInfo(CurrentChapterInfo.SkillItemID), 0);
+				CurrentChapterInfo.CurrentSkillRewardCount += 1;
+			}
+
 			if (stageInfo.RewardInfoList.Num() > 0)
 			{
 				stageInfo.StageIcon = stageInfo.RewardInfoList[0].ItemImage;
@@ -133,20 +143,25 @@ TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidate
 	TArray<FStageRewardCandidateInfo> ShuffledList = rewardInfoList.RewardCandidateInfoList;
 	Algo::RandomShuffle(ShuffledList);
 
-	TSet<int32> AlreadySelectedIDs;
+	TSet<int32> alreadySelectedIDs;
+	if (CurrentChapterInfo.MaxSkillRewardCount <= CurrentChapterInfo.CurrentSkillRewardCount)
+	{
+		// 스킬 보상 횟수를 초과한 경우, 스킬 아이템은 제외
+		ExceptIDList.Add(CurrentChapterInfo.SkillItemID);
+	}
 
 	for (const FStageRewardCandidateInfo& candidate : ShuffledList)
-	{
+	{ 
 		int32 ItemID = candidate.RewardItemID;
-		float Probability = candidate.RewardItemProbability;
+		float probability = candidate.RewardItemProbability;
 
 		if (ExceptIDList.Contains(ItemID)) continue;
-		if (AlreadySelectedIDs.Contains(ItemID)) continue;
+		if (alreadySelectedIDs.Contains(ItemID)) continue;
 
 		float rand = FMath::FRandRange(0.0f, 1.0f);
-		if (rand <= Probability)
+		if (rand <= probability)
 		{
-			AlreadySelectedIDs.Add(ItemID);
+			alreadySelectedIDs.Add(ItemID);
 
 			FItemInfoDataStruct itemInfo = GetRewardItemInfo(ItemID);
 			itemInfo.ItemAmount = 1;

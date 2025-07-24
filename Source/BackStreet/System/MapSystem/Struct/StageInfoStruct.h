@@ -176,10 +176,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float TimeLimitValue = 0.0f;
 
-	//Is blocked?
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		bool bIsBlocked = false;
-
 	//Is stage visited?
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bIsVisited = false;
@@ -284,22 +280,7 @@ public:
 		TMap<EStageCategoryInfo, FEnemyCompositionNameList> StageEnemyCompositionInfoMap;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
-		TMap<EStageCategoryInfo, FStageRewardCandidateInfoList> StageRewardCandidateInfoMap;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
 		TMap<EStageCategoryInfo, int32> MaxItemBoxSpawnCountMap;
-
-	//스킬이 보상으로 나오는 스테이지의 개수
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
-		int32 MaxSkillRewardCount = 2;
-
-	//확정적으로 스킬 보상이 나오는 스테이지 ID 리스트
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
-		TArray<int32> FixedSkillRewardStageIDList;
-
-	// 스킬 보상이 랜덤하게 나올수 있는 스테이지 타입 리스트
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay")
-		TArray<EStageCategoryInfo> RandomSkillStageTypeList;
 
 	//Stage template list. If this value is set, this overrides the above values(blocked~, stage tyep~)
 	UPROPERTY(EditDefaultsOnly, meta = (UIMin = 1, UIMax = 5), Category = "Config")
@@ -307,7 +288,25 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Config")
 		TArray<FStageInfo> StageInfoList;
-		
+
+//======= Reward  =======================
+	UPROPERTY(EditDefaultsOnly, Category = "Reward")
+		TMap<EStageCategoryInfo, FStageRewardCandidateInfoList> StageRewardCandidateInfoMap;
+
+	//확정적으로 스킬 보상이 나오는 스테이지 ID 리스트
+	UPROPERTY(EditDefaultsOnly, Category = "Reward")
+		TArray<int32> FixedSkillRewardStageIDList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Reward")
+		int32 SkillItemID = 10000;
+
+	//스킬이 보상으로 나올 수 있는 최대 횟수 (확정 스테이지도 포함)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Reward")
+		int32 MaxSkillRewardCount = 2;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		int32 CurrentSkillRewardCount = 0;
+
 //======= State  =======================
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 		bool bIsChapterInitialized = false;
