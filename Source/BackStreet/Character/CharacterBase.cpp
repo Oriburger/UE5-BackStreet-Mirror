@@ -842,6 +842,7 @@ void ACharacterBase::SetAsset()
 
 	//------Asset Initialize  -------------------
 	GetCapsuleComponent()->SetWorldRotation(FRotator::ZeroRotator);
+	GetCapsuleComponent()->SetCapsuleHalfHeight(AssetSoftPtrInfo.CapsuleHalfHeight);
 	SetActorScale3D(AssetSoftPtrInfo.InitialCapsuleComponentScale);
 
 	GetMesh()->SetSkeletalMesh(AssetSoftPtrInfo.CharacterMeshSoftPtr.Get());
