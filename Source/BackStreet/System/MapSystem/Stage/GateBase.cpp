@@ -37,12 +37,19 @@ void AGateBase::BeginPlay()
 	OverlapVolume->OnInteractionBegin.AddDynamic(this, &AGateBase::EnterGate);
 }
 
-void AGateBase::InitGate_Implementation(FVector2D NewDirection, FStageInfo StageInfo)
+void AGateBase::InitGate_Implementation(int32 NewGateIdx, FStageInfo StageInfo)
 {
 	if (bManualMode) return;
-	Direction = NewDirection;
+	GateIdx = NewGateIdx;
 	bIsGateActive = false;
 	NextStageType = StageInfo.StageType;
+
+	// 보스, 조합스테이지에서는 포탈을 하나만 생성한다.
+	if (NewGateIdx > 0 
+		&& (StageInfo.StageType == EStageCategoryInfo::E_Boss || StageInfo.StageType == EStageCategoryInfo::E_Craft))
+	{
+		Destroy();
+	}
 }
 
 void AGateBase::EnterGate()
@@ -59,7 +66,7 @@ void AGateBase::EnterGate()
 	}
 	else
 	{
-		OnEnterRequestReceived.Execute(Direction);
+		OnEnterRequestReceived.Execute(GateIdx);
 		Destroy();
 	}
 }

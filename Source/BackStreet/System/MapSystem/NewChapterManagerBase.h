@@ -59,7 +59,7 @@ public:
 
 	//Move next stage
 	UFUNCTION(BlueprintCallable)
-		void MoveStage(FVector2D direction);
+		void MoveStage(int32 GateIdx);
 
 	UFUNCTION(BlueprintCallable)
 		void OverwriteChapterInfo(FChapterInfo NewChapterInfo, FStageInfo NewStageInfo);
@@ -94,13 +94,7 @@ public:
 		int32 GetMaxChapterID() { return MaxChapterID; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FStageInfo& GetStageInfoWithCoordinate(FVector2D StageCoordinate);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FName GetStageTypeName(EStageCategoryInfo StageType);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsStageBlocked(FVector2D StageCoordinate);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FStageInfo GetBossStageInfo() { return CurrentChapterInfo.GetBossStageInfo(); }
@@ -110,7 +104,7 @@ public:
 		TArray<FStageInfo> GetStageInfoList() { return CurrentChapterInfo.StageInfoList; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FVector2D GetCurrentLocation() { return CurrentChapterInfo.CurrentStageCoordinate;  }
+		int32 GetCurrentLocation() { return CurrentChapterInfo.CurrentStageCoordinate;  }
 
 protected:
 	//Assign on blueprint
@@ -132,6 +126,9 @@ private:
 	TWeakObjectPtr<class AMainCharacterBase> PlayerRef;
 
 	bool bIsChapterFinished = false;
+
+	//ÇöÀç±îÁö È¹µæÇÑ ½ºÅ³ º¸»ó È½¼ö
+	int32 CurrentSkillRewardCount = 0;
 
 //========= Save System ================
 public:

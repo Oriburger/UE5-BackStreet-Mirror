@@ -202,7 +202,7 @@ void ASaveSlotManager::ApplyCachedData()
 	UE_LOG(LogSaveSystem, Log, TEXT("[ASaveSlotManager::Apply Data Preview] -------------------"));
 	UE_LOG(LogSaveSystem, Log, TEXT("- ChapterID : %d"), ProgressSaveData.ChapterInfo.ChapterID);
 	UE_LOG(LogSaveSystem, Log, TEXT("- SaveSlotName : %d"), *SaveSlotInfo.SaveSlotName);
-	UE_LOG(LogSaveSystem, Log, TEXT("- StageCoordinate: %s"), *ProgressSaveData.ChapterInfo.CurrentStageCoordinate.ToString());
+	UE_LOG(LogSaveSystem, Log, TEXT("- StageCoordinate: %d"), ProgressSaveData.ChapterInfo.CurrentStageCoordinate);
 	UE_LOG(LogSaveSystem, Log, TEXT("- StageInfoList: %d"), ProgressSaveData.ChapterInfo.StageInfoList.Num());
 	UE_LOG(LogSaveSystem, Log, TEXT("- CurrentMapName : %s"), *ProgressSaveData.StageInfo.MainLevelAsset.ToString());
 

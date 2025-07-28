@@ -194,14 +194,6 @@ public:
 		FStageInfo GetCurrentStageInfo() { return CurrentStageInfo; }
 
 private:
-	//Check Reward Duplication for next stage
-	UFUNCTION()
-		void EnsureUniqueStageRewards(FVector2D Coordinate);
-	
-	//@@@@@@@@반드시 SpawnGate 마지막에 호출해야함.@@@@@@@@@@@@@@
-	UFUNCTION()
-		void EnsureUniqueCraftGate(FVector2D Coordinate);
-
 	//Grant stage reward
 	UFUNCTION()
 		void GrantStageRewards();
