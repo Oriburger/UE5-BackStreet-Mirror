@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_en\n"
-"POT-Creation-Date: 2025-07-17 02:01\n"
-"PO-Revision-Date: 2025-07-17 02:01\n"
+"POT-Creation-Date: 2025-07-30 13:04\n"
+"PO-Revision-Date: 2025-07-30 13:04\n"
 "Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -2477,6 +2477,13 @@ msgctxt "ST_Item,Desc_HealPack_Small"
 msgid "Restores a small amount of HP."
 msgstr "Restores a small amount of HP."
 
+#. Key:	Desc_SkillModule
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_SkillModule"
+msgid "Equip skill modules to unlock useful combat skills."
+msgstr "Equip skill modules to unlock useful combat skills."
+
 #. Key:	Desc_SodaCan
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
@@ -2714,6 +2721,13 @@ msgstr "None"
 msgctxt "ST_Item,Name_Rare_Ticket"
 msgid "Rare Ticket"
 msgstr "Rare Ticket"
+
+#. Key:	Name_SkillModule
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_SkillModule"
+msgid "Skill Module"
+msgstr "Skill Module"
 
 #. Key:	Name_SodaCan
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -3118,8 +3132,8 @@ msgstr "This is a boss stage. Prepare thoroughly."
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Desc_CraftStage"
-msgid "Create skill modules using crafting materials."
-msgstr "Create skill modules using crafting materials."
+msgid "Use gears to purchase repair kits or enhance your boosterchips."
+msgstr "Use gears to purchase repair kits or enhance your boosterchips."
 
 #. Key:	Desc_CurrencyTip
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3349,8 +3363,8 @@ msgstr "Booster Chip Tip"
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Name_CraftStage"
-msgid "Crafting Stage"
-msgstr "Crafting Stage"
+msgid "Special Stage"
+msgstr "Special Stage"
 
 #. Key:	Name_CurrencyTip
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
