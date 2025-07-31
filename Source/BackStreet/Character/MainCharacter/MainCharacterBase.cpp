@@ -416,6 +416,9 @@ void AMainCharacterBase::StartJump(const FInputActionValue& Value)
 	if (GetCharacterMovement()->IsFalling()) return;
 	if (!ActionTrackingComponent->GetIsActionReady(FName("Skill"))
 		|| !ActionTrackingComponent->GetIsActionReady(FName("Roll"))
+		|| GetIsActionActive(ECharacterActionType::E_Stun)
+		|| GetIsActionActive(ECharacterActionType::E_Die)
+		|| GetIsActionActive(ECharacterActionType::E_KnockedDown)
 		|| !ActionTrackingComponent->GetIsActionReady(FName("Aim"))) return;
 	
 	ResetActionState(true);
@@ -460,8 +463,10 @@ void AMainCharacterBase::Roll()
 	if (UGameplayStatics::GetGlobalTimeDilation(GetWorld()) <= 0.01) return;
 	if (ActionTrackingComponent->GetIsActionInProgress(FName("Skill"))) return; 
 	if (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Attack)) return;
+	if (GetIsActionActive(ECharacterActionType::E_Stun)
+		|| GetIsActionActive(ECharacterActionType::E_Die)
+		|| GetIsActionActive(ECharacterActionType::E_KnockedDown)) return;=
 	if (!CharacterGameplayInfo.bCanRoll) return;
-	if (GetIsActionActive(ECharacterActionType::E_Stun)) return;
 
 	if (GetIsActionActive(ECharacterActionType::E_Attack))
 	{
@@ -698,7 +703,7 @@ void AMainCharacterBase::TryAttack()
 }
 
 bool AMainCharacterBase::TrySkill(int32 SkillID)
-{	
+{
 	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Attack)
 	{
 		StopAttack();
