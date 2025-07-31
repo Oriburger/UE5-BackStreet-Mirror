@@ -46,19 +46,7 @@ private:
 //======== Getter Function ==============
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FVector2D GetNextCoordinate(FVector2D Direction, FVector2D CurrCoordinate);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetStageCount() { return CurrentChapterInfo.GridSize * 2 - 1; }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		int32 GetStageIdx(FVector2D Location) { return CurrentChapterInfo.GridSize * Location.Y + Location.X; }
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FVector2D GetStageCoordinate(int32 StageIdx);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsCoordinateInBoundary(FVector2D Coordinate);
+		int32 GetStageCount() { return CurrentChapterInfo.StageCount; }
 
 protected:
 	UFUNCTION(BlueprintCallable)
@@ -66,7 +54,7 @@ protected:
 
 	//Return the randomly shuffled list of world for each stage
 	UFUNCTION(BlueprintCallable)
-		TArray<TSoftObjectPtr<UWorld> > GetShuffledWorldList();
+		TArray<TSoftObjectPtr<UWorld> > GetShuffledWorldList(EStageCategoryInfo StageCategory);
 	
 private:
 	FChapterInfo CurrentChapterInfo;

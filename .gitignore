@@ -82,5 +82,7 @@ Plugins/*
 
 # 빌드 데이터 파일
 *_BuiltData.uasset
-/Content/StarterContent
+Content/StarterContent/*
 
+# 영상 파일
+Content/Movies/*

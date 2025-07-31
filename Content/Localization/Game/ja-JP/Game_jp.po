@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_jp\n"
-"POT-Creation-Date: 2025-07-17 02:01\n"
-"PO-Revision-Date: 2025-07-17 02:01\n"
+"POT-Creation-Date: 2025-07-30 13:04\n"
+"PO-Revision-Date: 2025-07-30 13:04\n"
 "Language-Team: \n"
 "Language: ja-JP\n"
 "MIME-Version: 1.0\n"
@@ -2477,6 +2477,13 @@ msgctxt "ST_Item,Desc_HealPack_Small"
 msgid "Restores a small amount of HP."
 msgstr "体力を少し回復する。"
 
+#. Key:	Desc_SkillModule
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_SkillModule"
+msgid "Equip skill modules to unlock useful combat skills."
+msgstr "スキルモジュールを装着すると、戦闘に役立つスキルを使用できる。"
+
 #. Key:	Desc_SodaCan
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
@@ -2714,6 +2721,13 @@ msgstr "なし"
 msgctxt "ST_Item,Name_Rare_Ticket"
 msgid "Rare Ticket"
 msgstr "レアチケット"
+
+#. Key:	Name_SkillModule
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_SkillModule"
+msgid "Skill Module"
+msgstr "スキルモジュール"
 
 #. Key:	Name_SodaCan
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -3118,8 +3132,8 @@ msgstr "ボスとの戦闘ステージです。しっかりと準備しましょ
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Desc_CraftStage"
-msgid "Create skill modules using crafting materials."
-msgstr "クラフト素材を使ってスキルモジュールを作成します。"
+msgid "Use gears to purchase repair kits or enhance your boosterchips."
+msgstr "ギアを使って修理キットを購入したり、所持中のブースターチップを強化することができる。"
 
 #. Key:	Desc_CurrencyTip
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3349,8 +3363,8 @@ msgstr "ブースターチップのヒント"
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Name_CraftStage"
-msgid "Crafting Stage"
-msgstr "クラフトステージ"
+msgid "Special Stage"
+msgstr "特殊ステージ"
 
 #. Key:	Name_CurrencyTip
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial

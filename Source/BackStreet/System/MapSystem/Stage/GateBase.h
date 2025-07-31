@@ -7,7 +7,7 @@
 #include "GateBase.generated.h"
 
 
-DECLARE_DELEGATE_OneParam(FDelegateMove, FVector2D);
+DECLARE_DELEGATE_OneParam(FDelegateMove, int32);
 
 UCLASS()
 class BACKSTREET_API AGateBase : public AActor
@@ -45,7 +45,7 @@ public:
 public:
 	// Initialize Gate
 	UFUNCTION(BlueprintNativeEvent)
-		void InitGate(FVector2D NewDirection, FStageInfo StageInfo);
+		void InitGate(int32 NewGateIdx, FStageInfo StageInfo);
 
 	// Check Gate Is Active and RequsetMoveStage
 	UFUNCTION(BlueprintCallable)
@@ -64,10 +64,11 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		EStageCategoryInfo NextStageType;
 
+	UPROPERTY(BlueprintReadOnly)
+		int32 GateIdx = 0; 
+
 private:
 	bool bIsGateActive;
-	//Gate's direction to move on n*n grid chapter
-	FVector2D Direction;
 
 //-------- ±× ¿Ü-----------------------
 private:

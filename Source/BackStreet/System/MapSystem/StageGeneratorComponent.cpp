@@ -4,6 +4,7 @@
 #include "StageGeneratorComponent.h"
 #include "../../Global/BackStreetGameModeBase.h"
 #include "NewChapterManagerBase.h"
+#include "Algo/RandomShuffle.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values for this component's properties
@@ -36,7 +37,6 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 
 	UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate() -------"));
 
-	//####### 선형 임시코드 ####### 
 	TArray<FStageInfo> result;
 	
 	FStageInfo stageInfo;
@@ -48,21 +48,18 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 	{
 		templateIdx = UKismetMathLibrary::RandomInteger(CurrentChapterInfo.StageTemplateList.Num());
 		stageTemplateInfo = CurrentChapterInfo.StageTemplateList[templateIdx];
-		checkf(stageTemplateInfo.StageComposition.Num() == FMath::Pow(CurrentChapterInfo.GridSize, 2.0f), TEXT("UStageGeneratorComponent::Generate(), invalid template data"));
+		checkf(stageTemplateInfo.StageComposition.Num() == CurrentChapterInfo.StageCount, TEXT("UStageGeneratorComponent::Generate(), invalid template data"));
 	}
 	UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate(), template idx : %d"), templateIdx);
 
-	TArray<TSoftObjectPtr<UWorld> > shuffledCombatWorldList = GetShuffledWorldList();
-
 	//this is not total stage count in grid, but vertical stage count.
-	const int32 stageCount = FMath::Pow(CurrentChapterInfo.GridSize, 2.0f);
+	const int32 stageCount = CurrentChapterInfo.StageCount;
 	int32 nextCombatWorldIdx = 0;
 
 	for (int32 stageIdx = 0; stageIdx < stageCount; stageIdx++)
 	{
 		//1. set stage type
-		FVector2D stageCoordinate = GetStageCoordinate(stageIdx);
-		UE_LOG(LogStage, Warning, TEXT("Stage Idx : %d,  stageCoordinate : %s"), stageIdx, *stageCoordinate.ToString());
+		int32 stageCoordinate = stageIdx;
 		
 		if (templateIdx != -1)
 		{
@@ -70,73 +67,60 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 		}
 		else
 		{
-			TArray<EStageCategoryInfo> stageTypeList = CurrentChapterInfo.StageTypeListForLevelIdx[stageCoordinate.Y + stageCoordinate.X].StageTypeList;
+			TArray<EStageCategoryInfo> stageTypeList = CurrentChapterInfo.StageTypeListForLevelIdx[stageCoordinate].StageTypeList;
 			checkf(stageTypeList.Num() > 0, TEXT("Stage type list data is invalid "));
 			stageInfo.StageType = stageTypeList[UKismetMathLibrary::RandomInteger(stageTypeList.Num())];
 		}
 
+		TArray<TSoftObjectPtr<UWorld> > shuffledCombatWorldList = GetShuffledWorldList(stageInfo.StageType);
+
 		//2. set stage coordinate and level
-		stageInfo.Coordinate = GetStageCoordinate(stageIdx);
+		stageInfo.Coordinate = stageIdx;
+		UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate() - Stage Idx : %d,  stageCoordinate : %d"), stageIdx, stageInfo.Coordinate);
+
 
 		//3. set default icon
 		if (CurrentChapterInfo.StageIconInfoMap.Contains(stageInfo.StageType))
 		{
 			stageInfo.StageIcon = *CurrentChapterInfo.StageIconInfoMap.Find(stageInfo.StageType);
+			UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate() - Stage Icon : %s"), *stageInfo.StageIcon->GetName());
 		}
-
+		
 		//4. set reward and stage's special property
-		if (stageInfo.StageType == EStageCategoryInfo::E_TimeAttack) stageInfo.StageType = EStageCategoryInfo::E_Exterminate;
-		else if (stageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack) stageInfo.StageType = EStageCategoryInfo::E_EliteExterminate;
-
-		switch (stageInfo.StageType)
+		if (stageInfo.GetIsCombatStage(false))
 		{
-		case EStageCategoryInfo::E_TimeAttack:
-		case EStageCategoryInfo::E_EliteTimeAttack:
-			/*
-			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
-			stageInfo.TimeLimitValue = CurrentChapterInfo.EliteTimeAtkStageTimeOut;
-			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType);
+			nextCombatWorldIdx = stageCoordinate % stageCount;
+			const bool bIsFixedSkillRewardStage =	(CurrentChapterInfo.CurrentSkillRewardCount < CurrentChapterInfo.MaxSkillRewardCount
+													&& CurrentChapterInfo.FixedSkillRewardStageIDList.Contains(stageIdx));
+			
+			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType, {});
+			//고정 스킬 보상 스테이지를 설정한다.
+			if (bIsFixedSkillRewardStage)
+			{
+				stageInfo.RewardInfoList.Insert(GetRewardItemInfo(CurrentChapterInfo.SkillItemID), 0);
+				CurrentChapterInfo.CurrentSkillRewardCount += 1;
+			}
+
 			if (stageInfo.RewardInfoList.Num() > 0)
 			{
 				stageInfo.StageIcon = stageInfo.RewardInfoList[0].ItemImage;
 			}
-			break;*/
-		case EStageCategoryInfo::E_Exterminate:
-		case EStageCategoryInfo::E_EliteExterminate:
-		case EStageCategoryInfo::E_Escort:
-		case EStageCategoryInfo::E_EliteEscort:
-			nextCombatWorldIdx = (int32)(stageCoordinate.Y + stageCoordinate.X + stageCount - 1) % stageCount;
+			UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate() - Stage Type : %d, Reward Count : %d"), (int32)stageInfo.StageType, stageInfo.RewardInfoList.Num());
+		}
+		else if (stageInfo.StageType == EStageCategoryInfo::E_Entry)
+		{
 			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType, {});
-			if (stageInfo.RewardInfoList.Num() > 0)
-			{
-				stageInfo.StageIcon = stageInfo.RewardInfoList[0].ItemImage;
-			}
-			break;
-		case EStageCategoryInfo::E_Entry:
-			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType, {});
-			break;
+			UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate() - Stage Type : %d, Reward Count : %d"), (int32)stageInfo.StageType, stageInfo.RewardInfoList.Num());
 		}
 
 		//5. set enemy composition
-		if (stageInfo.StageType == EStageCategoryInfo::E_Boss || stageInfo.StageType == EStageCategoryInfo::E_Exterminate
-			|| stageInfo.StageType == EStageCategoryInfo::E_EliteExterminate || stageInfo.StageType == EStageCategoryInfo::E_TimeAttack
-			|| stageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack || stageInfo.StageType == EStageCategoryInfo::E_Entry
-			|| stageInfo.StageType == EStageCategoryInfo::E_EliteEscort || stageInfo.StageType == EStageCategoryInfo::E_Escort)
+		if (stageInfo.GetIsCombatStage())
 		{
 			checkf(CurrentChapterInfo.StageEnemyCompositionInfoMap.Contains(stageInfo.StageType), TEXT("EnemyCompositionInfoMap is empty"));
 			stageInfo.EnemyCompositionInfo = *CurrentChapterInfo.StageEnemyCompositionInfoMap.Find(stageInfo.StageType);
 		}
+		UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate() - Stage Type : %d, Enemy Composition Count : %d"), (int32)stageInfo.StageType, stageInfo.EnemyCompositionInfo.CompositionNameList.Num());
 		result.Add(stageInfo);
-	}
-
-	//제거 예정
-	for (FVector2D& coordinate : CurrentChapterInfo.BlockedPosList)
-	{
-		result[GetStageIdx(coordinate)].bIsBlocked = true;
-	}
-	for (int32 idx : CurrentChapterInfo.BlockedStageIdxList)
-	{
-		result[idx].bIsBlocked = true;
 	}
 
 	return CurrentChapterInfo.StageInfoList = result;
@@ -146,8 +130,7 @@ TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidate
 {
 	if (!CurrentChapterInfo.StageRewardCandidateInfoMap.Contains(StageType)) return {};
 
-	FStageRewardCandidateInfoList rewardInfoList = *CurrentChapterInfo.StageRewardCandidateInfoMap.Find(StageType);
-	TArray<int32> rewardItemIDList;
+	const FStageRewardCandidateInfoList& rewardInfoList = *CurrentChapterInfo.StageRewardCandidateInfoMap.Find(StageType);
 	TArray<FItemInfoDataStruct> rewardItemInfoList;
 
 	if (rewardInfoList.RewardCandidateInfoList.IsEmpty())
@@ -156,71 +139,39 @@ TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidate
 		return {};
 	}
 
-	//pick several item id by reward candidate infos
-	for (auto& rewardCandidateInfo : rewardInfoList.RewardCandidateInfoList)
+	// 무작위 순서로 후보 리스트 순회
+	TArray<FStageRewardCandidateInfo> ShuffledList = rewardInfoList.RewardCandidateInfoList;
+	Algo::RandomShuffle(ShuffledList);
+
+	TSet<int32> alreadySelectedIDs;
+	if (CurrentChapterInfo.MaxSkillRewardCount <= CurrentChapterInfo.CurrentSkillRewardCount)
 	{
-		if (rewardCandidateInfo.RewardItemIDList.Num() != rewardCandidateInfo.RewardItemProbabilityList.Num()) continue;
+		// 스킬 보상 횟수를 초과한 경우, 스킬 아이템은 제외
+		ExceptIDList.Add(CurrentChapterInfo.SkillItemID);
+	}
 
-		// calculate total probability
-		float totalProbability = 0.0f;
-		for (float probability : rewardCandidateInfo.RewardItemProbabilityList)
+	for (const FStageRewardCandidateInfo& candidate : ShuffledList)
+	{ 
+		int32 ItemID = candidate.RewardItemID;
+		float probability = candidate.RewardItemProbability;
+
+		if (ExceptIDList.Contains(ItemID)) continue;
+		if (alreadySelectedIDs.Contains(ItemID)) continue;
+
+		float rand = FMath::FRandRange(0.0f, 1.0f);
+		if (rand <= probability)
 		{
-			totalProbability += probability;
-		}
+			alreadySelectedIDs.Add(ItemID);
 
-		// generate random value
-		float randomValue = FMath::FRandRange(0.0f, totalProbability);
-
-		// select reward by cumulative probability
-		float cumulativeProbability = 0.0f;
-		for (int32 candidateIdx = 0; candidateIdx < rewardCandidateInfo.RewardItemIDList.Num(); ++candidateIdx)
-		{
-			if (ExceptIDList.Contains(rewardCandidateInfo.RewardItemIDList[candidateIdx])) continue;
-
-			cumulativeProbability += rewardCandidateInfo.RewardItemProbabilityList[candidateIdx];
-
-			if (randomValue <= cumulativeProbability)
-			{
-				// selected reward item id
-				int32 selectedRewardItemID = rewardCandidateInfo.RewardItemIDList[candidateIdx];
-
-				rewardItemIDList.Add(selectedRewardItemID);
-				break;
-			}
+			FItemInfoDataStruct itemInfo = GetRewardItemInfo(ItemID);
+			itemInfo.ItemAmount = 1;
+			rewardItemInfoList.Add(itemInfo);
 		}
 	}
-	
-	//만약, rewardItemIDList가 비어있다면? 그냥 랜덤하게 지급한다
-	if (rewardItemIDList.IsEmpty())
-	{
-		UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::GetRewardListFromCandidates(%d), cumulative pick failed. random idx pick applied"), (int32)StageType);
 
-		int32 randomIdx = UKismetMathLibrary::RandomInteger(rewardInfoList.RewardCandidateInfoList.Num());
-		FStageRewardCandidateInfo randomRewardInfo = rewardInfoList.RewardCandidateInfoList[randomIdx];
-		randomIdx = UKismetMathLibrary::RandomInteger(randomRewardInfo.RewardItemIDList.Num());
-
-		int32 selectedRewardItemID = randomRewardInfo.RewardItemIDList[randomIdx];
-		rewardItemIDList.Add(selectedRewardItemID);
-	}
-	
-	//check duplicate item's count and add reward info list
-	rewardItemIDList.Sort();
-	rewardItemIDList.Add(-1); 
-
-	int32 prevID = -1, count = 0;
-	for (const int32& currID : rewardItemIDList)
-	{
-		if (prevID == -1) prevID = currID, count = 1;
-		else if (prevID != currID)
-		{
-			FItemInfoDataStruct newItemInfo = GetRewardItemInfo(prevID);
-			newItemInfo.ItemAmount = count;
-			rewardItemInfoList.Add(newItemInfo);
-			prevID = currID, count = 1;
-		}	
-	}
 	return rewardItemInfoList;
 }
+
 
 FItemInfoDataStruct UStageGeneratorComponent::GetRewardItemInfo(int32 ItemID)
 {
@@ -240,30 +191,6 @@ FItemInfoDataStruct UStageGeneratorComponent::GetRewardItemInfo(int32 ItemID)
 	return FItemInfoDataStruct(); 
 }
 
-FVector2D UStageGeneratorComponent::GetNextCoordinate(FVector2D Direction, FVector2D CurrCoordinate)
-{
-	CurrCoordinate.Y += Direction.Y;
-	CurrCoordinate.X += Direction.X;
-	if (GetIsCoordinateInBoundary(CurrCoordinate))
-	{
-		return CurrCoordinate;
-	}
-	return FVector2D(-1);
-}
-
-FVector2D UStageGeneratorComponent::GetStageCoordinate(int32 StageIdx)
-{
-	if (CurrentChapterInfo.GridSize <= 0 || StageIdx < 0) return FVector2D();
-	return FVector2D(StageIdx % CurrentChapterInfo.GridSize, StageIdx / CurrentChapterInfo.GridSize);
-}
-
-bool UStageGeneratorComponent::GetIsCoordinateInBoundary(FVector2D Coordinate)
-{
-	if (Coordinate.Y >= 0 && Coordinate.Y < CurrentChapterInfo.GridSize
-		&& Coordinate.X >= 0 && Coordinate.X < CurrentChapterInfo.GridSize) return true;
-	return false;
-}
-
 TSoftObjectPtr<UWorld> UStageGeneratorComponent::GetRandomWorld(TArray<TSoftObjectPtr<UWorld>>& WorldList)
 {
 	checkf(!WorldList.IsEmpty(), TEXT("WorldList Is Empty"));
@@ -271,15 +198,19 @@ TSoftObjectPtr<UWorld> UStageGeneratorComponent::GetRandomWorld(TArray<TSoftObje
 	return WorldList[idx];
 }
 
-TArray<TSoftObjectPtr<UWorld>> UStageGeneratorComponent::GetShuffledWorldList()
+TArray<TSoftObjectPtr<UWorld>> UStageGeneratorComponent::GetShuffledWorldList(EStageCategoryInfo StageCategory)
 {
 	//Temporary code for BIC -----
-	checkf(CurrentChapterInfo.StageLevelInfoMap.Contains(EStageCategoryInfo::E_Exterminate), TEXT("StageLevelInfoMap is not valid for exterminate stage"));
-	FLevelSoftObjectPtrList levelInfo = *CurrentChapterInfo.StageLevelInfoMap.Find(EStageCategoryInfo::E_Exterminate);
+	if (!CurrentChapterInfo.StageLevelInfoMap.Contains(StageCategory))
+	{
+		UE_LOG(LogStage, Error, TEXT("StageLevelInfoMap is not valid for exterminate stage"));
+		return {};
+	}
+	FLevelSoftObjectPtrList levelInfo = *CurrentChapterInfo.StageLevelInfoMap.Find(StageCategory);
 	
 	levelInfo.LevelList.Sort([this](const TSoftObjectPtr<UWorld> item1, const TSoftObjectPtr<UWorld> item2) {
 		return FMath::FRand() < 0.5f;
 	});
-	CurrentChapterInfo.StageLevelInfoMap[EStageCategoryInfo::E_Exterminate] = levelInfo;
+	CurrentChapterInfo.StageLevelInfoMap[StageCategory] = levelInfo;
 	return levelInfo.LevelList;
 }

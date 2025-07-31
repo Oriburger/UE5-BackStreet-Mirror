@@ -56,7 +56,7 @@ void UStageManagerComponent::InitStage(FStageInfo NewStageInfo)
 
 	UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::InitStage-------------"));
 	UE_LOG(LogStage, Warning, TEXT("> Stage Type : %d"), CurrentStageInfo.StageType);
-	UE_LOG(LogStage, Warning, TEXT("> Coordinate : %s"), *CurrentStageInfo.Coordinate.ToString());
+	UE_LOG(LogStage, Warning, TEXT("> Coordinate : %d"), CurrentStageInfo.Coordinate);
 
 	//Update visited craft stage count
 	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft)
@@ -137,7 +137,7 @@ void UStageManagerComponent::RegisterActorList(TArray<AActor*> TargetActorList)
 
 void UStageManagerComponent::OverwriteStageInfo(FChapterInfo NewChapterInfo, FStageInfo NewStageInfo)
 {
-	UE_LOG(LogSaveSystem, Log, TEXT("UStageManagerComponent::OverwriteStageInfo - Coordinate : %s"), *NewStageInfo.Coordinate.ToString());
+	UE_LOG(LogSaveSystem, Log, TEXT("UStageManagerComponent::OverwriteStageInfo - Coordinate : %d"), NewStageInfo.Coordinate);
 	CurrentChapterInfo = NewChapterInfo;
 	CurrentStageInfo = NewStageInfo;
 }
@@ -312,14 +312,7 @@ TArray<AActor*> UStageManagerComponent::TryUpdateSpawnPointProperty()
 void UStageManagerComponent::SpawnEnemy()
 {
 	//Basic condition (stage type check and data count check
-	if (CurrentStageInfo.StageType != EStageCategoryInfo::E_Entry
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_TimeAttack
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Exterminate
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Escort
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteTimeAttack
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteExterminate
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteEscort
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss) return;
+	if (!CurrentStageInfo.GetIsCombatStage()) return;
 
 	if (CurrentStageInfo.EnemyCompositionInfo.CompositionNameList.Num() == 0)
 	{
@@ -421,14 +414,7 @@ void UStageManagerComponent::SpawnItemBox()
 {
 	//Basic condition (stage type check and data count check
 	if (!IsValid(ItemBoxClass)) return;
-	if (CurrentStageInfo.StageType != EStageCategoryInfo::E_Entry
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_TimeAttack
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Exterminate
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Escort
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteTimeAttack
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteExterminate
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_EliteEscort
-		&& CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss) return;
+	if (!CurrentStageInfo.GetIsCombatStage()) return;
 	
 	//Check data is valid
 	if (!CurrentChapterInfo.MaxItemBoxSpawnCountMap.Contains(CurrentStageInfo.StageType))
@@ -497,28 +483,19 @@ void UStageManagerComponent::SpawnPortal(int32 GateCount)
 			{
 				//OnActorSpawned.Broadcast(spawnLocation, newGate);
 			}
-			
-			FName directionTag = CurrentStageInfo.PortalDirectionTagList[idx];
-			FVector2D direction = ((directionTag == FName("Up")) ? FVector2D(1, 0)
-								: (directionTag == FName("Down")) ? FVector2D(0, 1) : FVector2D(0));
-			checkf(direction != FVector2D(0), TEXT("Gate spawn point direction tag is invalid"));
-			if (!stageGeneratorRef->GetIsCoordinateInBoundary(CurrentStageInfo.Coordinate + direction)
-				|| ChapterManagerRef.Get()->GetIsStageBlocked(CurrentStageInfo.Coordinate + direction))
-			{
-				newGate->Destroy();
-				continue;
-			}
 
-			FStageInfo nextStageInfo = ChapterManagerRef.Get()->GetStageInfoWithCoordinate(CurrentStageInfo.Coordinate + direction);
-			newGate->InitGate(direction, nextStageInfo);
+			FStageInfo nextStageInfo = ChapterManagerRef.Get()->GetStageInfo(CurrentStageInfo.Coordinate + 1);
+			newGate->InitGate(idx, nextStageInfo);
 
 			//temp
 			newGate->ActivateGate();
 			newGate->OnEnterRequestReceived.BindUFunction(GetOwner(), FName("MoveStage"));
+
+			//다음 스테이지가 보스나 제작 스테이지라면, 포탈을 1개만 생성한다
+			if (nextStageInfo.StageType == EStageCategoryInfo::E_Boss
+				|| nextStageInfo.StageType == EStageCategoryInfo::E_Craft) break;
 		}
 	}
-
-	EnsureUniqueCraftGate(CurrentStageInfo.Coordinate);
 }
 
 void UStageManagerComponent::CheckLoadStatusAndStartGame()
@@ -562,10 +539,6 @@ void UStageManagerComponent::CheckLoadStatusAndStartGame()
 
 void UStageManagerComponent::StartStage()
 {
-	//Visit Check
-	//if (CurrentStageInfo.bIsVisited) return;
-	//CurrentStageInfo.bIsVisited = true;
-
 	//Load End Broadcast (Safe with latent delay)
 	OnStageLoadDone.Broadcast();
 
@@ -581,9 +554,6 @@ void UStageManagerComponent::StartStage()
 	UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::StartStage : ItemBox"));
 	SpawnItemBox();
 
-	//Check next stage's reward validation
-	EnsureUniqueStageRewards(CurrentStageInfo.Coordinate);
-
 	//Move player to start location
 	ACharacter* playerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	if (IsValid(playerCharacter))
@@ -593,22 +563,8 @@ void UStageManagerComponent::StartStage()
 		playerCharacter->GetController()->SetControlRotation(CurrentStageInfo.PlayerStartRotation);
 	}
 
-	//Start timer if stage type if timeattack
-	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
-	{
-		FTimerDelegate stageOverDelegate;
-		stageOverDelegate.BindUFunction(this, FName("FinishStage"), false);
 
-		float extraTime = !PlayerRef.IsValid() ? 0.0f : PlayerRef.Get()->GetCharacterGameplayInfo().ExtraStageTime;
-		GetOwner()->GetWorldTimerManager().SetTimer(TimeAttackTimerHandle, stageOverDelegate, 1.0f, false, CurrentStageInfo.TimeLimitValue + extraTime);
-
-		//UI Event
-		OnTimeAttackStageBegin.Broadcast();
-	}
-	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_MiniGame
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Gatcha)
+	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft)
 	{
 		FinishStage(true);
 	}
@@ -631,13 +587,9 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 	if (!CurrentStageInfo.bIsGameOver && CurrentStageInfo.StageType != EStageCategoryInfo::E_Boss)
 	{
 		SpawnPortal(2);
-		
 	}
 
-	if (bStageClear &&
-		(CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteExterminate))
+	if (bStageClear && CurrentStageInfo.GetIsCombatStage(false))
 	{
 		//Stage Clear UI Update using delegate
 		OnStageCleared.Broadcast();
@@ -648,130 +600,10 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry) //&& !ChapterManagerRef.Get()->GetTutorialCompletion())
 		{
 			UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::FinishStage - Tutorial level will be activated"));
-			//ChapterManagerRef.Get()->SetTutorialCompletion(true);
 		}
-
 	}
-	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
-	{
-		if (bStageClear)
-		{
-			//Stage Clear UI Update using delegate
-			OnStageCleared.Broadcast();
 
-			//Stage Reward
-			GrantStageRewards();
-		}
-		else
-		{
-			//Time Out using delegate
-			OnTimeIsOver.Broadcast();	
-
-		}
-		//TimeAttack UI Event
-		OnTimeAttackStageEnd.Broadcast();
-	}
-	
-	//StageFinished Delegate
 	OnStageFinished.Broadcast(CurrentStageInfo);
-}
-
-void UStageManagerComponent::EnsureUniqueStageRewards(FVector2D Coordinate)
-{
-	UE_LOG(LogStage, Warning, TEXT("===========UStageManagerComponent::EnsureUniqueStageRewards(%d, %d)==================="), (int32)Coordinate.Y, (int32)Coordinate.X);
-
-	const TArray<FVector2D> directions = { {0.0f, 1.0f}, {1.0f, 0.0f} }; //좌, 우 검색
-	TArray<int32> rewardIDList; //{Left, Right} Stage
-	
-	//현재 Component가 살아있다 -> Owner가 살아있음이 보장 -> GeneratorComponent도 살아있음
-	UStageGeneratorComponent* stageGeneratorRef = ChapterManagerRef.Get()->StageGeneratorComponent;
-
-	//좌, 우 존재 유무 검사
-	for (int32 idx = 0; idx < directions.Num(); idx++)
-	{
-		FVector2D nextCoordinate = Coordinate + directions[idx];
-		bool result = !stageGeneratorRef->GetIsCoordinateInBoundary(nextCoordinate) 
-					|| ChapterManagerRef.Get()->GetStageInfoWithCoordinate(nextCoordinate).bIsBlocked;
-		if (result)
-		{
-			UE_LOG(LogStage, Warning, TEXT("> One side is blocked, return the function."));
-			return;  //한쪽이 Blocked 되어있거나 맵 경계 밖이라면 수정을 할 필요가 없음
-		}
-	}
-	
-	FStageInfo& leftStageInfo = ChapterManagerRef.Get()->GetStageInfoWithCoordinate(Coordinate + directions[0]);
-	FStageInfo& rightStageInfo = ChapterManagerRef.Get()->GetStageInfoWithCoordinate(Coordinate + directions[1]);
-
-	if (leftStageInfo.StageType == EStageCategoryInfo::E_Craft || rightStageInfo.StageType == EStageCategoryInfo::E_Craft)
-	{
-		UE_LOG(LogStage, Warning, TEXT("> At least one side is Craft stage, return the function."));
-		return;
-	}
-
-	if (!leftStageInfo.RewardInfoList.IsEmpty()
-		&& leftStageInfo.RewardInfoList.Num() == rightStageInfo.RewardInfoList.Num())
-	{
-		UE_LOG(LogStage, Warning, TEXT("> first comp - %d, %d"), leftStageInfo.RewardInfoList[0].ItemID, rightStageInfo.RewardInfoList[0].ItemID);
-
-		//정렬 되어있음을 가정
-		for (int32 idx = 0; idx < leftStageInfo.RewardInfoList.Num(); idx++)
-		{
-			if (leftStageInfo.RewardInfoList[idx].ItemID != rightStageInfo.RewardInfoList[idx].ItemID)
-			{
-				UE_LOG(LogStage, Warning, TEXT("> Difference is detected, return the function"));
-				return;
-			}
-		}
-		
-		//새로운 보상으로 지정한다.
-		for (auto& rewardInfo : rightStageInfo.RewardInfoList)//convert to id list
-			rewardIDList.Add(rewardInfo.ItemID);
-		leftStageInfo.RewardInfoList = stageGeneratorRef->GetRewardListFromCandidates(leftStageInfo.StageType, rewardIDList);
-
-		if (leftStageInfo.RewardInfoList.IsEmpty())
-		{
-			UE_LOG(LogStage, Warning, TEXT("> change reward failed, return to original one"));
-			leftStageInfo.RewardInfoList = rightStageInfo.RewardInfoList;
-		}
-		leftStageInfo.StageIcon = leftStageInfo.RewardInfoList[0].ItemImage;
-		UE_LOG(LogStage, Warning, TEXT("> after change - %d, %d"), leftStageInfo.RewardInfoList[0].ItemID, rightStageInfo.RewardInfoList[0].ItemID);
-
-	}
-}
-
-void UStageManagerComponent::EnsureUniqueCraftGate(FVector2D Coordinate)
-{
-	UE_LOG(LogStage, Warning, TEXT("===========UStageManagerComponent::EnsureUniqueStageRewards(%d, %d)==================="), (int32)Coordinate.Y, (int32)Coordinate.X);
-
-	const TArray<FVector2D> directions = { {0.0f, 1.0f}, {1.0f, 0.0f} }; //좌, 우 검색
-	TArray<int32> rewardIDList; //{Left, Right} Stage
-
-	//현재 Component가 살아있다 -> Owner가 살아있음이 보장 -> GeneratorComponent도 살아있음
-	UStageGeneratorComponent* stageGeneratorRef = ChapterManagerRef.Get()->StageGeneratorComponent;
-
-	//좌, 우 존재 유무 검사
-	for (int32 idx = 0; idx < directions.Num(); idx++)
-	{
-		FVector2D nextCoordinate = Coordinate + directions[idx];
-		bool result = !stageGeneratorRef->GetIsCoordinateInBoundary(nextCoordinate)
-			|| ChapterManagerRef.Get()->GetStageInfoWithCoordinate(nextCoordinate).bIsBlocked;
-		if (result)
-		{
-			UE_LOG(LogStage, Warning, TEXT("> One side is blocked, return the function."));
-			return;  //한쪽이 Blocked 되어있거나 맵 경계 밖이라면 수정을 할 필요가 없음
-		}
-	}
-
-	FStageInfo& leftStageInfo = ChapterManagerRef.Get()->GetStageInfoWithCoordinate(Coordinate + directions[0]);
-	FStageInfo& rightStageInfo = ChapterManagerRef.Get()->GetStageInfoWithCoordinate(Coordinate + directions[1]);
-
-	if (leftStageInfo.StageType == EStageCategoryInfo::E_Craft && rightStageInfo.StageType == EStageCategoryInfo::E_Craft)
-	{
-		//반드시 SpawnGate 마지막에 호출해야함.
-		SpawnedActorList[SpawnedActorList.Num() - 1]->Destroy();
-		SpawnedActorList.RemoveAt(SpawnedActorList.Num() - 1);
-	}
 }
 
 void UStageManagerComponent::GrantStageRewards()
@@ -791,6 +623,7 @@ void UStageManagerComponent::GrantStageRewards()
 		{
 			playerCharacter->ItemInventory->AddItem(rewardItemInfo.ItemID, rewardItemInfo.ItemAmount);
 		}
+		break;
 	}
 }
 
@@ -826,21 +659,9 @@ void UStageManagerComponent::UpdateEnemyCountAndCheckClear()
 bool UStageManagerComponent::CheckStageClearStatus()
 {
 	//Basic condition (stage type check)
-	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Exterminate
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteExterminate
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Escort
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteEscort
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_Boss
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteExterminate)
+	if (CurrentStageInfo.GetIsCombatStage())
 	{
 		return RemainingEnemyCount == 0;
-	}
-	else if (CurrentStageInfo.StageType == EStageCategoryInfo::E_TimeAttack
-		|| CurrentStageInfo.StageType == EStageCategoryInfo::E_EliteTimeAttack)
-	{
-		bool bIsTimeLeft = GetRemainingTime() > 0.0f;
-		return RemainingEnemyCount == 0 && bIsTimeLeft;
 	}
 	return false;
 }

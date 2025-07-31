@@ -105,6 +105,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
 		FVector InitialCapsuleComponentScale = FVector::ZeroVector;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Transform")
+		float CapsuleHalfHeight = 84.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
+		FVector WidgetLocationOffset = FVector::ZeroVector;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
+		FVector TargetingArrowLocationOffset = FVector::ZeroVector;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
 		UAnimBlueprintGeneratedClass* AnimBlueprint;
 

@@ -50,6 +50,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 KillCount = 0;
+
+	// 플레이어가 해금한 스킬 정보
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<int32> UnlockedPlayerSkillIDList;
 };
 
 USTRUCT(BlueprintType)
