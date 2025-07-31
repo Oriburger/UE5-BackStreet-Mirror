@@ -465,7 +465,7 @@ void AMainCharacterBase::Roll()
 	if (!GetIsActionActive(ECharacterActionType::E_Idle) && !GetIsActionActive(ECharacterActionType::E_Attack)) return;
 	if (GetIsActionActive(ECharacterActionType::E_Stun)
 		|| GetIsActionActive(ECharacterActionType::E_Die)
-		|| GetIsActionActive(ECharacterActionType::E_KnockedDown)) return;=
+		|| GetIsActionActive(ECharacterActionType::E_KnockedDown)) return;
 	if (!CharacterGameplayInfo.bCanRoll) return;
 
 	if (GetIsActionActive(ECharacterActionType::E_Attack))
