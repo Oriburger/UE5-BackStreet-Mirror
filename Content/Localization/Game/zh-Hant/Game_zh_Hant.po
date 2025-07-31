@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hant\n"
-"POT-Creation-Date: 2025-07-17 02:02\n"
-"PO-Revision-Date: 2025-07-17 02:02\n"
+"POT-Creation-Date: 2025-07-30 13:05\n"
+"PO-Revision-Date: 2025-07-30 13:05\n"
 "Language-Team: \n"
 "Language: zh-Hant\n"
 "MIME-Version: 1.0\n"
@@ -2477,6 +2477,13 @@ msgctxt "ST_Item,Desc_HealPack_Small"
 msgid "Restores a small amount of HP."
 msgstr "恢復少量體力。"
 
+#. Key:	Desc_SkillModule
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_SkillModule"
+msgid "Equip skill modules to unlock useful combat skills."
+msgstr "裝備技能模組後可使用戰鬥中實用的技能。"
+
 #. Key:	Desc_SodaCan
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
@@ -2714,6 +2721,13 @@ msgstr "無"
 msgctxt "ST_Item,Name_Rare_Ticket"
 msgid "Rare Ticket"
 msgstr "稀有票"
+
+#. Key:	Name_SkillModule
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_SkillModule"
+msgid "Skill Module"
+msgstr "技能模組"
 
 #. Key:	Name_SodaCan
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -3118,8 +3132,8 @@ msgstr "這是一個Boss關卡，請做好萬全準備。"
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Desc_CraftStage"
-msgid "Create skill modules using crafting materials."
-msgstr "使用製作材料來製作技能模組。\r\n\r\n"
+msgid "Use gears to purchase repair kits or enhance your boosterchips."
+msgstr "可使用齒輪購買修理包或強化已擁有的增幅晶片。"
 
 #. Key:	Desc_CurrencyTip
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3349,8 +3363,8 @@ msgstr "增幅芯片提示"
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Name_CraftStage"
-msgid "Crafting Stage"
-msgstr "製作關卡"
+msgid "Special Stage"
+msgstr "特殊關卡"
 
 #. Key:	Name_CurrencyTip
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
