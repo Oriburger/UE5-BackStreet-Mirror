@@ -312,9 +312,7 @@ void AEnemyCharacterBase::SpawnDeathItems()
 		{
 			totalSpawnItemCount *= (int32)statValue;
 		}	
-	}
-
-	
+	}	
 
 	// 실제 스폰 처리 =====================
 	int32 trySpawnCount = 0; //스폰 시도를 한 횟수

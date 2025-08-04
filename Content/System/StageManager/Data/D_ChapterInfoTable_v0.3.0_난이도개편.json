@@ -259,8 +259,8 @@
 				"EnemySet":
 				{
 					"1110": 2,
-					"2000": 2,
-					"2001": 1
+					"2000": 1,
+					"2001": 2
 				}
 			},
 			"hard_medium2":
@@ -285,16 +285,17 @@
 			{
 				"EnemySet":
 				{
-					"1110": 3,
+					"1110": 2,
 					"2000": 2,
-					"2001": 2
+					"2001": 3
 				}
 			},
 			"hard_large2":
 			{
 				"EnemySet":
 				{
-					"1110": 3,
+					"1110": 2,
+					"2001": 2,
 					"2002": 2
 				}
 			},
@@ -302,14 +303,14 @@
 			{
 				"EnemySet":
 				{
-					"1110": 3,
 					"2001": 3
 				}
 			}
 		},
 		"StageEnemyCompositionInfoMap":
 		{
-			"E_Entry": {
+			"E_Entry":
+			{
 				"CompositionNameList": [
 					"easy_small1",
 					"easy_small2",
@@ -318,7 +319,8 @@
 					"easy_small5"
 				]
 			},
-			"E_Easy": {
+			"E_Easy":
+			{
 				"CompositionNameList": [
 					"easy_medium1",
 					"easy_medium2",
@@ -331,7 +333,8 @@
 					"easy_superlarge2"
 				]
 			},
-			"E_Normal": {
+			"E_Normal":
+			{
 				"CompositionNameList": [
 					"normal_small1",
 					"normal_small2",
@@ -344,7 +347,8 @@
 					"normal_medium4"
 				]
 			},
-			"E_Hard": {
+			"E_Hard":
+			{
 				"CompositionNameList": [
 					"normal_large1",
 					"normal_large2",
@@ -353,7 +357,8 @@
 					"normal_superlarge2"
 				]
 			},
-			"E_Expert": {
+			"E_Expert":
+			{
 				"CompositionNameList": [
 					"hard_small1",
 					"hard_medium1",
@@ -361,7 +366,8 @@
 					"hard_medium3"
 				]
 			},
-			"E_Nightmare": {
+			"E_Nightmare":
+			{
 				"CompositionNameList": [
 					"hard_large1",
 					"hard_large2"
