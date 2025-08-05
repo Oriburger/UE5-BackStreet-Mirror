@@ -22,6 +22,12 @@ void UAbilityManagerComponent::BeginPlay()
 	UpdateCumulativeProbabilityList();
 }
 
+int32 UAbilityManagerComponent::GetAbilityUpgradeCost(EAbilityTierType TargetTier)
+{
+	if (!AbilityManagerInfo.UpgradeCostInfoMap.Contains(TargetTier)) return -1;
+	return AbilityManagerInfo.UpgradeCostInfoMap[TargetTier];
+}
+
 void UAbilityManagerComponent::InitAbilityManager(ACharacterBase* NewCharacter, FAbilityManagerInfoStruct AbilityManagerInfoData)
 {
 	if (!IsValid(NewCharacter)) return;
@@ -111,28 +117,30 @@ bool UAbilityManagerComponent::TryRemoveAbility(int32 AbilityID)
 
 	//Total Tier 계산
 	AbilityTotalTier[targetAbilityInfo.AbilityType] -= (int32)targetAbilityInfo.AbilityTier;
-
-	bool result = false;
-	TArray<ECharacterStatType> targetStatTypeList; targetAbilityInfo.TargetStatMap.GenerateKeyArray(targetStatTypeList);
-	for (ECharacterStatType& statType : targetStatTypeList)
-	{
-		FAbilityValueInfoStruct abilityValue = targetAbilityInfo.TargetStatMap[statType];
-		if (!ownerInfo.StatGroupList.IsValidIndex((int32)statType))
-		{
-			UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat newStat for %d"), (int32)statType);
-			continue;
-		}
-
-		//Adder로 동작함
-		ownerInfo.SetAbilityStatInfo(statType, ownerInfo.GetAbilityStatInfo(statType) - abilityValue.Variable);
-		if (abilityValue.bIsContainProbability && ownerInfo.GetIsContainProbability(statType))
-		{
-			ownerInfo.SetProbabilityStatInfo(statType, ownerInfo.GetProbabilityStatInfo(statType) - abilityValue.ProbabilityValue);
-		}
-	}
+	TryUpdateCharacterStat(targetAbilityInfo, false);
 
 	OnAbilityUpdated.Broadcast(AbilityManagerInfo.ActiveAbilityInfoList);
 	return true;
+}
+
+bool UAbilityManagerComponent::TryUpgradeAbility(int32 AbilityID)
+{
+	for (auto& abilityInfo : AbilityManagerInfo.ActiveAbilityInfoList)
+	{
+		if (AbilityID == abilityInfo.AbilityId)
+		{
+			if (abilityInfo.AbilityTier == EAbilityTierType::E_Legendary) return false; //최대 티어인 경우 업그레이드 불가
+
+			// 새 정보를 덮어쓰고, Total Tier를 업데이트
+			AbilityTotalTier[abilityInfo.AbilityType] -= (int32)abilityInfo.AbilityTier;
+			abilityInfo = GetAbilityInfo(AbilityID + 1);
+			AbilityTotalTier[abilityInfo.AbilityType] += (int32)abilityInfo.AbilityTier;
+
+			TryUpdateCharacterStat(abilityInfo, false);
+			return true;
+		}
+	}
+	return false; // AbilityID가 ActiveAbilityInfoList에 존재하지 않는 경우
 }
 
 void UAbilityManagerComponent::ClearAllAbility()
@@ -286,6 +294,8 @@ bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct T
 		UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat / ownerInfo is not valid"));
 		return false;
 	}
+
+	ownerInfo.ResetAllAbilityStatInfo();
 
 	TArray<ECharacterStatType> targetStatTypeList; TargetAbilityInfo.TargetStatMap.GenerateKeyArray(targetStatTypeList);
 	for (ECharacterStatType& statType : targetStatTypeList)
