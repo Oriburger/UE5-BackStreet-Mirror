@@ -76,7 +76,8 @@ void AItemBase::InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride)
 
 	if (ItemInfo.ItemID == 0) return;
 
-	if (InfoOverride.ItemID == 0 && ItemInfo.ItemType != EItemCategoryInfo::E_SubWeapon)
+	if ((InfoOverride.ItemID == 0 && ItemInfo.ItemType != EItemCategoryInfo::E_SubWeapon)
+		|| ItemInfo.ItemType == EItemCategoryInfo::E_Craft)
 	{
 		ItemInfo.ItemAmount = 1;
 	}
