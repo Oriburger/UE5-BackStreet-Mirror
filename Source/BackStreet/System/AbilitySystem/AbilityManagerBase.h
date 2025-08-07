@@ -11,7 +11,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateAbilityUpdate, const TArray<FAbilityInfoStruct>&, AbilityInfoList);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDelegateStatUpdate, ECharacterStatType, StatType, FStatValueGroup, StatValue);
 
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent), Blueprintable)
 class BACKSTREET_API UAbilityManagerComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -39,6 +39,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		TArray<FAbilityInfoStruct> GetActiveAbilityInfoList() const;
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TMap<EAbilityTierType, int32> GetAbilityUpgradeCostInfoMap() { return AbilityManagerInfo.UpgradeCostInfoMap;  };
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetAbilityUpgradeCost(EAbilityTierType TargetTier);
+
 public:
 	//어빌리티 매니저 초기화, 부모 설정
 	UFUNCTION()
@@ -51,6 +57,10 @@ public:
 	//소유하고 있는 어빌리티를 제거 (실패 시 false)
 	UFUNCTION()
 		bool TryRemoveAbility(int32 AbilityID);
+
+	//Cost를 고려하지 않고 어빌리티를 업그레이드 시도 (실패 시 false)
+	UFUNCTION(BlueprintCallable)
+		bool TryUpgradeAbility(int32 AbilityID);
 
 	//모든 어빌리티 초기화
 	UFUNCTION(BlueprintCallable)

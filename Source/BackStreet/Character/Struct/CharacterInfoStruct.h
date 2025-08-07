@@ -339,6 +339,17 @@ public:
 		target.ProbabilityValue = FMath::Clamp(NewValue, 0.0f, 1.0f);
 		return true;
 	}
+    inline void ResetAllAbilityStatInfo()
+    {
+		for (uint8 typeIdx = static_cast<uint8>(ECharacterStatType::E_None) + 1
+				; typeIdx < static_cast<uint8>(ECharacterStatType::E_LuckyDrop); ++typeIdx)
+		{
+			ECharacterStatType type = static_cast<ECharacterStatType>(typeIdx);
+			FStatValueGroup& target = GetStatGroup(type);
+			target.AbilityRateValue = 0.0f;
+			target.UpdateTotalValue();
+		}
+    }
 	static FORCEINLINE ECharacterStatType GetDebuffStatType(bool bIsJumpAttacking, bool bIsDashAttacking, ECharacterDebuffType DebuffType)
 	{
 		// 기본값은 Normal 공격 유형으로 설정
@@ -654,6 +665,7 @@ public:
 	}
 };
 
+
 USTRUCT(BlueprintType)
 struct FAbilityManagerInfoStruct
 {
@@ -667,6 +679,13 @@ public:
 	//티어에 따른 등장 확률, 미지정 시 모두 같은 확률 적용
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		TMap<EAbilityTierType, float> ProbabilityInfoMap;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		int32 GearItemID = 1;
+
+	//어빌리티 티어에 따른 업그레이드 비용 정보	 (재화는 기어 고정 / 별도의 수정 불가)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+		TMap<EAbilityTierType, int32> UpgradeCostInfoMap;
 
 	//현재 플레이어가 소유한 어빌리티의 정보
 	UPROPERTY(VisibleDefaultsOnly)
