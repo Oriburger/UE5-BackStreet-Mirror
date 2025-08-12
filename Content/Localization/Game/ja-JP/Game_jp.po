@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_jp\n"
-"POT-Creation-Date: 2025-07-30 13:04\n"
-"PO-Revision-Date: 2025-07-30 13:04\n"
+"POT-Creation-Date: 2025-08-12 05:01\n"
+"PO-Revision-Date: 2025-08-12 05:01\n"
 "Language-Team: \n"
 "Language: ja-JP\n"
 "MIME-Version: 1.0\n"
@@ -1312,8 +1312,8 @@ msgstr "クリティカル"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,UI_Name_Currency"
-msgid "Currency"
-msgstr "通貨"
+msgid "Utility"
+msgstr "ユーティリティ"
 
 #. Key:	UI_Name_DashCombo
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -3118,8 +3118,8 @@ msgstr "<Medium.24>[キャラクターの永久強化]</>\r\n\r\n- プレイヤ�
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Desc_BoosterCipTip"
-msgid "Press Tab to view the booster chips you’ve obtained. Collect them to become even stronger."
-msgstr "Tabキーを押して取得したブースターチップを確認しましょう。集めてさらに強くなろう！"
+msgid "You can check acquired boosterchips in the Boosterchip Panel. Collect more to grow stronger."
+msgstr "入手したブースターチップは、ブースターチップパネルで確認できる。集めてさらに強くなろう。"
 
 #. Key:	Desc_BossStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3139,8 +3139,8 @@ msgstr "ギアを使って修理キットを購入したり、所持中のブー
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Desc_CurrencyTip"
-msgid "Collect gears to craft new skill modules. They might also serve as currency?"
-msgstr "ギアを集めて新しいスキルモジュールを作成しましょう。通貨としても使えるかもしれません。"
+msgid "Collect gears to upgrade boosterchips or use them in trades."
+msgstr "ギアを集めれば、ブースターチップの強化や取引に利用できそうだ。"
 
 #. Key:	Desc_DebuffTip
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial

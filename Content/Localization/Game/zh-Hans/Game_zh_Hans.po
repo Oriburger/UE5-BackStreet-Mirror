@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hans\n"
-"POT-Creation-Date: 2025-07-30 13:05\n"
-"PO-Revision-Date: 2025-07-30 13:05\n"
+"POT-Creation-Date: 2025-08-12 05:01\n"
+"PO-Revision-Date: 2025-08-12 05:01\n"
 "Language-Team: \n"
 "Language: zh-Hans\n"
 "MIME-Version: 1.0\n"
@@ -1312,8 +1312,8 @@ msgstr "致命"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,UI_Name_Currency"
-msgid "Currency"
-msgstr "货币"
+msgid "Utility"
+msgstr "多功能"
 
 #. Key:	UI_Name_DashCombo
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -3118,8 +3118,8 @@ msgstr "<Medium.24>[角色永久强化]</>\r\n\r\n- 玩家可通过重复游玩�
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Desc_BoosterCipTip"
-msgid "Press Tab to view the booster chips you’ve obtained. Collect them to become even stronger."
-msgstr "按下 Tab 键查看你获得的增幅芯片。收集更多变得更强！"
+msgid "You can check acquired boosterchips in the Boosterchip Panel. Collect more to grow stronger."
+msgstr "已获得的增幅芯片可在增幅芯片面板中查看。收集更多，变得更强大吧。"
 
 #. Key:	Desc_BossStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3139,8 +3139,8 @@ msgstr "可使用齿轮购买修理包或强化已拥有的增幅芯片。"
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Desc_CurrencyTip"
-msgid "Collect gears to craft new skill modules. They might also serve as currency?"
-msgstr "收集齿轮来制作新的技能模块，也许还能作为货币使用？"
+msgid "Collect gears to upgrade boosterchips or use them in trades."
+msgstr "收集齿轮可用于升级增幅芯片或进行交易。"
 
 #. Key:	Desc_DebuffTip
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
