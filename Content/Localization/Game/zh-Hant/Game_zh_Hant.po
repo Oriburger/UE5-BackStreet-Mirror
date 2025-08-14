@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hant\n"
-"POT-Creation-Date: 2025-08-12 05:01\n"
-"PO-Revision-Date: 2025-08-12 05:01\n"
+"POT-Creation-Date: 2025-08-14 07:42\n"
+"PO-Revision-Date: 2025-08-14 07:42\n"
 "Language-Team: \n"
 "Language: zh-Hant\n"
 "MIME-Version: 1.0\n"
@@ -2442,6 +2442,13 @@ msgctxt "ST_Item,Desc_CigaretteButt"
 msgid "A cigarette butt with embers still glowing."
 msgstr "一個仍然發光的香菸煙蒂。"
 
+#. Key:	Desc_Core
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Core"
+msgid "A core energy of '3COS' recovered from the wreckage of enemy robots. It is used to unlock new character abilities in neutral zones."
+msgstr "從敵方機器人殘骸中回收的「3COS」核心能量。用於在中立區域解鎖角色的新能力"
+
 #. Key:	Desc_EMP_Vial
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
@@ -2595,6 +2602,13 @@ msgstr "香菸煙蒂"
 msgctxt "ST_Item,Name_Common_Ticket"
 msgid "Common Ticket"
 msgstr "普通票"
+
+#. Key:	Name_Core
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Core"
+msgid "Core"
+msgstr "核心"
 
 #. Key:	Name_CraftingMaterial_Gear
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item

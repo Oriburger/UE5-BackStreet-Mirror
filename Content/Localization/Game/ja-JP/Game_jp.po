@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_jp\n"
-"POT-Creation-Date: 2025-08-12 05:01\n"
-"PO-Revision-Date: 2025-08-12 05:01\n"
+"POT-Creation-Date: 2025-08-14 07:42\n"
+"PO-Revision-Date: 2025-08-14 07:42\n"
 "Language-Team: \n"
 "Language: ja-JP\n"
 "MIME-Version: 1.0\n"
@@ -2442,6 +2442,13 @@ msgctxt "ST_Item,Desc_CigaretteButt"
 msgid "A cigarette butt with embers still glowing."
 msgstr "まだ火が残っているタバコの吸い殻。"
 
+#. Key:	Desc_Core
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Core"
+msgid "A core energy of '3COS' recovered from the wreckage of enemy robots. It is used to unlock new character abilities in neutral zones."
+msgstr "敵ロボットの残骸から回収された「3COS」のコアエネルギー。中立エリアでキャラクターの新たな能力を解放するために使用されます。"
+
 #. Key:	Desc_EMP_Vial
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
@@ -2595,6 +2602,13 @@ msgstr "タバコの吸い殻"
 msgctxt "ST_Item,Name_Common_Ticket"
 msgid "Common Ticket"
 msgstr "コモンチケット"
+
+#. Key:	Name_Core
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Core"
+msgid "Core"
+msgstr "コア"
 
 #. Key:	Name_CraftingMaterial_Gear
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
