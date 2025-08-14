@@ -97,6 +97,15 @@ void AItemBase::InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride)
 			streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &AItemBase::InitializeItemMesh));
 		}
 	}
+
+	if (ItemInfo.ItemEffect.IsValid())
+	{
+		ParticleComponent->SetAsset(ItemInfo.ItemEffect.Get());
+		ParticleComponent->SetRelativeLocation(ItemInfo.EffectInitialLocation);
+		ParticleComponent->SetRelativeRotation(ItemInfo.EffectInitialRotation);
+		ParticleComponent->Activate();
+	}
+
 	OnItemInitialized.Broadcast(ItemInfo);
 
 	UE_LOG(LogTemp, Warning, TEXT("AItemBase::InitItem()"));
