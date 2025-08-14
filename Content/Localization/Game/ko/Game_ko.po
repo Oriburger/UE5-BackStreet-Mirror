@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-07-30 13:05\n"
-"PO-Revision-Date: 2025-07-30 13:05\n"
+"POT-Creation-Date: 2025-08-12 05:02\n"
+"PO-Revision-Date: 2025-08-12 05:02\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -1312,8 +1312,8 @@ msgstr "치명타"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,UI_Name_Currency"
-msgid "Currency"
-msgstr "재화"
+msgid "Utility"
+msgstr "다용도"
 
 #. Key:	UI_Name_DashCombo
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -3118,8 +3118,8 @@ msgstr "<Medium.24>[캐릭터 영구 강화]</>\r\n\r\n- 플레이어는 반복 
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Desc_BoosterCipTip"
-msgid "Press Tab to view the booster chips you’ve obtained. Collect them to become even stronger."
-msgstr "획득한 부스터칩은 tap을 눌러 확인할 수 있다. 부스터칩을 모아 더욱 강해지자."
+msgid "You can check acquired boosterchips in the Boosterchip Panel. Collect more to grow stronger."
+msgstr "획득한 부스터칩은 부스터칩 패널에서 확인할 수 있다. 부스터칩을 모아 더욱 강해지자."
 
 #. Key:	Desc_BossStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3139,8 +3139,8 @@ msgstr "기어로 수리 키트를 구매하거나 보유 중인 부스터칩을
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Desc_CurrencyTip"
-msgid "Collect gears to craft new skill modules. They might also serve as currency?"
-msgstr "톱니바퀴를 모아 새로운 스킬 모듈을 제작할 수 있을 것 같다. 재화로 사용할 수 있을지도?"
+msgid "Collect gears to upgrade boosterchips or use them in trades."
+msgstr "기어를 모으면 부스터칩 업그레이드나 거래에 활용할 수 있을 것 같다."
 
 #. Key:	Desc_DebuffTip
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
