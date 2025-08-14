@@ -21,21 +21,43 @@ void UBackStreetGameInstance::Init()
 void UBackStreetGameInstance::OnPreLoadMap(const FString& MapName)
 {
 	SaveSlotManagerRef = nullptr;
-
-	if (MapName.Contains("MainMenu"))
-	{
-		UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::OnPreLoadMap - MainMenu detected, SaveSlotManagerRef reset"));
-		SetCurrentSaveSlotName(TEXT(""));
-	}
 }
 
 void UBackStreetGameInstance::OnPostLoadMap(UWorld* LoadedWorld)
 {
+	UE_LOG(LogSaveSystem, Log, TEXT(" "));
+	UE_LOG(LogSaveSystem, Log, TEXT("============================================================================"));
+	UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::OnPostLoadMap - PostLoadMap called with MapName: %s"), *LoadedWorld->GetMapName());
+	UE_LOG(LogSaveSystem, Log, TEXT("============================================================================"));
+
+	//메인메뉴로 이동 시, 데이터 초기화
+	if (LoadedWorld->GetMapName().Contains("MainMenu"))
+	{
+		UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::OnPostLoadMap - In MainMenu level, resetting save data"));
+		SaveSlotInfo = FSaveSlotInfo();
+		ProgressSaveData = FProgressSaveData();
+		AchievementSaveData = FAchievementSaveData();
+		InventorySaveData = FInventorySaveData();
+	}
+	else if (LoadedWorld->GetMapName().Contains("Chapter"))
+	{
+		SaveSlotInfo.bIsInGame = true;
+		SaveSlotInfo.bIsInNeutralZone = false; 
+	}
+	else if( LoadedWorld->GetMapName().Contains("NeutralZone"))
+	{
+		SaveSlotInfo.bIsInGame = false;
+		SaveSlotInfo.bIsInNeutralZone = true;
+
+		ProgressSaveData = FProgressSaveData();
+	}
+
 	// SaveSlotManager가 유효한지 체크
 	bool result = IsValid(GetSafeSaveSlotManager());
 	if (result)
 	{
 		UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::OnPostLoadMap - SaveSlotManager spawned successfully"));
+		GetSafeSaveSlotManager()->OnPostLoadMap(LoadedWorld);
 	}
 	else
 	{
@@ -46,7 +68,6 @@ void UBackStreetGameInstance::OnPostLoadMap(UWorld* LoadedWorld)
 bool UBackStreetGameInstance::TrySpawnAndInitializeSaveSlotManager()
 {
 	UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::TrySpawnAndInitializeSaveSlotManager - Attempting to spawn SaveSlotManager"));
-
 
 	if (SaveSlotManagerClassRef)
 	{
@@ -93,24 +114,46 @@ void UBackStreetGameInstance::SetCurrentSaveSlotName(FString NewSaveSlotName)
 	UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::SetCurrentSaveSlotName - SaveSlotName: %s"), *SaveSlotInfo.SaveSlotName);
 }
 
-void UBackStreetGameInstance::CacheGameData(FProgressSaveData NewProgressData, FAchievementSaveData NewAchievementData, FInventorySaveData NewInventoryData)
+void UBackStreetGameInstance::GetIsInGameOrNeutralZone(bool& bIsInGame, bool& bIsNeutralZone)
 {
+	bIsInGame = SaveSlotInfo.bIsInGame;
+	bIsNeutralZone = SaveSlotInfo.bIsInNeutralZone;
+}
+
+void UBackStreetGameInstance::CacheGameData(FSaveSlotInfo NewSaveSlotInfo, FProgressSaveData NewProgressData, FAchievementSaveData NewAchievementData, FInventorySaveData NewInventoryData)
+{
+	if (!NewSaveSlotInfo.bIsInitialized)
+	{
+		UE_LOG(LogSaveSystem, Warning, TEXT("UBackStreetGameInstance::CacheGameData - NewSaveSlotInfo is not initialized"));
+		return;
+	}
+	SaveSlotInfo = NewSaveSlotInfo;
 	ProgressSaveData = NewProgressData;
 	AchievementSaveData = NewAchievementData;
 	InventorySaveData = NewInventoryData;
 
 	//LOG
+	UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::CacheGameData Invoked!!"));
 	UE_LOG(LogSaveSystem, Log, TEXT("[Cacheded Data Preview] -------------------"));
 	UE_LOG(LogSaveSystem, Log, TEXT("- ChapterID : %d"), ProgressSaveData.ChapterInfo.ChapterID);
-	UE_LOG(LogSaveSystem, Log, TEXT("- SaveSlotName : %d"), *SaveSlotInfo.SaveSlotName);
+	UE_LOG(LogSaveSystem, Log, TEXT("- SaveSlotName : %s"), *SaveSlotInfo.SaveSlotName);
 	UE_LOG(LogSaveSystem, Log, TEXT("- StageCoordinate: %d"), ProgressSaveData.ChapterInfo.CurrentStageCoordinate);
 	UE_LOG(LogSaveSystem, Log, TEXT("- StageInfoList: %d"), ProgressSaveData.ChapterInfo.StageInfoList.Num());
 	UE_LOG(LogSaveSystem, Log, TEXT("- CurrentMapName : %s"), *ProgressSaveData.StageInfo.MainLevelAsset.ToString());
+	UE_LOG(LogSaveSystem, Log, TEXT("- IsInGame : %d, IsInNeutralZone : %d"), SaveSlotInfo.bIsInGame, SaveSlotInfo.bIsInNeutralZone);
 }
 
-void UBackStreetGameInstance::GetCachedSaveGameData(FProgressSaveData& OutProgressData, FAchievementSaveData& OutAchievementData, FInventorySaveData& OutInventoryData)
+bool UBackStreetGameInstance::GetCachedSaveGameData(FSaveSlotInfo& OutSaveSlotInfo, FProgressSaveData& OutProgressData, FAchievementSaveData& OutAchievementData, FInventorySaveData& OutInventoryData)
 {
+	if (!SaveSlotInfo.bIsInitialized)
+	{
+		UE_LOG(LogSaveSystem, Warning, TEXT("UBackStreetGameInstance::GetCachedSaveGameData - SaveSlotInfo is not initialized"));
+		return false;
+	}
+	OutSaveSlotInfo = SaveSlotInfo;
 	OutProgressData = ProgressSaveData;
 	OutAchievementData = AchievementSaveData;
 	OutInventoryData = InventorySaveData;
+
+	return true;
 }
