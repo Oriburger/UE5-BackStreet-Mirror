@@ -160,8 +160,6 @@ void UWeaponComponentBase::InitWeaponAsset()
 
 	if (WeaponAssetInfo.WeaponMesh.IsValid())
 	{
-		UE_LOG(LogSaveSystem, Log, TEXT("UWeaponComponentBase::InitWeaponAsset() Mesh name is %s"), *WeaponAssetInfo.WeaponMesh.Get()->GetName());
-
 		this->SetStaticMesh(WeaponAssetInfo.WeaponMesh.Get());
 		this->SetRelativeLocation(WeaponAssetInfo.InitialLocation);
 		this->SetRelativeRotation(WeaponAssetInfo.InitialRotation);

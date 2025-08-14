@@ -572,7 +572,11 @@ void UStageManagerComponent::StartStage()
 
 void UStageManagerComponent::FinishStage(bool bStageClear)
 {
-	if (CurrentStageInfo.bIsFinished) return;
+	if (CurrentStageInfo.bIsFinished)
+	{
+		UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::FinishStage - Stage is already finished"));
+		return;
+	}
 	CurrentStageInfo.bIsClear = bStageClear;
 	CurrentStageInfo.bIsFinished = true;
 
@@ -603,6 +607,7 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 		}
 	}
 
+	UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::FinishStage - Stage Finished!"));
 	OnStageFinished.Broadcast(CurrentStageInfo);
 }
 
@@ -650,8 +655,11 @@ AActor* UStageManagerComponent::SpawnItemActor(FItemInfoDataStruct ItemInfo)
 void UStageManagerComponent::UpdateEnemyCountAndCheckClear()
 {
 	UpdateRemainingEnemyCount();
+	UE_LOG(LogStage, Log, TEXT("UStageManagerComponent::UpdateEnemyCountAndCheckClear - Remaining Enemy Count : %d"), RemainingEnemyCount);
+	
 	if (CheckStageClearStatus())
 	{
+		UE_LOG(LogStage, Log, TEXT("UStageManagerComponent::UpdateEnemyCountAndCheckClear - Stage Clear!"));
 		FinishStage(true);
 	}
 }

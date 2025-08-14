@@ -132,12 +132,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		int32 MaxMainWeaponCount = 1;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Wealth")
-		int32 GenesiumID;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Wealth")
-		int32 FusionCellID;
-
 	UPROPERTY(VisibleAnywhere, Category = "Gameplay")
 		TMap<int32, FWeaponStateStruct> WeaponStateMap;
 
