@@ -69,6 +69,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void ActivateItem();
 
+	UFUNCTION(BlueprintCallable)
+		void AdjustItemZLocation(float ZOffsetOverride = -0.1f, bool bDrawDebugLine = false);
+
 	UFUNCTION()
 		void OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp
 			, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
