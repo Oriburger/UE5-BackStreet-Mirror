@@ -601,7 +601,7 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 		//Stage Reward
 		GrantStageRewards();
 
-		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry) //&& !ChapterManagerRef.Get()->GetTutorialCompletion())
+		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry && !ChapterManagerRef.Get()->GetTutorialCompletion())
 		{
 			UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::FinishStage - Tutorial level will be activated"));
 		}
@@ -618,8 +618,15 @@ void UStageManagerComponent::GrantStageRewards()
 	if (!IsValid(playerCharacter)) return;
 
 	TArray<FItemInfoDataStruct> rewardInfoList = GetCurrentStageInfo().RewardInfoList;
+	if(rewardInfoList.IsEmpty())
+	{
+		UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::GrantStageRewards - No reward info found for stage %d"), CurrentStageInfo.Coordinate);
+		return;
+	}
 	for (FItemInfoDataStruct& rewardItemInfo : rewardInfoList)
 	{
+		UE_LOG(LogStage, Log, TEXT("UStageManagerComponent::GrantStageRewards - ItemID : %d, Amount : %d, bIsActorItem : %d"), 
+			rewardItemInfo.ItemID, rewardItemInfo.ItemAmount, rewardItemInfo.bIsActorItem);
 		if (rewardItemInfo.bIsActorItem)
 		{
 			SpawnedActorList.Add(SpawnItemActor(rewardItemInfo));

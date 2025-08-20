@@ -410,23 +410,19 @@
 				"RewardCandidateInfoList": [
 					{
 						"RewardItemID": 11,
-						"RewardItemProbability": 0
+						"RewardItemProbability": 1
 					},
 					{
 						"RewardItemID": 12,
-						"RewardItemProbability": 0
+						"RewardItemProbability": 1
 					},
 					{
 						"RewardItemID": 13,
-						"RewardItemProbability": 0
+						"RewardItemProbability": 1
 					},
 					{
 						"RewardItemID": 14,
-						"RewardItemProbability": 0
-					},
-					{
-						"RewardItemID": 2,
-						"RewardItemProbability": 19999
+						"RewardItemProbability": 1
 					}
 				]
 			},
