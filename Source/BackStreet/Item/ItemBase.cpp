@@ -132,7 +132,7 @@ void AItemBase::AdjustItemZLocation(float ZOffsetOverride, bool bDrawDebugLine)
 	objectQueryParams.Add(EObjectTypeQuery::ObjectTypeQuery1); // WorldStatic
 	objectQueryParams.Add(EObjectTypeQuery::ObjectTypeQuery2); // WorldDynamic
 
-	FVector startLocation = GetActorLocation();
+	FVector startLocation = GetActorLocation() + FVector(0.0f, 0.0f, 50.0f);
 	FVector endLocation = GetActorLocation() + GetActorLocation().UpVector * 200.0f;
 	FVector resultLocation;
 
