@@ -92,7 +92,7 @@ void AItemBase::InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride)
 
 	if (!ItemInfo.ItemMesh.IsNull())
 	{
-		bNeedToAsyncLoad = !IsValid(ItemInfo.ItemMesh.Get());
+		bNeedToAsyncLoad = bNeedToAsyncLoad || !IsValid(ItemInfo.ItemMesh.Get());
 		assetToStream.AddUnique(ItemInfo.ItemMesh.ToSoftObjectPath());
 		assetToStream.AddUnique(ItemInfo.OutlineMaterial.ToSoftObjectPath());
 	}
