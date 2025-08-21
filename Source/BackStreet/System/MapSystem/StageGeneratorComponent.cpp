@@ -136,8 +136,8 @@ TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidate
 	}
 
 	// 무작위 순서로 후보 리스트 순회
-	TArray<FStageRewardCandidateInfo> ShuffledList = rewardInfoList.RewardCandidateInfoList;
-	Algo::RandomShuffle(ShuffledList);
+	TArray<FStageRewardCandidateInfo> shuffledList = rewardInfoList.RewardCandidateInfoList;
+	Algo::RandomShuffle(shuffledList);
 
 	TSet<int32> alreadySelectedIDs;
 	if (CurrentChapterInfo.MaxSkillRewardCount <= CurrentChapterInfo.CurrentSkillRewardCount)
@@ -146,7 +146,7 @@ TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidate
 		ExceptIDList.Add(CurrentChapterInfo.SkillItemID);
 	}
 
-	for (const FStageRewardCandidateInfo& candidate : ShuffledList)
+	for (const FStageRewardCandidateInfo& candidate : shuffledList)
 	{ 
 		int32 ItemID = candidate.RewardItemID;
 		float probability = candidate.RewardItemProbability;
@@ -167,7 +167,6 @@ TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidate
 
 	return rewardItemInfoList;
 }
-
 
 FItemInfoDataStruct UStageGeneratorComponent::GetRewardItemInfo(int32 ItemID)
 {

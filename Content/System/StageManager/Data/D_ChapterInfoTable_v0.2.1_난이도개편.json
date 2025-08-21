@@ -2,7 +2,7 @@
 	{
 		"Name": "1",
 		"ChapterID": 1,
-		"StageCount": 9,
+		"StageCount": 7,
 		"CurrentStageCoordinate": 0,
 		"StageTypeListForLevelIdx": [],
 		"EliteTimeAtkStageTimeOut": 80,
@@ -394,11 +394,9 @@
 				"StageComposition": [
 					"E_Entry",
 					"E_Easy",
-					"E_Normal",
 					"E_Craft",
-					"E_Hard",
-					"E_Expert",
-					"E_Expert",
+					"E_Normal",
+					"E_Normal",
 					"E_Craft",
 					"E_Boss"
 				]
@@ -424,10 +422,6 @@
 					},
 					{
 						"RewardItemID": 14,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 2,
 						"RewardItemProbability": 1
 					}
 				]
@@ -468,7 +462,7 @@
 						"RewardItemProbability": 1
 					},
 					{
-						"RewardItemID": 5,
+						"RewardItemID": 2,
 						"RewardItemProbability": 1
 					}
 				]
@@ -554,7 +548,7 @@
 						"RewardItemProbability": 1.75
 					},
 					{
-						"RewardItemID": 5,
+						"RewardItemID": 2,
 						"RewardItemProbability": 1
 					}
 				]
@@ -599,7 +593,7 @@
 						"RewardItemProbability": 1.75
 					},
 					{
-						"RewardItemID": 5,
+						"RewardItemID": 2,
 						"RewardItemProbability": 1
 					}
 				]
@@ -650,7 +644,7 @@
 				]
 			}
 		},
-		"FixedSkillRewardStageIDList": [ 2 ],
+		"FixedSkillRewardStageIDList": [ 1 ],
 		"SkillItemID": 10000,
 		"MaxSkillRewardCount": 2,
 		"CurrentSkillRewardCount": 0,
@@ -817,7 +811,7 @@
 	{
 		"Name": "2",
 		"ChapterID": 2,
-		"StageCount": 9,
+		"StageCount": 7,
 		"CurrentStageCoordinate": 0,
 		"StageTypeListForLevelIdx": [],
 		"EliteTimeAtkStageTimeOut": 80,
@@ -1207,13 +1201,11 @@
 		"StageTemplateList": [
 			{
 				"StageComposition": [
-					"E_Entry",
-					"E_Easy",
 					"E_Normal",
-					"E_Craft",
 					"E_Hard",
+					"E_Craft",
 					"E_Expert",
-					"E_Expert",
+					"E_Nightmare",
 					"E_Craft",
 					"E_Boss"
 				]
@@ -1239,10 +1231,6 @@
 					},
 					{
 						"RewardItemID": 14,
-						"RewardItemProbability": 1
-					},
-					{
-						"RewardItemID": 5,
 						"RewardItemProbability": 1
 					}
 				]
@@ -1283,7 +1271,7 @@
 						"RewardItemProbability": 1
 					},
 					{
-						"RewardItemID": 5,
+						"RewardItemID": 2,
 						"RewardItemProbability": 1
 					}
 				]
@@ -1324,7 +1312,7 @@
 						"RewardItemProbability": 1
 					},
 					{
-						"RewardItemID": 5,
+						"RewardItemID": 2,
 						"RewardItemProbability": 1
 					}
 				]
@@ -1369,7 +1357,7 @@
 						"RewardItemProbability": 1.75
 					},
 					{
-						"RewardItemID": 5,
+						"RewardItemID": 2,
 						"RewardItemProbability": 1
 					}
 				]
@@ -1414,7 +1402,7 @@
 						"RewardItemProbability": 1.75
 					},
 					{
-						"RewardItemID": 5,
+						"RewardItemID": 2,
 						"RewardItemProbability": 1
 					}
 				]
@@ -1459,13 +1447,13 @@
 						"RewardItemProbability": 1.75
 					},
 					{
-						"RewardItemID": 5,
+						"RewardItemID": 2,
 						"RewardItemProbability": 1
 					}
 				]
 			}
 		},
-		"FixedSkillRewardStageIDList": [ 2 ],
+		"FixedSkillRewardStageIDList": [ 1 ],
 		"SkillItemID": 10000,
 		"MaxSkillRewardCount": 2,
 		"CurrentSkillRewardCount": 0,
@@ -1534,115 +1522,91 @@
 			"E_Craft": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Crafting_a.TX_ICON_Crafting_a'"
 		},
 		"StageIconTransitionValueList": [],
-		"TutorialLevel": "/Game/Map/Chapter02/Polishing/Chapter02_Entry.Chapter02_Entry",
+		"TutorialLevel": "/Game/Map/Chapter01/Polishing/Chapter01_Entry_Tutorial.Chapter01_Entry_Tutorial",
 		"StageLevelInfoMap":
 		{
 			"E_Entry":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter02/Polishing/Chapter02_Entry.Chapter02_Entry"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Entry.Chapter01_Entry"
 				]
 			},
 			"E_Easy":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01.Chapter02_Combat01",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02.Chapter02_Combat02",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03.Chapter02_Combat03",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04.Chapter02_Combat04",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_a.Chapter02_Combat01_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_b.Chapter02_Combat01_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_a.Chapter02_Combat02_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_b.Chapter02_Combat02_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_a.Chapter02_Combat03_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_b.Chapter02_Combat03_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_a.Chapter02_Combat04_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_b.Chapter02_Combat04_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_c.Chapter02_Combat04_c"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat10.Chapter01_Combat10"
 				]
 			},
 			"E_Normal":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01.Chapter02_Combat01",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02.Chapter02_Combat02",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03.Chapter02_Combat03",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04.Chapter02_Combat04",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_a.Chapter02_Combat01_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_b.Chapter02_Combat01_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_a.Chapter02_Combat02_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_b.Chapter02_Combat02_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_a.Chapter02_Combat03_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_b.Chapter02_Combat03_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_a.Chapter02_Combat04_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_b.Chapter02_Combat04_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_c.Chapter02_Combat04_c"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat10.Chapter01_Combat10"
 				]
 			},
 			"E_Hard":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01.Chapter02_Combat01",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02.Chapter02_Combat02",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03.Chapter02_Combat03",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04.Chapter02_Combat04",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_a.Chapter02_Combat01_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_b.Chapter02_Combat01_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_a.Chapter02_Combat02_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_b.Chapter02_Combat02_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_a.Chapter02_Combat03_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_b.Chapter02_Combat03_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_a.Chapter02_Combat04_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_b.Chapter02_Combat04_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_c.Chapter02_Combat04_c"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08"
 				]
 			},
 			"E_Expert":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01.Chapter02_Combat01",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02.Chapter02_Combat02",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03.Chapter02_Combat03",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04.Chapter02_Combat04",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_a.Chapter02_Combat01_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_b.Chapter02_Combat01_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_a.Chapter02_Combat02_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_b.Chapter02_Combat02_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_a.Chapter02_Combat03_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_b.Chapter02_Combat03_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_a.Chapter02_Combat04_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_b.Chapter02_Combat04_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_c.Chapter02_Combat04_c"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08"
 				]
 			},
 			"E_Nightmare":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01.Chapter02_Combat01",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02.Chapter02_Combat02",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03.Chapter02_Combat03",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04.Chapter02_Combat04",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_a.Chapter02_Combat01_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_b.Chapter02_Combat01_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_a.Chapter02_Combat02_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_b.Chapter02_Combat02_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_a.Chapter02_Combat03_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_b.Chapter02_Combat03_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_a.Chapter02_Combat04_a",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_b.Chapter02_Combat04_b",
-					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_c.Chapter02_Combat04_c"
+					"/Game/Map/Chapter01/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Chapter01_Combat07.Chapter01_Combat07"
 				]
 			},
 			"E_Boss":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter02/Polishing/Chapter02_Boss.Chapter02_Boss"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Boss.Chapter01_Boss"
 				]
 			},
 			"E_Craft":
 			{
 				"LevelList": [
-					"/Game/Map/Chapter02/Polishing/Chapter02_Craft.Chapter02_Craft"
+					"/Game/Map/Chapter01/Polishing/Chapter01_Craft.Chapter01_Craft"
 				]
 			}
 		},
