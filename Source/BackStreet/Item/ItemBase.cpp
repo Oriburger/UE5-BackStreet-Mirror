@@ -241,6 +241,7 @@ void AItemBase::OnItemPicked_Implementation()
 
 void AItemBase::InitializeItemMesh()
 {
+	if (ItemInfo.ItemID == 0) return;
 	if (ItemInfo.ItemMesh.IsNull() || !IsValid(ItemInfo.ItemMesh.Get())) return;
 	
 	MeshComponent->SetStaticMesh(ItemInfo.ItemMesh.Get());
