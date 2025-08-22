@@ -59,6 +59,8 @@ protected:
 private:
 	int32 DefferedInitializeCount = 0;
 
+	bool bNeedToFetchPermanentWealthData = true;
+
 	UPROPERTY()
 		FTimerHandle DefferedInitializeTimerHandle;
 

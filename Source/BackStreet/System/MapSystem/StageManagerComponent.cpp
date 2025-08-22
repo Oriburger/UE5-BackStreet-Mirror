@@ -563,7 +563,6 @@ void UStageManagerComponent::StartStage()
 		playerCharacter->GetController()->SetControlRotation(CurrentStageInfo.PlayerStartRotation);
 	}
 
-
 	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft)
 	{
 		FinishStage(true);

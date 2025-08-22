@@ -42,8 +42,8 @@ void ASaveSlotManager::BeginPlay()
 	// Initialize GameInstance reference
 	GameInstanceRef = Cast<UBackStreetGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
-	// Init variables
-	DefferedInitializeCount = 0;
+	// Init variables			
+	DefferedInitializeCount = 0; 
 
 	// Bind to load done event
 	OnLoadDone.AddDynamic(this, &ASaveSlotManager::OnLoadFinished);
@@ -141,6 +141,7 @@ void ASaveSlotManager::OnPreLoadMap_Implementation(const FString& MapName)
 	// 메인메뉴 및 중립구역으로 전환 시의 상태를 초기화
 	if (MapName.Contains("MainMenu"))
 	{
+		bNeedToFetchPermanentWealthData = true;
 		UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::OnPreLoadMap - MainMenu detected, SaveSlotManagerRef reset"));
 		
 		ProgressSaveData = FProgressSaveData();
@@ -149,6 +150,7 @@ void ASaveSlotManager::OnPreLoadMap_Implementation(const FString& MapName)
 	}
 	if (MapName.Contains("NeutralZone"))
 	{
+		bNeedToFetchPermanentWealthData = true;
 		ProgressSaveData.ChapterInfo = FChapterInfo();
 		ProgressSaveData.StageInfo = FStageInfo();
 	}
@@ -249,9 +251,13 @@ void ASaveSlotManager::FetchGameData()
 		ProgressSaveData.SkillManagerInfo = PlayerCharacterRef->SkillManagerComponent->GetSkillManagerInfo();
 
 		// 영구재화 Handling 
-		const int32 newCoreCount = PlayerCharacterRef->ItemInventory->GetItemAmount(InventorySaveData.CoreID);
-		PlayerCharacterRef->ItemInventory->RemoveItem(InventorySaveData.CoreID, newCoreCount); //음....................
-		InventorySaveData.CoreCount += newCoreCount; 
+		if (bNeedToFetchPermanentWealthData)
+		{
+			UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::FetchGameData - Fetching permanent data from PlayerCharacterRef"));
+			const int32 newCoreCount = PlayerCharacterRef->ItemInventory->GetItemAmount(InventorySaveData.CoreID);
+			PlayerCharacterRef->ItemInventory->RemoveItem(InventorySaveData.CoreID, newCoreCount); //음....................
+			InventorySaveData.CoreCount += newCoreCount;
+		}
 
 		UE_LOG(LogSaveSystem, Error, TEXT("ASaveSlotManager::FetchGameData - InventorySaveData.CoreCount : %d"), InventorySaveData.CoreCount);
 	}
