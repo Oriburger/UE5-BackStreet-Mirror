@@ -1,0 +1,1629 @@
+[
+	{
+		"Name": "1",
+		"ChapterID": 1,
+		"StageCount": 7,
+		"CurrentStageCoordinate": 0,
+		"StageTypeListForLevelIdx": [],
+		"EliteTimeAtkStageTimeOut": 80,
+		"NormalTimeAtkStageTimeOut": 90,
+		"EnemyCompositionMap":
+		{
+			"easy_small1":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"1002": 2
+				}
+			},
+			"easy_small2":
+			{
+				"EnemySet":
+				{
+					"1001": 1,
+					"1002": 3
+				}
+			},
+			"easy_small3":
+			{
+				"EnemySet":
+				{
+					"1002": 4
+				}
+			},
+			"easy_small4":
+			{
+				"EnemySet":
+				{
+					"1001": 3,
+					"1002": 1
+				}
+			},
+			"easy_small5":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"2002": 1
+				}
+			},
+			"easy_medium1":
+			{
+				"EnemySet":
+				{
+					"1001": 3,
+					"1002": 2,
+					"2002": 1
+				}
+			},
+			"easy_medium2":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"2002": 2
+				}
+			},
+			"easy_medium3":
+			{
+				"EnemySet":
+				{
+					"1002": 2
+				}
+			},
+			"easy_medium4":
+			{
+				"EnemySet":
+				{
+					"1001": 1,
+					"1002": 2
+				}
+			},
+			"easy_large1":
+			{
+				"EnemySet":
+				{
+					"1001": 3,
+					"1002": 3,
+					"2002": 1
+				}
+			},
+			"easy_large2":
+			{
+				"EnemySet":
+				{
+					"1002": 4,
+					"2002": 2
+				}
+			},
+			"easy_large3":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"1002": 2,
+					"2002": 1
+				}
+			},
+			"easy_superlarge1":
+			{
+				"EnemySet":
+				{
+					"1001": 4,
+					"1002": 3
+				}
+			},
+			"easy_superlarge2":
+			{
+				"EnemySet":
+				{
+					"1002": 4,
+					"2002": 2
+				}
+			},
+			"normal_small1":
+			{
+				"EnemySet":
+				{
+					"1100": 1,
+					"1101": 1,
+					"1002": 2
+				}
+			},
+			"normal_small2":
+			{
+				"EnemySet":
+				{
+					"2002": 2,
+					"1001": 2
+				}
+			},
+			"normal_small3":
+			{
+				"EnemySet":
+				{
+					"1101": 2,
+					"1002": 2
+				}
+			},
+			"normal_small4":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"1002": 1,
+					"2002": 1
+				}
+			},
+			"normal_small5":
+			{
+				"EnemySet":
+				{
+					"1001": 1,
+					"1101": 1,
+					"2002": 2
+				}
+			},
+			"normal_medium1":
+			{
+				"EnemySet":
+				{
+					"1100": 2,
+					"2000": 1,
+					"1002": 1
+				}
+			},
+			"normal_medium2":
+			{
+				"EnemySet":
+				{
+					"2000": 1,
+					"1001": 2,
+					"2002": 1
+				}
+			},
+			"normal_medium3":
+			{
+				"EnemySet":
+				{
+					"2001": 1,
+					"1001": 2,
+					"1002": 1
+				}
+			},
+			"normal_medium4":
+			{
+				"EnemySet":
+				{
+					"1101": 2,
+					"2002": 2
+				}
+			},
+			"normal_large1":
+			{
+				"EnemySet":
+				{
+					"1100": 2,
+					"2002": 2,
+					"1002": 2
+				}
+			},
+			"normal_large2":
+			{
+				"EnemySet":
+				{
+					"2001": 1,
+					"1001": 2,
+					"2002": 2
+				}
+			},
+			"normal_large3":
+			{
+				"EnemySet":
+				{
+					"2000": 1,
+					"1001": 2,
+					"1002": 2
+				}
+			},
+			"normal_superlarge1":
+			{
+				"EnemySet":
+				{
+					"1101": 2,
+					"1001": 3,
+					"2002": 2
+				}
+			},
+			"normal_superlarge2":
+			{
+				"EnemySet":
+				{
+					"1100": 2,
+					"2001": 1,
+					"1002": 3
+				}
+			},
+			"hard_small1":
+			{
+				"EnemySet":
+				{
+					"1101": 1,
+					"2000": 2,
+					"1110": 2
+				}
+			},
+			"hard_medium1":
+			{
+				"EnemySet":
+				{
+					"1110": 2,
+					"2000": 1,
+					"2001": 2
+				}
+			},
+			"hard_medium2":
+			{
+				"EnemySet":
+				{
+					"1110": 1,
+					"1001": 2,
+					"1002": 2
+				}
+			},
+			"hard_medium3":
+			{
+				"EnemySet":
+				{
+					"1110": 2,
+					"2001": 2,
+					"2002": 1
+				}
+			},
+			"hard_large1":
+			{
+				"EnemySet":
+				{
+					"1110": 2,
+					"2000": 2,
+					"2001": 3
+				}
+			},
+			"hard_large2":
+			{
+				"EnemySet":
+				{
+					"1110": 2,
+					"2001": 2,
+					"2002": 2
+				}
+			},
+			"boss":
+			{
+				"EnemySet":
+				{
+					"2001": 3
+				}
+			}
+		},
+		"StageEnemyCompositionInfoMap":
+		{
+			"E_Entry":
+			{
+				"CompositionNameList": [
+					"easy_small1",
+					"easy_small2",
+					"easy_small3",
+					"easy_small4",
+					"easy_small5"
+				]
+			},
+			"E_Easy":
+			{
+				"CompositionNameList": [
+					"easy_medium1",
+					"easy_medium2",
+					"easy_medium3",
+					"easy_medium4",
+					"easy_large1",
+					"easy_large2",
+					"easy_large3",
+					"easy_superlarge1",
+					"easy_superlarge2"
+				]
+			},
+			"E_Normal":
+			{
+				"CompositionNameList": [
+					"normal_small1",
+					"normal_small2",
+					"normal_small3",
+					"normal_small4",
+					"normal_small5",
+					"normal_medium1",
+					"normal_medium2",
+					"normal_medium3",
+					"normal_medium4"
+				]
+			},
+			"E_Hard":
+			{
+				"CompositionNameList": [
+					"normal_large1",
+					"normal_large2",
+					"normal_large3",
+					"normal_superlarge1",
+					"normal_superlarge2"
+				]
+			},
+			"E_Expert":
+			{
+				"CompositionNameList": [
+					"hard_small1",
+					"hard_medium1",
+					"hard_medium2",
+					"hard_medium3"
+				]
+			},
+			"E_Nightmare":
+			{
+				"CompositionNameList": [
+					"hard_large1",
+					"hard_large2"
+				]
+			},
+			"E_Boss":
+			{
+				"CompositionNameList": [
+					"boss"
+				]
+			}
+		},
+		"MaxItemBoxSpawnCountMap":
+		{
+			"E_Entry": 2,
+			"E_Easy": 2,
+			"E_Normal": 3,
+			"E_Hard": 4,
+			"E_Expert": 5,
+			"E_None": 6
+		},
+		"StageTemplateList": [
+			{
+				"StageComposition": [
+					"E_Entry",
+					"E_Easy",
+					"E_Craft",
+					"E_Normal",
+					"E_Normal",
+					"E_Craft",
+					"E_Boss"
+				]
+			}
+		],
+		"StageInfoList": [],
+		"StageRewardCandidateInfoMap":
+		{
+			"E_Entry":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 1
+					}
+				]
+			},
+			"E_Easy":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 2,
+						"RewardItemProbability": 1
+					}
+				]
+			},
+			"E_Normal":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 2,
+						"RewardItemProbability": 1
+					}
+				]
+			},
+			"E_Hard":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 10000,
+						"RewardItemProbability": 1.75
+					},
+					{
+						"RewardItemID": 2,
+						"RewardItemProbability": 1
+					}
+				]
+			},
+			"E_Expert":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 10000,
+						"RewardItemProbability": 1.75
+					},
+					{
+						"RewardItemID": 2,
+						"RewardItemProbability": 1
+					}
+				]
+			},
+			"E_Nightmare":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 10000,
+						"RewardItemProbability": 1.75
+					},
+					{
+						"RewardItemID": 2,
+						"RewardItemProbability": 1
+					}
+				]
+			}
+		},
+		"FixedSkillRewardStageIDList": [ 1 ],
+		"SkillItemID": 10000,
+		"MaxSkillRewardCount": 2,
+		"CurrentSkillRewardCount": 0,
+		"bIsChapterInitialized": false,
+		"BossStageInfo":
+		{
+			"StageType": "E_None",
+			"StageIcon": "None",
+			"Coordinate": 0,
+			"MainLevelAsset": "None",
+			"OuterLevelAsset": "None",
+			"EnemyCompositionInfo":
+			{
+				"CompositionNameList": []
+			},
+			"RewardInfoList": [],
+			"EnemySpawnLocationList": [],
+			"BossSpawnLocation":
+			{
+				"X": 0,
+				"Y": 0,
+				"Z": 0
+			},
+			"BossSpawnRotation":
+			{
+				"Pitch": 0,
+				"Yaw": 0,
+				"Roll": 0
+			},
+			"PlayerStartLocation":
+			{
+				"X": 0,
+				"Y": 0,
+				"Z": 0
+			},
+			"PlayerStartRotation":
+			{
+				"Pitch": 0,
+				"Yaw": 0,
+				"Roll": 0
+			},
+			"ItemBoxSpawnLocationList": [],
+			"RewardSpawnLocation":
+			{
+				"X": 0,
+				"Y": 0,
+				"Z": 0
+			},
+			"PortalTransformList": [],
+			"PortalDirectionTagList": [],
+			"TimeLimitValue": 0,
+			"bIsVisited": false,
+			"bIsFinished": false,
+			"bIsClear": false,
+			"bIsGameOver": false
+		},
+		"StageIconInfoMap":
+		{
+			"E_Entry": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Start_a.TX_ICON_Start_a'",
+			"E_Easy": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Ebattle_a.TX_ICON_Ebattle_a'",
+			"E_Normal": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Battle_a.TX_ICON_Battle_a'",
+			"E_Hard": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
+			"E_Expert": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
+			"E_Nightmare": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
+			"E_Boss": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Boss_a.TX_ICON_Boss_a'",
+			"E_Craft": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Crafting_a.TX_ICON_Crafting_a'"
+		},
+		"StageIconTransitionValueList": [],
+		"TutorialLevel": "/Game/Map/Chapter01/Polishing/Chapter01_Entry_Tutorial.Chapter01_Entry_Tutorial",
+		"StageLevelInfoMap":
+		{
+			"E_Entry":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Polishing/Chapter01_Entry.Chapter01_Entry"
+				]
+			},
+			"E_Easy":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat10.Chapter01_Combat10"
+				]
+			},
+			"E_Normal":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat10.Chapter01_Combat10"
+				]
+			},
+			"E_Hard":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08"
+				]
+			},
+			"E_Expert":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat07.Chapter01_Combat07",
+					"/Game/Map/Chapter01/Polishing/Chapter01_Combat08.Chapter01_Combat08"
+				]
+			},
+			"E_Nightmare":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Chapter01_Combat01.Chapter01_Combat01",
+					"/Game/Map/Chapter01/Chapter01_Combat02.Chapter01_Combat02",
+					"/Game/Map/Chapter01/Chapter01_Combat03.Chapter01_Combat03",
+					"/Game/Map/Chapter01/Chapter01_Combat04.Chapter01_Combat04",
+					"/Game/Map/Chapter01/Chapter01_Combat05.Chapter01_Combat05",
+					"/Game/Map/Chapter01/Chapter01_Combat06.Chapter01_Combat06",
+					"/Game/Map/Chapter01/Chapter01_Combat07.Chapter01_Combat07"
+				]
+			},
+			"E_Boss":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Polishing/Chapter01_Boss.Chapter01_Boss"
+				]
+			},
+			"E_Craft":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter01/Polishing/Chapter01_Craft.Chapter01_Craft"
+				]
+			}
+		},
+		"OuterStageLevelList": [
+			"/Game/Map/Chapter01/Chapter01_OuterArea01.Chapter01_OuterArea01",
+			"/Game/Map/Chapter01/Chapter01_OuterArea02.Chapter01_OuterArea02",
+			"/Game/Map/Chapter01/Chapter01_OuterArea03.Chapter01_OuterArea03"
+		],
+		"BossCharacterClass": "/Script/Engine.BlueprintGeneratedClass'/Game/Character/EnemyCharacter/Blueprint/BP_BossCharacter.BP_BossCharacter_C'"
+	},
+	{
+		"Name": "2",
+		"ChapterID": 2,
+		"StageCount": 7,
+		"CurrentStageCoordinate": 0,
+		"StageTypeListForLevelIdx": [],
+		"EliteTimeAtkStageTimeOut": 80,
+		"NormalTimeAtkStageTimeOut": 90,
+		"EnemyCompositionMap":
+		{
+			"easy_small1":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"1002": 2
+				}
+			},
+			"easy_small2":
+			{
+				"EnemySet":
+				{
+					"1001": 1,
+					"1002": 3
+				}
+			},
+			"easy_small3":
+			{
+				"EnemySet":
+				{
+					"1002": 4
+				}
+			},
+			"easy_small4":
+			{
+				"EnemySet":
+				{
+					"1001": 3,
+					"1002": 1
+				}
+			},
+			"easy_small5":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"2002": 1
+				}
+			},
+			"easy_medium1":
+			{
+				"EnemySet":
+				{
+					"1001": 3,
+					"1002": 2,
+					"2002": 1
+				}
+			},
+			"easy_medium2":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"2002": 2
+				}
+			},
+			"easy_medium3":
+			{
+				"EnemySet":
+				{
+					"1002": 2
+				}
+			},
+			"easy_medium4":
+			{
+				"EnemySet":
+				{
+					"1001": 1,
+					"1002": 2
+				}
+			},
+			"easy_large1":
+			{
+				"EnemySet":
+				{
+					"1001": 3,
+					"1002": 3,
+					"2002": 1
+				}
+			},
+			"easy_large2":
+			{
+				"EnemySet":
+				{
+					"1002": 4,
+					"2002": 2
+				}
+			},
+			"easy_large3":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"1002": 2,
+					"2002": 1
+				}
+			},
+			"easy_superlarge1":
+			{
+				"EnemySet":
+				{
+					"1001": 4,
+					"1002": 3
+				}
+			},
+			"easy_superlarge2":
+			{
+				"EnemySet":
+				{
+					"1002": 4,
+					"2002": 2
+				}
+			},
+			"normal_small1":
+			{
+				"EnemySet":
+				{
+					"1100": 1,
+					"1101": 1,
+					"1002": 2
+				}
+			},
+			"normal_small2":
+			{
+				"EnemySet":
+				{
+					"2002": 2,
+					"1001": 2
+				}
+			},
+			"normal_small3":
+			{
+				"EnemySet":
+				{
+					"1101": 2,
+					"1002": 2
+				}
+			},
+			"normal_small4":
+			{
+				"EnemySet":
+				{
+					"1001": 2,
+					"1002": 1,
+					"2002": 1
+				}
+			},
+			"normal_small5":
+			{
+				"EnemySet":
+				{
+					"1001": 1,
+					"1101": 1,
+					"2002": 2
+				}
+			},
+			"normal_medium1":
+			{
+				"EnemySet":
+				{
+					"1100": 2,
+					"2000": 1,
+					"1002": 1
+				}
+			},
+			"normal_medium2":
+			{
+				"EnemySet":
+				{
+					"2000": 1,
+					"1001": 2,
+					"2002": 1
+				}
+			},
+			"normal_medium3":
+			{
+				"EnemySet":
+				{
+					"2001": 1,
+					"1001": 2,
+					"1002": 1
+				}
+			},
+			"normal_medium4":
+			{
+				"EnemySet":
+				{
+					"1101": 2,
+					"2002": 2
+				}
+			},
+			"normal_large1":
+			{
+				"EnemySet":
+				{
+					"1100": 2,
+					"2002": 2,
+					"1002": 2
+				}
+			},
+			"normal_large2":
+			{
+				"EnemySet":
+				{
+					"2001": 1,
+					"1001": 2,
+					"2002": 2
+				}
+			},
+			"normal_large3":
+			{
+				"EnemySet":
+				{
+					"2000": 1,
+					"1001": 2,
+					"1002": 2
+				}
+			},
+			"normal_superlarge1":
+			{
+				"EnemySet":
+				{
+					"1101": 2,
+					"1001": 3,
+					"2002": 2
+				}
+			},
+			"normal_superlarge2":
+			{
+				"EnemySet":
+				{
+					"1100": 2,
+					"2001": 1,
+					"1002": 3
+				}
+			},
+			"hard_small1":
+			{
+				"EnemySet":
+				{
+					"1101": 1,
+					"2000": 2,
+					"1110": 2
+				}
+			},
+			"hard_medium1":
+			{
+				"EnemySet":
+				{
+					"1110": 2,
+					"2000": 1,
+					"2001": 2
+				}
+			},
+			"hard_medium2":
+			{
+				"EnemySet":
+				{
+					"1110": 1,
+					"1001": 2,
+					"1002": 2
+				}
+			},
+			"hard_medium3":
+			{
+				"EnemySet":
+				{
+					"1110": 2,
+					"2001": 2,
+					"2002": 1
+				}
+			},
+			"hard_large1":
+			{
+				"EnemySet":
+				{
+					"1110": 2,
+					"2000": 2,
+					"2001": 3
+				}
+			},
+			"hard_large2":
+			{
+				"EnemySet":
+				{
+					"1110": 2,
+					"2001": 2,
+					"2002": 2
+				}
+			},
+			"boss":
+			{
+				"EnemySet":
+				{
+					"2001": 3
+				}
+			}
+		},
+		"StageEnemyCompositionInfoMap":
+		{
+			"E_Entry":
+			{
+				"CompositionNameList": [
+					"easy_small1",
+					"easy_small2",
+					"easy_small3",
+					"easy_small4",
+					"easy_small5"
+				]
+			},
+			"E_Easy":
+			{
+				"CompositionNameList": [
+					"easy_medium1",
+					"easy_medium2",
+					"easy_medium3",
+					"easy_medium4",
+					"easy_large1",
+					"easy_large2",
+					"easy_large3",
+					"easy_superlarge1",
+					"easy_superlarge2"
+				]
+			},
+			"E_Normal":
+			{
+				"CompositionNameList": [
+					"normal_small1",
+					"normal_small2",
+					"normal_small3",
+					"normal_small4",
+					"normal_small5",
+					"normal_medium1",
+					"normal_medium2",
+					"normal_medium3",
+					"normal_medium4"
+				]
+			},
+			"E_Hard":
+			{
+				"CompositionNameList": [
+					"normal_large1",
+					"normal_large2",
+					"normal_large3",
+					"normal_superlarge1",
+					"normal_superlarge2"
+				]
+			},
+			"E_Expert":
+			{
+				"CompositionNameList": [
+					"hard_small1",
+					"hard_medium1",
+					"hard_medium2",
+					"hard_medium3"
+				]
+			},
+			"E_Nightmare":
+			{
+				"CompositionNameList": [
+					"hard_large1",
+					"hard_large2"
+				]
+			},
+			"E_Boss":
+			{
+				"CompositionNameList": [
+					"boss"
+				]
+			}
+		},
+		"MaxItemBoxSpawnCountMap":
+		{
+			"E_Entry": 2,
+			"E_Easy": 2,
+			"E_Normal": 3,
+			"E_Hard": 4,
+			"E_Expert": 5,
+			"E_None": 6
+		},
+		"StageTemplateList": [
+			{
+				"StageComposition": [
+					"E_Normal",
+					"E_Hard",
+					"E_Craft",
+					"E_Expert",
+					"E_Nightmare",
+					"E_Craft",
+					"E_Boss"
+				]
+			}
+		],
+		"StageInfoList": [],
+		"StageRewardCandidateInfoMap":
+		{
+			"E_Entry":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 1
+					}
+				]
+			},
+			"E_Easy":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 2,
+						"RewardItemProbability": 1
+					}
+				]
+			},
+			"E_Normal":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 2,
+						"RewardItemProbability": 1
+					}
+				]
+			},
+			"E_Hard":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 10000,
+						"RewardItemProbability": 1.75
+					},
+					{
+						"RewardItemID": 2,
+						"RewardItemProbability": 1
+					}
+				]
+			},
+			"E_Expert":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 10000,
+						"RewardItemProbability": 1.75
+					},
+					{
+						"RewardItemID": 2,
+						"RewardItemProbability": 1
+					}
+				]
+			},
+			"E_Nightmare":
+			{
+				"RewardCandidateInfoList": [
+					{
+						"RewardItemID": 8,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 11,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 12,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 13,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 14,
+						"RewardItemProbability": 0.5
+					},
+					{
+						"RewardItemID": 15,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 16,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 17,
+						"RewardItemProbability": 1
+					},
+					{
+						"RewardItemID": 10000,
+						"RewardItemProbability": 1.75
+					},
+					{
+						"RewardItemID": 2,
+						"RewardItemProbability": 1
+					}
+				]
+			}
+		},
+		"FixedSkillRewardStageIDList": [ 1 ],
+		"SkillItemID": 10000,
+		"MaxSkillRewardCount": 2,
+		"CurrentSkillRewardCount": 0,
+		"bIsChapterInitialized": false,
+		"BossStageInfo":
+		{
+			"StageType": "E_None",
+			"StageIcon": "None",
+			"Coordinate": 0,
+			"MainLevelAsset": "None",
+			"OuterLevelAsset": "None",
+			"EnemyCompositionInfo":
+			{
+				"CompositionNameList": []
+			},
+			"RewardInfoList": [],
+			"EnemySpawnLocationList": [],
+			"BossSpawnLocation":
+			{
+				"X": 0,
+				"Y": 0,
+				"Z": 0
+			},
+			"BossSpawnRotation":
+			{
+				"Pitch": 0,
+				"Yaw": 0,
+				"Roll": 0
+			},
+			"PlayerStartLocation":
+			{
+				"X": 0,
+				"Y": 0,
+				"Z": 0
+			},
+			"PlayerStartRotation":
+			{
+				"Pitch": 0,
+				"Yaw": 0,
+				"Roll": 0
+			},
+			"ItemBoxSpawnLocationList": [],
+			"RewardSpawnLocation":
+			{
+				"X": 0,
+				"Y": 0,
+				"Z": 0
+			},
+			"PortalTransformList": [],
+			"PortalDirectionTagList": [],
+			"TimeLimitValue": 0,
+			"bIsVisited": false,
+			"bIsFinished": false,
+			"bIsClear": false,
+			"bIsGameOver": false
+		},
+		"StageIconInfoMap":
+		{
+			"E_Entry": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Start_a.TX_ICON_Start_a'",
+			"E_Easy": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Ebattle_a.TX_ICON_Ebattle_a'",
+			"E_Normal": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Battle_a.TX_ICON_Battle_a'",
+			"E_Hard": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
+			"E_Expert": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
+			"E_Nightmare": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_TimeAttack_a.TX_ICON_TimeAttack_a'",
+			"E_Boss": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Boss_a.TX_ICON_Boss_a'",
+			"E_Craft": "/Script/Engine.Texture2D'/Game/UI/InGame/Texture/00_ICON_Map/Legacy/TX_ICON_Crafting_a.TX_ICON_Crafting_a'"
+		},
+		"StageIconTransitionValueList": [],
+		"TutorialLevel": "/Game/Map/Chapter01/Polishing/Chapter01_Entry_Tutorial.Chapter01_Entry_Tutorial",
+		"StageLevelInfoMap":
+		{
+			"E_Entry":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter02/Backup/Chapter02_Entry.Chapter02_Entry"
+				]
+			},
+			"E_Easy":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01.Chapter02_Combat01",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_a.Chapter02_Combat01_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_b.Chapter02_Combat01_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_a.Chapter02_Combat02_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_b.Chapter02_Combat02_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_a.Chapter02_Combat03_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_b.Chapter02_Combat03_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_a.Chapter02_Combat04_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_b.Chapter02_Combat04_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_c.Chapter02_Combat04_c"
+				]
+			},
+			"E_Normal":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01.Chapter02_Combat01",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_a.Chapter02_Combat01_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_b.Chapter02_Combat01_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_a.Chapter02_Combat02_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_b.Chapter02_Combat02_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_a.Chapter02_Combat03_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_b.Chapter02_Combat03_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_a.Chapter02_Combat04_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_b.Chapter02_Combat04_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_c.Chapter02_Combat04_c"
+				]
+			},
+			"E_Hard":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01.Chapter02_Combat01",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_a.Chapter02_Combat01_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_b.Chapter02_Combat01_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_a.Chapter02_Combat02_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_b.Chapter02_Combat02_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_a.Chapter02_Combat03_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_b.Chapter02_Combat03_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_a.Chapter02_Combat04_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_b.Chapter02_Combat04_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_c.Chapter02_Combat04_c"
+				]
+			},
+			"E_Expert":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01.Chapter02_Combat01",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_a.Chapter02_Combat01_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_b.Chapter02_Combat01_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_a.Chapter02_Combat02_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_b.Chapter02_Combat02_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_a.Chapter02_Combat03_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_b.Chapter02_Combat03_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_a.Chapter02_Combat04_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_b.Chapter02_Combat04_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_c.Chapter02_Combat04_c"
+				]
+			},
+			"E_Nightmare":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01.Chapter02_Combat01",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_a.Chapter02_Combat01_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat01_b.Chapter02_Combat01_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_a.Chapter02_Combat02_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat02_b.Chapter02_Combat02_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_a.Chapter02_Combat03_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat03_b.Chapter02_Combat03_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_a.Chapter02_Combat04_a",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_b.Chapter02_Combat04_b",
+					"/Game/Map/Chapter02/Polishing/Chapter02_Combat04_c.Chapter02_Combat04_c"
+				]
+			},
+			"E_Boss":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter02/Polishing/Chapter02_Boss.Chapter02_Boss"
+				]
+			},
+			"E_Craft":
+			{
+				"LevelList": [
+					"/Game/Map/Chapter02/Polishing/Chapter02_Craft.Chapter02_Craft"
+				]
+			}
+		},
+		"OuterStageLevelList": [
+			"/Game/Map/Chapter01/Chapter01_OuterArea01.Chapter01_OuterArea01",
+			"/Game/Map/Chapter01/Chapter01_OuterArea02.Chapter01_OuterArea02",
+			"/Game/Map/Chapter01/Chapter01_OuterArea03.Chapter01_OuterArea03"
+		],
+		"BossCharacterClass": "/Script/Engine.BlueprintGeneratedClass'/Game/Character/EnemyCharacter/Blueprint/BP_BossCharacter.BP_BossCharacter_C'"
+	}
+]

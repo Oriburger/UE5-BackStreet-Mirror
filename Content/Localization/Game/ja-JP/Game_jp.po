@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_jp\n"
-"POT-Creation-Date: 2025-08-12 05:01\n"
-"PO-Revision-Date: 2025-08-12 05:01\n"
+"POT-Creation-Date: 2025-08-22 03:47\n"
+"PO-Revision-Date: 2025-08-22 03:47\n"
 "Language-Team: \n"
 "Language: ja-JP\n"
 "MIME-Version: 1.0\n"
@@ -1434,6 +1434,13 @@ msgctxt "ST_EasyGameUICommon,Button_Credit"
 msgid "Credits"
 msgstr "クレジット"
 
+#. Key:	Button_Delete
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Delete"
+msgid "Delete"
+msgstr "削除する"
+
 #. Key:	Button_Discard
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1475,6 +1482,13 @@ msgstr "タイトル画面に戻る"
 msgctxt "ST_EasyGameUICommon,Button_Reset"
 msgid "Reset"
 msgstr "リセット"
+
+#. Key:	Button_Return_to_Neutral_Zone
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Return_to_Neutral_Zone"
+msgid "Return to Neutral Zone"
+msgstr "中立エリアに戻る"
 
 #. Key:	Button_Select
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2141,12 +2155,33 @@ msgctxt "ST_EasyGameUICommon,Reset_Warning"
 msgid "Do you really want to reset settings ?\r\nAny action is definitive."
 msgstr "本当に設定をリセットしますか？\r\nこの操作は取り消せません。"
 
+#. Key:	Return_NeutralZone_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Return_NeutralZone_Warning"
+msgid "Are you sure you want to return to the lobby?\r\nAll rewards acquired during this run will be lost."
+msgstr "本当にロビーに戻りますか？\r\nこのプレイ中に獲得した報酬はすべて失われます。"
+
 #. Key:	ReturnToTitle_Warning
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 msgctxt "ST_EasyGameUICommon,ReturnToTitle_Warning"
 msgid "Do you really want to quit?\r\nAny unsaved progress will be lost."
 msgstr "本当に終了しますか？\r\n保存されていない進行状況は失われます。"
+
+#. Key:	Save_Delete_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Save_Delete_Warning"
+msgid "Do you really want to delete this save file ?\r\nThis action is definitive."
+msgstr "本当にこのセーブファイルを削除しますか？\r\nこの操作は元に戻せません。"
+
+#. Key:	Save_Overwrite_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Save_Overwrite_Warning"
+msgid "Do you really want to overwrite this save file ?\r\nAll saved progress will be lost."
+msgstr "本当にこのセーブファイルを上書きしますか？\r\n保存されたすべての進行状況が失われます。"
 
 #. Key:	Skill
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2442,6 +2477,13 @@ msgctxt "ST_Item,Desc_CigaretteButt"
 msgid "A cigarette butt with embers still glowing."
 msgstr "まだ火が残っているタバコの吸い殻。"
 
+#. Key:	Desc_Core
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Core"
+msgid "A core energy of '3COS' recovered from the wreckage of enemy robots. It is used to unlock new character abilities in neutral zones."
+msgstr "敵ロボットの残骸から回収された「3COS」のコアエネルギー。中立エリアでキャラクターの新たな能力を解放するために使用されます。"
+
 #. Key:	Desc_EMP_Vial
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
@@ -2595,6 +2637,13 @@ msgstr "タバコの吸い殻"
 msgctxt "ST_Item,Name_Common_Ticket"
 msgid "Common Ticket"
 msgstr "コモンチケット"
+
+#. Key:	Name_Core
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Core"
+msgid "Core"
+msgstr "コア"
 
 #. Key:	Name_CraftingMaterial_Gear
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item

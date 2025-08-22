@@ -155,11 +155,11 @@ private:
 	class UUserWidget* GameResultWidgetRef;
 
 //======== Timer ==========================
-protected:
+public:
 	UFUNCTION()
 		void OpenMainMenuLevel();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void OpenNeutralZoneLevel();
 
 private:

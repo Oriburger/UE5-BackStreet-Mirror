@@ -8,6 +8,7 @@
 #include "../../Global/BackStreetGameModeBase.h"
 #include "../../Global/BackStreetGameInstance.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
+#include "../../System/SaveSystem/SaveSlotManager.h"
 #include "Runtime/UMG/Public/UMG.h"
 
 // Sets default values
@@ -91,15 +92,14 @@ void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 	OnChapterCleared.Broadcast();
 
 	//change level to next chapter
-	if (CurrentChapterInfo.ChapterID != MaxChapterID)
+	if (CurrentChapterInfo.ChapterID != MaxChapterID && bChapterClear)
 	{
 		StartChapter(CurrentChapterInfo.ChapterID + 1);
 	}
 	else
 	{
 		//나중에 Reward UI로 대체하기
-		//OpenNeutralZoneLevel();
-		OpenMainMenuLevel();
+		OpenNeutralZoneLevel();
 	}
 }
 
@@ -154,6 +154,7 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 	{
 		ChapterID = NewChapterID;
 		CurrentChapterInfo = *newInfo;
+		bIsChapterFinished = false;
 		CurrentChapterInfo.bIsChapterInitialized = true;
 		StageGeneratorComponent->InitGenerator(CurrentChapterInfo);
 		StageManagerComponent->Initialize(CurrentChapterInfo);
@@ -165,9 +166,17 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 
 void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 {
-	if (bIsChapterFinished) return;
+	if (bIsChapterFinished)
+	{
+		UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::OnStageFinished - Chapter is already finished"));
+		return;
+	}
 	int32 stageIdx = StageInfo.Coordinate;
-	if (!CurrentChapterInfo.StageInfoList.IsValidIndex(stageIdx)) return;
+	if (!CurrentChapterInfo.StageInfoList.IsValidIndex(stageIdx))
+	{
+		UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::OnStageFinished - Invalid StageIdx %d for StageInfoList %d"), stageIdx, CurrentChapterInfo.StageInfoList.Num());
+		return;
+	}
 	CurrentChapterInfo.StageInfoList[stageIdx] = StageInfo;
 	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
 
@@ -244,9 +253,11 @@ void ANewChapterManagerBase::SetTutorialCompletion(bool bCompleted)
 	if (gameInstance)
 	{
 		// 게임 인스턴스의 ProgressSaveData에 튜토리얼 완료 상태 저장
-		FSaveSlotInfo saveSlotInfo;
-		gameInstance->GetCurrentSaveSlotInfo(saveSlotInfo);
-		saveSlotInfo.bIsTutorialDone = bCompleted;
+		ASaveSlotManager* saveSlotManager = gameInstance->GetSafeSaveSlotManager();
+		if (IsValid(saveSlotManager))
+		{
+			saveSlotManager->SetTutorialCompletion(bCompleted);
+		}
 		return;
 	}
 	UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::SetTutorialCompletion(%d) - game instance is not valid"), (int32)bCompleted);
@@ -282,6 +293,7 @@ void ANewChapterManagerBase::OpenMainMenuLevel()
 		UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::OpenMainMenuLevel() - GamemodeRef is not valid"));
 		return;
 	}
+	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::OpenMainMenuLevel() - Open Main Menu Level"));
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
 	GamemodeRef.Get()->RequestOpenLevel("MainMenuPersistent", false);
 }
@@ -293,6 +305,7 @@ void ANewChapterManagerBase::OpenNeutralZoneLevel()
 		UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::OpenMainMenuLevel() - GamemodeRef is not valid"));
 		return;
 	}
+	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::OpenNeutralZoneLevel() - Open Neutral Zone Level"));
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
 	GamemodeRef.Get()->RequestOpenLevel("NeutralZonePersistent", true);
 }

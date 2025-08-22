@@ -563,7 +563,6 @@ void UStageManagerComponent::StartStage()
 		playerCharacter->GetController()->SetControlRotation(CurrentStageInfo.PlayerStartRotation);
 	}
 
-
 	if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Craft)
 	{
 		FinishStage(true);
@@ -572,7 +571,11 @@ void UStageManagerComponent::StartStage()
 
 void UStageManagerComponent::FinishStage(bool bStageClear)
 {
-	if (CurrentStageInfo.bIsFinished) return;
+	if (CurrentStageInfo.bIsFinished)
+	{
+		UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::FinishStage - Stage is already finished"));
+		return;
+	}
 	CurrentStageInfo.bIsClear = bStageClear;
 	CurrentStageInfo.bIsFinished = true;
 
@@ -597,12 +600,13 @@ void UStageManagerComponent::FinishStage(bool bStageClear)
 		//Stage Reward
 		GrantStageRewards();
 
-		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry) //&& !ChapterManagerRef.Get()->GetTutorialCompletion())
+		if (CurrentStageInfo.StageType == EStageCategoryInfo::E_Entry && !ChapterManagerRef.Get()->GetTutorialCompletion())
 		{
 			UE_LOG(LogStage, Warning, TEXT("> UStageManagerComponent::FinishStage - Tutorial level will be activated"));
 		}
 	}
 
+	UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::FinishStage - Stage Finished!"));
 	OnStageFinished.Broadcast(CurrentStageInfo);
 }
 
@@ -613,8 +617,15 @@ void UStageManagerComponent::GrantStageRewards()
 	if (!IsValid(playerCharacter)) return;
 
 	TArray<FItemInfoDataStruct> rewardInfoList = GetCurrentStageInfo().RewardInfoList;
+	if(rewardInfoList.IsEmpty())
+	{
+		UE_LOG(LogStage, Warning, TEXT("UStageManagerComponent::GrantStageRewards - No reward info found for stage %d"), CurrentStageInfo.Coordinate);
+		return;
+	}
 	for (FItemInfoDataStruct& rewardItemInfo : rewardInfoList)
 	{
+		UE_LOG(LogStage, Log, TEXT("UStageManagerComponent::GrantStageRewards - ItemID : %d, Amount : %d, bIsActorItem : %d"), 
+			rewardItemInfo.ItemID, rewardItemInfo.ItemAmount, rewardItemInfo.bIsActorItem);
 		if (rewardItemInfo.bIsActorItem)
 		{
 			SpawnedActorList.Add(SpawnItemActor(rewardItemInfo));
@@ -650,8 +661,11 @@ AActor* UStageManagerComponent::SpawnItemActor(FItemInfoDataStruct ItemInfo)
 void UStageManagerComponent::UpdateEnemyCountAndCheckClear()
 {
 	UpdateRemainingEnemyCount();
+	UE_LOG(LogStage, Log, TEXT("UStageManagerComponent::UpdateEnemyCountAndCheckClear - Remaining Enemy Count : %d"), RemainingEnemyCount);
+	
 	if (CheckStageClearStatus())
 	{
+		UE_LOG(LogStage, Log, TEXT("UStageManagerComponent::UpdateEnemyCountAndCheckClear - Stage Clear!"));
 		FinishStage(true);
 	}
 }

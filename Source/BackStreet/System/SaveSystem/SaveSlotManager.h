@@ -14,7 +14,6 @@ class BACKSTREET_API ASaveSlotManager : public AActor
 {
 	GENERATED_BODY()
 
-
 public:
 	ASaveSlotManager();
 
@@ -26,10 +25,10 @@ public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateGameLoadDone OnInitializeDone;
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintNativeEvent)
 		void OnPreLoadMap(const FString& MapName);
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintNativeEvent)
 		void OnPostLoadMap(UWorld* LoadedWorld);
 
 	
@@ -42,10 +41,14 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
-		void InitializeReference(bool bIsInGame = true);
+		void InitializeReference();
 
 	UFUNCTION()
 		void DefferedInitializeReference();
+
+	//EasyGameUI 시스템을 이용해 SaveSlotName을 초기화
+	UFUNCTION(BlueprintImplementableEvent)
+		void InitializeSaveSlotName();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		float DefferedInitializeTime = 5.0f;
@@ -55,6 +58,8 @@ protected:
 
 private:
 	int32 DefferedInitializeCount = 0;
+
+	bool bNeedToFetchPermanentWealthData = true;
 
 	UPROPERTY()
 		FTimerHandle DefferedInitializeTimerHandle;
@@ -70,22 +75,31 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FString GetSaveSlotName() const;
 
+	UFUNCTION()
+		void SetTutorialCompletion(bool bCompleted);
+
+protected:
+	UFUNCTION()
+		void OnLoadFinished(bool bIsSuccess);
+
 	UFUNCTION(BlueprintCallable)
 		void SetSaveSlotName(FString NewSaveSlotName);
 
-protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Save")
 		bool bIsRequiredToLoad = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
+		bool bIsInMainMenuLevel = false;
+
 //======= Cache SaveGame Data ========================
 protected:
-	// 게임 인스턴스로부터 게임 데이터를 가져옴
-	UFUNCTION()
+	// 인게임 인스턴스들로부터 게임 데이터를 가져옴
+	UFUNCTION(BlueprintCallable)
 		void FetchGameData();
 
     // 최초 스폰 시 Game Instance에서 Cached 데이터를 Fetch
     UFUNCTION(BlueprintCallable, Category = "Save System")
-        void FetchCachedData();
+        bool TryFetchCachedData();
 
     // 특정 시점에 Game Instance로 Cache 연산
     UFUNCTION(BlueprintCallable, Category = "Save System")

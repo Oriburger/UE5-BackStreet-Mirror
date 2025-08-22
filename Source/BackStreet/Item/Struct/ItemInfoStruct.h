@@ -98,9 +98,23 @@ public:
 	//메시의 초기 크기 정보
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 		FVector InitialScale = FVector::ZeroVector;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+		float ItemZOffset = 0.0f;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
 		TSoftObjectPtr<UMaterialInstance> OutlineMaterial;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		TSoftObjectPtr<class UNiagaraSystem> ItemEffect;
+
+	//이펙트의 초기 위치 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		FVector EffectInitialLocation = FVector::ZeroVector;
+
+	//이펙트의 초기 회전 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "VFX")
+		FRotator EffectInitialRotation = FRotator::ZeroRotator;
 
 	//Item Icon Image
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay")
@@ -131,12 +145,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
 		int32 MaxMainWeaponCount = 1;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Wealth")
-		int32 GenesiumID;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config|Wealth")
-		int32 FusionCellID;
 
 	UPROPERTY(VisibleAnywhere, Category = "Gameplay")
 		TMap<int32, FWeaponStateStruct> WeaponStateMap;

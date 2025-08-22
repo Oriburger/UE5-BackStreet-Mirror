@@ -23,9 +23,8 @@ public:
 	UFUNCTION()
 		void InitInventory(FItemInventoryInfoStruct InitialData = FItemInventoryInfoStruct());
 
-	//OnItemUpdated로 수정바람@@ - 240905 @ljh
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateUpdateItem OnUpdateItem;
+		FDelegateUpdateItem OnItemUpdated;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateAddItem OnItemAdded; 

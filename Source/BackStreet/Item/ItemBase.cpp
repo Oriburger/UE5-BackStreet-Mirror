@@ -82,21 +82,32 @@ void AItemBase::InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride)
 		ItemInfo.ItemAmount = 1;
 	}
 
+	bool bNeedToAsyncLoad = false;
+	TArray<FSoftObjectPath> assetToStream;
+	if (!ItemInfo.ItemEffect.IsNull())
+	{
+		bNeedToAsyncLoad = !IsValid(ItemInfo.ItemEffect.Get());
+		assetToStream.AddUnique(ItemInfo.ItemEffect.ToSoftObjectPath());
+	}
+
 	if (!ItemInfo.ItemMesh.IsNull())
 	{
-		TArray<FSoftObjectPath> assetToStream;
+		bNeedToAsyncLoad = bNeedToAsyncLoad || !IsValid(ItemInfo.ItemMesh.Get());
 		assetToStream.AddUnique(ItemInfo.ItemMesh.ToSoftObjectPath());
 		assetToStream.AddUnique(ItemInfo.OutlineMaterial.ToSoftObjectPath());
-		if (IsValid(ItemInfo.ItemMesh.Get()))
-		{
-			InitializeItemMesh();
-		}
-		else
-		{
-			FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
-			streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &AItemBase::InitializeItemMesh));
-		}
 	}
+
+	//비동기 에셋 로드가 필요한지 유무 체크
+	if(bNeedToAsyncLoad)
+	{
+		FStreamableManager& streamable = UAssetManager::Get().GetStreamableManager();
+		streamable.RequestAsyncLoad(assetToStream, FStreamableDelegate::CreateUObject(this, &AItemBase::InitializeItemMesh));
+	}
+	else
+	{
+		InitializeItemMesh();
+	}
+
 	OnItemInitialized.Broadcast(ItemInfo);
 
 	UE_LOG(LogTemp, Warning, TEXT("AItemBase::InitItem()"));
@@ -104,14 +115,52 @@ void AItemBase::InitItem(int32 NewItemID, FItemInfoDataStruct InfoOverride)
 	UE_LOG(LogTemp, Warning, TEXT("ItemImage : %s"), *UKismetSystemLibrary::GetDisplayName(ItemInfo.ItemImage));
 	UE_LOG(LogTemp, Warning, TEXT("ItemType : %d"), (int32)ItemInfo.ItemType);
 	UE_LOG(LogTemp, Warning, TEXT("ItemAmount : %d"), ItemInfo.ItemAmount);
-	
-	ActivateItem();
 }
 
 void AItemBase::SetItemAmount(int32 NewAmount)
 {
 	if (ItemInfo.ItemType != EItemCategoryInfo::E_SubWeapon && ItemInfo.ItemType != EItemCategoryInfo::E_Craft) return;
 	ItemInfo.ItemAmount = NewAmount;
+}
+
+void AItemBase::AdjustItemZLocation(float ZOffsetOverride, bool bDrawDebugLine)
+{
+	FHitResult hitResult;
+
+	// 여러 오브젝트 타입을 대상으로 설정 (WorldStatic, WorldDynamic)
+	TArray<TEnumAsByte<EObjectTypeQuery>> objectQueryParams;
+	objectQueryParams.Add(EObjectTypeQuery::ObjectTypeQuery1); // WorldStatic
+	objectQueryParams.Add(EObjectTypeQuery::ObjectTypeQuery2); // WorldDynamic
+
+	FVector startLocation = GetActorLocation() + FVector(0.0f, 0.0f, 50.0f);
+	FVector endLocation = GetActorLocation() + GetActorLocation().UpVector * 200.0f;
+	FVector resultLocation;
+
+	// 천장 체크
+	// WorldStatic, WorldDynamic로 트레이스
+	// 결과를 startLocation에 저장
+	// 라인트레이스 수행
+	bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(GetWorld(), startLocation, endLocation, objectQueryParams
+		, true, { this }, bDrawDebugLine ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResult, true, FLinearColor::Yellow, FLinearColor::Green, 20.0f
+	);
+
+	startLocation = (bHit && hitResult.bBlockingHit) ? hitResult.Location : startLocation;
+	
+	// 바닥 체크, WorldStatic, WorldDynamic로 트레이스
+	endLocation = GetActorLocation() + GetActorLocation().UpVector * -1000.0f;
+
+	bHit = UKismetSystemLibrary::LineTraceSingleForObjects(GetWorld(), startLocation, endLocation, objectQueryParams
+		, true, { this }, bDrawDebugLine ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResult, true, FLinearColor::Red, FLinearColor::Green, 20.0f
+	);
+
+	// 결과 위치를 resultLocation에 저장
+	resultLocation = (bHit && hitResult.bBlockingHit) ? hitResult.Location : GetActorLocation();
+	
+	//offset 적용하여 액터 월드 위치 set
+	const float finalZOffset = ZOffsetOverride != -0.1f ? ItemInfo.ItemZOffset : ItemInfo.InitialLocation.Z;
+	resultLocation.Z += finalZOffset;
+	SetActorLocation(resultLocation, false, nullptr, ETeleportType::TeleportPhysics);
+	DrawDebugSphere(GetWorld(), resultLocation, 10.0f, 12, FColor::Green, false, 50.0f);
 }
 
 void AItemBase::OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -192,13 +241,21 @@ void AItemBase::OnItemPicked_Implementation()
 
 void AItemBase::InitializeItemMesh()
 {
+	if (ItemInfo.ItemID == 0) return;
 	if (ItemInfo.ItemMesh.IsNull() || !IsValid(ItemInfo.ItemMesh.Get())) return;
 	
 	MeshComponent->SetStaticMesh(ItemInfo.ItemMesh.Get());
-	//MeshComponent->SetRelativeLocation(ItemInfo.InitialLocation);
 	MeshComponent->SetRelativeRotation(ItemInfo.InitialRotation);
 	MeshComponent->SetRelativeScale3D(ItemInfo.InitialScale);
+
+	ParticleComponent->SetAsset(ItemInfo.ItemEffect.Get());
+	ParticleComponent->SetRelativeLocation(ItemInfo.EffectInitialLocation);
+	ParticleComponent->SetRelativeRotation(ItemInfo.EffectInitialRotation);
+	ParticleComponent->Activate();
+
 	OnItemInitialized.Broadcast(ItemInfo);
+	ActivateItem();
+	AdjustItemZLocation(ItemInfo.ItemZOffset, true);
 }
 
 FItemInfoDataStruct AItemBase::GetItemInfoWithID(const int32 ItemID)

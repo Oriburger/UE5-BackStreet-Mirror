@@ -332,8 +332,7 @@ void AEnemyCharacterBase::SpawnDeathItems()
 
 		if (FMath::RandRange(0.0f, 1.0f) <= spawnProbability)
 		{
-			//임시로 오프셋 넣어둠. 언젠가 Linetrace로 바닥 맞춰주는 로직 추가할 것.
-			AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FMath::VRand() * 30.0f - FVector(0.0f, 0.0f, 50.0f));
+			AItemBase* newItem = GamemodeRef->SpawnItemToWorld(itemID, GetActorLocation() + FVector(0.0f, 0.0f, 200.0f));
 
 			if (IsValid(newItem))
 			{
