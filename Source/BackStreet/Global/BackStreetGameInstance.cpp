@@ -35,6 +35,8 @@ void UBackStreetGameInstance::OnPostLoadMap(UWorld* LoadedWorld)
 	{
 		UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::OnPostLoadMap - In MainMenu level, resetting save data"));
 		SaveSlotInfo = FSaveSlotInfo();
+		SaveSlotInfo.bIsInGame = false;
+		SaveSlotInfo.bIsInNeutralZone = false;
 		ProgressSaveData = FProgressSaveData();
 		AchievementSaveData = FAchievementSaveData();
 		InventorySaveData = FInventorySaveData();

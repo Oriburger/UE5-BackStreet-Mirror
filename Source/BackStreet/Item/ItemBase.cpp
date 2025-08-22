@@ -141,26 +141,26 @@ void AItemBase::AdjustItemZLocation(float ZOffsetOverride, bool bDrawDebugLine)
 	// 결과를 startLocation에 저장
 	// 라인트레이스 수행
 	bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(GetWorld(), startLocation, endLocation, objectQueryParams
-		, true, { this }, bDrawDebugLine ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResult, true, FLinearColor::Red, FLinearColor::Green, 10.0f
+		, true, { this }, bDrawDebugLine ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResult, true, FLinearColor::Yellow, FLinearColor::Green, 20.0f
 	);
 
-	startLocation = (bHit && hitResult.bBlockingHit) ? hitResult.Location : endLocation;
+	startLocation = (bHit && hitResult.bBlockingHit) ? hitResult.Location : startLocation;
 	
 	// 바닥 체크, WorldStatic, WorldDynamic로 트레이스
 	endLocation = GetActorLocation() + GetActorLocation().UpVector * -1000.0f;
 
 	bHit = UKismetSystemLibrary::LineTraceSingleForObjects(GetWorld(), startLocation, endLocation, objectQueryParams
-		, true, { this }, bDrawDebugLine ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResult, true, FLinearColor::Red, FLinearColor::Green, 10.0f
+		, true, { this }, bDrawDebugLine ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None, hitResult, true, FLinearColor::Red, FLinearColor::Green, 20.0f
 	);
-	if (bHit && hitResult.bBlockingHit)
-	{
-		resultLocation = hitResult.Location;
-	}
+
+	// 결과 위치를 resultLocation에 저장
+	resultLocation = (bHit && hitResult.bBlockingHit) ? hitResult.Location : GetActorLocation();
 	
 	//offset 적용하여 액터 월드 위치 set
 	const float finalZOffset = ZOffsetOverride != -0.1f ? ItemInfo.ItemZOffset : ItemInfo.InitialLocation.Z;
 	resultLocation.Z += finalZOffset;
 	SetActorLocation(resultLocation, false, nullptr, ETeleportType::TeleportPhysics);
+	DrawDebugSphere(GetWorld(), resultLocation, 10.0f, 12, FColor::Green, false, 50.0f);
 }
 
 void AItemBase::OnOverlapBegins(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
