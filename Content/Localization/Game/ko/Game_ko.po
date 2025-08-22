@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-08-14 09:21\n"
-"PO-Revision-Date: 2025-08-14 09:21\n"
+"POT-Creation-Date: 2025-08-22 03:48\n"
+"PO-Revision-Date: 2025-08-22 03:48\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -1434,6 +1434,13 @@ msgctxt "ST_EasyGameUICommon,Button_Credit"
 msgid "Credits"
 msgstr "제작진"
 
+#. Key:	Button_Delete
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Delete"
+msgid "Delete"
+msgstr "삭제하기"
+
 #. Key:	Button_Discard
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1475,6 +1482,13 @@ msgstr "타이틀 화면으로"
 msgctxt "ST_EasyGameUICommon,Button_Reset"
 msgid "Reset"
 msgstr "초기화"
+
+#. Key:	Button_Return_to_Neutral_Zone
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Return_to_Neutral_Zone"
+msgid "Return to Neutral Zone"
+msgstr "중립 구역으로 돌아가기"
 
 #. Key:	Button_Select
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2141,12 +2155,33 @@ msgctxt "ST_EasyGameUICommon,Reset_Warning"
 msgid "Do you really want to reset settings ?\r\nAny action is definitive."
 msgstr "설정을 정말 초기화하시겠습니까?\r\n이 작업은 되돌릴 수 없습니다."
 
+#. Key:	Return_NeutralZone_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Return_NeutralZone_Warning"
+msgid "Are you sure you want to return to the lobby?\r\nAll rewards acquired during this run will be lost."
+msgstr "정말 로비로 돌아가시겠습니까?\r\n이번 회차에서 획득한 보상은 모두 사라집니다."
+
 #. Key:	ReturnToTitle_Warning
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 msgctxt "ST_EasyGameUICommon,ReturnToTitle_Warning"
 msgid "Do you really want to quit?\r\nAny unsaved progress will be lost."
 msgstr "정말로 타이틀로 나가시겠습니까?\r\n현재까지의 내용은 저장되지 않습니다."
+
+#. Key:	Save_Delete_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Save_Delete_Warning"
+msgid "Do you really want to delete this save file ?\r\nThis action is definitive."
+msgstr "정말 이 저장 파일을 삭제하시겠습니까?\r\n이 작업은 되돌릴 수 없습니다."
+
+#. Key:	Save_Overwrite_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Save_Overwrite_Warning"
+msgid "Do you really want to overwrite this save file ?\r\nAll saved progress will be lost."
+msgstr "정말 이 저장 파일을 덮어쓰시겠습니까?\r\n저장된 모든 진행 내용이 사라집니다."
 
 #. Key:	Skill
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon

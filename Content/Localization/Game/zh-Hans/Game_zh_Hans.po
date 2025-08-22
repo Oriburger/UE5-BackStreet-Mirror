@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hans\n"
-"POT-Creation-Date: 2025-08-14 07:42\n"
-"PO-Revision-Date: 2025-08-14 07:42\n"
+"POT-Creation-Date: 2025-08-22 03:48\n"
+"PO-Revision-Date: 2025-08-22 03:48\n"
 "Language-Team: \n"
 "Language: zh-Hans\n"
 "MIME-Version: 1.0\n"
@@ -1434,6 +1434,13 @@ msgctxt "ST_EasyGameUICommon,Button_Credit"
 msgid "Credits"
 msgstr "制作人员"
 
+#. Key:	Button_Delete
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Delete"
+msgid "Delete"
+msgstr "删除"
+
 #. Key:	Button_Discard
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1475,6 +1482,13 @@ msgstr "返回标题界面"
 msgctxt "ST_EasyGameUICommon,Button_Reset"
 msgid "Reset"
 msgstr "重置"
+
+#. Key:	Button_Return_to_Neutral_Zone
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Return_to_Neutral_Zone"
+msgid "Return to Neutral Zone"
+msgstr "返回中立區域"
 
 #. Key:	Button_Select
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2141,12 +2155,33 @@ msgctxt "ST_EasyGameUICommon,Reset_Warning"
 msgid "Do you really want to reset settings ?\r\nAny action is definitive."
 msgstr "您确定要重置设置吗？\r\n此操作不可撤销。"
 
+#. Key:	Return_NeutralZone_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Return_NeutralZone_Warning"
+msgid "Are you sure you want to return to the lobby?\r\nAll rewards acquired during this run will be lost."
+msgstr "你确定要返回大厅吗？\r\n本次游玩中获得的所有奖励都将被清除。"
+
 #. Key:	ReturnToTitle_Warning
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 msgctxt "ST_EasyGameUICommon,ReturnToTitle_Warning"
 msgid "Do you really want to quit?\r\nAny unsaved progress will be lost."
 msgstr "您确定要退出吗？\r\n所有未保存的进度都将丢失。"
+
+#. Key:	Save_Delete_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Save_Delete_Warning"
+msgid "Do you really want to delete this save file ?\r\nThis action is definitive."
+msgstr "你真的要删除这个存档文件吗？\r\n此操作无法撤销。"
+
+#. Key:	Save_Overwrite_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Save_Overwrite_Warning"
+msgid "Do you really want to overwrite this save file ?\r\nAll saved progress will be lost."
+msgstr "你真的要覆盖这个存档文件吗？\r\n所有已保存的进度将会丢失。"
 
 #. Key:	Skill
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
