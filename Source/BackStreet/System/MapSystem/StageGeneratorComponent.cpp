@@ -90,7 +90,7 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 		if (stageInfo.GetIsCombatStage(false))
 		{
 			nextCombatWorldIdx = stageCoordinate % stageCount;
-			const bool bIsFixedSkillRewardStage =	(CurrentChapterInfo.CurrentSkillRewardCount < CurrentChapterInfo.MaxSkillRewardCount
+			const bool bIsFixedSkillRewardStage = (CurrentChapterInfo.CurrentSkillRewardCount < CurrentChapterInfo.MaxSkillRewardCount
 													&& CurrentChapterInfo.FixedSkillRewardStageIDList.Contains(stageIdx));
 			
 			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType, {});
@@ -105,14 +105,10 @@ TArray<FStageInfo> UStageGeneratorComponent::Generate()
 			{
 				stageInfo.StageIcon = stageInfo.RewardInfoList[0].ItemImage;
 			}
-			UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate() - Stage Type : %d, Reward Count : %d"), (int32)stageInfo.StageType, stageInfo.RewardInfoList.Num());
+			UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate() - Stage Type : %d, Reward Count : %d, FixedSkillRewardStage : %d, SkillRewardCount : %d")
+				, (int32)stageInfo.StageType, stageInfo.RewardInfoList.Num(), (int32)bIsFixedSkillRewardStage, CurrentChapterInfo.CurrentSkillRewardCount);
 		}
-		else if (stageInfo.StageType == EStageCategoryInfo::E_Entry)
-		{
-			stageInfo.RewardInfoList = GetRewardListFromCandidates(stageInfo.StageType, {});
-			UE_LOG(LogStage, Warning, TEXT("UStageGeneratorComponent::Generate() - Stage Type : %d, Reward Count : %d"), (int32)stageInfo.StageType, stageInfo.RewardInfoList.Num());
-		}
-
+		
 		//5. set enemy composition
 		if (stageInfo.GetIsCombatStage())
 		{
@@ -140,8 +136,8 @@ TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidate
 	}
 
 	// 무작위 순서로 후보 리스트 순회
-	TArray<FStageRewardCandidateInfo> ShuffledList = rewardInfoList.RewardCandidateInfoList;
-	Algo::RandomShuffle(ShuffledList);
+	TArray<FStageRewardCandidateInfo> shuffledList = rewardInfoList.RewardCandidateInfoList;
+	Algo::RandomShuffle(shuffledList);
 
 	TSet<int32> alreadySelectedIDs;
 	if (CurrentChapterInfo.MaxSkillRewardCount <= CurrentChapterInfo.CurrentSkillRewardCount)
@@ -150,7 +146,7 @@ TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidate
 		ExceptIDList.Add(CurrentChapterInfo.SkillItemID);
 	}
 
-	for (const FStageRewardCandidateInfo& candidate : ShuffledList)
+	for (const FStageRewardCandidateInfo& candidate : shuffledList)
 	{ 
 		int32 ItemID = candidate.RewardItemID;
 		float probability = candidate.RewardItemProbability;
@@ -171,7 +167,6 @@ TArray<FItemInfoDataStruct> UStageGeneratorComponent::GetRewardListFromCandidate
 
 	return rewardItemInfoList;
 }
-
 
 FItemInfoDataStruct UStageGeneratorComponent::GetRewardItemInfo(int32 ItemID)
 {

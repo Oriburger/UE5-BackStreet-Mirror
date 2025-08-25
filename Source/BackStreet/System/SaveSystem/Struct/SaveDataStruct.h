@@ -64,12 +64,12 @@ struct FInventorySaveData
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		bool bIsInitialzed = false;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int32 GenesiumCount = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Config|Wealth")
+		int32 CoreID = 2;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int32 FusionCellCount = 0;
+		int32 CoreCount = 0;
 	
 };
 
@@ -79,6 +79,9 @@ struct FSaveSlotInfo
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString SaveSlotName = TEXT("");
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		bool bIsInitialized = false;
 
@@ -86,11 +89,8 @@ public:
 		bool bIsTutorialDone = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int32 SaveCount = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FString SaveSlotName = TEXT("");
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bIsInGame = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bIsInNeutralZone = false;
 };

@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_ko\n"
-"POT-Creation-Date: 2025-07-30 13:05\n"
-"PO-Revision-Date: 2025-07-30 13:05\n"
+"POT-Creation-Date: 2025-08-22 03:48\n"
+"PO-Revision-Date: 2025-08-22 03:48\n"
 "Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -1312,8 +1312,8 @@ msgstr "치명타"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,UI_Name_Currency"
-msgid "Currency"
-msgstr "재화"
+msgid "Utility"
+msgstr "다용도"
 
 #. Key:	UI_Name_DashCombo
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -1434,6 +1434,13 @@ msgctxt "ST_EasyGameUICommon,Button_Credit"
 msgid "Credits"
 msgstr "제작진"
 
+#. Key:	Button_Delete
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Delete"
+msgid "Delete"
+msgstr "삭제하기"
+
 #. Key:	Button_Discard
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1475,6 +1482,13 @@ msgstr "타이틀 화면으로"
 msgctxt "ST_EasyGameUICommon,Button_Reset"
 msgid "Reset"
 msgstr "초기화"
+
+#. Key:	Button_Return_to_Neutral_Zone
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Return_to_Neutral_Zone"
+msgid "Return to Neutral Zone"
+msgstr "중립 구역으로 돌아가기"
 
 #. Key:	Button_Select
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2141,12 +2155,33 @@ msgctxt "ST_EasyGameUICommon,Reset_Warning"
 msgid "Do you really want to reset settings ?\r\nAny action is definitive."
 msgstr "설정을 정말 초기화하시겠습니까?\r\n이 작업은 되돌릴 수 없습니다."
 
+#. Key:	Return_NeutralZone_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Return_NeutralZone_Warning"
+msgid "Are you sure you want to return to the lobby?\r\nAll rewards acquired during this run will be lost."
+msgstr "정말 로비로 돌아가시겠습니까?\r\n이번 회차에서 획득한 보상은 모두 사라집니다."
+
 #. Key:	ReturnToTitle_Warning
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 msgctxt "ST_EasyGameUICommon,ReturnToTitle_Warning"
 msgid "Do you really want to quit?\r\nAny unsaved progress will be lost."
 msgstr "정말로 타이틀로 나가시겠습니까?\r\n현재까지의 내용은 저장되지 않습니다."
+
+#. Key:	Save_Delete_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Save_Delete_Warning"
+msgid "Do you really want to delete this save file ?\r\nThis action is definitive."
+msgstr "정말 이 저장 파일을 삭제하시겠습니까?\r\n이 작업은 되돌릴 수 없습니다."
+
+#. Key:	Save_Overwrite_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Save_Overwrite_Warning"
+msgid "Do you really want to overwrite this save file ?\r\nAll saved progress will be lost."
+msgstr "정말 이 저장 파일을 덮어쓰시겠습니까?\r\n저장된 모든 진행 내용이 사라집니다."
 
 #. Key:	Skill
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2442,6 +2477,13 @@ msgctxt "ST_Item,Desc_CigaretteButt"
 msgid "A cigarette butt with embers still glowing."
 msgstr "아직 불씨가 살아있는 담배꽁초이다."
 
+#. Key:	Desc_Core
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Core"
+msgid "A core energy of '3COS' recovered from the wreckage of enemy robots. It is used to unlock new character abilities in neutral zones."
+msgstr "적 로봇의 잔해에서 회수한 '3COS'의 핵심 에너지. 중립구역에서 캐릭터의 새로운 능력을 개방하는 데 사용된다."
+
 #. Key:	Desc_EMP_Vial
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
@@ -2595,6 +2637,13 @@ msgstr "담배꽁초"
 msgctxt "ST_Item,Name_Common_Ticket"
 msgid "Common Ticket"
 msgstr "일반티켓"
+
+#. Key:	Name_Core
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Core"
+msgid "Core"
+msgstr "코어"
 
 #. Key:	Name_CraftingMaterial_Gear
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -3118,8 +3167,8 @@ msgstr "<Medium.24>[캐릭터 영구 강화]</>\r\n\r\n- 플레이어는 반복 
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Desc_BoosterCipTip"
-msgid "Press Tab to view the booster chips you’ve obtained. Collect them to become even stronger."
-msgstr "획득한 부스터칩은 tap을 눌러 확인할 수 있다. 부스터칩을 모아 더욱 강해지자."
+msgid "You can check acquired boosterchips in the Boosterchip Panel. Collect more to grow stronger."
+msgstr "획득한 부스터칩은 부스터칩 패널에서 확인할 수 있다. 부스터칩을 모아 더욱 강해지자."
 
 #. Key:	Desc_BossStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3139,8 +3188,8 @@ msgstr "기어로 수리 키트를 구매하거나 보유 중인 부스터칩을
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Desc_CurrencyTip"
-msgid "Collect gears to craft new skill modules. They might also serve as currency?"
-msgstr "톱니바퀴를 모아 새로운 스킬 모듈을 제작할 수 있을 것 같다. 재화로 사용할 수 있을지도?"
+msgid "Collect gears to upgrade boosterchips or use them in trades."
+msgstr "기어를 모으면 부스터칩 업그레이드나 거래에 활용할 수 있을 것 같다."
 
 #. Key:	Desc_DebuffTip
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial

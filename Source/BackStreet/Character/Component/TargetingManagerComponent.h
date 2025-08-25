@@ -84,11 +84,11 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		bool bAutoTargeting = false;
+		bool bAutoTargeting = true;
 
 	//타게팅을 유지하기 위한 거리
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float TargetingMaintainThreashold = 1250.0f;
+		float TargetingMaintainThreashold = 1500.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		float MaxFindDistance = 750.0f;
@@ -106,10 +106,10 @@ public:
 		bool bUseConeTrace = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (UIMin = 0.0, UIMax = 1.0, EditCondition = "bUseConeTrace"))
-		float TraceDensity = 0.35f;
+		float TraceDensity = 0.4f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (UIMin = 0.0, UIMax = 90.0, EditCondition = "bUseConeTrace"))
-		float TraceAngle = 45.0f; //in degree
+		float TraceAngle = 40.0f; //in degree
 		
 private:
 	bool bIsTargetingActivated;

@@ -44,7 +44,7 @@ void UItemInventoryComponent::InitInventory(FItemInventoryInfoStruct InitialData
 			return;
 		}
 	}
-	if (WeaponRef.IsValid())
+	if (!WeaponRef.IsExplicitlyNull() && WeaponRef.IsValid())
 	{
 		WeaponRef.Get()->OnWeaponStateUpdated.AddDynamic(this, &UItemInventoryComponent::OnWeaponStateUpdated);
 	}
@@ -85,7 +85,8 @@ void UItemInventoryComponent::AddItem(int32 ItemID, uint8 ItemCnt)
 		OnItemAdded.Broadcast(InventoryInfoData.ItemMap[ItemID], ItemCnt);
 		InventoryInfoData.ItemMap[ItemID].ItemAmount = FMath::Min(MAX_ITEM_COUNT_THRESHOLD, InventoryInfoData.ItemMap[ItemID].ItemAmount + ItemCnt);
 	}
-	OnUpdateItem.Broadcast();
+
+	OnItemUpdated.Broadcast();
 }
 
 void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
@@ -100,7 +101,7 @@ void UItemInventoryComponent::RemoveItem(int32 ItemID, uint8 ItemCnt)
 		TryRemoveWeapon(ItemID, InventoryInfoData.ItemMap[ItemID].ItemType, ItemCnt);
 	}
 
-	OnUpdateItem.Broadcast();
+	OnItemUpdated.Broadcast();
 	OnItemRemoved.Broadcast(InventoryInfoData.ItemMap[ItemID], InventoryInfoData.ItemMap[ItemID].ItemAmount);
 }
 

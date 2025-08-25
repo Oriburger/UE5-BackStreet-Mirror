@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_en\n"
-"POT-Creation-Date: 2025-07-30 13:04\n"
-"PO-Revision-Date: 2025-07-30 13:04\n"
+"POT-Creation-Date: 2025-08-14 07:42\n"
+"PO-Revision-Date: 2025-08-14 07:42\n"
 "Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -1312,8 +1312,8 @@ msgstr "Critical"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,UI_Name_Currency"
-msgid "Currency"
-msgstr "Currency"
+msgid "Utility"
+msgstr "Utility"
 
 #. Key:	UI_Name_DashCombo
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -2442,6 +2442,13 @@ msgctxt "ST_Item,Desc_CigaretteButt"
 msgid "A cigarette butt with embers still glowing."
 msgstr "A cigarette butt with embers still glowing."
 
+#. Key:	Desc_Core
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Desc_Core"
+msgid "A core energy of '3COS' recovered from the wreckage of enemy robots. It is used to unlock new character abilities in neutral zones."
+msgstr "A core energy of '3COS' recovered from the wreckage of enemy robots. It is used to unlock new character abilities in neutral zones."
+
 #. Key:	Desc_EMP_Vial
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
 #: /Game/UI/Localization/ST_Item.ST_Item
@@ -2595,6 +2602,13 @@ msgstr "Cigarette Butt"
 msgctxt "ST_Item,Name_Common_Ticket"
 msgid "Common Ticket"
 msgstr "Common Ticket"
+
+#. Key:	Name_Core
+#. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
+#: /Game/UI/Localization/ST_Item.ST_Item
+msgctxt "ST_Item,Name_Core"
+msgid "Core"
+msgstr "Core"
 
 #. Key:	Name_CraftingMaterial_Gear
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -3118,8 +3132,8 @@ msgstr "<Medium.24>[Permanent Character Upgrade]</>\r\n\r\n- Players can permane
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Desc_BoosterCipTip"
-msgid "Press Tab to view the booster chips you’ve obtained. Collect them to become even stronger."
-msgstr "Press Tab to view the booster chips you’ve obtained. Collect them to become even stronger."
+msgid "You can check acquired boosterchips in the Boosterchip Panel. Collect more to grow stronger."
+msgstr "You can check acquired boosterchips in the Boosterchip Panel. Collect more to grow stronger."
 
 #. Key:	Desc_BossStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3139,8 +3153,8 @@ msgstr "Use gears to purchase repair kits or enhance your boosterchips."
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Desc_CurrencyTip"
-msgid "Collect gears to craft new skill modules. They might also serve as currency?"
-msgstr "Collect gears to craft new skill modules. They might also serve as currency?"
+msgid "Collect gears to upgrade boosterchips or use them in trades."
+msgstr "Collect gears to upgrade boosterchips or use them in trades."
 
 #. Key:	Desc_DebuffTip
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial

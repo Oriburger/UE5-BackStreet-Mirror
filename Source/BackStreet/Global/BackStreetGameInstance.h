@@ -41,16 +41,16 @@ public:
 		class ASaveSlotManager* GetSafeSaveSlotManager();
 
 //======== Handling SaveSlot =========================
-protected:
-	//UFUNCTION()
-		//void OnSlotCreated(const FString& NewSlotName);
-
-	//UFUNCTION()
-		//void OnSlotLoaded(const FString& SlotName, bool bIsSuccess);
-
 public:
 	UFUNCTION(BlueprintCallable, Blueprintpure)
 		void GetCurrentSaveSlotInfo(FSaveSlotInfo& OutSaveSlotInfo) { OutSaveSlotInfo = SaveSlotInfo; }
+
+	UFUNCTION(BlueprintCallable)
+		void SetCurrentSaveSlotInfo(FSaveSlotInfo NewSaveSlotInfo) 
+		{
+			SaveSlotInfo = NewSaveSlotInfo; 
+			UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::SetCurrentSaveSlotInfo - SaveSlotName: %s, bIsInit ? : %d, bIsInGame ? : %d"), *SaveSlotInfo.SaveSlotName, SaveSlotInfo.bIsInitialized, SaveSlotInfo.bIsInGame);
+		}
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FORCEINLINE FString GetCurrentSaveSlotName() const { return SaveSlotInfo.SaveSlotName; }
@@ -59,13 +59,13 @@ public:
 		void SetCurrentSaveSlotName(FString NewSaveSlotName);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		FORCEINLINE bool GetIsInGame() { return SaveSlotInfo.bIsInGame = GetWorld() ? GetWorld()->GetMapName().Contains(TEXT("Chapter")) : false; }
+		void GetIsInGameOrNeutralZone(bool& bIsInGame, bool& bIsNeutralZone);
 
 	UFUNCTION(BlueprintCallable)
-		void CacheGameData(FProgressSaveData NewProgressData, FAchievementSaveData NewAchievementData, FInventorySaveData NewInventoryData);
+		void CacheGameData(FSaveSlotInfo NewSaveSlotInfo, FProgressSaveData NewProgressData, FAchievementSaveData NewAchievementData, FInventorySaveData NewInventoryData);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		void GetCachedSaveGameData(FProgressSaveData& OutProgressData, FAchievementSaveData& OutAchievementData, FInventorySaveData& OutInventoryData);
+		bool GetCachedSaveGameData(FSaveSlotInfo& OutSaveSlotInfo, FProgressSaveData& OutProgressData, FAchievementSaveData& OutAchievementData, FInventorySaveData& OutInventoryData);
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		void GetCachedProgressSaveData(FProgressSaveData& OutProgressData) { OutProgressData = ProgressSaveData; }

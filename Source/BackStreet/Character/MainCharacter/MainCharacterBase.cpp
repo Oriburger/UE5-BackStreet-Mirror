@@ -91,7 +91,6 @@ AMainCharacterBase::AMainCharacterBase()
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SOUND"));
 	ItemInventory = CreateDefaultSubobject<UItemInventoryComponent>(TEXT("Item_Inventory"));
 
-	AbilityManagerComponent = CreateDefaultSubobject<UAbilityManagerComponent>(TEXT("ABILITY_MANAGER"));
 	TargetingManagerComponent = CreateDefaultSubobject<UTargetingManagerComponent>(TEXT("TARGETING_MANAGER"));;
 
 	GetCapsuleComponent()->OnComponentHit.AddUniqueDynamic(this, &AMainCharacterBase::OnCapsuleHit);
@@ -111,7 +110,10 @@ AMainCharacterBase::AMainCharacterBase()
 void AMainCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	//Blueprint에서 추가된 컴포넌트 
+	AbilityManagerComponent = FindComponentByClass<UAbilityManagerComponent>();
+
 	InitCharacterGameplayInfo(DefaultStat);
 
 	PlayerControllerRef = Cast<AMainCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));

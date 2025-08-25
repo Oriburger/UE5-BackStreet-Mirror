@@ -22,6 +22,12 @@ void UAbilityManagerComponent::BeginPlay()
 	UpdateCumulativeProbabilityList();
 }
 
+int32 UAbilityManagerComponent::GetAbilityUpgradeCost(EAbilityTierType TargetTier)
+{
+	if (!AbilityManagerInfo.UpgradeCostInfoMap.Contains(TargetTier)) return -1;
+	return AbilityManagerInfo.UpgradeCostInfoMap[TargetTier];
+}
+
 void UAbilityManagerComponent::InitAbilityManager(ACharacterBase* NewCharacter, FAbilityManagerInfoStruct AbilityManagerInfoData)
 {
 	if (!IsValid(NewCharacter)) return;
@@ -48,15 +54,6 @@ bool UAbilityManagerComponent::TryAddNewAbility(int32 AbilityID)
 	if (!OwnerCharacterRef.IsValid()) return false;
 	if (GetIsAbilityActive(AbilityID)) return false;
 	if (AbilityManagerInfo.ActiveAbilityInfoList.Num() >= AbilityManagerInfo.MaxAbilityCount) return false;
-
-	//이전 단계의 어빌리티가 있다면 제거부터 함 // not working 250107 
-	if (AbilityID > 0 && AbilityID % 3 != 1)
-	{
-		if (!TryRemoveAbility(AbilityID - 1))
-		{
-			UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::TryAddNewAbility %d / prev ability remove failed"), AbilityID);
-		}	
-	}
 
 	//추가 로직
 	FAbilityInfoStruct newAbilityInfo = GetAbilityInfo(AbilityID);
@@ -102,7 +99,6 @@ bool UAbilityManagerComponent::TryRemoveAbility(int32 AbilityID)
 	}
 	else
 	{
-		AbilityManagerInfo.ActiveAbilityInfoList.RemoveAt(targetAbilityIdx);
 		if (targetAbilityInfo.bIsRepetitive)
 		{
 			OwnerCharacterRef.Get()->GetWorldTimerManager().ClearTimer(targetAbilityInfo.TimerHandle);
@@ -111,28 +107,28 @@ bool UAbilityManagerComponent::TryRemoveAbility(int32 AbilityID)
 
 	//Total Tier 계산
 	AbilityTotalTier[targetAbilityInfo.AbilityType] -= (int32)targetAbilityInfo.AbilityTier;
-
-	bool result = false;
-	TArray<ECharacterStatType> targetStatTypeList; targetAbilityInfo.TargetStatMap.GenerateKeyArray(targetStatTypeList);
-	for (ECharacterStatType& statType : targetStatTypeList)
-	{
-		FAbilityValueInfoStruct abilityValue = targetAbilityInfo.TargetStatMap[statType];
-		if (!ownerInfo.StatGroupList.IsValidIndex((int32)statType))
-		{
-			UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat newStat for %d"), (int32)statType);
-			continue;
-		}
-
-		//Adder로 동작함
-		ownerInfo.SetAbilityStatInfo(statType, ownerInfo.GetAbilityStatInfo(statType) - abilityValue.Variable);
-		if (abilityValue.bIsContainProbability && ownerInfo.GetIsContainProbability(statType))
-		{
-			ownerInfo.SetProbabilityStatInfo(statType, ownerInfo.GetProbabilityStatInfo(statType) - abilityValue.ProbabilityValue);
-		}
-	}
+	TryUpdateCharacterStat(targetAbilityInfo, true);
+	AbilityManagerInfo.ActiveAbilityInfoList.Remove(targetAbilityInfo);
 
 	OnAbilityUpdated.Broadcast(AbilityManagerInfo.ActiveAbilityInfoList);
 	return true;
+}
+
+bool UAbilityManagerComponent::TryUpgradeAbility(int32 AbilityID)
+{
+	//3개의 티어이기 때문에, 3으로 나누어 떨어지는 AbilityID는 업그레이드 불가능
+	if(AbilityID % 3 == 0)
+	{
+		UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::TryUpgradeAbility / AbilityID %d is not valid for upgrade"), AbilityID);
+		return false; // 업그레이드 불가능한 어빌리티
+	}
+
+	bool result = TryRemoveAbility(AbilityID);
+	if (result)
+	{
+		result = TryAddNewAbility(AbilityID + 1);
+	}
+	return result; // AbilityID가 ActiveAbilityInfoList에 존재하지 않는 경우
 }
 
 void UAbilityManagerComponent::ClearAllAbility()
@@ -278,7 +274,11 @@ void UAbilityManagerComponent::UpdateCumulativeProbabilityList()
 bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct TargetAbilityInfo, bool bIsReset)
 {
 	//Validity 체크 (꺼져있는데 제거를 시도하거나, 켜져있는데 추가를 시도한다면?)
-	if (GetIsAbilityActive(TargetAbilityInfo.AbilityId) != bIsReset) return false;
+	if (bIsReset && !GetIsAbilityActive(TargetAbilityInfo.AbilityId))
+	{
+		UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::TryUpdateCharacterStat / AbilityID %d is not active"), TargetAbilityInfo.AbilityId);
+		return false;
+	}
 	
 	FCharacterGameplayInfo& ownerInfo = OwnerCharacterRef.Get()->GetCharacterGameplayInfoRef();
 	if (!ownerInfo.IsValid())
@@ -299,10 +299,10 @@ bool UAbilityManagerComponent::TryUpdateCharacterStat(const FAbilityInfoStruct T
 		}
 
 		//Adder로 동작함
-		ownerInfo.SetAbilityStatInfo(statType, ownerInfo.GetAbilityStatInfo(statType) + abilityValue.Variable);
+		ownerInfo.SetAbilityStatInfo(statType, ownerInfo.GetAbilityStatInfo(statType) + abilityValue.Variable * (bIsReset ? -1 : 1));
 		if (abilityValue.bIsContainProbability && ownerInfo.GetIsContainProbability(statType))
 		{
-			ownerInfo.SetProbabilityStatInfo(statType, ownerInfo.GetProbabilityStatInfo(statType) + abilityValue.ProbabilityValue);
+			ownerInfo.SetProbabilityStatInfo(statType, ownerInfo.GetProbabilityStatInfo(statType) + abilityValue.ProbabilityValue * (bIsReset ? -1 : 1));
 		}
 		//HP UI 업데이트
 		if (statType == ECharacterStatType::E_MaxHealth)
