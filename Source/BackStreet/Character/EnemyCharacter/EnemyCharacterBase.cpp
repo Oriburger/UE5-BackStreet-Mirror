@@ -220,7 +220,7 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 
 	//Stop AI Logic And Set Reactivation event
 	//Set Rotation To Causer
-	//250825 Exception Handling for Boss (Stop AI Login And Set Reactivation event, Rotating towards the actor that the damage causer)
+	//250825 Exception Handling for Boss (Stop AI Logic And Set Reactivation event, Rotating towards the actor that the damage causer)
 	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(Controller);
 	if (!ActorHasTag("Boss"))
 	{
