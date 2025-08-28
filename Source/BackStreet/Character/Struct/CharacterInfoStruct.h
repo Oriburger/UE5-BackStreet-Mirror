@@ -697,4 +697,7 @@ public:
 	//모든 어빌리티의 정보
 	UPROPERTY()
 		TArray<FAbilityInfoStruct> AbilityInfoList;
+
+	UPROPERTY()
+		TMap<EAbilityType, int32> AbilityTotalTier;
 };

@@ -64,9 +64,9 @@ bool UAbilityManagerComponent::TryAddNewAbility(int32 AbilityID)
 		OwnerCharacterRef.Get()->GetWorldTimerManager().SetTimer(newAbilityInfo.TimerHandle, newAbilityInfo.TimerDelegate, 1.0f, true);
 	}
 	//Total Tier 계산
-	if (!AbilityTotalTier.Contains(newAbilityInfo.AbilityType))
-		AbilityTotalTier.Add(newAbilityInfo.AbilityType, 0);
-	AbilityTotalTier[newAbilityInfo.AbilityType] += (int32)newAbilityInfo.AbilityTier;
+	if (!AbilityManagerInfo.AbilityTotalTier.Contains(newAbilityInfo.AbilityType))
+		AbilityManagerInfo.AbilityTotalTier.Add(newAbilityInfo.AbilityType, 0);
+	AbilityManagerInfo.AbilityTotalTier[newAbilityInfo.AbilityType] += (int32)newAbilityInfo.AbilityTier;
 	UE_LOG(LogAbility, Log, TEXT(""))
 
 	TryUpdateCharacterStat(newAbilityInfo, false);
@@ -106,7 +106,12 @@ bool UAbilityManagerComponent::TryRemoveAbility(int32 AbilityID)
 	}
 
 	//Total Tier 계산
-	AbilityTotalTier[targetAbilityInfo.AbilityType] -= (int32)targetAbilityInfo.AbilityTier;
+	if(!AbilityManagerInfo.AbilityTotalTier.Contains(targetAbilityInfo.AbilityType))
+	{
+		UE_LOG(LogAbility, Error, TEXT("UAbilityManagerComponent::TryRemoveAbility / AbilityManagerInfo.AbilityTotalTier is not valid for %s"), *UEnum::GetValueAsString(targetAbilityInfo.AbilityType));
+		return false;
+	}
+	AbilityManagerInfo.AbilityTotalTier[targetAbilityInfo.AbilityType] -= (int32)targetAbilityInfo.AbilityTier;
 	TryUpdateCharacterStat(targetAbilityInfo, true);
 	AbilityManagerInfo.ActiveAbilityInfoList.Remove(targetAbilityInfo);
 
@@ -248,8 +253,8 @@ TArray<FAbilityInfoStruct> UAbilityManagerComponent::GetRandomAbilityInfoList(in
 
 int32 UAbilityManagerComponent::GetAbilityTotalTier(EAbilityType AbilityType)
 {
-	if (!AbilityTotalTier.Contains(AbilityType)) return 0;
-	return AbilityTotalTier[AbilityType];
+	if (!AbilityManagerInfo.AbilityTotalTier.Contains(AbilityType)) return 0;
+	return AbilityManagerInfo.AbilityTotalTier[AbilityType];
 }
 
 int32 UAbilityManagerComponent::GetAbilityTotalTierThreshold(EAbilityType AbilityType)
