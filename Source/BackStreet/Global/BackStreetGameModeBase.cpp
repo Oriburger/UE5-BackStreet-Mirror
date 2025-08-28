@@ -153,24 +153,20 @@ void ABackStreetGameModeBase::OnSaveManagerLoadDone(bool bIsSuccess)
 	}
 }
 
-UCommonUserWidget* ABackStreetGameModeBase::GetMainHUDRef()
+UUserWidget* ABackStreetGameModeBase::GetMainHUDRef()
 {
 	if (IsValid(MainHUDRef)) return MainHUDRef;
-	return MainHUDRef = Cast<UCommonUserWidget>(CreateWidget(GetWorld(), MainHUDClass));
+	return MainHUDRef = Cast<UUserWidget>(CreateWidget(GetWorld(), MainHUDClass));
 }
 
 void ABackStreetGameModeBase::CreateDefaultHUD()
 {
-	UCommonUserWidget* combatWidgetRef = GetMainHUDRef();
+	UUserWidget* combatWidgetRef = GetMainHUDRef();
 	if (IsValid(combatWidgetRef))
 	{
 		if (!combatWidgetRef->IsInViewport())
 		{
 			combatWidgetRef->AddToViewport();
-		}
-		if (Cast<UCommonActivatableWidget>(combatWidgetRef))
-		{
-			//Cast<UCommonActivatableWidget>(combatWidgetRef)->ActivateWidget();
 		}
 	}
 

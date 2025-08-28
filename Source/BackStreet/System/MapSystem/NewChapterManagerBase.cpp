@@ -180,18 +180,25 @@ void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 	CurrentChapterInfo.StageInfoList[stageIdx] = StageInfo;
 	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
 
+
+	//===========================================================
+	//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishChapter' 
+
 	//Game Over
 	if (StageInfo.bIsGameOver)
 	{
-		//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishChapter' 
 		CreateGameResultWidget(false);
 	}
-	else if (StageInfo.bIsClear)
+	//Chapter & Game Clear
+	else if (StageInfo.bIsClear && StageInfo.StageType == EStageCategoryInfo::E_Boss)
 	{
-		if (StageInfo.StageType == EStageCategoryInfo::E_Boss)
+		if (CurrentChapterInfo.ChapterID == MaxChapterID)
 		{
-			//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishChapter'
 			CreateGameResultWidget(true);
+		}
+		else
+		{
+			CreateChapterCleartWidget();
 		}
 	}
 
@@ -275,15 +282,6 @@ bool ANewChapterManagerBase::GetTutorialCompletion()
 	}
 	UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::GetTutorialCompletion() - game instance is not valid"));
 	return false;
-}
-
-void ANewChapterManagerBase::CreateGameResultWidget(bool bChapterClear)
-{
-	GameResultWidgetRef = CreateWidget(GetWorld(), bChapterClear ? ChapterClearWidgetClass : GameOverWidgetClass);
-	if (IsValid(GameResultWidgetRef))
-	{
-		GameResultWidgetRef->AddToViewport();
-	}
 }
 
 void ANewChapterManagerBase::OpenMainMenuLevel()
