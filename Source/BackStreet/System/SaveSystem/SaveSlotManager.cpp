@@ -11,7 +11,6 @@
 #include "../../Character/Component/ItemInventoryComponent.h"
 #include "../../Character/Component/WeaponComponentBase.h"
 #include "../../Character/Component/SkillManagerComponentBase.h"	
-#include "ProgressSaveGame.h"
 
 ASaveSlotManager::ASaveSlotManager()
 {
