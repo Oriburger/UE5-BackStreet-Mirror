@@ -555,8 +555,12 @@ void AMainCharacterBase::ToggleTargetingMode(const FInputActionValue& Value)
 	{
 		if (Controller)
 		{
+			SetManualRotateMode();
+			if (!UGameplayStatics::IsGamePaused(GetWorld()))
+				SetAutomaticRotateModeTimer();
+
 			float newYawValue = GetMesh()->GetComponentRotation().Yaw + 95.0f;
-			Controller->SetControlRotation(FRotator(-20.0f, newYawValue, 0.0f));
+			Controller->SetControlRotation(FRotator(-5.0f, newYawValue, 0.0f));
 			OnLockOnStarted.Broadcast();
 		}
 		return;
