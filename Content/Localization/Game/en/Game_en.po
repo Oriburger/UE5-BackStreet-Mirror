@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_en\n"
-"POT-Creation-Date: 2025-09-01 07:33\n"
-"PO-Revision-Date: 2025-09-01 07:33\n"
+"POT-Creation-Date: 2025-09-01 08:46\n"
+"PO-Revision-Date: 2025-09-01 08:46\n"
 "Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -185,64 +185,64 @@ msgstr "Defense power increases by 15%"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Legendary"
-msgid "35% chance for jump attack to deal flame damage"
-msgstr "35% chance for jump attack to deal flame damage"
+msgid "30% chance for jump attack to deal flame damage"
+msgstr "30% chance for jump attack to deal flame damage"
 
 #. Key:	Desc_Flame_Aerial_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Normal"
-msgid "7% chance for jump attack to deal flame damage"
-msgstr "7% chance for jump attack to deal flame damage"
+msgid "5% chance for jump attack to deal flame damage"
+msgstr "5% chance for jump attack to deal flame damage"
 
 #. Key:	Desc_Flame_Aerial_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Rare"
-msgid "16% chance for jump attack to deal flame damage"
-msgstr "16% chance for jump attack to deal flame damage"
+msgid "15% chance for jump attack to deal flame damage"
+msgstr "15% chance for jump attack to deal flame damage"
 
 #. Key:	Desc_Flame_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Legendary"
-msgid "35% chance for dash attack to deal flame damage"
-msgstr "35% chance for dash attack to deal flame damage"
+msgid "30% chance for dash attack to deal flame damage"
+msgstr "30% chance for dash attack to deal flame damage"
 
 #. Key:	Desc_Flame_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Normal"
-msgid "7% chance for dash attack to deal flame damage"
-msgstr "7% chance for dash attack to deal flame damage"
+msgid "5% chance for dash attack to deal flame damage"
+msgstr "5% chance for dash attack to deal flame damage"
 
 #. Key:	Desc_Flame_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Rare"
-msgid "16% chance for dash attack to deal flame damage"
-msgstr "16% chance for dash attack to deal flame damage"
+msgid "15% chance for dash attack to deal flame damage"
+msgstr "15% chance for dash attack to deal flame damage"
 
 #. Key:	Desc_Flame_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Legendary"
-msgid "30% chance for normal attack to deal flame damage"
-msgstr "30% chance for normal attack to deal flame damage"
+msgid "35% chance for normal attack to deal flame damage"
+msgstr "35% chance for normal attack to deal flame damage"
 
 #. Key:	Desc_Flame_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Normal"
-msgid "5% chance for normal attack to deal flame damage"
-msgstr "5% chance for normal attack to deal flame damage"
+msgid "7% chance for normal attack to deal flame damage"
+msgstr "7% chance for normal attack to deal flame damage"
 
 #. Key:	Desc_Flame_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Rare"
-msgid "15% chance for normal attack to deal flame damage"
-msgstr "15% chance for normal attack to deal flame damage"
+msgid "17% chance for normal attack to deal flame damage"
+msgstr "17% chance for normal attack to deal flame damage"
 
 #. Key:	Desc_Footwork_Optimization_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip

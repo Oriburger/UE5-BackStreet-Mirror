@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hans\n"
-"POT-Creation-Date: 2025-09-01 07:34\n"
-"PO-Revision-Date: 2025-09-01 07:34\n"
+"POT-Creation-Date: 2025-09-01 08:47\n"
+"PO-Revision-Date: 2025-09-01 08:47\n"
 "Language-Team: \n"
 "Language: zh-Hans\n"
 "MIME-Version: 1.0\n"
@@ -185,64 +185,64 @@ msgstr "防御力提高15%"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Legendary"
-msgid "35% chance for jump attack to deal flame damage"
-msgstr "跳跃攻击有35%的几率造成火焰伤害"
+msgid "30% chance for jump attack to deal flame damage"
+msgstr "跳跃攻击有30%的几率造成火焰伤害"
 
 #. Key:	Desc_Flame_Aerial_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Normal"
-msgid "7% chance for jump attack to deal flame damage"
-msgstr "跳跃攻击有7%的几率造成火焰伤害"
+msgid "5% chance for jump attack to deal flame damage"
+msgstr "跳跃攻击有5%的几率造成火焰伤害"
 
 #. Key:	Desc_Flame_Aerial_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Rare"
-msgid "16% chance for jump attack to deal flame damage"
-msgstr "跳跃攻击有16%的几率造成火焰伤害"
+msgid "15% chance for jump attack to deal flame damage"
+msgstr "跳跃攻击有15%的几率造成火焰伤害"
 
 #. Key:	Desc_Flame_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Legendary"
-msgid "35% chance for dash attack to deal flame damage"
-msgstr "冲刺攻击有35%的几率造成火焰伤害"
+msgid "30% chance for dash attack to deal flame damage"
+msgstr "冲刺攻击有30%的几率造成火焰伤害"
 
 #. Key:	Desc_Flame_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Normal"
-msgid "7% chance for dash attack to deal flame damage"
-msgstr "冲刺攻击有7%的几率造成火焰伤害"
+msgid "5% chance for dash attack to deal flame damage"
+msgstr "冲刺攻击有5%的几率造成火焰伤害"
 
 #. Key:	Desc_Flame_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Rare"
-msgid "16% chance for dash attack to deal flame damage"
-msgstr "冲刺攻击有16%的几率造成火焰伤害"
+msgid "15% chance for dash attack to deal flame damage"
+msgstr "冲刺攻击有15%的几率造成火焰伤害"
 
 #. Key:	Desc_Flame_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Legendary"
-msgid "30% chance for normal attack to deal flame damage"
-msgstr "普通攻击有30%的几率造成火焰伤害"
+msgid "35% chance for normal attack to deal flame damage"
+msgstr "普通攻击有35%的几率造成火焰伤害"
 
 #. Key:	Desc_Flame_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Normal"
-msgid "5% chance for normal attack to deal flame damage"
-msgstr "普通攻击有5%的几率造成火焰伤害"
+msgid "7% chance for normal attack to deal flame damage"
+msgstr "普通攻击有7%的几率造成火焰伤害"
 
 #. Key:	Desc_Flame_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Rare"
-msgid "15% chance for normal attack to deal flame damage"
-msgstr "普通攻击有15%的几率造成火焰伤害"
+msgid "17% chance for normal attack to deal flame damage"
+msgstr "普通攻击有17%的几率造成火焰伤害"
 
 #. Key:	Desc_Footwork_Optimization_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
