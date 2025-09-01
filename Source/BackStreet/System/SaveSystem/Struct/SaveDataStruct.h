@@ -14,6 +14,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		bool bIsInitialzed = false;
 
+	//챕터별 클리어 시간
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		TArray<float> ChapterClearTimeList;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FChapterInfo ChapterInfo;
 

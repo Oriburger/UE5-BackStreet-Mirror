@@ -619,6 +619,7 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 	{
 		PlayHitAnimMontage();
 	}
+	CharacterGameplayInfo.TotalDamageTaken += damageAmount;
 	return damageAmount;
 }
 
@@ -939,6 +940,16 @@ void AMainCharacterBase::OnTargetingStateUpdated(bool bIsActivated, APawn* Targe
 	{
 		SetAutomaticRotateMode();
 	}
+}
+
+void AMainCharacterBase::UpdateDamageAmount(float NewDamage, float NewSubDamage)
+{
+	//기본값 처리
+	NewDamage = NewDamage < 0.0f ? 0.0f : NewDamage;
+	NewSubDamage = NewSubDamage < 0.0f ? 0.0f : NewSubDamage;
+
+	CharacterGameplayInfo.TotalDamage += NewDamage;
+	CharacterGameplayInfo.SubWeaponTotalDamage += NewSubDamage;
 }
 
 void AMainCharacterBase::SetCharacterStatFromSaveData()

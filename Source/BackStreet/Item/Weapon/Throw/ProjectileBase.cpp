@@ -229,7 +229,7 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		{
 			bool bIsFatalAttack = false;
 			const float totalDamage = Cast<ACharacterBase>(GetOwner())->WeaponComponent->CalculateTotalDamage(Cast<ACharacterBase>(OtherActor)->GetCharacterGameplayInfo(), bIsFatalAttack);
-			UGameplayStatics::ApplyDamage(OtherActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
+			UGameplayStatics::ApplyDamage(OtherActor, totalDamage, SpawnInstigator, this, nullptr);				
 			DestroyWithEffect(GetActorLocation(), true);
 		}
 	}
@@ -308,7 +308,7 @@ void AProjectileBase::CheckInitialDamageCondition(float SphereRadius, float Dist
 				{
 					bool bIsFatalAttack = false;
 					const float totalDamage = Cast<ACharacterBase>(GetOwner())->WeaponComponent->CalculateTotalDamage(Cast<ACharacterBase>(overlapActor)->GetCharacterGameplayInfo(), bIsFatalAttack);
-					UGameplayStatics::ApplyDamage(overlapActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
+					UGameplayStatics::ApplyDamage(overlapActor, totalDamage, SpawnInstigator, this, nullptr);
 
 					GetWorld()->GetTimerManager().SetTimer(DestroyWithEffectTimer,
 						FTimerDelegate::CreateLambda([&]()
@@ -351,7 +351,7 @@ void AProjectileBase::Explode()
 	//--- 데미지 관련 --------------
 	TArray<AActor*> ignoreActors = { (AActor*)this };
 	UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), ProjectileStat.ProjectileDamage, ProjectileStat.ProjectileDamage * 0.2f
-		, GetActorLocation(), 125.0f, 250.0f, 0.5f, nullptr, ignoreActors, OwnerCharacterRef.Get()
+		, GetActorLocation(), 125.0f, 250.0f, 0.5f, nullptr, ignoreActors, this
 		, OwnerCharacterRef.Get()->GetController(), ECC_WorldStatic);
 
 	//--- 이펙트 출력 --------------
