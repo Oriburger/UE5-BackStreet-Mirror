@@ -168,6 +168,21 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void OpenNeutralZoneLevel();
 
+	UFUNCTION(BlueprintCallable)
+		void PauseChapterTimer();
+
+	UFUNCTION(BlueprintCallable)
+		void UnPauseChapterTimer();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetChapterClearTime() { return CurrentChapterInfo.TotalElapsedTime; }
+
+protected:
+	UFUNCTION()
+		void UpdateChapterElapsedTime();
+
 private:
 	FTimerHandle OpenLevelDelayHandle; 
+
+	FTimerHandle ChapterTimerHandle; //챕터 클리어 시간 측정용
 };

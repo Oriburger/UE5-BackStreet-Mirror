@@ -9,6 +9,7 @@
 #include "../../Global/BackStreetGameInstance.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "../../System/SaveSystem/SaveSlotManager.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Runtime/UMG/Public/UMG.h"
 
 // Sets default values
@@ -28,6 +29,8 @@ void ANewChapterManagerBase::BeginPlay()
 	Super::BeginPlay();
 
 	StageManagerComponent->OnStageFinished.AddDynamic(this, &ANewChapterManagerBase::OnStageFinished);
+	StageManagerComponent->OnStageLoadBegin.AddDynamic(this, &ANewChapterManagerBase::PauseChapterTimer);
+	StageManagerComponent->OnStageLoadDone.AddDynamic(this, &ANewChapterManagerBase::UnPauseChapterTimer);
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 	GameInstanceRef = Cast<UBackStreetGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
@@ -148,12 +151,14 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 	//Load chapter info from data table
 	FChapterInfo* newInfo = nullptr;
 	FString rowName = FString::FromInt(NewChapterID);
+	const float elapsedTime = CurrentChapterInfo.TotalElapsedTime;
 
 	newInfo = ChapterInfoTable->FindRow<FChapterInfo>(FName(rowName), rowName);
 	if (newInfo != nullptr)
 	{
 		ChapterID = NewChapterID;
 		CurrentChapterInfo = *newInfo;
+		CurrentChapterInfo.TotalElapsedTime = elapsedTime;
 		bIsChapterFinished = false;
 		CurrentChapterInfo.bIsChapterInitialized = true;
 		StageGeneratorComponent->InitGenerator(CurrentChapterInfo);
@@ -306,4 +311,24 @@ void ANewChapterManagerBase::OpenNeutralZoneLevel()
 	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::OpenNeutralZoneLevel() - Open Neutral Zone Level"));
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
 	GamemodeRef.Get()->RequestOpenLevel("NeutralZonePersistent", true);
+}
+
+void ANewChapterManagerBase::PauseChapterTimer()
+{
+	GetWorldTimerManager().PauseTimer(ChapterTimerHandle);
+}
+
+void ANewChapterManagerBase::UnPauseChapterTimer()
+{
+	if (!GetWorldTimerManager().IsTimerActive(ChapterTimerHandle))
+	{
+		GetWorldTimerManager().SetTimer(ChapterTimerHandle, this, &ANewChapterManagerBase::UpdateChapterElapsedTime, 0.01f, true, 0.0f);
+		return;
+	}
+	GetWorldTimerManager().UnPauseTimer(ChapterTimerHandle);
+}
+
+void ANewChapterManagerBase::UpdateChapterElapsedTime()
+{
+	CurrentChapterInfo.TotalElapsedTime += 0.01f;
 }

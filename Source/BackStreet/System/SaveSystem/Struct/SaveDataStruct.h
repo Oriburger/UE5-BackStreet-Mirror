@@ -89,6 +89,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		bool bIsInitialized = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		TArray<float> BestChapterClearTimeList;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bIsTutorialDone = false;
 

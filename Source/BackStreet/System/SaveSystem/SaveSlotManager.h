@@ -31,6 +31,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 		void OnPostLoadMap(UWorld* LoadedWorld);
 
+	UFUNCTION()
+		void OnChapterCleared();
+
 	
 //======= Basic ======================================
 public:
@@ -59,7 +62,7 @@ protected:
 private:
 	int32 DefferedInitializeCount = 0;
 
-	bool bNeedToFetchPermanentWealthData = true;
+	bool bIsReadyToMoveNeutralZone = true;
 
 	UPROPERTY()
 		FTimerHandle DefferedInitializeTimerHandle;
