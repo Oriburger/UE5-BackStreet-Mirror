@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_en\n"
-"POT-Creation-Date: 2025-08-14 07:42\n"
-"PO-Revision-Date: 2025-08-14 07:42\n"
+"POT-Creation-Date: 2025-09-01 08:46\n"
+"PO-Revision-Date: 2025-09-01 08:46\n"
 "Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -17,22 +17,22 @@ msgstr ""
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Legendary"
-msgid "Jump attack speed increases by 40%"
-msgstr "Jump attack speed increases by 40%"
+msgid "Jump attack speed increases by 25%"
+msgstr "Jump attack speed increases by 25%"
 
 #. Key:	Desc_Aerial_Strike_Optimization_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Normal"
-msgid "Jump attack speed increases by 8%"
-msgstr "Jump attack speed increases by 8%"
+msgid "Jump attack speed increases by 5%"
+msgstr "Jump attack speed increases by 5%"
 
 #. Key:	Desc_Aerial_Strike_Optimization_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Aerial_Strike_Optimization_Rare"
-msgid "Jump attack speed increases by 24%"
-msgstr "Jump attack speed increases by 24%"
+msgid "Jump attack speed increases by 15%"
+msgstr "Jump attack speed increases by 15%"
 
 #. Key:	Desc_Aerial_Throttling_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -80,92 +80,92 @@ msgstr "Max HP increases by 20%"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Legendary"
-msgid "Jump attack critical hit damage increases by 4.5 times"
-msgstr "Jump attack critical hit damage increases by 4.5 times"
+msgid "Jump attack critical hit damage increases by 200%"
+msgstr "Jump attack critical hit damage increases by 200%"
 
 #. Key:	Desc_Critical_Aerial_Attack_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Normal"
-msgid "Jump attack critical hit damage increases by 2.5 times"
-msgstr "Jump attack critical hit damage increases by 2.5 times"
+msgid "Jump attack critical hit damage increases by 50%"
+msgstr "Jump attack critical hit damage increases by 50%"
 
 #. Key:	Desc_Critical_Aerial_Attack_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Aerial_Attack_Rare"
-msgid "Jump attack critical hit damage increases by 3.5 times"
-msgstr "Jump attack critical hit damage increases by 3.5 times"
+msgid "Jump attack critical hit damage increases by 100%"
+msgstr "Jump attack critical hit damage increases by 100%"
 
 #. Key:	Desc_Critical_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Dash_Legendary"
-msgid "Dash attack critical hit damage increases by 4.5 times"
-msgstr "Dash attack critical hit damage increases by 4.5 times"
+msgid "Dash attack critical hit damage increases by 200%"
+msgstr "Dash attack critical hit damage increases by 200%"
 
 #. Key:	Desc_Critical_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Dash_Normal"
-msgid "Dash attack critical hit damage increases by 2.5 times"
-msgstr "Dash attack critical hit damage increases by 2.5 times"
+msgid "Dash attack critical hit damage increases by 50%"
+msgstr "Dash attack critical hit damage increases by 50%"
 
 #. Key:	Desc_Critical_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Dash_Rare"
-msgid "Dash attack critical hit damage increases by 3.5 times"
-msgstr "Dash attack critical hit damage increases by 3.5 times"
+msgid "Dash attack critical hit damage increases by 100%"
+msgstr "Dash attack critical hit damage increases by 100%"
 
 #. Key:	Desc_Critical_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Strike_Legendary"
-msgid "Normal attack critical hit damage increases by 4 times"
-msgstr "Normal attack critical hit damage increases by 4 times"
+msgid "Normal attack critical hit damage increases by 200%"
+msgstr "Normal attack critical hit damage increases by 200%"
 
 #. Key:	Desc_Critical_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Strike_Normal"
-msgid "Normal attack critical hit damage increases by 2 times"
-msgstr "Normal attack critical hit damage increases by 2 times"
+msgid "Normal attack critical hit damage increases by 50%"
+msgstr "Normal attack critical hit damage increases by 50%"
 
 #. Key:	Desc_Critical_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Critical_Strike_Rare"
-msgid "Normal attack critical hit damage increases by 3 times"
-msgstr "Normal attack critical hit damage increases by 3 times"
+msgid "Normal attack critical hit damage increases by 100%"
+msgstr "Normal attack critical hit damage increases by 100%"
 
 #. Key:	Desc_Dash_Optimization_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Legendary"
-msgid "Dash attack speed increases by 45%"
-msgstr "Dash attack speed increases by 45%"
+msgid "Dash attack speed increases by 25%"
+msgstr "Dash attack speed increases by 25%"
 
 #. Key:	Desc_Dash_Optimization_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Normal"
-msgid "Dash attack speed increases by 8%"
-msgstr "Dash attack speed increases by 8%"
+msgid "Dash attack speed increases by 5%"
+msgstr "Dash attack speed increases by 5%"
 
 #. Key:	Desc_Dash_Optimization_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Dash_Optimization_Rare"
-msgid "Dash attack speed increases by 25%"
-msgstr "Dash attack speed increases by 25%"
+msgid "Dash attack speed increases by 15%"
+msgstr "Dash attack speed increases by 15%"
 
 #. Key:	Desc_Firewall_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Firewall_Enhancement_Legendary"
-msgid "Defense power increases by 50%"
-msgstr "Defense power increases by 50%"
+msgid "Defense power increases by 20%"
+msgstr "Defense power increases by 20%"
 
 #. Key:	Desc_Firewall_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -178,71 +178,71 @@ msgstr "Defense power increases by 10%"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Firewall_Enhancement_Rare"
-msgid "Defense power increases by 30%"
-msgstr "Defense power increases by 30%"
+msgid "Defense power increases by 15%"
+msgstr "Defense power increases by 15%"
 
 #. Key:	Desc_Flame_Aerial_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Legendary"
-msgid "35% chance for jump attack to deal flame damage"
-msgstr "35% chance for jump attack to deal flame damage"
+msgid "30% chance for jump attack to deal flame damage"
+msgstr "30% chance for jump attack to deal flame damage"
 
 #. Key:	Desc_Flame_Aerial_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Normal"
-msgid "7% chance for jump attack to deal flame damage"
-msgstr "7% chance for jump attack to deal flame damage"
+msgid "5% chance for jump attack to deal flame damage"
+msgstr "5% chance for jump attack to deal flame damage"
 
 #. Key:	Desc_Flame_Aerial_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Rare"
-msgid "16% chance for jump attack to deal flame damage"
-msgstr "16% chance for jump attack to deal flame damage"
+msgid "15% chance for jump attack to deal flame damage"
+msgstr "15% chance for jump attack to deal flame damage"
 
 #. Key:	Desc_Flame_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Legendary"
-msgid "35% chance for dash attack to deal flame damage"
-msgstr "35% chance for dash attack to deal flame damage"
+msgid "30% chance for dash attack to deal flame damage"
+msgstr "30% chance for dash attack to deal flame damage"
 
 #. Key:	Desc_Flame_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Normal"
-msgid "7% chance for dash attack to deal flame damage"
-msgstr "7% chance for dash attack to deal flame damage"
+msgid "5% chance for dash attack to deal flame damage"
+msgstr "5% chance for dash attack to deal flame damage"
 
 #. Key:	Desc_Flame_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Rare"
-msgid "16% chance for dash attack to deal flame damage"
-msgstr "16% chance for dash attack to deal flame damage"
+msgid "15% chance for dash attack to deal flame damage"
+msgstr "15% chance for dash attack to deal flame damage"
 
 #. Key:	Desc_Flame_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Legendary"
-msgid "30% chance for normal attack to deal flame damage"
-msgstr "30% chance for normal attack to deal flame damage"
+msgid "35% chance for normal attack to deal flame damage"
+msgstr "35% chance for normal attack to deal flame damage"
 
 #. Key:	Desc_Flame_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Normal"
-msgid "5% chance for normal attack to deal flame damage"
-msgstr "5% chance for normal attack to deal flame damage"
+msgid "7% chance for normal attack to deal flame damage"
+msgstr "7% chance for normal attack to deal flame damage"
 
 #. Key:	Desc_Flame_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Rare"
-msgid "15% chance for normal attack to deal flame damage"
-msgstr "15% chance for normal attack to deal flame damage"
+msgid "17% chance for normal attack to deal flame damage"
+msgstr "17% chance for normal attack to deal flame damage"
 
 #. Key:	Desc_Footwork_Optimization_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -269,43 +269,43 @@ msgstr "Movement speed increases by 26%"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Legendary"
-msgid "Jump attack power increases by 27% and has a chance to inflict stun debuff"
-msgstr "Jump attack power increases by 27% and has a chance to inflict stun debuff"
+msgid "Jump attack power increases by 25% and has a chance to inflict stun debuff"
+msgstr "Jump attack power increases by 25% and has a chance to inflict stun debuff"
 
 #. Key:	Desc_Freezing_Aerial_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Normal"
-msgid "Jump attack power increases by 7% and has a chance to inflict stun debuff"
-msgstr "Jump attack power increases by 7% and has a chance to inflict stun debuff"
+msgid "Jump attack power increases by 8% and has a chance to inflict stun debuff"
+msgstr "Jump attack power increases by 8% and has a chance to inflict stun debuff"
 
 #. Key:	Desc_Freezing_Aerial_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Aerial_Rare"
-msgid "Jump attack power increases by 17% and has a chance to inflict stun debuff"
-msgstr "Jump attack power increases by 17% and has a chance to inflict stun debuff"
+msgid "Jump attack power increases by 15% and has a chance to inflict stun debuff"
+msgstr "Jump attack power increases by 15% and has a chance to inflict stun debuff"
 
 #. Key:	Desc_Freezing_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Legendary"
-msgid "Dash attack power increases by 27% and has a chance to inflict stun debuff"
-msgstr "Dash attack power increases by 27% and has a chance to inflict stun debuff"
+msgid "Dash attack power increases by 25% and has a chance to inflict stun debuff"
+msgstr "Dash attack power increases by 25% and has a chance to inflict stun debuff"
 
 #. Key:	Desc_Freezing_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Normal"
-msgid "Dash attack power increases by 7% and has a chance to inflict stun debuff"
-msgstr "Dash attack power increases by 7% and has a chance to inflict stun debuff"
+msgid "Dash attack power increases by 8% and has a chance to inflict stun debuff"
+msgstr "Dash attack power increases by 8% and has a chance to inflict stun debuff"
 
 #. Key:	Desc_Freezing_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Dash_Rare"
-msgid "Dash attack power increases by 17% and has a chance to inflict stun debuff"
-msgstr "Dash attack power increases by 17% and has a chance to inflict stun debuff"
+msgid "Dash attack power increases by 15% and has a chance to inflict stun debuff"
+msgstr "Dash attack power increases by 15% and has a chance to inflict stun debuff"
 
 #. Key:	Desc_Freezing_Resistance_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -353,22 +353,22 @@ msgstr "Normal attack stun chance increases by 5%"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Legendary"
-msgid "Normal attack power increases by 25% and has a chance to inflict stun debuff"
-msgstr "Normal attack power increases by 25% and has a chance to inflict stun debuff"
+msgid "Normal attack power increases by 30% and has a chance to inflict stun debuff"
+msgstr "Normal attack power increases by 30% and has a chance to inflict stun debuff"
 
 #. Key:	Desc_Freezing_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Normal"
-msgid "Normal attack power increases by 5% and has a chance to inflict stun debuff"
-msgstr "Normal attack power increases by 5% and has a chance to inflict stun debuff"
+msgid "Normal attack power increases by 10% and has a chance to inflict stun debuff"
+msgstr "Normal attack power increases by 10% and has a chance to inflict stun debuff"
 
 #. Key:	Desc_Freezing_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Freezing_Strike_Rare"
-msgid "Normal attack power increases by 15% and has a chance to inflict stun debuff"
-msgstr "Normal attack power increases by 15% and has a chance to inflict stun debuff"
+msgid "Normal attack power increases by 20% and has a chance to inflict stun debuff"
+msgstr "Normal attack power increases by 20% and has a chance to inflict stun debuff"
 
 #. Key:	Desc_Heal_Pack_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -395,22 +395,22 @@ msgstr "40% chance for healing item recovery amount to increase by 35%"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Legendary"
-msgid "Max HP decreases by 20%, but normal attack deals very strong acidic damage"
-msgstr "Max HP decreases by 20%, but normal attack deals very strong acidic damage"
+msgid "Max HP decreases by 15%, but normal attack deals very strong acidic damage"
+msgstr "Max HP decreases by 15%, but normal attack deals very strong acidic damage"
 
 #. Key:	Desc_High-Risk_Oxidation_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Normal"
-msgid "Max HP decreases by 20%, but normal attack deals strong acidic damage"
-msgstr "Max HP decreases by 20%, but normal attack deals strong acidic damage"
+msgid "Max HP decreases by 15%, but normal attack deals strong acidic damage"
+msgstr "Max HP decreases by 15%, but normal attack deals strong acidic damage"
 
 #. Key:	Desc_High-Risk_Oxidation_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_High-Risk_Oxidation_Strike_Rare"
-msgid "Max HP decreases by 20%, but normal attack deals even stronger acidic damage"
-msgstr "Max HP decreases by 20%, but normal attack deals even stronger acidic damage"
+msgid "Max HP decreases by 15%, but normal attack deals even stronger acidic damage"
+msgstr "Max HP decreases by 15%, but normal attack deals even stronger acidic damage"
 
 #. Key:	Desc_Hit_Rate_Enhancement_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -486,85 +486,85 @@ msgstr "Max HP decreases by 10%, but movement speed increases by 30%"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Legendary"
-msgid "Jump attack speed decreases by 15%, but inflicts very strong slow debuff"
-msgstr "Jump attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgid "Jump attack speed decreases by 8%, but inflicts very strong slow debuff"
+msgstr "Jump attack speed decreases by 8%, but inflicts very strong slow debuff"
 
 #. Key:	Desc_Overload_Self_Aerial_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Normal"
-msgid "Jump attack speed decreases by 15%, but inflicts slow debuff"
-msgstr "Jump attack speed decreases by 15%, but inflicts slow debuff"
+msgid "Jump attack speed decreases by 8%, but inflicts slow debuff"
+msgstr "Jump attack speed decreases by 8%, but inflicts slow debuff"
 
 #. Key:	Desc_Overload_Self_Aerial_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Aerial_Rare"
-msgid "Jump attack speed decreases by 15%, but inflicts strong slow debuff"
-msgstr "Jump attack speed decreases by 15%, but inflicts strong slow debuff"
+msgid "Jump attack speed decreases by 8%, but inflicts strong slow debuff"
+msgstr "Jump attack speed decreases by 8%, but inflicts strong slow debuff"
 
 #. Key:	Desc_Overload_Self_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Legendary"
-msgid "Dash attack speed decreases by 15%, but inflicts very strong slow debuff"
-msgstr "Dash attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgid "Dash attack speed decreases by 8%, but inflicts very strong slow debuff"
+msgstr "Dash attack speed decreases by 8%, but inflicts very strong slow debuff"
 
 #. Key:	Desc_Overload_Self_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Normal"
-msgid "Dash attack speed decreases by 15%, but inflicts strong slow debuff"
-msgstr "Dash attack speed decreases by 15%, but inflicts strong slow debuff"
+msgid "Dash attack speed decreases by 8%, but inflicts strong slow debuff"
+msgstr "Dash attack speed decreases by 8%, but inflicts strong slow debuff"
 
 #. Key:	Desc_Overload_Self_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Dash_Rare"
-msgid "Dash attack speed decreases by 15%, but inflicts even stronger slow debuff"
-msgstr "Dash attack speed decreases by 15%, but inflicts even stronger slow debuff"
+msgid "Dash attack speed decreases by 8%, but inflicts even stronger slow debuff"
+msgstr "Dash attack speed decreases by 8%, but inflicts even stronger slow debuff"
 
 #. Key:	Desc_Overload_Self_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Legendary"
-msgid "Movement speed decreases by 30%, but normal attack power increases by 30%"
-msgstr "Movement speed decreases by 30%, but normal attack power increases by 30%"
+msgid "Movement speed decreases by 15%, but normal attack power increases by 30%"
+msgstr "Movement speed decreases by 15%, but normal attack power increases by 30%"
 
 #. Key:	Desc_Overload_Self_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Normal"
-msgid "Movement speed decreases by 30%, but normal attack power increases by 10%"
-msgstr "Movement speed decreases by 30%, but normal attack power increases by 10%"
+msgid "Movement speed decreases by 15%, but normal attack power increases by 10%"
+msgstr "Movement speed decreases by 15%, but normal attack power increases by 10%"
 
 #. Key:	Desc_Overload_Self_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Rare"
-msgid "Movement speed decreases by 30%, but normal attack power increases by 20%"
-msgstr "Movement speed decreases by 30%, but normal attack power increases by 20%"
+msgid "Movement speed decreases by 15%, but normal attack power increases by 20%"
+msgstr "Movement speed decreases by 15%, but normal attack power increases by 20%"
 
 #. Key:	Desc_Overload_Self_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Legendary"
-msgid "Normal attack speed decreases by 15%, but inflicts very strong slow debuff"
-msgstr "Normal attack speed decreases by 15%, but inflicts very strong slow debuff"
+msgid "Normal attack speed decreases by 8%, but inflicts very strong slow debuff"
+msgstr "Normal attack speed decreases by 8%, but inflicts very strong slow debuff"
 
 #. Key:	Desc_Overload_Self_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Normal"
-msgid "Normal attack speed decreases by 15%, but inflicts strong slow debuff"
-msgstr "Normal attack speed decreases by 15%, but inflicts strong slow debuff"
+msgid "Normal attack speed decreases by 8%, but inflicts strong slow debuff"
+msgstr "Normal attack speed decreases by 8%, but inflicts strong slow debuff"
 
 #. Key:	Desc_Overload_Self_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Overload_Self_Strike_Rare"
-msgid "Normal attack speed decreases by 15%, but inflicts even stronger slow debuff"
-msgstr "Normal attack speed decreases by 15%, but inflicts even stronger slow debuff"
+msgid "Normal attack speed decreases by 8%, but inflicts even stronger slow debuff"
+msgstr "Normal attack speed decreases by 8%, but inflicts even stronger slow debuff"
 
 #. Key:	Desc_Oxidation_Aerial_Attack_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -703,8 +703,8 @@ msgstr "Overall skill cooldown decreases by 50%"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Skill_Optimization_Normal"
-msgid "Overall skill cooldown decreases by 10%"
-msgstr "Overall skill cooldown decreases by 10%"
+msgid "Overall skill cooldown decreases by 15%"
+msgstr "Overall skill cooldown decreases by 15%"
 
 #. Key:	Desc_Skill_Optimization_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -724,8 +724,8 @@ msgstr "Normal attack speed increases by 35%"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Strike_Optimization_Normal"
-msgid "Normal attack speed increases by 5%"
-msgstr "Normal attack speed increases by 5%"
+msgid "Normal attack speed increases by 8%"
+msgstr "Normal attack speed increases by 8%"
 
 #. Key:	Desc_Strike_Optimization_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -780,22 +780,22 @@ msgstr "Sub-weapon max capacity increases by 2 times"
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Legendary"
-msgid "All attack power increases by 3%"
-msgstr "All attack power increases by 3%"
+msgid "All attack power increases by 10%"
+msgstr "All attack power increases by 10%"
 
 #. Key:	Desc_System_Performance_Enhancement_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Normal"
-msgid "All attack power increases by 1%"
-msgstr "All attack power increases by 1%"
+msgid "All attack power increases by 3%"
+msgstr "All attack power increases by 3%"
 
 #. Key:	Desc_System_Performance_Enhancement_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_System_Performance_Enhancement_Rare"
-msgid "All attack power increases by 2%"
-msgstr "All attack power increases by 2%"
+msgid "All attack power increases by 5%"
+msgstr "All attack power increases by 5%"
 
 #. Key:	Desc_Throttling_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -885,22 +885,22 @@ msgstr "Normal attack power decreases by 2%, but dash attack deals even stronger
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Legendary"
-msgid "Defense power decreases by 50%, but normal attack deals very strong acidic damage"
-msgstr "Defense power decreases by 50%, but normal attack deals very strong acidic damage"
+msgid "Defense power decreases by 30%, but normal attack deals very strong acidic damage"
+msgstr "Defense power decreases by 30%, but normal attack deals very strong acidic damage"
 
 #. Key:	Desc_Toxic_Oxidation_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Normal"
-msgid "Defense power decreases by 50%, but normal attack deals strong acidic damage"
-msgstr "Defense power decreases by 50%, but normal attack deals strong acidic damage"
+msgid "Defense power decreases by 30%, but normal attack deals strong acidic damage"
+msgstr "Defense power decreases by 30%, but normal attack deals strong acidic damage"
 
 #. Key:	Desc_Toxic_Oxidation_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Toxic_Oxidation_Strike_Rare"
-msgid "Defense power decreases by 50%, but normal attack deals even stronger acidic damage"
-msgstr "Defense power decreases by 50%, but normal attack deals even stronger acidic damage"
+msgid "Defense power decreases by 30%, but normal attack deals even stronger acidic damage"
+msgstr "Defense power decreases by 30%, but normal attack deals even stronger acidic damage"
 
 #. Key:	Desc_Transcendent_Critical_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -1434,6 +1434,13 @@ msgctxt "ST_EasyGameUICommon,Button_Credit"
 msgid "Credits"
 msgstr "Credits"
 
+#. Key:	Button_Delete
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Delete"
+msgid "Delete"
+msgstr "Delete"
+
 #. Key:	Button_Discard
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1475,6 +1482,13 @@ msgstr "Quit To Title Screen"
 msgctxt "ST_EasyGameUICommon,Button_Reset"
 msgid "Reset"
 msgstr "Reset"
+
+#. Key:	Button_Return_to_Neutral_Zone
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Button_Return_to_Neutral_Zone"
+msgid "Return to Neutral Zone"
+msgstr "Return to Neutral Zone"
 
 #. Key:	Button_Select
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2141,12 +2155,33 @@ msgctxt "ST_EasyGameUICommon,Reset_Warning"
 msgid "Do you really want to reset settings ?\r\nAny action is definitive."
 msgstr "Do you really want to reset settings ?\r\nAny action is definitive."
 
+#. Key:	Return_NeutralZone_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Return_NeutralZone_Warning"
+msgid "Are you sure you want to return to the lobby?\r\nAll rewards acquired during this run will be lost."
+msgstr "Are you sure you want to return to the lobby?\r\nAll rewards acquired during this run will be lost."
+
 #. Key:	ReturnToTitle_Warning
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 msgctxt "ST_EasyGameUICommon,ReturnToTitle_Warning"
 msgid "Do you really want to quit?\r\nAny unsaved progress will be lost."
 msgstr "Do you really want to quit?\r\nAny unsaved progress will be lost."
+
+#. Key:	Save_Delete_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Save_Delete_Warning"
+msgid "Do you really want to delete this save file ?\r\nThis action is definitive."
+msgstr "Do you really want to delete this save file ?\r\nThis action is definitive."
+
+#. Key:	Save_Overwrite_Warning
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Save_Overwrite_Warning"
+msgid "Do you really want to overwrite this save file ?\r\nAll saved progress will be lost."
+msgstr "Do you really want to overwrite this save file ?\r\nAll saved progress will be lost."
 
 #. Key:	Skill
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
