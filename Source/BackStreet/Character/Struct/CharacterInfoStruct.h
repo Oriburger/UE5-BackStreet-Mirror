@@ -683,7 +683,7 @@ public:
 		TMap<EAbilityTierType, int32> UpgradeCostInfoMap;
 
 	//현재 플레이어가 소유한 어빌리티의 정보
-	UPROPERTY(VisibleDefaultsOnly)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		TArray<FAbilityInfoStruct> ActiveAbilityInfoList;
 
 	UPROPERTY(VisibleDefaultsOnly)
