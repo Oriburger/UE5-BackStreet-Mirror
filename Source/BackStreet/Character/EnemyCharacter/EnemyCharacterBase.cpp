@@ -193,9 +193,9 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	APawn* causerPawn = EventInstigator->GetPawn();
+	APawn* causerPawn = IsValid(EventInstigator) ? EventInstigator->GetPawn() : nullptr;
 
-	if (!IsValid(DamageCauser) || !causerPawn->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterGameplayInfo.bIsInvincibility)
+	if (!IsValid(DamageCauser) || !IsValid(causerPawn) || !causerPawn->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterGameplayInfo.bIsInvincibility)
 	{
 		return 0.0f;
 	}
