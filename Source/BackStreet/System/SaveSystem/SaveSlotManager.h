@@ -71,7 +71,7 @@ protected:
 private:
 	int32 DefferedInitializeCount = 0;
 
-	bool bIsReadyToMoveNeutralZone = true;
+	bool bIsReadyToMoveNeutralZone = false;
 
 	UPROPERTY()
 		FTimerHandle DefferedInitializeTimerHandle;

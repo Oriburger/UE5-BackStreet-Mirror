@@ -273,7 +273,7 @@ void ASaveSlotManager::FetchGameData()
 		ProgressSaveData.InventoryInfo = PlayerCharacterRef->ItemInventory->GetInventoryInfoData();
 		ProgressSaveData.SkillManagerInfo = PlayerCharacterRef->SkillManagerComponent->GetSkillManagerInfo();	
 		
-		if (bIsReadyToMoveNeutralZone)
+		if (bIsReadyToMoveNeutralZone && SaveSlotInfo.bIsInGame)
 		{
 			// 영구재화 Handling 
 			UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::FetchGameData - Fetching permanent data from PlayerCharacterRef"));
