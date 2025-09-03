@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_jp\n"
-"POT-Creation-Date: 2025-09-01 08:47\n"
-"PO-Revision-Date: 2025-09-01 08:47\n"
+"POT-Creation-Date: 2025-09-03 02:22\n"
+"PO-Revision-Date: 2025-09-03 02:22\n"
 "Language-Team: \n"
 "Language: ja-JP\n"
 "MIME-Version: 1.0\n"
@@ -186,63 +186,63 @@ msgstr "防御力が15%増加する"
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Legendary"
 msgid "30% chance for jump attack to deal flame damage"
-msgstr "ジャンプ攻撃が炎ダメージを与える確率が30%増加する"
+msgstr "ジャンプ攻撃がフレイムダメージを与える確率が30%増加する"
 
 #. Key:	Desc_Flame_Aerial_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Normal"
 msgid "5% chance for jump attack to deal flame damage"
-msgstr "ジャンプ攻撃が炎ダメージを与える確率が5%増加する"
+msgstr "ジャンプ攻撃がフレイムダメージを与える確率が5%増加する"
 
 #. Key:	Desc_Flame_Aerial_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Aerial_Strike_Rare"
 msgid "15% chance for jump attack to deal flame damage"
-msgstr "ジャンプ攻撃が炎ダメージを与える確率が15%増加する"
+msgstr "ジャンプ攻撃がフレイムダメージを与える確率が15%増加する"
 
 #. Key:	Desc_Flame_Dash_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Legendary"
 msgid "30% chance for dash attack to deal flame damage"
-msgstr "ダッシュ攻撃が炎ダメージを与える確率が30%増加する"
+msgstr "ダッシュ攻撃がフレイムダメージを与える確率が30%増加する"
 
 #. Key:	Desc_Flame_Dash_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Normal"
 msgid "5% chance for dash attack to deal flame damage"
-msgstr "ダッシュ攻撃が炎ダメージを与える確率が5%増加する"
+msgstr "ダッシュ攻撃がフレイムダメージを与える確率が5%増加する"
 
 #. Key:	Desc_Flame_Dash_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Dash_Rare"
 msgid "15% chance for dash attack to deal flame damage"
-msgstr "ダッシュ攻撃が炎ダメージを与える確率が15%増加する"
+msgstr "ダッシュ攻撃がフレイムダメージを与える確率が15%増加する"
 
 #. Key:	Desc_Flame_Strike_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Legendary"
 msgid "35% chance for normal attack to deal flame damage"
-msgstr "通常攻撃が炎ダメージを与える確率が35%増加する"
+msgstr "通常攻撃がフレイムダメージを与える確率が35%増加する"
 
 #. Key:	Desc_Flame_Strike_Normal
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Normal"
 msgid "7% chance for normal attack to deal flame damage"
-msgstr "通常攻撃が炎ダメージを与える確率が7%増加する"
+msgstr "通常攻撃がフレイムダメージを与える確率が7%増加する"
 
 #. Key:	Desc_Flame_Strike_Rare
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 #: /Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
 msgctxt "ST_Boosterchip,Desc_Flame_Strike_Rare"
 msgid "17% chance for normal attack to deal flame damage"
-msgstr "通常攻撃が炎ダメージを与える確率が17%増加する"
+msgstr "通常攻撃がフレイムダメージを与える確率が17%増加する"
 
 #. Key:	Desc_Footwork_Optimization_Legendary
 #. SourceLocation:	/Game/UI/Localization/ST_Boosterchip.ST_Boosterchip
@@ -1369,21 +1369,21 @@ msgstr "ブースターチップの獲得を放棄します。\r\nこの選択�
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 msgctxt "ST_EasyGameUICommon,Ability"
 msgid "Boosterchip"
-msgstr "アビリティ"
+msgstr "ブースターチップ"
 
 #. Key:	Ability_Description
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 msgctxt "ST_EasyGameUICommon,Ability_Description"
 msgid "Boosterchip Description"
-msgstr "アビリティ説明"
+msgstr "ブースターチップ説明"
 
 #. Key:	Ability_Name
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 msgctxt "ST_EasyGameUICommon,Ability_Name"
 msgid "Boosterchip Name"
-msgstr "アビリティ名"
+msgstr "ブースターチップ名"
 
 #. Key:	Button_AboutOfficialRelease
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1833,6 +1833,125 @@ msgctxt "ST_EasyGameUICommon,High_Quality_Setting"
 msgid "High"
 msgstr "高"
 
+#. Key:	Label_BestRecords
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_BestRecords"
+msgid "Best\r\nRecords"
+msgstr "最高記録"
+
+#. Key:	Label_BoosterchipAcquired
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_BoosterchipAcquired"
+msgid "Number of Boosterchips Acquired"
+msgstr "獲得ブースターチップ"
+
+#. Key:	Label_Chapter1
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_Chapter1"
+msgid "Ch1."
+msgstr "Ch1."
+
+#. Key:	Label_Chapter2
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_Chapter2"
+msgid "Ch2."
+msgstr "Ch2."
+
+#. Key:	Label_Chapter3
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_Chapter3"
+msgid "Ch3."
+msgstr "Ch3."
+
+#. Key:	Label_Chapter4
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_Chapter4"
+msgid "Ch4."
+msgstr "Ch4."
+
+#. Key:	Label_CoresAcquired
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_CoresAcquired"
+msgid "Number of Cores Acquired"
+msgstr "獲得コア数"
+
+#. Key:	Label_CurrentRecords
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_CurrentRecords"
+msgid "Current\r\nRecords"
+msgstr "現在の記録"
+
+#. Key:	Label_GameResult
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_GameResult"
+msgid "Game Result"
+msgstr "ゲーム結果"
+
+#. Key:	Label_GearsAcquired
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_GearsAcquired"
+msgid "Number of Gears Acquired"
+msgstr "獲得ギア数"
+
+#. Key:	Label_HealingAmount
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_HealingAmount"
+msgid "Healing Amount"
+msgstr "回復量"
+
+#. Key:	Label_RecordsOverview
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_RecordsOverview"
+msgid "Records Overview"
+msgstr "記録一覧"
+
+#. Key:	Label_SkillsAcquired
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_SkillsAcquired"
+msgid "Number of Skills Acquired"
+msgstr "獲得スキル数"
+
+#. Key:	Label_SubWeaponDamage
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_SubWeaponDamage"
+msgid "Sub-Weapon Damage"
+msgstr "サブ武器ダメージ"
+
+#. Key:	Label_TotalDmgDealt
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_TotalDmgDealt"
+msgid "Total Damage Dealt"
+msgstr "総与ダメージ"
+
+#. Key:	Label_TotalDmgTaken
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_TotalDmgTaken"
+msgid "Total Damage Taken"
+msgstr "総被ダメージ"
+
+#. Key:	Label_WeaponInfo
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_WeaponInfo"
+msgid "Weapon Info"
+msgstr "武器情報"
+
 #. Key:	LoadGame
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1853,6 +1972,13 @@ msgstr "低"
 msgctxt "ST_EasyGameUICommon,Medium_Quality_Setting"
 msgid "Medium"
 msgstr "中"
+
+#. Key:	More_Info
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,More_Info"
+msgid "More Info"
+msgstr "詳細"
 
 #. Key:	NewGame
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -2426,7 +2552,7 @@ msgstr "コンボや移動の速度を強化します。全体的な戦闘力を
 #: /Game/UI/Localization/ST_Item.ST_Item
 msgctxt "ST_Item,Desc_Boosterchip_Flame"
 msgid "Inflicts a flame debuff on enemies, causing strong damage over time with a low probability."
-msgstr "敵に火炎デバフを付与し、低確率で強力な持続ダメージを与えます。"
+msgstr "敵に火フレイムデバフを付与し、低確率で強力な持続ダメージを与えます。"
 
 #. Key:	Desc_Boosterchip_Freezing
 #. SourceLocation:	/Game/UI/Localization/ST_Item.ST_Item
@@ -2874,7 +3000,7 @@ msgstr "マルチスラッシュ"
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_BurnResist"
 msgid "Burn Resistance"
-msgstr "炎耐性"
+msgstr "フレイム耐性"
 
 #. Key:	Name_Stat_DashAttackFatality
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
@@ -2888,7 +3014,7 @@ msgstr "ダッシュ攻撃クリティカル率"
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_DashAttackFlame"
 msgid "Dash Attack Flame"
-msgstr "ダッシュ攻撃炎効果"
+msgstr "ダッシュ攻撃フレイム効果"
 
 #. Key:	Name_Stat_DashAttackPoison
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
@@ -2958,7 +3084,7 @@ msgstr "ジャンプ攻撃クリティカル率"
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_JumpAttackFlame"
 msgid "Jump Attack Flame"
-msgstr "ジャンプ攻撃炎効果"
+msgstr "ジャンプ攻撃フレイム効果"
 
 #. Key:	Name_Stat_JumpAttackPoison
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
@@ -3035,7 +3161,7 @@ msgstr "通常攻撃クリティカル率"
 #: /Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
 msgctxt "ST_Skill,Name_Stat_NormalFlame"
 msgid "Normal Attack Flame"
-msgstr "通常攻撃炎効果"
+msgstr "通常攻撃フレイム効果"
 
 #. Key:	Name_Stat_NormalPoison
 #. SourceLocation:	/Game/UI/Localization/ST_Stat_Skill.ST_Stat_Skill
@@ -3210,7 +3336,7 @@ msgstr "ステージクリア後に次のステージを選ぶことができま
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
 msgctxt "ST_Tutorial,Header_AbilityInfo"
 msgid "About Ability"
-msgstr "アビリティについて"
+msgstr "ブースターチップについて"
 
 #. Key:	Header_BoosterChip
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3394,6 +3520,13 @@ msgctxt "ST_Tutorial,Input_Sprint"
 msgid "Sprint"
 msgstr "スプリント"
 
+#. Key:	Label_Name
+#. SourceLocation:	/Game/UI/Localization/ST_PermanentGrowth.ST_PermanentGrowth
+#: /Game/UI/Localization/ST_PermanentGrowth.ST_PermanentGrowth
+msgctxt "ST_Tutorial,Label_Name"
+msgid "Name"
+msgstr "名称"
+
 #. Key:	Name_BossStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3435,6 +3568,20 @@ msgstr "デバフのヒント"
 msgctxt "ST_Tutorial,Name_StageSelectionTip"
 msgid "Stage Selection Tip"
 msgstr "ステージ選択のヒント"
+
+#. Key:	Stat_Attack_Power
+#. SourceLocation:	/Game/UI/Localization/ST_PermanentGrowth.ST_PermanentGrowth
+#: /Game/UI/Localization/ST_PermanentGrowth.ST_PermanentGrowth
+msgctxt "ST_Tutorial,Stat_Attack_Power"
+msgid "Attack Power"
+msgstr "攻撃力"
+
+#. Key:	Stat_Attack_Speed
+#. SourceLocation:	/Game/UI/Localization/ST_PermanentGrowth.ST_PermanentGrowth
+#: /Game/UI/Localization/ST_PermanentGrowth.ST_PermanentGrowth
+msgctxt "ST_Tutorial,Stat_Attack_Speed"
+msgid "Attack Speed"
+msgstr "攻撃速度"
 
 #. Key:	Tutorial_Battle_1
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
