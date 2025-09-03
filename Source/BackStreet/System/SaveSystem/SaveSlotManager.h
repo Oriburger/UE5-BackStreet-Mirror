@@ -25,6 +25,12 @@ public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateGameLoadDone OnInitializeDone;
 
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateGameLoadDone OnSaveBegin;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateGameLoadDone OnSaveDone;
+
 	UFUNCTION(BlueprintNativeEvent)
 		void OnPreLoadMap(const FString& MapName);
 

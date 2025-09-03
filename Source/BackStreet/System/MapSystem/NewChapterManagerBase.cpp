@@ -38,6 +38,9 @@ void ANewChapterManagerBase::BeginPlay()
 void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 {
 	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::StartChapter(%d)"), NewChapterID);
+	
+	//Clear resource
+	StageManagerComponent->ClearPreviousResource();
 
 	//init chapter with generate stage infos
 	CurrentChapterInfo.bIsChapterInitialized = true;
@@ -89,20 +92,28 @@ void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 	//Set state variable
 	bIsChapterFinished = true;
 
-	//Clear resource
-	StageManagerComponent->ClearPreviousResource();
-
 	OnChapterCleared.Broadcast();
 
-	//change level to next chapter
-	if (CurrentChapterInfo.ChapterID != MaxChapterID && bChapterClear)
+	//===========================================================
+	//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishChapter' 
+
+	//Game Over
+	if (StageManagerComponent->GetCurrentStageInfo().bIsGameOver)
 	{
-		StartChapter(CurrentChapterInfo.ChapterID + 1);
+		CreateGameResultWidget(false);
 	}
-	else
+	//Chapter & Game Clear
+	else if (StageManagerComponent->GetCurrentStageInfo().bIsClear 
+	&& StageManagerComponent->GetCurrentStageInfo().StageType == EStageCategoryInfo::E_Boss)
 	{
-		//나중에 Reward UI로 대체하기
-		OpenNeutralZoneLevel();
+		if (CurrentChapterInfo.ChapterID == MaxChapterID)
+		{
+			CreateGameResultWidget(true);
+		}
+		else
+		{
+			CreateChapterCleartWidget();
+		}
 	}
 }
 
@@ -185,28 +196,13 @@ void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 	CurrentChapterInfo.StageInfoList[stageIdx] = StageInfo;
 	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
 
-
-	//===========================================================
-	//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishChapter' 
-
-	//Game Over
-	if (StageInfo.bIsGameOver)
+	//Chapter Clear
+	if (StageInfo.StageType == EStageCategoryInfo::E_Boss)
 	{
-		CreateGameResultWidget(false);
+		FinishChapter(StageInfo.bIsClear);
+		return;
 	}
-	//Chapter & Game Clear
-	else if (StageInfo.bIsClear && StageInfo.StageType == EStageCategoryInfo::E_Boss)
-	{
-		if (CurrentChapterInfo.ChapterID == MaxChapterID)
-		{
-			CreateGameResultWidget(true);
-		}
-		else
-		{
-			CreateChapterCleartWidget();
-		}
-	}
-
+	return;
 }
 
 void ANewChapterManagerBase::InitStageIconTranslationList(FVector2D Threshold)

@@ -175,12 +175,13 @@ void ASaveSlotManager::OnChapterCleared()
 		ProgressSaveData.ChapterClearTimeList.Add(ChapterManagerRef->GetChapterClearTime());
 		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::OnChapterCleared - Chapter #%d cleared at time %f"), ChapterManagerRef->GetCurrentChapterInfo().ChapterID, ChapterManagerRef->GetChapterClearTime());
 	}
-	SaveGameData();
+	CacheCurrentGameState();
+}
 }
 
 void ASaveSlotManager::SaveGameData_Implementation()
 {	
-
+	OnSaveBegin.Broadcast(true);
 	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::SaveGameData - SaveGameData called"));
 }
 
