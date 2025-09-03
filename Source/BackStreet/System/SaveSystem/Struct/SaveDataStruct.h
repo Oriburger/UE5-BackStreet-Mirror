@@ -18,6 +18,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		TArray<float> ChapterClearTimeList;
 
+	//(인게임 기록 산출 전용) 얻은 기어의 총 수 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 TotalGearCountInGame = 0;
+	
+	//(인게임 기록 산출 전용)얻은 영구재화의 총 수
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 TotalCoreCountInGame = 0;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FChapterInfo ChapterInfo;
 

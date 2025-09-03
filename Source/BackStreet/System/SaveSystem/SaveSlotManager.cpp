@@ -89,12 +89,10 @@ void ASaveSlotManager::InitializeReference()
 		}
 
 		// Bind to events
-		if (ChapterManagerRef.IsValid() && StageManagerRef.IsValid())
-		{
-			UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::InitializeReference - Bind to events"));
-			ChapterManagerRef->OnChapterCleared.AddDynamic(this, &ASaveSlotManager::OnChapterCleared);
-			StageManagerRef->OnStageLoadDone.AddDynamic(this, &ASaveSlotManager::SaveGameData);
-		}
+		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::InitializeReference - Bind to events"));
+		ChapterManagerRef->OnChapterCleared.AddDynamic(this, &ASaveSlotManager::OnChapterCleared);
+		StageManagerRef->OnStageLoadDone.AddDynamic(this, &ASaveSlotManager::SaveGameData);
+		PlayerInventoryRef->OnItemAdded.AddDynamic(this, &ASaveSlotManager::OnItemAdded);
 	}
 	//인게임 체크
 	bool result = TryFetchCachedData();
@@ -177,6 +175,21 @@ void ASaveSlotManager::OnChapterCleared()
 	}
 	CacheCurrentGameState();
 }
+
+void ASaveSlotManager::OnItemAdded(const FItemInfoDataStruct& NewItemInfo, const int32 AddCount)
+{
+	//Gear id : 1, Core id : 2
+	const int32 gearID = 1;
+	const int32 coreID = 2;
+
+	if (NewItemInfo.ItemID == gearID)
+	{
+		ProgressSaveData.TotalGearCountInGame += AddCount;
+	}
+	else if (NewItemInfo.ItemID == coreID)
+	{
+		ProgressSaveData.TotalCoreCountInGame += AddCount;
+	}
 }
 
 void ASaveSlotManager::SaveGameData_Implementation()
@@ -264,9 +277,7 @@ void ASaveSlotManager::FetchGameData()
 		{
 			// 영구재화 Handling 
 			UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::FetchGameData - Fetching permanent data from PlayerCharacterRef"));
-			const int32 newCoreCount = PlayerCharacterRef->ItemInventory->GetItemAmount(InventorySaveData.CoreID);
-			PlayerCharacterRef->ItemInventory->RemoveItem(InventorySaveData.CoreID, newCoreCount); //음....................
-			InventorySaveData.CoreCount += newCoreCount;
+			InventorySaveData.CoreCount += ProgressSaveData.TotalCoreCountInGame;
 
 			//최고기록 Handling
 			if (ProgressSaveData.ChapterClearTimeList.Num() > 4)

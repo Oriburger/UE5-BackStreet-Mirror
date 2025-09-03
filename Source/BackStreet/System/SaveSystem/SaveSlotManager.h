@@ -40,6 +40,9 @@ public:
 	UFUNCTION()
 		void OnChapterCleared();
 
+	//Total Core Count, Total Gear Count 산출을 위함
+	UFUNCTION()
+		void OnItemAdded(const FItemInfoDataStruct& NewItemInfo, const int32 AddCount);
 	
 //======= Basic ======================================
 public:
