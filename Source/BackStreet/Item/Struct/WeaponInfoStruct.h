@@ -205,10 +205,6 @@ struct FWeaponStateStruct
 public:						
 	GENERATED_USTRUCT_BODY()
 
-	//현재 내구도
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		int32 CurrentDurability = 10;
-
 	//temp, meleeonly
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FRotator SlashRotation = FRotator::ZeroRotator;

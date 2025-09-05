@@ -259,21 +259,18 @@ public:
 		int32 HitCounter = 0;
 
 	//=========================================================
-	//====== 미분류 ============================================
-		//for time-attack stage
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
-		float ExtraStageTime = 0.0f;
+	//====== Extra ============================================
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Extra")
+		float TotalDamage = 0.0f;
 
-	//Extra wish list in skill
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
-		int32 MaxKeepingSkillCount = 1;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Extra")
+		float SubWeaponTotalDamage = 0.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
-		bool bInfiniteSkillMaterial = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Extra")
+		float TotalHealAmount = 0.0f;
 
-	//Extra percentage for universal material
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
-		float ExtraPercentageUnivMaterial = 0.0f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Extra")
+		float TotalDamageTaken = 0.0f;
 
 	//=========================================================
 	//====== Function =========================================
@@ -405,8 +402,7 @@ public:
 
 	FCharacterGameplayInfo() : bUseDefaultStat(false), CharacterID(0) , bInfinite(false) , bIsInvincibility(false), StatGroupList(), CharacterDebuffState(1 << 10)
 		, CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), CurrentSP(0.0f), bCanAttack(false), bCanRoll(false), bIsSprinting(false), bIsAiming(false)
-		, bIsAirAttacking(false), bIsDownwardAttacking(false), HitCounter(0), ExtraStageTime(0.0f), MaxKeepingSkillCount(1)
-		, bInfiniteSkillMaterial(false), ExtraPercentageUnivMaterial(0.0f)
+		, bIsAirAttacking(false), bIsDownwardAttacking(false), HitCounter(0), TotalDamage(0.0f), SubWeaponTotalDamage(0.0f), TotalHealAmount(0.0f), TotalDamageTaken(0.0f)
 	{
 		for (uint8 typeIdx = static_cast<uint8>(ECharacterStatType::E_None)
 			; typeIdx <= static_cast<uint8>(ECharacterStatType::E_LuckyDrop); ++typeIdx)
@@ -418,8 +414,7 @@ public:
 
 	FCharacterGameplayInfo(FCharacterDefaultStat DefaultStat) : bUseDefaultStat(false), CharacterID(DefaultStat.CharacterID), bInfinite(DefaultStat.bInfinite), bIsInvincibility(DefaultStat.bIsInvincibility)
 		, StatGroupList(), CharacterDebuffState(1 << 10), CharacterActionState(ECharacterActionType::E_Idle), CurrentHP(0.0f), CurrentSP(0.0f), bCanAttack(false), bCanRoll(false)
-		, bIsSprinting(false), bIsAiming(false), bIsAirAttacking(false), bIsDownwardAttacking(false), HitCounter(0), ExtraStageTime(0.0f)
-		, MaxKeepingSkillCount(1), bInfiniteSkillMaterial(false), ExtraPercentageUnivMaterial(0.0f)
+		, bIsSprinting(false), bIsAiming(false), bIsAirAttacking(false), bIsDownwardAttacking(false), HitCounter(0), TotalDamage(0.0f), SubWeaponTotalDamage(0.0f), TotalHealAmount(0.0f), TotalDamageTaken(0.0f)
 	{
 		for (uint8 typeIdx = static_cast<uint8>(ECharacterStatType::E_None)
 			; typeIdx <= static_cast<uint8>(ECharacterStatType::E_LuckyDrop); ++typeIdx)
@@ -688,7 +683,7 @@ public:
 		TMap<EAbilityTierType, int32> UpgradeCostInfoMap;
 
 	//현재 플레이어가 소유한 어빌리티의 정보
-	UPROPERTY(VisibleDefaultsOnly)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		TArray<FAbilityInfoStruct> ActiveAbilityInfoList;
 
 	UPROPERTY(VisibleDefaultsOnly)

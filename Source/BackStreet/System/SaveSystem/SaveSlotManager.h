@@ -25,12 +25,24 @@ public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateGameLoadDone OnInitializeDone;
 
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateGameLoadDone OnSaveBegin;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateGameLoadDone OnSaveDone;
+
 	UFUNCTION(BlueprintNativeEvent)
 		void OnPreLoadMap(const FString& MapName);
 
 	UFUNCTION(BlueprintNativeEvent)
 		void OnPostLoadMap(UWorld* LoadedWorld);
 
+	UFUNCTION()
+		void OnChapterCleared();
+
+	//Total Core Count, Total Gear Count 산출을 위함
+	UFUNCTION()
+		void OnItemAdded(const FItemInfoDataStruct& NewItemInfo, const int32 AddCount);
 	
 //======= Basic ======================================
 public:
@@ -59,7 +71,7 @@ protected:
 private:
 	int32 DefferedInitializeCount = 0;
 
-	bool bNeedToFetchPermanentWealthData = true;
+	bool bIsReadyToMoveNeutralZone = false;
 
 	UPROPERTY()
 		FTimerHandle DefferedInitializeTimerHandle;

@@ -107,7 +107,7 @@ AProjectileBase* URangedCombatManager::CreateProjectile(FRotator FireRotationOve
 	FWeaponStateStruct weaponState = WeaponComponentRef.Get()->WeaponState;
 
 	FActorSpawnParameters spawmParams;
-	spawmParams.Owner = OwnerCharacterRef.Get(); //Projectile의 소유자는 Player
+	spawmParams.Owner = OwnerCharacterRef.Get();
 	spawmParams.Instigator = OwnerCharacterRef.Get()->GetInstigator();
 	spawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::DontSpawnIfColliding;
 

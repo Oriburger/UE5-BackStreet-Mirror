@@ -555,8 +555,12 @@ void AMainCharacterBase::ToggleTargetingMode(const FInputActionValue& Value)
 	{
 		if (Controller)
 		{
+			SetManualRotateMode();
+			if (!UGameplayStatics::IsGamePaused(GetWorld()))
+				SetAutomaticRotateModeTimer();
+
 			float newYawValue = GetMesh()->GetComponentRotation().Yaw + 95.0f;
-			Controller->SetControlRotation(FRotator(-20.0f, newYawValue, 0.0f));
+			Controller->SetControlRotation(FRotator(-5.0f, newYawValue, 0.0f));
 			OnLockOnStarted.Broadcast();
 		}
 		return;
@@ -615,6 +619,7 @@ float AMainCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 	{
 		PlayHitAnimMontage();
 	}
+	CharacterGameplayInfo.TotalDamageTaken += damageAmount;
 	return damageAmount;
 }
 
@@ -935,6 +940,16 @@ void AMainCharacterBase::OnTargetingStateUpdated(bool bIsActivated, APawn* Targe
 	{
 		SetAutomaticRotateMode();
 	}
+}
+
+void AMainCharacterBase::UpdateDamageAmount(float NewDamage, float NewSubDamage)
+{
+	//기본값 처리
+	NewDamage = NewDamage < 0.0f ? 0.0f : NewDamage;
+	NewSubDamage = NewSubDamage < 0.0f ? 0.0f : NewSubDamage;
+
+	CharacterGameplayInfo.TotalDamage += NewDamage;
+	CharacterGameplayInfo.SubWeaponTotalDamage += NewSubDamage;
 }
 
 void AMainCharacterBase::SetCharacterStatFromSaveData()

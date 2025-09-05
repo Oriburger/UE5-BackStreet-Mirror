@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Game_zh_Hant\n"
-"POT-Creation-Date: 2025-09-01 08:48\n"
-"PO-Revision-Date: 2025-09-01 08:48\n"
+"POT-Creation-Date: 2025-09-03 02:23\n"
+"PO-Revision-Date: 2025-09-03 02:23\n"
 "Language-Team: \n"
 "Language: zh-Hant\n"
 "MIME-Version: 1.0\n"
@@ -1833,6 +1833,125 @@ msgctxt "ST_EasyGameUICommon,High_Quality_Setting"
 msgid "High"
 msgstr "高"
 
+#. Key:	Label_BestRecords
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_BestRecords"
+msgid "Best\r\nRecords"
+msgstr "最佳記錄"
+
+#. Key:	Label_BoosterchipAcquired
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_BoosterchipAcquired"
+msgid "Number of Boosterchips Acquired"
+msgstr "獲得增幅晶片"
+
+#. Key:	Label_Chapter1
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_Chapter1"
+msgid "Ch1."
+msgstr "第1章"
+
+#. Key:	Label_Chapter2
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_Chapter2"
+msgid "Ch2."
+msgstr "第2章"
+
+#. Key:	Label_Chapter3
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_Chapter3"
+msgid "Ch3."
+msgstr "第3章"
+
+#. Key:	Label_Chapter4
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_Chapter4"
+msgid "Ch4."
+msgstr "第4章"
+
+#. Key:	Label_CoresAcquired
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_CoresAcquired"
+msgid "Number of Cores Acquired"
+msgstr "獲得核心數"
+
+#. Key:	Label_CurrentRecords
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_CurrentRecords"
+msgid "Current\r\nRecords"
+msgstr "當前記錄"
+
+#. Key:	Label_GameResult
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_GameResult"
+msgid "Game Result"
+msgstr "遊戲結果"
+
+#. Key:	Label_GearsAcquired
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_GearsAcquired"
+msgid "Number of Gears Acquired"
+msgstr "獲得齒輪數"
+
+#. Key:	Label_HealingAmount
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_HealingAmount"
+msgid "Healing Amount"
+msgstr "治療量"
+
+#. Key:	Label_RecordsOverview
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_RecordsOverview"
+msgid "Records Overview"
+msgstr "關鍵數據"
+
+#. Key:	Label_SkillsAcquired
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_SkillsAcquired"
+msgid "Number of Skills Acquired"
+msgstr "獲得技能數"
+
+#. Key:	Label_SubWeaponDamage
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_SubWeaponDamage"
+msgid "Sub-Weapon Damage"
+msgstr "副武器傷害"
+
+#. Key:	Label_TotalDmgDealt
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_TotalDmgDealt"
+msgid "Total Damage Dealt"
+msgstr "總傷害量"
+
+#. Key:	Label_TotalDmgTaken
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_TotalDmgTaken"
+msgid "Total Damage Taken"
+msgstr "總承受傷害"
+
+#. Key:	Label_WeaponInfo
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,Label_WeaponInfo"
+msgid "Weapon Info"
+msgstr "武器資訊"
+
 #. Key:	LoadGame
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
 #: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -1853,6 +1972,13 @@ msgstr "低"
 msgctxt "ST_EasyGameUICommon,Medium_Quality_Setting"
 msgid "Medium"
 msgstr "中"
+
+#. Key:	More_Info
+#. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+#: /Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
+msgctxt "ST_EasyGameUICommon,More_Info"
+msgid "More Info"
+msgstr "詳細資訊"
 
 #. Key:	NewGame
 #. SourceLocation:	/Game/EasyGameUI/Datas/ST_EasyGameUICommon.ST_EasyGameUICommon
@@ -3394,6 +3520,13 @@ msgctxt "ST_Tutorial,Input_Sprint"
 msgid "Sprint"
 msgstr "衝刺"
 
+#. Key:	Label_Name
+#. SourceLocation:	/Game/UI/Localization/ST_PermanentGrowth.ST_PermanentGrowth
+#: /Game/UI/Localization/ST_PermanentGrowth.ST_PermanentGrowth
+msgctxt "ST_Tutorial,Label_Name"
+msgid "Name"
+msgstr "名稱"
+
 #. Key:	Name_BossStage
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
 #: /Game/UI/Localization/ST_Tutorial.ST_Tutorial
@@ -3435,6 +3568,20 @@ msgstr "負面效果提示"
 msgctxt "ST_Tutorial,Name_StageSelectionTip"
 msgid "Stage Selection Tip"
 msgstr "關卡選擇提示"
+
+#. Key:	Stat_Attack_Power
+#. SourceLocation:	/Game/UI/Localization/ST_PermanentGrowth.ST_PermanentGrowth
+#: /Game/UI/Localization/ST_PermanentGrowth.ST_PermanentGrowth
+msgctxt "ST_Tutorial,Stat_Attack_Power"
+msgid "Attack Power"
+msgstr "攻击力"
+
+#. Key:	Stat_Attack_Speed
+#. SourceLocation:	/Game/UI/Localization/ST_PermanentGrowth.ST_PermanentGrowth
+#: /Game/UI/Localization/ST_PermanentGrowth.ST_PermanentGrowth
+msgctxt "ST_Tutorial,Stat_Attack_Speed"
+msgid "Attack Speed"
+msgstr "攻击速度"
 
 #. Key:	Tutorial_Battle_1
 #. SourceLocation:	/Game/UI/Localization/ST_Tutorial.ST_Tutorial
