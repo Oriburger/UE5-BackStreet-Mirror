@@ -202,6 +202,7 @@ void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 		FinishChapter(StageInfo.bIsClear);
 		return;
 	}
+	FinishChapter(false);
 	return;
 }
 
