@@ -11,7 +11,6 @@
 #include "../../Character/Component/ItemInventoryComponent.h"
 #include "../../Character/Component/WeaponComponentBase.h"
 #include "../../Character/Component/SkillManagerComponentBase.h"	
-#include "ProgressSaveGame.h"
 
 ASaveSlotManager::ASaveSlotManager()
 {
@@ -90,12 +89,10 @@ void ASaveSlotManager::InitializeReference()
 		}
 
 		// Bind to events
-		if (ChapterManagerRef.IsValid() && StageManagerRef.IsValid())
-		{
-			UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::InitializeReference - Bind to events"));
-			ChapterManagerRef->OnChapterCleared.AddDynamic(this, &ASaveSlotManager::SaveGameData);
-			StageManagerRef->OnStageLoadDone.AddDynamic(this, &ASaveSlotManager::SaveGameData);
-		}
+		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::InitializeReference - Bind to events"));
+		ChapterManagerRef->OnChapterCleared.AddDynamic(this, &ASaveSlotManager::OnChapterCleared);
+		StageManagerRef->OnStageLoadDone.AddDynamic(this, &ASaveSlotManager::SaveGameData);
+		PlayerInventoryRef->OnItemAdded.AddDynamic(this, &ASaveSlotManager::OnItemAdded);
 	}
 	//인게임 체크
 	bool result = TryFetchCachedData();
@@ -141,7 +138,7 @@ void ASaveSlotManager::OnPreLoadMap_Implementation(const FString& MapName)
 	// 메인메뉴 및 중립구역으로 전환 시의 상태를 초기화
 	if (MapName.Contains("MainMenu"))
 	{
-		bNeedToFetchPermanentWealthData = true;
+		bIsReadyToMoveNeutralZone = true;
 		UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::OnPreLoadMap - MainMenu detected, SaveSlotManagerRef reset"));
 		
 		ProgressSaveData = FProgressSaveData();
@@ -150,7 +147,7 @@ void ASaveSlotManager::OnPreLoadMap_Implementation(const FString& MapName)
 	}
 	if (MapName.Contains("NeutralZone"))
 	{
-		bNeedToFetchPermanentWealthData = true;
+		bIsReadyToMoveNeutralZone = true;
 		ProgressSaveData.ChapterInfo = FChapterInfo();
 		ProgressSaveData.StageInfo = FStageInfo();
 	}
@@ -169,9 +166,35 @@ void ASaveSlotManager::OnPostLoadMap_Implementation(UWorld* LoadedWorld)
 	}
 }
 
+void ASaveSlotManager::OnChapterCleared()
+{
+	if (ChapterManagerRef.IsValid())
+	{
+		ProgressSaveData.ChapterClearTimeList.Add(ChapterManagerRef->GetChapterClearTime());
+		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::OnChapterCleared - Chapter #%d cleared at time %f"), ChapterManagerRef->GetCurrentChapterInfo().ChapterID, ChapterManagerRef->GetChapterClearTime());
+	}
+	CacheCurrentGameState();
+}
+
+void ASaveSlotManager::OnItemAdded(const FItemInfoDataStruct& NewItemInfo, const int32 AddCount)
+{
+	//Gear id : 1, Core id : 2
+	const int32 gearID = 1;
+	const int32 coreID = 2;
+
+	if (NewItemInfo.ItemID == gearID)
+	{
+		ProgressSaveData.TotalGearCountInGame += AddCount;
+	}
+	else if (NewItemInfo.ItemID == coreID)
+	{
+		ProgressSaveData.TotalCoreCountInGame += AddCount;
+	}
+}
+
 void ASaveSlotManager::SaveGameData_Implementation()
 {	
-
+	OnSaveBegin.Broadcast(true);
 	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::SaveGameData - SaveGameData called"));
 }
 
@@ -248,17 +271,21 @@ void ASaveSlotManager::FetchGameData()
 		ProgressSaveData.WeaponStateInfo = PlayerCharacterRef->WeaponComponent->GetWeaponState();
 		ProgressSaveData.AbilityManagerInfo = PlayerCharacterRef->AbilityManagerComponent->GetAbilityManagerInfo();
 		ProgressSaveData.InventoryInfo = PlayerCharacterRef->ItemInventory->GetInventoryInfoData();
-		ProgressSaveData.SkillManagerInfo = PlayerCharacterRef->SkillManagerComponent->GetSkillManagerInfo();
-
-		// 영구재화 Handling 
-		if (bNeedToFetchPermanentWealthData)
+		ProgressSaveData.SkillManagerInfo = PlayerCharacterRef->SkillManagerComponent->GetSkillManagerInfo();	
+		
+		if (bIsReadyToMoveNeutralZone && SaveSlotInfo.bIsInGame)
 		{
+			// 영구재화 Handling 
 			UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::FetchGameData - Fetching permanent data from PlayerCharacterRef"));
-			const int32 newCoreCount = PlayerCharacterRef->ItemInventory->GetItemAmount(InventorySaveData.CoreID);
-			PlayerCharacterRef->ItemInventory->RemoveItem(InventorySaveData.CoreID, newCoreCount); //음....................
-			InventorySaveData.CoreCount += newCoreCount;
-		}
+			InventorySaveData.CoreCount += ProgressSaveData.TotalCoreCountInGame;
 
+			//최고기록 Handling
+			if (ProgressSaveData.ChapterClearTimeList.Num() > 4)
+			{
+				SaveSlotInfo.BestChapterClearTimeList = SaveSlotInfo.BestChapterClearTimeList.IsEmpty() ? ProgressSaveData.ChapterClearTimeList
+					: (ProgressSaveData.ChapterClearTimeList[3] < SaveSlotInfo.BestChapterClearTimeList[3] ? ProgressSaveData.ChapterClearTimeList : SaveSlotInfo.BestChapterClearTimeList);
+			}
+		}
 		UE_LOG(LogSaveSystem, Error, TEXT("ASaveSlotManager::FetchGameData - InventorySaveData.CoreCount : %d"), InventorySaveData.CoreCount);
 	}
 }

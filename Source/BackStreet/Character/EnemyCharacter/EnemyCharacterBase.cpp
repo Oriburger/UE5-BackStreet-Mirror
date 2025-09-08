@@ -193,16 +193,24 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 {
 	float damageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	if (!IsValid(DamageCauser) || !DamageCauser->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterGameplayInfo.bIsInvincibility) return 0.0f;
+	APawn* causerPawn = IsValid(EventInstigator) ? EventInstigator->GetPawn() : nullptr;
 
-	EnemyDamageDelegate.ExecuteIfBound(DamageCauser);
+	if (!IsValid(DamageCauser) || !IsValid(causerPawn) || !causerPawn->ActorHasTag("Player") || damageAmount <= 0.0f || CharacterGameplayInfo.bIsInvincibility)
+	{
+		return 0.0f;
+	}
+
+	EnemyDamageDelegate.ExecuteIfBound(causerPawn);
 	SetInstantHpWidgetVisibility();
 	
 	FloatingHpBar->SetVisibility(CharacterGameplayInfo.CurrentHP > 0.0f);
 
 	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Skill) return damageAmount;
-
-	if (DamageCauser->ActorHasTag("Player"))
+	if (DamageCauser->ActorHasTag("Projectile") && IsValid(Cast<AMainCharacterBase>(causerPawn)))
+	{
+		Cast<AMainCharacterBase>(causerPawn)->UpdateDamageAmount(-1.0f, damageAmount);
+	}
+	else if (DamageCauser->ActorHasTag("Player"))
 	{
 		//apply fov hit effect by damage amountd
 		float fovValue = 90.0f + FMath::Clamp(DamageAmount/100.0f, 0.0f, 1.0f) * 45.0f;
@@ -211,7 +219,8 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 			fovValue = 120.0f;
 		}
 		Cast<AMainCharacterBase>(DamageCauser)->SetFieldOfViewWithInterp(fovValue, 5.0f, true);
-	}	
+		Cast<AMainCharacterBase>(DamageCauser)->UpdateDamageAmount(damageAmount);
+	}
 	
 	if (CharacterGameplayInfo.CharacterActionState == ECharacterActionType::E_Hit)
 	{

@@ -14,8 +14,6 @@ class BACKSTREET_API URangedCombatManager : public UCombatManager
 public:
 	URangedCombatManager();
 	
-
-
 public:
 	//공격 처리		
 	UFUNCTION(BlueprintCallable)

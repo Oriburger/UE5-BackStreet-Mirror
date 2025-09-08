@@ -98,11 +98,11 @@ public:
 //------ 위젯 ------------------------
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
-		TSubclassOf<class UCommonUserWidget> MainHUDClass;
+		TSubclassOf<class UUserWidget> MainHUDClass;
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		class UCommonUserWidget* GetMainHUDRef();
+		class UUserWidget* GetMainHUDRef();
 
 	//create combat ui and menu ui
 	UFUNCTION(BlueprintCallable)
@@ -111,7 +111,7 @@ public:
 protected:
 	//For combat hud widget
 	UPROPERTY()
-		class UCommonUserWidget* MainHUDRef;
+		class UUserWidget* MainHUDRef;
 
 //------ 세이브 및 로드 관련 ------------------------
 public:

@@ -68,7 +68,18 @@ void ABackStreetGameModeBase::TryContinueGame()
 void ABackStreetGameModeBase::FinishGame(bool bGameIsOver)
 {
 	if (!IsValid(ChapterManagerRef)) return;
-	ChapterManagerRef->FinishChapter(!bGameIsOver);
+	
+	//change level to next chapter
+	const int32 currentChapterID = ChapterManagerRef->GetCurrentChapterInfo().ChapterID;
+	if (currentChapterID != ChapterManagerRef->GetMaxChapterID() && !bGameIsOver)
+	{
+		ChapterManagerRef->StartChapter(currentChapterID + 1);
+	}
+	else
+	{
+		//나중에 Reward UI로 대체하기
+		ChapterManagerRef->OpenNeutralZoneLevel();
+	}
 }
 
 void ABackStreetGameModeBase::RegisterActorToStageManager(AActor* TargetActor)
@@ -153,24 +164,20 @@ void ABackStreetGameModeBase::OnSaveManagerLoadDone(bool bIsSuccess)
 	}
 }
 
-UCommonUserWidget* ABackStreetGameModeBase::GetMainHUDRef()
+UUserWidget* ABackStreetGameModeBase::GetMainHUDRef()
 {
 	if (IsValid(MainHUDRef)) return MainHUDRef;
-	return MainHUDRef = Cast<UCommonUserWidget>(CreateWidget(GetWorld(), MainHUDClass));
+	return MainHUDRef = Cast<UUserWidget>(CreateWidget(GetWorld(), MainHUDClass));
 }
 
 void ABackStreetGameModeBase::CreateDefaultHUD()
 {
-	UCommonUserWidget* combatWidgetRef = GetMainHUDRef();
+	UUserWidget* combatWidgetRef = GetMainHUDRef();
 	if (IsValid(combatWidgetRef))
 	{
 		if (!combatWidgetRef->IsInViewport())
 		{
 			combatWidgetRef->AddToViewport();
-		}
-		if (Cast<UCommonActivatableWidget>(combatWidgetRef))
-		{
-			//Cast<UCommonActivatableWidget>(combatWidgetRef)->ActivateWidget();
 		}
 	}
 

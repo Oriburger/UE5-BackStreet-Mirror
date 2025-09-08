@@ -100,7 +100,6 @@ protected:
 
 private:
 	//어빌리티 종류별 토탈 티어 합산 (3: 레전더리, 2: 레어, 1: 일반)
-	TMap<EAbilityType, int32> AbilityTotalTier;
 	TMap<EAbilityType, int32> AbilityTotalTierThreshold;
 
 	//확률 계산을 위한 누적합 배열

@@ -9,6 +9,7 @@
 #include "../../Global/BackStreetGameInstance.h"
 #include "../../Character/MainCharacter/MainCharacterBase.h"
 #include "../../System/SaveSystem/SaveSlotManager.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Runtime/UMG/Public/UMG.h"
 
 // Sets default values
@@ -28,6 +29,8 @@ void ANewChapterManagerBase::BeginPlay()
 	Super::BeginPlay();
 
 	StageManagerComponent->OnStageFinished.AddDynamic(this, &ANewChapterManagerBase::OnStageFinished);
+	StageManagerComponent->OnStageLoadBegin.AddDynamic(this, &ANewChapterManagerBase::PauseChapterTimer);
+	StageManagerComponent->OnStageLoadDone.AddDynamic(this, &ANewChapterManagerBase::UnPauseChapterTimer);
 	GamemodeRef = Cast<ABackStreetGameModeBase>(GetWorld()->GetAuthGameMode());
 	GameInstanceRef = Cast<UBackStreetGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
@@ -35,6 +38,9 @@ void ANewChapterManagerBase::BeginPlay()
 void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 {
 	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::StartChapter(%d)"), NewChapterID);
+	
+	//Clear resource
+	StageManagerComponent->ClearPreviousResource();
 
 	//init chapter with generate stage infos
 	CurrentChapterInfo.bIsChapterInitialized = true;
@@ -86,20 +92,31 @@ void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 	//Set state variable
 	bIsChapterFinished = true;
 
-	//Clear resource
-	StageManagerComponent->ClearPreviousResource();
-
-	OnChapterCleared.Broadcast();
-
-	//change level to next chapter
-	if (CurrentChapterInfo.ChapterID != MaxChapterID && bChapterClear)
+	if (bChapterClear)
 	{
-		StartChapter(CurrentChapterInfo.ChapterID + 1);
+		OnChapterCleared.Broadcast();
 	}
-	else
+
+	//===========================================================
+	//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishChapter' 
+
+	//Game Over
+	if (StageManagerComponent->GetCurrentStageInfo().bIsGameOver)
 	{
-		//나중에 Reward UI로 대체하기
-		OpenNeutralZoneLevel();
+		CreateGameResultWidget(false);
+	}
+	//Chapter & Game Clear
+	else if (StageManagerComponent->GetCurrentStageInfo().bIsClear 
+	&& StageManagerComponent->GetCurrentStageInfo().StageType == EStageCategoryInfo::E_Boss)
+	{
+		if (CurrentChapterInfo.ChapterID == MaxChapterID)
+		{
+			CreateGameResultWidget(true);
+		}
+		else
+		{
+			CreateChapterCleartWidget();
+		}
 	}
 }
 
@@ -148,12 +165,14 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 	//Load chapter info from data table
 	FChapterInfo* newInfo = nullptr;
 	FString rowName = FString::FromInt(NewChapterID);
+	const float elapsedTime = CurrentChapterInfo.TotalElapsedTime;
 
 	newInfo = ChapterInfoTable->FindRow<FChapterInfo>(FName(rowName), rowName);
 	if (newInfo != nullptr)
 	{
 		ChapterID = NewChapterID;
 		CurrentChapterInfo = *newInfo;
+		CurrentChapterInfo.TotalElapsedTime = elapsedTime;
 		bIsChapterFinished = false;
 		CurrentChapterInfo.bIsChapterInitialized = true;
 		StageGeneratorComponent->InitGenerator(CurrentChapterInfo);
@@ -166,11 +185,6 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 
 void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 {
-	if (bIsChapterFinished)
-	{
-		UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::OnStageFinished - Chapter is already finished"));
-		return;
-	}
 	int32 stageIdx = StageInfo.Coordinate;
 	if (!CurrentChapterInfo.StageInfoList.IsValidIndex(stageIdx))
 	{
@@ -180,21 +194,14 @@ void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 	CurrentChapterInfo.StageInfoList[stageIdx] = StageInfo;
 	OnChapterInfoUpdated.Broadcast(CurrentChapterInfo);
 
-	//Game Over
-	if (StageInfo.bIsGameOver)
+	//Chapter Clear
+	if (StageInfo.StageType == EStageCategoryInfo::E_Boss)
 	{
-		//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishChapter' 
-		CreateGameResultWidget(false);
+		FinishChapter(StageInfo.bIsClear);
+		return;
 	}
-	else if (StageInfo.bIsClear)
-	{
-		if (StageInfo.StageType == EStageCategoryInfo::E_Boss)
-		{
-			//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishChapter'
-			CreateGameResultWidget(true);
-		}
-	}
-
+	FinishChapter(false);
+	return;
 }
 
 void ANewChapterManagerBase::InitStageIconTranslationList(FVector2D Threshold)
@@ -277,15 +284,6 @@ bool ANewChapterManagerBase::GetTutorialCompletion()
 	return false;
 }
 
-void ANewChapterManagerBase::CreateGameResultWidget(bool bChapterClear)
-{
-	GameResultWidgetRef = CreateWidget(GetWorld(), bChapterClear ? ChapterClearWidgetClass : GameOverWidgetClass);
-	if (IsValid(GameResultWidgetRef))
-	{
-		GameResultWidgetRef->AddToViewport();
-	}
-}
-
 void ANewChapterManagerBase::OpenMainMenuLevel()
 {
 	if (!GamemodeRef.IsValid())
@@ -308,4 +306,24 @@ void ANewChapterManagerBase::OpenNeutralZoneLevel()
 	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::OpenNeutralZoneLevel() - Open Neutral Zone Level"));
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
 	GamemodeRef.Get()->RequestOpenLevel("NeutralZonePersistent", true);
+}
+
+void ANewChapterManagerBase::PauseChapterTimer()
+{
+	GetWorldTimerManager().PauseTimer(ChapterTimerHandle);
+}
+
+void ANewChapterManagerBase::UnPauseChapterTimer()
+{
+	if (!GetWorldTimerManager().IsTimerActive(ChapterTimerHandle))
+	{
+		GetWorldTimerManager().SetTimer(ChapterTimerHandle, this, &ANewChapterManagerBase::UpdateChapterElapsedTime, 0.01f, true, 0.0f);
+		return;
+	}
+	GetWorldTimerManager().UnPauseTimer(ChapterTimerHandle);
+}
+
+void ANewChapterManagerBase::UpdateChapterElapsedTime()
+{
+	CurrentChapterInfo.TotalElapsedTime += 0.01f;
 }

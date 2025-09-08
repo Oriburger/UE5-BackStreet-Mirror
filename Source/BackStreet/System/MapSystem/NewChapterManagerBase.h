@@ -142,17 +142,23 @@ public:
 public:
 	//Result widget
 	UPROPERTY(EditDefaultsOnly,  Category = "UI")
-		TSubclassOf<class UUserWidget> ChapterClearWidgetClass;
+		TSubclassOf<class UUserWidget> GameResultWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
-		TSubclassOf<class UUserWidget> GameOverWidgetClass;
+		TSubclassOf<class UUserWidget> ChapterClearWidgetClass;
 
 protected:
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent)
 		void CreateGameResultWidget(bool bChapterClear);
 
-private:
-	class UUserWidget* GameResultWidgetRef;
+	UFUNCTION(BlueprintImplementableEvent)
+		void CreateChapterCleartWidget();
+
+	UPROPERTY(BlueprintReadWrite)
+		class UUserWidget* ChapterClearWidgetRef;
+
+	UPROPERTY(BlueprintReadWrite)
+		class UUserWidget* GameResultWidgetRef;
 
 //======== Timer ==========================
 public:
@@ -162,6 +168,21 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void OpenNeutralZoneLevel();
 
+	UFUNCTION(BlueprintCallable)
+		void PauseChapterTimer();
+
+	UFUNCTION(BlueprintCallable)
+		void UnPauseChapterTimer();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetChapterClearTime() { return CurrentChapterInfo.TotalElapsedTime; }
+
+protected:
+	UFUNCTION()
+		void UpdateChapterElapsedTime();
+
 private:
 	FTimerHandle OpenLevelDelayHandle; 
+
+	FTimerHandle ChapterTimerHandle; //챕터 클리어 시간 측정용
 };

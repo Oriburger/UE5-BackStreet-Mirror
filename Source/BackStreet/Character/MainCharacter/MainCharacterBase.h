@@ -288,6 +288,10 @@ protected:
 		float CameraSensivity;
 
 // ------- SaveData ฐüทร --------------------
+public:
+	UFUNCTION(BlueprintCallable)
+		void UpdateDamageAmount(float NewDamage = -1.0f, float NewSubDamage = -1.0f);
+
 protected:
 	UFUNCTION()
 		void SetCharacterStatFromSaveData();

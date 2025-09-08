@@ -445,12 +445,14 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	float oldClampedHealthValue = CharacterGameplayInfo.CurrentHP;
 	float newClampedHealthValue = 0.0f;
 
-	CharacterGameplayInfo.CurrentHP = CharacterGameplayInfo.CurrentHP - DamageAmount * (1.0f - FMath::Clamp(0.5f * CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_Defense), 0.0f, 0.5f));
+	DamageAmount = DamageAmount * (1.0f - FMath::Clamp(0.5f * CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_Defense), 0.0f, 0.5f));
+
+	CharacterGameplayInfo.CurrentHP = CharacterGameplayInfo.CurrentHP - DamageAmount;
 	newClampedHealthValue = CharacterGameplayInfo.CurrentHP = FMath::Max(0.0f, CharacterGameplayInfo.CurrentHP);
 	
 	oldClampedHealthValue = UKismetMathLibrary::MapRangeClamped(oldClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
 	newClampedHealthValue = UKismetMathLibrary::MapRangeClamped(newClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
-	
+
 	OnHealthChanged.Broadcast(oldClampedHealthValue, newClampedHealthValue);
 	OnDamageReceived.Broadcast();
 
@@ -465,7 +467,7 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	}
 
 	//if causer is not character(like resource manager), return func immediately
-	if (!DamageCauser->ActorHasTag("Character")) return 0.0f;
+	if (!DamageCauser->ActorHasTag("Character")) return DamageAmount;
 
 	// ====== move to enemy's Hit scene location ======================
 	//Update EnemyCharacter's Rotation
@@ -496,7 +498,7 @@ float ACharacterBase::TakeDebuffDamage(ECharacterDebuffType DebuffType, float Da
 	totalDamage = FMath::Min(totalDamage, DamageAmount);
 	totalDamage = FMath::Max(0.0f, totalDamage);
 
-	TakeDamage(DamageAmount, FDamageEvent(), nullptr, this);
+	TakeDamage(DamageAmount, FDamageEvent(), Causer->GetInstigatorController(), this);
 	return DamageAmount;
 }
 
@@ -511,15 +513,19 @@ void ACharacterBase::TakeHeal(float HealAmount, bool bIsTimerEvent, uint8 BuffDe
 	const float& totalHealthValue = CharacterGameplayInfo.GetTotalValue(ECharacterStatType::E_MaxHealth);
 	float oldClampedHealthValue = CharacterGameplayInfo.CurrentHP;
 	float newClampedHealthValue = 0.0f;
-	CharacterGameplayInfo.CurrentHP += (HealAmount * (1.0f + GetStatTotalValue(ECharacterStatType::E_HealItemPerformance)));
+
+	HealAmount = (HealAmount * (1.0f + GetStatTotalValue(ECharacterStatType::E_HealItemPerformance)));
+	CharacterGameplayInfo.CurrentHP += HealAmount;
 	newClampedHealthValue = CharacterGameplayInfo.CurrentHP = FMath::Min(totalHealthValue, CharacterGameplayInfo.CurrentHP);
 	OnDamageReceived.Broadcast();
 	
+	//실제 회복된 양을 계산
+	CharacterGameplayInfo.TotalHealAmount += (newClampedHealthValue - oldClampedHealthValue);
+
 	oldClampedHealthValue = UKismetMathLibrary::MapRangeClamped(oldClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
 	newClampedHealthValue = UKismetMathLibrary::MapRangeClamped(newClampedHealthValue, 0.0f, totalHealthValue, 0.0f, 100.0f);
 
 	OnHealthChanged.Broadcast(oldClampedHealthValue, newClampedHealthValue);
-
 	return;
 }
 

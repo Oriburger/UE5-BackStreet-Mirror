@@ -256,6 +256,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (UIMin = 1, UIMax = 5), Category = "Category")
 		int32 StageCount = 9;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Category")
+		float TotalElapsedTime = 0.0f;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Config")
 		int32 CurrentStageCoordinate = 0;
 
