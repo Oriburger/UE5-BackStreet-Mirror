@@ -228,7 +228,7 @@ void AProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedCo
 		{
 			bool bIsFatalAttack = false;
 			const float totalDamage = Cast<ACharacterBase>(GetOwner())->WeaponComponent->CalculateTotalDamage(Cast<ACharacterBase>(OtherActor)->GetCharacterGameplayInfo(), bIsFatalAttack);
-			UGameplayStatics::ApplyDamage(OtherActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
+			UGameplayStatics::ApplyDamage(OtherActor, totalDamage, SpawnInstigator, this, nullptr);				
 			DestroyWithEffect(GetActorLocation(), true);
 		}
 	}
@@ -307,7 +307,7 @@ void AProjectileBase::CheckInitialDamageCondition(float SphereRadius, float Dist
 				{
 					bool bIsFatalAttack = false;
 					const float totalDamage = Cast<ACharacterBase>(GetOwner())->WeaponComponent->CalculateTotalDamage(Cast<ACharacterBase>(overlapActor)->GetCharacterGameplayInfo(), bIsFatalAttack);
-					UGameplayStatics::ApplyDamage(overlapActor, totalDamage, SpawnInstigator, OwnerCharacterRef.Get(), nullptr);
+					UGameplayStatics::ApplyDamage(overlapActor, totalDamage, SpawnInstigator, this, nullptr);
 
 					GetWorld()->GetTimerManager().SetTimer(DestroyWithEffectTimer,
 						FTimerDelegate::CreateLambda([&]()
@@ -349,23 +349,9 @@ void AProjectileBase::Explode()
 
 	//--- 데미지 관련 --------------
 	TArray<AActor*> ignoreActors = { (AActor*)this };
-	if (OwnerCharacterRef.Get()->ActorHasTag("Boss"))
-	{
-		bool bIsFatalAttack = false;
-		float totalDamage = OwnerCharacterRef.Get()->WeaponComponent->CalculateTotalDamage(OwnerCharacterRef.Get()->GetCharacterGameplayInfo(), bIsFatalAttack);
-
-		UE_LOG(LogTemp, Warning, TEXT("AProjectileBase::Explode() - Total Damage: %f"), totalDamage);
-
-		UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), totalDamage, totalDamage * 0.2f
-			, GetActorLocation(), 125.0f, 250.0f, 0.5f, nullptr, ignoreActors, OwnerCharacterRef.Get()
-			, OwnerCharacterRef.Get()->GetController(), ECC_WorldStatic);
-	}
-	else
-	{
-		UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), ProjectileStat.ProjectileDamage, ProjectileStat.ProjectileDamage * 0.2f
-			, GetActorLocation(), 125.0f, 250.0f, 0.5f, nullptr, ignoreActors, OwnerCharacterRef.Get()
-			, OwnerCharacterRef.Get()->GetController(), ECC_WorldStatic);
-	}
+	UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), ProjectileStat.ProjectileDamage, ProjectileStat.ProjectileDamage * 0.2f
+		, GetActorLocation(), 125.0f, 250.0f, 0.5f, nullptr, ignoreActors, OwnerCharacterRef.Get()
+		, OwnerCharacterRef.Get()->GetController(), ECC_WorldStatic);
 
 	//--- 이펙트 출력 --------------
 	if (ExplodeParticle != nullptr)
