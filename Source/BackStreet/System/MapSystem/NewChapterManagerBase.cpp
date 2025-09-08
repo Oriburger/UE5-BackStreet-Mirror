@@ -92,7 +92,10 @@ void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
 	//Set state variable
 	bIsChapterFinished = true;
 
-	OnChapterCleared.Broadcast();
+	if (bChapterClear)
+	{
+		OnChapterCleared.Broadcast();
+	}
 
 	//===========================================================
 	//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishChapter' 
@@ -182,11 +185,6 @@ void ANewChapterManagerBase::InitChapter(int32 NewChapterID)
 
 void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 {
-	if (bIsChapterFinished)
-	{
-		UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::OnStageFinished - Chapter is already finished"));
-		return;
-	}
 	int32 stageIdx = StageInfo.Coordinate;
 	if (!CurrentChapterInfo.StageInfoList.IsValidIndex(stageIdx))
 	{
