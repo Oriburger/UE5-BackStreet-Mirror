@@ -150,6 +150,9 @@ void ASaveSlotManager::OnPreLoadMap_Implementation(const FString& MapName)
 	if (MapName.Contains("NeutralZone"))
 	{
 		bIsReadyToMoveNeutralZone = true;
+		InventorySaveData.CoreCount += ProgressSaveData.TotalCoreCountInGame;
+		ProgressSaveData.TotalCoreCountInGame = 0;
+
 		ProgressSaveData.ChapterInfo = FChapterInfo();
 		ProgressSaveData.StageInfo = FStageInfo();
 	}
@@ -165,7 +168,6 @@ void ASaveSlotManager::OnPostLoadMap_Implementation(UWorld* LoadedWorld)
 	if (LoadedWorld && LoadedWorld->GetMapName().Contains("NeutralZone"))
 	{
 		SaveSlotInfo.bIsRequiredToMoveNeutralZone = false;
-		CacheCurrentGameState();
 	}
 }
 
@@ -176,10 +178,16 @@ void ASaveSlotManager::OnChapterCleared()
 		ProgressSaveData.ChapterClearTimeList.Add(ChapterManagerRef->GetChapterClearTime());
 		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::OnChapterCleared - Chapter #%d cleared at time %f"), ChapterManagerRef->GetCurrentChapterInfo().ChapterID, ChapterManagerRef->GetChapterClearTime());
 	}
-	SaveSlotInfo.bIsRequiredToMoveNeutralZone = ChapterManagerRef.IsValid() ? ChapterManagerRef.Get()->GetIsMaxChapter() : false;
-
+	const bool bIsMaxChapter = ChapterManagerRef.IsValid() ? ChapterManagerRef.Get()->GetIsMaxChapter() : false;
+	SaveSlotInfo.bIsRequiredToMoveNeutralZone = bIsMaxChapter;
+	
 	bIsChapterCleared = true;
 	CacheCurrentGameState();
+	
+	if (bIsMaxChapter)
+	{
+		SaveGameData();
+	}
 }
 
 void ASaveSlotManager::OnChapterOvered()
@@ -190,6 +198,7 @@ void ASaveSlotManager::OnChapterOvered()
 		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::OnChapterOvered - Chapter #%d finished at time %f"), ChapterManagerRef->GetCurrentChapterInfo().ChapterID, ChapterManagerRef->GetChapterClearTime());
 	}
 	SaveSlotInfo.bIsRequiredToMoveNeutralZone = true;
+	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::OnChapterOvered - bIsRequiredToMoveNeutralZone set to true"));
 	CacheCurrentGameState();
 	SaveGameData();
 }
@@ -352,10 +361,6 @@ void ASaveSlotManager::CacheCurrentGameState()
 {
 	if (SaveSlotInfo.bIsInGame)
 	{
-		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::CacheCurrentGameState - Caching current game state"));
-
-		InventorySaveData.CoreCount += ProgressSaveData.TotalCoreCountInGame;
-		ProgressSaveData.TotalCoreCountInGame = 0;
 		GameInstanceRef->CacheGameData(SaveSlotInfo, ProgressSaveData, AchievementSaveData, InventorySaveData);
 	}
 	else if (SaveSlotInfo.bIsInNeutralZone)

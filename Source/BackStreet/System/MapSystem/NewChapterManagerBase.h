@@ -97,7 +97,7 @@ public:
 		int32 GetMaxChapterID() { return MaxChapterID; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-		bool GetIsMaxChapter() { return ChapterID >= MaxChapterID; }
+		bool GetIsMaxChapter() { return CurrentChapterInfo.ChapterID >= MaxChapterID; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FName GetStageTypeName(EStageCategoryInfo StageType);
