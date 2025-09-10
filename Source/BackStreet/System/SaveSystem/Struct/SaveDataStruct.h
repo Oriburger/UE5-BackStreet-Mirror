@@ -108,4 +108,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bIsInNeutralZone = false;
+
+	//중립구역으로 이동해야하는지 여부
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool bIsRequiredToMoveNeutralZone = false;
+
 };

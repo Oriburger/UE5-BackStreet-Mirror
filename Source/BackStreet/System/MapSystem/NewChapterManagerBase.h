@@ -7,7 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "NewChapterManagerBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateChapterClear);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateChapterFinish);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateChapterInfoUpdate, FChapterInfo, ChapterInfo);
 
 UCLASS()
@@ -18,7 +18,10 @@ class BACKSTREET_API ANewChapterManagerBase : public AActor
 //======== Delegate ============
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-		FDelegateChapterClear OnChapterCleared;
+		FDelegateChapterFinish OnChapterCleared;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateChapterFinish OnChapterOvered;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 		FDelegateChapterInfoUpdate OnChapterInfoUpdated;
@@ -51,7 +54,7 @@ public:
 
 	//Finish current chapter
 	UFUNCTION(BlueprintCallable)
-		void FinishChapter(bool bChapterClear);
+		void FinishChapter(bool bIsChapterCleared);
 
 	//?
 	UFUNCTION()
@@ -92,6 +95,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		int32 GetMaxChapterID() { return MaxChapterID; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsMaxChapter() { return ChapterID >= MaxChapterID; }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FName GetStageTypeName(EStageCategoryInfo StageType);
@@ -149,7 +155,7 @@ public:
 
 protected:
 	UFUNCTION(BlueprintImplementableEvent)
-		void CreateGameResultWidget(bool bChapterClear);
+		void CreateGameResultWidget(bool bIsChapterCleared);
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void CreateChapterCleartWidget();
@@ -162,12 +168,6 @@ protected:
 
 //======== Timer ==========================
 public:
-	UFUNCTION()
-		void OpenMainMenuLevel();
-
-	UFUNCTION(BlueprintCallable)
-		void OpenNeutralZoneLevel();
-
 	UFUNCTION(BlueprintCallable)
 		void PauseChapterTimer();
 

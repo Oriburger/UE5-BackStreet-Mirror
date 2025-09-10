@@ -116,7 +116,7 @@ protected:
 //------ 세이브 및 로드 관련 ------------------------
 public:
 	UFUNCTION(BlueprintCallable)
-		void RequestOpenLevel(FName MapName, bool bShouldLoadData, FName SaveSlotName = "");
+		void RequestOpenLevel(FName MapName);
 
 //------ 그 외 프로퍼티 ---------------
 public:

@@ -60,6 +60,7 @@ void ANewChapterManagerBase::StartChapter(int32 NewChapterID)
 		if(IsValid(playerRef))
 		{
 			OnChapterCleared.AddDynamic(playerRef, &AMainCharacterBase::ClearAllTimerHandle);
+			OnChapterOvered.AddDynamic(playerRef, &AMainCharacterBase::ClearAllTimerHandle);
 		}
 	}
 	else
@@ -87,15 +88,22 @@ void ANewChapterManagerBase::ContinueChapter()
 	}
 }
 
-void ANewChapterManagerBase::FinishChapter(bool bChapterClear)
+void ANewChapterManagerBase::FinishChapter(bool bIsChapterCleared)
 {
 	//Set state variable
 	bIsChapterFinished = true;
 
-	if (bChapterClear)
+	if (bIsChapterCleared)
 	{
+		UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::FinishChapter - Chapter Cleared ##############################"));
 		OnChapterCleared.Broadcast();
 	}
+	else
+	{
+		UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::FinishChapter - Chapter Overed ##############################"));
+		OnChapterOvered.Broadcast();
+	}
+		
 
 	//===========================================================
 	//Important!) Gameresult widget must include calling the function 'BackStreetGamemode->FinishChapter' 
@@ -198,9 +206,12 @@ void ANewChapterManagerBase::OnStageFinished(FStageInfo StageInfo)
 	if (StageInfo.StageType == EStageCategoryInfo::E_Boss)
 	{
 		FinishChapter(StageInfo.bIsClear);
-		return;
 	}
-	FinishChapter(false);
+	else if(StageInfo.bIsGameOver)
+	{
+		FinishChapter(false);
+	}
+
 	return;
 }
 
@@ -282,30 +293,6 @@ bool ANewChapterManagerBase::GetTutorialCompletion()
 	}
 	UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::GetTutorialCompletion() - game instance is not valid"));
 	return false;
-}
-
-void ANewChapterManagerBase::OpenMainMenuLevel()
-{
-	if (!GamemodeRef.IsValid())
-	{
-		UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::OpenMainMenuLevel() - GamemodeRef is not valid"));
-		return;
-	}
-	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::OpenMainMenuLevel() - Open Main Menu Level"));
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
-	GamemodeRef.Get()->RequestOpenLevel("MainMenuPersistent", false);
-}
-
-void ANewChapterManagerBase::OpenNeutralZoneLevel()
-{
-	if (!GamemodeRef.IsValid())
-	{
-		UE_LOG(LogStage, Error, TEXT("ANewChapterManagerBase::OpenMainMenuLevel() - GamemodeRef is not valid"));
-		return;
-	}
-	UE_LOG(LogStage, Warning, TEXT("ANewChapterManagerBase::OpenNeutralZoneLevel() - Open Neutral Zone Level"));
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
-	GamemodeRef.Get()->RequestOpenLevel("NeutralZonePersistent", true);
 }
 
 void ANewChapterManagerBase::PauseChapterTimer()

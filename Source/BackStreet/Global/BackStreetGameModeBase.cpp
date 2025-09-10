@@ -77,8 +77,7 @@ void ABackStreetGameModeBase::FinishGame(bool bGameIsOver)
 	}
 	else
 	{
-		//나중에 Reward UI로 대체하기
-		ChapterManagerRef->OpenNeutralZoneLevel();
+		RequestOpenLevel(FName("NeutralZonePersistent"));
 	}
 }
 
@@ -189,18 +188,10 @@ void ABackStreetGameModeBase::CreateDefaultHUD()
 	}
 }
 
-void ABackStreetGameModeBase::RequestOpenLevel(FName MapName, bool bShouldLoadData, FName SaveSlotName)
+void ABackStreetGameModeBase::RequestOpenLevel(FName MapName)
 {
-	if (SaveSlotName == TEXT(""))
-	{
-		SaveSlotName = FName(GameInstanceRef.Get()->GetCurrentSaveSlotName());
-	}
-
-	// 파라미터 스트링 생성
-	FString params = FString::Printf(TEXT("?SaveSlot=%s&ShouldLoad=%s"),
-		*SaveSlotName.ToString(),
-		bShouldLoadData ? TEXT("true") : TEXT("false"));
-
 	// 맵 변경
-	UGameplayStatics::OpenLevel(GetWorld(), FName(MapName.ToString() + params));
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
+	UE_LOG(LogStage, Log, TEXT("ABackStreetGameModeBase::RequestOpenLevel - Opening Level: %s"), *MapName.ToString());
+	UGameplayStatics::OpenLevel(GetWorld(), FName(MapName.ToString()));
 }

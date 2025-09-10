@@ -17,6 +17,10 @@ void UBackStreetGameInstance::Init()
 
 void UBackStreetGameInstance::OnPreLoadMap(const FString& MapName)
 {
+	UE_LOG(LogSaveSystem, Log, TEXT(" "));
+	UE_LOG(LogSaveSystem, Log, TEXT("============================================================================"));
+	UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::OnPreLoadMap - PreLoadMap called with MapName: %s"), *MapName);
+	UE_LOG(LogSaveSystem, Log, TEXT("============================================================================"));
 	SaveSlotManagerRef = nullptr;
 }
 
@@ -126,6 +130,7 @@ void UBackStreetGameInstance::CacheGameData(FSaveSlotInfo NewSaveSlotInfo, FProg
 		UE_LOG(LogSaveSystem, Warning, TEXT("UBackStreetGameInstance::CacheGameData - NewSaveSlotInfo is not initialized"));
 		return;
 	}
+
 	SaveSlotInfo = NewSaveSlotInfo;
 	ProgressSaveData = NewProgressData;
 	AchievementSaveData = NewAchievementData;
@@ -140,6 +145,8 @@ void UBackStreetGameInstance::CacheGameData(FSaveSlotInfo NewSaveSlotInfo, FProg
 	UE_LOG(LogSaveSystem, Log, TEXT("- StageInfoList: %d"), ProgressSaveData.ChapterInfo.StageInfoList.Num());
 	UE_LOG(LogSaveSystem, Log, TEXT("- CurrentMapName : %s"), *ProgressSaveData.StageInfo.MainLevelAsset.ToString());
 	UE_LOG(LogSaveSystem, Log, TEXT("- IsInGame : %d, IsInNeutralZone : %d"), SaveSlotInfo.bIsInGame, SaveSlotInfo.bIsInNeutralZone);
+	UE_LOG(LogSaveSystem, Log, TEXT("- bIsRequiredToMoveNeutralZone : %d"), SaveSlotInfo.bIsRequiredToMoveNeutralZone);
+	UE_LOG(LogSaveSystem, Log, TEXT("------------------------------------------------"));
 }
 
 bool UBackStreetGameInstance::GetCachedSaveGameData(FSaveSlotInfo& OutSaveSlotInfo, FProgressSaveData& OutProgressData, FAchievementSaveData& OutAchievementData, FInventorySaveData& OutInventoryData)

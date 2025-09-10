@@ -40,6 +40,9 @@ public:
 	UFUNCTION()
 		void OnChapterCleared();
 
+	UFUNCTION()
+		void OnChapterOvered();
+
 	//Total Core Count, Total Gear Count 산출을 위함
 	UFUNCTION()
 		void OnItemAdded(const FItemInfoDataStruct& NewItemInfo, const int32 AddCount);
@@ -72,6 +75,8 @@ private:
 	int32 DefferedInitializeCount = 0;
 
 	bool bIsReadyToMoveNeutralZone = false;
+
+	bool bIsChapterCleared = false;
 
 	UPROPERTY()
 		FTimerHandle DefferedInitializeTimerHandle;

@@ -90,6 +90,7 @@ void ASaveSlotManager::InitializeReference()
 
 		// Bind to events
 		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::InitializeReference - Bind to events"));
+		ChapterManagerRef->OnChapterOvered.AddDynamic(this, &ASaveSlotManager::OnChapterOvered);
 		ChapterManagerRef->OnChapterCleared.AddDynamic(this, &ASaveSlotManager::OnChapterCleared);
 		StageManagerRef->OnStageLoadDone.AddDynamic(this, &ASaveSlotManager::SaveGameData);
 		PlayerInventoryRef->OnItemAdded.AddDynamic(this, &ASaveSlotManager::OnItemAdded);
@@ -134,13 +135,14 @@ void ASaveSlotManager::DefferedInitializeReference()
 void ASaveSlotManager::OnPreLoadMap_Implementation(const FString& MapName)
 {
 	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::OnPreLoadMap - PreLoadMap: %s"), *MapName);
-	
+
 	// 메인메뉴 및 중립구역으로 전환 시의 상태를 초기화
 	if (MapName.Contains("MainMenu"))
 	{
 		bIsReadyToMoveNeutralZone = true;
 		UE_LOG(LogSaveSystem, Log, TEXT("UBackStreetGameInstance::OnPreLoadMap - MainMenu detected, SaveSlotManagerRef reset"));
 		
+		SaveSlotInfo = FSaveSlotInfo();
 		ProgressSaveData = FProgressSaveData();
 		AchievementSaveData = FAchievementSaveData();
 		InventorySaveData = FInventorySaveData();
@@ -162,7 +164,8 @@ void ASaveSlotManager::OnPostLoadMap_Implementation(UWorld* LoadedWorld)
 	//NeutralZone로 전환 시의 상태를 초기화
 	if (LoadedWorld && LoadedWorld->GetMapName().Contains("NeutralZone"))
 	{
-		SaveGameData();
+		SaveSlotInfo.bIsRequiredToMoveNeutralZone = false;
+		CacheCurrentGameState();
 	}
 }
 
@@ -173,7 +176,22 @@ void ASaveSlotManager::OnChapterCleared()
 		ProgressSaveData.ChapterClearTimeList.Add(ChapterManagerRef->GetChapterClearTime());
 		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::OnChapterCleared - Chapter #%d cleared at time %f"), ChapterManagerRef->GetCurrentChapterInfo().ChapterID, ChapterManagerRef->GetChapterClearTime());
 	}
+	SaveSlotInfo.bIsRequiredToMoveNeutralZone = ChapterManagerRef.IsValid() ? ChapterManagerRef.Get()->GetIsMaxChapter() : false;
+
+	bIsChapterCleared = true;
 	CacheCurrentGameState();
+}
+
+void ASaveSlotManager::OnChapterOvered()
+{
+	if (ChapterManagerRef.IsValid())
+	{
+		ProgressSaveData.ChapterClearTimeList.Add(ChapterManagerRef->GetChapterClearTime());
+		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::OnChapterOvered - Chapter #%d finished at time %f"), ChapterManagerRef->GetCurrentChapterInfo().ChapterID, ChapterManagerRef->GetChapterClearTime());
+	}
+	SaveSlotInfo.bIsRequiredToMoveNeutralZone = true;
+	CacheCurrentGameState();
+	SaveGameData();
 }
 
 void ASaveSlotManager::OnItemAdded(const FItemInfoDataStruct& NewItemInfo, const int32 AddCount)
@@ -238,11 +256,18 @@ void ASaveSlotManager::OnLoadFinished(bool bIsSuccess)
 
 		ApplyCachedData();
 		OnInitializeDone.Broadcast(SaveSlotInfo.bIsInGame);
+
+		if (SaveSlotInfo.bIsRequiredToMoveNeutralZone)
+		{
+			GamemodeRef->RequestOpenLevel(FName("NeutralZonePersistent"));
+		}
 	}
 }
 
 void ASaveSlotManager::FetchGameData()
 {
+	UE_LOG(LogStage, Warning, TEXT("ASaveSlotManager::FetchGameData() - FetchGameData called"));
+
 	// Switch to main weapon
 	if (PlayerCharacterRef.IsValid())
 	{
@@ -275,10 +300,6 @@ void ASaveSlotManager::FetchGameData()
 		
 		if (bIsReadyToMoveNeutralZone && SaveSlotInfo.bIsInGame)
 		{
-			// 영구재화 Handling 
-			UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::FetchGameData - Fetching permanent data from PlayerCharacterRef"));
-			InventorySaveData.CoreCount += ProgressSaveData.TotalCoreCountInGame;
-
 			//최고기록 Handling
 			if (ProgressSaveData.ChapterClearTimeList.Num() > 4)
 			{
@@ -299,7 +320,18 @@ bool ASaveSlotManager::TryFetchCachedData()
 
 		if (result)
 		{
-			UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::FetchCachedData - Cached data fetched successfully"));
+			//LOG
+			UE_LOG(LogSaveSystem, Log, TEXT(" "));
+			UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::TryFetchCachedData() Invoked!!"));
+			UE_LOG(LogSaveSystem, Log, TEXT("[Cacheded Data Preview] -------------------"));
+			UE_LOG(LogSaveSystem, Log, TEXT("- ChapterID : %d"), ProgressSaveData.ChapterInfo.ChapterID);
+			UE_LOG(LogSaveSystem, Log, TEXT("- SaveSlotName : %s"), *SaveSlotInfo.SaveSlotName);
+			UE_LOG(LogSaveSystem, Log, TEXT("- StageCoordinate: %d"), ProgressSaveData.ChapterInfo.CurrentStageCoordinate);
+			UE_LOG(LogSaveSystem, Log, TEXT("- StageInfoList: %d"), ProgressSaveData.ChapterInfo.StageInfoList.Num());
+			UE_LOG(LogSaveSystem, Log, TEXT("- CurrentMapName : %s"), *ProgressSaveData.StageInfo.MainLevelAsset.ToString());
+			UE_LOG(LogSaveSystem, Log, TEXT("- IsInGame : %d, IsInNeutralZone : %d"), SaveSlotInfo.bIsInGame, SaveSlotInfo.bIsInNeutralZone);
+			UE_LOG(LogSaveSystem, Log, TEXT("- bIsRequiredToMoveNeutralZone : %d"), SaveSlotInfo.bIsRequiredToMoveNeutralZone);
+			UE_LOG(LogSaveSystem, Log, TEXT("------------------------------------------------\n"));
 
 			// Apply cached data to ChapterManager and PlayerCharacter
 			ApplyCachedData();
@@ -320,6 +352,10 @@ void ASaveSlotManager::CacheCurrentGameState()
 {
 	if (SaveSlotInfo.bIsInGame)
 	{
+		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::CacheCurrentGameState - Caching current game state"));
+
+		InventorySaveData.CoreCount += ProgressSaveData.TotalCoreCountInGame;
+		ProgressSaveData.TotalCoreCountInGame = 0;
 		GameInstanceRef->CacheGameData(SaveSlotInfo, ProgressSaveData, AchievementSaveData, InventorySaveData);
 	}
 	else if (SaveSlotInfo.bIsInNeutralZone)
