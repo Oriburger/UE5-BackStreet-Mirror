@@ -806,7 +806,7 @@
 			"/Game/Map/Chapter01/Chapter01_OuterArea02.Chapter01_OuterArea02",
 			"/Game/Map/Chapter01/Chapter01_OuterArea03.Chapter01_OuterArea03"
 		],
-		"BossCharacterClass": "/Script/Engine.BlueprintGeneratedClass'/Game/Character/EnemyCharacter/Blueprint/BP_BossCharacter.BP_BossCharacter_C'"
+		"BossCharacterClass": "None"
 	},
 	{
 		"Name": "2",
@@ -1624,6 +1624,6 @@
 			"/Game/Map/Chapter01/Chapter01_OuterArea02.Chapter01_OuterArea02",
 			"/Game/Map/Chapter01/Chapter01_OuterArea03.Chapter01_OuterArea03"
 		],
-		"BossCharacterClass": "/Script/Engine.BlueprintGeneratedClass'/Game/Character/EnemyCharacter/Blueprint/BP_BossCharacter.BP_BossCharacter_C'"
+		"BossCharacterClass": "/Script/Engine.BlueprintGeneratedClass'/Game/Character/EnemyCharacter/Blueprint/BP_Boss_Chapter2.BP_Boss_Chapter2_C'"
 	}
 ]

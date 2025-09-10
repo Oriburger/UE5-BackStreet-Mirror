@@ -228,18 +228,18 @@ float AEnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	}
 
 	//Stop AI Logic And Set Reactivation event
-	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(Controller);
-	if (IsValid(aiControllerRef) && CharacterID != 1200 && aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill 
-		&& CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_KnockedDown)
-	{
-		aiControllerRef->DeactivateAI();
-		GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
-		GetWorldTimerManager().SetTimer(DamageAIDelayTimer, aiControllerRef, &AAIControllerBase::ActivateAI, 1.0f, false, 1.5f);
-	}
-
 	//Set Rotation To Causer
-	if (!DamageCauser->ActorHasTag("Boss"))
-	{	
+	//250825 Exception Handling for Boss (Stop AI Logic And Set Reactivation event, Rotating towards the actor that the damage causer)
+	AAIControllerBase* aiControllerRef = Cast<AAIControllerBase>(Controller);
+	if (!ActorHasTag("Boss"))
+	{
+		if (IsValid(aiControllerRef) && aiControllerRef->GetBehaviorState() != EAIBehaviorType::E_Skill
+			&& CharacterGameplayInfo.CharacterActionState != ECharacterActionType::E_KnockedDown)
+		{
+			aiControllerRef->DeactivateAI();
+			GetWorldTimerManager().ClearTimer(DamageAIDelayTimer);
+			GetWorldTimerManager().SetTimer(DamageAIDelayTimer, aiControllerRef, &AAIControllerBase::ActivateAI, 1.0f, false, 1.5f);
+		}
 		FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), DamageCauser->GetActorLocation());
 		newRotation.Pitch = newRotation.Roll = 0.0f;
 		SetActorRotation(newRotation);
