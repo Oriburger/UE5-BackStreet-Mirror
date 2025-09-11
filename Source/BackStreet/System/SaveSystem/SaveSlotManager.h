@@ -77,6 +77,7 @@ private:
 	bool bIsReadyToMoveNeutralZone = false;
 
 	bool bIsChapterCleared = false;
+	bool bIsChapterOvered = false;
 
 	UPROPERTY()
 		FTimerHandle DefferedInitializeTimerHandle;

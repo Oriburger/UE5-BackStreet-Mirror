@@ -51,8 +51,6 @@ void UBackStreetGameInstance::OnPostLoadMap(UWorld* LoadedWorld)
 	{
 		SaveSlotInfo.bIsInGame = false;
 		SaveSlotInfo.bIsInNeutralZone = true;
-
-		ProgressSaveData = FProgressSaveData();
 	}
 
 	// SaveSlotManager가 유효한지 체크
@@ -146,6 +144,8 @@ void UBackStreetGameInstance::CacheGameData(FSaveSlotInfo NewSaveSlotInfo, FProg
 	UE_LOG(LogSaveSystem, Log, TEXT("- CurrentMapName : %s"), *ProgressSaveData.StageInfo.MainLevelAsset.ToString());
 	UE_LOG(LogSaveSystem, Log, TEXT("- IsInGame : %d, IsInNeutralZone : %d"), SaveSlotInfo.bIsInGame, SaveSlotInfo.bIsInNeutralZone);
 	UE_LOG(LogSaveSystem, Log, TEXT("- bIsRequiredToMoveNeutralZone : %d"), SaveSlotInfo.bIsRequiredToMoveNeutralZone);
+	UE_LOG(LogSaveSystem, Log, TEXT("- TotalCoreCount InGame : %d"), ProgressSaveData.TotalCoreCountInGame);
+	UE_LOG(LogSaveSystem, Log, TEXT("- InventoryCoreCount : %d"), InventorySaveData.CoreCount);
 	UE_LOG(LogSaveSystem, Log, TEXT("------------------------------------------------"));
 }
 
