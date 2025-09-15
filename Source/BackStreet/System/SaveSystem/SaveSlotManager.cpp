@@ -115,6 +115,13 @@ void ASaveSlotManager::InitializeReference()
 
 void ASaveSlotManager::DefferedInitializeReference()
 {
+	if(GetWorld()->GetMapName().Contains("MainMenu"))
+	{
+		UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::DefferedInitializeReference - In MainMenu level, skipping Deffered Initialize"));
+		SaveSlotInfo = FSaveSlotInfo();
+		return;
+	}
+
 	UE_LOG(LogSaveSystem, Log, TEXT("ASaveSlotManager::DefferedInitializeReference - DefferedInitializeCount: %d"), DefferedInitializeCount);
 
 	// Check if the references are valid
@@ -272,7 +279,7 @@ void ASaveSlotManager::OnLoadFinished(bool bIsSuccess)
 
 		if (SaveSlotInfo.bIsRequiredToMoveNeutralZone)
 		{
-			GamemodeRef->RequestOpenLevel(FName("NeutralZonePersistent"));
+			GamemodeRef->RequestOpenLevel(FName("MainMenuPersistent"));
 		}
 	}
 }
