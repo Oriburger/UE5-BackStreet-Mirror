@@ -1,6 +1,7 @@
 # 📦 BackStreet (백스트리트) v0.3.1.1
 
 > **"Back to the Street, Forward to the Action"**
+> 본 레포지토리는 BackStreet의 Mirror 버전이며, 핵심 소스 및 에셋이 제외되었습니다.
 
 간단한 조작으로 펼치는 역동적인 콤보와 깊이 있는 전략이 어우러진 **3D 액션 로그라이트** 게임입니다.
 
