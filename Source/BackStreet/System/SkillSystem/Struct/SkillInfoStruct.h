@@ -1,0 +1,143 @@
+#pragma once
+#include "Engine/DataTable.h"
+#include "Sound/SoundCue.h"
+#include "NiagaraSystem.h"
+#include "MediaSource.h"
+#include "SkillInfoStruct.generated.h"
+
+USTRUCT(BlueprintType)
+struct FSkillInfo : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+//======== Basic Info ==================================
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		int32 SkillID = 0;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UTexture2D* IconImage;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		class UMediaSource* SkillPreviewMedia;
+
+	//스킬 이름 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText SkillNameText;
+
+	//스킬 설명 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText SkillDescriptionText;
+
+	//스킬 보조 설명 (현지화 지원)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Localization")
+		FText SkillSubDescriptionText;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+		UAnimMontage* SkillAnimation;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PrevAction")
+		bool bContainPrevAction = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "PrevAction", meta = (EditCondition = "bContainPrevAction"))
+		TSubclassOf<class ASkillBase> PrevActionClass;
+
+	//Causer의 생명주기를 따라갈 것인지?
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool bIsLifeSpanWithCauser = true;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool bIsPlayerSkill = false;
+
+	//조합을 위해 필요한 재료 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		int32 MaterialID;
+	
+	//조합을 위해 필요한 재료 정보
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		int32 MaterialCount;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float CoolTimeValue;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float SkillAPCost;
+
+//======== Function, State ======================================
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		bool bIsValid = true;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TWeakObjectPtr<AActor> PrevActionRef;
+
+	bool IsValid()
+	{
+		return bIsValid && SkillID > 0;
+	}
+
+	friend uint32 GetTypeHash(const FSkillInfo& Other)
+	{
+		return GetTypeHash(Other.SkillID);
+	}
+
+	FSkillInfo() : SkillID(0), IconImage(nullptr)
+		, SkillNameText(), SkillDescriptionText(), SkillSubDescriptionText(), SkillAnimation(nullptr), bContainPrevAction(false)
+		, PrevActionClass(nullptr), bIsLifeSpanWithCauser(false), bIsPlayerSkill(false), MaterialID(0), MaterialCount(0), CoolTimeValue(0.0f)
+		, bIsValid(true), PrevActionRef(nullptr) { }
+};
+
+UENUM(BlueprintType)
+enum class ESkillUpgradeType : uint8
+{
+	E_None				UMETA(DisplayName = "None"),
+	E_AttackPower		UMETA(DisplayName = "E_Mobility"),
+	E_Debuff			UMETA(DisplayName = "E_Debuff"),
+	E_AttackRange		UMETA(DisplayName = "E_AttackRange"),
+	E_AttackCount		UMETA(DisplayName = "E_AttackCount"),
+	E_Explosion			UMETA(DisplayName = "E_Explosion"),
+	E_CoolTime			UMETA(DisplayName = "E_CoolTime")
+};
+
+USTRUCT(BlueprintType)
+struct FSkillStatStruct : public FTableRowBase
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		int32 SkillID;
+};
+
+
+USTRUCT(BlueprintType)
+struct FSkillManagerInfoStruct
+{
+public:
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		TMap<int32, FSkillInfo> SkillInventory;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		TMap<int32, FTimerHandle> CoolTimerHandleMap;
+
+	//Need to capture cool time value for each skill on save time
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		TMap<int32, float> CoolTimeValueMap;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		TMap<int32, FSkillStatStruct> SkillInfoCache;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		TMap<int32, FSkillInfo> SkillInfoCacheMap;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		TArray<int32> PlayerSkillIDList;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gameplay|Data")
+		FSkillInfo PrevSkillInfo;
+
+	FSkillManagerInfoStruct()
+		: SkillInventory(), CoolTimerHandleMap(), CoolTimeValueMap(), SkillInfoCache(), SkillInfoCacheMap(), PlayerSkillIDList(), PrevSkillInfo() {
+	};
+};

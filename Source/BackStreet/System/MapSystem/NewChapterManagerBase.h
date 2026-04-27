@@ -1,0 +1,194 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "../../Global/BackStreet.h"
+#include "Engine/LevelStreamingDynamic.h"
+#include "GameFramework/Actor.h"
+#include "NewChapterManagerBase.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateChapterFinish);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDelegateChapterInfoUpdate, FChapterInfo, ChapterInfo);
+
+UCLASS()
+class BACKSTREET_API ANewChapterManagerBase : public AActor
+{
+	GENERATED_BODY()
+
+//======== Delegate ============
+public:
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateChapterFinish OnChapterStarted;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateChapterFinish OnChapterCleared;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateChapterFinish OnChapterOvered;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateChapterInfoUpdate OnChapterInfoUpdated;
+
+//======== Basic ===============
+public:
+	// Sets default values for this actor's properties
+	ANewChapterManagerBase();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UStageManagerComponent* StageManagerComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		class UStageGeneratorComponent* StageGeneratorComponent;
+
+//======== Main Function ===============
+public:
+	//Start new chapter using id (data table)
+	UFUNCTION(BlueprintCallable)
+		void StartChapter(int32 NewChapterID);
+
+	//Continue current chapter
+	UFUNCTION(BlueprintCallable)
+		void ContinueChapter();
+
+	//Finish current chapter
+	UFUNCTION(BlueprintCallable)
+		void FinishChapter(bool bIsChapterCleared);
+
+	//?
+	UFUNCTION()
+		void ResetChapter();
+
+	//Move next stage
+	UFUNCTION(BlueprintCallable)
+		void MoveStage(int32 GateIdx, int32 StageIdxOverride = -1);
+
+	UFUNCTION(BlueprintCallable)
+		void OverwriteChapterInfo(FChapterInfo NewChapterInfo, FStageInfo NewStageInfo);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetRewardCoreCount();
+
+protected:
+	//Init chapter using data table 
+	//It must be called before "StartChapter"
+	UFUNCTION()
+		void InitChapter(int32 NewChapterID);
+
+	//Delegate function called by UStageManageComponent
+	UFUNCTION()
+		void OnStageFinished(FStageInfo StageInfo);
+
+	UFUNCTION(BlueprintCallable)
+		void InitStageIconTranslationList(FVector2D Threshold);
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FORCEINLINE bool GetIsChapterInitialized() const { return CurrentChapterInfo.bIsChapterInitialized; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FORCEINLINE FChapterInfo GetCurrentChapterInfo() { return CurrentChapterInfo; }
+
+	UFUNCTION(BlueprintCallable)
+		void SetStageIconTranslationList(TArray<FVector2D> NewList) { CurrentChapterInfo.StageIconTransitionValueList = NewList; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FStageInfo& GetStageInfo(int32 StageIdx);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetMaxChapterID() { return MaxChapterID; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsMaxChapter() { return CurrentChapterInfo.ChapterID >= MaxChapterID; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FName GetStageTypeName(EStageCategoryInfo StageType);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FStageInfo GetBossStageInfo() { return CurrentChapterInfo.GetBossStageInfo(); }
+
+	// if you edit this return value, the new result will not be applyed because it is copy value.
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		TArray<FStageInfo> GetStageInfoList() { return CurrentChapterInfo.StageInfoList; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		int32 GetCurrentLocation() { return CurrentChapterInfo.CurrentStageCoordinate;  }
+
+protected:
+	//Assign on blueprint
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Basic")
+		int32 MaxChapterID = 4;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Data")
+		UDataTable* ChapterInfoTable;
+
+private:
+	int32 ChapterID;
+
+	FChapterInfo CurrentChapterInfo;
+
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+	TWeakObjectPtr<class UBackStreetGameInstance> GameInstanceRef;
+
+	TWeakObjectPtr<class AMainCharacterBase> PlayerRef;
+
+	bool bIsChapterFinished = false;
+
+	//현재까지 획득한 스킬 보상 횟수
+	int32 CurrentSkillRewardCount = 0;
+
+//========= Save System ================
+public:
+	UFUNCTION(BlueprintCallable)
+		void SetTutorialCompletion(bool bCompleted);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetTutorialCompletion();
+
+//========= Widget =====================
+public:
+	//Result widget
+	UPROPERTY(EditDefaultsOnly,  Category = "UI")
+		TSubclassOf<class UUserWidget> GameResultWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<class UUserWidget> ChapterClearWidgetClass;
+
+protected:
+	UFUNCTION(BlueprintImplementableEvent)
+		void CreateGameResultWidget(bool bIsChapterCleared);
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void CreateChapterCleartWidget();
+
+	UPROPERTY(BlueprintReadWrite)
+		class UUserWidget* ChapterClearWidgetRef;
+
+	UPROPERTY(BlueprintReadWrite)
+		class UUserWidget* GameResultWidgetRef;
+
+//======== Timer ==========================
+public:
+	UFUNCTION(BlueprintCallable)
+		void PauseChapterTimer();
+
+	UFUNCTION(BlueprintCallable)
+		void UnPauseChapterTimer();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetChapterClearTime() { return CurrentChapterInfo.TotalElapsedTime; }
+
+protected:
+	UFUNCTION()
+		void UpdateChapterElapsedTime();
+
+private:
+	FTimerHandle OpenLevelDelayHandle; 
+
+	FTimerHandle ChapterTimerHandle; //챕터 클리어 시간 측정용
+};

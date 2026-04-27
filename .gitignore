@@ -75,7 +75,9 @@ DerivedDataCache/*
 
 # 에셋 주요 파일
 Content/*
-Source/*
+Source/BackStreet/Widget/*
+Source/BackStreet/System/CraftingSystem/*
+Source/BackStreet/System/TutorialSystem/*
 Plugins/*
 
 # 빌드 데이터 파일

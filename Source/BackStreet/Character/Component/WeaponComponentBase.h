@@ -1,0 +1,194 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "../../Global/BackStreet.h"
+#include "Components/StaticMeshComponent.h"
+#include "WeaponComponentBase.generated.h"
+#define MAX_WEAPON_UPGRADABLE_STAT_IDX 3
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegateWeaponUpdated);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDelegateWeaponStateUpdated, int32, WeaponID, FWeaponStatStruct, WeaponStat, FWeaponStateStruct, NewState);
+
+UCLASS(Blueprintable)
+class BACKSTREET_API UWeaponComponentBase : public UStaticMeshComponent
+{
+	GENERATED_BODY()
+public:
+	UWeaponComponentBase();
+
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
+
+public:
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateWeaponStateUpdated OnWeaponStateUpdated;
+
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
+		FDelegateWeaponUpdated OnMainWeaponUpdated;
+
+//------- VFX --------------------------------
+public:
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraComponent* WeaponTrailParticle;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraSystem* HitEffectParticle;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|VFX")
+		class UNiagaraSystem* HitEffectParticleLarge;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX/SFX")
+		class USoundCue* HitEffectSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX/SFX")
+		class USoundCue* HitEffectSoundLarge;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay | VFX")
+		class UNiagaraSystem* ShootEffectParticle;
+
+//------- Basic property, Action -------------------
+public:
+	//process attack 
+	UFUNCTION()
+		void Attack();
+
+	//stop process attack
+	UFUNCTION()
+		void StopAttack();
+
+	//essential property
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Basic")
+		int32 WeaponID;
+
+	//init weapon with load asset
+	UFUNCTION(BlueprintCallable)
+		void InitWeapon(int32 NewWeaponID);
+
+//--------- Data Table, Asset Load ----------------------
+public:
+	UFUNCTION()
+		void InitWeaponAsset();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FWeaponAssetInfoStruct GetWeaponAssetInfoWithID(int32 TargetWeaponID);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FWeaponStatStruct GetWeaponStatInfoWithID(int32 TargetWeaponID);
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
+		UDataTable* WeaponAssetInfoTable;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
+		UDataTable* WeaponStatInfoTable;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
+		UDataTable* ProjectileAssetInfoTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Data")
+		UDataTable* ProjectileStatInfoTable;
+
+public:
+	//asset info for this weapon instance
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Gameplay|Asset")
+		FWeaponAssetInfoStruct WeaponAssetInfo;
+
+
+//------ State, Stat ---------------------------------
+public:
+	//Weapon stat
+	UPROPERTY(EditInstanceOnly, Category = "Gameplay|Stat")
+		FWeaponStatStruct WeaponStat;
+
+	//Weapon state
+	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay|Stat")
+		FWeaponStateStruct WeaponState;
+
+	//발사체의 에셋 정보를 담을 캐시 변수
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Weapon|Projectile")
+		FProjectileAssetInfoStruct ProjectileAssetInfo;
+
+	//발사체의 스탯을 담을 캐시 변수
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay|Weapon|Projectile")
+		FProjectileStatStruct ProjectileStatInfo;
+
+private:
+	//무기 교체 시에 사용할 ID 별 스테이트 저장 맵
+	TMap<int32, FWeaponStatStruct> WeaponStatCacheMap;
+	TMap<int32, FWeaponStateStruct> WeaponStateCacheMap;
+	TMap<int32, FWeaponAssetInfoStruct> WeaponAssetCacheMap;
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FWeaponStateStruct GetWeaponStateCacheDate(int32 TargetWeaponID);
+
+	UFUNCTION()
+		bool UpdateWeaponStateCache(int32 TargetWeaponID, FWeaponStateStruct NewState);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		bool GetIsWeaponRangeType() { return WeaponStat.WeaponType == EWeaponType::E_Shoot; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FWeaponStatStruct GetWeaponStat() { return WeaponStat; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FWeaponStateStruct GetWeaponState() { return WeaponState; }
+
+	UFUNCTION()
+		FProjectileStatStruct GetProjectileStatInfo(int32 TargetProjectileID);
+
+	UFUNCTION()
+		FProjectileAssetInfoStruct GetProjectileAssetInfo(int32 TargetProjectileID);
+
+	UFUNCTION()
+		void SetProjectileInfo(int32 ProjectileID);
+
+	UFUNCTION(BlueprintCallable)
+		void SetWeaponStat(FWeaponStatStruct NewStat) { WeaponStat = NewStat; }
+
+	UFUNCTION(BlueprintCallable)
+		void SetWeaponState(FWeaponStateStruct NewState) { WeaponState = NewState; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		uint8 GetLimitedStatLevel(EWeaponStatType WeaponStatType);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		uint8 GetMaxStatLevel(EWeaponStatType WeaponStatType);
+
+	//Calculate total damage to target character
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float CalculateTotalDamage(FCharacterGameplayInfo TargetState, bool& bIsFatalAttack);
+
+	UFUNCTION()
+		bool ApplyWeaponDebuff(class ACharacterBase* TargetCharacter, ECharacterDebuffType DebuffType, ECharacterStatType DebuffStatType);
+private:
+	float CalculateAttackFatality(FCharacterGameplayInfo& GameplayInfoRef
+			, bool bIsJumpAttacking = false, bool bIsDashAttacking = false);
+
+
+//====== Upgrade ================
+public:	
+	UFUNCTION(BlueprintCallable)
+		bool UpgradeStat(TArray<uint8> NewLevelList);
+
+//-------- Combat Manager -------------------------------
+public:
+	UPROPERTY()
+		class UMeleeCombatManager* MeleeCombatManager;
+
+	UPROPERTY()
+		class URangedCombatManager* RangedCombatManager;
+
+//-------- Ref, TimerHandle ------------------------------
+private:
+	//gamemode ref
+	TWeakObjectPtr<class ABackStreetGameModeBase> GamemodeRef;
+
+	//inventory owner character (equal to getowner())
+	TWeakObjectPtr<class ACharacterBase> OwnerCharacterRef;
+
+	//Combo timer handle 
+	FTimerHandle ComboTimerHandle;
+};
